@@ -4,7 +4,7 @@ import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationComman
 import teamdevhub.devhub.adapter.in.auth.dto.ConfirmEmailCertificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.EmailCertificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.TokenResponseDto;
-import teamdevhub.devhub.adapter.in.common.vo.ApiResponseVo;
+import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
@@ -22,9 +22,9 @@ public class AuthController {
     private final EmailCertificationUseCase emailCertificationUseCase;
 
     @PostMapping("/reissue")
-    public ResponseEntity<ApiResponseVo<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
+    public ResponseEntity<ApiDataListResponseVo<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
         return ResponseEntity.ok(
-                ApiResponseVo.successWithData(
+                ApiDataListResponseVo.successWithData(
                         SuccessCodeEnum.CREATE_SUCCESS,
                         authUseCase.refreshAccessToken(refreshToken)
                 )
@@ -32,21 +32,21 @@ public class AuthController {
     }
 
     @PostMapping("/email-certification")
-    public ResponseEntity<ApiResponseVo<Void>> sendEmailCertificationCode(@Valid @RequestBody EmailCertificationRequestDto emailCertificationRequestDto) {
+    public ResponseEntity<ApiDataListResponseVo<Void>> sendEmailCertificationCode(@Valid @RequestBody EmailCertificationRequestDto emailCertificationRequestDto) {
         emailCertificationUseCase.sendEmailCertificationCode(emailCertificationRequestDto);
         return ResponseEntity.ok(
-                ApiResponseVo.successWithoutData(
+                ApiDataListResponseVo.successWithoutData(
                         SuccessCodeEnum.EMAIL_CERTIFICATION_SENT
                 )
         );
     }
 
     @PostMapping("/email-certification/confirm")
-    public ResponseEntity<ApiResponseVo<Void>> confirmEmailCertificationCode(@Valid @RequestBody ConfirmEmailCertificationRequestDto confirmEmailCertificationRequestDto) {
+    public ResponseEntity<ApiDataListResponseVo<Void>> confirmEmailCertificationCode(@Valid @RequestBody ConfirmEmailCertificationRequestDto confirmEmailCertificationRequestDto) {
         ConfirmEmailCertificationCommand confirmEmailCertificationCommand = ConfirmEmailCertificationCommand.of(confirmEmailCertificationRequestDto.getEmail(), confirmEmailCertificationRequestDto.getCode());
         emailCertificationUseCase.confirmEmailCertificationCode(confirmEmailCertificationCommand);
         return ResponseEntity.ok(
-                ApiResponseVo.successWithoutData(
+                ApiDataListResponseVo.successWithoutData(
                         SuccessCodeEnum.EMAIL_CERTIFICATION_SUCCESS
                 )
         );

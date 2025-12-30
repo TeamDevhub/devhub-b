@@ -1,7 +1,7 @@
 package teamdevhub.devhub.common.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import teamdevhub.devhub.adapter.in.common.vo.ApiResponseVo;
+import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
 
-        ApiResponseVo<?> result = ApiResponseVo.failureFromThrowable(accessDeniedException);
+        ApiDataListResponseVo<?> result = ApiDataListResponseVo.failureFromThrowable(accessDeniedException);
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType("application/json;charset=UTF-8");
 

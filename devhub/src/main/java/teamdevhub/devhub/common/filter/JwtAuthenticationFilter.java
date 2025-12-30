@@ -1,7 +1,7 @@
 package teamdevhub.devhub.common.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import teamdevhub.devhub.adapter.in.common.vo.ApiResponseVo;
+import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
 import teamdevhub.devhub.adapter.in.user.dto.LoginUserRequestDto;
 import teamdevhub.devhub.service.auth.RefreshTokenService;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
@@ -76,7 +76,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .maxAge(14 * 24 * 60 * 60)
                 .build();
 
-        ApiResponseVo<?> responseBody = ApiResponseVo.successWithData(SuccessCodeEnum.LOGIN_SUCCESS, Map.of("accessToken", accessToken));
+        ApiDataListResponseVo<?> responseBody = ApiDataListResponseVo.successWithData(SuccessCodeEnum.LOGIN_SUCCESS, Map.of("accessToken", accessToken));
 
 
         String jsonResponse = objectMapper.writeValueAsString(responseBody);
@@ -91,7 +91,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
-        ApiResponseVo<?> apiResponse = ApiResponseVo.failureWithoutData(ErrorCodeEnum.LOGIN_FAIL);
+        ApiDataListResponseVo<?> apiResponse = ApiDataListResponseVo.failureWithoutData(ErrorCodeEnum.LOGIN_FAIL);
         String jsonResponse = objectMapper.writeValueAsString(apiResponse);
 
         response.setContentType("application/json");

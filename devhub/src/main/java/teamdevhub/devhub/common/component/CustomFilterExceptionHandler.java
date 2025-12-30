@@ -1,7 +1,7 @@
 package teamdevhub.devhub.common.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import teamdevhub.devhub.adapter.in.common.vo.ApiResponseVo;
+import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class CustomFilterExceptionHandler {
             res.setContentType("application/json");
             res.setCharacterEncoding("UTF-8");
 
-            ApiResponseVo<?> result = ApiResponseVo.failureWithoutData(errorCodeEnum);
+            ApiDataListResponseVo<?> result = ApiDataListResponseVo.failureWithoutData(errorCodeEnum);
             String json = mapper.writeValueAsString(result);
 
             res.getWriter().write(json);
@@ -55,7 +55,7 @@ public class CustomFilterExceptionHandler {
                 "message", message
         );
 
-        ApiResponseVo<?> result = ApiResponseVo.failureFromFilter(ex);
+        ApiDataListResponseVo<?> result = ApiDataListResponseVo.failureFromFilter(ex);
 
         try {
             res.getWriter().write(mapper.writeValueAsString(result));
