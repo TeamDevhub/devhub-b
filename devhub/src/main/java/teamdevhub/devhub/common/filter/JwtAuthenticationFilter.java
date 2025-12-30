@@ -1,14 +1,6 @@
 package teamdevhub.devhub.common.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
-import teamdevhub.devhub.adapter.in.user.dto.LoginUserRequestDto;
-import teamdevhub.devhub.service.auth.RefreshTokenService;
-import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.enums.SuccessCodeEnum;
-import teamdevhub.devhub.common.util.JwtUtil;
-import teamdevhub.devhub.domain.user.UserRole;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +13,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
+import teamdevhub.devhub.adapter.in.user.dto.LoginUserRequestDto;
+import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
+import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.SuccessCodeEnum;
+import teamdevhub.devhub.common.util.JwtUtil;
+import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.service.auth.RefreshTokenService;
 
 import java.io.IOException;
 import java.util.Map;
@@ -76,7 +76,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .maxAge(14 * 24 * 60 * 60)
                 .build();
 
-        ApiDataListResponseVo<?> responseBody = ApiDataListResponseVo.successWithData(SuccessCodeEnum.LOGIN_SUCCESS, Map.of("accessToken", accessToken));
+        ApiDataResponseVo<?> responseBody = ApiDataResponseVo.successWithData(SuccessCodeEnum.LOGIN_SUCCESS, Map.of("accessToken", accessToken));
 
 
         String jsonResponse = objectMapper.writeValueAsString(responseBody);
@@ -91,7 +91,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
-        ApiDataListResponseVo<?> apiResponse = ApiDataListResponseVo.failureWithoutData(ErrorCodeEnum.LOGIN_FAIL);
+        ApiDataResponseVo<?> apiResponse = ApiDataResponseVo.failureWithoutData(ErrorCodeEnum.LOGIN_FAIL);
         String jsonResponse = objectMapper.writeValueAsString(apiResponse);
 
         response.setContentType("application/json");

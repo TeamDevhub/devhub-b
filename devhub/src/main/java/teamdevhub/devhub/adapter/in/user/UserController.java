@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
+import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.dto.SignupUserRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.SignupUserResponseDto;
@@ -22,10 +22,10 @@ public class UserController {
     private final UserUseCase userUseCase;
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiDataListResponseVo<SignupUserResponseDto>> signup(@Valid @RequestBody SignupUserRequestDto signupUserRequestDto) {
+    public ResponseEntity<ApiDataResponseVo<SignupUserResponseDto>> signup(@Valid @RequestBody SignupUserRequestDto signupUserRequestDto) {
         SignupCommand signupCommand = SignupCommand.fromSignupUserRequestDto(signupUserRequestDto);
         return ResponseEntity.ok(
-                ApiDataListResponseVo.successWithData(
+                ApiDataResponseVo.successWithData(
                         SuccessCodeEnum.SIGNUP_SUCCESS,
                         SignupUserResponseDto.fromUserDomain(userUseCase.signup(signupCommand))
                 )
