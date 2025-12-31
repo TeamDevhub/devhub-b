@@ -6,8 +6,8 @@ import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.user.UserUseCase;
-import teamdevhub.devhub.port.out.common.IdentifierGeneratorPort;
-import teamdevhub.devhub.port.out.common.PasswordPolicyPort;
+import teamdevhub.devhub.port.out.common.IdentifierProvider;
+import teamdevhub.devhub.port.out.common.PasswordPolicyProvider;
 import teamdevhub.devhub.port.out.mail.EmailCertificationPort;
 import teamdevhub.devhub.port.out.user.UserPort;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +21,16 @@ public class UserService implements UserUseCase {
 
     private final UserPort userPort;
     private final EmailCertificationPort emailCertificationPort;
-    private final PasswordPolicyPort passwordPolicyPort;
-    private final IdentifierGeneratorPort identifierGeneratorPort;
+    private final PasswordPolicyProvider passwordPolicyProvider;
+    private final IdentifierProvider identifierProvider;
 
     @Override
     public User signup(SignupCommand signupCommand) {
         if (!emailCertificationPort.isVerified(signupCommand.getEmail())) {
             throw BusinessRuleException.of(ErrorCodeEnum.EMAIL_NOT_CONFIRMED);
         }
-        String userGuid = identifierGeneratorPort.generate();
-        String encodedPassword = passwordPolicyPort.encode(signupCommand.getPassword());
+        String userGuid = identifierProvider.generate();
+        String encodedPassword = passwordPolicyProvider.encode(signupCommand.getPassword());
         User user = User.createGeneralUser(userGuid, signupCommand.getEmail(), signupCommand.getUsername(), encodedPassword);
         emailCertificationPort.delete(signupCommand.getEmail());
         return userPort.save(user);
@@ -38,8 +38,8 @@ public class UserService implements UserUseCase {
 
     @Override
     public void createAdminUser(String email, String username, String rawPassword) {
-        String userGuid = identifierGeneratorPort.generate();
-        String encodedPassword = passwordPolicyPort.encode(rawPassword);
+        String userGuid = identifierProvider.generate();
+        String encodedPassword = passwordPolicyProvider.encode(rawPassword);
         User adminUser = User.createAdminUser(userGuid, email, username, encodedPassword);
         userPort.save(adminUser);
     }

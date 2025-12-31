@@ -11,11 +11,11 @@ public class User {
     private final String email;
     private String password;
     private String username;
-    private UserRole role;
+    private UserRole userRole;
 
     private AuditInfo auditInfo;
 
-    public User(String userGuid, String email, String username, String password, UserRole role, AuditInfo auditInfo) {
+    public User(String userGuid, String email, String username, String password, UserRole userRole, AuditInfo auditInfo) {
         if (email == null || email.isBlank()) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_ID_FAIL);
         }
@@ -27,7 +27,7 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.userRole = userRole;
         this.auditInfo = auditInfo != null ? auditInfo : AuditInfo.empty();
     }
 
@@ -44,17 +44,17 @@ public class User {
     }
 
     public boolean hasRole(UserRole checkRole) {
-        return this.role == checkRole;
+        return this.userRole == checkRole;
     }
 
     public User changeUsername(String newUsername) {
-        return new User(this.userGuid, this.email, newUsername, this.password, this.role, this.auditInfo);
+        return new User(this.userGuid, this.email, newUsername, this.password, this.userRole, this.auditInfo);
     }
 
     public String getUserGuid() { return userGuid; }
     public String getEmail() { return email; }
     public String getUsername() { return username; }
     public String getPassword() { return password; }
-    public UserRole getRole() { return role; }
+    public UserRole getUserRole() { return userRole; }
     public AuditInfo getAuditInfo() { return auditInfo; }
 }

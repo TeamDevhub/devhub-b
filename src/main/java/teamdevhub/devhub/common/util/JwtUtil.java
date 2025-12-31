@@ -5,7 +5,7 @@ import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.common.enums.TokenTypeEnum;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.common.AuthTokenPort;
+import teamdevhub.devhub.port.out.common.TokenProvider;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -25,7 +25,7 @@ import java.util.Date;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JwtUtil implements AuthTokenPort {
+public class JwtUtil implements TokenProvider {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
@@ -108,6 +108,7 @@ public class JwtUtil implements AuthTokenPort {
         }
     }
 
+    @Override
     public Claims getUserInfo(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }

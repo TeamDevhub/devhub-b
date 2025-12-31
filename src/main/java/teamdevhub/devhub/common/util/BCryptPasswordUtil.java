@@ -1,13 +1,13 @@
 package teamdevhub.devhub.common.util;
 
-import teamdevhub.devhub.port.out.common.PasswordPolicyPort;
+import teamdevhub.devhub.port.out.common.PasswordPolicyProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class BCryptPasswordUtil implements PasswordPolicyPort {
+public class BCryptPasswordUtil implements PasswordPolicyProvider {
 
     private final PasswordEncoder passwordEncoder;
 

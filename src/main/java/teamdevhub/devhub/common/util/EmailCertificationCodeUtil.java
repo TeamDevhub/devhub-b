@@ -1,12 +1,12 @@
 package teamdevhub.devhub.common.util;
 
-import teamdevhub.devhub.port.out.mail.EmailCertificationCodeGeneratorPort;
+import teamdevhub.devhub.port.out.common.EmailCertificationCodeProvider;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 
 @Component
-public class EmailCertificationCodeGeneratorUtil implements EmailCertificationCodeGeneratorPort {
+public class EmailCertificationCodeUtil implements EmailCertificationCodeProvider {
 
     private final SecureRandom RANDOM = new SecureRandom();
 

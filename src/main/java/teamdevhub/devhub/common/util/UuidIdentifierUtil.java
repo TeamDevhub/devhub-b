@@ -1,12 +1,12 @@
 package teamdevhub.devhub.common.util;
 
-import teamdevhub.devhub.port.out.common.IdentifierGeneratorPort;
+import teamdevhub.devhub.port.out.common.IdentifierProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
-public class UuidIdentifierGeneratorUtil implements IdentifierGeneratorPort {
+public class UuidIdentifierUtil implements IdentifierProvider {
 
     @Override
     public String generate() {

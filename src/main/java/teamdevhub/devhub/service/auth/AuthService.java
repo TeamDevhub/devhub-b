@@ -7,7 +7,7 @@ import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.out.auth.AuthPort;
-import teamdevhub.devhub.port.out.common.AuthTokenPort;
+import teamdevhub.devhub.port.out.common.TokenProvider;
 import teamdevhub.devhub.port.out.user.UserPort;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,14 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class AuthService implements AuthUseCase {
 
-    private final AuthTokenPort authTokenPort;
+    private final TokenProvider tokenProvider;
     private final AuthPort authPort;
     private final UserPort userPort;
 
     @Override
     public TokenResponseDto refreshAccessToken(String refreshToken) {
 
-        JwtStatusEnum jwtStatusEnum = authTokenPort.validateToken(refreshToken);
+        JwtStatusEnum jwtStatusEnum = tokenProvider.validateToken(refreshToken);
 
         if (jwtStatusEnum == JwtStatusEnum.EXPIRED) {
             throw AuthRuleException.of(ErrorCodeEnum.TOKEN_EXPIRED);
@@ -35,13 +35,13 @@ public class AuthService implements AuthUseCase {
             throw AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID);
         }
 
-        String email = authTokenPort.getEmailFromRefreshToken(refreshToken);
+        String email = tokenProvider.getEmailFromRefreshToken(refreshToken);
         User user = userPort.findByEmail(email)
                 .orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
 
         authPort.findByEmail(email).filter(token -> token.getRefreshToken().equals(refreshToken)).orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID));
 
-        String newAccessToken = authTokenPort.createAccessToken(user.getEmail(), user.getRole());
+        String newAccessToken = tokenProvider.createAccessToken(user.getEmail(), user.getUserRole());
         return TokenResponseDto.reissue(newAccessToken);
     }
 }

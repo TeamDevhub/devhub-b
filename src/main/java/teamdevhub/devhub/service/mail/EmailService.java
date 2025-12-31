@@ -5,7 +5,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.EmailCertificationRequestDto;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
-import teamdevhub.devhub.port.out.mail.EmailCertificationCodeGeneratorPort;
+import teamdevhub.devhub.port.out.common.EmailCertificationCodeProvider;
 import teamdevhub.devhub.port.out.mail.EmailCertificationPort;
 import teamdevhub.devhub.port.out.mail.EmailSendPort;
 import jakarta.transaction.Transactional;
@@ -21,7 +21,7 @@ public class EmailService implements EmailCertificationUseCase {
 
     private final EmailSendPort emailSendPort;
     private final EmailCertificationPort emailCertificationPort;
-    private final EmailCertificationCodeGeneratorPort emailCertificationCodeGeneratorPort;
+    private final EmailCertificationCodeProvider emailCertificationCodeProvider;
 
     @Override
     public void sendEmailCertificationCode(EmailCertificationRequestDto emailCertificationRequestDto) {
@@ -30,7 +30,7 @@ public class EmailService implements EmailCertificationUseCase {
             throw AuthRuleException.of(ErrorCodeEnum.EMAIL_CERTIFICATION_CODE_ALREADY_SENT);
         }
 
-        String code = emailCertificationCodeGeneratorPort.generateEmailCertificationCode();
+        String code = emailCertificationCodeProvider.generateEmailCertificationCode();
         emailCertificationPort.save(email, code, Duration.ofMinutes(5));
         emailSendPort.sendEmail(email, "[회원가입] 이메일 인증 코드", code);
     }
