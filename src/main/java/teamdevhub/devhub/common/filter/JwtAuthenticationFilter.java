@@ -21,6 +21,7 @@ import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.auth.RefreshTokenUseCase;
+import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.common.TokenProvider;
 
 import java.io.IOException;
@@ -30,9 +31,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    private final ObjectMapper objectMapper;
     private final TokenProvider tokenProvider;
     private final RefreshTokenUseCase refreshTokenUseCase;
-    private final ObjectMapper objectMapper;
+    private final UserUseCase userUseCase;
 
     @PostConstruct
     public void init() {
@@ -79,7 +81,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         ApiDataResponseVo<?> responseBody = ApiDataResponseVo.successWithData(SuccessCodeEnum.LOGIN_SUCCESS, Map.of("accessToken", accessToken));
 
-
         String jsonResponse = objectMapper.writeValueAsString(responseBody);
 
         response.setHeader(HttpHeaders.AUTHORIZATION, JwtUtil.BEARER_PREFIX + accessToken);
@@ -88,6 +89,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
         response.getWriter().write(jsonResponse);
         response.setStatus(HttpServletResponse.SC_OK);
+
+        userUseCase.updateLastLoginDate();
     }
 
     @Override

@@ -6,7 +6,7 @@ import teamdevhub.devhub.port.out.common.CurrentUserProvider;
 
 @Component("userAuthChecker")
 @RequiredArgsConstructor
-public class UserAuthChecker {
+public class AuthChecker {
 
     private final CurrentUserProvider currentUserProvider;
 

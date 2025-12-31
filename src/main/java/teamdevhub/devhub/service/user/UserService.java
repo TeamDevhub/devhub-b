@@ -6,6 +6,7 @@ import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.user.UserUseCase;
+import teamdevhub.devhub.port.out.common.DateTimeProvider;
 import teamdevhub.devhub.port.out.common.IdentifierProvider;
 import teamdevhub.devhub.port.out.common.PasswordPolicyProvider;
 import teamdevhub.devhub.port.out.mail.EmailCertificationPort;
@@ -13,6 +14,8 @@ import teamdevhub.devhub.port.out.user.UserPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class UserService implements UserUseCase {
     private final EmailCertificationPort emailCertificationPort;
     private final PasswordPolicyProvider passwordPolicyProvider;
     private final IdentifierProvider identifierProvider;
+    private final DateTimeProvider dateTimeProvider;
 
     @Override
     public User signup(SignupCommand signupCommand) {
@@ -50,7 +54,7 @@ public class UserService implements UserUseCase {
     }
 
     @Override
-    public void update() {
+    public void updateLastLoginDate() {
 
     }
 }

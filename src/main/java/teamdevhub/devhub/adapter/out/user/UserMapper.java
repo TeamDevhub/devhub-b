@@ -29,10 +29,10 @@ public class UserMapper {
 
     private static AuditInfo toAuditInfo(UserEntity userEntity) {
         return AuditInfo.of(
-                userEntity.getCreatedBy(),
-                userEntity.getCreatedAt(),
-                userEntity.getModifiedBy(),
-                userEntity.getModifiedAt()
+                userEntity.getRgtrId(),
+                userEntity.getRegDt(),
+                userEntity.getMdfrId(),
+                userEntity.getMdfcnDt()
         );
     }
 }

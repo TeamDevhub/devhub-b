@@ -2,6 +2,7 @@ package teamdevhub.devhub.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import teamdevhub.devhub.port.in.auth.RefreshTokenUseCase;
+import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.common.TokenProvider;
 import teamdevhub.devhub.common.component.CustomAccessDeniedHandler;
 import teamdevhub.devhub.common.component.CustomAuthenticationEntryPoint;
@@ -36,6 +37,7 @@ public class WebSecurityConfig {
 
     private final ObjectMapper objectMapper;
     private final RefreshTokenUseCase refreshTokenUseCase;
+    private final UserUseCase userUseCase;
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
@@ -49,7 +51,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(tokenProvider, refreshTokenUseCase, objectMapper);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(objectMapper, tokenProvider, refreshTokenUseCase,userUseCase);
         filter.setAuthenticationManager(authenticationManager);
         return filter;
     }

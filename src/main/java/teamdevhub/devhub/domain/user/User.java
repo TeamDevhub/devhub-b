@@ -4,16 +4,29 @@ import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.DomainRuleException;
 import teamdevhub.devhub.domain.common.AuditInfo;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public class User {
 
     private final String userGuid;
 
     private final String email;
-    private String password;
-    private String username;
-    private UserRole userRole;
+    private final String password;
 
-    private AuditInfo auditInfo;
+    private final String username;
+//    private final String introduction;
+//    private final List<String> skillList;
+//    private final int mannerDegree;
+//
+//    private final String blockYn;
+//    private final LocalDate blockEndDate;
+//    private final LocalDate lastLoginDate;
+//    private final String deleteYn;
+
+    private final UserRole userRole;
+
+    private final AuditInfo auditInfo;
 
     public User(String userGuid, String email, String username, String password, UserRole userRole, AuditInfo auditInfo) {
         if (email == null || email.isBlank()) {
