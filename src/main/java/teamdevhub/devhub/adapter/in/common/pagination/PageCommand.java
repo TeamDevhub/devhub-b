@@ -14,8 +14,4 @@ public class PageCommand {
     public static PageCommand of(PageRequestDto vo) {
         return new PageCommand(vo.getPage(), vo.getSize());
     }
-
-    public Pageable toPageable() {
-        return PageRequest.of(page, size);
-    }
 }

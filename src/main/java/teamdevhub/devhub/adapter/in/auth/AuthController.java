@@ -22,6 +22,15 @@ public class AuthController {
     private final AuthUseCase authUseCase;
     private final EmailCertificationUseCase emailCertificationUseCase;
 
+    @PostMapping("/logout")
+    public ResponseEntity<ApiDataResponseVo<Void>> logout() {
+        return ResponseEntity.ok(
+                ApiDataResponseVo.successWithoutData(
+                        SuccessCodeEnum.EMAIL_CERTIFICATION_SUCCESS
+                )
+        );
+    }
+
     @PostMapping("/reissue")
     public ResponseEntity<ApiDataResponseVo<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
         return ResponseEntity.ok(

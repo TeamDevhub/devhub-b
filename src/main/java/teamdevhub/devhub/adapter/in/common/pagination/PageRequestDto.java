@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageRequestDto {
-
     private int page = 0;
     private int size = 10;
 }

@@ -3,10 +3,7 @@ package teamdevhub.devhub.adapter.in.user;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.dto.SignupUserRequestDto;
@@ -28,6 +25,24 @@ public class UserController {
                 ApiDataResponseVo.successWithData(
                         SuccessCodeEnum.SIGNUP_SUCCESS,
                         SignupUserResponseDto.fromUserDomain(userUseCase.signup(signupCommand))
+                )
+        );
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<ApiDataResponseVo<Void>> updateUserProfile(@Valid @RequestBody SignupUserRequestDto signupUserRequestDto) {
+        return ResponseEntity.ok(
+                ApiDataResponseVo.successWithoutData(
+                        SuccessCodeEnum.SIGNUP_SUCCESS
+                )
+        );
+    }
+
+    @DeleteMapping("/profile")
+    public ResponseEntity<ApiDataResponseVo<Void>> withdrawUser(@Valid @RequestBody SignupUserRequestDto signupUserRequestDto) {
+        return ResponseEntity.ok(
+                ApiDataResponseVo.successWithoutData(
+                        SuccessCodeEnum.SIGNUP_SUCCESS
                 )
         );
     }

@@ -12,7 +12,6 @@ public class TokenResponseDto {
     public static TokenResponseDto of(String accessToken) {
         return new TokenResponseDto(accessToken);
     }
-
     public static TokenResponseDto reissue(String newAccessToken) {
         return new TokenResponseDto(newAccessToken);
     }

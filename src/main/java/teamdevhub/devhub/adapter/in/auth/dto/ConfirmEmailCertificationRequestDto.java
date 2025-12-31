@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConfirmEmailCertificationRequestDto {
+
     private String email;
     @NotBlank
     @Size(min = 6, max = 6)
