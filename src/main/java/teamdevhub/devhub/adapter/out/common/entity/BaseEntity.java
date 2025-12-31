@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.common;
+package teamdevhub.devhub.adapter.out.common.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

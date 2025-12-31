@@ -1,4 +1,4 @@
-package teamdevhub.devhub.common.util;
+package teamdevhub.devhub.adapter.out.common.util;
 
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.port.out.common.DateTimeProvider;

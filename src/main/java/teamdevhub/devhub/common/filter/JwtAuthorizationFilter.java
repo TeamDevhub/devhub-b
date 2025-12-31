@@ -5,7 +5,6 @@ import teamdevhub.devhub.common.component.JwtAuthenticationProvider;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.common.enums.TokenTypeEnum;
-import teamdevhub.devhub.common.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

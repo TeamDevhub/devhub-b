@@ -1,6 +1,6 @@
 package teamdevhub.devhub.adapter.out.user.entity;
 
-import teamdevhub.devhub.adapter.out.common.BaseEntity;
+import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
 import teamdevhub.devhub.domain.user.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

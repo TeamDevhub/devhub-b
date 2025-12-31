@@ -1,18 +1,14 @@
 package teamdevhub.devhub.adapter.in.common.vo;
 
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
+import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 
 @Getter
 @Builder
-@Schema(description = "에러 상세 정보")
 public class ErrorResponseVo {
 
-    @Schema(description = "오류 코드")
     private String code;
-    @Schema(description = "오류 메시지")
     private String message;
 
     public static ErrorResponseVo of(ErrorCodeEnum errorCode) {

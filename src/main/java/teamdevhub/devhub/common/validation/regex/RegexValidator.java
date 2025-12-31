@@ -1,4 +1,4 @@
-package teamdevhub.devhub.common.validation;
+package teamdevhub.devhub.common.validation.regex;
 
 import teamdevhub.devhub.common.enums.RegexPatternEnum;
 import jakarta.validation.ConstraintValidator;

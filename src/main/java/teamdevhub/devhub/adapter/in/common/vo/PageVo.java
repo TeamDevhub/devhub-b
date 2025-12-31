@@ -1,6 +1,5 @@
 package teamdevhub.devhub.adapter.in.common.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Page;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@Schema(description = "페이징 정보")
 public class PageVo {
 
     private int page;

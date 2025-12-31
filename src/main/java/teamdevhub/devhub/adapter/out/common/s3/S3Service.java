@@ -1,4 +1,4 @@
-package teamdevhub.devhub.common.infrastructure.s3;
+package teamdevhub.devhub.adapter.out.common.s3;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

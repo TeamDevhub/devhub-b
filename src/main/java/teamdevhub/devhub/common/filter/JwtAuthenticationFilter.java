@@ -18,7 +18,7 @@ import teamdevhub.devhub.adapter.in.user.dto.LoginUserRequestDto;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
-import teamdevhub.devhub.common.util.JwtUtil;
+import teamdevhub.devhub.adapter.out.common.util.JwtUtil;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.common.TokenProvider;
 import teamdevhub.devhub.service.auth.RefreshTokenService;
