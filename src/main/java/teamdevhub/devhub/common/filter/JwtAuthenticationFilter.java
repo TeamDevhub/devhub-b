@@ -20,6 +20,7 @@ import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.common.util.JwtUtil;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.port.out.common.TokenProvider;
 import teamdevhub.devhub.service.auth.RefreshTokenService;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final JwtUtil jwtUtil;
+    private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
     private final ObjectMapper objectMapper;
 
@@ -65,8 +66,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String email = userDetails.getUsername();
         UserRole role = userDetails.getUser().getUserRole();
 
-        String accessToken = jwtUtil.createAccessToken(email, role);
-        String refreshToken = jwtUtil.createRefreshToken(email);
+        String accessToken = tokenProvider.createAccessToken(email, role);
+        String refreshToken = tokenProvider.createRefreshToken(email);
         refreshTokenService.save(email, refreshToken);
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)

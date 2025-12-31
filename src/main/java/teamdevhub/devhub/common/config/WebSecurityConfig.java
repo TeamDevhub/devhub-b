@@ -1,7 +1,7 @@
 package teamdevhub.devhub.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import teamdevhub.devhub.common.util.JwtUtil;
+import teamdevhub.devhub.port.out.common.TokenProvider;
 import teamdevhub.devhub.service.auth.RefreshTokenService;
 import teamdevhub.devhub.common.component.CustomAccessDeniedHandler;
 import teamdevhub.devhub.common.component.CustomAuthenticationEntryPoint;
@@ -35,7 +35,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final ObjectMapper objectMapper;
-    private final JwtUtil jwtUtil;
+    private final TokenProvider tokenProvider;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final RefreshTokenService refreshTokenService;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
@@ -49,14 +49,14 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, refreshTokenService, objectMapper);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(tokenProvider, refreshTokenService, objectMapper);
         filter.setAuthenticationManager(authenticationManager);
         return filter;
     }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, jwtAuthenticationProvider, customFilterExceptionHandler);
+        return new JwtAuthorizationFilter(tokenProvider, jwtAuthenticationProvider, customFilterExceptionHandler);
     }
 
     @Bean

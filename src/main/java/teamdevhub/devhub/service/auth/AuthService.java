@@ -6,7 +6,7 @@ import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
-import teamdevhub.devhub.port.out.auth.AuthPort;
+import teamdevhub.devhub.port.out.auth.RefreshTokenPort;
 import teamdevhub.devhub.port.out.common.TokenProvider;
 import teamdevhub.devhub.port.out.user.UserPort;
 import jakarta.transaction.Transactional;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class AuthService implements AuthUseCase {
 
     private final TokenProvider tokenProvider;
-    private final AuthPort authPort;
+    private final RefreshTokenPort refreshTokenPort;
     private final UserPort userPort;
 
     @Override
@@ -39,7 +39,7 @@ public class AuthService implements AuthUseCase {
         User user = userPort.findByEmail(email)
                 .orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
 
-        authPort.findByEmail(email).filter(token -> token.getRefreshToken().equals(refreshToken)).orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID));
+        refreshTokenPort.findByEmail(email).filter(token -> token.getRefreshToken().equals(refreshToken)).orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID));
 
         String newAccessToken = tokenProvider.createAccessToken(user.getEmail(), user.getUserRole());
         return TokenResponseDto.reissue(newAccessToken);

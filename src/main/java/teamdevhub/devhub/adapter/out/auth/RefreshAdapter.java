@@ -1,7 +1,7 @@
 package teamdevhub.devhub.adapter.out.auth;
 
 import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
-import teamdevhub.devhub.port.out.auth.AuthPort;
+import teamdevhub.devhub.port.out.auth.RefreshTokenPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class RefreshAdapter implements AuthPort {
+public class RefreshAdapter implements RefreshTokenPort {
 
     private final RefreshTokenRepositoryJpa refreshTokenRepositoryJpa;
 

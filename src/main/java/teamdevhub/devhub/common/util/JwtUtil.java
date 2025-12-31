@@ -44,11 +44,13 @@ public class JwtUtil implements TokenProvider {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
+    @Override
     public String substringHeaderToken(String token) {
         if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) { return token.substring(7);}
         throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
     }
 
+    @Override
     public String getTokenFromHeader(HttpServletRequest req) {
         String token = req.getHeader(AUTHORIZATION_HEADER);
         if(token != null) {
@@ -75,6 +77,7 @@ public class JwtUtil implements TokenProvider {
                         .compact();
     }
 
+    @Override
     public String createRefreshToken(String email) {
         Date now = new Date();
         return Jwts.builder()

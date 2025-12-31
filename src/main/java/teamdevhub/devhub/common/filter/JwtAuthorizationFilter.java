@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import teamdevhub.devhub.port.out.common.TokenProvider;
 
 import java.io.IOException;
 
@@ -24,22 +25,22 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
+    private final TokenProvider tokenProvider;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
-        String token = jwtUtil.getTokenFromHeader(httpServletRequest);
+        String token = tokenProvider.getTokenFromHeader(httpServletRequest);
 
         if (!StringUtils.hasText(token)) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
 
-        String pureToken = jwtUtil.substringHeaderToken(token);
-        JwtStatusEnum status = jwtUtil.validateToken(pureToken);
+        String pureToken = tokenProvider.substringHeaderToken(token);
+        JwtStatusEnum status = tokenProvider.validateToken(pureToken);
 
         if (status == JwtStatusEnum.EXPIRED) {
             customFilterExceptionHandler.handle(httpServletResponse, ErrorCodeEnum.TOKEN_EXPIRED);
@@ -51,7 +52,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        Claims claims = jwtUtil.getUserInfo(pureToken);
+        Claims claims = tokenProvider.getUserInfo(pureToken);
         TokenTypeEnum tokenTypeEnum = TokenTypeEnum.valueOf(claims.get("token_type", String.class));
         if (tokenTypeEnum != TokenTypeEnum.ACCESS) {
             customFilterExceptionHandler.handle(httpServletResponse, ErrorCodeEnum.TOKEN_INVALID);

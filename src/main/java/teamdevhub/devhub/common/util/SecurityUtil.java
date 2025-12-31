@@ -2,11 +2,13 @@ package teamdevhub.devhub.common.util;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import teamdevhub.devhub.port.out.common.CurrentUserProvider;
 
 @Component
-public class SecurityUtil {
+public class SecurityUtil implements CurrentUserProvider {
 
-    public static String getCurrentUserGuid() {
+    @Override
+    public String getCurrentUserGuid() {
         return SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
