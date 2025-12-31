@@ -15,13 +15,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.adapter.in.user.dto.LoginUserRequestDto;
+import teamdevhub.devhub.adapter.out.common.util.JwtUtil;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
-import teamdevhub.devhub.adapter.out.common.util.JwtUtil;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.port.in.auth.RefreshTokenUseCase;
 import teamdevhub.devhub.port.out.common.TokenProvider;
-import teamdevhub.devhub.service.auth.RefreshTokenService;
 
 import java.io.IOException;
 import java.util.Map;
@@ -31,7 +31,7 @@ import java.util.Map;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final TokenProvider tokenProvider;
-    private final RefreshTokenService refreshTokenService;
+    private final RefreshTokenUseCase refreshTokenUseCase;
     private final ObjectMapper objectMapper;
 
     @PostConstruct
@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String accessToken = tokenProvider.createAccessToken(email, role);
         String refreshToken = tokenProvider.createRefreshToken(email);
-        refreshTokenService.save(email, refreshToken);
+        refreshTokenUseCase.save(email, refreshToken);
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(false)

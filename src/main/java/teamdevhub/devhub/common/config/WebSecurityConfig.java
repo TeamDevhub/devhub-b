@@ -1,8 +1,8 @@
 package teamdevhub.devhub.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import teamdevhub.devhub.port.in.auth.RefreshTokenUseCase;
 import teamdevhub.devhub.port.out.common.TokenProvider;
-import teamdevhub.devhub.service.auth.RefreshTokenService;
 import teamdevhub.devhub.common.component.CustomAccessDeniedHandler;
 import teamdevhub.devhub.common.component.CustomAuthenticationEntryPoint;
 import teamdevhub.devhub.common.component.CustomFilterExceptionHandler;
@@ -35,9 +35,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final ObjectMapper objectMapper;
+    private final RefreshTokenUseCase refreshTokenUseCase;
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
-    private final RefreshTokenService refreshTokenService;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -49,7 +49,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(tokenProvider, refreshTokenService, objectMapper);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(tokenProvider, refreshTokenUseCase, objectMapper);
         filter.setAuthenticationManager(authenticationManager);
         return filter;
     }
