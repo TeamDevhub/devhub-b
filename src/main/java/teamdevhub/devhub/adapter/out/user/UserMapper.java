@@ -11,8 +11,14 @@ public class UserMapper {
                 .userGuid(user.getUserGuid())
                 .email(user.getEmail())
                 .password(user.getPassword())
+                .userRole(user.getUserRole())
                 .username(user.getUsername())
-                .role(user.getUserRole())
+                .introduction(user.getIntroduction())
+                .mannerDegree(user.getMannerDegree())
+                .blocked(user.isBlocked())
+                .blockEndDate(user.getBlockEndDate())
+                .deleted(user.isDeleted())
+                .lastLoginDt(user.getLastLoginDateTime())
                 .build();
     }
 
@@ -20,9 +26,15 @@ public class UserMapper {
         return User.of(
                 userEntity.getUserGuid(),
                 userEntity.getEmail(),
-                userEntity.getUsername(),
                 userEntity.getPassword(),
-                userEntity.getRole(),
+                userEntity.getUserRole(),
+                userEntity.getUsername(),
+                userEntity.getIntroduction(),
+                userEntity.getMannerDegree(),
+                userEntity.isBlocked(),
+                userEntity.getBlockEndDate(),
+                userEntity.isDeleted(),
+                userEntity.getLastLoginDt(),
                 toAuditInfo(userEntity)
         );
     }

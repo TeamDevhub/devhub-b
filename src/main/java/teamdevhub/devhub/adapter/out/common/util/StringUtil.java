@@ -25,6 +25,7 @@ public class StringUtil {
 
     public static String truncate(String str, int maxLength) {
         if (isEmpty(str)) return str;
+        //refactor
         return str.length() <= maxLength ? str : str.substring(0, maxLength);
     }
 }

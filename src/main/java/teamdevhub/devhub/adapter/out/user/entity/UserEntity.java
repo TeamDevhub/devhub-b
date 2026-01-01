@@ -1,12 +1,16 @@
 package teamdevhub.devhub.adapter.out.user.entity;
 
 import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
+import teamdevhub.devhub.adapter.out.common.entity.BooleanToYNConverter;
 import teamdevhub.devhub.domain.user.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -32,13 +36,31 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
-    @Column
-    private String username;
-
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private UserRole role;
+    private UserRole userRole;
+
+    @Column
+    private String username;
+
+    @Column(length = 500)
+    private String introduction;
+
+    @Column(nullable = false)
+    private double mannerDegree;
+
+    @Column(nullable = false)
+    @Convert(converter = BooleanToYNConverter.class)
+    private boolean blocked;
+
+    private LocalDateTime blockEndDate;
+
+    @Column(nullable = false)
+    @Convert(converter = BooleanToYNConverter.class)
+    private boolean deleted;
+
+    private LocalDateTime lastLoginDt;
 }

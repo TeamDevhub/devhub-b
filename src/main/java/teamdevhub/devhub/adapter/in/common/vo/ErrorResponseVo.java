@@ -21,6 +21,7 @@ public class ErrorResponseVo {
     public static ErrorResponseVo of(Throwable throwable) {
         return ErrorResponseVo.builder()
                 .code(ErrorCodeEnum.UNKNOWN_FAIL.getCode())
+                //refactor
                 .message(throwable.getMessage() != null ? throwable.getMessage() : "Unexpected system error occurred")
                 .build();
     }

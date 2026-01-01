@@ -6,6 +6,7 @@ import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.user.UserUseCase;
+import teamdevhub.devhub.port.out.common.CurrentUserProvider;
 import teamdevhub.devhub.port.out.common.DateTimeProvider;
 import teamdevhub.devhub.port.out.common.IdentifierProvider;
 import teamdevhub.devhub.port.out.common.PasswordPolicyProvider;
@@ -26,6 +27,7 @@ public class UserService implements UserUseCase {
     private final EmailCertificationPort emailCertificationPort;
     private final PasswordPolicyProvider passwordPolicyProvider;
     private final IdentifierProvider identifierProvider;
+    private final CurrentUserProvider currentUserProvider;
     private final DateTimeProvider dateTimeProvider;
 
     @Override
@@ -35,13 +37,13 @@ public class UserService implements UserUseCase {
         }
         String userGuid = identifierProvider.generate();
         String encodedPassword = passwordPolicyProvider.encode(signupCommand.getPassword());
-        User user = User.createGeneralUser(userGuid, signupCommand.getEmail(), signupCommand.getUsername(), encodedPassword);
+        User user = User.createGeneralUser(userGuid, signupCommand.getEmail(), signupCommand.getUsername(), encodedPassword, signupCommand.getIntroduction());
         emailCertificationPort.delete(signupCommand.getEmail());
         return userPort.save(user);
     }
 
     @Override
-    public void createAdminUser(String email, String username, String rawPassword) {
+    public void initializeAdminUser(String email, String username, String rawPassword) {
         String userGuid = identifierProvider.generate();
         String encodedPassword = passwordPolicyProvider.encode(rawPassword);
         User adminUser = User.createAdminUser(userGuid, email, username, encodedPassword);
@@ -55,6 +57,9 @@ public class UserService implements UserUseCase {
 
     @Override
     public void updateLastLoginDate() {
-
+//        String userGuid = currentUserProvider.getCurrentUserGuid();
+//        User user = userPort.findByUserGuid(userGuid).orElseThrow();
+//        user.login(dateTimeProvider.now());
+//        userPort.save(user);
     }
 }

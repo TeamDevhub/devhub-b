@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface UserPort {
 
     User save(User user);
+    Optional<User> findByUserGuid(String userGuid);
     Optional<User> findByEmail(String email);
     boolean existsByRole(UserRole role);
     boolean existsByEmail(String email);

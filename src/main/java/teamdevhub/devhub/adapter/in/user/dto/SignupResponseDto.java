@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class SignupUserResponseDto {
+public class SignupResponseDto {
 
     private String email;
     private String username;
@@ -17,8 +17,8 @@ public class SignupUserResponseDto {
     private String createdBy;
     private String modifiedBy;
 
-    public static SignupUserResponseDto fromUserDomain(User user) {
-        return SignupUserResponseDto.builder()
+    public static SignupResponseDto fromUserDomain(User user) {
+        return SignupResponseDto.builder()
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .createdAt(user.getAuditInfo().getCreatedAt())

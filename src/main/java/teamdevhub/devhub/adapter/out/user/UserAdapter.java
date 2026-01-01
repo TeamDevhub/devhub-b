@@ -1,5 +1,6 @@
 package teamdevhub.devhub.adapter.out.user;
 
+import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.user.UserPort;
@@ -16,7 +17,8 @@ public class UserAdapter implements UserPort {
 
     @Override
     public User save(User user) {
-        return UserMapper.toDomain(userRepositoryJpa.save(UserMapper.toEntity(user)));
+        UserEntity userEntity = userRepositoryJpa.save(UserMapper.toEntity(user));
+        return UserMapper.toDomain(userEntity);
     }
 
     @Override
@@ -25,13 +27,17 @@ public class UserAdapter implements UserPort {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepositoryJpa.findByEmail(email)
-                .map(UserMapper::toDomain);
+    public Optional<User> findByUserGuid(String userGuid) {
+        return userRepositoryJpa.findByUserGuid(userGuid).map(UserMapper::toDomain);
     }
 
     @Override
-    public boolean existsByRole(UserRole role) {
-        return userRepositoryJpa.existsByRole(role);
+    public Optional<User> findByEmail(String email) {
+        return userRepositoryJpa.findByEmail(email).map(UserMapper::toDomain);
+    }
+
+    @Override
+    public boolean existsByRole(UserRole userRole) {
+        return userRepositoryJpa.existsByUserRole(userRole);
     }
 }

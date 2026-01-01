@@ -14,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
-import teamdevhub.devhub.adapter.in.user.dto.LoginUserRequestDto;
+import teamdevhub.devhub.adapter.in.user.dto.LoginRequestDto;
 import teamdevhub.devhub.adapter.out.common.util.JwtUtil;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
@@ -45,13 +45,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         try {
-            LoginUserRequestDto loginUserRequestDto =
-                    objectMapper.readValue(request.getInputStream(), LoginUserRequestDto.class);
+            LoginRequestDto loginRequestDto =
+                    objectMapper.readValue(request.getInputStream(), LoginRequestDto.class);
 
             return getAuthenticationManager().authenticate(
                             new UsernamePasswordAuthenticationToken(
-                                    loginUserRequestDto.getEmail(),
-                                    loginUserRequestDto.getPassword()));
+                                    loginRequestDto.getEmail(),
+                                    loginRequestDto.getPassword()));
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
