@@ -1,19 +1,20 @@
 package teamdevhub.devhub.service.user;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.user.UserUseCase;
+import teamdevhub.devhub.port.out.auth.RefreshTokenPort;
 import teamdevhub.devhub.port.out.common.DateTimeProvider;
 import teamdevhub.devhub.port.out.common.IdentifierProvider;
 import teamdevhub.devhub.port.out.common.PasswordPolicyProvider;
 import teamdevhub.devhub.port.out.mail.EmailCertificationPort;
 import teamdevhub.devhub.port.out.user.UserPort;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class UserService implements UserUseCase {
 
     private final UserPort userPort;
     private final EmailCertificationPort emailCertificationPort;
+    private final RefreshTokenPort refreshTokenPort;
     private final PasswordPolicyProvider passwordPolicyProvider;
     private final IdentifierProvider identifierProvider;
     private final DateTimeProvider dateTimeProvider;
@@ -55,6 +57,16 @@ public class UserService implements UserUseCase {
     public void updateLastLoginDate(String userGuid) {
         User user = userPort.findByUserGuid(userGuid).orElseThrow();
         user.login(dateTimeProvider.now());
+        userPort.save(user);
+    }
+
+    @Override
+    public void withdrawCurrentUser(String userGuid) {
+        User user = userPort.findByUserGuid(userGuid)
+                .orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+
+        user.withdraw();
+        refreshTokenPort.deleteByEmail(user.getEmail());
         userPort.save(user);
     }
 }

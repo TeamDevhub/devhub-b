@@ -24,11 +24,11 @@ public class AuthController {
     private final EmailCertificationUseCase emailCertificationUseCase;
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiDataResponseVo<Void>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiDataResponseVo<Void>> revoke(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         authUseCase.revoke(userDetails.getUsername());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.EMAIL_CERTIFICATION_SUCCESS
+                        SuccessCodeEnum.LOGOUT_SUCCESS
                 )
         );
     }

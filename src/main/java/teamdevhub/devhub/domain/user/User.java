@@ -134,6 +134,14 @@ public class User {
         this.lastLoginDateTime = loginDateTime;
     }
 
+    public void withdraw() {
+        if (this.deleted) {
+            throw DomainRuleException.of(ErrorCodeEnum.UNKNOWN_FAIL);
+        }
+        this.deleted = true;
+        this.blocked = false;
+    }
+
     public boolean hasRole(UserRole checkRole) {
         return this.userRole == checkRole;
     }

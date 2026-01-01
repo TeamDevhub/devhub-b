@@ -3,11 +3,13 @@ package teamdevhub.devhub.adapter.in.user;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.dto.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.SignupResponseDto;
+import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 
@@ -39,10 +41,11 @@ public class UserController {
     }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> withdrawUser(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<ApiDataResponseVo<Void>> withdrawUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userUseCase.withdrawCurrentUser(userDetails.getUserGuid());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.SIGNUP_SUCCESS
+                        SuccessCodeEnum.USER_DELETE_SUCCESS
                 )
         );
     }

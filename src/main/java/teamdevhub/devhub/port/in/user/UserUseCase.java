@@ -9,4 +9,5 @@ public interface UserUseCase {
     void initializeAdminUser(String email, String username, String rawPassword);
     boolean existsByUserRole(UserRole userRole);
     void updateLastLoginDate(String userGuid);
+    void withdrawCurrentUser(String userGuid);
 }
