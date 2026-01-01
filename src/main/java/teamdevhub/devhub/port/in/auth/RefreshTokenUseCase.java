@@ -7,5 +7,4 @@ import java.util.Optional;
 public interface RefreshTokenUseCase {
     void save(String email, String refreshToken);
     Optional<RefreshTokenEntity> findByEmail(String email);
-    void delete(String email);
 }

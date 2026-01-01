@@ -3,6 +3,7 @@ package teamdevhub.devhub.adapter.in.auth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.ConfirmEmailCertificationRequestDto;
@@ -10,6 +11,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.EmailCertificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
+import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
@@ -23,7 +25,8 @@ public class AuthController {
     private final EmailCertificationUseCase emailCertificationUseCase;
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiDataResponseVo<Void>> logout() {
+    public ResponseEntity<ApiDataResponseVo<Void>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        authUseCase.logout(userDetails.getUsername());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCodeEnum.EMAIL_CERTIFICATION_SUCCESS

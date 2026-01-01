@@ -27,9 +27,4 @@ public class RefreshTokenService implements RefreshTokenUseCase {
     public Optional<RefreshTokenEntity> findByEmail(String email) {
         return refreshTokenPort.findByEmail(email);
     }
-
-    @Override
-    public void delete(String email) {
-        refreshTokenPort.deleteByEmail(email);
-    }
 }

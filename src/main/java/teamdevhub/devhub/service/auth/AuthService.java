@@ -44,4 +44,9 @@ public class AuthService implements AuthUseCase {
         String newAccessToken = tokenProvider.createAccessToken(user.getEmail(), user.getUserRole());
         return TokenResponseDto.reissue(newAccessToken);
     }
+
+    @Override
+    public void logout(String email) {
+        refreshTokenPort.deleteByEmail(email);
+    }
 }
