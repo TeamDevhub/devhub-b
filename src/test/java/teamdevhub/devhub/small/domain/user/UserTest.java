@@ -19,7 +19,7 @@ class UserTest {
     }
 
     @Test
-    void hasRole() {
+    void hasUserRole() {
     }
 
     @Test

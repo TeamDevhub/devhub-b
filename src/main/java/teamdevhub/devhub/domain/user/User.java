@@ -7,7 +7,6 @@ import teamdevhub.devhub.common.exception.DomainRuleException;
 import teamdevhub.devhub.domain.common.AuditInfo;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class User {
@@ -142,7 +141,7 @@ public class User {
         this.blocked = false;
     }
 
-    public boolean hasRole(UserRole checkRole) {
+    public boolean hasUserRole(UserRole checkRole) {
         return this.userRole == checkRole;
     }
 
