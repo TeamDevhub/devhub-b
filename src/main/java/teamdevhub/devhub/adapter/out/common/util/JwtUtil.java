@@ -1,11 +1,5 @@
 package teamdevhub.devhub.adapter.out.common.util;
 
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.enums.JwtStatusEnum;
-import teamdevhub.devhub.common.enums.TokenTypeEnum;
-import teamdevhub.devhub.common.exception.AuthRuleException;
-import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.common.TokenProvider;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -15,8 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.JwtStatusEnum;
+import teamdevhub.devhub.common.enums.TokenTypeEnum;
+import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.port.out.common.TokenProvider;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
