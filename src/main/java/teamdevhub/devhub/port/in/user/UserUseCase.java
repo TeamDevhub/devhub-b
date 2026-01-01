@@ -8,5 +8,5 @@ public interface UserUseCase {
     User signup(SignupCommand signupCommand);
     void initializeAdminUser(String email, String username, String rawPassword);
     boolean existsByRole(UserRole role);
-    void updateLastLoginDate();
+    void updateLastLoginDate(String userGuid);
 }

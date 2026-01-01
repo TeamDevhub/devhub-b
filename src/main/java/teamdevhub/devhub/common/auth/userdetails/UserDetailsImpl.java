@@ -55,7 +55,7 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
-    public String getUserId() {
+    public String getUserGuid() {
         return user.getUserGuid();
     }
 }

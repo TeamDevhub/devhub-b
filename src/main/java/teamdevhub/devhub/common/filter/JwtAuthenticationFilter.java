@@ -90,7 +90,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.getWriter().write(jsonResponse);
         response.setStatus(HttpServletResponse.SC_OK);
 
-        userUseCase.updateLastLoginDate();
+        userUseCase.updateLastLoginDate(userDetails.getUserGuid());
     }
 
     @Override

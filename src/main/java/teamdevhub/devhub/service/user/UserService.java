@@ -16,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -56,10 +54,9 @@ public class UserService implements UserUseCase {
     }
 
     @Override
-    public void updateLastLoginDate() {
-//        String userGuid = currentUserProvider.getCurrentUserGuid();
-//        User user = userPort.findByUserGuid(userGuid).orElseThrow();
-//        user.login(dateTimeProvider.now());
-//        userPort.save(user);
+    public void updateLastLoginDate(String userGuid) {
+        User user = userPort.findByUserGuid(userGuid).orElseThrow();
+        user.login(dateTimeProvider.now());
+        userPort.save(user);
     }
 }

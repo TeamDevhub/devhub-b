@@ -30,21 +30,19 @@ public class User {
     private final AuditInfo auditInfo;
 
     @Builder
-    private User(
-            String userGuid,
-            String email,
-            String password,
-            UserRole userRole,
-            String username,
-            String introduction,
-            List<String> skillList,
-            double mannerDegree,
-            boolean blocked,
-            LocalDateTime blockEndDate,
-            boolean deleted,
-            LocalDateTime lastLoginDateTime,
-            AuditInfo auditInfo
-    ) {
+    private User(String userGuid,
+                 String email,
+                 String password,
+                 UserRole userRole,
+                 String username,
+                 String introduction,
+                 double mannerDegree,
+                 boolean blocked,
+                 LocalDateTime blockEndDate,
+                 boolean deleted,
+                 LocalDateTime lastLoginDateTime,
+                 AuditInfo auditInfo)
+    {
         if (email == null || email.isBlank()) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_ID_FAIL);
         }
@@ -66,7 +64,12 @@ public class User {
         this.auditInfo = auditInfo != null ? auditInfo : AuditInfo.empty(); //refactor
     }
 
-    public static User createGeneralUser(String userGuid, String email, String username, String password, String introduction) {
+    public static User createGeneralUser(String userGuid,
+                                         String email,
+                                         String username,
+                                         String password,
+                                         String introduction)
+    {
         return User.builder()
                 .userGuid(userGuid)
                 .email(email)
@@ -81,7 +84,11 @@ public class User {
                 .build();
     }
 
-    public static User createAdminUser(String userGuid, String email, String username, String password) {
+    public static User createAdminUser(String userGuid,
+                                       String email,
+                                       String username,
+                                       String password)
+    {
         return User.builder()
                 .userGuid(userGuid)
                 .email(email)
@@ -94,20 +101,19 @@ public class User {
                 .build();
     }
 
-    public static User of(
-            String userGuid,
-            String email,
-            String password,
-            UserRole userRole,
-            String username,
-            String introduction,
-            double mannerDegree,
-            boolean blocked,
-            LocalDateTime blockEndDate,
-            boolean deleted,
-            LocalDateTime lastLoginDateTime,
-            AuditInfo auditInfo
-    ) {
+    public static User of(String userGuid,
+                          String email,
+                          String password,
+                          UserRole userRole,
+                          String username,
+                          String introduction,
+                          double mannerDegree,
+                          boolean blocked,
+                          LocalDateTime blockEndDate,
+                          boolean deleted,
+                          LocalDateTime lastLoginDateTime,
+                          AuditInfo auditInfo)
+    {
         return User.builder()
                 .userGuid(userGuid)
                 .email(email)
@@ -139,13 +145,8 @@ public class User {
         this.username = newUsername;
     }
 
-    public void blockUntil(LocalDateTime endDate) {
+    public void blockUntil(LocalDateTime blockEndDate) {
         this.blocked = true;
-        this.blockEndDate = endDate;
-    }
-
-    public void unblock() {
-        this.blocked = false;
-        this.blockEndDate = null;
+        this.blockEndDate = blockEndDate;
     }
 }
