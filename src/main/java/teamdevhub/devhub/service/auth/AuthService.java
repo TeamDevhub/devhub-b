@@ -23,7 +23,7 @@ public class AuthService implements AuthUseCase {
     private final UserPort userPort;
 
     @Override
-    public TokenResponseDto refreshAccessToken(String refreshToken) {
+    public TokenResponseDto reissueAccessToken(String refreshToken) {
 
         JwtStatusEnum jwtStatusEnum = tokenProvider.validateToken(refreshToken);
 
@@ -46,7 +46,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
-    public void logout(String email) {
+    public void revoke(String email) {
         refreshTokenPort.deleteByEmail(email);
     }
 }

@@ -9,7 +9,6 @@ import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationComman
 import teamdevhub.devhub.adapter.in.auth.dto.ConfirmEmailCertificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.EmailCertificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.TokenResponseDto;
-import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
@@ -26,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<ApiDataResponseVo<Void>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        authUseCase.logout(userDetails.getUsername());
+        authUseCase.revoke(userDetails.getUsername());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCodeEnum.EMAIL_CERTIFICATION_SUCCESS
@@ -39,7 +38,7 @@ public class AuthController {
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithData(
                         SuccessCodeEnum.CREATE_SUCCESS,
-                        authUseCase.refreshAccessToken(refreshToken)
+                        authUseCase.reissueAccessToken(refreshToken)
                 )
         );
     }

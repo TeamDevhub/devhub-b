@@ -16,7 +16,7 @@ public class AdminInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        boolean existAdmin = userUseCase.existsByRole(UserRole.ADMIN);
+        boolean existAdmin = userUseCase.existsByUserRole(UserRole.ADMIN);
         if (!existAdmin) {
             userUseCase.initializeAdminUser("admin@admin.co.kr", "admin", "admin1234!");
             log.info("기본 ADMIN 계정 생성됨 - ID : admin@admin.co.kr / PW : admin1234!");

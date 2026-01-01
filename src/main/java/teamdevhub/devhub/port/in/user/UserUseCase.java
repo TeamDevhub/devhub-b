@@ -7,6 +7,6 @@ import teamdevhub.devhub.domain.user.UserRole;
 public interface UserUseCase {
     User signup(SignupCommand signupCommand);
     void initializeAdminUser(String email, String username, String rawPassword);
-    boolean existsByRole(UserRole role);
+    boolean existsByUserRole(UserRole userRole);
     void updateLastLoginDate(String userGuid);
 }

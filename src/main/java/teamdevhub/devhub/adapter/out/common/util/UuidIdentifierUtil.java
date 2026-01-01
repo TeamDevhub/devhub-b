@@ -9,7 +9,7 @@ import java.util.UUID;
 public class UuidIdentifierUtil implements IdentifierProvider {
 
     @Override
-    public String generate() {
+    public String generateIdentifier() {
         return UUID.randomUUID()
                 .toString()
                 .replace("-", "");

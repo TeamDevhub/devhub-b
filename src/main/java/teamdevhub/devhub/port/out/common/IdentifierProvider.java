@@ -1,5 +1,5 @@
 package teamdevhub.devhub.port.out.common;
 
 public interface IdentifierProvider {
-    String generate();
+    String generateIdentifier();
 }

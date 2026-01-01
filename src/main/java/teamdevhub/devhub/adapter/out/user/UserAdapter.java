@@ -22,11 +22,6 @@ public class UserAdapter implements UserPort {
     }
 
     @Override
-    public boolean existsByEmail(String email) {
-        return userRepositoryJpa.existsByEmail(email);
-    }
-
-    @Override
     public Optional<User> findByUserGuid(String userGuid) {
         return userRepositoryJpa.findByUserGuid(userGuid).map(UserMapper::toDomain);
     }
@@ -37,7 +32,7 @@ public class UserAdapter implements UserPort {
     }
 
     @Override
-    public boolean existsByRole(UserRole userRole) {
+    public boolean existsByUserRole(UserRole userRole) {
         return userRepositoryJpa.existsByUserRole(userRole);
     }
 }

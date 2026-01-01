@@ -66,11 +66,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
         String email = userDetails.getUsername();
-        UserRole role = userDetails.getUser().getUserRole();
+        UserRole userRole = userDetails.getUser().getUserRole();
 
-        String accessToken = tokenProvider.createAccessToken(email, role);
+        String accessToken = tokenProvider.createAccessToken(email, userRole);
         String refreshToken = tokenProvider.createRefreshToken(email);
-        refreshTokenUseCase.save(email, refreshToken);
+        refreshTokenUseCase.issueRefreshToken(email, refreshToken);
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(false)

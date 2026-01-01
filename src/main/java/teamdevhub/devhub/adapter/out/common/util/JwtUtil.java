@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -54,22 +55,17 @@ public class JwtUtil implements TokenProvider {
     public String getTokenFromHeader(HttpServletRequest req) {
         String token = req.getHeader(AUTHORIZATION_HEADER);
         if(token != null) {
-            try {
-                return URLDecoder.decode(token, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                log.info(e.getMessage());
-                return null;
-            }
+            return URLDecoder.decode(token, StandardCharsets.UTF_8);
         }
         return null;
     }
 
     @Override
-    public String createAccessToken(String email, UserRole role) {
+    public String createAccessToken(String email, UserRole userRole) {
         Date now = new Date();
         return Jwts.builder()
                         .setSubject(email)
-                        .claim(AUTHORIZATION_KEY, role)
+                        .claim(AUTHORIZATION_KEY, userRole)
                         .claim("token_type", TokenTypeEnum.ACCESS.name())
                         .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
                         .setIssuedAt(now)

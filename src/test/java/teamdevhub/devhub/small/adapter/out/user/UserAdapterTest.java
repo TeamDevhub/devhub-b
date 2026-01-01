@@ -2,8 +2,6 @@ package teamdevhub.devhub.small.adapter.out.user;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class UserAdapterTest {
 
     @Test
@@ -19,6 +17,6 @@ class UserAdapterTest {
     }
 
     @Test
-    void existsByRole() {
+    void existsByUserRole() {
     }
 }
