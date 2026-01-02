@@ -20,13 +20,9 @@
         </encoder>
     </appender>
 
-    <!-- ERROR_FILE Logger 참조 추가 -->
-    <logger name="ERROR_FILE" level="ERROR" additivity="false">
-        <appender-ref ref="ERROR_FILE"/>
-    </logger>
-
     <!-- 루트 -->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ERROR_FILE"/>
     </root>
 </configuration>

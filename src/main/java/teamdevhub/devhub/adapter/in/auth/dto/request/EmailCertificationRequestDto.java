@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.auth.dto;
+package teamdevhub.devhub.adapter.in.auth.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

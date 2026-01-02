@@ -1,11 +1,9 @@
 package teamdevhub.devhub.adapter.in.user.command;
 
-import teamdevhub.devhub.adapter.in.user.dto.SignupRequestDto;
+import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 @Builder

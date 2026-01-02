@@ -1,6 +1,6 @@
 package teamdevhub.devhub.port.in.auth;
 
-import teamdevhub.devhub.adapter.in.auth.dto.TokenResponseDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 
 public interface AuthUseCase {
     TokenResponseDto reissueAccessToken(String refreshToken);

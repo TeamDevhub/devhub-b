@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.auth.dto;
+package teamdevhub.devhub.adapter.in.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

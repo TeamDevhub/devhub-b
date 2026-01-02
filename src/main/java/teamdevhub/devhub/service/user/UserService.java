@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
+import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.user.User;
@@ -45,7 +46,7 @@ public class UserService implements UserUseCase {
         String userGuid = identifierProvider.generateIdentifier();
         String encodedPassword = passwordPolicyProvider.encode(rawPassword);
         User adminUser = User.createAdminUser(userGuid, email, username, encodedPassword);
-        userPort.save(adminUser);
+        update(adminUser);
     }
 
     @Override
@@ -55,18 +56,31 @@ public class UserService implements UserUseCase {
 
     @Override
     public void updateLastLoginDate(String userGuid) {
-        User user = userPort.findByUserGuid(userGuid).orElseThrow();
+        User user = getUserByUserGuid(userGuid);
         user.login(dateTimeProvider.now());
-        userPort.save(user);
+        update(user);
     }
 
     @Override
     public void withdrawCurrentUser(String userGuid) {
-        User user = userPort.findByUserGuid(userGuid)
-                .orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
-
+        User user = getUserByUserGuid(userGuid);
         user.withdraw();
         refreshTokenPort.deleteByEmail(user.getEmail());
+        update(user);
+    }
+
+    @Override
+    public void updateProfile(UpdateProfileCommand updateProfileCommand) {
+        User user = getUserByUserGuid(updateProfileCommand.getUserGuid());
+        user.updateProfile(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
+        update(user);
+    }
+
+    private User getUserByUserGuid(String userGuid) {
+        return userPort.findByUserGuid(userGuid).orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+    }
+
+    private void update(User user) {
         userPort.save(user);
     }
 }

@@ -7,8 +7,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
-import teamdevhub.devhub.adapter.in.user.dto.SignupRequestDto;
-import teamdevhub.devhub.adapter.in.user.dto.SignupResponseDto;
+import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
+import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
+import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
+import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.port.in.user.UserUseCase;
@@ -32,7 +34,9 @@ public class UserController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> updateProfile(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<ApiDataResponseVo<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, userDetails.getUserGuid());
+        userUseCase.updateProfile(updateProfileCommand);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCodeEnum.SIGNUP_SUCCESS

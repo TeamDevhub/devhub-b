@@ -1,6 +1,6 @@
 package teamdevhub.devhub.service.auth;
 
-import teamdevhub.devhub.adapter.in.auth.dto.TokenResponseDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.common.exception.AuthRuleException;

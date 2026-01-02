@@ -1,7 +1,7 @@
 package teamdevhub.devhub.service.mail;
 
 import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
-import teamdevhub.devhub.adapter.in.auth.dto.EmailCertificationRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;

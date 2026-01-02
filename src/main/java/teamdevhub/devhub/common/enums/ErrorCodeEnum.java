@@ -34,22 +34,6 @@ public enum ErrorCodeEnum {
     USER_ID_FAIL("ERR.DVH.0030", "사용자 ID 값이 잘못되었습니다.",BAD_REQUEST),
     USER_PASSWORD_FAIL("ERR.DVH.0031", "사용자 비밀번호 값이 잘못되었습니다.",BAD_REQUEST),
 
-    PROJECT_POSITION_RECRUITMENT_FAIL("ERR.DVH.0051", "모집 인원은 최소 1명 이상이어야 합니다.", BAD_REQUEST),
-    PROJECT_PERIOD_FAIL("ERR.DVH.0052", "프로젝트 종료일은 시작일 이후여야 합니다.",BAD_REQUEST),
-    PROJECT_TITLE_FAIL("ERR.DVH.0053", "프로젝트 제목은 공백일 수 없습니다.",BAD_REQUEST),
-    PROJECT_DESCRIPTION_FAIL("ERR.DVH.0054", "프로젝트 설명은 100자를 넘길 수 없습니다.",BAD_REQUEST),
-    PROJECT_PROGRESS_FAIL("ERR.DVH.0055", "프로젝트 진행 방식은 비어 있을 수 없습니다.",BAD_REQUEST),
-    PROJECT_WRONG_PROGRESS_FAIL("ERR.DVH.0056", "잘못된 프로젝트 진행 방식입니다.",BAD_REQUEST),
-    PROJECT_RECRUITMENT_FAIL("ERR.DVH.0057", "모집 유형은 비어 있을 수 없습니다.",BAD_REQUEST),
-    PROJECT_WRONG_RECRUITMENT_FAIL("ERR.DVH.0058", "잘못된 모집 유형입니다.",BAD_REQUEST),
-
-    APPLICATION_PROJECT_FAIL("ERR.DVH.0070", "프로젝트 식별값은 필수입니다.",BAD_REQUEST),
-    APPLICATION_USER_FAIL("ERR.DVH.0071", "이메일은 필수입니다.",BAD_REQUEST),
-    APPLICATION_APPLY_FAIL("ERR.DVH.0072", "이미 지원한 내역이 존재합니다.",BAD_REQUEST),
-    APPLICATION_APPROVE_FAIL("ERR.DVH.0073", "승인할 수 없는 상태입니다.",BAD_REQUEST),
-    APPLICATION_REJECT_FAIL("ERR.DVH.0074", "거절할 수 없는 상태입니다.",BAD_REQUEST),
-    APPLICATION_CANCEL_FAIL("ERR.DVH.0075", "승인된 지원은 취소할 수 없습니다.",BAD_REQUEST),
-
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다.",BAD_REQUEST);
 
     private final String code;

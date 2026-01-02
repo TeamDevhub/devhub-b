@@ -141,6 +141,19 @@ public class User {
         this.blocked = false;
     }
 
+    public void updateProfile(String username, String introduction) {
+        if(hasText(username)) {
+            this.username = username;
+        }
+        if(hasText(introduction)) {
+            this.introduction = introduction;
+        }
+
+    }
+
+    public boolean hasText(String value) {
+        return value != null && !value.isBlank();
+    }
     public boolean hasUserRole(UserRole checkRole) {
         return this.userRole == checkRole;
     }

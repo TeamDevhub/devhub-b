@@ -1,7 +1,7 @@
 package teamdevhub.devhub.port.in.mail;
 
 import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
-import teamdevhub.devhub.adapter.in.auth.dto.EmailCertificationRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
 
 public interface EmailCertificationUseCase {
     void sendEmailCertificationCode(EmailCertificationRequestDto emailCertificationRequestDto);

@@ -14,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
-import teamdevhub.devhub.adapter.in.user.dto.LoginRequestDto;
+import teamdevhub.devhub.adapter.in.user.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.out.common.util.JwtUtil;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
