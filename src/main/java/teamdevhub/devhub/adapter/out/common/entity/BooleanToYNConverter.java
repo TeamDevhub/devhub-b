@@ -3,7 +3,7 @@ package teamdevhub.devhub.adapter.out.common.entity;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-@Converter(autoApply = false)
+@Converter
 public class BooleanToYNConverter implements AttributeConverter<Boolean, String> {
 
     private static final String YES = "Y";

@@ -1,7 +1,5 @@
 package teamdevhub.devhub.adapter.out.common.util;
 
-import java.util.UUID;
-
 public class StringUtil {
 
     public static boolean isEmpty(String str) {
@@ -9,11 +7,7 @@ public class StringUtil {
             return true;
         }
 
-        if (str.isBlank()) {
-            return true;
-        }
-
-        return false;
+        return str.isBlank();
     }
 
     public static boolean isNotEmpty(String str) {

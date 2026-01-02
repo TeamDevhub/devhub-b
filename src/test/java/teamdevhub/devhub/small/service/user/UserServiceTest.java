@@ -56,7 +56,7 @@ class UserServiceTest {
                 TEST_EMAIL,
                 VERIFIED_EMAIL_CODE,
                 fakeDateTimeProvider.now().plusMinutes(5),
-                fakeDateTimeProvider.now() // verifiedAt
+                fakeDateTimeProvider.now()
         );
 
         fakeEmailCertificationRepository = new FakeEmailCertificationRepository(List.of(verifiedEmail), fakeDateTimeProvider);
@@ -73,10 +73,13 @@ class UserServiceTest {
 
     @Test
     void signup_success() {
+        //given
         SignupCommand command = new SignupCommand(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
 
+        //when
         User savedUser = userService.signup(command);
 
+        //then
         assertNotNull(savedUser.getUserGuid());
         assertEquals(TEST_EMAIL, savedUser.getEmail());
         assertEquals(TEST_USERNAME, savedUser.getUsername());
@@ -86,17 +89,23 @@ class UserServiceTest {
 
     @Test
     void signup_failsIfEmailNotVerified() {
+        //given
         SignupCommand command = new SignupCommand(UNVERIFIED_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
+
+        //when,then
         assertThrows(BusinessRuleException.class, () -> userService.signup(command));
     }
 
     @Test
     void withdraw_user_success() {
+        //given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
         fakeUserRepository.save(user);
 
+        //when
         userService.withdrawCurrentUser(TEST_GUID);
 
+        //then
         User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID).orElseThrow(() -> new AssertionError("User must exist after withdraw"));
         assertTrue(updatedUser.isDeleted());
         assertFalse(fakeRefreshTokenRepository.findByEmail(TEST_EMAIL).isPresent());
@@ -104,23 +113,29 @@ class UserServiceTest {
 
     @Test
     void updateLastLoginDate_success() {
+        //given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
         fakeUserRepository.save(user);
 
+        //when
         userService.updateLastLoginDate(TEST_GUID);
 
+        //then
         User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID).orElseThrow(() -> new AssertionError("User must exist after updateLastLoginDate"));
         assertEquals(fakeDateTimeProvider.now(), updatedUser.getLastLoginDateTime());
     }
 
     @Test
     void updateProfile_success() {
+        //given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
         fakeUserRepository.save(user);
 
+        //when
         UpdateProfileCommand command = new UpdateProfileCommand(TEST_GUID, NEW_USERNAME, NEW_INTRO);
         userService.updateProfile(command);
 
+        //then
         User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID).orElseThrow(() -> new AssertionError("User must exist after updateProfile"));
         assertEquals(NEW_USERNAME, updatedUser.getUsername());
         assertEquals(NEW_INTRO, updatedUser.getIntroduction());
@@ -128,8 +143,10 @@ class UserServiceTest {
 
     @Test
     void initializeAdminUser_success() {
+        //given
         userService.initializeAdminUser(ADMIN_EMAIL, ADMIN_USERNAME, ADMIN_PASSWORD);
 
+        //then
         assertTrue(fakeUserRepository.existsByUserRole(UserRole.ADMIN));
     }
 }
