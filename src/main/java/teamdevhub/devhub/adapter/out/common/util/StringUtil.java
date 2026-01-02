@@ -1,14 +1,19 @@
 package teamdevhub.devhub.adapter.out.common.util;
 
-import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
-@NoArgsConstructor
 public class StringUtil {
 
     public static boolean isEmpty(String str) {
-        return str == null || str.trim().isEmpty();
+        if (str == null) {
+            return true;
+        }
+
+        if (str.isBlank()) {
+            return true;
+        }
+
+        return false;
     }
 
     public static boolean isNotEmpty(String str) {
@@ -16,16 +21,26 @@ public class StringUtil {
     }
 
     public static String defaultIfEmpty(String str, String defaultStr) {
-        return isEmpty(str) ? defaultStr : str;
-    }
+        if (isEmpty(str)) {
+            return defaultStr;
+        }
 
-    public static String generateRandomUUID() {
-        return UUID.randomUUID().toString();
+        return str;
     }
 
     public static String truncate(String str, int maxLength) {
-        if (isEmpty(str)) return str;
-        //refactor
-        return str.length() <= maxLength ? str : str.substring(0, maxLength);
+        if (isEmpty(str)) {
+            return str;
+        }
+
+        if (maxLength < 0) {
+            throw new IllegalArgumentException("maxLength must be positive");
+        }
+
+        if (str.length() <= maxLength) {
+            return str;
+        }
+
+        return str.substring(0, maxLength);
     }
 }

@@ -19,10 +19,22 @@ public class ErrorResponseVo {
     }
 
     public static ErrorResponseVo of(Throwable throwable) {
+        String message = resolveMessage(throwable);
         return ErrorResponseVo.builder()
                 .code(ErrorCodeEnum.UNKNOWN_FAIL.getCode())
-                //refactor
-                .message(throwable.getMessage() != null ? throwable.getMessage() : "Unexpected system error occurred")
+                .message(message)
                 .build();
+    }
+
+    private static String resolveMessage(Throwable throwable) {
+        if (throwable == null) {
+            return "Unexpected system error occurred";
+        }
+
+        if (throwable.getMessage() == null || throwable.getMessage().isBlank()) {
+            return "Unexpected system error occurred";
+        }
+
+        return throwable.getMessage();
     }
 }

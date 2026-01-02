@@ -35,6 +35,6 @@ public class BooleanToYNConverter implements AttributeConverter<Boolean, String>
         if (NO.equals(databaseColumnValue)) {
             return false;
         }
-        throw new IllegalArgumentException("Invalid Y/N value: " + databaseColumnValue); // refactor
+        throw new IllegalArgumentException("Invalid Y/N value: " + databaseColumnValue);
     }
 }

@@ -7,6 +7,7 @@ import teamdevhub.devhub.common.exception.DomainRuleException;
 import teamdevhub.devhub.domain.common.AuditInfo;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 public class User {
@@ -60,7 +61,7 @@ public class User {
         this.blockEndDate = blockEndDate;
         this.deleted = deleted;
         this.lastLoginDateTime = lastLoginDateTime;
-        this.auditInfo = auditInfo != null ? auditInfo : AuditInfo.empty(); //refactor
+        this.auditInfo = Objects.requireNonNullElse(auditInfo, AuditInfo.empty());
     }
 
     public static User createGeneralUser(String userGuid,
