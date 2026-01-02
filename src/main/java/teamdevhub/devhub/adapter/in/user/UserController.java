@@ -39,7 +39,7 @@ public class UserController {
         userUseCase.updateProfile(updateProfileCommand);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.SIGNUP_SUCCESS
+                        SuccessCodeEnum.UPDATE_SUCCESS
                 )
         );
     }

@@ -10,35 +10,35 @@ import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.user.UserUseCase;
-import teamdevhub.devhub.port.out.auth.RefreshTokenPort;
+import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import teamdevhub.devhub.port.out.common.DateTimeProvider;
 import teamdevhub.devhub.port.out.common.IdentifierProvider;
 import teamdevhub.devhub.port.out.common.PasswordPolicyProvider;
-import teamdevhub.devhub.port.out.mail.EmailCertificationPort;
-import teamdevhub.devhub.port.out.user.UserPort;
+import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
+import teamdevhub.devhub.port.out.user.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class UserService implements UserUseCase {
 
-    private final UserPort userPort;
-    private final EmailCertificationPort emailCertificationPort;
-    private final RefreshTokenPort refreshTokenPort;
+    private final UserRepository userRepository;
+    private final EmailCertificationRepository emailCertificationRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordPolicyProvider passwordPolicyProvider;
     private final IdentifierProvider identifierProvider;
     private final DateTimeProvider dateTimeProvider;
 
     @Override
     public User signup(SignupCommand signupCommand) {
-        if (!emailCertificationPort.isVerified(signupCommand.getEmail())) {
+        if (!emailCertificationRepository.isVerified(signupCommand.getEmail())) {
             throw BusinessRuleException.of(ErrorCodeEnum.EMAIL_NOT_CONFIRMED);
         }
         String userGuid = identifierProvider.generateIdentifier();
         String encodedPassword = passwordPolicyProvider.encode(signupCommand.getPassword());
         User user = User.createGeneralUser(userGuid, signupCommand.getEmail(), signupCommand.getUsername(), encodedPassword, signupCommand.getIntroduction());
-        emailCertificationPort.delete(signupCommand.getEmail());
-        return userPort.save(user);
+        emailCertificationRepository.delete(signupCommand.getEmail());
+        return userRepository.save(user);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class UserService implements UserUseCase {
 
     @Override
     public boolean existsByUserRole(UserRole userRole) {
-        return userPort.existsByUserRole(userRole);
+        return userRepository.existsByUserRole(userRole);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class UserService implements UserUseCase {
     public void withdrawCurrentUser(String userGuid) {
         User user = getUserByUserGuid(userGuid);
         user.withdraw();
-        refreshTokenPort.deleteByEmail(user.getEmail());
+        refreshTokenRepository.deleteByEmail(user.getEmail());
         update(user);
     }
 
@@ -77,10 +77,10 @@ public class UserService implements UserUseCase {
     }
 
     private User getUserByUserGuid(String userGuid) {
-        return userPort.findByUserGuid(userGuid).orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+        return userRepository.findByUserGuid(userGuid).orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
     }
 
     private void update(User user) {
-        userPort.save(user);
+        userRepository.save(user);
     }
 }

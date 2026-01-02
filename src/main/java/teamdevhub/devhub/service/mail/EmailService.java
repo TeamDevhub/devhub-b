@@ -4,40 +4,47 @@ import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationComman
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.domain.record.mail.EmailCertification;
 import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
+import teamdevhub.devhub.port.out.common.DateTimeProvider;
 import teamdevhub.devhub.port.out.common.EmailCertificationCodeProvider;
-import teamdevhub.devhub.port.out.mail.EmailCertificationPort;
-import teamdevhub.devhub.port.out.mail.EmailSendPort;
+import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
+import teamdevhub.devhub.port.out.mail.EmailNotificationSender;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class EmailService implements EmailCertificationUseCase {
 
-    private final EmailSendPort emailSendPort;
-    private final EmailCertificationPort emailCertificationPort;
+    private final EmailNotificationSender emailNotificationSender;
+    private final EmailCertificationRepository emailCertificationRepository;
     private final EmailCertificationCodeProvider emailCertificationCodeProvider;
+    private final DateTimeProvider dateTimeProvider;
 
     @Override
     public void sendEmailCertificationCode(EmailCertificationRequestDto emailCertificationRequestDto) {
         String email = emailCertificationRequestDto.getEmail();
-        if (emailCertificationPort.existsValidCode(email)) {
+
+        if (emailCertificationRepository.existsValidCode(email)) {
             throw AuthRuleException.of(ErrorCodeEnum.EMAIL_CERTIFICATION_CODE_ALREADY_SENT);
         }
 
         String code = emailCertificationCodeProvider.generateEmailCertificationCode();
-        emailCertificationPort.save(email, code, Duration.ofMinutes(5));
-        emailSendPort.sendEmail(email, "[회원가입] 이메일 인증 코드", code);
+        LocalDateTime expiredAt = dateTimeProvider.now().plus(Duration.ofMinutes(5));
+        EmailCertification emailCertification = new EmailCertification(email, code, expiredAt, null);
+        emailCertificationRepository.save(emailCertification);
+        emailNotificationSender.sendEmail(email, "[회원가입] 이메일 인증 코드", code);
     }
 
     @Override
     public void confirmEmailCertificationCode(ConfirmEmailCertificationCommand confirmEmailCertificationCommand) {
-        boolean verified = emailCertificationPort.verify(confirmEmailCertificationCommand.getEmail(), confirmEmailCertificationCommand.getCode());
+        boolean verified = emailCertificationRepository.verify(confirmEmailCertificationCommand.getEmail(), confirmEmailCertificationCommand.getCode());
         if (!verified) {
             throw AuthRuleException.of(ErrorCodeEnum.EMAIL_NOT_CONFIRMED);
         }
@@ -45,11 +52,11 @@ public class EmailService implements EmailCertificationUseCase {
 
     @Override
     public boolean isVerified(String email) {
-        return emailCertificationPort.isVerified(email);
+        return emailCertificationRepository.isVerified(email);
     }
 
     @Override
     public void delete(String email) {
-        emailCertificationPort.delete(email);
+        emailCertificationRepository.delete(email);
     }
 }

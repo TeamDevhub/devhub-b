@@ -1,6 +1,6 @@
 package teamdevhub.devhub.adapter.out.mail;
 
-import teamdevhub.devhub.port.out.mail.EmailSendPort;
+import teamdevhub.devhub.port.out.mail.EmailNotificationSender;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EmailSendAdapter implements EmailSendPort {
+public class EmailNotificationSendAdapter implements EmailNotificationSender {
 
     private final JavaMailSender mailSender;
 

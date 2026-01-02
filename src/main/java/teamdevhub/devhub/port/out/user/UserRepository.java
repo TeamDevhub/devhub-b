@@ -5,7 +5,7 @@ import teamdevhub.devhub.domain.user.UserRole;
 
 import java.util.Optional;
 
-public interface UserPort {
+public interface UserRepository {
 
     User save(User user);
     Optional<User> findByUserGuid(String userGuid);

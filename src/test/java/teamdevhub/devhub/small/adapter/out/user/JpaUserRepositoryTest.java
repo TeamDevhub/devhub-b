@@ -1,8 +1,10 @@
-package teamdevhub.devhub.medium.adapter.out.user;
+package teamdevhub.devhub.small.adapter.out.user;
 
 import org.junit.jupiter.api.Test;
 
-class UserRepositoryJpaTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class JpaUserRepositoryTest {
 
     @Test
     void findByEmail() {

@@ -3,7 +3,7 @@ package teamdevhub.devhub.adapter.out.user;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.user.UserPort;
+import teamdevhub.devhub.port.out.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,28 +11,28 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class UserAdapter implements UserPort {
+public class UserAdapter implements UserRepository {
 
-    private final UserRepositoryJpa userRepositoryJpa;
+    private final JpaUserRepository jpaUserRepository;
 
     @Override
     public User save(User user) {
-        UserEntity userEntity = userRepositoryJpa.save(UserMapper.toEntity(user));
+        UserEntity userEntity = jpaUserRepository.save(UserMapper.toEntity(user));
         return UserMapper.toDomain(userEntity);
     }
 
     @Override
     public Optional<User> findByUserGuid(String userGuid) {
-        return userRepositoryJpa.findByUserGuid(userGuid).map(UserMapper::toDomain);
+        return jpaUserRepository.findByUserGuid(userGuid).map(UserMapper::toDomain);
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return userRepositoryJpa.findByEmail(email).map(UserMapper::toDomain);
+        return jpaUserRepository.findByEmail(email).map(UserMapper::toDomain);
     }
 
     @Override
     public boolean existsByUserRole(UserRole userRole) {
-        return userRepositoryJpa.existsByUserRole(userRole);
+        return jpaUserRepository.existsByUserRole(userRole);
     }
 }

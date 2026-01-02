@@ -1,9 +1,9 @@
 package teamdevhub.devhub.port.out.mail;
 
-import java.time.Duration;
+import teamdevhub.devhub.domain.record.mail.EmailCertification;
 
-public interface EmailCertificationPort {
-    void save(String email, String code, Duration ttl);
+public interface EmailCertificationRepository {
+    void save(EmailCertification emailCertification);
     boolean existsValidCode(String email);
     boolean verify(String email, String code);
     boolean isVerified(String email);

@@ -1,11 +1,15 @@
 package teamdevhub.devhub.adapter.out.auth.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "refresh_token")
 public class RefreshTokenEntity {
@@ -17,11 +21,11 @@ public class RefreshTokenEntity {
     private String email;
 
     @Column(nullable = false, length = 500)
-    private String refreshToken;
+    private String token;
 
-    protected RefreshTokenEntity(String email, String refreshToken) {
+    protected RefreshTokenEntity(String email, String token) {
         this.email = email;
-        this.refreshToken = refreshToken;
+        this.token = token;
     }
 
     public static RefreshTokenEntity of(String email, String refreshToken) {
@@ -29,6 +33,6 @@ public class RefreshTokenEntity {
     }
 
     public void rotate(String newToken) {
-        this.refreshToken = newToken;
+        this.token = newToken;
     }
 }

@@ -1,46 +1,48 @@
 package teamdevhub.devhub.adapter.out.mail;
 
 import teamdevhub.devhub.adapter.out.mail.entity.EmailCertificationEntity;
-import teamdevhub.devhub.port.out.mail.EmailCertificationPort;
+import teamdevhub.devhub.domain.record.mail.EmailCertification;
+import teamdevhub.devhub.port.out.common.DateTimeProvider;
+import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class EmailCertificationAdapter implements EmailCertificationPort {
+public class EmailCertificationAdapter implements EmailCertificationRepository {
 
-    private final EmailCertificationRepositoryJpa emailCertificationRepositoryJpa;
+    private final JpaEmailCertificationRepository jpaEmailCertificationRepository;
+    private final DateTimeProvider dateTimeProvider;
 
     @Override
-    public void save(String email, String code, Duration limit) {
-        LocalDateTime expiredAt = LocalDateTime.now().plus(limit);
+    public void save(EmailCertification emailCertification) {
         EmailCertificationEntity entity = EmailCertificationEntity.builder()
-                        .email(email)
-                        .code(code)
-                        .expiredAt(expiredAt)
+                        .email(emailCertification.email())
+                        .code(emailCertification.code())
+                        .expiredAt(emailCertification.expiredAt())
+                        .verifiedAt(null)
                         .build();
-        emailCertificationRepositoryJpa.save(entity);
+        jpaEmailCertificationRepository.save(entity);
     }
 
     @Override
     public boolean existsValidCode(String email) {
-        return emailCertificationRepositoryJpa.findById(email)
-                .filter(entity -> !entity.isExpired(LocalDateTime.now()))
+        return jpaEmailCertificationRepository.findById(email)
+                .filter(entity -> !entity.isExpired(dateTimeProvider.now()))
                 .isPresent();
     }
 
     @Override
     public boolean verify(String email, String code) {
-        EmailCertificationEntity emailCertificationEntity = emailCertificationRepositoryJpa.findById(email).orElse(null);
+        EmailCertificationEntity emailCertificationEntity = jpaEmailCertificationRepository.findById(email).orElse(null);
         if (emailCertificationEntity == null) {
             return false;
         }
-        if (emailCertificationEntity.isExpired(LocalDateTime.now())) {
+        if (emailCertificationEntity.isExpired(dateTimeProvider.now())) {
             return false;
         }
         if (!emailCertificationEntity.getCode().equals(code)) {
@@ -52,13 +54,13 @@ public class EmailCertificationAdapter implements EmailCertificationPort {
 
     @Override
     public boolean isVerified(String email) {
-        return emailCertificationRepositoryJpa.findById(email)
-                .map(entity -> entity.getVerifiedAt() != null && entity.getExpiredAt().isAfter(LocalDateTime.now()))
+        return jpaEmailCertificationRepository.findById(email)
+                .map(entity -> entity.getVerifiedAt() != null && entity.getExpiredAt().isAfter(dateTimeProvider.now()))
                 .orElse(false);
     }
 
     @Override
     public void delete(String email) {
-        emailCertificationRepositoryJpa.deleteById(email);
+        jpaEmailCertificationRepository.deleteById(email);
     }
 }
