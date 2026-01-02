@@ -26,9 +26,9 @@ public class LoggingAspect {
     private static final String NULL_JSON = "null";
     private static final int SAMPLE_LIMIT = 5;
 
-    @Around("execution(* teamdevhub.devhub..adapter.in.project..*(..)) || " +
-            "execution(* teamdevhub.devhub..adapter.out.project..*(..)) || " +
-            "execution(* teamdevhub.devhub..application.project..*(..)) ")
+    @Around("execution(* teamdevhub.devhub..adapter.in.user..*(..)) || " +
+            "execution(* teamdevhub.devhub..adapter.out.user..*(..)) || " +
+            "execution(* teamdevhub.devhub..application.user..*(..)) ")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
 

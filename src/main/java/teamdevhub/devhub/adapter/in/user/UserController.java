@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> updateUserProfile(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<ApiDataResponseVo<Void>> updateProfile(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCodeEnum.SIGNUP_SUCCESS
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> withdrawUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiDataResponseVo<Void>> withdraw(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         userUseCase.withdrawCurrentUser(userDetails.getUserGuid());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
