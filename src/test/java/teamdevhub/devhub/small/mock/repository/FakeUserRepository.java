@@ -13,7 +13,8 @@ public class FakeUserRepository implements UserRepository {
 
     @Override
     public User save(User user) {
-        return store.put(user.getUserGuid(), user);
+        store.put(user.getUserGuid(), user);
+        return user;
     }
 
     @Override

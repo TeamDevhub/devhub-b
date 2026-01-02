@@ -1,14 +1,32 @@
 package teamdevhub.devhub.small.mock.repository;
 
 import teamdevhub.devhub.domain.record.mail.EmailCertification;
+import teamdevhub.devhub.port.out.common.DateTimeProvider;
 import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 
 public class FakeEmailCertificationRepository implements EmailCertificationRepository {
 
-    private final HashMap<String, EmailCertification> store = new HashMap<>();
+    private final HashMap<String, EmailCertification> store;
+    private final DateTimeProvider dateTimeProvider;
+
+    public FakeEmailCertificationRepository(DateTimeProvider dateTimeProvider) {
+        this.store = new HashMap<>();
+        this.dateTimeProvider = dateTimeProvider;
+    }
+
+    public FakeEmailCertificationRepository(List<EmailCertification> initialData, DateTimeProvider dateTimeProvider) {
+        this.store = new HashMap<>();
+        this.dateTimeProvider = dateTimeProvider;
+        if (initialData != null) {
+            for (EmailCertification emailCertification : initialData) {
+                store.put(emailCertification.email(), emailCertification);
+            }
+        }
+    }
 
     @Override
     public void save(EmailCertification emailCertification) {
@@ -19,7 +37,7 @@ public class FakeEmailCertificationRepository implements EmailCertificationRepos
     public boolean existsValidCode(String email) {
         EmailCertification emailCertification = store.get(email);
         if (emailCertification == null) return false;
-        return emailCertification.expiredAt().isAfter(java.time.LocalDateTime.now());
+        return emailCertification.expiredAt().isAfter(dateTimeProvider.now());
     }
 
     @Override
@@ -27,7 +45,7 @@ public class FakeEmailCertificationRepository implements EmailCertificationRepos
         EmailCertification emailCertification = store.get(email);
         if (emailCertification == null) return false;
 
-        if (emailCertification.code().equals(code) && emailCertification.expiredAt().isAfter(java.time.LocalDateTime.now())) {
+        if (emailCertification.code().equals(code) && emailCertification.expiredAt().isAfter(dateTimeProvider.now())) {
             EmailCertification verifiedCert = EmailCertification.of(emailCertification.email(),
                     emailCertification.code(),
                     LocalDateTime.now(),
