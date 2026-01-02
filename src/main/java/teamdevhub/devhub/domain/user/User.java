@@ -135,7 +135,7 @@ public class User {
 
     public void withdraw() {
         if (this.deleted) {
-            throw DomainRuleException.of(ErrorCodeEnum.UNKNOWN_FAIL);
+            throw DomainRuleException.of(ErrorCodeEnum.ALREADY_DELETED);
         }
         this.deleted = true;
         this.blocked = false;
@@ -154,15 +154,9 @@ public class User {
     public boolean hasText(String value) {
         return value != null && !value.isBlank();
     }
+
     public boolean hasUserRole(UserRole checkRole) {
         return this.userRole == checkRole;
-    }
-
-    public void changeUsername(String newUsername) {
-        if (newUsername == null || newUsername.isBlank()) {
-            throw DomainRuleException.of(ErrorCodeEnum.UNKNOWN_FAIL);
-        }
-        this.username = newUsername;
     }
 
     public void blockUntil(LocalDateTime blockEndDate) {

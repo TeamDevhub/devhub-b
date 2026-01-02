@@ -1,6 +1,5 @@
 package teamdevhub.devhub.port.out.auth;
 
-import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
 import teamdevhub.devhub.domain.record.auth.RefreshToken;
 
 import java.util.Optional;
