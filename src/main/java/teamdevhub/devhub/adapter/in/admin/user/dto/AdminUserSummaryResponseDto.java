@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
-import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 
 import java.time.LocalDateTime;

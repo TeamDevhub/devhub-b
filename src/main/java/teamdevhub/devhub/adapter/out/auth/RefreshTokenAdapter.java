@@ -19,16 +19,14 @@ public class RefreshTokenAdapter implements RefreshTokenRepository {
         jpaRefreshTokenRepository.findByEmail(refreshToken.email())
                 .ifPresentOrElse(
                         refreshTokenEntity -> rotateToken(refreshTokenEntity, refreshToken.token()),
-                        () -> jpaRefreshTokenRepository.save(
-                                RefreshTokenEntity.of(refreshToken.email(), refreshToken.token())
-                        )
+                        () -> jpaRefreshTokenRepository.save(RefreshTokenEntity.of(refreshToken.email(), refreshToken.token()))
                 );
     }
 
     @Override
     public RefreshToken findByEmail(String email) {
         return jpaRefreshTokenRepository.findByEmail(email)
-                .map(entity -> RefreshToken.of(entity.getEmail(), entity.getToken()))
+                .map(refreshTokenEntity -> RefreshToken.of(refreshTokenEntity.getEmail(), refreshTokenEntity.getToken()))
                 .orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID));
     }
 
@@ -37,7 +35,7 @@ public class RefreshTokenAdapter implements RefreshTokenRepository {
         jpaRefreshTokenRepository.deleteByEmail(email);
     }
 
-    private void rotateToken(RefreshTokenEntity entity, String newToken) {
-        entity.rotate(newToken);
+    private void rotateToken(RefreshTokenEntity refreshTokenEntity, String newToken) {
+        refreshTokenEntity.rotate(newToken);
     }
 }

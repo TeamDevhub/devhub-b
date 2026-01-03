@@ -7,12 +7,12 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 
 public interface UserUseCase {
-    User signup(SignupCommand signupCommand);
-    AuthUser getAuthUser(String email);
-    User getCurrentUserProfile(String userGuid);
     void initializeAdminUser(String email, String rawPassword, String username);
-    boolean existsByUserRole(UserRole userRole);
+    AuthUser getUserForAuth(String email);
+    User signup(SignupCommand signupCommand);
     void updateLastLoginDateTime(String userGuid);
-    void withdrawCurrentUser(String userGuid);
+    User getCurrentUserProfile(String userGuid);
     void updateProfile(UpdateProfileCommand updateProfileCommand);
+    void withdrawCurrentUser(String userGuid);
+    boolean existsByUserRole(UserRole userRole);
 }

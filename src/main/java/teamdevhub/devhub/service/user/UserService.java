@@ -40,7 +40,12 @@ public class UserService implements UserUseCase {
         String userGuid = identifierProvider.generateIdentifier();
         String encodedPassword = passwordPolicyProvider.encode(rawPassword);
         User adminUser = User.createAdminUser(userGuid, email, encodedPassword, username);
-        update(adminUser);
+        userRepository.saveAdminUser(adminUser);
+    }
+
+    @Override
+    public AuthUser getUserForAuth(String email) {
+        return userRepository.findUserByEmailForAuth(email);
     }
 
     @Override
@@ -60,11 +65,6 @@ public class UserService implements UserUseCase {
                 signupCommand.getSkillList());
         emailCertificationRepository.delete(signupCommand.getEmail());
         return userRepository.saveNewUser(user);
-    }
-
-    @Override
-    public AuthUser getAuthUser(String email) {
-        return userRepository.findAuthUserByEmail(email);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class UserService implements UserUseCase {
                 positions,
                 skills);
 
-        update(user);
+        userRepository.updateUserProfile(user);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class UserService implements UserUseCase {
         User user = getUserByUserGuid(userGuid);
         user.withdraw();
         refreshTokenRepository.deleteByEmail(user.getEmail());
-        update(user);
+        userRepository.updateUserForWithdrawal(user);
     }
 
     @Override
@@ -113,9 +113,5 @@ public class UserService implements UserUseCase {
 
     private User getUserByUserGuid(String userGuid) {
         return userRepository.findByUserGuid(userGuid);
-    }
-
-    private void update(User user) {
-        userRepository.updateUserProfile(user);
     }
 }

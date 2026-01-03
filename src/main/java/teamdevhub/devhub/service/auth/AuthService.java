@@ -37,11 +37,13 @@ public class AuthService implements AuthUseCase {
         }
 
         String email = tokenProvider.getEmailFromRefreshToken(token);
-        AuthUser authUser = userUseCase.getAuthUser(email);
+        AuthUser authUser = userUseCase.getUserForAuth(email);
         RefreshToken refreshToken = refreshTokenRepository.findByEmail(email);
+
         if (!refreshToken.token().equals(token)) {
             throw AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID);
         }
+
         String newAccessToken = tokenProvider.createAccessToken(authUser.email(), authUser.userRole());
         return TokenResponseDto.reissue(newAccessToken);
     }

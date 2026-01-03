@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Component
 @RequiredArgsConstructor
 @Transactional
@@ -19,43 +17,47 @@ public class EmailCertificationAdapter implements EmailCertificationRepository {
     private final DateTimeProvider dateTimeProvider;
 
     @Override
+    public boolean existsValidCode(String email) {
+        return jpaEmailCertificationRepository.findById(email)
+                .filter(emailCertificationEntity -> !emailCertificationEntity.isExpired(dateTimeProvider.now()))
+                .isPresent();
+    }
+
+    @Override
     public void save(EmailCertification emailCertification) {
-        EmailCertificationEntity entity = EmailCertificationEntity.builder()
+        EmailCertificationEntity emailCertificationEntity = EmailCertificationEntity.builder()
                         .email(emailCertification.email())
                         .code(emailCertification.code())
                         .expiredAt(emailCertification.expiredAt())
                         .verifiedAt(null)
                         .build();
-        jpaEmailCertificationRepository.save(entity);
+        jpaEmailCertificationRepository.save(emailCertificationEntity);
     }
 
     @Override
-    public boolean existsValidCode(String email) {
-        return jpaEmailCertificationRepository.findById(email)
-                .filter(entity -> !entity.isExpired(dateTimeProvider.now()))
-                .isPresent();
-    }
-
-    @Override
-    public boolean verify(String email, String code) {
+    public boolean verify(String email, String emailCertificationCode) {
         EmailCertificationEntity emailCertificationEntity = jpaEmailCertificationRepository.findById(email).orElse(null);
+
         if (emailCertificationEntity == null) {
             return false;
         }
+
         if (emailCertificationEntity.isExpired(dateTimeProvider.now())) {
             return false;
         }
-        if (!emailCertificationEntity.getCode().equals(code)) {
+
+        if (!emailCertificationEntity.getCode().equals(emailCertificationCode)) {
             return false;
         }
-        emailCertificationEntity.verify(LocalDateTime.now());
+
+        emailCertificationEntity.verify(dateTimeProvider.now());
         return true;
     }
 
     @Override
     public boolean isVerified(String email) {
         return jpaEmailCertificationRepository.findById(email)
-                .map(entity -> entity.getVerifiedAt() != null && entity.getExpiredAt().isAfter(dateTimeProvider.now()))
+                .map(emailCertificationEntity -> emailCertificationEntity.getVerifiedAt() != null && emailCertificationEntity.getExpiredAt().isAfter(dateTimeProvider.now()))
                 .orElse(false);
     }
 

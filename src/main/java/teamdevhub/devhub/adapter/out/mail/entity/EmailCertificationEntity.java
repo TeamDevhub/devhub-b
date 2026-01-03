@@ -33,10 +33,6 @@ public class EmailCertificationEntity {
         return expiredAt.isBefore(now);
     }
 
-    public boolean isVerified() {
-        return verifiedAt != null;
-    }
-
     public void verify(LocalDateTime now) {
         this.code = null;
         this.verifiedAt = now;

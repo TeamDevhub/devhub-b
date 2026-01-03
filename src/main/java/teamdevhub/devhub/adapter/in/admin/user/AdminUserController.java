@@ -25,6 +25,7 @@ public class AdminUserController {
     public ResponseEntity<ApiDataListResponseVo<AdminUserSummaryResponseDto>> list(@ModelAttribute SearchUserRequestDto searchUserRequestDto, @RequestParam int page, @RequestParam int size) {
         SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
         PageCommand pageCommand = PageCommand.of(page, size);
+
         Page<AdminUserSummaryResponseDto> pagedUserList = adminUserUseCase.listUser(searchUserCommand, pageCommand);
         PageVo pageVo = PageConverter.toPageVo(pagedUserList);
         return ResponseEntity.ok(

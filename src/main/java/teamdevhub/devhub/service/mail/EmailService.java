@@ -35,28 +35,18 @@ public class EmailService implements EmailCertificationUseCase {
             throw AuthRuleException.of(ErrorCodeEnum.EMAIL_CERTIFICATION_CODE_ALREADY_SENT);
         }
 
-        String code = emailCertificationCodeProvider.generateEmailCertificationCode();
+        String emailCertificationCode = emailCertificationCodeProvider.generateEmailCertificationCode();
         LocalDateTime expiredAt = dateTimeProvider.now().plus(Duration.ofMinutes(5));
-        EmailCertification emailCertification = new EmailCertification(email, code, expiredAt, null);
+        EmailCertification emailCertification = EmailCertification.of(email, emailCertificationCode, expiredAt, null);
         emailCertificationRepository.save(emailCertification);
-        emailNotificationSender.sendEmail(email, "[회원가입] 이메일 인증 코드", code);
+        emailNotificationSender.sendEmail(email, "[회원가입] 이메일 인증 코드", emailCertificationCode);
     }
 
     @Override
     public void confirmEmailCertificationCode(ConfirmEmailCertificationCommand confirmEmailCertificationCommand) {
-        boolean verified = emailCertificationRepository.verify(confirmEmailCertificationCommand.getEmail(), confirmEmailCertificationCommand.getCode());
-        if (!verified) {
+        boolean isVerified = emailCertificationRepository.verify(confirmEmailCertificationCommand.getEmail(), confirmEmailCertificationCommand.getCode());
+        if (!isVerified) {
             throw AuthRuleException.of(ErrorCodeEnum.EMAIL_NOT_CONFIRMED);
         }
-    }
-
-    @Override
-    public boolean isVerified(String email) {
-        return emailCertificationRepository.isVerified(email);
-    }
-
-    @Override
-    public void delete(String email) {
-        emailCertificationRepository.delete(email);
     }
 }

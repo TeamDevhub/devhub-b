@@ -53,22 +53,30 @@ public class UserQueryRepositoryImpl implements UserQueryRepository{
     }
 
     private BooleanExpression blockedCondition(Boolean blocked) {
-        if (blocked == null) return null;
+        if (blocked == null) {
+            return null;
+        }
         return QUserEntity.userEntity.blocked.eq(blocked);
     }
 
     private BooleanExpression joinedFromCondition(LocalDateTime joinedFrom) {
-        if (joinedFrom == null) return null;
+        if (joinedFrom == null) {
+            return null;
+        }
         return QUserEntity.userEntity.regDt.goe(joinedFrom);
     }
 
     private BooleanExpression joinedToCondition(LocalDateTime joinedTo) {
-        if (joinedTo == null) return null;
+        if (joinedTo == null) {
+            return null;
+        }
         return QUserEntity.userEntity.regDt.loe(joinedTo);
     }
 
     private BooleanExpression keywordCondition(String keyword) {
-        if (keyword == null) return null;
+        if (keyword == null) {
+            return null;
+        }
         return QUserEntity.userEntity.username.containsIgnoreCase(keyword);
     }
 }

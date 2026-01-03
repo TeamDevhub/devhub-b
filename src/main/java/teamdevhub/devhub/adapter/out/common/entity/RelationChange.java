@@ -2,7 +2,7 @@ package teamdevhub.devhub.adapter.out.common.entity;
 
 import java.util.Set;
 
-public record RelationDiff<T>(
+public record RelationChange<T>(
         Set<T> toInsert,
         Set<T> toDelete
 ) {
@@ -10,7 +10,7 @@ public record RelationDiff<T>(
         return toInsert.isEmpty() && toDelete.isEmpty();
     }
 
-    public static <T> RelationDiff<T> of(Set<T> toInsert, Set<T> toDelete) {
-        return new RelationDiff<>(Set.copyOf(toInsert), Set.copyOf(toDelete));
+    public static <T> RelationChange<T> of(Set<T> toInsert, Set<T> toDelete) {
+        return new RelationChange<>(Set.copyOf(toInsert), Set.copyOf(toDelete));
     }
 }

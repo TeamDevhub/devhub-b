@@ -4,8 +4,8 @@ import org.springframework.data.domain.*;
 import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
-import teamdevhub.devhub.adapter.out.common.entity.RelationDiff;
-import teamdevhub.devhub.adapter.out.common.util.RelationDiffUtil;
+import teamdevhub.devhub.adapter.out.common.entity.RelationChange;
+import teamdevhub.devhub.adapter.out.common.util.RelationChangeUtil;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
@@ -42,16 +42,23 @@ public class UserAdapter implements UserRepository {
     private final IdentifierProvider identifierProvider;
 
     @Override
-    public User saveNewUser(User user) {
-        UserEntity saved = jpaUserRepository.save(UserMapper.toEntity(user));
-        saveRelations(user);
-        return UserMapper.toDomain(saved, user.getPositions(), user.getSkills());
+    public void saveAdminUser(User adminUser) {
+        jpaUserRepository.save(UserMapper.toEntity(adminUser));
     }
 
     @Override
-    public AuthUser findAuthUserByEmail(String email) {
-        UserEntity userEntity = jpaUserRepository.findByEmail(email).orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+    public AuthUser findUserByEmailForAuth(String email) {
+        UserEntity userEntity = jpaUserRepository.findByEmail(email).
+                orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
         return UserMapper.toAuthUser(userEntity);
+    }
+
+    @Override
+    public User saveNewUser(User user) {
+        UserEntity userEntity = jpaUserRepository.save(UserMapper.toEntity(user));
+        insertPositions(user.getUserGuid(), extractPositionCodes(user));
+        insertSkills(user.getUserGuid(), extractSkillCodes(user));
+        return UserMapper.toDomain(userEntity, user.getPositions(), user.getSkills());
     }
 
     @Override
@@ -61,7 +68,8 @@ public class UserAdapter implements UserRepository {
 
     @Override
     public User findByUserGuid(String userGuid) {
-        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid).orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
+                .orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
         return UserMapper.toDomain(userEntity, loadPositions(userGuid), loadSkills(userGuid));
     }
 
@@ -73,109 +81,113 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
+    public void updateUserForWithdrawal(User user) {
+        jpaUserRepository.save(UserMapper.toEntity(user));
+    }
+
+    @Override
     public boolean existsByUserRole(UserRole userRole) {
         return jpaUserRepository.existsByUserRole(userRole);
     }
 
     @Override
     public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
-        Pageable pageable = PageRequest.of(pageCommand.getPage(), pageCommand.getSize(), Sort.by("regDt").descending());
+        Pageable pageable = PageRequest.of(
+                pageCommand.getPage(),
+                pageCommand.getSize(),
+                Sort.by("regDt").descending()
+        );
+
         Page<UserEntity> pagedUserEntityList = userQueryRepository.listUser(searchUserCommand, pageable);
-        List<AdminUserSummaryResponseDto> responseUserList = pagedUserEntityList.getContent().stream()
+        List<AdminUserSummaryResponseDto> userList = pagedUserEntityList.getContent().stream()
                 .map(AdminUserSummaryResponseDto::fromEntity)
                 .toList();
-        return new PageImpl<>(
-                responseUserList,
-                pageable,
-                pagedUserEntityList.getTotalElements()
-        );
+        return new PageImpl<>(userList, pageable, pagedUserEntityList.getTotalElements());
     }
 
     private void syncPositions(User user) {
         String userGuid = user.getUserGuid();
-        RelationDiff<String> diff =
-                RelationDiffUtil.diff(
-                        jpaUserPositionRepository.findCodesByUserGuid(userGuid),
-                        extractPositionCodes(user));
+        RelationChange<String> relationChange = RelationChangeUtil.change(
+                jpaUserPositionRepository.findCodesByUserGuid(userGuid),
+                extractPositionCodes(user)
+        );
 
-        if (diff.isEmpty()) return;
+        if (relationChange.isEmpty()) {
+            return;
+        }
 
-        deletePositions(userGuid, diff.toDelete());
-        insertPositions(userGuid, diff.toInsert());
+        deletePositions(userGuid, relationChange.toDelete());
+        insertPositions(userGuid, relationChange.toInsert());
     }
 
     private Set<UserPosition> loadPositions(String userGuid) {
         return jpaUserPositionRepository.findByUserGuid(userGuid).stream()
-                .map(e -> new UserPosition(e.getPositionCd()))
+                .map(userPositionEntity -> new UserPosition(userPositionEntity.getPositionCd()))
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    private void deletePositions(String userGuid, Set<String> codes) {
-        if (!codes.isEmpty()) {
-            jpaUserPositionRepository.deleteByUserGuidAndPositionCdIn(userGuid, codes);
+    private void deletePositions(String userGuid, Set<String> positionCodeSet) {
+        if (!positionCodeSet.isEmpty()) {
+            jpaUserPositionRepository.deleteByUserGuidAndPositionCdIn(userGuid, positionCodeSet);
         }
     }
 
-    private void insertPositions(String userGuid, Set<String> codes) {
-        if (codes.isEmpty()) return;
+    private void insertPositions(String userGuid, Set<String> positionCodeSet) {
+        if (positionCodeSet.isEmpty()) {
+            return;
+        }
 
-        List<UserPositionEntity> entities =
-                codes.stream()
-                        .map(code -> UserPositionEntity.builder()
-                                .userInterestPositionGuid(identifierProvider.generateIdentifier())
-                                .userGuid(userGuid)
-                                .positionCd(code)
-                                .build())
-                        .toList();
-
-        jpaUserPositionRepository.saveAll(entities);
+        List<UserPositionEntity> userPositionEntityList = positionCodeSet.stream()
+                .map(positionCode -> UserPositionEntity.builder()
+                        .userInterestPositionGuid(identifierProvider.generateIdentifier())
+                        .userGuid(userGuid)
+                        .positionCd(positionCode)
+                        .build())
+                .toList();
+        jpaUserPositionRepository.saveAll(userPositionEntityList);
     }
 
     private void syncSkills(User user) {
         String userGuid = user.getUserGuid();
 
-        RelationDiff<String> diff =
-                RelationDiffUtil.diff(
-                        jpaUserSkillRepository.findCodesByUserGuid(userGuid),
-                        extractSkillCodes(user)
-                );
+        RelationChange<String> relationChange = RelationChangeUtil.change(
+                jpaUserSkillRepository.findCodesByUserGuid(userGuid),
+                extractSkillCodes(user)
+        );
 
-        if (diff.isEmpty()) return;
+        if (relationChange.isEmpty()) {
+            return;
+        }
 
-        deleteSkills(userGuid, diff.toDelete());
-        insertSkills(userGuid, diff.toInsert());
+        deleteSkills(userGuid, relationChange.toDelete());
+        insertSkills(userGuid, relationChange.toInsert());
     }
 
     private Set<UserSkill> loadSkills(String userGuid) {
         return jpaUserSkillRepository.findByUserGuid(userGuid).stream()
-                .map(e -> new UserSkill(e.getSkillCd()))
+                .map(userSkillEntity -> new UserSkill(userSkillEntity.getSkillCd()))
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    private void deleteSkills(String userGuid, Set<String> codes) {
-        if (!codes.isEmpty()) {
-            jpaUserSkillRepository.deleteByUserGuidAndSkillCdIn(userGuid, codes);
+    private void deleteSkills(String userGuid, Set<String> skillCodeSet) {
+        if (!skillCodeSet.isEmpty()) {
+            jpaUserSkillRepository.deleteByUserGuidAndSkillCdIn(userGuid, skillCodeSet);
         }
     }
 
-    private void insertSkills(String userGuid, Set<String> codes) {
-        if (codes.isEmpty()) return;
+    private void insertSkills(String userGuid, Set<String> skillCodeSet) {
+        if (skillCodeSet.isEmpty()) {
+            return;
+        }
 
-        List<UserSkillEntity> entities =
-                codes.stream()
-                        .map(code -> UserSkillEntity.builder()
-                                .userSkillGuid(identifierProvider.generateIdentifier())
-                                .userGuid(userGuid)
-                                .skillCd(code)
-                                .build())
-                        .toList();
-
-        jpaUserSkillRepository.saveAll(entities);
-    }
-
-    private void saveRelations(User user) {
-        insertPositions(user.getUserGuid(), extractPositionCodes(user));
-        insertSkills(user.getUserGuid(), extractSkillCodes(user));
+        List<UserSkillEntity> userSkillEntityList = skillCodeSet.stream()
+                .map(skillCode -> UserSkillEntity.builder()
+                        .userSkillGuid(identifierProvider.generateIdentifier())
+                        .userGuid(userGuid)
+                        .skillCd(skillCode)
+                        .build())
+                .toList();
+        jpaUserSkillRepository.saveAll(userSkillEntityList);
     }
 
     private Set<String> extractPositionCodes(User user) {

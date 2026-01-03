@@ -1,15 +1,15 @@
 package teamdevhub.devhub.adapter.out.common.util;
 
-import teamdevhub.devhub.adapter.out.common.entity.RelationDiff;
+import teamdevhub.devhub.adapter.out.common.entity.RelationChange;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public final class RelationDiffUtil {
+public final class RelationChangeUtil {
 
-    private RelationDiffUtil() {}
+    private RelationChangeUtil() {}
 
-    public static <T> RelationDiff<T> diff(
+    public static <T> RelationChange<T> change(
             Set<T> existing,
             Set<T> incoming
     ) {
@@ -19,6 +19,6 @@ public final class RelationDiffUtil {
         Set<T> toInsert = new HashSet<>(incoming);
         toInsert.removeAll(existing);
 
-        return RelationDiff.of(toInsert, toDelete);
+        return RelationChange.of(toInsert, toDelete);
     }
 }

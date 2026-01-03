@@ -16,7 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AuthUser authUser = userUseCase.getAuthUser(email);
+        AuthUser authUser = userUseCase.getUserForAuth(email);
         return new UserDetailsImpl(authUser);
     }
 }

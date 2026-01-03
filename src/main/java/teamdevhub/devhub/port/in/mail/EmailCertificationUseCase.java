@@ -6,6 +6,4 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDt
 public interface EmailCertificationUseCase {
     void sendEmailCertificationCode(EmailCertificationRequestDto emailCertificationRequestDto);
     void confirmEmailCertificationCode(ConfirmEmailCertificationCommand confirmEmailCertificationCommand);
-    boolean isVerified(String email);
-    void delete(String email);
 }
