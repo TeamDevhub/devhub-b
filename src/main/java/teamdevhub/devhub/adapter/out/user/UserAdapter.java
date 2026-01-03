@@ -1,6 +1,7 @@
 package teamdevhub.devhub.adapter.out.user;
 
 import teamdevhub.devhub.adapter.out.common.entity.RelationDiff;
+import teamdevhub.devhub.adapter.out.common.util.RelationDiffUtil;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
@@ -73,11 +74,12 @@ public class UserAdapter implements UserRepository {
 
     private void syncPositions(User user) {
         String userGuid = user.getUserGuid();
-        RelationDiff<String> diff = diff(jpaUserPositionRepository.findCodesByUserGuid(userGuid), extractPositionCodes(user));
+        RelationDiff<String> diff =
+                RelationDiffUtil.diff(
+                        jpaUserPositionRepository.findCodesByUserGuid(userGuid),
+                        extractPositionCodes(user));
 
-        if (diff.isEmpty()) {
-            return;
-        }
+        if (diff.isEmpty()) return;
 
         deletePositions(userGuid, diff.toDelete());
         insertPositions(userGuid, diff.toInsert());
@@ -113,10 +115,11 @@ public class UserAdapter implements UserRepository {
     private void syncSkills(User user) {
         String userGuid = user.getUserGuid();
 
-        RelationDiff<String> diff = diff(
-                jpaUserSkillRepository.findCodesByUserGuid(userGuid),
-                extractSkillCodes(user)
-        );
+        RelationDiff<String> diff =
+                RelationDiffUtil.diff(
+                        jpaUserSkillRepository.findCodesByUserGuid(userGuid),
+                        extractSkillCodes(user)
+                );
 
         if (diff.isEmpty()) return;
 
@@ -166,15 +169,5 @@ public class UserAdapter implements UserRepository {
         return user.getSkills().stream()
                 .map(UserSkill::skillCode)
                 .collect(Collectors.toSet());
-    }
-
-    private <T> RelationDiff<T> diff(Set<T> existing, Set<T> incoming) {
-        Set<T> toDelete = new HashSet<>(existing);
-        toDelete.removeAll(incoming);
-
-        Set<T> toInsert = new HashSet<>(incoming);
-        toInsert.removeAll(existing);
-
-        return new RelationDiff<>(toInsert, toDelete);
     }
 }
