@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
-import teamdevhub.devhub.domain.record.auth.LoginUser;
+import teamdevhub.devhub.domain.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.user.UserUseCase;
@@ -58,8 +58,8 @@ public class UserService implements UserUseCase {
     }
 
     @Override
-    public LoginUser getLoginUser(String email) {
-        return userRepository.findForLoginByEmail(email);
+    public AuthUser getAuthUser(String email) {
+        return userRepository.findAuthUserByEmail(email);
     }
 
     @Override
@@ -106,6 +106,6 @@ public class UserService implements UserUseCase {
     }
 
     private void update(User user) {
-        userRepository.saveNewUser(user);
+        userRepository.updateUser(user);
     }
 }

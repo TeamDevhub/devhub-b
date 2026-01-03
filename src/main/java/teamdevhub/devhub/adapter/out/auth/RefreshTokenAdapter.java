@@ -1,16 +1,16 @@
 package teamdevhub.devhub.adapter.out.auth;
 
 import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
+import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.record.auth.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 @RequiredArgsConstructor
-public class RefreshAdapter implements RefreshTokenRepository {
+public class RefreshTokenAdapter implements RefreshTokenRepository {
 
     private final JpaRefreshTokenRepository jpaRefreshTokenRepository;
 
@@ -26,9 +26,10 @@ public class RefreshAdapter implements RefreshTokenRepository {
     }
 
     @Override
-    public Optional<RefreshToken> findByEmail(String email) {
+    public RefreshToken findByEmail(String email) {
         return jpaRefreshTokenRepository.findByEmail(email)
-                .map(entity -> RefreshToken.of(entity.getEmail(), entity.getToken()));
+                .map(entity -> RefreshToken.of(entity.getEmail(), entity.getToken()))
+                .orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID));
     }
 
     @Override

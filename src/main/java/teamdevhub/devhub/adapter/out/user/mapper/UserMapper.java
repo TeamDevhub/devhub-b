@@ -2,15 +2,15 @@ package teamdevhub.devhub.adapter.out.user.mapper;
 
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.common.AuditInfo;
-import teamdevhub.devhub.domain.record.auth.LoginUser;
+import teamdevhub.devhub.domain.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 
 import java.util.List;
 
 public class UserMapper {
 
-    public static LoginUser toLoginUser(UserEntity userEntity) {
-        return LoginUser.of(userEntity.getUserGuid(),
+    public static AuthUser toAuthUser(UserEntity userEntity) {
+        return AuthUser.of(userEntity.getUserGuid(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.getUserRole()

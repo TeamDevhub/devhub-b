@@ -9,7 +9,7 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
-import teamdevhub.devhub.domain.record.auth.LoginUser;
+import teamdevhub.devhub.domain.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.common.IdentifierProvider;
@@ -37,9 +37,9 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public LoginUser findForLoginByEmail(String email) {
+    public AuthUser findAuthUserByEmail(String email) {
         UserEntity userEntity = jpaUserRepository.findByEmail(email).orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
-        return UserMapper.toLoginUser(userEntity);
+        return UserMapper.toAuthUser(userEntity);
     }
 
     @Override
@@ -65,23 +65,8 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public User findByEmail(String email) {
-        UserEntity userEntity = jpaUserRepository.findByEmail(email).orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
-        String userGuid = userEntity.getUserGuid();
-
-        List<String> positionList =
-                jpaUserPositionRepository.findByUserGuid(userGuid)
-                        .stream()
-                        .map(UserPositionEntity::getPositionCd)
-                        .toList();
-
-        List<String> skillList =
-                jpaUserSkillRepository.findByUserGuid(userGuid)
-                        .stream()
-                        .map(UserSkillEntity::getSkillCd)
-                        .toList();
-
-        return UserMapper.toDomain(userEntity, positionList, skillList);
+    public void updateUser(User user) {
+        jpaUserRepository.save(UserMapper.toEntity(user));
     }
 
     @Override
