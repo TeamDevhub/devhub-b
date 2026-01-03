@@ -5,10 +5,15 @@ import lombok.Getter;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.DomainRuleException;
 import teamdevhub.devhub.domain.common.AuditInfo;
+import teamdevhub.devhub.domain.user.record.UserPosition;
+import teamdevhub.devhub.domain.user.record.UserSkill;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 public class User {
@@ -22,8 +27,8 @@ public class User {
     private String username;
     private String introduction;
 
-    private final List<String> positionList;
-    private final List<String> skillList;
+    private Set<UserPosition> positions;
+    private Set<UserSkill> skills;
 
     private double mannerDegree;
 
@@ -42,8 +47,8 @@ public class User {
             String username,
             UserRole userRole,
             String introduction,
-            List<String> positionList,
-            List<String> skillList,
+            Set<UserPosition> positions,
+            Set<UserSkill> skills,
             double mannerDegree,
             boolean blocked,
             LocalDateTime blockEndDate,
@@ -51,7 +56,7 @@ public class User {
             LocalDateTime lastLoginDateTime,
             AuditInfo auditInfo
     ) {
-        validate(email, password, userRole, positionList, skillList);
+        validate(email, password, userRole, positions, skills);
 
         this.userGuid = userGuid;
         this.email = email;
@@ -60,15 +65,8 @@ public class User {
         this.username = username;
         this.introduction = introduction;
 
-        this.positionList = new ArrayList<>();
-        if (positionList != null) {
-            this.positionList.addAll(positionList);
-        }
-
-        this.skillList = new ArrayList<>();
-        if (skillList != null) {
-            this.skillList.addAll(skillList);
-        }
+        this.positions = new HashSet<>(positions);
+        this.skills = new HashSet<>(skills);
 
         this.mannerDegree = mannerDegree;
         this.blocked = blocked;
@@ -87,14 +85,14 @@ public class User {
             String email,
             String password,
             UserRole userRole,
-            List<String> positionList,
-            List<String> skillList
+            Set<UserPosition> positions,
+            Set<UserSkill> skills
     ) {
         if (!hasText(email)) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_ID_FAIL);
         }
 
-        if (!hasText(password) || password.length() < 6) {
+        if (!hasText(password) || password.length() < 8) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_PASSWORD_FAIL);
         }
 
@@ -102,11 +100,10 @@ public class User {
             return;
         }
 
-        if (positionList == null || positionList.isEmpty()) {
+        if (positions == null || positions.isEmpty()) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_POSITION_REQUIRED);
         }
-
-        if (skillList == null || skillList.isEmpty()) {
+        if (skills == null || skills.isEmpty()) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_SKILL_REQUIRED);
         }
     }
@@ -117,8 +114,8 @@ public class User {
             String password,
             String username,
             String introduction,
-            List<String> positionList,
-            List<String> skillList
+            List<String> positionCodes,
+            List<String> skillCodes
     ) {
         return User.builder()
                 .userGuid(userGuid)
@@ -127,8 +124,8 @@ public class User {
                 .username(username)
                 .userRole(UserRole.USER)
                 .introduction(introduction)
-                .positionList(positionList)
-                .skillList(skillList)
+                .positions(toPositions(positionCodes))
+                .skills(toSkills(skillCodes))
                 .mannerDegree(36.5)
                 .blocked(false)
                 .deleted(false)
@@ -148,8 +145,8 @@ public class User {
                 .password(password)
                 .username(username)
                 .userRole(UserRole.ADMIN)
-                .positionList(List.of())
-                .skillList(List.of())
+                .positions(Set.of())
+                .skills(Set.of())
                 .blocked(false)
                 .deleted(false)
                 .auditInfo(AuditInfo.empty())
@@ -163,8 +160,8 @@ public class User {
             String username,
             UserRole userRole,
             String introduction,
-            List<String> positionList,
-            List<String> skillList,
+            Set<UserPosition> positions,
+            Set<UserSkill> skills,
             double mannerDegree,
             boolean blocked,
             LocalDateTime blockEndDate,
@@ -179,8 +176,8 @@ public class User {
                 .username(username)
                 .userRole(userRole)
                 .introduction(introduction)
-                .positionList(positionList)
-                .skillList(skillList)
+                .positions(positions)
+                .skills(skills)
                 .mannerDegree(mannerDegree)
                 .blocked(blocked)
                 .blockEndDate(blockEndDate)
@@ -198,7 +195,12 @@ public class User {
         this.blocked = false;
     }
 
-    public void updateProfile(String newUsername, String newIntroduction, List<String> newPositionList, List<String> newSkillList) {
+    public void updateProfile(
+            String newUsername,
+            String newIntroduction,
+            Set<UserPosition> newPositions,
+            Set<UserSkill> newSkills
+    ) {
         if (hasText(newUsername)) {
             this.username = newUsername;
         }
@@ -206,28 +208,33 @@ public class User {
             this.introduction = newIntroduction;
         }
 
-        updatePositionList(newPositionList);
-        updateSkillList(newSkillList);
-    }
-
-    public void updatePositionList(List<String> newPositionList) {
-        if (newPositionList == null || newPositionList.isEmpty()) {
+        if (newPositions == null || newPositions.isEmpty()) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_POSITION_REQUIRED);
         }
-        this.positionList.clear();
-        this.positionList.addAll(newPositionList);
-    }
-
-    public void updateSkillList(List<String> newSkillList) {
-        if (newSkillList == null || newSkillList.isEmpty()) {
+        if (newSkills == null || newSkills.isEmpty()) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_SKILL_REQUIRED);
         }
-        this.skillList.clear();
-        this.skillList.addAll(newSkillList);
+
+        this.positions = new HashSet<>(newPositions);
+        this.skills = new HashSet<>(newSkills);
     }
 
     public boolean hasText(String value) {
         return value != null && !value.isBlank();
+    }
+
+    private static Set<UserPosition> toPositions(List<String> codes) {
+        if (codes == null) return Set.of();
+        return codes.stream()
+                .map(UserPosition::new)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    private static Set<UserSkill> toSkills(List<String> codes) {
+        if (codes == null) return Set.of();
+        return codes.stream()
+                .map(UserSkill::new)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     public boolean hasUserRole(UserRole checkRole) {

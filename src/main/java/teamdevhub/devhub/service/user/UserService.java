@@ -10,6 +10,8 @@ import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.record.UserPosition;
+import teamdevhub.devhub.domain.user.record.UserSkill;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import teamdevhub.devhub.port.out.common.DateTimeProvider;
@@ -17,6 +19,9 @@ import teamdevhub.devhub.port.out.common.IdentifierProvider;
 import teamdevhub.devhub.port.out.common.PasswordPolicyProvider;
 import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
 import teamdevhub.devhub.port.out.user.UserRepository;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,12 +81,19 @@ public class UserService implements UserUseCase {
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
         User user = getUserByUserGuid(updateProfileCommand.getUserGuid());
 
+        Set<UserPosition> positions = updateProfileCommand.getPositionList().stream()
+                .map(UserPosition::new)
+                .collect(Collectors.toUnmodifiableSet());
+
+        Set<UserSkill> skills = updateProfileCommand.getSkillList().stream()
+                .map(UserSkill::new)
+                .collect(Collectors.toUnmodifiableSet());
+
         user.updateProfile(
                 updateProfileCommand.getUsername(),
                 updateProfileCommand.getIntroduction(),
-                updateProfileCommand.getPositionList(),
-                updateProfileCommand.getSkillList()
-        );
+                positions,
+                skills);
 
         update(user);
     }
@@ -104,6 +116,6 @@ public class UserService implements UserUseCase {
     }
 
     private void update(User user) {
-        userRepository.updateUser(user);
+        userRepository.updateUserProfile(user);
     }
 }

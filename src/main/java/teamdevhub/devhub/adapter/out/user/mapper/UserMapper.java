@@ -4,8 +4,11 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.common.AuditInfo;
 import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
+import teamdevhub.devhub.domain.user.record.UserPosition;
+import teamdevhub.devhub.domain.user.record.UserSkill;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserMapper {
 
@@ -35,8 +38,8 @@ public class UserMapper {
 
     public static User toDomain(
             UserEntity entity,
-            List<String> positionList,
-            List<String> skillList
+            Set<UserPosition> positions,
+            Set<UserSkill> skills
     ) {
         return User.of(
                 entity.getUserGuid(),
@@ -45,8 +48,8 @@ public class UserMapper {
                 entity.getUsername(),
                 entity.getUserRole(),
                 entity.getIntroduction(),
-                positionList,
-                skillList,
+                positions,
+                skills,
                 entity.getMannerDegree(),
                 entity.isBlocked(),
                 entity.getBlockEndDate(),

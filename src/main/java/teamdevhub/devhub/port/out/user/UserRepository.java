@@ -12,6 +12,6 @@ public interface UserRepository {
     AuthUser findAuthUserByEmail(String email);
     void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
     User findByUserGuid(String userGuid);
-    void updateUser(User user);
+    void updateUserProfile(User user);
     boolean existsByUserRole(UserRole userRole);
 }
