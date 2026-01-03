@@ -27,35 +27,37 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
-        String userGuid = identifierProvider.generateIdentifier();
-        String password = passwordPolicyProvider.encode("password123!");
+        for (int i = 1; i <= 10; i++) {
+            String userGuid = identifierProvider.generateIdentifier();
+            String password = passwordPolicyProvider.encode("password123!");
 
-        UserEntity user = UserEntity.builder()
-                .userGuid(userGuid)
-                .email("test@example.com")
-                .password(password)
-                .username("tester")
-                .userRole(UserRole.USER)
-                .introduction("테스트 유저")
-                .mannerDegree(36.5)
-                .blocked(false)
-                .deleted(false)
-                .build();
+            UserEntity user = UserEntity.builder()
+                    .userGuid(userGuid)
+                    .email("test" + i + "@example.com")
+                    .password(password)
+                    .username("tester" + i)
+                    .userRole(UserRole.USER)
+                    .introduction("테스트 유저 " + i)
+                    .mannerDegree(36.5)
+                    .blocked(false)
+                    .deleted(false)
+                    .build();
 
-        jpaUserRepository.save(user);
+            jpaUserRepository.save(user);
 
-        jpaUserPositionRepository.save(UserPositionEntity.builder()
-                .userInterestPositionGuid(identifierProvider.generateIdentifier())
-                .userGuid(userGuid)
-                .positionCd("001")
-                .build());
+            jpaUserPositionRepository.save(UserPositionEntity.builder()
+                    .userInterestPositionGuid(identifierProvider.generateIdentifier())
+                    .userGuid(userGuid)
+                    .positionCd(String.format("%03d", i)) // 001, 002, ...
+                    .build());
 
-        jpaUserSkillRepository.save(UserSkillEntity.builder()
-                .userSkillGuid(identifierProvider.generateIdentifier())
-                .userGuid(userGuid)
-                .skillCd("001")
-                .build());
+            jpaUserSkillRepository.save(UserSkillEntity.builder()
+                    .userSkillGuid(identifierProvider.generateIdentifier())
+                    .userGuid(userGuid)
+                    .skillCd(String.format("%03d", i)) // 001, 002, ...
+                    .build());
 
-        log.info("기본 USER 계정 생성됨 - ID : test@example.com / PW : password123!");
+            log.info("기본 USER 계정 생성됨 - ID : {} / PW : password123!", "test" + i + "@example.com");
+        }
     }
 }

@@ -7,7 +7,6 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.record.UserPosition;
 import teamdevhub.devhub.domain.user.record.UserSkill;
 
-import java.util.List;
 import java.util.Set;
 
 public class UserMapper {

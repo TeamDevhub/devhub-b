@@ -12,9 +12,9 @@ public class PageCommand {
 
     private static final int MAX_SIZE = 100;
 
-    public static PageCommand of(PageRequestDto pageRequestDto) {
-        int safeSize = Math.max(1, Math.min(pageRequestDto.getSize(), MAX_SIZE));
-        int safePage = Math.max(pageRequestDto.getPage(), 0);
+    public static PageCommand of(int page, int size) {
+        int safeSize = Math.max(1, Math.min(size, MAX_SIZE));
+        int safePage = Math.max(page, 0);
         return new PageCommand(safePage, safeSize);
     }
 }

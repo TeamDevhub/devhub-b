@@ -2,6 +2,7 @@ package teamdevhub.devhub.adapter.out.user;
 
 import org.springframework.data.domain.*;
 import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
 import teamdevhub.devhub.adapter.out.common.entity.RelationDiff;
 import teamdevhub.devhub.adapter.out.common.util.RelationDiffUtil;
@@ -77,14 +78,14 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public Page<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
-        Pageable pageable = PageRequest.of(pageCommand.getPage(), pageCommand.getSize(), Sort.by("joinedAt").descending());
+    public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
+        Pageable pageable = PageRequest.of(pageCommand.getPage(), pageCommand.getSize(), Sort.by("regDt").descending());
         Page<UserEntity> pagedUserEntityList = userQueryRepository.listUser(searchUserCommand, pageable);
-        List<User> userList = pagedUserEntityList.getContent().stream()
-                .map(entity -> UserMapper.toDomain(entity, Set.of(), Set.of())) // User 도메인으로 변환
+        List<AdminUserSummaryResponseDto> responseUserList = pagedUserEntityList.getContent().stream()
+                .map(AdminUserSummaryResponseDto::fromEntity)
                 .toList();
         return new PageImpl<>(
-                userList,
+                responseUserList,
                 pageable,
                 pagedUserEntityList.getTotalElements()
         );
