@@ -198,13 +198,16 @@ public class User {
         this.blocked = false;
     }
 
-    public void updateProfile(String username, String introduction) {
-        if (hasText(username)) {
-            this.username = username;
+    public void updateProfile(String newUsername, String newIntroduction, List<String> newPositionList, List<String> newSkillList) {
+        if (hasText(newUsername)) {
+            this.username = newUsername;
         }
-        if (hasText(introduction)) {
-            this.introduction = introduction;
+        if (hasText(newIntroduction)) {
+            this.introduction = newIntroduction;
         }
+
+        updatePositionList(newPositionList);
+        updateSkillList(newSkillList);
     }
 
     public void updatePositionList(List<String> newPositionList) {

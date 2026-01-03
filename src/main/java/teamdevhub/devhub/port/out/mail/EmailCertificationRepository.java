@@ -1,6 +1,6 @@
 package teamdevhub.devhub.port.out.mail;
 
-import teamdevhub.devhub.domain.record.mail.EmailCertification;
+import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
 
 public interface EmailCertificationRepository {
     void save(EmailCertification emailCertification);

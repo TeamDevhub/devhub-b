@@ -1,4 +1,4 @@
-package teamdevhub.devhub.domain.record.auth;
+package teamdevhub.devhub.domain.common.record.auth;
 
 import teamdevhub.devhub.domain.user.UserRole;
 

@@ -9,7 +9,7 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
-import teamdevhub.devhub.domain.record.auth.AuthUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.common.IdentifierProvider;
@@ -66,7 +66,9 @@ public class UserAdapter implements UserRepository {
 
     @Override
     public void updateUser(User user) {
-        jpaUserRepository.save(UserMapper.toEntity(user));
+        jpaUserPositionRepository.deleteByUserGuid(user.getUserGuid());
+        jpaUserSkillRepository.deleteByUserGuid(user.getUserGuid());
+        saveNewUser(user);
     }
 
     @Override

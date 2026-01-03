@@ -1,6 +1,6 @@
 package teamdevhub.devhub.common.auth.userdetails;
 
-import teamdevhub.devhub.domain.record.auth.AuthUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

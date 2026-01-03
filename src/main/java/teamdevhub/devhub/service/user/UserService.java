@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
-import teamdevhub.devhub.domain.record.auth.AuthUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.user.UserUseCase;
@@ -75,15 +75,13 @@ public class UserService implements UserUseCase {
     @Override
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
         User user = getUserByUserGuid(updateProfileCommand.getUserGuid());
-        user.updateProfile(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
 
-        if (updateProfileCommand.getPositionList() != null) {
-            user.updatePositionList(updateProfileCommand.getPositionList());
-        }
-
-        if (updateProfileCommand.getSkillList() != null) {
-            user.updateSkillList(updateProfileCommand.getSkillList());
-        }
+        user.updateProfile(
+                updateProfileCommand.getUsername(),
+                updateProfileCommand.getIntroduction(),
+                updateProfileCommand.getPositionList(),
+                updateProfileCommand.getSkillList()
+        );
 
         update(user);
     }

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.domain.record.mail;
+package teamdevhub.devhub.domain.common.record.mail;
 
 import java.time.LocalDateTime;
 

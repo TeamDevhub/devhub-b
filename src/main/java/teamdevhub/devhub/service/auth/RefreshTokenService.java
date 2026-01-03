@@ -3,7 +3,7 @@ package teamdevhub.devhub.service.auth;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import teamdevhub.devhub.domain.record.auth.RefreshToken;
+import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.RefreshTokenUseCase;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 

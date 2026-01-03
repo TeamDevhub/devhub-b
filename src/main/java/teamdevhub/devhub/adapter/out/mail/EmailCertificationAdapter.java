@@ -1,7 +1,7 @@
 package teamdevhub.devhub.adapter.out.mail;
 
 import teamdevhub.devhub.adapter.out.mail.entity.EmailCertificationEntity;
-import teamdevhub.devhub.domain.record.mail.EmailCertification;
+import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
 import teamdevhub.devhub.port.out.common.DateTimeProvider;
 import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
 import lombok.RequiredArgsConstructor;

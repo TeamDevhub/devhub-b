@@ -19,7 +19,7 @@ import lombok.*;
 public class UserPositionEntity {
 
     @Id
-    @Column(name = "user_intrst_postn_guid")
+    @Column(name = "user__position_guid")
     private String userInterestPositionGuid;
 
     @Column(name = "user_guid", nullable = false)

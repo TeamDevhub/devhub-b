@@ -1,6 +1,6 @@
 package teamdevhub.devhub.port.out.user;
 
-import teamdevhub.devhub.domain.record.auth.AuthUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 

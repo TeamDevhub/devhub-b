@@ -4,7 +4,7 @@ import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationComman
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.AuthRuleException;
-import teamdevhub.devhub.domain.record.mail.EmailCertification;
+import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
 import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
 import teamdevhub.devhub.port.out.common.DateTimeProvider;
 import teamdevhub.devhub.port.out.common.EmailCertificationCodeProvider;
