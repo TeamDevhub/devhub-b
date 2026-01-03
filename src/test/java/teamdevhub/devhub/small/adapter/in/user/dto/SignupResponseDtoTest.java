@@ -7,6 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class SignupResponseDtoTest {
 
     @Test
-    void fromUserDomain() {
+    void fromDomain() {
     }
 }

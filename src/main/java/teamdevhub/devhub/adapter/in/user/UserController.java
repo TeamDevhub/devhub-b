@@ -11,6 +11,7 @@ import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
+import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.port.in.user.UserUseCase;
@@ -28,7 +29,17 @@ public class UserController {
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithData(
                         SuccessCodeEnum.SIGNUP_SUCCESS,
-                        SignupResponseDto.fromUserDomain(userUseCase.signup(signupCommand))
+                        SignupResponseDto.fromDomain(userUseCase.signup(signupCommand))
+                )
+        );
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(
+                ApiDataResponseVo.successWithData(
+                        SuccessCodeEnum.READ_SUCCESS,
+                        UserProfileResponseDto.fromDomain(userUseCase.getCurrentUserProfile(userDetails.getUserGuid()))
                 )
         );
     }

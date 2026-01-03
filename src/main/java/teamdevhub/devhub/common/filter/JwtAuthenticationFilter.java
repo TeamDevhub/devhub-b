@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
         String email = userDetails.getUsername();
-        UserRole userRole = userDetails.getUser().getUserRole();
+        UserRole userRole = userDetails.getUser().userRole();
 
         String accessToken = tokenProvider.createAccessToken(email, userRole);
         String refreshToken = tokenProvider.createRefreshToken(email);
@@ -90,7 +90,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.getWriter().write(jsonResponse);
         response.setStatus(HttpServletResponse.SC_OK);
 
-        userUseCase.updateLastLoginDate(userDetails.getUserGuid());
+        userUseCase.updateLastLoginDateTime(userDetails.getUserGuid());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package teamdevhub.devhub.common.auth.userdetails;
 
+import teamdevhub.devhub.domain.record.auth.LoginUser;
 import teamdevhub.devhub.domain.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,29 +11,29 @@ import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user;
+    private final LoginUser loginUser;
 
-    public UserDetailsImpl(User user) {
-        this.user = user;
+    public UserDetailsImpl(LoginUser loginUser) {
+        this.loginUser = loginUser;
     }
 
-    public User getUser() {
-        return user;
+    public LoginUser getUser() {
+        return loginUser;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return loginUser.password();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return loginUser.email();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getUserRole().getAuthority()));
+        return List.of(new SimpleGrantedAuthority(loginUser.userRole().getAuthority()));
     }
 
     @Override
@@ -56,6 +57,6 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public String getUserGuid() {
-        return user.getUserGuid();
+        return loginUser.userGuid();
     }
 }

@@ -7,6 +7,7 @@ import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
+import teamdevhub.devhub.domain.record.auth.LoginUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.user.UserUseCase;
@@ -53,14 +54,22 @@ public class UserService implements UserUseCase {
                 signupCommand.getPositionList(),
                 signupCommand.getSkillList());
         emailCertificationRepository.delete(signupCommand.getEmail());
-        return userRepository.save(user);
+        return userRepository.saveNewUser(user);
     }
 
     @Override
-    public void updateLastLoginDate(String userGuid) {
-        User user = getUserByUserGuid(userGuid);
-        user.login(dateTimeProvider.now());
-        update(user);
+    public LoginUser getLoginUser(String email) {
+        return userRepository.findForLoginByEmail(email);
+    }
+
+    @Override
+    public void updateLastLoginDateTime(String userGuid) {
+        userRepository.updateLastLoginDateTime(userGuid, dateTimeProvider.now());
+    }
+
+    @Override
+    public User getCurrentUserProfile(String userGuid) {
+        return getUserByUserGuid(userGuid);
     }
 
     @Override
@@ -97,6 +106,6 @@ public class UserService implements UserUseCase {
     }
 
     private void update(User user) {
-        userRepository.save(user);
+        userRepository.saveNewUser(user);
     }
 }

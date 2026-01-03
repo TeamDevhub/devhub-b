@@ -28,9 +28,6 @@ class UserTest {
     private static final String ADMIN_USERNAME = "AdminUser";
     private static final String ADMIN_PASSWORD = "adminPassword123";
 
-    private static final String VERIFIED_EMAIL_CODE = "123456";
-    private static final String UNVERIFIED_EMAIL = "unverified@example.com";
-
     private static final String NEW_USERNAME = "NewUsername";
     private static final String NEW_INTRO = "NewIntro";
     private static final List<String> NEW_POSITIONS = List.of("002");

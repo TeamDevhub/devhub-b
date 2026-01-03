@@ -190,11 +190,6 @@ public class User {
                 .build();
     }
 
-
-    public void login(LocalDateTime loginDateTime) {
-        this.lastLoginDateTime = loginDateTime;
-    }
-
     public void withdraw() {
         if (this.deleted) {
             throw DomainRuleException.of(ErrorCodeEnum.ALREADY_DELETED);

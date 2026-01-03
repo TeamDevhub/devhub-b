@@ -9,6 +9,7 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
+import teamdevhub.devhub.domain.record.auth.LoginUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.common.IdentifierProvider;
@@ -16,6 +17,7 @@ import teamdevhub.devhub.port.out.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -28,10 +30,21 @@ public class UserAdapter implements UserRepository {
     private final IdentifierProvider identifierProvider;
 
     @Override
-    public User save(User user) {
+    public User saveNewUser(User user) {
         UserEntity savedUser  = jpaUserRepository.save(UserMapper.toEntity(user));
         persistUserRelations(user);
         return UserMapper.toDomain(savedUser, user.getPositionList(), user.getSkillList());
+    }
+
+    @Override
+    public LoginUser findForLoginByEmail(String email) {
+        UserEntity userEntity = jpaUserRepository.findByEmail(email).orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+        return UserMapper.toLoginUser(userEntity);
+    }
+
+    @Override
+    public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
+        jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime);
     }
 
     @Override

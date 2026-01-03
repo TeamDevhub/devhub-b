@@ -11,25 +11,21 @@ import java.time.LocalDateTime;
 public class SignupResponseDto {
 
     private String email;
-
     private String username;
 
+    private String createdBy;
     private LocalDateTime createdAt;
-
+    private String modifiedBy;
     private LocalDateTime modifiedAt;
 
-    private String createdBy;
-
-    private String modifiedBy;
-
-    public static SignupResponseDto fromUserDomain(User user) {
+    public static SignupResponseDto fromDomain(User user) {
         return SignupResponseDto.builder()
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .createdAt(user.getAuditInfo().getCreatedAt())
-                .modifiedAt(user.getAuditInfo().getModifiedAt())
                 .createdBy(user.getAuditInfo().getCreatedBy())
+                .createdAt(user.getAuditInfo().getCreatedAt())
                 .modifiedBy(user.getAuditInfo().getModifiedBy())
+                .modifiedAt(user.getAuditInfo().getModifiedAt())
                 .build();
     }
 }
