@@ -1,5 +1,8 @@
 package teamdevhub.devhub.adapter.out.user;
 
+import org.springframework.data.domain.*;
+import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
 import teamdevhub.devhub.adapter.out.common.entity.RelationDiff;
 import teamdevhub.devhub.adapter.out.common.util.RelationDiffUtil;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
@@ -9,6 +12,7 @@ import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserPositionRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
+import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.common.record.auth.AuthUser;
@@ -22,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +35,7 @@ import java.util.stream.Collectors;
 public class UserAdapter implements UserRepository {
 
     private final JpaUserRepository jpaUserRepository;
+    private final UserQueryRepository userQueryRepository;
     private final JpaUserPositionRepository jpaUserPositionRepository;
     private final JpaUserSkillRepository jpaUserSkillRepository;
     private final IdentifierProvider identifierProvider;
@@ -70,6 +74,20 @@ public class UserAdapter implements UserRepository {
     @Override
     public boolean existsByUserRole(UserRole userRole) {
         return jpaUserRepository.existsByUserRole(userRole);
+    }
+
+    @Override
+    public Page<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
+        Pageable pageable = PageRequest.of(pageCommand.getPage(), pageCommand.getSize(), Sort.by("joinedAt").descending());
+        Page<UserEntity> pagedUserEntityList = userQueryRepository.listUser(searchUserCommand, pageable);
+        List<User> userList = pagedUserEntityList.getContent().stream()
+                .map(entity -> UserMapper.toDomain(entity, Set.of(), Set.of())) // User 도메인으로 변환
+                .toList();
+        return new PageImpl<>(
+                userList,
+                pageable,
+                pagedUserEntityList.getTotalElements()
+        );
     }
 
     private void syncPositions(User user) {

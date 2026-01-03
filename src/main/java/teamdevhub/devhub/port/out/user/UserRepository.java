@@ -1,5 +1,8 @@
 package teamdevhub.devhub.port.out.user;
 
+import org.springframework.data.domain.Page;
+import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
 import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -14,4 +17,6 @@ public interface UserRepository {
     User findByUserGuid(String userGuid);
     void updateUserProfile(User user);
     boolean existsByUserRole(UserRole userRole);
+
+    Page<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand);
 }
