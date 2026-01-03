@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.user.dto.request;
+package teamdevhub.devhub.adapter.in.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

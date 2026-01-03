@@ -1,5 +1,7 @@
 package teamdevhub.devhub.small.mock.repository;
 
+import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.user.UserRepository;
@@ -18,13 +20,16 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByUserGuid(String userGuid) {
-        return Optional.ofNullable(store.get(userGuid));
+    public User findByUserGuid(String userGuid) {
+        return store.get(userGuid);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return store.values().stream().filter(user -> user.getEmail().equals(email)).findFirst();
+    public User findByEmail(String email) {
+        return store.values().stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
     }
 
     @Override

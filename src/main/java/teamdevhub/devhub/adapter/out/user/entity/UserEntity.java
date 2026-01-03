@@ -39,12 +39,12 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column
+    private String username;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRole userRole;
-
-    @Column
-    private String username;
 
     @Column(length = 500)
     private String introduction;

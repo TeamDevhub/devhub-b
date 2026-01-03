@@ -30,34 +30,52 @@ public class UserService implements UserUseCase {
     private final DateTimeProvider dateTimeProvider;
 
     @Override
+    public void initializeAdminUser(String email, String rawPassword, String username) {
+        String userGuid = identifierProvider.generateIdentifier();
+        String encodedPassword = passwordPolicyProvider.encode(rawPassword);
+        User adminUser = User.createAdminUser(userGuid, email, encodedPassword, username);
+        update(adminUser);
+    }
+
+    @Override
     public User signup(SignupCommand signupCommand) {
         if (!emailCertificationRepository.isVerified(signupCommand.getEmail())) {
             throw BusinessRuleException.of(ErrorCodeEnum.EMAIL_NOT_CONFIRMED);
         }
         String userGuid = identifierProvider.generateIdentifier();
         String encodedPassword = passwordPolicyProvider.encode(signupCommand.getPassword());
-        User user = User.createGeneralUser(userGuid, signupCommand.getEmail(), signupCommand.getUsername(), encodedPassword, signupCommand.getIntroduction());
+        User user = User.createGeneralUser(
+                userGuid,
+                signupCommand.getEmail(),
+                encodedPassword,
+                signupCommand.getUsername(),
+                signupCommand.getIntroduction(),
+                signupCommand.getPositionList(),
+                signupCommand.getSkillList());
         emailCertificationRepository.delete(signupCommand.getEmail());
         return userRepository.save(user);
-    }
-
-    @Override
-    public void initializeAdminUser(String email, String username, String rawPassword) {
-        String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = passwordPolicyProvider.encode(rawPassword);
-        User adminUser = User.createAdminUser(userGuid, email, username, encodedPassword);
-        update(adminUser);
-    }
-
-    @Override
-    public boolean existsByUserRole(UserRole userRole) {
-        return userRepository.existsByUserRole(userRole);
     }
 
     @Override
     public void updateLastLoginDate(String userGuid) {
         User user = getUserByUserGuid(userGuid);
         user.login(dateTimeProvider.now());
+        update(user);
+    }
+
+    @Override
+    public void updateProfile(UpdateProfileCommand updateProfileCommand) {
+        User user = getUserByUserGuid(updateProfileCommand.getUserGuid());
+        user.updateProfile(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
+
+        if (updateProfileCommand.getPositionList() != null) {
+            user.updatePositionList(updateProfileCommand.getPositionList());
+        }
+
+        if (updateProfileCommand.getSkillList() != null) {
+            user.updateSkillList(updateProfileCommand.getSkillList());
+        }
+
         update(user);
     }
 
@@ -70,14 +88,12 @@ public class UserService implements UserUseCase {
     }
 
     @Override
-    public void updateProfile(UpdateProfileCommand updateProfileCommand) {
-        User user = getUserByUserGuid(updateProfileCommand.getUserGuid());
-        user.updateProfile(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
-        update(user);
+    public boolean existsByUserRole(UserRole userRole) {
+        return userRepository.existsByUserRole(userRole);
     }
 
     private User getUserByUserGuid(String userGuid) {
-        return userRepository.findByUserGuid(userGuid).orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+        return userRepository.findByUserGuid(userGuid);
     }
 
     private void update(User user) {

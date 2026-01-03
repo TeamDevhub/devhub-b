@@ -1,8 +1,10 @@
-package teamdevhub.devhub.adapter.out.user;
+package teamdevhub.devhub.adapter.out.user.mapper;
 
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.common.AuditInfo;
 import teamdevhub.devhub.domain.user.User;
+
+import java.util.List;
 
 public class UserMapper {
 
@@ -11,8 +13,8 @@ public class UserMapper {
                 .userGuid(user.getUserGuid())
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .userRole(user.getUserRole())
                 .username(user.getUsername())
+                .userRole(user.getUserRole())
                 .introduction(user.getIntroduction())
                 .mannerDegree(user.getMannerDegree())
                 .blocked(user.isBlocked())
@@ -22,20 +24,26 @@ public class UserMapper {
                 .build();
     }
 
-    public static User toDomain(UserEntity userEntity) {
+    public static User toDomain(
+            UserEntity entity,
+            List<String> positionList,
+            List<String> skillList
+    ) {
         return User.of(
-                userEntity.getUserGuid(),
-                userEntity.getEmail(),
-                userEntity.getPassword(),
-                userEntity.getUserRole(),
-                userEntity.getUsername(),
-                userEntity.getIntroduction(),
-                userEntity.getMannerDegree(),
-                userEntity.isBlocked(),
-                userEntity.getBlockEndDate(),
-                userEntity.isDeleted(),
-                userEntity.getLastLoginDt(),
-                toAuditInfo(userEntity)
+                entity.getUserGuid(),
+                entity.getEmail(),
+                entity.getPassword(),
+                entity.getUsername(),
+                entity.getUserRole(),
+                entity.getIntroduction(),
+                positionList,
+                skillList,
+                entity.getMannerDegree(),
+                entity.isBlocked(),
+                entity.getBlockEndDate(),
+                entity.isDeleted(),
+                entity.getLastLoginDt(),
+                toAuditInfo(entity)
         );
     }
 

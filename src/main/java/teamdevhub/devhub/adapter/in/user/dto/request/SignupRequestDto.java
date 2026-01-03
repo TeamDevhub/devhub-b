@@ -1,9 +1,14 @@
 package teamdevhub.devhub.adapter.in.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import teamdevhub.devhub.common.enums.RegexPatternEnum;
 import teamdevhub.devhub.common.validation.regex.RegexMatch;
+
+import java.util.List;
 
 @Getter
 public class SignupRequestDto {
@@ -21,4 +26,12 @@ public class SignupRequestDto {
     private String username;
 
     private String introduction;
+
+    @NotNull(message = "관심 포지션은 필수입니다.")
+    @Size(min = 1, message = "관심 포지션은 최소 1개 이상 선택해야 합니다.")
+    private List<@NotBlank String> positionList;
+
+    @NotNull(message = "보유 스킬은 필수입니다.")
+    @Size(min = 1, message = "보유 스킬은 최소 1개 이상 선택해야 합니다.")
+    private List<@NotBlank String> skillList;
 }

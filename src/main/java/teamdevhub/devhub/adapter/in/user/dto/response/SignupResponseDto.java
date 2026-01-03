@@ -11,10 +11,15 @@ import java.time.LocalDateTime;
 public class SignupResponseDto {
 
     private String email;
+
     private String username;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime modifiedAt;
+
     private String createdBy;
+
     private String modifiedBy;
 
     public static SignupResponseDto fromUserDomain(User user) {

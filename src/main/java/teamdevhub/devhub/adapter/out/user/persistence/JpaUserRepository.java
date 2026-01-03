@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.user;
+package teamdevhub.devhub.adapter.out.user.persistence;
 
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.UserRole;

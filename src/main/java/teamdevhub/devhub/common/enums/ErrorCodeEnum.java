@@ -34,6 +34,8 @@ public enum ErrorCodeEnum {
     USER_ID_FAIL("ERR.DVH.0030", "사용자 ID 값이 잘못되었습니다.",BAD_REQUEST),
     USER_PASSWORD_FAIL("ERR.DVH.0031", "사용자 비밀번호 값이 잘못되었습니다.",BAD_REQUEST),
     ALREADY_DELETED("ERR.DVH.0032", "이미 탈퇴한 회원입니다.", BAD_REQUEST ),
+    USER_POSITION_REQUIRED("ERR.DVH.0033", "관심 포지션은 필수입니다.", BAD_REQUEST),
+    USER_SKILL_REQUIRED("ERR.DVH.0034", "보유 스킬목록은 필수입니다.", BAD_REQUEST),
 
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다.",BAD_REQUEST);
 

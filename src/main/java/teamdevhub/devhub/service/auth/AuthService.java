@@ -36,7 +36,7 @@ public class AuthService implements AuthUseCase {
         }
 
         String email = tokenProvider.getEmailFromRefreshToken(token);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email);
         refreshTokenRepository.findByEmail(email).filter(refreshToken -> refreshToken.token().equals(token)).orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID));
         String newAccessToken = tokenProvider.createAccessToken(user.getEmail(), user.getUserRole());
         return TokenResponseDto.reissue(newAccessToken);

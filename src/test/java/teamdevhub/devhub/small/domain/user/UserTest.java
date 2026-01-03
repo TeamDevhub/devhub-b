@@ -7,24 +7,47 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class UserTest {
 
+    private static final String TEST_GUID = "USERa1b2c3d4e5f6g7h8i9j10k11l12m";
+    private static final String TEST_EMAIL = "user@example.com";
+    private static final String TEST_PASSWORD = "password123";
+    private static final String TEST_USERNAME = "User";
+    private static final String TEST_INTRO = "Hello World";
+
+    private static final List<String> TEST_POSITIONS = List.of("001");
+    private static final List<String> TEST_SKILLS = List.of("001");
+
+    private static final String ADMIN_GUID = "ADMINa1b2c3d4e5f6g7h8i9j10k11l12";
+    private static final String ADMIN_EMAIL = "admin@example.com";
+    private static final String ADMIN_USERNAME = "AdminUser";
+    private static final String ADMIN_PASSWORD = "adminPassword123";
+
+    private static final String VERIFIED_EMAIL_CODE = "123456";
+    private static final String UNVERIFIED_EMAIL = "unverified@example.com";
+
+    private static final String NEW_USERNAME = "NewUsername";
+    private static final String NEW_INTRO = "NewIntro";
+    private static final List<String> NEW_POSITIONS = List.of("002");
+    private static final List<String> NEW_SKILLS = List.of("002");
+
     @Test
     void createGeneralUser() {
         //when
-        User user = User.createGeneralUser("a1b2c3d4e5f6g7h8i9j10k11l12m13nF", "user@example.com", "User", "password123", "Hello world");
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
 
         //then
-        assertThat(user.getUserGuid()).isEqualTo("a1b2c3d4e5f6g7h8i9j10k11l12m13nF");
-        assertThat(user.getEmail()).isEqualTo("user@example.com");
-        assertThat(user.getUsername()).isEqualTo("User");
-        assertThat(user.getPassword()).isEqualTo("password123");
+        assertThat(user.getUserGuid()).isEqualTo(TEST_GUID);
+        assertThat(user.getEmail()).isEqualTo(TEST_EMAIL);
+        assertThat(user.getPassword()).isEqualTo(TEST_PASSWORD);
+        assertThat(user.getUsername()).isEqualTo(TEST_USERNAME);
         assertThat(user.getUserRole()).isEqualTo(UserRole.USER);
-        assertThat(user.getIntroduction()).isEqualTo("Hello world");
+        assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO);
         assertThat(user.isDeleted()).isFalse();
         assertThat(user.isBlocked()).isFalse();
         assertThat(user.getMannerDegree()).isEqualTo(36.5);
@@ -33,7 +56,7 @@ class UserTest {
     @Test
     void createAdminUser() {
         //when
-        User adminUser = User.createAdminUser("a1b2c3d4e5f6g7h8i9j10k11l12m13nF", "admin@example.com", "Admin", "adminPass");
+        User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
         //then
         assertThat(adminUser.getUserRole()).isEqualTo(UserRole.ADMIN);
@@ -49,12 +72,14 @@ class UserTest {
 
         //when
         User user = User.of(
-                "a1b2c3d4e5f6g7h8i9j10k11l12m13nF",
-                "user@example.com",
-                "password123",
+                TEST_GUID,
+                TEST_EMAIL,
+                TEST_PASSWORD,
+                TEST_USERNAME,
                 UserRole.USER,
-                "User",
-                "Intro",
+                TEST_INTRO,
+                TEST_POSITIONS,
+                TEST_SKILLS,
                 50.0,
                 false,
                 null,
@@ -64,7 +89,7 @@ class UserTest {
         );
 
         //then
-        assertThat(user.getEmail()).isEqualTo("user@example.com");
+        assertThat(user.getEmail()).isEqualTo(TEST_EMAIL);
         assertThat(user.getMannerDegree()).isEqualTo(50.0);
         assertThat(user.getLastLoginDateTime()).isEqualTo(now);
     }
@@ -72,7 +97,7 @@ class UserTest {
     @Test
     void login() {
         //given
-        User user = User.createGeneralUser("a1b2c3d4e5f6g7h8i9j10k11l12m13nF", "user@example.com", "User", "password123", "Hello world");
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
         LocalDateTime loginTime = LocalDateTime.now();
 
         //when
@@ -85,7 +110,7 @@ class UserTest {
     @Test
     void withdraw() {
         //given
-        User user = User.createGeneralUser("a1b2c3d4e5f6g7h8i9j10k11l12m13nF", "user@example.com", "User", "password123", "Hello world");
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
 
         //when
         user.withdraw();
@@ -98,7 +123,7 @@ class UserTest {
     @Test
     void withdrawAlreadyDeleted_throwsException() {
         //given
-        User user = User.createGeneralUser("a1b2c3d4e5f6g7h8i9j10k11l12m13nF", "user@example.com", "User", "password123", "Hello world");
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
 
         //when
         user.withdraw();
@@ -111,25 +136,25 @@ class UserTest {
     @Test
     void updateProfile() {
         //given
-        User user = User.createGeneralUser("a1b2c3d4e5f6g7h8i9j10k11l12m13nF", "user@example.com", "User", "password123", "Hello world");
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
 
         //when
-        user.updateProfile("NewName", "New Intro");
+        user.updateProfile(NEW_USERNAME, NEW_INTRO);
 
         //then
-        assertThat(user.getUsername()).isEqualTo("NewName");
-        assertThat(user.getIntroduction()).isEqualTo("New Intro");
+        assertThat(user.getUsername()).isEqualTo(NEW_USERNAME);
+        assertThat(user.getIntroduction()).isEqualTo(NEW_INTRO);
     }
 
     @Test
     void updateProfileWithNullOrBlank_ignored() {
         //given
-        User user = User.createGeneralUser("a1b2c3d4e5f6g7h8i9j10k11l12m13nF", "user@example.com", "User", "password123", "Hello world");
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
 
         //when
         user.updateProfile(null, "   ");
 
-        assertThat(user.getUsername()).isEqualTo("User");
-        assertThat(user.getIntroduction()).isEqualTo("Hello world");
+        assertThat(user.getUsername()).isEqualTo(TEST_USERNAME);
+        assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO);
     }
 }

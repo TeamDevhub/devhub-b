@@ -29,14 +29,21 @@ class UserServiceTest {
     private static final String TEST_USERNAME = "User";
     private static final String TEST_INTRO = "Hello World";
 
+    private static final List<String> TEST_POSITIONS = List.of("001");
+    private static final List<String> TEST_SKILLS = List.of("001");
+
     private static final String ADMIN_EMAIL = "admin@example.com";
     private static final String ADMIN_USERNAME = "AdminUser";
     private static final String ADMIN_PASSWORD = "adminPassword123";
 
     private static final String VERIFIED_EMAIL_CODE = "123456";
     private static final String UNVERIFIED_EMAIL = "unverified@example.com";
+
     private static final String NEW_USERNAME = "NewUsername";
     private static final String NEW_INTRO = "NewIntro";
+    private static final List<String> NEW_POSITIONS = List.of("002");
+    private static final List<String> NEW_SKILLS = List.of("002");
+
 
     private UserService userService;
     private FakeUserRepository fakeUserRepository;
@@ -74,23 +81,23 @@ class UserServiceTest {
     @Test
     void signup_success() {
         //given
-        SignupCommand command = new SignupCommand(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
+        SignupCommand command = new SignupCommand(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
 
         //when
         User savedUser = userService.signup(command);
 
         //then
         assertNotNull(savedUser.getUserGuid());
+        assertEquals(TEST_GUID, savedUser.getUserGuid());
         assertEquals(TEST_EMAIL, savedUser.getEmail());
         assertEquals(TEST_USERNAME, savedUser.getUsername());
-        assertTrue(fakeUserRepository.findByUserGuid(savedUser.getUserGuid()).isPresent());
         assertFalse(fakeEmailCertificationRepository.isVerified(TEST_EMAIL));
     }
 
     @Test
     void signup_failsIfEmailNotVerified() {
         //given
-        SignupCommand command = new SignupCommand(UNVERIFIED_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
+        SignupCommand command = new SignupCommand(UNVERIFIED_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
 
         //when,then
         assertThrows(BusinessRuleException.class, () -> userService.signup(command));
@@ -99,14 +106,14 @@ class UserServiceTest {
     @Test
     void withdraw_user_success() {
         //given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
         fakeUserRepository.save(user);
 
         //when
         userService.withdrawCurrentUser(TEST_GUID);
 
         //then
-        User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID).orElseThrow(() -> new AssertionError("User must exist after withdraw"));
+        User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID);
         assertTrue(updatedUser.isDeleted());
         assertFalse(fakeRefreshTokenRepository.findByEmail(TEST_EMAIL).isPresent());
     }
@@ -114,29 +121,29 @@ class UserServiceTest {
     @Test
     void updateLastLoginDate_success() {
         //given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
         fakeUserRepository.save(user);
 
         //when
         userService.updateLastLoginDate(TEST_GUID);
 
         //then
-        User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID).orElseThrow(() -> new AssertionError("User must exist after updateLastLoginDate"));
+        User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID);
         assertEquals(fakeDateTimeProvider.now(), updatedUser.getLastLoginDateTime());
     }
 
     @Test
     void updateProfile_success() {
         //given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO);
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
         fakeUserRepository.save(user);
 
         //when
-        UpdateProfileCommand command = new UpdateProfileCommand(TEST_GUID, NEW_USERNAME, NEW_INTRO);
+        UpdateProfileCommand command = new UpdateProfileCommand(TEST_GUID, NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, NEW_SKILLS);
         userService.updateProfile(command);
 
         //then
-        User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID).orElseThrow(() -> new AssertionError("User must exist after updateProfile"));
+        User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID);
         assertEquals(NEW_USERNAME, updatedUser.getUsername());
         assertEquals(NEW_INTRO, updatedUser.getIntroduction());
     }
@@ -144,7 +151,7 @@ class UserServiceTest {
     @Test
     void initializeAdminUser_success() {
         //given
-        userService.initializeAdminUser(ADMIN_EMAIL, ADMIN_USERNAME, ADMIN_PASSWORD);
+        userService.initializeAdminUser(ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
         //then
         assertTrue(fakeUserRepository.existsByUserRole(UserRole.ADMIN));
