@@ -69,7 +69,9 @@ public class UserService implements UserUseCase {
 
     @Override
     public void updateLastLoginDateTime(String userGuid) {
-        userRepository.updateLastLoginDateTime(userGuid, dateTimeProvider.now());
+        User user = getUserByUserGuid(userGuid);
+        user.updateLastLoginDateTime(dateTimeProvider.now());
+        userRepository.updateLastLoginDateTime(user);
     }
 
     @Override

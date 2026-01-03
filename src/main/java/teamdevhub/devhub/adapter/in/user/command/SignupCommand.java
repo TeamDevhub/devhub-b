@@ -14,9 +14,9 @@ public class SignupCommand {
 
     private final String email;
 
-    private final String username;
-
     private final String password;
+
+    private final String username;
 
     private String introduction;
 
@@ -27,8 +27,8 @@ public class SignupCommand {
     public static SignupCommand fromSignupUserRequestDto(SignupRequestDto signupRequestDto) {
         return SignupCommand.builder()
                 .email(signupRequestDto.getEmail())
-                .username(signupRequestDto.getUsername())
                 .password(signupRequestDto.getPassword())
+                .username(signupRequestDto.getUsername())
                 .introduction(signupRequestDto.getIntroduction())
                 .positionList(signupRequestDto.getPositionList())
                 .skillList(signupRequestDto.getSkillList())

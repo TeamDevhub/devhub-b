@@ -62,8 +62,8 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
-        jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime);
+    public void updateLastLoginDateTime(User user) {
+        jpaUserRepository.save(UserMapper.toEntity(user));
     }
 
     @Override

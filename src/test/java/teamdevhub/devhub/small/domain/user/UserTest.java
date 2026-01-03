@@ -2,12 +2,14 @@ package teamdevhub.devhub.small.domain.user;
 
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.common.exception.DomainRuleException;
-import teamdevhub.devhub.domain.common.AuditInfo;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.record.UserPosition;
+import teamdevhub.devhub.domain.user.record.UserSkill;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,8 +22,11 @@ class UserTest {
     private static final String TEST_USERNAME = "User";
     private static final String TEST_INTRO = "Hello World";
 
-    private static final List<String> TEST_POSITIONS = List.of("001");
-    private static final List<String> TEST_SKILLS = List.of("001");
+    private static final List<String> TEST_POSITION_LIST = List.of("001");
+    private static final List<String> TEST_SKILL_LIST = List.of("001");
+
+    private static final Set<UserPosition> TEST_POSITIONS = Set.of(new UserPosition("001"));
+    private static final Set<UserSkill> TEST_SKILLS = Set.of(new UserSkill("001"));
 
     private static final String ADMIN_GUID = "ADMINa1b2c3d4e5f6g7h8i9j10k11l12";
     private static final String ADMIN_EMAIL = "admin@example.com";
@@ -30,13 +35,28 @@ class UserTest {
 
     private static final String NEW_USERNAME = "NewUsername";
     private static final String NEW_INTRO = "NewIntro";
-    private static final List<String> NEW_POSITIONS = List.of("002");
-    private static final List<String> NEW_SKILLS = List.of("002");
+    private static final Set<UserPosition> NEW_POSITIONS = Set.of(new UserPosition("002"));
+    private static final Set<UserSkill> NEW_SKILLS = Set.of(new UserSkill("002"));
+
 
     @Test
-    void createGeneralUser() {
-        //when
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
+    void 관리자_계정은_관심_포지션과_보유_스킬이_빈_값이다() {
+        //given, when
+        User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
+
+        //then
+        assertThat(adminUser.getUserRole()).isEqualTo(UserRole.ADMIN);
+        assertThat(adminUser.getUsername()).isEqualTo(ADMIN_USERNAME);
+        assertThat(adminUser.getPositions()).isEmpty();
+        assertThat(adminUser.getSkills()).isEmpty();
+        assertThat(adminUser.isDeleted()).isFalse();
+        assertThat(adminUser.isBlocked()).isFalse();
+    }
+
+    @Test
+    void 관심_포지션과_보유_스킬을_리스트로_받고_일반_유저를_생성한다() {
+        //given,when
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         //then
         assertThat(user.getUserGuid()).isEqualTo(TEST_GUID);
@@ -45,69 +65,75 @@ class UserTest {
         assertThat(user.getUsername()).isEqualTo(TEST_USERNAME);
         assertThat(user.getUserRole()).isEqualTo(UserRole.USER);
         assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO);
+        assertThat(user.getPositions()).isEqualTo(TEST_POSITIONS);
+        assertThat(user.getSkills()).isEqualTo(TEST_SKILLS);
         assertThat(user.isDeleted()).isFalse();
         assertThat(user.isBlocked()).isFalse();
         assertThat(user.getMannerDegree()).isEqualTo(36.5);
     }
 
     @Test
-    void createAdminUser() {
-        //when
+    void 이메일_값이_공백이면_예외를_던진다() {
+
+        assertThatThrownBy(
+                //given,when
+                () -> User.createGeneralUser(TEST_GUID, "", TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST)
+        )
+                //then
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("사용자 ID 값이 잘못되었습니다.");
+    }
+
+    @Test
+    void 비밀번호_길이가_8자보다_짧으면_예외를_던진다() {
+
+        assertThatThrownBy(
+                //given,when
+                () -> User.createGeneralUser(TEST_GUID, TEST_EMAIL, "123456", TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST)
+        )
+                //then
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("사용자 비밀번호 값이 잘못되었습니다.");
+    }
+
+    @Test
+    void 관심_포지션이_빈값이면_예외를_던진다() {
+
+        assertThatThrownBy(
+                //given,when
+                () -> User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, null, TEST_SKILL_LIST)
+        )
+                //then
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("관심 포지션은 필수입니다.");
+    }
+
+    @Test
+    void 관리자_계정은_보유_스킬이_빈_값이어도_예외를_던지지_않는다() {
+        //given, when
         User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
         //then
         assertThat(adminUser.getUserRole()).isEqualTo(UserRole.ADMIN);
-        assertThat(adminUser.isDeleted()).isFalse();
-        assertThat(adminUser.isBlocked()).isFalse();
     }
 
     @Test
-    void of() {
+    void 로그인_후_최근_로그인_시간이_변경된다() {
         //given
-        LocalDateTime now = LocalDateTime.now();
-        AuditInfo auditInfo = AuditInfo.empty();
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         //when
-        User user = User.of(
-                TEST_GUID,
-                TEST_EMAIL,
-                TEST_PASSWORD,
-                TEST_USERNAME,
-                UserRole.USER,
-                TEST_INTRO,
-                TEST_POSITIONS,
-                TEST_SKILLS,
-                50.0,
-                false,
-                null,
-                false,
-                now,
-                auditInfo
-        );
+        LocalDateTime now = LocalDateTime.now();
+        user.updateLastLoginDateTime(now);
 
         //then
-        assertThat(user.getEmail()).isEqualTo(TEST_EMAIL);
-        assertThat(user.getMannerDegree()).isEqualTo(50.0);
         assertThat(user.getLastLoginDateTime()).isEqualTo(now);
     }
 
     @Test
-    void login() {
+    void 탈퇴한_회원은_deleted_값이_true_다() {
         //given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
-        LocalDateTime loginTime = LocalDateTime.now();
-
-        //when
-        user.login(loginTime);
-
-        //then
-        assertThat(user.getLastLoginDateTime()).isEqualTo(loginTime);
-    }
-
-    @Test
-    void withdraw() {
-        //given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         //when
         user.withdraw();
@@ -118,40 +144,57 @@ class UserTest {
     }
 
     @Test
-    void withdrawAlreadyDeleted_throwsException() {
+    void 이미_탈퇴한_회원이_재탈퇴를_요청하면_예외를_던진다() {
         //given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
-
-        //when
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
         user.withdraw();
 
+        //when
         assertThatThrownBy(user::withdraw)
+                //then
                 .isInstanceOf(DomainRuleException.class)
                 .hasMessageContaining("이미 탈퇴한 회원입니다.");
     }
 
     @Test
-    void updateProfile() {
+    void 사용자_프로필_정보를_새로운_값으로_변경하면_기존_값이_변경된다() {
         //given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         //when
-        user.updateProfile(NEW_USERNAME, NEW_INTRO);
+        user.updateProfile(NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, NEW_SKILLS);
 
         //then
         assertThat(user.getUsername()).isEqualTo(NEW_USERNAME);
         assertThat(user.getIntroduction()).isEqualTo(NEW_INTRO);
+        assertThat(user.getPositions()).isEqualTo(NEW_POSITIONS);
+        assertThat(user.getSkills()).isEqualTo(NEW_SKILLS);
     }
 
     @Test
-    void updateProfileWithNullOrBlank_ignored() {
+    void 빈_값_또는_이전과_같은_값으로_변경하면_기존_값은_변경되지_않는다() {
         //given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         //when
-        user.updateProfile(null, "   ");
+        user.updateProfile("", null, TEST_POSITIONS, NEW_SKILLS);
 
+        //then
         assertThat(user.getUsername()).isEqualTo(TEST_USERNAME);
         assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO);
+        assertThat(user.getPositions()).isEqualTo(TEST_POSITIONS);
+        assertThat(user.getSkills()).isEqualTo(NEW_SKILLS);
+    }
+
+    @Test
+    void 관심_스킬을_빈_값으로_변경하면_예외를_던진다() {
+        //given
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+
+        //when
+        assertThatThrownBy(() -> user.updateProfile(NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, null))
+                //then
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("보유 스킬목록은 필수입니다.");
     }
 }

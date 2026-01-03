@@ -1,10 +1,9 @@
 package teamdevhub.devhub.small.mock.repository;
 
-import teamdevhub.devhub.domain.record.auth.RefreshToken;
+import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 public class FakeRefreshTokenRepository implements RefreshTokenRepository {
 
@@ -16,8 +15,8 @@ public class FakeRefreshTokenRepository implements RefreshTokenRepository {
     }
 
     @Override
-    public Optional<RefreshToken> findByEmail(String email) {
-        return Optional.ofNullable(store.get(email));
+    public RefreshToken findByEmail(String email) {
+        return store.get(email);
     }
 
     @Override

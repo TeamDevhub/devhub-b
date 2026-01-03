@@ -26,8 +26,8 @@ public class User {
     private String username;
     private String introduction;
 
-    private Set<UserPosition> positions;
-    private Set<UserSkill> skills;
+    private final Set<UserPosition> positions;
+    private final Set<UserSkill> skills;
 
     private double mannerDegree;
 
@@ -60,8 +60,8 @@ public class User {
         this.userGuid = userGuid;
         this.email = email;
         this.password = password;
-        this.userRole = userRole;
         this.username = username;
+        this.userRole = userRole;
         this.introduction = introduction;
 
         this.positions = new HashSet<>(positions);
@@ -77,33 +77,6 @@ public class User {
             this.auditInfo = AuditInfo.empty();
         } else {
             this.auditInfo = auditInfo;
-        }
-    }
-
-    private void validate(
-            String email,
-            String password,
-            UserRole userRole,
-            Set<UserPosition> positions,
-            Set<UserSkill> skills
-    ) {
-        if (!hasText(email)) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_ID_FAIL);
-        }
-
-        if (!hasText(password) || password.length() < 8) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_PASSWORD_FAIL);
-        }
-
-        if (userRole != UserRole.USER) {
-            return;
-        }
-
-        if (positions == null || positions.isEmpty()) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_POSITION_REQUIRED);
-        }
-        if (skills == null || skills.isEmpty()) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_SKILL_REQUIRED);
         }
     }
 
@@ -186,6 +159,10 @@ public class User {
                 .build();
     }
 
+    public void updateLastLoginDateTime(LocalDateTime now) {
+        this.lastLoginDateTime = now;
+    }
+
     public void withdraw() {
         if (this.deleted) {
             throw DomainRuleException.of(ErrorCodeEnum.ALREADY_DELETED);
@@ -200,25 +177,59 @@ public class User {
             Set<UserPosition> newPositions,
             Set<UserSkill> newSkills
     ) {
-        if (hasText(newUsername)) {
+        if (hasText(newUsername) && !newUsername.equals(this.username)) {
             this.username = newUsername;
         }
-        if (hasText(newIntroduction)) {
+
+        if (hasText(newIntroduction) && !newIntroduction.equals(this.introduction)) {
             this.introduction = newIntroduction;
         }
 
         if (newPositions == null || newPositions.isEmpty()) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_POSITION_REQUIRED);
         }
+        if (!new HashSet<>(newPositions).equals(this.positions)) {
+            this.positions.clear();
+            this.positions.addAll(newPositions);
+        }
+
         if (newSkills == null || newSkills.isEmpty()) {
             throw DomainRuleException.of(ErrorCodeEnum.USER_SKILL_REQUIRED);
         }
-
-        this.positions = new HashSet<>(newPositions);
-        this.skills = new HashSet<>(newSkills);
+        if (!new HashSet<>(newSkills).equals(this.skills)) {
+            this.skills.clear();
+            this.skills.addAll(newSkills);
+        }
     }
 
-    public boolean hasText(String value) {
+    private void validate(
+            String email,
+            String password,
+            UserRole userRole,
+            Set<UserPosition> positions,
+            Set<UserSkill> skills
+    ) {
+        if (!hasText(email)) {
+            throw DomainRuleException.of(ErrorCodeEnum.USER_ID_FAIL);
+        }
+
+        if (!hasText(password) || password.length() < 8) {
+            throw DomainRuleException.of(ErrorCodeEnum.USER_PASSWORD_FAIL);
+        }
+
+        if (userRole != UserRole.USER) {
+            return;
+        }
+
+        if (positions == null || positions.isEmpty()) {
+            throw DomainRuleException.of(ErrorCodeEnum.USER_POSITION_REQUIRED);
+        }
+        if (skills == null || skills.isEmpty()) {
+            throw DomainRuleException.of(ErrorCodeEnum.USER_SKILL_REQUIRED);
+        }
+    }
+
+    private boolean hasText(String value) {
         return value != null && !value.isBlank();
     }
 
@@ -234,14 +245,5 @@ public class User {
         return codes.stream()
                 .map(UserSkill::new)
                 .collect(Collectors.toUnmodifiableSet());
-    }
-
-    public boolean hasUserRole(UserRole checkRole) {
-        return this.userRole == checkRole;
-    }
-
-    public void blockUntil(LocalDateTime blockEndDate) {
-        this.blocked = true;
-        this.blockEndDate = blockEndDate;
     }
 }

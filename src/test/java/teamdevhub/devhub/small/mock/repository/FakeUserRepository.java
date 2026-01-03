@@ -1,22 +1,48 @@
 package teamdevhub.devhub.small.mock.repository;
 
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.exception.BusinessRuleException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
+import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
+import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Optional;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class FakeUserRepository implements UserRepository {
 
-    private final HashMap<String, User> store = new HashMap<>();
+    private final Map<String, User> store = new HashMap<>();
 
     @Override
-    public User save(User user) {
+    public void saveAdminUser(User adminUser) {
+        store.put(adminUser.getUserGuid(), adminUser);
+    }
+
+    @Override
+    public AuthUser findUserByEmailForAuth(String email) {
+        return store.values().stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .map(user -> new AuthUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .orElse(null);
+    }
+
+    @Override
+    public User saveNewUser(User user) {
         store.put(user.getUserGuid(), user);
         return user;
+    }
+
+    @Override
+    public void updateLastLoginDateTime(User user) {
+        store.put(user.getUserGuid(), user);
     }
 
     @Override
@@ -25,15 +51,54 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public User findByEmail(String email) {
-        return store.values().stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst()
-                .orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+    public void updateUserProfile(User user) {
+        User existedUser = store.get(user.getUserGuid());
+        if (existedUser != null) {
+            existedUser.updateProfile(user.getUsername(), user.getIntroduction(), user.getPositions(), user.getSkills());
+            existedUser.getPositions().clear();
+            existedUser.getPositions().addAll(user.getPositions());
+            existedUser.getSkills().clear();
+            existedUser.getSkills().addAll(user.getSkills());
+        }
+    }
+
+    @Override
+    public void updateUserForWithdrawal(User user) {
+        User existing = store.get(user.getUserGuid());
+        if (existing != null) {
+            existing.withdraw();
+        }
     }
 
     @Override
     public boolean existsByUserRole(UserRole userRole) {
         return store.values().stream().anyMatch(user -> user.getUserRole().equals(userRole));
+    }
+
+    @Override
+    public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
+        List<AdminUserSummaryResponseDto> users = store.values().stream()
+                .map(user -> AdminUserSummaryResponseDto.builder()
+                        .userGuid(user.getUserGuid())
+                        .email(user.getEmail())
+                        .username(user.getUsername())
+                        .introduction(user.getIntroduction())
+                        .mannerDegree(user.getMannerDegree())
+                        .blocked(user.isBlocked())
+                        .blockEndDate(user.getBlockEndDate())
+                        .deleted(user.isDeleted())
+                        .lastLoginDateTime(user.getLastLoginDateTime())
+                        .createdBy(user.getAuditInfo().getCreatedBy())
+                        .createdAt(user.getAuditInfo().getCreatedAt())
+                        .modifiedBy(user.getAuditInfo().getModifiedBy())
+                        .modifiedAt(user.getAuditInfo().getModifiedAt())
+                        .build())
+                .collect(Collectors.toList());
+
+        int start = pageCommand.getPage() * pageCommand.getSize();
+        int end = Math.min(start + pageCommand.getSize(), users.size());
+        List<AdminUserSummaryResponseDto> pageContent = start >= end ? Collections.emptyList() : users.subList(start, end);
+
+        return new PageImpl<>(pageContent, org.springframework.data.domain.PageRequest.of(pageCommand.getPage(), pageCommand.getSize()), users.size());
     }
 }

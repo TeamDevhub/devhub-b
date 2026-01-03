@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @PostConstruct
     public void init() {
-        setFilterProcessesUrl("/auth/login");
+        setFilterProcessesUrl("/auth/updateLastLoginDateTime");
     }
 
     @Override

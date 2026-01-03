@@ -15,7 +15,7 @@ public interface UserRepository {
     void saveAdminUser(User adminUser);
     AuthUser findUserByEmailForAuth(String email);
     User saveNewUser(User user);
-    void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
+    void updateLastLoginDateTime(User user);
     User findByUserGuid(String userGuid);
     void updateUserProfile(User user);
     void updateUserForWithdrawal(User user);

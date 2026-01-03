@@ -1,10 +1,9 @@
 package teamdevhub.devhub.small.mock.repository;
 
-import teamdevhub.devhub.domain.record.mail.EmailCertification;
+import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
 import teamdevhub.devhub.port.out.common.DateTimeProvider;
 import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,15 +28,15 @@ public class FakeEmailCertificationRepository implements EmailCertificationRepos
     }
 
     @Override
-    public void save(EmailCertification emailCertification) {
-        store.put(emailCertification.email(), emailCertification);
-    }
-
-    @Override
     public boolean existsValidCode(String email) {
         EmailCertification emailCertification = store.get(email);
         if (emailCertification == null) return false;
         return emailCertification.expiredAt().isAfter(dateTimeProvider.now());
+    }
+
+    @Override
+    public void save(EmailCertification emailCertification) {
+        store.put(emailCertification.email(), emailCertification);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class FakeEmailCertificationRepository implements EmailCertificationRepos
         if (emailCertification.code().equals(code) && emailCertification.expiredAt().isAfter(dateTimeProvider.now())) {
             EmailCertification verifiedCert = EmailCertification.of(emailCertification.email(),
                     emailCertification.code(),
-                    LocalDateTime.now(),
+                    dateTimeProvider.now(),
                     emailCertification.expiredAt());
             store.put(email, verifiedCert);
             return true;
