@@ -31,7 +31,7 @@ public class EmailService implements EmailCertificationUseCase {
     public void sendEmailCertificationCode(EmailCertificationRequestDto emailCertificationRequestDto) {
         String email = emailCertificationRequestDto.getEmail();
 
-        if (emailCertificationRepository.existsValidCode(email)) {
+        if (emailCertificationRepository.hasUnexpiredCode(email)) {
             throw AuthRuleException.of(ErrorCodeEnum.EMAIL_CERTIFICATION_CODE_ALREADY_SENT);
         }
 

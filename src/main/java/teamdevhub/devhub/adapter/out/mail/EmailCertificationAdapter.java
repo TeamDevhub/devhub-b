@@ -17,7 +17,7 @@ public class EmailCertificationAdapter implements EmailCertificationRepository {
     private final DateTimeProvider dateTimeProvider;
 
     @Override
-    public boolean existsValidCode(String email) {
+    public boolean hasUnexpiredCode(String email) {
         return jpaEmailCertificationRepository.findById(email)
                 .filter(emailCertificationEntity -> !emailCertificationEntity.isExpired(dateTimeProvider.now()))
                 .isPresent();

@@ -90,7 +90,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 관리자_계정을_생성할_수_있다() {
+    void 관리자_계정을_생성한다() {
         //given
         FakeUuidIdentifierProvider adminUuidProvider = new FakeUuidIdentifierProvider(ADMIN_GUID);
         userService = new UserService(
@@ -137,7 +137,7 @@ class UserServiceTest {
         User savedUser = userService.signup(signupCommand);
 
         //then
-        assertThat(fakeEmailCertificationRepository.existsValidCode(signupCommand.getEmail())).isFalse();
+        assertThat(fakeEmailCertificationRepository.hasUnexpiredCode(signupCommand.getEmail())).isFalse();
         assertThat(fakeUserRepository.saveNewUser(savedUser).getUserGuid()).isEqualTo(TEST_GUID);
         assertThat(fakeUserRepository.saveNewUser(savedUser).getPositions()).isEqualTo(TEST_POSITIONS);
         assertThat(fakeUserRepository.saveNewUser(savedUser).getSkills()).isEqualTo(TEST_SKILLS);
