@@ -14,8 +14,6 @@ import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.record.UserPosition;
-import teamdevhub.devhub.domain.user.record.UserSkill;
 import teamdevhub.devhub.port.out.common.IdentifierProvider;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserPositionRepository;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserRepository;
