@@ -3,13 +3,19 @@ package teamdevhub.devhub.adapter.in.user.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import teamdevhub.devhub.common.enums.RegexPatternEnum;
 import teamdevhub.devhub.common.validation.regex.RegexMatch;
 
 import java.util.List;
 
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SignupRequestDto {
 
     @NotBlank(message = "이메일은 필수입니다.")

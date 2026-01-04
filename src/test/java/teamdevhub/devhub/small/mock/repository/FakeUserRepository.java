@@ -10,10 +10,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FakeUserRepository implements UserRepository {
@@ -54,20 +51,18 @@ public class FakeUserRepository implements UserRepository {
     public void updateUserProfile(User user) {
         User existedUser = store.get(user.getUserGuid());
         if (existedUser != null) {
-            existedUser.updateProfile(user.getUsername(), user.getIntroduction(), user.getPositions(), user.getSkills());
-            existedUser.getPositions().clear();
-            existedUser.getPositions().addAll(user.getPositions());
-            existedUser.getSkills().clear();
-            existedUser.getSkills().addAll(user.getSkills());
+            existedUser.updateProfile(
+                    user.getUsername(),
+                    user.getIntroduction(),
+                    new HashSet<>(user.getPositions()),
+                    new HashSet<>(user.getSkills())
+            );
         }
     }
 
     @Override
     public void updateUserForWithdrawal(User user) {
-        User existing = store.get(user.getUserGuid());
-        if (existing != null) {
-            existing.withdraw();
-        }
+        store.get(user.getUserGuid());
     }
 
     @Override

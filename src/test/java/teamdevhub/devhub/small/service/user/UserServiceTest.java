@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
+import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -22,7 +23,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class UserServiceTest {
 
@@ -45,8 +47,8 @@ class UserServiceTest {
     private static final String EMAIL_CODE = "123456";
     private static final String UNVERIFIED_EMAIL = "unverified@example.com";
 
-    private static final List<String> NEW_POSITION_LIST = List.of("001");
-    private static final List<String> NEW_SKILL_LIST = List.of("001");
+    private static final List<String> NEW_POSITION_LIST = List.of("002");
+    private static final List<String> NEW_SKILL_LIST = List.of("002");
     private static final String NEW_USERNAME = "NewUsername";
     private static final String NEW_INTRO = "NewIntro";
     private static final Set<UserPosition> NEW_POSITIONS = Set.of(new UserPosition("002"));
@@ -138,69 +140,102 @@ class UserServiceTest {
         assertThat(fakeEmailCertificationRepository.existsValidCode(signupCommand.getEmail())).isFalse();
         assertThat(fakeUserRepository.saveNewUser(savedUser).getUserGuid()).isEqualTo(TEST_GUID);
         assertThat(fakeUserRepository.saveNewUser(savedUser).getPositions()).isEqualTo(TEST_POSITIONS);
+        assertThat(fakeUserRepository.saveNewUser(savedUser).getSkills()).isEqualTo(TEST_SKILLS);
         assertThat(fakeUserRepository.saveNewUser(savedUser).getPassword()).isEqualTo(fakePasswordPolicyProvider.encode(TEST_PASSWORD));
     }
 
-//    @Test
-//    void signup_failsIfEmailNotVerified() {
-//        //given
-//        SignupCommand command = new SignupCommand(UNVERIFIED_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
-//
-//        //when,then
-//        assertThrows(BusinessRuleException.class, () -> userService.signup(command));
-//    }
-//
-//    @Test
-//    void withdraw_user_success() {
-//        //given
-//        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
-//        fakeUserRepository.saveNewUser(user);
-//
-//        //when
-//        userService.withdrawCurrentUser(TEST_GUID);
-//
-//        //then
-//        User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID);
-//        assertTrue(updatedUser.isDeleted());
-//        assertFalse(fakeRefreshTokenRepository.findByEmail(TEST_EMAIL).isPresent());
-//    }
-//
-//    @Test
-//    void updateLastUpdateLastLoginDateTimeDate_success() {
-//        //given
-//        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
-//        fakeUserRepository.saveNewUser(user);
-//
-//        //when
-//        userService.updateLastLoginDateTime(TEST_GUID);
-//
-//        //then
-//        User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID);
-//        assertEquals(fakeDateTimeProvider.now(), updatedUser.getLastLoginDateTime());
-//    }
-//
-//    @Test
-//    void updateProfile_success() {
-//        //given
-//        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_INTRO, TEST_POSITIONS, TEST_SKILLS);
-//        fakeUserRepository.saveNewUser(user);
-//
-//        //when
-//        UpdateProfileCommand command = new UpdateProfileCommand(TEST_GUID, NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, NEW_SKILLS);
-//        userService.updateProfile(command);
-//
-//        //then
-//        User updatedUser = fakeUserRepository.findByUserGuid(TEST_GUID);
-//        assertEquals(NEW_USERNAME, updatedUser.getUsername());
-//        assertEquals(NEW_INTRO, updatedUser.getIntroduction());
-//    }
-//
-//    @Test
-//    void initializeAdminUser_success() {
-//        //given
-//        userService.initializeAdminUser(ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
-//
-//        //then
-//        assertTrue(fakeUserRepository.existsByUserRole(UserRole.ADMIN));
-//    }
+    @Test
+    void 이메일_인증이_완료되지_않은_사용자가_회원가입을_요청하면_예외를_던진다() {
+        //given
+        SignupCommand signupCommand = new SignupCommand(UNVERIFIED_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+
+        //when
+        assertThatThrownBy(
+                () -> userService.signup(signupCommand))
+                //then
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessageContaining("E-mail 인증에 실패했습니다.");
+    }
+
+    @Test
+    void 회원가입_후_로그인_하지_않은_사용자의_최종_로그인_일시는_존재하지_않는다() {
+        //given
+        SignupCommand signupCommand = new SignupCommand(TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+
+        //when
+        userService.signup(signupCommand);
+
+        //then
+        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID).getLastLoginDateTime()).isNull();
+    }
+
+    @Test
+    void 로그인을_하면_최종_로그인_일시가_변한다() {
+        //given
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        fakeUserRepository.saveNewUser(user);
+
+        // when
+        userService.updateLastLoginDateTime(TEST_GUID);
+
+        //then
+        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID).getLastLoginDateTime()).isNotNull();
+        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID).getLastLoginDateTime()).isEqualTo(fakeDateTimeProvider.now());
+    }
+
+    @Test
+    void 회원_상세_정보를_조회했을_때_모든_정보가_조회된다() {
+        //given
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        fakeUserRepository.saveNewUser(user);
+
+        //when, then
+        assertThat(userService.getCurrentUserProfile(user.getUserGuid())).isNotNull();
+        assertThat(userService.getCurrentUserProfile(user.getUserGuid()).getUsername()).isEqualTo(user.getUsername());
+        assertThat(userService.getCurrentUserProfile(user.getUserGuid()).getIntroduction()).isEqualTo(user.getIntroduction());
+    }
+
+    @Test
+    void 회원정보를_수정하면_수정한_값으로_변경된다() {
+        //given
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        fakeUserRepository.saveNewUser(user);
+
+        // when
+        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_GUID, NEW_USERNAME, NEW_INTRO, NEW_POSITION_LIST, NEW_SKILL_LIST);
+        userService.updateProfile(updateProfileCommand);
+
+        //then
+        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID).getUsername()).isEqualTo(NEW_USERNAME);
+        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID).getIntroduction()).isEqualTo(NEW_INTRO);
+        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID).getPositions()).isEqualTo(NEW_POSITIONS);
+        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID).getSkills()).isEqualTo(NEW_SKILLS);
+    }
+
+    @Test
+    void 회원탈퇴한_사용자의_deleted_값은_true_이다() {
+        //given
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        fakeUserRepository.saveNewUser(user);
+        RefreshToken refreshToken = new RefreshToken(TEST_EMAIL, "testToken");
+        fakeRefreshTokenRepository.save(refreshToken);
+
+        // when
+        userService.withdrawCurrentUser(TEST_GUID);
+
+        //then
+        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID).isDeleted()).isTrue();
+        assertThat(fakeRefreshTokenRepository.findByEmail(TEST_EMAIL)).isNull();
+    }
+
+    @Test
+    void 권한체크() {
+        //given
+        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        fakeUserRepository.saveNewUser(user);
+
+        //when, then
+        assertThat(userService.existsByUserRole(UserRole.USER)).isTrue();
+        assertThat(userService.existsByUserRole(UserRole.ADMIN)).isFalse();
+    }
 }
