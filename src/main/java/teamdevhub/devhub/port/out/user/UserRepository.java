@@ -8,8 +8,6 @@ import teamdevhub.devhub.domain.common.record.auth.AuthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 
-import java.time.LocalDateTime;
-
 public interface UserRepository {
 
     void saveAdminUser(User adminUser);

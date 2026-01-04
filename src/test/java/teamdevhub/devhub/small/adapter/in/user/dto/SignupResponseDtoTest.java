@@ -2,10 +2,8 @@ package teamdevhub.devhub.small.adapter.in.user.dto;
 
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
-import teamdevhub.devhub.domain.common.AuditInfo;
 import teamdevhub.devhub.domain.user.User;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,10 +17,6 @@ class SignupResponseDtoTest {
     private static final String TEST_INTRO = "Hello World";
     private static final List<String> TEST_POSITION_LIST = List.of("001");
     private static final List<String> TEST_SKILL_LIST = List.of("001");
-    private static final String TEST_CREATED_BY = "system";
-    private static final LocalDateTime TEST_CREATED_AT = LocalDateTime.of(2025, 1, 1, 12, 0);
-    private static final String TEST_MODIFIED_BY = "system";
-    private static final LocalDateTime TEST_MODIFIED_AT = LocalDateTime.of(2025, 1, 1, 12, 0);
 
     @Test
     void User_도메인을_SignupResponseDto_로_변환할_수_있다() {

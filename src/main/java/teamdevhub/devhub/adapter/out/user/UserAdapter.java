@@ -1,6 +1,8 @@
 package teamdevhub.devhub.adapter.out.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
@@ -23,10 +25,7 @@ import teamdevhub.devhub.domain.user.record.UserPosition;
 import teamdevhub.devhub.domain.user.record.UserSkill;
 import teamdevhub.devhub.port.out.common.IdentifierProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
