@@ -40,10 +40,6 @@ public class FakeUserQueryRepository implements UserQueryRepository {
         store.put(user2.getUserGuid(), UserMapper.toEntity(user2));
     }
 
-    public void save(UserEntity userEntity) {
-        store.put(userEntity.getUserGuid(), userEntity);
-    }
-
     @Override
     public Page<UserEntity> listUser(SearchUserCommand searchUserCommand, Pageable pageable) {
         List<UserEntity> filtered = store.values().stream()

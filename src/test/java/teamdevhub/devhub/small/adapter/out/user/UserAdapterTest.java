@@ -37,20 +37,11 @@ class UserAdapterTest {
     private static final String TEST_INTRO = "Hello World";
     private static final List<String> TEST_POSITION_LIST = List.of("001");
     private static final List<String> TEST_SKILL_LIST = List.of("001");
-    private static final Set<UserPosition> TEST_POSITIONS = Set.of(new UserPosition("001"));
-    private static final Set<UserSkill> TEST_SKILLS = Set.of(new UserSkill("001"));
 
     private static final String ADMIN_GUID = "ADMINa1b2c3d4e5f6g7h8i9j10k11l12";
     private static final String ADMIN_EMAIL = "admin@example.com";
     private static final String ADMIN_USERNAME = "AdminUser";
     private static final String ADMIN_PASSWORD = "adminPassword123";
-
-    private static final String NEW_USERNAME = "NewUsername";
-    private static final String NEW_INTRO = "NewIntro";
-    private static final List<String> NEW_POSITION_LIST = List.of("002");
-    private static final List<String> NEW_SKILL_LIST = List.of("002");
-    private static final Set<UserPosition> NEW_POSITIONS = Set.of(new UserPosition("002"));
-    private static final Set<UserSkill> NEW_SKILLS = Set.of(new UserSkill("002"));
 
     private UserAdapter userAdapter;
     private FakeJpaUserRepository fakeJpaUserRepository;
