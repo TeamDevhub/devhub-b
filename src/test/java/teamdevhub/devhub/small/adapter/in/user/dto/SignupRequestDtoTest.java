@@ -25,7 +25,7 @@ class SignupRequestDtoTest {
     private Validator validator;
 
     @BeforeEach
-    void setup() {
+    void init() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
