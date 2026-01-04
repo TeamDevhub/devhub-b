@@ -47,10 +47,10 @@ class UserServiceTest {
     private static final String EMAIL_CODE = "123456";
     private static final String UNVERIFIED_EMAIL = "unverified@example.com";
 
-    private static final List<String> NEW_POSITION_LIST = List.of("002");
-    private static final List<String> NEW_SKILL_LIST = List.of("002");
     private static final String NEW_USERNAME = "NewUsername";
     private static final String NEW_INTRO = "NewIntro";
+    private static final List<String> NEW_POSITION_LIST = List.of("002");
+    private static final List<String> NEW_SKILL_LIST = List.of("002");
     private static final Set<UserPosition> NEW_POSITIONS = Set.of(new UserPosition("002"));
     private static final Set<UserSkill> NEW_SKILLS = Set.of(new UserSkill("002"));
 
@@ -229,7 +229,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 권한체크() {
+    void 일반_사용자는_USER_권한이_존재한다() {
         //given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
         fakeUserRepository.saveNewUser(user);
