@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface JpaUserPositionRepository extends JpaRepository<UserPositionEntity, String> {
-    void deleteByUserGuid(String userGuid);
     List<UserPositionEntity> findByUserGuid(String userGuid);
 
     @Query("select p.positionCd from UserPositionEntity p where p.userGuid = :userGuid")

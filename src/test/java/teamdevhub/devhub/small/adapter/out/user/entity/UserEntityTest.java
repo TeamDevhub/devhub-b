@@ -7,7 +7,6 @@ import teamdevhub.devhub.domain.user.UserRole;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserEntityTest {
 
