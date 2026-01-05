@@ -27,7 +27,7 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 0; i <= 2; i++) {
             String userGuid = identifierProvider.generateIdentifier();
             String password = passwordPolicyProvider.encode("password123!");
 
@@ -48,13 +48,13 @@ public class DataInitializer {
             jpaUserPositionRepository.save(UserPositionEntity.builder()
                     .userInterestPositionGuid(identifierProvider.generateIdentifier())
                     .userGuid(userGuid)
-                    .positionCd(String.format("%03d", i)) // 001, 002, ...
+                    .positionCd(String.format("%03d", i))
                     .build());
 
             jpaUserSkillRepository.save(UserSkillEntity.builder()
                     .userSkillGuid(identifierProvider.generateIdentifier())
                     .userGuid(userGuid)
-                    .skillCd(String.format("%03d", i)) // 001, 002, ...
+                    .skillCd(String.format("%03d", i))
                     .build());
 
             log.info("기본 USER 계정 생성됨 - ID : {} / PW : password123!", "test" + i + "@example.com");

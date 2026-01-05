@@ -78,9 +78,11 @@ sourceSets {
 		}
 	}
 }
+
 tasks.withType(JavaCompile).configureEach {
 	options.generatedSourceOutputDirectory.set(querydslDir)
 	options.annotationProcessorPath = configurations.annotationProcessor
+	options.compilerArgs += "-Xlint:deprecation"
 }
 
 clean.doLast {
