@@ -4,13 +4,10 @@ import org.springframework.data.domain.*;
 import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
-import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FakeAdminUserUseCase implements AdminUserUseCase {
 
