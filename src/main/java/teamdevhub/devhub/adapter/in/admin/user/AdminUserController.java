@@ -29,7 +29,7 @@ public class AdminUserController {
         Page<AdminUserSummaryResponseDto> pagedUserList = adminUserUseCase.listUser(searchUserCommand, pageCommand);
         PageVo pageVo = PageConverter.toPageVo(pagedUserList);
         return ResponseEntity.ok(
-                ApiDataListResponseVo.successWithDataList(SuccessCodeEnum.SIGNUP_SUCCESS,
+                ApiDataListResponseVo.successWithDataList(SuccessCodeEnum.READ_SUCCESS,
                         pagedUserList.getContent(),
                         pageVo)
         );
