@@ -9,24 +9,24 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import teamdevhub.devhub.common.annotation.CurrentUser;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedEmailUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 
 @Component
-public class AuthenticatedUserArgumentResolver implements HandlerMethodArgumentResolver {
+public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
-    public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(CurrentUser.class) &&
-                parameter.getParameterType().equals(AuthenticatedEmailUser.class);
+    public boolean supportsParameter(MethodParameter methodParameter) {
+        return methodParameter.hasParameterAnnotation(CurrentUser.class) &&
+                methodParameter.getParameterType().equals(AuthenticatedUser.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter,
-                                  ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest,
-                                  WebDataBinderFactory binderFactory) {
+    public Object resolveArgument(MethodParameter methodParameter,
+                                  ModelAndViewContainer modelAndViewContainer,
+                                  NativeWebRequest nativeWebRequest,
+                                  WebDataBinderFactory webDataBinderFactory) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() instanceof AuthenticatedEmailUser) {
+        if (auth != null && auth.getPrincipal() instanceof AuthenticatedUser) {
             return auth.getPrincipal();
         }
         throw new RuntimeException("No authenticated user found");

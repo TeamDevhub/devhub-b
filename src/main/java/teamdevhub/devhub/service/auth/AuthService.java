@@ -1,10 +1,17 @@
 package teamdevhub.devhub.service.auth;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
+import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
+import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.common.exception.AuthRuleException;
-import teamdevhub.devhub.domain.common.record.auth.AuthUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
@@ -20,8 +27,33 @@ import org.springframework.stereotype.Service;
 public class AuthService implements AuthUseCase {
 
     private final TokenProvider tokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final UserUseCase userUseCase;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final AuthenticationManager authenticationManager;
+
+    @Override
+    public LoginResponseDto login(LoginCommand loginCommand) {
+        String email = loginCommand.getEmail();
+        String rawPassword = loginCommand.getPassword();
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, rawPassword));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        String accessToken = tokenProvider.createAccessToken(email, userDetails.getUser().userRole());
+        String refreshToken = tokenProvider.createRefreshToken(email);
+
+        issueRefreshToken(email, refreshToken);
+        userUseCase.updateLastLoginDateTime(userDetails.getUserGuid());
+
+        return LoginResponseDto.of("", accessToken, refreshToken);
+    }
+
+    @Override
+    public void issueRefreshToken(String email, String token) {
+        RefreshToken refreshToken = RefreshToken.of(email, token);
+        refreshTokenRepository.save(refreshToken);
+    }
 
     @Override
     public TokenResponseDto reissueAccessToken(String token) {
@@ -37,15 +69,15 @@ public class AuthService implements AuthUseCase {
         }
 
         String email = tokenProvider.getEmailFromRefreshToken(token);
-        AuthUser authUser = userUseCase.getUserForAuth(email);
+        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(email);
         RefreshToken refreshToken = refreshTokenRepository.findByEmail(email);
 
         if (!refreshToken.token().equals(token)) {
             throw AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID);
         }
 
-        String newAccessToken = tokenProvider.createAccessToken(authUser.email(), authUser.userRole());
-        return TokenResponseDto.reissue(newAccessToken);
+        String newAccessToken = tokenProvider.createAccessToken(authenticatedUser.email(), authenticatedUser.userRole());
+        return TokenResponseDto.issue(newAccessToken);
     }
 
     @Override

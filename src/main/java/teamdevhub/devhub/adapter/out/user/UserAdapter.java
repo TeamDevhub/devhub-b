@@ -18,7 +18,7 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.exception.BusinessRuleException;
-import teamdevhub.devhub.domain.common.record.auth.AuthUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
@@ -46,10 +46,10 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public AuthUser findUserByEmailForAuth(String email) {
+    public AuthenticatedUser findUserByEmailForAuth(String email) {
         UserEntity userEntity = jpaUserRepository.findByEmail(email).
                 orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
-        return UserMapper.toAuthUser(userEntity);
+        return UserMapper.toAuthenticatedUser(userEntity);
     }
 
     @Override

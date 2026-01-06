@@ -11,7 +11,7 @@ import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
-import teamdevhub.devhub.domain.common.record.auth.AuthUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
 
@@ -68,8 +68,8 @@ class UserControllerTest {
     @Test
     void 유저_프로필_정보_조회에_성공하면_HTTPSTATUS_OK_를_반환한다() {
         //given
-        AuthUser authUser = new AuthUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
-        UserDetailsImpl userDetails = new UserDetailsImpl(authUser);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
+        UserDetailsImpl userDetails = new UserDetailsImpl(authenticatedUser);
 
         //when
         ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> response = userController.getProfile(userDetails);
@@ -84,8 +84,8 @@ class UserControllerTest {
     @Test
     void 유저_프로필_정보_수정에_성공하면_HTTPSTATUS_OK_를_반환한다() {
         //given
-        AuthUser authUser = new AuthUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
-        UserDetailsImpl userDetails = new UserDetailsImpl(authUser);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
+        UserDetailsImpl userDetails = new UserDetailsImpl(authenticatedUser);
 
         //when
         UpdateProfileRequestDto updateProfileRequestDto = UpdateProfileRequestDto.builder()
@@ -104,8 +104,8 @@ class UserControllerTest {
     @Test
     void 회원탈퇴에_성공하면_HTTPSTATUS_OK_를_반환한다() {
         // given: 유저 먼저 생성
-        AuthUser authUser = new AuthUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
-        UserDetailsImpl userDetails = new UserDetailsImpl(authUser);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
+        UserDetailsImpl userDetails = new UserDetailsImpl(authenticatedUser);
 
         ResponseEntity<ApiDataResponseVo<Void>> response = userController.withdraw(userDetails);
 

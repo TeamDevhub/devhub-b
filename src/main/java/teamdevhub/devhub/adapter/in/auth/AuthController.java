@@ -2,14 +2,20 @@ package teamdevhub.devhub.adapter.in.auth;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
+import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmEmailCertificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
+import teamdevhub.devhub.adapter.out.common.util.CookieUtil;
 import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
@@ -22,26 +28,6 @@ public class AuthController {
 
     private final AuthUseCase authUseCase;
     private final EmailCertificationUseCase emailCertificationUseCase;
-
-    @PostMapping("/logout")
-    public ResponseEntity<ApiDataResponseVo<Void>> revoke(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        authUseCase.revoke(userDetails.getUsername());
-        return ResponseEntity.ok(
-                ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.LOGOUT_SUCCESS
-                )
-        );
-    }
-
-    @PostMapping("/reissue")
-    public ResponseEntity<ApiDataResponseVo<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
-        return ResponseEntity.ok(
-                ApiDataResponseVo.successWithData(
-                        SuccessCodeEnum.CREATE_SUCCESS,
-                        authUseCase.reissueAccessToken(refreshToken)
-                )
-        );
-    }
 
     @PostMapping("/email-certification")
     public ResponseEntity<ApiDataResponseVo<Void>> sendEmailCertificationCode(@Valid @RequestBody EmailCertificationRequestDto emailCertificationRequestDto) {
@@ -63,4 +49,41 @@ public class AuthController {
                 )
         );
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
+        LoginCommand loginCommand = LoginCommand.fromLoginRequestDto(loginRequestDto);
+        LoginResponseDto loginResponseDto = authUseCase.login(loginCommand);
+        ResponseCookie refreshCookie = CookieUtil.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .body(ApiDataResponseVo.successWithData(
+                        SuccessCodeEnum.LOGIN_SUCCESS,
+                        TokenResponseDto.issue(loginResponseDto.getAccessToken())
+                        )
+                );
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<ApiDataResponseVo<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
+        return ResponseEntity.ok(
+                ApiDataResponseVo.successWithData(
+                        SuccessCodeEnum.CREATE_SUCCESS,
+                        authUseCase.reissueAccessToken(refreshToken)
+                )
+        );
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiDataResponseVo<Void>> revoke(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        authUseCase.revoke(userDetails.getUsername());
+        return ResponseEntity.ok(
+                ApiDataResponseVo.successWithoutData(
+                        SuccessCodeEnum.LOGOUT_SUCCESS
+                )
+        );
+    }
+
 }

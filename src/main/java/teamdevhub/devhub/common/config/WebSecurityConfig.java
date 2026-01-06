@@ -1,16 +1,5 @@
 package teamdevhub.devhub.common.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import teamdevhub.devhub.port.in.auth.RefreshTokenUseCase;
-import teamdevhub.devhub.port.in.user.UserUseCase;
-import teamdevhub.devhub.port.out.common.TokenProvider;
-import teamdevhub.devhub.common.component.CustomAccessDeniedHandler;
-import teamdevhub.devhub.common.component.CustomAuthenticationEntryPoint;
-import teamdevhub.devhub.common.component.CustomFilterExceptionHandler;
-import teamdevhub.devhub.common.component.JwtAuthenticationProvider;
-import teamdevhub.devhub.common.filter.JwtAuthenticationFilter;
-import teamdevhub.devhub.common.filter.JwtAuthorizationFilter;
-import teamdevhub.devhub.common.filter.JwtExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -19,14 +8,24 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import teamdevhub.devhub.common.component.CustomAccessDeniedHandler;
+import teamdevhub.devhub.common.component.CustomAuthenticationEntryPoint;
+import teamdevhub.devhub.common.component.CustomFilterExceptionHandler;
+import teamdevhub.devhub.common.component.JwtAuthenticationProvider;
+import teamdevhub.devhub.common.filter.JwtAuthorizationFilter;
+import teamdevhub.devhub.common.filter.JwtExceptionFilter;
+import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.port.out.common.TokenProvider;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -35,9 +34,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final ObjectMapper objectMapper;
-    private final RefreshTokenUseCase refreshTokenUseCase;
-    private final UserUseCase userUseCase;
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
@@ -47,13 +43,6 @@ public class WebSecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(objectMapper, tokenProvider, refreshTokenUseCase,userUseCase);
-        filter.setAuthenticationManager(authenticationManager);
-        return filter;
     }
 
     @Bean
@@ -70,9 +59,9 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT","OPTIONS"));
-        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("HEAD","POST","GET","DELETE","PUT","OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
         config.addExposedHeader("*");
         config.setAllowCredentials(true);
 
@@ -83,12 +72,10 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
-                                                   JwtAuthenticationFilter jwtAuthenticationFilter,
-                                                   JwtAuthorizationFilter jwtAuthorizationFilter,
-                                                   JwtExceptionFilter jwtExceptionFilter) throws Exception {
+                                                   JwtAuthorizationFilter jwtAuthorizationFilter) throws Exception {
 
         httpSecurity
-                .csrf((csrf) -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -111,12 +98,9 @@ public class WebSecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .headers(headers -> headers
-                        .frameOptions(frameOptions -> frameOptions.disable())
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
                 )
-                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
-                .addFilterAt(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
-
         return httpSecurity.build();
     }
 }

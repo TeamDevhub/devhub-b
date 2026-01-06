@@ -9,10 +9,7 @@ public class TokenResponseDto {
 
     private String accessToken;
 
-    public static TokenResponseDto of(String accessToken) {
+    public static TokenResponseDto issue(String accessToken) {
         return new TokenResponseDto(accessToken);
-    }
-    public static TokenResponseDto reissue(String newAccessToken) {
-        return new TokenResponseDto(newAccessToken);
     }
 }

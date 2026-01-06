@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.adapter.out.user.mapper;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.domain.common.record.auth.AuthUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
@@ -28,7 +28,7 @@ class UserMapperTest {
 
 
     @Test
-    void UserEntity_를_AuthUser_로_변환할_수_있다() {
+    void UserEntity_를_AuthenticatedUser_로_변환할_수_있다() {
         //given
         UserEntity userEntity = UserEntity.builder()
                 .userGuid(TEST_GUID)
@@ -38,13 +38,13 @@ class UserMapperTest {
                 .build();
 
         //when
-        AuthUser authUser = UserMapper.toAuthUser(userEntity);
+        AuthenticatedUser authenticatedUser = UserMapper.toAuthenticatedUser(userEntity);
 
         //then
-        assertThat(authUser.userGuid()).isEqualTo(TEST_GUID);
-        assertThat(authUser.email()).isEqualTo(TEST_EMAIL);
-        assertThat(authUser.password()).isEqualTo(TEST_PASSWORD);
-        assertThat(authUser.userRole()).isEqualTo(UserRole.USER);
+        assertThat(authenticatedUser.userGuid()).isEqualTo(TEST_GUID);
+        assertThat(authenticatedUser.email()).isEqualTo(TEST_EMAIL);
+        assertThat(authenticatedUser.password()).isEqualTo(TEST_PASSWORD);
+        assertThat(authenticatedUser.userRole()).isEqualTo(UserRole.USER);
     }
 
     @Test

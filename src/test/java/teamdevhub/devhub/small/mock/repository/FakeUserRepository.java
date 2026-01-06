@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageImpl;
 import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
-import teamdevhub.devhub.domain.common.record.auth.AuthUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.user.UserRepository;
@@ -23,11 +23,11 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public AuthUser findUserByEmailForAuth(String email) {
+    public AuthenticatedUser findUserByEmailForAuth(String email) {
         return store.values().stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst()
-                .map(user -> new AuthUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
                 .orElse(null);
     }
 
