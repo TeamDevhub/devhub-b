@@ -10,7 +10,6 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
-import teamdevhub.devhub.adapter.out.auth.userDetail.AuthenticatedUserDetails;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
