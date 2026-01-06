@@ -69,10 +69,9 @@ class UserControllerTest {
     void 유저_프로필_정보_조회에_성공하면_HTTPSTATUS_OK_를_반환한다() {
         //given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
-        AuthenticatedUserDetails userDetails = new AuthenticatedUserDetails(authenticatedUser);
 
         //when
-        ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> response = userController.getProfile(userDetails);
+        ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> response = userController.getProfile(authenticatedUser);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -85,7 +84,6 @@ class UserControllerTest {
     void 유저_프로필_정보_수정에_성공하면_HTTPSTATUS_OK_를_반환한다() {
         //given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
-        AuthenticatedUserDetails userDetails = new AuthenticatedUserDetails(authenticatedUser);
 
         //when
         UpdateProfileRequestDto updateProfileRequestDto = UpdateProfileRequestDto.builder()
@@ -95,7 +93,7 @@ class UserControllerTest {
                 .skillList(NEW_SKILL_LIST)
                 .build();
 
-        ResponseEntity<ApiDataResponseVo<Void>> response = userController.updateProfile(updateProfileRequestDto, userDetails);
+        ResponseEntity<ApiDataResponseVo<Void>> response = userController.updateProfile(updateProfileRequestDto, authenticatedUser);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -103,12 +101,13 @@ class UserControllerTest {
 
     @Test
     void 회원탈퇴에_성공하면_HTTPSTATUS_OK_를_반환한다() {
-        // given: 유저 먼저 생성
+        //given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
-        AuthenticatedUserDetails userDetails = new AuthenticatedUserDetails(authenticatedUser);
 
-        ResponseEntity<ApiDataResponseVo<Void>> response = userController.withdraw(userDetails);
+        //when
+        ResponseEntity<ApiDataResponseVo<Void>> response = userController.withdraw(authenticatedUser);
 
+        //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(fakeUserUseCase.getCurrentUserProfile(TEST_GUID).isDeleted()).isTrue();
     }

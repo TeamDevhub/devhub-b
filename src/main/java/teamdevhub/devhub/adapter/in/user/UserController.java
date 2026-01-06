@@ -2,9 +2,10 @@ package teamdevhub.devhub.adapter.in.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import teamdevhub.devhub.adapter.in.common.annotation.CurrentUser;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
@@ -12,13 +13,14 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
-import teamdevhub.devhub.adapter.out.auth.userDetail.AuthenticatedUserDetails;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserUseCase userUseCase;
@@ -34,19 +36,30 @@ public class UserController {
         );
     }
 
+    @PostMapping("/signup/{oauth}")
+    public ResponseEntity<ApiDataResponseVo<Void>> signupWithOauth(@PathVariable String oauth) {
+        //userUseCase.oauthSignup(oauth)
+        return ResponseEntity.ok(
+                ApiDataResponseVo.successWithoutData(
+                        SuccessCodeEnum.SIGNUP_SUCCESS
+                        //SignupResponseDto.fromDomain(userUseCase.signupWithOauth(oauth))
+                )
+        );
+    }
+
     @GetMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> getProfile(@AuthenticationPrincipal AuthenticatedUserDetails userDetails) {
+    public ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> getProfile(@CurrentUser AuthenticatedUser authenticatedUser) {
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithData(
                         SuccessCodeEnum.READ_SUCCESS,
-                        UserProfileResponseDto.fromDomain(userUseCase.getCurrentUserProfile(userDetails.getUserGuid()))
+                        UserProfileResponseDto.fromDomain(userUseCase.getCurrentUserProfile(authenticatedUser.userGuid()))
                 )
         );
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @AuthenticationPrincipal AuthenticatedUserDetails userDetails) {
-        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, userDetails.getUserGuid());
+    public ResponseEntity<ApiDataResponseVo<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @CurrentUser AuthenticatedUser authenticatedUser) {
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, authenticatedUser.userGuid());
         userUseCase.updateProfile(updateProfileCommand);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
@@ -56,8 +69,8 @@ public class UserController {
     }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> withdraw(@AuthenticationPrincipal AuthenticatedUserDetails userDetails) {
-        userUseCase.withdrawCurrentUser(userDetails.getUserGuid());
+    public ResponseEntity<ApiDataResponseVo<Void>> withdraw(@CurrentUser AuthenticatedUser authenticatedUser) {
+        userUseCase.withdrawCurrentUser(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCodeEnum.USER_DELETE_SUCCESS

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
 import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
@@ -14,9 +13,10 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDt
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
+import teamdevhub.devhub.adapter.in.common.annotation.CurrentUser;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
-import teamdevhub.devhub.adapter.out.auth.userDetail.AuthenticatedUserDetails;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
 
@@ -50,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<ApiDataResponseVo<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
         LoginCommand loginCommand = LoginCommand.fromLoginRequestDto(loginRequestDto);
         LoginResponseDto loginResponseDto = authUseCase.login(loginCommand);
         ResponseCookie refreshCookie = CookieUtil.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
@@ -60,6 +60,20 @@ public class AuthController {
                 .body(ApiDataResponseVo.successWithData(
                         SuccessCodeEnum.LOGIN_SUCCESS,
                         TokenResponseDto.issue(loginResponseDto.getAccessToken())
+                        )
+                );
+    }
+
+    @PostMapping("/login/{oauth}")
+    public ResponseEntity<ApiDataResponseVo<Void>> loginWithOauth(@PathVariable String oauth, @RequestBody LoginRequestDto loginRequestDto) {
+        // LoginResponseDto loginResponseDto = authUseCase.loginWithOauth(oauth);
+        // ResponseCookie refreshCookie = CookieUtil.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
+        return ResponseEntity.ok()
+                //.header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
+                //.header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .body(ApiDataResponseVo.successWithoutData(
+                                SuccessCodeEnum.LOGIN_SUCCESS
+                                //TokenResponseDto.issue(loginResponseDto.getAccessToken())
                         )
                 );
     }
@@ -75,8 +89,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiDataResponseVo<Void>> revoke(@AuthenticationPrincipal AuthenticatedUserDetails userDetails) {
-        authUseCase.revoke(userDetails.getUsername());
+    public ResponseEntity<ApiDataResponseVo<Void>> revoke(@CurrentUser AuthenticatedUser authenticatedUser) {
+        authUseCase.revoke(authenticatedUser.email());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCodeEnum.LOGOUT_SUCCESS

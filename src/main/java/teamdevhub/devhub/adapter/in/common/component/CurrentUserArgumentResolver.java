@@ -9,7 +9,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import teamdevhub.devhub.adapter.in.common.annotation.CurrentUser;
+import teamdevhub.devhub.adapter.out.auth.userDetail.AuthenticatedUserDetails;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+
+import java.util.Optional;
 
 @Component
 public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -25,10 +28,19 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
                                   ModelAndViewContainer modelAndViewContainer,
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() instanceof AuthenticatedUser) {
-            return auth.getPrincipal();
+
+        Object principal = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                .map(Authentication::getPrincipal)
+                .orElseThrow(() -> new RuntimeException("No authenticated user found"));
+
+        if (principal instanceof AuthenticatedUserDetails authenticatedUserDetails) {
+            return authenticatedUserDetails.getUser();
         }
+
+        if (principal instanceof AuthenticatedUser authenticatedUser) {
+            return authenticatedUser;
+        }
+
         throw new RuntimeException("No authenticated user found");
     }
 }

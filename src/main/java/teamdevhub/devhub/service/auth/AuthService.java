@@ -36,9 +36,21 @@ public class AuthService implements AuthUseCase {
         String email = loginCommand.getEmail();
         String rawPassword = loginCommand.getPassword();
 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, rawPassword));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, rawPassword)
+        );
+
+        // UserDetails 가져오기
         AuthenticatedUserDetails userDetails = (AuthenticatedUserDetails) authentication.getPrincipal();
+        AuthenticatedUser user = userDetails.getUser();
+
+        // SecurityContext에 Principal을 AuthenticatedUser로 넣음
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                user,                          // Principal
+                userDetails.getPassword(),      // Credentials
+                userDetails.getAuthorities()    // 권한
+        );
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
 
         String prefix = tokenProvider.getPrefix();
         String accessToken = tokenProvider.createAccessToken(email, userDetails.getUser().userRole());

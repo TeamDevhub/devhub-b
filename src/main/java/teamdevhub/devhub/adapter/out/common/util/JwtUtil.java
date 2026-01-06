@@ -27,9 +27,10 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtil implements TokenProvider {
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String AUTHORIZATION_KEY = "auth";
-    public static final String BEARER_PREFIX = "Bearer ";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String AUTHORIZATION_KEY = "auth";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String TOKEN_TYPE = "token_type";
     private static final long ACCESS_TOKEN_TIME = 30 * 60 * 1000L;
     private static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L;
 
@@ -65,7 +66,7 @@ public class JwtUtil implements TokenProvider {
         return Jwts.builder()
                         .setSubject(email)
                         .claim(AUTHORIZATION_KEY, userRole)
-                        .claim("token_type", TokenTypeEnum.ACCESS.name())
+                        .claim(TOKEN_TYPE, TokenTypeEnum.ACCESS.name())
                         .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
                         .setIssuedAt(now)
                         .signWith(key, signatureAlgorithm)
@@ -82,7 +83,7 @@ public class JwtUtil implements TokenProvider {
         Date now = new Date();
         return Jwts.builder()
                         .setSubject(email)
-                        .claim("token_type", TokenTypeEnum.REFRESH.name())
+                        .claim(TOKEN_TYPE, TokenTypeEnum.REFRESH.name())
                         .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
                         .setIssuedAt(now)
                         .signWith(key, signatureAlgorithm)
@@ -119,7 +120,7 @@ public class JwtUtil implements TokenProvider {
     @Override
     public String getEmailFromRefreshToken(String refreshToken) {
         Claims claims = getUserInfo(refreshToken);
-        TokenTypeEnum tokenTypeEnum = TokenTypeEnum.valueOf(claims.get("token_type", String.class));
+        TokenTypeEnum tokenTypeEnum = TokenTypeEnum.valueOf(claims.get(TOKEN_TYPE, String.class));
         if (tokenTypeEnum != TokenTypeEnum.REFRESH) {
             throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
         }
