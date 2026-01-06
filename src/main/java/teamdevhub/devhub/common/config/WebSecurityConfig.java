@@ -19,7 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import teamdevhub.devhub.adapter.in.common.component.CustomAccessDeniedHandler;
 import teamdevhub.devhub.adapter.in.common.component.CustomAuthenticationEntryPoint;
 import teamdevhub.devhub.adapter.in.common.component.CustomFilterExceptionHandler;
-import teamdevhub.devhub.adapter.out.common.util.AuthenticatedUserUtil;
+import teamdevhub.devhub.common.util.AuthenticatedUserUtil;
 import teamdevhub.devhub.common.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.port.out.provider.TokenProvider;
 

@@ -1,7 +1,6 @@
 package teamdevhub.devhub.common.filter;
 
 import teamdevhub.devhub.adapter.in.common.component.CustomFilterExceptionHandler;
-import teamdevhub.devhub.port.out.provider.AuthenticatedUserProvider;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.common.enums.TokenTypeEnum;
@@ -16,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import teamdevhub.devhub.common.util.AuthenticatedUserUtil;
 import teamdevhub.devhub.port.out.provider.TokenProvider;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
-    private final AuthenticatedUserProvider authenticatedUserProvider;
+    private final AuthenticatedUserUtil authenticatedUserUtil;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
 
     @Override
@@ -62,7 +62,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     public void setAuthentication(String email) {
-        Authentication authentication = authenticatedUserProvider.authenticate(email);
+        Authentication authentication = authenticatedUserUtil.authenticate(email);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

@@ -73,6 +73,11 @@ public class JwtUtil implements TokenProvider {
     }
 
     @Override
+    public String getPrefix() {
+        return BEARER_PREFIX;
+    }
+
+    @Override
     public String createRefreshToken(String email) {
         Date now = new Date();
         return Jwts.builder()

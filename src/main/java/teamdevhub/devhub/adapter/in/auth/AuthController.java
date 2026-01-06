@@ -54,7 +54,6 @@ public class AuthController {
         LoginCommand loginCommand = LoginCommand.fromLoginRequestDto(loginRequestDto);
         LoginResponseDto loginResponseDto = authUseCase.login(loginCommand);
         ResponseCookie refreshCookie = CookieUtil.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())

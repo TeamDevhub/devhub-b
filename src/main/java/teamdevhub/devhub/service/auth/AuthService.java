@@ -40,13 +40,14 @@ public class AuthService implements AuthUseCase {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         AuthenticatedUserDetails userDetails = (AuthenticatedUserDetails) authentication.getPrincipal();
 
+        String prefix = tokenProvider.getPrefix();
         String accessToken = tokenProvider.createAccessToken(email, userDetails.getUser().userRole());
         String refreshToken = tokenProvider.createRefreshToken(email);
 
         issueRefreshToken(email, refreshToken);
         userUseCase.updateLastLoginDateTime(userDetails.getUserGuid());
 
-        return LoginResponseDto.of("", accessToken, refreshToken);
+        return LoginResponseDto.of(prefix, accessToken, refreshToken);
     }
 
     @Override

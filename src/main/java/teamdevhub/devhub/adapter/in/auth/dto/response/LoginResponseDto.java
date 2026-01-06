@@ -10,17 +10,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponseDto {
-    private String tokenType;
+    private String prefix;
     private String accessToken;
     private String refreshToken;
 
     public String toAuthorizationHeader() {
-        return tokenType + " " + accessToken;
+        return prefix + " " + accessToken;
     }
 
-    public static LoginResponseDto of(String tokenType, String accessToken, String refreshToken){
+    public static LoginResponseDto of(String prefix, String accessToken, String refreshToken){
         return LoginResponseDto.builder()
-                .tokenType(tokenType)
+                .prefix(prefix)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
