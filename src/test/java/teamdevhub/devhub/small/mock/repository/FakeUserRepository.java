@@ -71,7 +71,7 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
+    public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size) {
         List<AdminUserSummaryResponseDto> users = store.values().stream()
                 .map(user -> AdminUserSummaryResponseDto.builder()
                         .userGuid(user.getUserGuid())
@@ -83,17 +83,17 @@ public class FakeUserRepository implements UserRepository {
                         .blockEndDate(user.getBlockEndDate())
                         .deleted(user.isDeleted())
                         .lastLoginDateTime(user.getLastLoginDateTime())
-                        .createdBy(user.getAuditInfo().getCreatedBy())
-                        .createdAt(user.getAuditInfo().getCreatedAt())
-                        .modifiedBy(user.getAuditInfo().getModifiedBy())
-                        .modifiedAt(user.getAuditInfo().getModifiedAt())
+                        .createdBy(user.getAuditInfo().createdBy())
+                        .createdAt(user.getAuditInfo().createdAt())
+                        .modifiedBy(user.getAuditInfo().modifiedBy())
+                        .modifiedAt(user.getAuditInfo().modifiedAt())
                         .build())
                 .collect(Collectors.toList());
 
-        int start = pageCommand.getPage() * pageCommand.getSize();
-        int end = Math.min(start + pageCommand.getSize(), users.size());
+        int start = page * size;
+        int end = Math.min(start + size, users.size());
         List<AdminUserSummaryResponseDto> pageContent = start >= end ? Collections.emptyList() : users.subList(start, end);
 
-        return new PageImpl<>(pageContent, org.springframework.data.domain.PageRequest.of(pageCommand.getPage(), pageCommand.getSize()), users.size());
+        return new PageImpl<>(pageContent, org.springframework.data.domain.PageRequest.of(page, size), users.size());
     }
 }

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.common.enums.RegexPatternEnum;
-import teamdevhub.devhub.common.validation.regex.RegexMatch;
+import teamdevhub.devhub.adapter.in.common.annotation.RegexMatch;
 
 @Getter
 @NoArgsConstructor

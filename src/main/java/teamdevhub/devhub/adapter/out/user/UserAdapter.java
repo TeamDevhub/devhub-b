@@ -5,8 +5,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
-import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
-import teamdevhub.devhub.adapter.out.common.entity.RelationChange;
 import teamdevhub.devhub.adapter.out.common.util.RelationChangeUtil;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
@@ -17,14 +15,14 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
 import teamdevhub.devhub.domain.user.record.UserSkill;
-import teamdevhub.devhub.port.out.common.IdentifierProvider;
+import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
+import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 
 import java.util.List;
 import java.util.Set;
@@ -90,10 +88,10 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
+    public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size) {
         Pageable pageable = PageRequest.of(
-                pageCommand.getPage(),
-                pageCommand.getSize(),
+                page,
+                size,
                 Sort.by("regDt").descending()
         );
 
@@ -106,10 +104,9 @@ public class UserAdapter implements UserRepository {
 
     private void syncPositions(User user) {
         String userGuid = user.getUserGuid();
-        RelationChange<String> relationChange = RelationChangeUtil.change(
+        RelationChangeUtil.RelationChange<String> relationChange = RelationChangeUtil.change(
                 jpaUserPositionRepository.findCodesByUserGuid(userGuid),
-                extractPositionCodes(user)
-        );
+                extractPositionCodes(user));
 
         if (relationChange.isEmpty()) {
             return;
@@ -149,10 +146,9 @@ public class UserAdapter implements UserRepository {
     private void syncSkills(User user) {
         String userGuid = user.getUserGuid();
 
-        RelationChange<String> relationChange = RelationChangeUtil.change(
-                jpaUserSkillRepository.findCodesByUserGuid(userGuid),
-                extractSkillCodes(user)
-        );
+        RelationChangeUtil.RelationChange<String> relationChange = RelationChangeUtil.change(
+                jpaUserPositionRepository.findCodesByUserGuid(userGuid),
+                extractSkillCodes(user));
 
         if (relationChange.isEmpty()) {
             return;

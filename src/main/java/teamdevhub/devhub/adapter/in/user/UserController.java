@@ -12,7 +12,7 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
-import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
+import teamdevhub.devhub.adapter.out.auth.userDetail.AuthenticatedUserDetails;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> getProfile(@AuthenticationPrincipal AuthenticatedUserDetails userDetails) {
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithData(
                         SuccessCodeEnum.READ_SUCCESS,
@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiDataResponseVo<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @AuthenticationPrincipal AuthenticatedUserDetails userDetails) {
         UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, userDetails.getUserGuid());
         userUseCase.updateProfile(updateProfileCommand);
         return ResponseEntity.ok(
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> withdraw(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiDataResponseVo<Void>> withdraw(@AuthenticationPrincipal AuthenticatedUserDetails userDetails) {
         userUseCase.withdrawCurrentUser(userDetails.getUserGuid());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(

@@ -1,6 +1,6 @@
 package teamdevhub.devhub.adapter.out.common.util;
 
-import teamdevhub.devhub.port.out.common.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.provider.PasswordPolicyProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

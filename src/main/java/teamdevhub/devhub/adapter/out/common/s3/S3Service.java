@@ -11,7 +11,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.exception.BusinessRuleException;
+import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 
 import java.io.IOException;
 import java.io.InputStream;

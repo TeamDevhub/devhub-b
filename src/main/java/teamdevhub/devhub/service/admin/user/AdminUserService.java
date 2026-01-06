@@ -20,7 +20,7 @@ public class AdminUserService implements AdminUserUseCase {
 
     @Override
     public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
-        Page<AdminUserSummaryResponseDto> pagedUserList = userRepository.listUser(searchUserCommand, pageCommand);
+        Page<AdminUserSummaryResponseDto> pagedUserList = userRepository.listUser(searchUserCommand, pageCommand.getPage(), pageCommand.getSize());
         return new PageImpl<>(
                 pagedUserList.getContent(),
                 pagedUserList.getPageable(),

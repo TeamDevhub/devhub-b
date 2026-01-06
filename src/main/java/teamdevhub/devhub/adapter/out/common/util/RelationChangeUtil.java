@@ -1,7 +1,5 @@
 package teamdevhub.devhub.adapter.out.common.util;
 
-import teamdevhub.devhub.adapter.out.common.entity.RelationChange;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,5 +18,18 @@ public final class RelationChangeUtil {
         toInsert.removeAll(existing);
 
         return RelationChange.of(toInsert, toDelete);
+    }
+
+    public record RelationChange<T>(
+            Set<T> toInsert,
+            Set<T> toDelete
+    ) {
+        public boolean isEmpty() {
+            return toInsert.isEmpty() && toDelete.isEmpty();
+        }
+
+        public static <T> RelationChange<T> of(Set<T> toInsert, Set<T> toDelete) {
+            return new RelationChange<>(Set.copyOf(toInsert), Set.copyOf(toDelete));
+        }
     }
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.adapter.in.common.pagination.PageVo;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 
 import java.util.List;

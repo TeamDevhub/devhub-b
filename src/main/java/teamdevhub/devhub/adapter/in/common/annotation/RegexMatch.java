@@ -1,0 +1,23 @@
+package teamdevhub.devhub.adapter.in.common.annotation;
+
+import teamdevhub.devhub.adapter.in.common.validator.RegexValidator;
+import teamdevhub.devhub.common.enums.RegexPatternEnum;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+
+import java.lang.annotation.*;
+
+@Documented
+@Target({ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = RegexValidator.class)
+public @interface RegexMatch {
+
+    RegexPatternEnum value();
+
+    String message() default "잘못된 형식입니다.";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+}

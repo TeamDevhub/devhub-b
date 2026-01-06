@@ -1,7 +1,7 @@
 package teamdevhub.devhub.small.domain.user;
 
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.common.exception.DomainRuleException;
+import teamdevhub.devhub.domain.common.exception.DomainRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;

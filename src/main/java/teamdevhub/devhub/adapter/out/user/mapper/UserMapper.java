@@ -1,7 +1,7 @@
 package teamdevhub.devhub.adapter.out.user.mapper;
 
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
-import teamdevhub.devhub.domain.common.AuditInfo;
+import teamdevhub.devhub.domain.common.record.audit.AuditInfo;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.record.UserPosition;

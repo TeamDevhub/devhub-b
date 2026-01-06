@@ -10,7 +10,7 @@ import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
 import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
 import teamdevhub.devhub.adapter.in.common.pagination.PageConverter;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
-import teamdevhub.devhub.adapter.in.common.vo.PageVo;
+import teamdevhub.devhub.adapter.in.common.pagination.PageVo;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
 

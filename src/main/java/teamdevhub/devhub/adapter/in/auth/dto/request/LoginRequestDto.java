@@ -3,7 +3,7 @@ package teamdevhub.devhub.adapter.in.auth.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import teamdevhub.devhub.common.enums.RegexPatternEnum;
-import teamdevhub.devhub.common.validation.regex.RegexMatch;
+import teamdevhub.devhub.adapter.in.common.annotation.RegexMatch;
 
 @Getter
 public class LoginRequestDto {

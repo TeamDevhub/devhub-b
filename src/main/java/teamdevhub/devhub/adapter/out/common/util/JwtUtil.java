@@ -12,9 +12,9 @@ import org.springframework.util.StringUtils;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.common.enums.TokenTypeEnum;
-import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.common.TokenProvider;
+import teamdevhub.devhub.port.out.provider.TokenProvider;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;

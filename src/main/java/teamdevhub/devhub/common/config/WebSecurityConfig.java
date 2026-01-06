@@ -16,14 +16,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import teamdevhub.devhub.common.component.CustomAccessDeniedHandler;
-import teamdevhub.devhub.common.component.CustomAuthenticationEntryPoint;
-import teamdevhub.devhub.common.component.CustomFilterExceptionHandler;
-import teamdevhub.devhub.common.component.JwtAuthenticationProvider;
+import teamdevhub.devhub.adapter.in.common.component.CustomAccessDeniedHandler;
+import teamdevhub.devhub.adapter.in.common.component.CustomAuthenticationEntryPoint;
+import teamdevhub.devhub.adapter.in.common.component.CustomFilterExceptionHandler;
+import teamdevhub.devhub.adapter.out.common.util.AuthenticatedUserUtil;
 import teamdevhub.devhub.common.filter.JwtAuthorizationFilter;
-import teamdevhub.devhub.common.filter.JwtExceptionFilter;
-import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.common.TokenProvider;
+import teamdevhub.devhub.port.out.provider.TokenProvider;
 
 import java.util.List;
 
@@ -35,7 +33,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final TokenProvider tokenProvider;
-    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final AuthenticatedUserUtil jwtAuthenticationUtil;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -47,12 +45,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(tokenProvider, jwtAuthenticationProvider, customFilterExceptionHandler);
-    }
-
-    @Bean
-    public JwtExceptionFilter jwtExceptionFilter() {
-        return new JwtExceptionFilter();
+        return new JwtAuthorizationFilter(tokenProvider, jwtAuthenticationUtil, customFilterExceptionHandler);
     }
 
     @Bean

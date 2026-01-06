@@ -22,10 +22,10 @@ public class SignupResponseDto {
         return SignupResponseDto.builder()
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .createdBy(user.getAuditInfo().getCreatedBy())
-                .createdAt(user.getAuditInfo().getCreatedAt())
-                .modifiedBy(user.getAuditInfo().getModifiedBy())
-                .modifiedAt(user.getAuditInfo().getModifiedAt())
+                .createdBy(user.getAuditInfo().createdBy())
+                .createdAt(user.getAuditInfo().createdAt())
+                .modifiedBy(user.getAuditInfo().modifiedBy())
+                .modifiedAt(user.getAuditInfo().modifiedAt())
                 .build();
     }
 }

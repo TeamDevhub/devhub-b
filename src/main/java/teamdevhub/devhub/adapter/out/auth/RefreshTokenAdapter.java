@@ -1,8 +1,9 @@
 package teamdevhub.devhub.adapter.out.auth;
 
 import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
+import teamdevhub.devhub.adapter.out.auth.persist.JpaRefreshTokenRepository;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;

@@ -7,16 +7,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
-import teamdevhub.devhub.common.auth.userdetails.UserDetailsImpl;
+import teamdevhub.devhub.adapter.out.auth.userDetail.AuthenticatedUserDetails;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.JwtStatusEnum;
-import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
-import teamdevhub.devhub.port.out.common.TokenProvider;
+import teamdevhub.devhub.port.out.provider.TokenProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class AuthService implements AuthUseCase {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, rawPassword));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        AuthenticatedUserDetails userDetails = (AuthenticatedUserDetails) authentication.getPrincipal();
 
         String accessToken = tokenProvider.createAccessToken(email, userDetails.getUser().userRole());
         String refreshToken = tokenProvider.createRefreshToken(email);

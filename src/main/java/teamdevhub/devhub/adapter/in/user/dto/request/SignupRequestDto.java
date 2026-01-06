@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.common.enums.RegexPatternEnum;
-import teamdevhub.devhub.common.validation.regex.RegexMatch;
+import teamdevhub.devhub.adapter.in.common.annotation.RegexMatch;
 
 import java.util.List;
 

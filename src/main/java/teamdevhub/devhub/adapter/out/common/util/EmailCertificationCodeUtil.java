@@ -1,6 +1,6 @@
 package teamdevhub.devhub.adapter.out.common.util;
 
-import teamdevhub.devhub.port.out.common.EmailCertificationCodeProvider;
+import teamdevhub.devhub.port.out.provider.EmailCertificationCodeProvider;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;

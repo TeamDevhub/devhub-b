@@ -1,7 +1,8 @@
 package teamdevhub.devhub.adapter.out.common.util;
 
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.port.out.common.DateTimeProvider;
+import teamdevhub.devhub.domain.common.util.StringUtil;
+import teamdevhub.devhub.port.out.provider.DateTimeProvider;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -19,5 +19,5 @@ public interface UserRepository {
     void updateUserForWithdrawal(User user);
     boolean existsByUserRole(UserRole userRole);
 
-    Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand);
+    Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size);
 }

@@ -1,7 +1,7 @@
 package teamdevhub.devhub.small.mock.repository;
 
 import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
-import teamdevhub.devhub.port.out.common.DateTimeProvider;
+import teamdevhub.devhub.port.out.provider.DateTimeProvider;
 import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
 
 import java.util.HashMap;

@@ -8,7 +8,7 @@ import teamdevhub.devhub.adapter.in.admin.user.AdminUserController;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
-import teamdevhub.devhub.adapter.in.common.vo.PageVo;
+import teamdevhub.devhub.adapter.in.common.pagination.PageVo;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
 import teamdevhub.devhub.small.mock.usecase.FakeAdminUserUseCase;
 

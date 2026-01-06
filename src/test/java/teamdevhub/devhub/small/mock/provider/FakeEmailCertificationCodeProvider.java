@@ -1,6 +1,6 @@
 package teamdevhub.devhub.small.mock.provider;
 
-import teamdevhub.devhub.port.out.common.EmailCertificationCodeProvider;
+import teamdevhub.devhub.port.out.provider.EmailCertificationCodeProvider;
 
 public class FakeEmailCertificationCodeProvider implements EmailCertificationCodeProvider {
 

@@ -16,7 +16,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
 import teamdevhub.devhub.domain.user.record.UserSkill;
-import teamdevhub.devhub.port.out.common.IdentifierProvider;
+import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserPositionRepository;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserRepository;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserSkillRepository;
@@ -253,7 +253,7 @@ class UserAdapterTest {
         SearchUserCommand searchCommand = new SearchUserCommand(null, null, null, null);
 
         //when
-        Page<AdminUserSummaryResponseDto> page = userAdapter.listUser(searchCommand, pageCommand);
+        Page<AdminUserSummaryResponseDto> page = userAdapter.listUser(searchCommand, pageCommand.getPage(), pageCommand.getSize());
 
         //then
         assertThat(page.getContent()).hasSize(2);
