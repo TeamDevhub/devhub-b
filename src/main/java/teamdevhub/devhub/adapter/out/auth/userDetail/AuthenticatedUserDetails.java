@@ -1,10 +1,9 @@
 package teamdevhub.devhub.adapter.out.auth.userDetail;
 
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 
 import java.util.Collection;
 import java.util.List;
