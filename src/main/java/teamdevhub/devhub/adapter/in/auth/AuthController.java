@@ -13,9 +13,10 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDt
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
-import teamdevhub.devhub.adapter.in.common.annotation.CurrentUser;
+import teamdevhub.devhub.adapter.in.common.annotation.LoginUser;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
 
@@ -88,8 +89,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiDataResponseVo<Void>> revoke(@CurrentUser teamdevhub.devhub.domain.common.record.auth.LoginUser loginUser) {
-        authUseCase.revoke(loginUser.email());
+    public ResponseEntity<ApiDataResponseVo<Void>> revoke(@LoginUser AuthenticatedUser authenticatedUser) {
+        authUseCase.revoke(authenticatedUser.email());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCodeEnum.LOGOUT_SUCCESS

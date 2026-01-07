@@ -12,6 +12,6 @@ public interface TokenProvider {
     String getEmailFromRefreshToken(String refreshToken);
     String substringHeaderToken(String token);
     String getTokenFromHeader(HttpServletRequest req);
-    String createAccessToken(String email, UserRole userRole);
+    String createAccessToken(String userGuid, String email, UserRole userRole);
     String getPrefix();
 }

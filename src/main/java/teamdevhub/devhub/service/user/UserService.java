@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.service.common.exception.BusinessRuleException;
-import teamdevhub.devhub.domain.common.record.auth.LoginUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
@@ -44,7 +44,7 @@ public class UserService implements UserUseCase {
     }
 
     @Override
-    public LoginUser getUserForAuth(String email) {
+    public AuthenticatedUser getUserForAuth(String email) {
         return userRepository.findUserByEmailForAuth(email);
     }
 

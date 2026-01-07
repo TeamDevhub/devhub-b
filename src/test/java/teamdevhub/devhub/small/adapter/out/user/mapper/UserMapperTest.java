@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.adapter.out.user.mapper;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.domain.common.record.auth.LoginUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
@@ -38,13 +38,13 @@ class UserMapperTest {
                 .build();
 
         //when
-        LoginUser loginUser = UserMapper.toAuthenticatedUser(userEntity);
+        AuthenticatedUser authenticatedUser = UserMapper.toAuthenticatedUser(userEntity);
 
         //then
-        assertThat(loginUser.userGuid()).isEqualTo(TEST_GUID);
-        assertThat(loginUser.email()).isEqualTo(TEST_EMAIL);
-        assertThat(loginUser.password()).isEqualTo(TEST_PASSWORD);
-        assertThat(loginUser.userRole()).isEqualTo(UserRole.USER);
+        assertThat(authenticatedUser.userGuid()).isEqualTo(TEST_GUID);
+        assertThat(authenticatedUser.email()).isEqualTo(TEST_EMAIL);
+        assertThat(authenticatedUser.password()).isEqualTo(TEST_PASSWORD);
+        assertThat(authenticatedUser.userRole()).isEqualTo(UserRole.USER);
     }
 
     @Test

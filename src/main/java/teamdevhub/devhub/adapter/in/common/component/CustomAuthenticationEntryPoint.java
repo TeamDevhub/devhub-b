@@ -21,11 +21,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
 
-        ApiDataResponseVo<?> result = ApiDataResponseVo.failureWithData(ErrorCodeEnum.AUTH_INVALID, Map.of("reason", authException.getMessage()));
+        ApiDataResponseVo<?> result = ApiDataResponseVo.failureWithoutData(ErrorCodeEnum.AUTH_INVALID);
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json;charset=UTF-8");
-
         response.getWriter().write(mapper.writeValueAsString(result));
     }
 }

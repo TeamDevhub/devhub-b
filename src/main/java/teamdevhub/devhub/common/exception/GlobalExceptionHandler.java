@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.common.exception;
+package teamdevhub.devhub.common.exception;
 
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;

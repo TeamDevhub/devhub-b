@@ -8,9 +8,9 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import teamdevhub.devhub.adapter.in.common.annotation.CurrentUser;
+import teamdevhub.devhub.adapter.in.common.annotation.LoginUser;
 import teamdevhub.devhub.adapter.out.auth.userDetail.LoginAuthentication;
-import teamdevhub.devhub.domain.common.record.auth.LoginUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 
 import java.util.Optional;
 
@@ -19,8 +19,8 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.hasParameterAnnotation(CurrentUser.class) &&
-                methodParameter.getParameterType().equals(LoginUser.class);
+        return methodParameter.hasParameterAnnotation(LoginUser.class) &&
+                methodParameter.getParameterType().equals(AuthenticatedUser.class);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
             return loginAuthentication.getUser();
         }
 
-        if (principal instanceof LoginUser loginUser) {
-            return loginUser;
+        if (principal instanceof AuthenticatedUser authenticatedUser) {
+            return authenticatedUser;
         }
 
         throw new RuntimeException("No authenticated user found");

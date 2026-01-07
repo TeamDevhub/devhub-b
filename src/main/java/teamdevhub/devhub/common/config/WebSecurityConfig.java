@@ -19,7 +19,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import teamdevhub.devhub.adapter.in.common.component.CustomAccessDeniedHandler;
 import teamdevhub.devhub.adapter.in.common.component.CustomAuthenticationEntryPoint;
 import teamdevhub.devhub.adapter.in.common.component.CustomFilterExceptionHandler;
-import teamdevhub.devhub.common.util.AuthenticatedUserUtil;
 import teamdevhub.devhub.common.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.port.out.provider.TokenProvider;
 
@@ -33,7 +32,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final TokenProvider tokenProvider;
-    private final AuthenticatedUserUtil jwtAuthenticationUtil;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -45,7 +43,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(tokenProvider, jwtAuthenticationUtil, customFilterExceptionHandler);
+        return new JwtAuthorizationFilter(tokenProvider, customFilterExceptionHandler);
     }
 
     @Bean

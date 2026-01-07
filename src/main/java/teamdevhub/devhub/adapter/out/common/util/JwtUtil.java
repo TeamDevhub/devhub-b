@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import teamdevhub.devhub.common.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.common.enums.TokenTypeEnum;
@@ -28,9 +29,7 @@ import java.util.Date;
 public class JwtUtil implements TokenProvider {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final String TOKEN_TYPE = "token_type";
     private static final long ACCESS_TOKEN_TIME = 30 * 60 * 1000L;
     private static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L;
 
@@ -61,16 +60,17 @@ public class JwtUtil implements TokenProvider {
     }
 
     @Override
-    public String createAccessToken(String email, UserRole userRole) {
+    public String createAccessToken(String userGuid, String email, UserRole userRole) {
         Date now = new Date();
         return Jwts.builder()
-                        .setSubject(email)
-                        .claim(AUTHORIZATION_KEY, userRole)
-                        .claim(TOKEN_TYPE, TokenTypeEnum.ACCESS.name())
-                        .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
-                        .setIssuedAt(now)
-                        .signWith(key, signatureAlgorithm)
-                        .compact();
+                .setSubject(userGuid)
+                .claim(JwtClaims.EMAIL, email)
+                .claim(JwtClaims.USER_ROLE, userRole.name())
+                .claim(JwtClaims.TOKEN_TYPE, TokenTypeEnum.ACCESS.name())
+                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
+                .setIssuedAt(now)
+                .signWith(key, signatureAlgorithm)
+                .compact();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class JwtUtil implements TokenProvider {
         Date now = new Date();
         return Jwts.builder()
                         .setSubject(email)
-                        .claim(TOKEN_TYPE, TokenTypeEnum.REFRESH.name())
+                        .claim(JwtClaims.TOKEN_TYPE, TokenTypeEnum.REFRESH.name())
                         .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
                         .setIssuedAt(now)
                         .signWith(key, signatureAlgorithm)
@@ -120,7 +120,7 @@ public class JwtUtil implements TokenProvider {
     @Override
     public String getEmailFromRefreshToken(String refreshToken) {
         Claims claims = getUserInfo(refreshToken);
-        TokenTypeEnum tokenTypeEnum = TokenTypeEnum.valueOf(claims.get(TOKEN_TYPE, String.class));
+        TokenTypeEnum tokenTypeEnum = TokenTypeEnum.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
         if (tokenTypeEnum != TokenTypeEnum.REFRESH) {
             throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
         }

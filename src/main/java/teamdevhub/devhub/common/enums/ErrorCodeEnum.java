@@ -37,6 +37,8 @@ public enum ErrorCodeEnum {
     USER_POSITION_REQUIRED("ERR.DVH.0033", "관심 포지션은 필수입니다.", BAD_REQUEST),
     USER_SKILL_REQUIRED("ERR.DVH.0034", "보유 스킬목록은 필수입니다.", BAD_REQUEST),
 
+    EMAIL_SEND_FAIL("ERR.DVH.0050", "이메일 발송이 실패했습니다.",INTERNAL_SERVER_ERROR),
+
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다.",BAD_REQUEST);
 
     private final String code;

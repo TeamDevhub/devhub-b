@@ -10,7 +10,7 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
-import teamdevhub.devhub.domain.common.record.auth.LoginUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
 
@@ -67,10 +67,10 @@ class UserControllerTest {
     @Test
     void 유저_프로필_정보_조회에_성공하면_HTTPSTATUS_OK_를_반환한다() {
         //given
-        LoginUser loginUser = new LoginUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
         //when
-        ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> response = userController.getProfile(loginUser);
+        ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> response = userController.getProfile(authenticatedUser);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -82,7 +82,7 @@ class UserControllerTest {
     @Test
     void 유저_프로필_정보_수정에_성공하면_HTTPSTATUS_OK_를_반환한다() {
         //given
-        LoginUser loginUser = new LoginUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
         //when
         UpdateProfileRequestDto updateProfileRequestDto = UpdateProfileRequestDto.builder()
@@ -92,7 +92,7 @@ class UserControllerTest {
                 .skillList(NEW_SKILL_LIST)
                 .build();
 
-        ResponseEntity<ApiDataResponseVo<Void>> response = userController.updateProfile(updateProfileRequestDto, loginUser);
+        ResponseEntity<ApiDataResponseVo<Void>> response = userController.updateProfile(updateProfileRequestDto, authenticatedUser);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -101,10 +101,10 @@ class UserControllerTest {
     @Test
     void 회원탈퇴에_성공하면_HTTPSTATUS_OK_를_반환한다() {
         //given
-        LoginUser loginUser = new LoginUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
         //when
-        ResponseEntity<ApiDataResponseVo<Void>> response = userController.withdraw(loginUser);
+        ResponseEntity<ApiDataResponseVo<Void>> response = userController.withdraw(authenticatedUser);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

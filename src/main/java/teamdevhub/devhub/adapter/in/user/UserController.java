@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamdevhub.devhub.adapter.in.common.annotation.CurrentUser;
+import teamdevhub.devhub.adapter.in.common.annotation.LoginUser;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
@@ -14,6 +14,7 @@ import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCodeEnum;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 
 @RestController
@@ -47,18 +48,18 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> getProfile(@CurrentUser teamdevhub.devhub.domain.common.record.auth.LoginUser loginUser) {
+    public ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> getProfile(@LoginUser AuthenticatedUser authenticatedUser) {
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithData(
                         SuccessCodeEnum.READ_SUCCESS,
-                        UserProfileResponseDto.fromDomain(userUseCase.getCurrentUserProfile(loginUser.userGuid()))
+                        UserProfileResponseDto.fromDomain(userUseCase.getCurrentUserProfile(authenticatedUser.userGuid()))
                 )
         );
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @CurrentUser teamdevhub.devhub.domain.common.record.auth.LoginUser loginUser) {
-        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, loginUser.userGuid());
+    public ResponseEntity<ApiDataResponseVo<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, authenticatedUser.userGuid());
         userUseCase.updateProfile(updateProfileCommand);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
@@ -68,8 +69,8 @@ public class UserController {
     }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<ApiDataResponseVo<Void>> withdraw(@CurrentUser teamdevhub.devhub.domain.common.record.auth.LoginUser loginUser) {
-        userUseCase.withdrawCurrentUser(loginUser.userGuid());
+    public ResponseEntity<ApiDataResponseVo<Void>> withdraw(@LoginUser AuthenticatedUser authenticatedUser) {
+        userUseCase.withdrawCurrentUser(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCodeEnum.USER_DELETE_SUCCESS

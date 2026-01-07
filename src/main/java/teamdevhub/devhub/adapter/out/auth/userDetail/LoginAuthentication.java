@@ -3,36 +3,36 @@ package teamdevhub.devhub.adapter.out.auth.userDetail;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import teamdevhub.devhub.domain.common.record.auth.LoginUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 
 import java.util.Collection;
 import java.util.List;
 
 public class LoginAuthentication implements UserDetails {
 
-    private final LoginUser loginUser;
+    private final AuthenticatedUser authenticatedUser;
 
-    public LoginAuthentication(LoginUser loginUser) {
-        this.loginUser = loginUser;
+    public LoginAuthentication(AuthenticatedUser authenticatedUser) {
+        this.authenticatedUser = authenticatedUser;
     }
 
-    public LoginUser getUser() {
-        return loginUser;
+    public AuthenticatedUser getUser() {
+        return authenticatedUser;
     }
 
     @Override
     public String getPassword() {
-        return loginUser.password();
+        return authenticatedUser.password();
     }
 
     @Override
     public String getUsername() {
-        return loginUser.email();
+        return authenticatedUser.email();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(loginUser.userRole().getAuthority()));
+        return List.of(new SimpleGrantedAuthority(authenticatedUser.userRole().getAuthority()));
     }
 
     @Override
@@ -56,6 +56,6 @@ public class LoginAuthentication implements UserDetails {
     }
 
     public String getUserGuid() {
-        return loginUser.userGuid();
+        return authenticatedUser.userGuid();
     }
 }

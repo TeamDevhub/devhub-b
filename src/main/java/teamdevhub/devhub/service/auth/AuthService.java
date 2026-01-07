@@ -11,7 +11,7 @@ import teamdevhub.devhub.adapter.out.auth.userDetail.LoginAuthentication;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
-import teamdevhub.devhub.domain.common.record.auth.LoginUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
@@ -40,22 +40,14 @@ public class AuthService implements AuthUseCase {
                 new UsernamePasswordAuthenticationToken(email, rawPassword)
         );
 
-        LoginAuthentication userDetails = (LoginAuthentication) authentication.getPrincipal();
-        LoginUser user = userDetails.getUser();
-
-        Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                user,
-                userDetails.getPassword(),
-                userDetails.getAuthorities()
-        );
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
+        LoginAuthentication loginAuthentication = (LoginAuthentication) authentication.getPrincipal();
 
         String prefix = tokenProvider.getPrefix();
-        String accessToken = tokenProvider.createAccessToken(email, userDetails.getUser().userRole());
+        String accessToken = tokenProvider.createAccessToken(loginAuthentication.getUser().userGuid(), loginAuthentication.getUser().email(), loginAuthentication.getUser().userRole());
         String refreshToken = tokenProvider.createRefreshToken(email);
 
         issueRefreshToken(email, refreshToken);
-        userUseCase.updateLastLoginDateTime(userDetails.getUserGuid());
+        userUseCase.updateLastLoginDateTime(loginAuthentication.getUserGuid());
 
         return LoginResponseDto.of(prefix, accessToken, refreshToken);
     }
@@ -80,14 +72,14 @@ public class AuthService implements AuthUseCase {
         }
 
         String email = tokenProvider.getEmailFromRefreshToken(token);
-        LoginUser loginUser = userUseCase.getUserForAuth(email);
+        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(email);
         RefreshToken refreshToken = refreshTokenRepository.findByEmail(email);
 
         if (!refreshToken.token().equals(token)) {
             throw AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID);
         }
 
-        String newAccessToken = tokenProvider.createAccessToken(loginUser.email(), loginUser.userRole());
+        String newAccessToken = tokenProvider.createAccessToken(authenticatedUser.userGuid(), authenticatedUser.email(), authenticatedUser.userRole());
         return TokenResponseDto.issue(newAccessToken);
     }
 

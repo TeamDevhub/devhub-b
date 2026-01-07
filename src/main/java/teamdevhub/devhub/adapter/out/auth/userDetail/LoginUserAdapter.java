@@ -1,6 +1,6 @@
 package teamdevhub.devhub.adapter.out.auth.userDetail;
 
-import teamdevhub.devhub.domain.common.record.auth.LoginUser;
+import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +16,7 @@ public class LoginUserAdapter implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        LoginUser loginUser = userUseCase.getUserForAuth(email);
-        return new LoginAuthentication(loginUser);
+        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(email);
+        return new LoginAuthentication(authenticatedUser);
     }
 }
