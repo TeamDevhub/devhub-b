@@ -2,8 +2,8 @@ package teamdevhub.devhub.adapter.out.auth;
 
 import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
 import teamdevhub.devhub.adapter.out.auth.persist.JpaRefreshTokenRepository;
+import teamdevhub.devhub.adapter.out.common.exception.DataAccessException;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class RefreshTokenAdapter implements RefreshTokenRepository {
     public RefreshToken findByEmail(String email) {
         return jpaRefreshTokenRepository.findByEmail(email)
                 .map(refreshTokenEntity -> RefreshToken.of(refreshTokenEntity.getEmail(), refreshTokenEntity.getToken()))
-                .orElseThrow(() -> AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID));
+                .orElseThrow(() -> DataAccessException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID));
     }
 
     @Override

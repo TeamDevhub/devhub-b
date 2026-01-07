@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.common.exception;
+package teamdevhub.devhub.adapter.out.common.exception;
 
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import lombok.Getter;

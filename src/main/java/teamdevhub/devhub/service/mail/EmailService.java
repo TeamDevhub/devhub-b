@@ -1,18 +1,19 @@
 package teamdevhub.devhub.service.mail;
 
-import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
-import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
-import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
-import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
-import teamdevhub.devhub.port.out.provider.DateTimeProvider;
-import teamdevhub.devhub.port.out.provider.EmailCertificationCodeProvider;
-import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
-import teamdevhub.devhub.port.out.mail.EmailNotificationSender;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
+import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
+import teamdevhub.devhub.adapter.out.common.exception.AuthRuleException;
+import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
+import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
+import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
+import teamdevhub.devhub.port.out.mail.EmailNotificationSender;
+import teamdevhub.devhub.port.out.provider.DateTimeProvider;
+import teamdevhub.devhub.port.out.provider.EmailCertificationCodeProvider;
+import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -46,7 +47,7 @@ public class EmailService implements EmailCertificationUseCase {
     public void confirmEmailCertificationCode(ConfirmEmailCertificationCommand confirmEmailCertificationCommand) {
         boolean isVerified = emailCertificationRepository.verify(confirmEmailCertificationCommand.getEmail(), confirmEmailCertificationCommand.getCode());
         if (!isVerified) {
-            throw AuthRuleException.of(ErrorCodeEnum.EMAIL_NOT_CONFIRMED);
+            throw BusinessRuleException.of(ErrorCodeEnum.EMAIL_NOT_CONFIRMED);
         }
     }
 }

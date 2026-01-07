@@ -9,16 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import teamdevhub.devhub.adapter.out.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.common.enums.TokenTypeEnum;
-import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.provider.TokenProvider;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -45,21 +42,6 @@ public class JwtUtil implements TokenProvider {
     }
 
     @Override
-    public String substringHeaderToken(String token) {
-        if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) { return token.substring(7);}
-        throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
-    }
-
-    @Override
-    public String getTokenFromHeader(HttpServletRequest req) {
-        String token = req.getHeader(AUTHORIZATION_HEADER);
-        if(token != null) {
-            return URLDecoder.decode(token, StandardCharsets.UTF_8);
-        }
-        return null;
-    }
-
-    @Override
     public String createAccessToken(String userGuid, String email, UserRole userRole) {
         Date now = new Date();
         return Jwts.builder()
@@ -71,11 +53,6 @@ public class JwtUtil implements TokenProvider {
                 .setIssuedAt(now)
                 .signWith(key, signatureAlgorithm)
                 .compact();
-    }
-
-    @Override
-    public String getPrefix() {
-        return BEARER_PREFIX;
     }
 
     @Override
@@ -91,39 +68,50 @@ public class JwtUtil implements TokenProvider {
     }
 
     @Override
-    public JwtStatusEnum validateToken(String token) {
+    public Claims parseClaims(String token) {
+
+        if (!StringUtils.hasText(token)) {
+            throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
+        }
+
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return JwtStatusEnum.VALID;
-        } catch (SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-            return JwtStatusEnum.INVALID;
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT token, 만료된 JWT token 입니다.");
-            return JwtStatusEnum.EXPIRED;
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
-            return JwtStatusEnum.INVALID;
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
-            return JwtStatusEnum.INVALID;
-        } finally {
-            log.info("JWT 토큰 검증 완료");
+            throw AuthRuleException.of(ErrorCodeEnum.TOKEN_EXPIRED);
+        } catch (JwtException | IllegalArgumentException e) {
+            throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
         }
     }
 
     @Override
-    public Claims getUserInfo(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-    }
-
-    @Override
-    public String getEmailFromRefreshToken(String refreshToken) {
-        Claims claims = getUserInfo(refreshToken);
+    public String extractEmailFromRefreshToken(String refreshToken) {
+        Claims claims = parseClaims(refreshToken);
         TokenTypeEnum tokenTypeEnum = TokenTypeEnum.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
         if (tokenTypeEnum != TokenTypeEnum.REFRESH) {
             throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
         }
         return claims.getSubject();
+    }
+
+    @Override
+    public String resolveToken(HttpServletRequest httpServletRequest) {
+        return httpServletRequest.getHeader(AUTHORIZATION_HEADER);
+    }
+
+    @Override
+    public String removeBearer(String token) {
+        if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
+            return token.substring(BEARER_PREFIX.length());
+        }
+        throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
+    }
+
+    @Override
+    public String getPrefix() {
+        return BEARER_PREFIX;
     }
 }

@@ -1,25 +1,23 @@
 package teamdevhub.devhub.service.auth;
 
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.out.auth.userDetail.LoginAuthentication;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.enums.JwtStatusEnum;
-import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import teamdevhub.devhub.port.out.provider.TokenProvider;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 
 @Service
 @RequiredArgsConstructor
@@ -61,25 +59,22 @@ public class AuthService implements AuthUseCase {
     @Override
     public TokenResponseDto reissueAccessToken(String token) {
 
-        JwtStatusEnum jwtStatusEnum = tokenProvider.validateToken(token);
-
-        if (jwtStatusEnum == JwtStatusEnum.EXPIRED) {
-            throw AuthRuleException.of(ErrorCodeEnum.TOKEN_EXPIRED);
-        }
-
-        if (jwtStatusEnum != JwtStatusEnum.VALID) {
-            throw AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID);
-        }
-
-        String email = tokenProvider.getEmailFromRefreshToken(token);
-        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(email);
+        String email = tokenProvider.extractEmailFromRefreshToken(token);
         RefreshToken refreshToken = refreshTokenRepository.findByEmail(email);
 
         if (!refreshToken.token().equals(token)) {
-            throw AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID);
+            throw BusinessRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID);
         }
 
-        String newAccessToken = tokenProvider.createAccessToken(authenticatedUser.userGuid(), authenticatedUser.email(), authenticatedUser.userRole());
+        AuthenticatedUser user = userUseCase.getUserForAuth(email);
+
+        String newAccessToken =
+                tokenProvider.createAccessToken(
+                        user.userGuid(),
+                        user.email(),
+                        user.userRole()
+                );
+
         return TokenResponseDto.issue(newAccessToken);
     }
 

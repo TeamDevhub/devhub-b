@@ -5,6 +5,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
+import teamdevhub.devhub.adapter.out.common.exception.DataAccessException;
 import teamdevhub.devhub.adapter.out.common.util.RelationChangeUtil;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
@@ -22,7 +23,6 @@ import teamdevhub.devhub.domain.user.record.UserPosition;
 import teamdevhub.devhub.domain.user.record.UserSkill;
 import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
-import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 
 import java.util.List;
 import java.util.Set;
@@ -46,7 +46,7 @@ public class UserAdapter implements UserRepository {
     @Override
     public AuthenticatedUser findUserByEmailForAuth(String email) {
         UserEntity userEntity = jpaUserRepository.findByEmail(email).
-                orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+                orElseThrow(() -> DataAccessException.of(ErrorCodeEnum.USER_NOT_FOUND));
         return UserMapper.toAuthenticatedUser(userEntity);
     }
 
@@ -66,7 +66,7 @@ public class UserAdapter implements UserRepository {
     @Override
     public User findByUserGuid(String userGuid) {
         UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
-                .orElseThrow(() -> BusinessRuleException.of(ErrorCodeEnum.USER_NOT_FOUND));
+                .orElseThrow(() -> DataAccessException.of(ErrorCodeEnum.USER_NOT_FOUND));
         return UserMapper.toDomain(userEntity, loadPositions(userGuid), loadSkills(userGuid));
     }
 

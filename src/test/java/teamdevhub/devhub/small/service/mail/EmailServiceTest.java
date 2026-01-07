@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
-import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
+import teamdevhub.devhub.adapter.out.common.exception.AuthRuleException;
 import teamdevhub.devhub.service.mail.EmailService;
 import teamdevhub.devhub.small.mock.infrastructure.FakeEmailNotificationSender;
 import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
