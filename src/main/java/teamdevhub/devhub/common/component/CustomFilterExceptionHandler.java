@@ -1,11 +1,11 @@
-package teamdevhub.devhub.adapter.in.common.component;
+package teamdevhub.devhub.common.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 
 @Slf4j
 @Component
@@ -13,18 +13,18 @@ public class CustomFilterExceptionHandler {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public void handle(HttpServletResponse httpServletResponse, ErrorCodeEnum errorCodeEnum) {
+    public void handle(HttpServletResponse httpServletResponse, ErrorCode errorCode) {
 
         try {
             if (httpServletResponse.isCommitted()) {
                 httpServletResponse.resetBuffer();
             }
 
-            httpServletResponse.setStatus(errorCodeEnum.getStatus().value());
+            httpServletResponse.setStatus(errorCode.getStatus().value());
             httpServletResponse.setContentType("application/json");
             httpServletResponse.setCharacterEncoding("UTF-8");
 
-            ApiDataResponseVo<?> result = ApiDataResponseVo.failureWithoutData(errorCodeEnum);
+            ApiDataResponseVo<?> result = ApiDataResponseVo.failureWithoutData(errorCode);
             String json = mapper.writeValueAsString(result);
 
             httpServletResponse.getWriter().write(json);

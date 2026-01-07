@@ -3,8 +3,9 @@ package teamdevhub.devhub.common.filter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import teamdevhub.devhub.adapter.in.common.component.CustomFilterExceptionHandler;
-import teamdevhub.devhub.common.JwtClaims;
+import teamdevhub.devhub.common.component.CustomFilterExceptionHandler;
+import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.adapter.out.common.util.JwtClaims;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,8 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.enums.TokenTypeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.FilterRuleException;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -31,7 +32,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private static final String TOKEN_TYPE = "token_type";
     private final TokenProvider tokenProvider;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
 
@@ -54,16 +54,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(httpServletRequest, httpServletResponse);
 
-        } catch (FilterRuleException e) {
-            customFilterExceptionHandler.handle(httpServletResponse, e.getErrorCodeEnum());
+        } catch (AuthRuleException e) {
+            customFilterExceptionHandler.handle(httpServletResponse, e.getErrorCode());
         }
     }
 
     private void validateAccessToken(Claims claims) {
-        TokenTypeEnum type = TokenTypeEnum.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
+        TokenType type = TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
 
-        if (type != TokenTypeEnum.ACCESS) {
-            throw FilterRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
+        if (type != TokenType.ACCESS) {
+            throw FilterRuleException.of(ErrorCode.TOKEN_INVALID);
         }
     }
 

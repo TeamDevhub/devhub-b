@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
-import teamdevhub.devhub.adapter.out.auth.userDetail.LoginAuthentication;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.security.UserAuthentication;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
@@ -38,14 +38,14 @@ public class AuthService implements AuthUseCase {
                 new UsernamePasswordAuthenticationToken(email, rawPassword)
         );
 
-        LoginAuthentication loginAuthentication = (LoginAuthentication) authentication.getPrincipal();
+        UserAuthentication userAuthentication = (UserAuthentication) authentication.getPrincipal();
 
         String prefix = tokenProvider.getPrefix();
-        String accessToken = tokenProvider.createAccessToken(loginAuthentication.getUser().userGuid(), loginAuthentication.getUser().email(), loginAuthentication.getUser().userRole());
+        String accessToken = tokenProvider.createAccessToken(userAuthentication.getUser().userGuid(), userAuthentication.getUser().email(), userAuthentication.getUser().userRole());
         String refreshToken = tokenProvider.createRefreshToken(email);
 
         issueRefreshToken(email, refreshToken);
-        userUseCase.updateLastLoginDateTime(loginAuthentication.getUserGuid());
+        userUseCase.updateLastLoginDateTime(userAuthentication.getUserGuid());
 
         return LoginResponseDto.of(prefix, accessToken, refreshToken);
     }
@@ -63,17 +63,16 @@ public class AuthService implements AuthUseCase {
         RefreshToken refreshToken = refreshTokenRepository.findByEmail(email);
 
         if (!refreshToken.token().equals(token)) {
-            throw BusinessRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID);
+            throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
         }
 
-        AuthenticatedUser user = userUseCase.getUserForAuth(email);
+        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(email);
 
-        String newAccessToken =
-                tokenProvider.createAccessToken(
-                        user.userGuid(),
-                        user.email(),
-                        user.userRole()
-                );
+        String newAccessToken = tokenProvider.createAccessToken(
+                authenticatedUser.userGuid(),
+                authenticatedUser.email(),
+                authenticatedUser.userRole()
+        );
 
         return TokenResponseDto.issue(newAccessToken);
     }

@@ -2,16 +2,17 @@ package teamdevhub.devhub.adapter.in.common.vo;
 
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 
 @Getter
 @Builder
 public class ErrorResponseVo {
 
     private String code;
+
     private String message;
 
-    public static ErrorResponseVo of(ErrorCodeEnum errorCode) {
+    public static ErrorResponseVo of(ErrorCode errorCode) {
         return ErrorResponseVo.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
@@ -21,7 +22,7 @@ public class ErrorResponseVo {
     public static ErrorResponseVo of(Throwable throwable) {
         String message = resolveMessage(throwable);
         return ErrorResponseVo.builder()
-                .code(ErrorCodeEnum.UNKNOWN_FAIL.getCode())
+                .code(ErrorCode.UNKNOWN_FAIL.getCode())
                 .message(message)
                 .build();
     }

@@ -1,19 +1,19 @@
 package teamdevhub.devhub.domain.common.exception;
 
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import lombok.Getter;
 
 @Getter
 public class DomainRuleException extends RuntimeException {
 
-    private final ErrorCodeEnum errorCodeEnum;
+    private final ErrorCode errorCode;
 
-    private DomainRuleException(ErrorCodeEnum errorCodeEnum) {
-        super(errorCodeEnum.getMessage());
-        this.errorCodeEnum = errorCodeEnum;
+    private DomainRuleException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
-    public static DomainRuleException of(ErrorCodeEnum errorCodeEnum) {
-        return new DomainRuleException(errorCodeEnum);
+    public static DomainRuleException of(ErrorCode errorCode) {
+        return new DomainRuleException(errorCode);
     }
 }

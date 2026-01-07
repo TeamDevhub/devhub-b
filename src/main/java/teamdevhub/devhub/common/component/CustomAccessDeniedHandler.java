@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.common.component;
+package teamdevhub.devhub.common.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

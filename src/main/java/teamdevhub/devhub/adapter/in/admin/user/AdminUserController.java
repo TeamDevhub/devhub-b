@@ -11,7 +11,7 @@ import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
 import teamdevhub.devhub.adapter.in.common.pagination.PageConverter;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
 import teamdevhub.devhub.adapter.in.common.pagination.PageVo;
-import teamdevhub.devhub.common.enums.SuccessCodeEnum;
+import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
 
 @RestController
@@ -29,7 +29,7 @@ public class AdminUserController {
         Page<AdminUserSummaryResponseDto> pagedUserList = adminUserUseCase.listUser(searchUserCommand, pageCommand);
         PageVo pageVo = PageConverter.toPageVo(pagedUserList);
         return ResponseEntity.ok(
-                ApiDataListResponseVo.successWithDataList(SuccessCodeEnum.READ_SUCCESS,
+                ApiDataListResponseVo.successWithDataList(SuccessCode.READ_SUCCESS,
                         pagedUserList.getContent(),
                         pageVo)
         );

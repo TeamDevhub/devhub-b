@@ -10,8 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponseDto {
+
     private String prefix;
+
     private String accessToken;
+
     private String refreshToken;
 
     public String toAuthorizationHeader() {

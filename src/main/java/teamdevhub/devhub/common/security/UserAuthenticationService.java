@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.auth.userDetail;
+package teamdevhub.devhub.common.security;
 
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LoginUserAdapter implements UserDetailsService {
+public class UserAuthenticationService implements UserDetailsService {
 
     private final UserUseCase userUseCase;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(email);
-        return new LoginAuthentication(authenticatedUser);
+        return new UserAuthentication(authenticatedUser);
     }
 }

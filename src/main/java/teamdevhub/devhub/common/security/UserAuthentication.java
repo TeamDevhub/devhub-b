@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.auth.userDetail;
+package teamdevhub.devhub.common.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,11 +8,11 @@ import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import java.util.Collection;
 import java.util.List;
 
-public class LoginAuthentication implements UserDetails {
+public class UserAuthentication implements UserDetails {
 
     private final AuthenticatedUser authenticatedUser;
 
-    public LoginAuthentication(AuthenticatedUser authenticatedUser) {
+    public UserAuthentication(AuthenticatedUser authenticatedUser) {
         this.authenticatedUser = authenticatedUser;
     }
 

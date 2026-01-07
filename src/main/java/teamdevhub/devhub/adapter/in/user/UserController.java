@@ -13,7 +13,7 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
-import teamdevhub.devhub.common.enums.SuccessCodeEnum;
+import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 
@@ -30,7 +30,7 @@ public class UserController {
         SignupCommand signupCommand = SignupCommand.fromSignupUserRequestDto(signupRequestDto);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithData(
-                        SuccessCodeEnum.SIGNUP_SUCCESS,
+                        SuccessCode.SIGNUP_SUCCESS,
                         SignupResponseDto.fromDomain(userUseCase.signup(signupCommand))
                 )
         );
@@ -41,7 +41,7 @@ public class UserController {
         //userUseCase.oauthSignup(oauth)
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.SIGNUP_SUCCESS
+                        SuccessCode.SIGNUP_SUCCESS
                         //SignupResponseDto.fromDomain(userUseCase.signupWithOauth(oauth))
                 )
         );
@@ -51,7 +51,7 @@ public class UserController {
     public ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> getProfile(@LoginUser AuthenticatedUser authenticatedUser) {
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithData(
-                        SuccessCodeEnum.READ_SUCCESS,
+                        SuccessCode.READ_SUCCESS,
                         UserProfileResponseDto.fromDomain(userUseCase.getCurrentUserProfile(authenticatedUser.userGuid()))
                 )
         );
@@ -63,7 +63,7 @@ public class UserController {
         userUseCase.updateProfile(updateProfileCommand);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.UPDATE_SUCCESS
+                        SuccessCode.UPDATE_SUCCESS
                 )
         );
     }
@@ -73,7 +73,7 @@ public class UserController {
         userUseCase.withdrawCurrentUser(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.USER_DELETE_SUCCESS
+                        SuccessCode.USER_DELETE_SUCCESS
                 )
         );
     }

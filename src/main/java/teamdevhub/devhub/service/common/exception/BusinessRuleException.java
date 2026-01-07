@@ -1,19 +1,19 @@
 package teamdevhub.devhub.service.common.exception;
 
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import lombok.Getter;
 
 @Getter
 public class BusinessRuleException extends RuntimeException {
 
-    private final ErrorCodeEnum errorCodeEnum;
+    private final ErrorCode errorCode;
 
-    private BusinessRuleException(ErrorCodeEnum errorCodeEnum) {
-        super(errorCodeEnum.getMessage());
-        this.errorCodeEnum = errorCodeEnum;
+    private BusinessRuleException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
-    public static BusinessRuleException of(ErrorCodeEnum errorCodeEnum) {
-        return new BusinessRuleException(errorCodeEnum);
+    public static BusinessRuleException of(ErrorCode errorCode) {
+        return new BusinessRuleException(errorCode);
     }
 }

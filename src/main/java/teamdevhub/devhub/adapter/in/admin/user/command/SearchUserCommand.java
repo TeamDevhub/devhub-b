@@ -13,8 +13,11 @@ import java.time.LocalDateTime;
 public class SearchUserCommand {
 
     private final Boolean blocked;
+
     private final LocalDateTime joinedFrom;
+
     private final LocalDateTime joinedTo;
+
     private final String keyword;
 
     public static SearchUserCommand fromSearchUserRequestDto(SearchUserRequestDto searchUserRequestDto) {

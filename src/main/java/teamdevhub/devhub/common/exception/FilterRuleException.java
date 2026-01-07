@@ -1,19 +1,19 @@
 package teamdevhub.devhub.common.exception;
 
 import lombok.Getter;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 
 @Getter
 public class FilterRuleException extends RuntimeException {
 
-    private final ErrorCodeEnum errorCodeEnum;
+    private final ErrorCode errorCode;
 
-    private FilterRuleException(ErrorCodeEnum errorCodeEnum) {
-        super(errorCodeEnum.getMessage());
-        this.errorCodeEnum = errorCodeEnum;
+    private FilterRuleException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
-    public static FilterRuleException of(ErrorCodeEnum errorCodeEnum) {
-        return new FilterRuleException(errorCodeEnum);
+    public static FilterRuleException of(ErrorCode errorCode) {
+        return new FilterRuleException(errorCode);
     }
 }

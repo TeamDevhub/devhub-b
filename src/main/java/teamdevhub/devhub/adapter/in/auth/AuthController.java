@@ -15,7 +15,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.common.annotation.LoginUser;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
-import teamdevhub.devhub.common.enums.SuccessCodeEnum;
+import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
@@ -33,7 +33,7 @@ public class AuthController {
         emailCertificationUseCase.sendEmailCertificationCode(emailCertificationRequestDto);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.EMAIL_CERTIFICATION_SENT
+                        SuccessCode.EMAIL_CERTIFICATION_SENT
                 )
         );
     }
@@ -44,7 +44,7 @@ public class AuthController {
         emailCertificationUseCase.confirmEmailCertificationCode(confirmEmailCertificationCommand);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.EMAIL_CERTIFICATION_SUCCESS
+                        SuccessCode.EMAIL_CERTIFICATION_SUCCESS
                 )
         );
     }
@@ -58,7 +58,7 @@ public class AuthController {
                 .header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(ApiDataResponseVo.successWithData(
-                        SuccessCodeEnum.LOGIN_SUCCESS,
+                        SuccessCode.LOGIN_SUCCESS,
                         TokenResponseDto.issue(loginResponseDto.getAccessToken())
                         )
                 );
@@ -72,7 +72,7 @@ public class AuthController {
                 //.header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
                 //.header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(ApiDataResponseVo.successWithoutData(
-                                SuccessCodeEnum.LOGIN_SUCCESS
+                                SuccessCode.LOGIN_SUCCESS
                                 //TokenResponseDto.issue(loginResponseDto.getAccessToken())
                         )
                 );
@@ -82,7 +82,7 @@ public class AuthController {
     public ResponseEntity<ApiDataResponseVo<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithData(
-                        SuccessCodeEnum.CREATE_SUCCESS,
+                        SuccessCode.CREATE_SUCCESS,
                         authUseCase.reissueAccessToken(refreshToken)
                 )
         );
@@ -93,7 +93,7 @@ public class AuthController {
         authUseCase.revoke(authenticatedUser.email());
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCodeEnum.LOGOUT_SUCCESS
+                        SuccessCode.LOGOUT_SUCCESS
                 )
         );
     }

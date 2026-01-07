@@ -2,7 +2,7 @@ package teamdevhub.devhub.domain.user;
 
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.common.exception.DomainRuleException;
 import teamdevhub.devhub.domain.common.record.audit.AuditInfo;
 import teamdevhub.devhub.domain.user.record.UserPosition;
@@ -165,7 +165,7 @@ public class User {
 
     public void withdraw() {
         if (this.deleted) {
-            throw DomainRuleException.of(ErrorCodeEnum.ALREADY_DELETED);
+            throw DomainRuleException.of(ErrorCode.ALREADY_DELETED);
         }
         this.deleted = true;
         this.blocked = false;
@@ -186,7 +186,7 @@ public class User {
         }
 
         if (newPositions == null || newPositions.isEmpty()) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_POSITION_REQUIRED);
+            throw DomainRuleException.of(ErrorCode.USER_POSITION_REQUIRED);
         }
         if (!new HashSet<>(newPositions).equals(this.positions)) {
             this.positions.clear();
@@ -194,7 +194,7 @@ public class User {
         }
 
         if (newSkills == null || newSkills.isEmpty()) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_SKILL_REQUIRED);
+            throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
         }
         if (!new HashSet<>(newSkills).equals(this.skills)) {
             this.skills.clear();
@@ -210,11 +210,11 @@ public class User {
             Set<UserSkill> skills
     ) {
         if (!hasText(email)) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_ID_FAIL);
+            throw DomainRuleException.of(ErrorCode.USER_ID_FAIL);
         }
 
         if (!hasText(password) || password.length() < 8) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_PASSWORD_FAIL);
+            throw DomainRuleException.of(ErrorCode.USER_PASSWORD_FAIL);
         }
 
         if (userRole != UserRole.USER) {
@@ -222,10 +222,10 @@ public class User {
         }
 
         if (positions == null || positions.isEmpty()) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_POSITION_REQUIRED);
+            throw DomainRuleException.of(ErrorCode.USER_POSITION_REQUIRED);
         }
         if (skills == null || skills.isEmpty()) {
-            throw DomainRuleException.of(ErrorCodeEnum.USER_SKILL_REQUIRED);
+            throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
         }
     }
 

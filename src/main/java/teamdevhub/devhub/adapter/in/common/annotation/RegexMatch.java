@@ -1,7 +1,7 @@
 package teamdevhub.devhub.adapter.in.common.annotation;
 
 import teamdevhub.devhub.adapter.in.common.validator.RegexValidator;
-import teamdevhub.devhub.common.enums.RegexPatternEnum;
+import teamdevhub.devhub.common.enums.RegexPattern;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = RegexValidator.class)
 public @interface RegexMatch {
 
-    RegexPatternEnum value();
+    RegexPattern value();
 
     String message() default "잘못된 형식입니다.";
 

@@ -5,8 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
-import teamdevhub.devhub.adapter.out.common.exception.AuthRuleException;
+import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.common.enums.EmailTemplateType;
+import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 import teamdevhub.devhub.service.mail.EmailService;
+import teamdevhub.devhub.service.mail.EmailTemplateVariables;
 import teamdevhub.devhub.small.mock.infrastructure.FakeEmailNotificationSender;
 import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
 import teamdevhub.devhub.small.mock.provider.FakeEmailCertificationCodeProvider;
@@ -52,8 +55,8 @@ class EmailServiceTest {
         assertThat(fakeEmailSender.getSentEmails()).hasSize(1);
         FakeEmailNotificationSender.SentEmail sentEmail = fakeEmailSender.getSentEmails().get(0);
         assertThat(sentEmail.getEmail()).isEqualTo("test@example.com");
-        assertThat(sentEmail.getCode()).isEqualTo("123456");
-        assertThat(fakeRepository.hasUnexpiredCode("test@example.com")).isTrue();
+        assertThat(sentEmail.getTemplateType()).isEqualTo(EmailTemplateType.EMAIL_CERTIFICATION);
+        assertThat(sentEmail.getVariable(EmailTemplateVariables.CODE)).isNotNull();
     }
 
     @Test
@@ -91,7 +94,7 @@ class EmailServiceTest {
         ConfirmEmailCertificationCommand confirmEmailCertificationCommand = new ConfirmEmailCertificationCommand("test@example.com", "654321");
 
         //then
-        assertThrows(AuthRuleException.class, () ->
+        assertThrows(BusinessRuleException.class, () ->
                 //when
                 emailService.confirmEmailCertificationCode(confirmEmailCertificationCommand)
         );

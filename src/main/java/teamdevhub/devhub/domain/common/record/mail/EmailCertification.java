@@ -9,4 +9,8 @@ public record EmailCertification(String email,
     public static EmailCertification of(String email, String code, LocalDateTime expiredAt, LocalDateTime verifiedAt) {
         return new EmailCertification(email, code, expiredAt, verifiedAt);
     }
+
+    public boolean isExpired(LocalDateTime now) {
+        return expiredAt.isBefore(now);
+    }
 }

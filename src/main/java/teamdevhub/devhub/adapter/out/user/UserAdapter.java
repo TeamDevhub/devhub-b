@@ -15,7 +15,7 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserPositionRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -46,7 +46,7 @@ public class UserAdapter implements UserRepository {
     @Override
     public AuthenticatedUser findUserByEmailForAuth(String email) {
         UserEntity userEntity = jpaUserRepository.findByEmail(email).
-                orElseThrow(() -> DataAccessException.of(ErrorCodeEnum.USER_NOT_FOUND));
+                orElseThrow(() -> DataAccessException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toAuthenticatedUser(userEntity);
     }
 
@@ -66,7 +66,7 @@ public class UserAdapter implements UserRepository {
     @Override
     public User findByUserGuid(String userGuid) {
         UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
-                .orElseThrow(() -> DataAccessException.of(ErrorCodeEnum.USER_NOT_FOUND));
+                .orElseThrow(() -> DataAccessException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toDomain(userEntity, loadPositions(userGuid), loadSkills(userGuid));
     }
 

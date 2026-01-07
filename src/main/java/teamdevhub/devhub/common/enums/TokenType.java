@@ -1,5 +1,5 @@
 package teamdevhub.devhub.common.enums;
 
-public enum TokenTypeEnum {
+public enum TokenType {
     ACCESS, REFRESH
 }

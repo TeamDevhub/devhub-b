@@ -3,7 +3,7 @@ package teamdevhub.devhub.common.enums;
 import lombok.Getter;
 
 @Getter
-public enum SuccessCodeEnum {
+public enum SuccessCode {
 
     READ_SUCCESS("SUC.DVH.0001", "조회 성공"),
     CREATE_SUCCESS("SUC.DVH.0002", "생성 성공"),
@@ -20,7 +20,7 @@ public enum SuccessCodeEnum {
     private final String code;
     private final String message;
 
-    SuccessCodeEnum(String code, String message) {
+    SuccessCode(String code, String message) {
         this.code = code;
         this.message = message;
     }

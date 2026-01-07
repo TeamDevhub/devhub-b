@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.common.component;
+package teamdevhub.devhub.common.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,7 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 
 import java.io.IOException;
 
@@ -20,7 +20,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
 
-        ApiDataResponseVo<?> result = ApiDataResponseVo.failureWithoutData(ErrorCodeEnum.AUTH_INVALID);
+        ApiDataResponseVo<?> result = ApiDataResponseVo.failureWithoutData(ErrorCode.AUTH_INVALID);
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json;charset=UTF-8");

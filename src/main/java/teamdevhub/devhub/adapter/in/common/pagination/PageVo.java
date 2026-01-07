@@ -13,10 +13,15 @@ import org.springframework.data.domain.Page;
 public class PageVo {
 
     private int page;
+
     private int size;
+
     private int totalPages;
+
     private long totalElements;
+
     private boolean first;
+
     private boolean last;
 
     public static PageVo from(Page<?> page) {

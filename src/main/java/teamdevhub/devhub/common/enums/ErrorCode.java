@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import static org.springframework.http.HttpStatus.*;
 
 @Getter
-public enum ErrorCodeEnum {
+public enum ErrorCode {
 
     VALIDATION_FAIL("ERR.DVH.000", "검증 오류", BAD_REQUEST),
 
@@ -38,6 +38,7 @@ public enum ErrorCodeEnum {
     USER_SKILL_REQUIRED("ERR.DVH.0034", "보유 스킬목록은 필수입니다.", BAD_REQUEST),
 
     EMAIL_SEND_FAIL("ERR.DVH.0050", "이메일 발송이 실패했습니다.",INTERNAL_SERVER_ERROR),
+    BOOLEAN_CONVERT_FAIL("ERR.DVH.0051", "boolean 값 변환에 실패했습니다.",INTERNAL_SERVER_ERROR),
 
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다.",BAD_REQUEST);
 
@@ -45,7 +46,7 @@ public enum ErrorCodeEnum {
     private final String message;
     private final HttpStatus status;
 
-    ErrorCodeEnum(String code, String message, HttpStatus status) {
+    ErrorCode(String code, String message, HttpStatus status) {
         this.code = code;
         this.message = message;
         this.status = status;

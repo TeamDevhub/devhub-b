@@ -137,7 +137,7 @@ class UserServiceTest {
         User savedUser = userService.signup(signupCommand);
 
         //then
-        assertThat(fakeEmailCertificationRepository.hasUnexpiredCode(signupCommand.getEmail())).isFalse();
+        assertThat(fakeEmailCertificationRepository.existUnexpiredCode(signupCommand.getEmail())).isFalse();
         assertThat(fakeUserRepository.saveNewUser(savedUser).getUserGuid()).isEqualTo(TEST_GUID);
         assertThat(fakeUserRepository.saveNewUser(savedUser).getPositions()).isEqualTo(TEST_POSITIONS);
         assertThat(fakeUserRepository.saveNewUser(savedUser).getSkills()).isEqualTo(TEST_SKILLS);

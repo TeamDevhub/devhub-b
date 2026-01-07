@@ -9,7 +9,7 @@ import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
 import teamdevhub.devhub.adapter.in.common.pagination.PageVo;
-import teamdevhub.devhub.common.enums.SuccessCodeEnum;
+import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.small.mock.usecase.FakeAdminUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,6 +58,6 @@ class AdminUserControllerTest {
         assertThat(pagination.getTotalPages()).isEqualTo(1);
 
         assertThat(body.isSuccess()).isTrue();
-        assertThat(body.getCode()).isEqualTo(SuccessCodeEnum.READ_SUCCESS.getCode());
+        assertThat(body.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
     }
 }

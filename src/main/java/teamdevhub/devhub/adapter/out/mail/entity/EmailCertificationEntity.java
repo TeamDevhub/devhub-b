@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
 
 import java.time.LocalDateTime;
 
@@ -36,5 +37,14 @@ public class EmailCertificationEntity {
     public void verify(LocalDateTime now) {
         this.code = null;
         this.verifiedAt = now;
+    }
+
+    public EmailCertification toEmailCertification() {
+        return EmailCertification.of(
+                email,
+                code,
+                expiredAt,
+                verifiedAt
+        );
     }
 }

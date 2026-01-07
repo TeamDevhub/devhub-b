@@ -28,7 +28,12 @@ public class FakeEmailCertificationRepository implements EmailCertificationRepos
     }
 
     @Override
-    public boolean hasUnexpiredCode(String email) {
+    public EmailCertification findByEmail(String email) {
+        return store.get(email);
+    }
+
+    @Override
+    public boolean existUnexpiredCode(String email) {
         EmailCertification emailCertification = store.get(email);
         if (emailCertification == null) return false;
         return emailCertification.expiredAt().isAfter(dateTimeProvider.now());
@@ -37,22 +42,6 @@ public class FakeEmailCertificationRepository implements EmailCertificationRepos
     @Override
     public void save(EmailCertification emailCertification) {
         store.put(emailCertification.email(), emailCertification);
-    }
-
-    @Override
-    public boolean verify(String email, String code) {
-        EmailCertification emailCertification = store.get(email);
-        if (emailCertification == null) return false;
-
-        if (emailCertification.code().equals(code) && emailCertification.expiredAt().isAfter(dateTimeProvider.now())) {
-            EmailCertification verifiedCert = EmailCertification.of(emailCertification.email(),
-                    emailCertification.code(),
-                    dateTimeProvider.now(),
-                    emailCertification.expiredAt());
-            store.put(email, verifiedCert);
-            return true;
-        }
-        return false;
     }
 
     @Override

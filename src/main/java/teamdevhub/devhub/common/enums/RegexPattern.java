@@ -1,6 +1,6 @@
 package teamdevhub.devhub.common.enums;
 
-public enum RegexPatternEnum {
+public enum RegexPattern {
 
     AUTH_EMAIL("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", "올바른 이메일 형식이 아닙니다."),
     AUTH_PASSWORD("^(?=.*[!@#$%^&*()_\\-+=<>?{}\\[\\]~])[A-Za-z\\d!@#$%^&*()_\\-+=<>?{}\\[\\]~]{8,20}$", "8~20자, 특수문자 1개 이상을 포함해야 합니다."),
@@ -9,7 +9,7 @@ public enum RegexPatternEnum {
     private final String regexp;
     private final String message;
 
-    RegexPatternEnum(String regexp, String message) {
+    RegexPattern(String regexp, String message) {
         this.regexp = regexp;
         this.message = message;
     }

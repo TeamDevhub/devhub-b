@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.common.enums.RegexPatternEnum;
+import teamdevhub.devhub.common.enums.RegexPattern;
 import teamdevhub.devhub.adapter.in.common.annotation.RegexMatch;
 
 import java.util.List;
@@ -19,15 +19,15 @@ import java.util.List;
 public class SignupRequestDto {
 
     @NotBlank(message = "이메일은 필수입니다.")
-    @RegexMatch(RegexPatternEnum.AUTH_EMAIL)
+    @RegexMatch(RegexPattern.AUTH_EMAIL)
     private String email;
 
     @NotBlank(message = "비밀번호는 필수입니다.")
-    @RegexMatch(RegexPatternEnum.AUTH_PASSWORD)
+    @RegexMatch(RegexPattern.AUTH_PASSWORD)
     private String password;
 
     @NotBlank(message = "사용자명은 필수입니다.")
-    @RegexMatch(RegexPatternEnum.USERNAME)
+    @RegexMatch(RegexPattern.USERNAME)
     private String username;
 
     private String introduction;

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.common;
+package teamdevhub.devhub.adapter.out.common.util;
 
 public final class JwtClaims {
 

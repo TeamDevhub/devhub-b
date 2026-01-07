@@ -9,10 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import teamdevhub.devhub.adapter.out.common.exception.AuthRuleException;
-import teamdevhub.devhub.common.JwtClaims;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
-import teamdevhub.devhub.common.enums.TokenTypeEnum;
+import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.provider.TokenProvider;
 
@@ -48,7 +47,7 @@ public class JwtUtil implements TokenProvider {
                 .setSubject(userGuid)
                 .claim(JwtClaims.EMAIL, email)
                 .claim(JwtClaims.USER_ROLE, userRole.name())
-                .claim(JwtClaims.TOKEN_TYPE, TokenTypeEnum.ACCESS.name())
+                .claim(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
                 .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
                 .setIssuedAt(now)
                 .signWith(key, signatureAlgorithm)
@@ -60,7 +59,7 @@ public class JwtUtil implements TokenProvider {
         Date now = new Date();
         return Jwts.builder()
                         .setSubject(email)
-                        .claim(JwtClaims.TOKEN_TYPE, TokenTypeEnum.REFRESH.name())
+                        .claim(JwtClaims.TOKEN_TYPE, TokenType.REFRESH.name())
                         .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
                         .setIssuedAt(now)
                         .signWith(key, signatureAlgorithm)
@@ -71,7 +70,7 @@ public class JwtUtil implements TokenProvider {
     public Claims parseClaims(String token) {
 
         if (!StringUtils.hasText(token)) {
-            throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
+            throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
 
         try {
@@ -81,18 +80,18 @@ public class JwtUtil implements TokenProvider {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw AuthRuleException.of(ErrorCodeEnum.TOKEN_EXPIRED);
+            throw AuthRuleException.of(ErrorCode.TOKEN_EXPIRED);
         } catch (JwtException | IllegalArgumentException e) {
-            throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
+            throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
     }
 
     @Override
     public String extractEmailFromRefreshToken(String refreshToken) {
         Claims claims = parseClaims(refreshToken);
-        TokenTypeEnum tokenTypeEnum = TokenTypeEnum.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
-        if (tokenTypeEnum != TokenTypeEnum.REFRESH) {
-            throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
+        TokenType tokenType = TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
+        if (tokenType != TokenType.REFRESH) {
+            throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
         return claims.getSubject();
     }
@@ -107,7 +106,7 @@ public class JwtUtil implements TokenProvider {
         if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
             return token.substring(BEARER_PREFIX.length());
         }
-        throw AuthRuleException.of(ErrorCodeEnum.TOKEN_INVALID);
+        throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
     }
 
     @Override

@@ -1,17 +1,17 @@
 package teamdevhub.devhub.adapter.in.common.validator;
 
 import teamdevhub.devhub.adapter.in.common.annotation.RegexMatch;
-import teamdevhub.devhub.common.enums.RegexPatternEnum;
+import teamdevhub.devhub.common.enums.RegexPattern;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class RegexValidator implements ConstraintValidator<RegexMatch, String> {
 
-    private RegexPatternEnum patternEnum;
+    private RegexPattern regexPattern;
 
     @Override
     public void initialize(RegexMatch constraintAnnotation) {
-        this.patternEnum = constraintAnnotation.value();
+        this.regexPattern = constraintAnnotation.value();
     }
 
     @Override
@@ -19,11 +19,11 @@ public class RegexValidator implements ConstraintValidator<RegexMatch, String> {
 
         if (value == null) return true;
 
-        boolean matched = value.matches(patternEnum.regexp());
+        boolean matched = value.matches(regexPattern.regexp());
 
         if (!matched) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(patternEnum.message())
+            context.buildConstraintViolationWithTemplate(regexPattern.message())
                     .addConstraintViolation();
         }
 

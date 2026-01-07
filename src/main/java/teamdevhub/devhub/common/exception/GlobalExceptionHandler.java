@@ -1,7 +1,7 @@
 package teamdevhub.devhub.common.exception;
 
 import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiDataResponseVo<?>> handleDomainException(DomainRuleException e) {
         logException(e);
         return ResponseEntity.badRequest()
-                .body(ApiDataResponseVo.failureWithoutData(e.getErrorCodeEnum()));
+                .body(ApiDataResponseVo.failureWithoutData(e.getErrorCode()));
     }
 
     @ExceptionHandler(BusinessRuleException.class)
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiDataResponseVo<?>> handleBusinessRuleException(BusinessRuleException e) {
         logException(e);
         return ResponseEntity.badRequest()
-                .body(ApiDataResponseVo.failureWithoutData(e.getErrorCodeEnum()));
+                .body(ApiDataResponseVo.failureWithoutData(e.getErrorCode()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
                 .orElse("검증 오류");
 
         return ResponseEntity.badRequest()
-                .body(ApiDataResponseVo.failureWithMessage(ErrorCodeEnum.VALIDATION_FAIL, message)
+                .body(ApiDataResponseVo.failureWithMessage(ErrorCode.VALIDATION_FAIL, message)
         );
     }
 

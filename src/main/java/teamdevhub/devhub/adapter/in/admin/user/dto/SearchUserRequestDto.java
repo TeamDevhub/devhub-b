@@ -16,6 +16,7 @@ public class SearchUserRequestDto {
     private String blocked;
 
     private LocalDateTime joinedFrom;
+
     private LocalDateTime joinedTo;
 
     private String keyword;

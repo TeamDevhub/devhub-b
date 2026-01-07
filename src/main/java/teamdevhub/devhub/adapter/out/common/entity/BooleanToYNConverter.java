@@ -2,6 +2,8 @@ package teamdevhub.devhub.adapter.out.common.entity;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import teamdevhub.devhub.adapter.out.common.exception.DataAccessException;
+import teamdevhub.devhub.common.enums.ErrorCode;
 
 @Converter
 public class BooleanToYNConverter implements AttributeConverter<Boolean, String> {
@@ -35,6 +37,6 @@ public class BooleanToYNConverter implements AttributeConverter<Boolean, String>
         if (NO.equals(databaseColumnValue)) {
             return false;
         }
-        throw new IllegalArgumentException("Invalid Y/N value: " + databaseColumnValue);
+        throw DataAccessException.of(ErrorCode.BOOLEAN_CONVERT_FAIL);
     }
 }

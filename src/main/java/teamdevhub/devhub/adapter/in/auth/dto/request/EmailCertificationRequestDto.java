@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.common.enums.RegexPatternEnum;
+import teamdevhub.devhub.common.enums.RegexPattern;
 import teamdevhub.devhub.adapter.in.common.annotation.RegexMatch;
 
 @Getter
@@ -13,6 +13,6 @@ import teamdevhub.devhub.adapter.in.common.annotation.RegexMatch;
 public class EmailCertificationRequestDto {
 
     @NotBlank
-    @RegexMatch(RegexPatternEnum.AUTH_EMAIL)
+    @RegexMatch(RegexPattern.AUTH_EMAIL)
     private String email;
 }

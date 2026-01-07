@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.common.component;
+package teamdevhub.devhub.common.component;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
@@ -9,13 +9,13 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import teamdevhub.devhub.adapter.in.common.annotation.LoginUser;
-import teamdevhub.devhub.adapter.out.auth.userDetail.LoginAuthentication;
+import teamdevhub.devhub.common.security.UserAuthentication;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 
 import java.util.Optional;
 
 @Component
-public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
+public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
@@ -33,8 +33,8 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
                 .map(Authentication::getPrincipal)
                 .orElseThrow(() -> new RuntimeException("No authenticated user found"));
 
-        if (principal instanceof LoginAuthentication loginAuthentication) {
-            return loginAuthentication.getUser();
+        if (principal instanceof UserAuthentication userAuthentication) {
+            return userAuthentication.getUser();
         }
 
         if (principal instanceof AuthenticatedUser authenticatedUser) {

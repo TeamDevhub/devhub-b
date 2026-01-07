@@ -10,7 +10,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import teamdevhub.devhub.common.enums.ErrorCodeEnum;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class S3Service {
+public class S3Adapter {
 
     private final S3Client s3Client;
 
@@ -48,12 +48,10 @@ public class S3Service {
                     putObjectRequest,
                     RequestBody.fromInputStream(inputStream, multipartFile.getSize())
             );
-
-            log.info("S3 upload success: {}", fileName);
             return generatePublicUrl(fileName);
 
         } catch (IOException e) {
-            throw BusinessRuleException.of(ErrorCodeEnum.UNKNOWN_FAIL);
+            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }
     }
 
@@ -67,16 +65,14 @@ public class S3Service {
                     .bucket(bucket)
                     .key(objectKey)
                     .build());
-
-            log.info("S3 delete success: {}", objectKey);
         } catch (Exception e) {
-            throw BusinessRuleException.of(ErrorCodeEnum.UNKNOWN_FAIL);
+            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }
     }
 
     private String generateFileName(String originalFilename) {
         if (!StringUtils.hasText(originalFilename)) {
-            throw BusinessRuleException.of(ErrorCodeEnum.UNKNOWN_FAIL);
+            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }
 
         String extension = extractExtension(originalFilename);
@@ -86,7 +82,7 @@ public class S3Service {
     private String extractExtension(String filename) {
         int idx = filename.lastIndexOf(".");
         if (idx == -1) {
-            throw BusinessRuleException.of(ErrorCodeEnum.UNKNOWN_FAIL);
+            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }
         return filename.substring(idx + 1);
     }
@@ -95,7 +91,7 @@ public class S3Service {
         try {
             return new URL(imageUrl).getPath().substring(1);
         } catch (Exception e) {
-            throw BusinessRuleException.of(ErrorCodeEnum.UNKNOWN_FAIL);
+            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }
     }
 
