@@ -5,8 +5,8 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.adapter.out.auth.userDetail.AuthenticatedUserDetails;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.adapter.out.auth.userDetail.LoginAuthentication;
+import teamdevhub.devhub.domain.common.record.auth.LoginUser;
 
 import java.util.Optional;
 
@@ -28,12 +28,12 @@ public class AuditorAwareUtil implements AuditorAware<String> {
         }
 
         Object principal = authentication.getPrincipal();
-        if (principal instanceof AuthenticatedUserDetails authenticatedUserDetails) {
-            return Optional.of(authenticatedUserDetails.getUser().email());
+        if (principal instanceof LoginAuthentication loginAuthentication) {
+            return Optional.of(loginAuthentication.getUser().email());
         }
 
-        if (principal instanceof AuthenticatedUser authenticatedUser) {
-            return Optional.of(authenticatedUser.email());
+        if (principal instanceof LoginUser loginUser) {
+            return Optional.of(loginUser.email());
         }
 
         return Optional.of(SYSTEM);

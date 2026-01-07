@@ -7,11 +7,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
-import teamdevhub.devhub.adapter.out.auth.userDetail.AuthenticatedUserDetails;
+import teamdevhub.devhub.adapter.out.auth.userDetail.LoginAuthentication;
 import teamdevhub.devhub.common.enums.ErrorCodeEnum;
 import teamdevhub.devhub.common.enums.JwtStatusEnum;
 import teamdevhub.devhub.adapter.in.common.exception.AuthRuleException;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.common.record.auth.LoginUser;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
@@ -40,15 +40,13 @@ public class AuthService implements AuthUseCase {
                 new UsernamePasswordAuthenticationToken(email, rawPassword)
         );
 
-        // UserDetails 가져오기
-        AuthenticatedUserDetails userDetails = (AuthenticatedUserDetails) authentication.getPrincipal();
-        AuthenticatedUser user = userDetails.getUser();
+        LoginAuthentication userDetails = (LoginAuthentication) authentication.getPrincipal();
+        LoginUser user = userDetails.getUser();
 
-        // SecurityContext에 Principal을 AuthenticatedUser로 넣음
         Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                user,                          // Principal
-                userDetails.getPassword(),      // Credentials
-                userDetails.getAuthorities()    // 권한
+                user,
+                userDetails.getPassword(),
+                userDetails.getAuthorities()
         );
         SecurityContextHolder.getContext().setAuthentication(newAuth);
 
@@ -82,14 +80,14 @@ public class AuthService implements AuthUseCase {
         }
 
         String email = tokenProvider.getEmailFromRefreshToken(token);
-        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(email);
+        LoginUser loginUser = userUseCase.getUserForAuth(email);
         RefreshToken refreshToken = refreshTokenRepository.findByEmail(email);
 
         if (!refreshToken.token().equals(token)) {
             throw AuthRuleException.of(ErrorCodeEnum.REFRESH_TOKEN_INVALID);
         }
 
-        String newAccessToken = tokenProvider.createAccessToken(authenticatedUser.email(), authenticatedUser.userRole());
+        String newAccessToken = tokenProvider.createAccessToken(loginUser.email(), loginUser.userRole());
         return TokenResponseDto.issue(newAccessToken);
     }
 

@@ -11,7 +11,7 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.common.record.auth.LoginUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
@@ -98,11 +98,11 @@ class UserAdapterTest {
         fakeJpaUserRepository.save(UserMapper.toEntity(adminUser));
 
         //when
-        AuthenticatedUser authenticatedUser = userAdapter.findUserByEmailForAuth(ADMIN_EMAIL);
+        LoginUser loginUser = userAdapter.findUserByEmailForAuth(ADMIN_EMAIL);
 
         //then
-        assertThat(authenticatedUser).isNotNull();
-        assertThat(authenticatedUser.email()).isEqualTo(ADMIN_EMAIL);
+        assertThat(loginUser).isNotNull();
+        assertThat(loginUser.email()).isEqualTo(ADMIN_EMAIL);
     }
 
     @Test

@@ -9,8 +9,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import teamdevhub.devhub.adapter.in.common.annotation.CurrentUser;
-import teamdevhub.devhub.adapter.out.auth.userDetail.AuthenticatedUserDetails;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.adapter.out.auth.userDetail.LoginAuthentication;
+import teamdevhub.devhub.domain.common.record.auth.LoginUser;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         return methodParameter.hasParameterAnnotation(CurrentUser.class) &&
-                methodParameter.getParameterType().equals(AuthenticatedUser.class);
+                methodParameter.getParameterType().equals(LoginUser.class);
     }
 
     @Override
@@ -33,12 +33,12 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
                 .map(Authentication::getPrincipal)
                 .orElseThrow(() -> new RuntimeException("No authenticated user found"));
 
-        if (principal instanceof AuthenticatedUserDetails authenticatedUserDetails) {
-            return authenticatedUserDetails.getUser();
+        if (principal instanceof LoginAuthentication loginAuthentication) {
+            return loginAuthentication.getUser();
         }
 
-        if (principal instanceof AuthenticatedUser authenticatedUser) {
-            return authenticatedUser;
+        if (principal instanceof LoginUser loginUser) {
+            return loginUser;
         }
 
         throw new RuntimeException("No authenticated user found");
