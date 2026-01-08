@@ -17,15 +17,13 @@ public class FakeJpaUserRepository implements JpaUserRepository {
     private final Map<String, UserEntity> store = new HashMap<>();
 
     @Override
-    public Optional<UserEntity> findByUserGuid(String userGuid) {
-        return Optional.ofNullable(store.get(userGuid));
+    public Optional<UserEntity> findByEmail(String email) {
+        return Optional.empty();
     }
 
     @Override
-    public Optional<UserEntity> findByEmail(String email) {
-        return store.values().stream()
-                .filter(u -> u.getEmail().equals(email))
-                .findFirst();
+    public Optional<UserEntity> findByUserGuid(String userGuid) {
+        return Optional.ofNullable(store.get(userGuid));
     }
 
     @Override

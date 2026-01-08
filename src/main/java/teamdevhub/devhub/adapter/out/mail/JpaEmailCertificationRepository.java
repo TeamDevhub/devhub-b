@@ -1,7 +1,7 @@
 package teamdevhub.devhub.adapter.out.mail;
 
-import teamdevhub.devhub.adapter.out.mail.entity.EmailCertificationEntity;
+import teamdevhub.devhub.adapter.out.mail.entity.EmailVerificationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaEmailCertificationRepository extends JpaRepository<EmailCertificationEntity, String> {
+public interface JpaEmailCertificationRepository extends JpaRepository<EmailVerificationEntity, String> {
 }

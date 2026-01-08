@@ -5,12 +5,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ConfirmEmailCertificationCommand {
+public class ConfirmEmailVerificationCommand {
 
     private String email;
     private String code;
 
-    public static ConfirmEmailCertificationCommand of(String email, String code) {
-        return new ConfirmEmailCertificationCommand(email, code);
+    public static ConfirmEmailVerificationCommand of(String email, String code) {
+        return new ConfirmEmailVerificationCommand(email, code);
     }
 }

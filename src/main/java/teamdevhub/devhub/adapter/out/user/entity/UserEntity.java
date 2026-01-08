@@ -23,7 +23,7 @@ import static lombok.AccessLevel.PROTECTED;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "uk_users_email",
-                        columnNames = "email"
+                        columnNames = "userGuid"
                 )
         }
 )

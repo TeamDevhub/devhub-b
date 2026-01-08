@@ -20,7 +20,7 @@ import teamdevhub.devhub.common.component.CustomAccessDeniedHandler;
 import teamdevhub.devhub.common.component.CustomAuthenticationEntryPoint;
 import teamdevhub.devhub.common.component.CustomFilterExceptionHandler;
 import teamdevhub.devhub.common.filter.JwtAuthorizationFilter;
-import teamdevhub.devhub.port.out.provider.TokenProvider;
+import teamdevhub.devhub.port.out.auth.TokenProvider;
 
 import java.util.List;
 
@@ -89,8 +89,7 @@ public class WebSecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
-                )
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

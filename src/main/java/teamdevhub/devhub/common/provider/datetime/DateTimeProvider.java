@@ -1,4 +1,4 @@
-package teamdevhub.devhub.port.out.provider;
+package teamdevhub.devhub.common.provider.datetime;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

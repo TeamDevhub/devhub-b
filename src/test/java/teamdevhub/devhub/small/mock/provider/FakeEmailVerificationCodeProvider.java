@@ -1,12 +1,12 @@
 package teamdevhub.devhub.small.mock.provider;
 
-import teamdevhub.devhub.port.out.provider.EmailCertificationCodeProvider;
+import teamdevhub.devhub.common.provider.verification.EmailVerificationCodeProvider;
 
-public class FakeEmailCertificationCodeProvider implements EmailCertificationCodeProvider {
+public class FakeEmailVerificationCodeProvider implements EmailVerificationCodeProvider {
 
     private final String fixedEmailCertificationCode;
 
-    public FakeEmailCertificationCodeProvider(String fixedEmailCertificationCode) {
+    public FakeEmailVerificationCodeProvider(String fixedEmailCertificationCode) {
         this.fixedEmailCertificationCode = fixedEmailCertificationCode;
     }
 

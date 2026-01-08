@@ -1,4 +1,4 @@
-package teamdevhub.devhub.port.out.provider;
+package teamdevhub.devhub.common.provider.password;
 
 public interface PasswordPolicyProvider {
     String encode(String rawPassword);

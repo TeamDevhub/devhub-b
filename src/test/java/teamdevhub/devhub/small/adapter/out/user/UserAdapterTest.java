@@ -16,7 +16,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
 import teamdevhub.devhub.domain.user.record.UserSkill;
-import teamdevhub.devhub.port.out.provider.IdentifierProvider;
+import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserPositionRepository;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserRepository;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserSkillRepository;
@@ -98,7 +98,7 @@ class UserAdapterTest {
         fakeJpaUserRepository.save(UserMapper.toEntity(adminUser));
 
         //when
-        AuthenticatedUser authenticatedUser = userAdapter.findUserByEmailForAuth(ADMIN_EMAIL);
+        AuthenticatedUser authenticatedUser = userAdapter.findUserByEmailForAuth(ADMIN_GUID);
 
         //then
         assertThat(authenticatedUser).isNotNull();

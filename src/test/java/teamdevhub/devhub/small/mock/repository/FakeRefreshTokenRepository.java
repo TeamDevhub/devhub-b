@@ -11,16 +11,16 @@ public class FakeRefreshTokenRepository implements RefreshTokenRepository {
 
     @Override
     public void save(RefreshToken refreshToken) {
-        store.put(refreshToken.email(), refreshToken);
+        store.put(refreshToken.userGuid(), refreshToken);
     }
 
     @Override
-    public RefreshToken findByEmail(String email) {
-        return store.get(email);
+    public RefreshToken findByUserGuid(String userGuid) {
+        return store.get(userGuid);
     }
 
     @Override
-    public void deleteByEmail(String email) {
-        store.remove(email);
+    public void deleteByUserGuid(String userGuid) {
+        store.remove(userGuid);
     }
 }

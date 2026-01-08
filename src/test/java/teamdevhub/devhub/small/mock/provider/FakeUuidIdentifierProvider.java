@@ -1,6 +1,6 @@
 package teamdevhub.devhub.small.mock.provider;
 
-import teamdevhub.devhub.port.out.provider.IdentifierProvider;
+import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 
 public class FakeUuidIdentifierProvider implements IdentifierProvider {
 

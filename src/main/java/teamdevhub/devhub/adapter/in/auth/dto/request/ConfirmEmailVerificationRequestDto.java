@@ -11,7 +11,7 @@ import teamdevhub.devhub.adapter.in.common.annotation.RegexMatch;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConfirmEmailCertificationRequestDto {
+public class ConfirmEmailVerificationRequestDto {
 
     @NotBlank
     @RegexMatch(RegexPattern.AUTH_EMAIL)

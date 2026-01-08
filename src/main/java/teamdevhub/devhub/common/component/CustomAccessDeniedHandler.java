@@ -17,12 +17,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-
+    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException accessDeniedException) throws IOException {
         ApiDataResponseVo<?> result = ApiDataResponseVo.failureFromThrowable(accessDeniedException);
-        response.setStatus(HttpStatus.FORBIDDEN.value());
-        response.setContentType("application/json;charset=UTF-8");
 
-        response.getWriter().write(mapper.writeValueAsString(result));
+        httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        httpServletResponse.setContentType("application/json;charset=UTF-8");
+        httpServletResponse.getWriter().write(mapper.writeValueAsString(result));
     }
 }

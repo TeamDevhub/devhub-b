@@ -17,22 +17,22 @@ public class RefreshTokenAdapter implements RefreshTokenRepository {
 
     @Override
     public void save(RefreshToken refreshToken) {
-        jpaRefreshTokenRepository.findByEmail(refreshToken.email())
+        jpaRefreshTokenRepository.findByUserGuid(refreshToken.userGuid())
                 .ifPresentOrElse(
                         refreshTokenEntity -> refreshTokenEntity.rotate(refreshToken.token()),
-                        () -> jpaRefreshTokenRepository.save(RefreshTokenEntity.of(refreshToken.email(), refreshToken.token()))
+                        () -> jpaRefreshTokenRepository.save(RefreshTokenEntity.of(refreshToken.userGuid(), refreshToken.token()))
                 );
     }
 
     @Override
-    public RefreshToken findByEmail(String email) {
-        return jpaRefreshTokenRepository.findByEmail(email)
-                .map(refreshTokenEntity -> RefreshToken.of(refreshTokenEntity.getEmail(), refreshTokenEntity.getToken()))
+    public RefreshToken findByUserGuid(String userGuid) {
+        return jpaRefreshTokenRepository.findByUserGuid(userGuid)
+                .map(refreshTokenEntity -> RefreshToken.of(refreshTokenEntity.getUserGuid(), refreshTokenEntity.getToken()))
                 .orElseThrow(() -> DataAccessException.of(ErrorCode.REFRESH_TOKEN_INVALID));
     }
 
     @Override
-    public void deleteByEmail(String email) {
-        jpaRefreshTokenRepository.deleteByEmail(email);
+    public void deleteByUserGuid(String userGuid) {
+        jpaRefreshTokenRepository.deleteByUserGuid(userGuid);
     }
 }

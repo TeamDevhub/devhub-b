@@ -2,21 +2,18 @@ package teamdevhub.devhub.service.auth;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
-import teamdevhub.devhub.common.security.UserAuthentication;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
+import teamdevhub.devhub.port.out.auth.Authenticator;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
-import teamdevhub.devhub.port.out.provider.TokenProvider;
+import teamdevhub.devhub.port.out.auth.TokenProvider;
 import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 
 @Service
@@ -25,28 +22,20 @@ import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 public class AuthService implements AuthUseCase {
 
     private final TokenProvider tokenProvider;
+    private final Authenticator authenticator;
     private final UserUseCase userUseCase;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final AuthenticationManager authenticationManager;
 
     @Override
     public LoginResponseDto login(LoginCommand loginCommand) {
-        String email = loginCommand.getEmail();
-        String rawPassword = loginCommand.getPassword();
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, rawPassword)
-        );
-
-        UserAuthentication userAuthentication = (UserAuthentication) authentication.getPrincipal();
+        AuthenticatedUser authenticatedUser = authenticator.authenticate(loginCommand.getEmail(), loginCommand.getPassword());
 
         String prefix = tokenProvider.getPrefix();
-        String accessToken = tokenProvider.createAccessToken(userAuthentication.getUser().userGuid(), userAuthentication.getUser().email(), userAuthentication.getUser().userRole());
-        String refreshToken = tokenProvider.createRefreshToken(email);
+        String accessToken = tokenProvider.createAccessToken(authenticatedUser.userGuid(), authenticatedUser.email(), authenticatedUser.userRole());
+        String refreshToken = tokenProvider.createRefreshToken(authenticatedUser.userGuid());
 
-        issueRefreshToken(email, refreshToken);
-        userUseCase.updateLastLoginDateTime(userAuthentication.getUserGuid());
-
+        issueRefreshToken(authenticatedUser.email(), refreshToken);
+        userUseCase.updateLastLoginDateTime(authenticatedUser.userGuid());
         return LoginResponseDto.of(prefix, accessToken, refreshToken);
     }
 
@@ -59,14 +48,14 @@ public class AuthService implements AuthUseCase {
     @Override
     public TokenResponseDto reissueAccessToken(String token) {
 
-        String email = tokenProvider.extractEmailFromRefreshToken(token);
-        RefreshToken refreshToken = refreshTokenRepository.findByEmail(email);
+        String userGuid = tokenProvider.extractUserGuidFromRefreshToken(token);
+        RefreshToken refreshToken = refreshTokenRepository.findByUserGuid(userGuid);
 
         if (!refreshToken.token().equals(token)) {
             throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
         }
 
-        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(email);
+        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(userGuid);
 
         String newAccessToken = tokenProvider.createAccessToken(
                 authenticatedUser.userGuid(),
@@ -78,7 +67,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
-    public void revoke(String email) {
-        refreshTokenRepository.deleteByEmail(email);
+    public void revoke(String userGuid) {
+        refreshTokenRepository.deleteByUserGuid(userGuid);
     }
 }

@@ -1,6 +1,5 @@
-package teamdevhub.devhub.adapter.out.common.util;
+package teamdevhub.devhub.common.provider.uuid;
 
-import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

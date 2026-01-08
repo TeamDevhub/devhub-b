@@ -1,23 +1,22 @@
 package teamdevhub.devhub.small.mock.repository;
 
-import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
-import teamdevhub.devhub.port.out.provider.DateTimeProvider;
-import teamdevhub.devhub.port.out.mail.EmailCertificationRepository;
+import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
+import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class FakeEmailCertificationRepository implements EmailCertificationRepository {
+public class FakeEmailVerificationRepository implements EmailVerificationRepository {
 
     private final HashMap<String, EmailCertification> store;
     private final DateTimeProvider dateTimeProvider;
 
-    public FakeEmailCertificationRepository(DateTimeProvider dateTimeProvider) {
+    public FakeEmailVerificationRepository(DateTimeProvider dateTimeProvider) {
         this.store = new HashMap<>();
         this.dateTimeProvider = dateTimeProvider;
     }
 
-    public FakeEmailCertificationRepository(List<EmailCertification> initialData, DateTimeProvider dateTimeProvider) {
+    public FakeEmailVerificationRepository(List<EmailCertification> initialData, DateTimeProvider dateTimeProvider) {
         this.store = new HashMap<>();
         this.dateTimeProvider = dateTimeProvider;
         if (initialData != null) {
@@ -42,12 +41,6 @@ public class FakeEmailCertificationRepository implements EmailCertificationRepos
     @Override
     public void save(EmailCertification emailCertification) {
         store.put(emailCertification.email(), emailCertification);
-    }
-
-    @Override
-    public boolean isVerified(String email) {
-        EmailCertification emailCertification = store.get(email);
-        return emailCertification != null && emailCertification.verifiedAt() != null;
     }
 
     @Override

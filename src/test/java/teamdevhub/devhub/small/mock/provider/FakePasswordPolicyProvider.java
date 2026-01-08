@@ -1,6 +1,6 @@
 package teamdevhub.devhub.small.mock.provider;
 
-import teamdevhub.devhub.port.out.provider.PasswordPolicyProvider;
+import teamdevhub.devhub.common.provider.password.PasswordPolicyProvider;
 
 public class FakePasswordPolicyProvider implements PasswordPolicyProvider {
 

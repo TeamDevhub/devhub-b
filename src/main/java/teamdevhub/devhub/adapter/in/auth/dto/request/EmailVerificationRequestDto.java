@@ -10,7 +10,7 @@ import teamdevhub.devhub.adapter.in.common.annotation.RegexMatch;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailCertificationRequestDto {
+public class EmailVerificationRequestDto {
 
     @NotBlank
     @RegexMatch(RegexPattern.AUTH_EMAIL)

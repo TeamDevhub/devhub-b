@@ -21,7 +21,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
 import teamdevhub.devhub.domain.user.record.UserSkill;
-import teamdevhub.devhub.port.out.provider.IdentifierProvider;
+import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 import java.util.List;
@@ -89,13 +89,9 @@ public class UserAdapter implements UserRepository {
 
     @Override
     public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size) {
-        Pageable pageable = PageRequest.of(
-                page,
-                size,
-                Sort.by("regDt").descending()
-        );
-
+        Pageable pageable = PageRequest.of(page, size, Sort.by("regDt").descending());
         Page<UserEntity> pagedUserEntityList = userQueryRepository.listUser(searchUserCommand, pageable);
+
         List<AdminUserSummaryResponseDto> userList = pagedUserEntityList.getContent().stream()
                 .map(AdminUserSummaryResponseDto::fromEntity)
                 .toList();

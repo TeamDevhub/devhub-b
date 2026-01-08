@@ -6,10 +6,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailCertificationCommand;
+import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailVerificationCommand;
 import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
-import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmEmailCertificationRequestDto;
-import teamdevhub.devhub.adapter.in.auth.dto.request.EmailCertificationRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmEmailVerificationRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
@@ -18,7 +18,7 @@ import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
-import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
+import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,11 +26,11 @@ import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
 public class AuthController {
 
     private final AuthUseCase authUseCase;
-    private final EmailCertificationUseCase emailCertificationUseCase;
+    private final EmailVerificationUseCase emailVerificationUseCase;
 
-    @PostMapping("/email-certification")
-    public ResponseEntity<ApiDataResponseVo<Void>> sendEmailCertificationCode(@Valid @RequestBody EmailCertificationRequestDto emailCertificationRequestDto) {
-        emailCertificationUseCase.sendEmailCertificationCode(emailCertificationRequestDto);
+    @PostMapping("/email-verification")
+    public ResponseEntity<ApiDataResponseVo<Void>> sendEmailCertificationCode(@Valid @RequestBody EmailVerificationRequestDto emailVerificationRequestDto) {
+        emailVerificationUseCase.sendEmailCertificationCode(emailVerificationRequestDto);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCode.EMAIL_CERTIFICATION_SENT
@@ -38,10 +38,10 @@ public class AuthController {
         );
     }
 
-    @PostMapping("/email-certification/confirm")
-    public ResponseEntity<ApiDataResponseVo<Void>> confirmEmailCertificationCode(@Valid @RequestBody ConfirmEmailCertificationRequestDto confirmEmailCertificationRequestDto) {
-        ConfirmEmailCertificationCommand confirmEmailCertificationCommand = ConfirmEmailCertificationCommand.of(confirmEmailCertificationRequestDto.getEmail(), confirmEmailCertificationRequestDto.getCode());
-        emailCertificationUseCase.confirmEmailCertificationCode(confirmEmailCertificationCommand);
+    @PostMapping("/email-verification/confirm")
+    public ResponseEntity<ApiDataResponseVo<Void>> confirmEmailCertificationCode(@Valid @RequestBody ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto) {
+        ConfirmEmailVerificationCommand confirmEmailVerificationCommand = ConfirmEmailVerificationCommand.of(confirmEmailVerificationRequestDto.getEmail(), confirmEmailVerificationRequestDto.getCode());
+        emailVerificationUseCase.confirmEmailCertificationCode(confirmEmailVerificationCommand);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
                         SuccessCode.EMAIL_CERTIFICATION_SUCCESS

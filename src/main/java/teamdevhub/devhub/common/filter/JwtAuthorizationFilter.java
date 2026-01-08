@@ -19,10 +19,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.TokenType;
-import teamdevhub.devhub.common.exception.FilterRuleException;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.provider.TokenProvider;
+import teamdevhub.devhub.port.out.auth.TokenProvider;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -48,12 +47,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             String pureToken = tokenProvider.removeBearer(token);
             Claims claims = tokenProvider.parseClaims(pureToken);
-
             validateAccessToken(claims);
+
             setAuthentication(claims);
-
             filterChain.doFilter(httpServletRequest, httpServletResponse);
-
         } catch (AuthRuleException e) {
             customFilterExceptionHandler.handle(httpServletResponse, e.getErrorCode());
         }
@@ -63,16 +60,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         TokenType type = TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
 
         if (type != TokenType.ACCESS) {
-            throw FilterRuleException.of(ErrorCode.TOKEN_INVALID);
+            throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
     }
 
     private void setAuthentication(Claims claims) {
         String userGuid = claims.getSubject();
         String email = claims.get(JwtClaims.EMAIL, String.class);
-        UserRole userRole = UserRole.valueOf(
-                claims.get(JwtClaims.USER_ROLE, String.class)
-        );
+        UserRole userRole = UserRole.valueOf(claims.get(JwtClaims.USER_ROLE, String.class));
 
         AuthenticatedUser authenticatedUser =
                 AuthenticatedUser.of(userGuid, email, null, userRole);

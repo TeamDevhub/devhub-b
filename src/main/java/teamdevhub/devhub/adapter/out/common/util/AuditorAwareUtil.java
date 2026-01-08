@@ -28,6 +28,7 @@ public class AuditorAwareUtil implements AuditorAware<String> {
         }
 
         Object principal = authentication.getPrincipal();
+
         if (principal instanceof UserAuthentication userAuthentication) {
             return Optional.of(userAuthentication.getUser().email());
         }

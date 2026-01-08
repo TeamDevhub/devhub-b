@@ -1,4 +1,4 @@
-package teamdevhub.devhub.port.out.provider;
+package teamdevhub.devhub.port.out.auth;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,7 +8,7 @@ public interface TokenProvider {
     String createAccessToken(String userGuid, String email, UserRole userRole);
     String createRefreshToken(String email);
     Claims parseClaims(String token);
-    String extractEmailFromRefreshToken(String refreshToken);
+    String extractUserGuidFromRefreshToken(String refreshToken);
     String resolveToken(HttpServletRequest httpRequest);
     String removeBearer(String token);
     String getPrefix();

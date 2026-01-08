@@ -6,7 +6,6 @@ import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
-import teamdevhub.devhub.domain.common.record.mail.EmailCertification;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
@@ -15,9 +14,10 @@ import teamdevhub.devhub.service.user.UserService;
 import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
 import teamdevhub.devhub.small.mock.provider.FakePasswordPolicyProvider;
 import teamdevhub.devhub.small.mock.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.small.mock.repository.FakeEmailCertificationRepository;
+import teamdevhub.devhub.small.mock.repository.FakeEmailVerificationRepository;
 import teamdevhub.devhub.small.mock.repository.FakeRefreshTokenRepository;
 import teamdevhub.devhub.small.mock.repository.FakeUserRepository;
+import teamdevhub.devhub.small.mock.usecase.FakeEmailVerificationUseCase;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,7 +56,8 @@ class UserServiceTest {
 
     private UserService userService;
     private FakeUserRepository fakeUserRepository;
-    private FakeEmailCertificationRepository fakeEmailCertificationRepository;
+    private FakeEmailVerificationUseCase fakeEmailCertificationUseCase;
+    private FakeEmailVerificationRepository fakeEmailCertificationRepository;
     private FakeUuidIdentifierProvider fakeUuidIdentifierProvider;
     private FakePasswordPolicyProvider fakePasswordPolicyProvider;
     private FakeRefreshTokenRepository fakeRefreshTokenRepository;
@@ -64,11 +65,13 @@ class UserServiceTest {
 
     @BeforeEach
     void init() {
-        fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
+        fakeUserRepository = new FakeUserRepository();
+        fakeEmailCertificationUseCase = new FakeEmailVerificationUseCase();
+
         fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_GUID);
         fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
-        fakeUserRepository = new FakeUserRepository();
         fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
+        fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
 
         EmailCertification verifiedEmail  = new EmailCertification(
                 TEST_EMAIL,
@@ -77,10 +80,11 @@ class UserServiceTest {
                 fakeDateTimeProvider.now()
         );
 
-        fakeEmailCertificationRepository = new FakeEmailCertificationRepository(List.of(verifiedEmail), fakeDateTimeProvider);
+        fakeEmailCertificationRepository = new FakeEmailVerificationRepository(List.of(verifiedEmail), fakeDateTimeProvider);
 
         userService = new UserService(
                 fakeUserRepository,
+                fakeEmailCertificationUseCase,
                 fakeEmailCertificationRepository,
                 fakeRefreshTokenRepository,
                 fakePasswordPolicyProvider,
@@ -95,6 +99,7 @@ class UserServiceTest {
         FakeUuidIdentifierProvider adminUuidProvider = new FakeUuidIdentifierProvider(ADMIN_GUID);
         userService = new UserService(
                 fakeUserRepository,
+                fakeEmailCertificationUseCase,
                 fakeEmailCertificationRepository,
                 fakeRefreshTokenRepository,
                 fakePasswordPolicyProvider,
@@ -122,10 +127,10 @@ class UserServiceTest {
         userService.getUserForAuth(TEST_EMAIL);
 
         //then
-        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_EMAIL)).isNotNull();
-        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_EMAIL).userGuid()).isEqualTo(TEST_GUID);
-        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_EMAIL).email()).isEqualTo(TEST_EMAIL);
-        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_EMAIL).userRole()).isEqualTo(UserRole.USER);
+        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_GUID)).isNotNull();
+        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_GUID).userGuid()).isEqualTo(TEST_GUID);
+        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_GUID).email()).isEqualTo(TEST_EMAIL);
+        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_GUID).userRole()).isEqualTo(UserRole.USER);
     }
 
     @Test
@@ -225,7 +230,7 @@ class UserServiceTest {
 
         //then
         assertThat(fakeUserRepository.findByUserGuid(TEST_GUID).isDeleted()).isTrue();
-        assertThat(fakeRefreshTokenRepository.findByEmail(TEST_EMAIL)).isNull();
+        assertThat(fakeRefreshTokenRepository.findByUserGuid(TEST_GUID)).isNull();
     }
 
     @Test

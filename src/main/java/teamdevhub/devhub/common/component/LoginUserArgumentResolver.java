@@ -9,6 +9,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import teamdevhub.devhub.adapter.in.common.annotation.LoginUser;
+import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.security.UserAuthentication;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 
@@ -31,7 +33,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         Object principal = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .map(Authentication::getPrincipal)
-                .orElseThrow(() -> new RuntimeException("No authenticated user found"));
+                .orElseThrow(() -> AuthRuleException.of(ErrorCode.USER_NOT_FOUND));
 
         if (principal instanceof UserAuthentication userAuthentication) {
             return userAuthentication.getUser();
@@ -41,6 +43,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
             return authenticatedUser;
         }
 
-        throw new RuntimeException("No authenticated user found");
+        throw AuthRuleException.of(ErrorCode.USER_NOT_FOUND);
     }
 }

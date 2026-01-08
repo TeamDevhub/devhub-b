@@ -13,7 +13,7 @@ import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.provider.TokenProvider;
+import teamdevhub.devhub.port.out.auth.TokenProvider;
 
 import java.security.Key;
 import java.util.Base64;
@@ -55,10 +55,10 @@ public class JwtUtil implements TokenProvider {
     }
 
     @Override
-    public String createRefreshToken(String email) {
+    public String createRefreshToken(String userGuid) {
         Date now = new Date();
         return Jwts.builder()
-                        .setSubject(email)
+                        .setSubject(userGuid)
                         .claim(JwtClaims.TOKEN_TYPE, TokenType.REFRESH.name())
                         .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
                         .setIssuedAt(now)
@@ -87,7 +87,7 @@ public class JwtUtil implements TokenProvider {
     }
 
     @Override
-    public String extractEmailFromRefreshToken(String refreshToken) {
+    public String extractUserGuidFromRefreshToken(String refreshToken) {
         Claims claims = parseClaims(refreshToken);
         TokenType tokenType = TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
         if (tokenType != TokenType.REFRESH) {

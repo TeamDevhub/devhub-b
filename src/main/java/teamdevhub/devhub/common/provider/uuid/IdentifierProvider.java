@@ -1,4 +1,4 @@
-package teamdevhub.devhub.port.out.provider;
+package teamdevhub.devhub.common.provider.uuid;
 
 public interface IdentifierProvider {
     String generateIdentifier();

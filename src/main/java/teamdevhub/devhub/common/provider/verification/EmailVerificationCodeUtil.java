@@ -1,12 +1,11 @@
-package teamdevhub.devhub.adapter.out.common.util;
+package teamdevhub.devhub.common.provider.verification;
 
-import teamdevhub.devhub.port.out.provider.EmailCertificationCodeProvider;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 
 @Component
-public class EmailCertificationCodeUtil implements EmailCertificationCodeProvider {
+public class EmailVerificationCodeUtil implements EmailVerificationCodeProvider {
 
     private final SecureRandom RANDOM = new SecureRandom();
 

@@ -29,16 +29,16 @@ public class LoggingAspect {
     @Around("execution(* teamdevhub.devhub..adapter.in.user..*(..)) || " +
             "execution(* teamdevhub.devhub..adapter.out.user..*(..)) || " +
             "execution(* teamdevhub.devhub..application.user..*(..)) ")
-    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long start = System.currentTimeMillis();
 
-        String className = joinPoint.getSignature().getDeclaringTypeName();
-        String methodName = joinPoint.getSignature().getName();
-        String params = getParamsAsJson(joinPoint.getArgs());
+        String className = proceedingJoinPoint.getSignature().getDeclaringTypeName();
+        String methodName = proceedingJoinPoint.getSignature().getName();
+        String params = getParamsAsJson(proceedingJoinPoint.getArgs());
 
         log.info("START {}.{}() with params: {}", className, methodName, params);
 
-        Object result = joinPoint.proceed();
+        Object result = proceedingJoinPoint.proceed();
         long elapsed = System.currentTimeMillis() - start;
         String resultLog = summarizeResult(result);
 
@@ -81,22 +81,22 @@ public class LoggingAspect {
         return toSafeJson(result);
     }
 
-    private String summarizeCollection(Collection<?> coll) {
-        int size = coll.size();
+    private String summarizeCollection(Collection<?> collection) {
+        int size = collection.size();
 
         if (size <= SAMPLE_LIMIT) {
-            return toSafeJson(coll);
+            return toSafeJson(collection);
         }
 
-        List<?> sample = coll.stream().limit(SAMPLE_LIMIT).toList();
+        List<?> sample = collection.stream().limit(SAMPLE_LIMIT).toList();
         return "%s... (total %d items)".formatted(toSafeJson(sample), size);
     }
 
-    private String toSafeJson(Object obj) {
+    private String toSafeJson(Object object) {
         try {
-            return objectMapper.writeValueAsString(obj);
+            return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            return Optional.ofNullable(obj)
+            return Optional.ofNullable(object)
                     .map(Object::toString)
                     .orElse(NULL_JSON);
         }

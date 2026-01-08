@@ -1,6 +1,6 @@
 package teamdevhub.devhub.small.mock.provider;
 
-import teamdevhub.devhub.port.out.provider.DateTimeProvider;
+import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

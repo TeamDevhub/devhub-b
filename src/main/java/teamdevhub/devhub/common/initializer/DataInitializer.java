@@ -11,8 +11,8 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserPositionRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.provider.IdentifierProvider;
-import teamdevhub.devhub.port.out.provider.PasswordPolicyProvider;
+import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
+import teamdevhub.devhub.common.provider.password.PasswordPolicyProvider;
 
 @Slf4j
 @Component

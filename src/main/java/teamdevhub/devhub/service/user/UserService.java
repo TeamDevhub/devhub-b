@@ -6,7 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.port.in.mail.EmailCertificationUseCase;
+import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
+import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
 import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
@@ -15,9 +16,9 @@ import teamdevhub.devhub.domain.user.record.UserPosition;
 import teamdevhub.devhub.domain.user.record.UserSkill;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
-import teamdevhub.devhub.port.out.provider.DateTimeProvider;
-import teamdevhub.devhub.port.out.provider.IdentifierProvider;
-import teamdevhub.devhub.port.out.provider.PasswordPolicyProvider;
+import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
+import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
+import teamdevhub.devhub.common.provider.password.PasswordPolicyProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 import java.util.Set;
@@ -29,7 +30,8 @@ import java.util.stream.Collectors;
 public class UserService implements UserUseCase {
 
     private final UserRepository userRepository;
-    private final EmailCertificationUseCase emailCertificationUseCase;
+    private final EmailVerificationUseCase emailVerificationUseCase;
+    private final EmailVerificationRepository emailVerificationRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordPolicyProvider passwordPolicyProvider;
     private final IdentifierProvider identifierProvider;
@@ -50,7 +52,7 @@ public class UserService implements UserUseCase {
 
     @Override
     public User signup(SignupCommand signupCommand) {
-        if (!emailCertificationUseCase.isVerified(signupCommand.getEmail())) {
+        if (!emailVerificationUseCase.isVerified(signupCommand.getEmail())) {
             throw BusinessRuleException.of(ErrorCode.EMAIL_NOT_CONFIRMED);
         }
         String userGuid = identifierProvider.generateIdentifier();
@@ -63,7 +65,7 @@ public class UserService implements UserUseCase {
                 signupCommand.getIntroduction(),
                 signupCommand.getPositionList(),
                 signupCommand.getSkillList());
-        emailCertificationUseCase.delete(signupCommand.getEmail());
+        emailVerificationRepository.delete(signupCommand.getEmail());
         return userRepository.saveNewUser(user);
     }
 
@@ -104,7 +106,7 @@ public class UserService implements UserUseCase {
     public void withdrawCurrentUser(String userGuid) {
         User user = getUserByUserGuid(userGuid);
         user.withdraw();
-        refreshTokenRepository.deleteByEmail(user.getEmail());
+        refreshTokenRepository.deleteByUserGuid(userGuid);
         userRepository.updateUserForWithdrawal(user);
     }
 
