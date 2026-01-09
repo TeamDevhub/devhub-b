@@ -15,10 +15,10 @@ import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.small.mock.persistence.FakeJpaUserPositionRepository;
-import teamdevhub.devhub.small.mock.persistence.FakeJpaUserRepository;
-import teamdevhub.devhub.small.mock.persistence.FakeJpaUserSkillRepository;
-import teamdevhub.devhub.small.mock.persistence.FakeUserQueryRepository;
+import teamdevhub.devhub.small.mock.persistence.user.FakeJpaUserPositionRepository;
+import teamdevhub.devhub.small.mock.persistence.user.FakeJpaUserRepository;
+import teamdevhub.devhub.small.mock.persistence.user.FakeJpaUserSkillRepository;
+import teamdevhub.devhub.small.mock.persistence.user.FakeUserQueryRepository;
 import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
 import teamdevhub.devhub.small.mock.provider.FakeUuidIdentifierProvider;
 
