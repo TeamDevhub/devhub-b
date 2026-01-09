@@ -36,25 +36,25 @@ public class UserMapper {
     }
 
     public static User toDomain(
-            UserEntity entity,
+            UserEntity userEntity,
             Set<UserPosition> positions,
             Set<UserSkill> skills
     ) {
         return User.of(
-                entity.getUserGuid(),
-                entity.getEmail(),
-                entity.getPassword(),
-                entity.getUsername(),
-                entity.getUserRole(),
-                entity.getIntroduction(),
+                userEntity.getUserGuid(),
+                userEntity.getEmail(),
+                userEntity.getPassword(),
+                userEntity.getUsername(),
+                userEntity.getUserRole(),
+                userEntity.getIntroduction(),
                 positions,
                 skills,
-                entity.getMannerDegree(),
-                entity.isBlocked(),
-                entity.getBlockEndDate(),
-                entity.isDeleted(),
-                entity.getLastLoginDt(),
-                toAuditInfo(entity)
+                userEntity.getMannerDegree(),
+                userEntity.isBlocked(),
+                userEntity.getBlockEndDate(),
+                userEntity.isDeleted(),
+                userEntity.getLastLoginDt(),
+                toAuditInfo(userEntity)
         );
     }
 

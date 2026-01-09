@@ -10,7 +10,7 @@ import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataListResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageVo;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.small.mock.usecase.FakeAdminUserUseCase;
+import teamdevhub.devhub.small.common.mock.usecase.FakeAdminUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +26,7 @@ class AdminUserControllerTest {
 
     @Test
     void 관리자_사용자_목록_조회를_하면_AdminUserSummaryResponseDto_리스트와_페이지정보를_반환한다() {
-        //given
+        // given
         SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
                 .blocked(null)
                 .keyword(null)
@@ -37,10 +37,10 @@ class AdminUserControllerTest {
         int page = 0;
         int size = 10;
 
-        //when
+        // when
         ResponseEntity<ApiDataListResponseDto<AdminUserSummaryResponseDto>> response = adminUserController.list(requestDto, page, size);
 
-        //then
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
 

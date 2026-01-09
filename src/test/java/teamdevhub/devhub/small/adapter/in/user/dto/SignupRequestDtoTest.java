@@ -11,8 +11,8 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import java.util.List;
 import java.util.Set;
 
-import static teamdevhub.devhub.small.constant.TestConstant.*;
 import static org.assertj.core.api.Assertions.*;
+import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class SignupRequestDtoTest {
 
@@ -26,7 +26,7 @@ class SignupRequestDtoTest {
 
     @Test
     void 올바른_데이터는_검증에_통과한다() {
-        //given
+        // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL)
                 .password(TEST_PASSWORD)
@@ -36,16 +36,16 @@ class SignupRequestDtoTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        //when
+        // when
         Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
-        //then
+        // then
         assertThat(violations).isEmpty();
     }
 
     @Test
     void 이메일이_비어있으면_검증에_실패한다() {
-        //given
+        // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email("")
                 .password(TEST_PASSWORD)
@@ -54,10 +54,10 @@ class SignupRequestDtoTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        //when
+        // when
         Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
-        //then
+        // then
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
@@ -66,7 +66,7 @@ class SignupRequestDtoTest {
 
     @Test
     void 포지션이_없으면_검증에_실패한다() {
-        //given
+        // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL)
                 .password(TEST_PASSWORD)
@@ -75,10 +75,10 @@ class SignupRequestDtoTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        //when
+        // when
         Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
-        //then
+        // then
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
@@ -87,7 +87,7 @@ class SignupRequestDtoTest {
 
     @Test
     void 포지션이_빈_값이면_검증에_실패한다() {
-        //given
+        // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL)
                 .password(TEST_PASSWORD)
@@ -96,10 +96,10 @@ class SignupRequestDtoTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        //when
+        // when
         Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
-        //then
+        // then
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
@@ -108,7 +108,7 @@ class SignupRequestDtoTest {
 
     @Test
     void 스킬이_없으면_검증에_실패한다() {
-        //given
+        // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL)
                 .password(TEST_PASSWORD)
@@ -117,10 +117,10 @@ class SignupRequestDtoTest {
                 .skillList(null)
                 .build();
 
-        //when
+        // when
         Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
-        //then
+        // then
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
@@ -129,7 +129,7 @@ class SignupRequestDtoTest {
 
     @Test
     void 스킬이_빈_값이면_검증에_실패한다() {
-        //given
+        // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL)
                 .password(TEST_PASSWORD)
@@ -138,10 +138,10 @@ class SignupRequestDtoTest {
                 .skillList(List.of())
                 .build();
 
-        //when
+        // when
         Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
-        //then
+        // then
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())

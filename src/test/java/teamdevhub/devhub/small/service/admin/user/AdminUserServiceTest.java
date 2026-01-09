@@ -8,7 +8,7 @@ import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.service.admin.user.AdminUserService;
-import teamdevhub.devhub.small.mock.repository.FakeUserRepository;
+import teamdevhub.devhub.small.common.mock.repository.FakeUserRepository;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ class AdminUserServiceTest {
 
     @Test
     void 관리자는_사용자_목록을_조회할_수_있다() {
-        //given
+        // given
         User user1 = User.createGeneralUser(
                 "GUID1",
                 "user1@example.com",
@@ -60,11 +60,11 @@ class AdminUserServiceTest {
         PageCommand pageCommand = PageCommand.of(0,10);
 
 
-        //when
+        // when
         Page<AdminUserSummaryResponseDto> adminUserSummaryResponseDtoList = adminUserService.listUser(searchUserCommand, pageCommand);
         AdminUserSummaryResponseDto getFirstAdminUserSummaryResponseDto = adminUserSummaryResponseDtoList.getContent().get(0);
 
-        //then
+        // then
         assertThat(adminUserSummaryResponseDtoList).isNotNull();
         assertThat(adminUserSummaryResponseDtoList.getContent().size()).isEqualTo(2);
         assertThat(adminUserSummaryResponseDtoList.getTotalPages()).isEqualTo(1);

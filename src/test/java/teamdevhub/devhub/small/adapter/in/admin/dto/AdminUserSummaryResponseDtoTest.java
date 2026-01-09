@@ -12,7 +12,7 @@ class AdminUserSummaryResponseDtoTest {
 
     @Test
     void UserEntity_를_AdminUserSummaryResponseDto_로_변환한다() {
-        //given
+        // given
         LocalDateTime now = LocalDateTime.of(2024, 1, 1, 12, 0);
 
         UserEntity userEntity = UserEntity.builder()
@@ -27,10 +27,10 @@ class AdminUserSummaryResponseDtoTest {
                 .lastLoginDt(now.minusDays(1))
                 .build();
 
-        //when
+        // when
         AdminUserSummaryResponseDto dto = AdminUserSummaryResponseDto.fromEntity(userEntity);
 
-        //then
+        // then
         assertThat(dto.getUserGuid()).isEqualTo(userEntity.getUserGuid());
         assertThat(dto.getEmail()).isEqualTo(userEntity.getEmail());
         assertThat(dto.getUsername()).isEqualTo(userEntity.getUsername());

@@ -24,6 +24,7 @@ import teamdevhub.devhub.domain.user.vo.UserSkill;
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public AuthenticatedUser findUserByEmailForLogin(String email) {
+    public AuthenticatedUser findByEmailForLogin(String email) {
         UserEntity userEntity = jpaUserRepository.findByEmail(email).
                 orElseThrow(() -> DataAccessException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toAuthenticatedUser(userEntity);
@@ -58,10 +59,9 @@ public class UserAdapter implements UserRepository {
         return UserMapper.toDomain(userEntity, user.getPositions(), user.getSkills());
     }
 
-    //refactor
     @Override
-    public void updateLastLoginDateTime(User user) {
-        jpaUserRepository.save(UserMapper.toEntity(user));
+    public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
+        jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime);
     }
 
     @Override

@@ -10,13 +10,13 @@ import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.constant.TestConstant.*;
+import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class UserMapperTest {
 
     @Test
     void UserEntity_를_AuthenticatedUser_로_변환할_수_있다() {
-        //given
+        // given
         UserEntity userEntity = UserEntity.builder()
                 .userGuid(TEST_GUID)
                 .email(TEST_EMAIL)
@@ -24,10 +24,10 @@ class UserMapperTest {
                 .userRole(UserRole.USER)
                 .build();
 
-        //when
+        // when
         AuthenticatedUser authenticatedUser = UserMapper.toAuthenticatedUser(userEntity);
 
-        //then
+        // then
         assertThat(authenticatedUser.userGuid()).isEqualTo(TEST_GUID);
         assertThat(authenticatedUser.email()).isEqualTo(TEST_EMAIL);
         assertThat(authenticatedUser.password()).isEqualTo(TEST_PASSWORD);
@@ -36,13 +36,13 @@ class UserMapperTest {
 
     @Test
     void User_를_UserEntity_로_변환할_수_있다() {
-        //given
+        // given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
-        //when
+        // when
         UserEntity userEntity = UserMapper.toEntity(user);
 
-        //then
+        // then
         assertThat(userEntity.getUserGuid()).isEqualTo(TEST_GUID);
         assertThat(userEntity.getEmail()).isEqualTo(TEST_EMAIL);
         assertThat(userEntity.getPassword()).isEqualTo(TEST_PASSWORD);
@@ -53,7 +53,7 @@ class UserMapperTest {
 
     @Test
     void UserEntity_를_User_로_변환할_수_있다() {
-        //given
+        // given
         UserEntity entity = UserEntity.builder()
                 .userGuid(TEST_GUID)
                 .email(TEST_EMAIL)
@@ -63,10 +63,10 @@ class UserMapperTest {
                 .introduction(TEST_INTRO)
                 .build();
 
-        //when
+        // when
         User user = UserMapper.toDomain(entity, TEST_POSITIONS, TEST_SKILLS);
 
-        //then
+        // then
         assertThat(user.getUserGuid()).isEqualTo(TEST_GUID);
         assertThat(user.getEmail()).isEqualTo(TEST_EMAIL);
         assertThat(user.getUsername()).isEqualTo(TEST_USERNAME);

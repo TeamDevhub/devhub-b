@@ -5,13 +5,13 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.UserRole;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.constant.TestConstant.*;
+import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class UserEntityTest {
 
     @Test
     void userEntity_생성_및_getter_테스트() {
-        //given, when
+        // given, when
         UserEntity userEntity = UserEntity.builder()
                 .userGuid(TEST_GUID)
                 .email(TEST_EMAIL)
@@ -25,7 +25,7 @@ class UserEntityTest {
                 .lastLoginDt(TEST_LAST_LOGIN)
                 .build();
 
-        //then
+        // then
         assertThat(userEntity.getUserGuid()).isEqualTo(TEST_GUID);
         assertThat(userEntity.getEmail()).isEqualTo(TEST_EMAIL);
         assertThat(userEntity.getPassword()).isEqualTo(TEST_PASSWORD);

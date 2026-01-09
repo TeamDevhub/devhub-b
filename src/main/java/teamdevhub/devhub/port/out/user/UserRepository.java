@@ -7,12 +7,14 @@ import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 
+import java.time.LocalDateTime;
+
 public interface UserRepository {
 
     void saveAdminUser(User adminUser);
-    AuthenticatedUser findUserByEmailForLogin(String email);
+    AuthenticatedUser findByEmailForLogin(String email);
     User saveNewUser(User user);
-    void updateLastLoginDateTime(User user);
+    void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
     User findByUserGuid(String userGuid);
     void updateUserProfile(User user);
     void updateUserForWithdrawal(User user);

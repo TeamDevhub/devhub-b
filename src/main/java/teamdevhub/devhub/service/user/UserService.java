@@ -47,7 +47,7 @@ public class UserService implements UserUseCase {
 
     @Override
     public AuthenticatedUser getUserForLogin(String email) {
-        return userRepository.findUserByEmailForLogin(email);
+        return userRepository.findByEmailForLogin(email);
     }
 
     @Override
@@ -71,19 +71,17 @@ public class UserService implements UserUseCase {
 
     @Override
     public void updateLastLoginDateTime(String userGuid) {
-        User user = getUserByUserGuid(userGuid);
-        user.updateLastLoginDateTime(dateTimeProvider.now());
-        userRepository.updateLastLoginDateTime(user);
+        userRepository.updateLastLoginDateTime(userGuid, dateTimeProvider.now());
     }
 
     @Override
     public User getCurrentUserProfile(String userGuid) {
-        return getUserByUserGuid(userGuid);
+        return getUser(userGuid);
     }
 
     @Override
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
-        User user = getUserByUserGuid(updateProfileCommand.getUserGuid());
+        User user = getUser(updateProfileCommand.getUserGuid());
 
         Set<UserPosition> positions = updateProfileCommand.getPositionList().stream()
                 .map(UserPosition::new)
@@ -104,7 +102,7 @@ public class UserService implements UserUseCase {
 
     @Override
     public void withdrawCurrentUser(String userGuid) {
-        User user = getUserByUserGuid(userGuid);
+        User user = getUser(userGuid);
         user.withdraw();
         refreshTokenRepository.deleteByUserGuid(userGuid);
         userRepository.updateUserForWithdrawal(user);
@@ -115,7 +113,7 @@ public class UserService implements UserUseCase {
         return userRepository.existsByUserRole(userRole);
     }
 
-    private User getUserByUserGuid(String userGuid) {
+    private User getUser(String userGuid) {
         return userRepository.findByUserGuid(userGuid);
     }
 }

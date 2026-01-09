@@ -12,10 +12,10 @@ import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
+import teamdevhub.devhub.small.common.mock.usecase.FakeUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.constant.TestConstant.*;
+import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class UserControllerTest {
 
@@ -30,7 +30,7 @@ class UserControllerTest {
 
     @Test
     void 회원가입에_성공하면_HTTPSTATUS_OK_를_반환한다() {
-        //given
+        // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL)
                 .password(TEST_PASSWORD)
@@ -40,10 +40,10 @@ class UserControllerTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        //when
+        // when
         ResponseEntity<ApiDataResponseDto<SignupResponseDto>> response = userController.signup(signupRequestDto);
 
-        //then
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getData().getEmail()).isEqualTo(TEST_EMAIL);
@@ -52,13 +52,13 @@ class UserControllerTest {
 
     @Test
     void 유저_프로필_정보_조회에_성공하면_HTTPSTATUS_OK_를_반환한다() {
-        //given
+        // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
-        //when
+        // when
         ResponseEntity<ApiDataResponseDto<UserProfileResponseDto>> response = userController.getProfile(authenticatedUser);
 
-        //then
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getData().getEmail()).isEqualTo(TEST_EMAIL);
@@ -67,10 +67,10 @@ class UserControllerTest {
 
     @Test
     void 유저_프로필_정보_수정에_성공하면_HTTPSTATUS_OK_를_반환한다() {
-        //given
+        // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
-        //when
+        // when
         UpdateProfileRequestDto updateProfileRequestDto = UpdateProfileRequestDto.builder()
                 .username(NEW_USERNAME)
                 .introduction(NEW_INTRO)
@@ -80,19 +80,19 @@ class UserControllerTest {
 
         ResponseEntity<ApiDataResponseDto<Void>> response = userController.updateProfile(updateProfileRequestDto, authenticatedUser);
 
-        //then
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     void 회원탈퇴에_성공하면_HTTPSTATUS_OK_를_반환한다() {
-        //given
+        // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
-        //when
+        // when
         ResponseEntity<ApiDataResponseDto<Void>> response = userController.withdraw(authenticatedUser);
 
-        //then
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(fakeUserUseCase.getCurrentUserProfile(TEST_GUID).isDeleted()).isTrue();
     }

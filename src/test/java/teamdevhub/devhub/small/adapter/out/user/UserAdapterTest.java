@@ -15,12 +15,12 @@ import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.small.mock.persistence.FakeJpaUserPositionRepository;
-import teamdevhub.devhub.small.mock.persistence.FakeJpaUserRepository;
-import teamdevhub.devhub.small.mock.persistence.FakeJpaUserSkillRepository;
-import teamdevhub.devhub.small.mock.persistence.FakeUserQueryRepository;
-import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
-import teamdevhub.devhub.small.mock.provider.FakeUuidIdentifierProvider;
+import teamdevhub.devhub.small.common.mock.persistence.FakeJpaUserPositionRepository;
+import teamdevhub.devhub.small.common.mock.persistence.FakeJpaUserRepository;
+import teamdevhub.devhub.small.common.mock.persistence.FakeJpaUserSkillRepository;
+import teamdevhub.devhub.small.common.mock.persistence.FakeUserQueryRepository;
+import teamdevhub.devhub.small.common.mock.provider.FakeDateTimeProvider;
+import teamdevhub.devhub.small.common.mock.provider.FakeUuidIdentifierProvider;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.constant.TestConstant.*;
+import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class UserAdapterTest {
 
@@ -59,13 +59,13 @@ class UserAdapterTest {
 
     @Test
     void 관리자_계정을_데이터베이스에_저장한다() {
-        //given
+        // given
         User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
-        //when
+        // when
         userAdapter.saveAdminUser(adminUser);
 
-        //then
+        // then
         UserEntity saved = fakeJpaUserRepository.findByUserGuid(ADMIN_GUID).orElse(null);
         assertThat(saved).isNotNull();
         assertThat(saved.getEmail()).isEqualTo(ADMIN_EMAIL);
@@ -73,27 +73,27 @@ class UserAdapterTest {
 
     @Test
     void 로그인을_시도하면_ID_값인_이메일로_AuthenticatedUser_를_조회한다() {
-        //given
+        // given
         User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
         fakeJpaUserRepository.saveForSignup(UserMapper.toEntity(adminUser));
 
-        //when
-        AuthenticatedUser authenticatedUser = userAdapter.findUserByEmailForLogin(ADMIN_EMAIL);
+        // when
+        AuthenticatedUser authenticatedUser = userAdapter.findByEmailForLogin(ADMIN_EMAIL);
 
-        //then
+        // then
         assertThat(authenticatedUser).isNotNull();
         assertThat(authenticatedUser.email()).isEqualTo(ADMIN_EMAIL);
     }
 
     @Test
     void 새로운_사용자를_생성하면_사용자_관심_포지션과_사용자_보유_스킬을_저장한다() {
-        //given
+        // given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
-        //when
+        // when
         User savedUser = userAdapter.saveNewUser(user);
 
-        //then
+        // then
         assertThat(savedUser.getUserGuid()).isEqualTo(TEST_GUID);
         List<UserPositionEntity> positions = fakeJpaUserPositionRepository.findByUserGuid(TEST_GUID);
         assertThat(positions).hasSize(1);
@@ -105,14 +105,13 @@ class UserAdapterTest {
 
     @Test
     void 사용자가_로그인을_하면_최종_로그인_시간이_변경된다() {
-        //given
+        // given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
-        user.updateLastLoginDateTime(fakeDateTimeProvider.now());
+        fakeJpaUserRepository.save(UserMapper.toEntity(user));
+        // when
+        userAdapter.updateLastLoginDateTime(TEST_GUID,fakeDateTimeProvider.now());
 
-        //when
-        userAdapter.updateLastLoginDateTime(user);
-
-        //then
+        // then
         assertThat(fakeJpaUserRepository.findByUserGuid(user.getUserGuid())
                 .orElseThrow()
                 .getLastLoginDt())
@@ -121,16 +120,16 @@ class UserAdapterTest {
 
     @Test
     void 사용자_식별키로_User_를_조회한다() {
-        //given
+        // given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
         fakeJpaUserPositionRepository.saveAll(Set.of(new UserPositionEntity(TEST_GUID + "-pos", TEST_GUID, "001")));
         fakeJpaUserSkillRepository.saveAll(Set.of(new UserSkillEntity(TEST_GUID + "-skill", TEST_GUID, "001")));
 
-        //when
+        // when
         User found = userAdapter.findByUserGuid(TEST_GUID);
 
-        //then
+        // then
         assertThat(found).isNotNull();
         assertThat(found.getUserGuid()).isEqualTo(TEST_GUID);
         assertThat(found.getPositions()).hasSize(1);
@@ -139,14 +138,14 @@ class UserAdapterTest {
 
     @Test
     void 사용자_프로필_정보를_수정하면_변경된_값이_저장된다() {
-        //given
+        // given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
         user.updateProfile(NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, NEW_SKILLS);
 
-        //when
+        // when
         userAdapter.updateUserProfile(user);
 
-        //then
+        // then
         User updatedUser = fakeJpaUserRepository.findByUserGuid(user.getUserGuid())
                 .map(userEntity -> UserMapper.toDomain(userEntity, NEW_POSITIONS, NEW_SKILLS))
                 .orElseThrow();
@@ -157,10 +156,10 @@ class UserAdapterTest {
 
     @Test
     void 사용자_프로필_정보_일부_포지션만_변경하면_diff_전략에_맞게_처리된다() {
-        //given
+        // given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
-        //when
+        // when
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
         fakeJpaUserPositionRepository.saveAll(
                 user.getPositions().stream()
@@ -187,7 +186,7 @@ class UserAdapterTest {
 
         userAdapter.updateUserProfile(user);
 
-        //then
+        // then
         Set<String> positionsAfterUpdate = fakeJpaUserPositionRepository.findByUserGuid(TEST_GUID)
                 .stream().map(UserPositionEntity::getPositionCd).collect(Collectors.toSet());
         Set<String> skillsAfterUpdate = fakeJpaUserSkillRepository.findByUserGuid(TEST_GUID)
@@ -199,14 +198,14 @@ class UserAdapterTest {
 
     @Test
     void 회원탈퇴한_사용자의_deleted_값은_true_이다() {
-        //given
+        // given
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
         user.withdraw();
 
-        //when
+        // when
         userAdapter.updateUserForWithdrawal(user);
 
-        //then
+        // then
         assertThat(fakeJpaUserRepository.findByUserGuid(user.getUserGuid())
                 .orElseThrow()
                 .isDeleted())
@@ -215,27 +214,27 @@ class UserAdapterTest {
 
     @Test
     void 사용자_권한이_일치한다면_true_를_반환한다() {
-        //given
+        // given
         User user = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
 
-        //when
+        // when
         boolean exists = userAdapter.existsByUserRole(UserRole.ADMIN);
 
-        //then
+        // then
         assertThat(exists).isTrue();
     }
 
     @Test
     void 사용자_목록_조회를_하면_AdminUserSummaryResponseDto_로_된_Page_데이터를_반환한다() {
-        //given
+        // given
         PageCommand pageCommand = new PageCommand(0, 10);
         SearchUserCommand searchCommand = new SearchUserCommand(null, null, null, null);
 
-        //when
+        // when
         Page<AdminUserSummaryResponseDto> page = userAdapter.listUser(searchCommand, pageCommand.getPage(), pageCommand.getSize());
 
-        //then
+        // then
         assertThat(page.getContent()).hasSize(2);
         assertThat(page.getContent().get(0).getEmail()).isEqualTo("user1@example.com");
         assertThat(page.getContent().get(1).getEmail()).isEqualTo("user2@example.com");

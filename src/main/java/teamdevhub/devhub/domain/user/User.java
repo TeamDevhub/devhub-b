@@ -159,10 +159,6 @@ public class User {
                 .build();
     }
 
-    public void updateLastLoginDateTime(LocalDateTime now) {
-        this.lastLoginDateTime = now;
-    }
-
     public void withdraw() {
         if (this.deleted) {
             throw DomainRuleException.of(ErrorCode.ALREADY_DELETED);
