@@ -54,7 +54,7 @@ class TraceIdMDCFilterTest {
         // given
         MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
-        FilterChain chain = (req, res) -> {assertThat(MDC.get("traceId")).isNotNull();};
+        FilterChain chain = (req, res) -> assertThat(MDC.get("traceId")).isNotNull();
 
         // when
         filter.doFilter(mockHttpServletRequest, mockHttpServletResponse, chain);

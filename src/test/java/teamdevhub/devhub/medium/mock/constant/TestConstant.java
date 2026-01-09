@@ -1,11 +1,6 @@
 package teamdevhub.devhub.medium.mock.constant;
 
-import teamdevhub.devhub.domain.user.vo.UserPosition;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
-
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 public final class TestConstant {
 

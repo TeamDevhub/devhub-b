@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import teamdevhub.devhub.adapter.out.common.provider.jwt.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.TokenType;
@@ -27,7 +26,8 @@ import teamdevhub.devhub.port.out.auth.TokenParseProvider;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static teamdevhub.devhub.medium.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.medium.mock.constant.TestConstant.TEST_EMAIL;
+import static teamdevhub.devhub.medium.mock.constant.TestConstant.TEST_GUID;
 
 @ExtendWith(MockitoExtension.class)
 class JwtAuthorizationFilterTest {
