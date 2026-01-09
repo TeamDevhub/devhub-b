@@ -21,7 +21,7 @@ public class ErrorResponseVo {
 
     public static ErrorResponseVo of(String errorCode, String message) {
         return ErrorResponseVo.builder()
-                .code(ErrorCode.UNKNOWN_FAIL.getCode())
+                .code(errorCode)
                 .message(message)
                 .build();
     }
