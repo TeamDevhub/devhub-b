@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 public interface UserRepository {
 
     void saveAdminUser(User adminUser);
-    AuthenticatedUser findByEmailForLogin(String email);
+    AuthenticatedUser findAuthenticatedUserByEmail(String email);
+    AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid);
     User saveNewUser(User user);
     void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
     User findByUserGuid(String userGuid);

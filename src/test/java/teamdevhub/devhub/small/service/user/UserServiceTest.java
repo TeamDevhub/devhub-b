@@ -94,10 +94,10 @@ class UserServiceTest {
         userService.getUserForLogin(TEST_EMAIL);
 
         // then
-        assertThat(fakeUserRepository.findByEmailForLogin(TEST_GUID)).isNotNull();
-        assertThat(fakeUserRepository.findByEmailForLogin(TEST_GUID).userGuid()).isEqualTo(TEST_GUID);
-        assertThat(fakeUserRepository.findByEmailForLogin(TEST_GUID).email()).isEqualTo(TEST_EMAIL);
-        assertThat(fakeUserRepository.findByEmailForLogin(TEST_GUID).userRole()).isEqualTo(UserRole.USER);
+        assertThat(fakeUserRepository.findAuthenticatedUserByEmail(TEST_GUID)).isNotNull();
+        assertThat(fakeUserRepository.findAuthenticatedUserByEmail(TEST_GUID).userGuid()).isEqualTo(TEST_GUID);
+        assertThat(fakeUserRepository.findAuthenticatedUserByEmail(TEST_GUID).email()).isEqualTo(TEST_EMAIL);
+        assertThat(fakeUserRepository.findAuthenticatedUserByEmail(TEST_GUID).userRole()).isEqualTo(UserRole.USER);
     }
 
     @Test

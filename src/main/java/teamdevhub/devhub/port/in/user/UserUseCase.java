@@ -9,6 +9,7 @@ import teamdevhub.devhub.domain.user.UserRole;
 public interface UserUseCase {
     void initializeAdminUser(String email, String rawPassword, String username);
     AuthenticatedUser getUserForLogin(String email);
+    AuthenticatedUser getUserForReissue(String userGuid);
     User signup(SignupCommand signupCommand);
     void updateLastLoginDateTime(String userGuid);
     User getCurrentUserProfile(String userGuid);

@@ -14,7 +14,7 @@ public interface JpaUserRepository extends JpaRepository<UserEntity, String> {
     Optional<UserEntity> findByUserGuid(String userGuid);
 
     @Modifying
-    @Query("UPDATE UserEntity u SET u.lastLoginDt = :lastLoginDateTime WHERE u.userGuid = :userGuid")
+    @Query("UPDATE UserEntity user SET user.lastLoginDt = :lastLoginDateTime WHERE user.userGuid = :userGuid")
     void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
 
     boolean existsByUserRole(UserRole role);

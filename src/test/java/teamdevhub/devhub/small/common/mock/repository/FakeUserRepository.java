@@ -23,9 +23,18 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public AuthenticatedUser findByEmailForLogin(String email) {
+    public AuthenticatedUser findAuthenticatedUserByEmail(String email) {
         return store.values().stream()
-                .filter(user -> user.getUserGuid().equals(email))
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .orElse(null);
+    }
+
+    @Override
+    public AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid) {
+        return store.values().stream()
+                .filter(user -> user.getUserGuid().equals(userGuid))
                 .findFirst()
                 .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
                 .orElse(null);

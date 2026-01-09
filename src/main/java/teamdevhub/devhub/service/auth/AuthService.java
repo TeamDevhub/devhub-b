@@ -34,7 +34,7 @@ public class AuthService implements AuthUseCase {
         String accessToken = tokenProvider.createAccessToken(authenticatedUser.userGuid(), authenticatedUser.email(), authenticatedUser.userRole());
         String refreshToken = tokenProvider.createRefreshToken(authenticatedUser.userGuid());
 
-        issueRefreshToken(authenticatedUser.email(), refreshToken);
+        issueRefreshToken(authenticatedUser.userGuid(), refreshToken);
         userUseCase.updateLastLoginDateTime(authenticatedUser.userGuid());
         return LoginResponseDto.of(prefix, accessToken, refreshToken);
     }
@@ -55,7 +55,7 @@ public class AuthService implements AuthUseCase {
             throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
         }
 
-        AuthenticatedUser authenticatedUser = userUseCase.getUserForLogin(userGuid);
+        AuthenticatedUser authenticatedUser = userUseCase.getUserForReissue(userGuid);
 
         String newAccessToken = tokenProvider.createAccessToken(
                 authenticatedUser.userGuid(),

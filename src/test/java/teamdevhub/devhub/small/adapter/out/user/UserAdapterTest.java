@@ -78,7 +78,7 @@ class UserAdapterTest {
         fakeJpaUserRepository.saveForSignup(UserMapper.toEntity(adminUser));
 
         // when
-        AuthenticatedUser authenticatedUser = userAdapter.findByEmailForLogin(ADMIN_EMAIL);
+        AuthenticatedUser authenticatedUser = userAdapter.findAuthenticatedUserByEmail(ADMIN_EMAIL);
 
         // then
         assertThat(authenticatedUser).isNotNull();

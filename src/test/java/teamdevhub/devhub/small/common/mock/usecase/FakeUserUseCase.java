@@ -56,6 +56,15 @@ public class FakeUserUseCase implements UserUseCase {
     }
 
     @Override
+    public AuthenticatedUser getUserForReissue(String userGuid) {
+        return store.values().stream()
+                .filter(u -> u.getUserGuid().equals(userGuid))
+                .findFirst()
+                .map(u -> new AuthenticatedUser(u.getUserGuid(), u.getEmail(), u.getPassword(), u.getUserRole()))
+                .orElse(null);
+    }
+
+    @Override
     public User signup(SignupCommand signupCommand) {
         User user = User.createGeneralUser(
                 TEST_GUID,
