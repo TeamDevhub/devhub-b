@@ -7,10 +7,14 @@ import java.time.LocalDateTime;
 
 public class FakeDateTimeProvider implements DateTimeProvider {
 
-    private final LocalDateTime fixedDateTime;
+    private LocalDateTime fixedDateTime;
 
     public FakeDateTimeProvider(LocalDateTime fixedDateTime) {
         this.fixedDateTime = fixedDateTime;
+    }
+
+    public FakeDateTimeProvider() {
+
     }
 
     @Override

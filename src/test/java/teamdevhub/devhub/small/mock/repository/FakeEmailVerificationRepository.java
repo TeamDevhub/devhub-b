@@ -9,8 +9,8 @@ import java.util.List;
 
 public class FakeEmailVerificationRepository implements EmailVerificationRepository {
 
-    private final HashMap<String, EmailVerification> store;
-    private final DateTimeProvider dateTimeProvider;
+    private HashMap<String, EmailVerification> store;
+    private DateTimeProvider dateTimeProvider;
 
     public FakeEmailVerificationRepository(DateTimeProvider dateTimeProvider) {
         this.store = new HashMap<>();

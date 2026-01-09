@@ -12,7 +12,8 @@ import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.auth.TokenProvider;
+import teamdevhub.devhub.port.out.auth.TokenIssueProvider;
+import teamdevhub.devhub.port.out.auth.TokenParseProvider;
 
 import java.security.Key;
 import java.util.Base64;
@@ -20,7 +21,7 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class JwtTokenProvider implements TokenProvider {
+public class JwtTokenIssueProvider implements TokenIssueProvider, TokenParseProvider {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";

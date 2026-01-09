@@ -51,7 +51,7 @@ class UserControllerTest {
     }
 
     @Test
-    void 유저_프로필_정보_조회에_성공하면_HTTPSTATUS_OK_를_반환한다() {
+    void 유저_프로필_정보_조회에_성공하면_해당유저의_프로필_정보와_HTTPSTATUS_OK_를_반환한다() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 

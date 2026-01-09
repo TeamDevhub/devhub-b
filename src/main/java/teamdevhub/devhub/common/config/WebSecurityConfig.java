@@ -20,7 +20,8 @@ import teamdevhub.devhub.common.web.security.handler.CustomAccessDeniedHandler;
 import teamdevhub.devhub.common.web.security.handler.CustomAuthenticationEntryPoint;
 import teamdevhub.devhub.common.web.security.filter.CustomFilterExceptionHandler;
 import teamdevhub.devhub.common.web.security.filter.JwtAuthorizationFilter;
-import teamdevhub.devhub.port.out.auth.TokenProvider;
+import teamdevhub.devhub.port.out.auth.TokenIssueProvider;
+import teamdevhub.devhub.port.out.auth.TokenParseProvider;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final TokenProvider tokenProvider;
+    private final TokenParseProvider tokenParseProvider;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -43,7 +44,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(tokenProvider, customFilterExceptionHandler);
+        return new JwtAuthorizationFilter(tokenParseProvider, customFilterExceptionHandler);
     }
 
     @Bean

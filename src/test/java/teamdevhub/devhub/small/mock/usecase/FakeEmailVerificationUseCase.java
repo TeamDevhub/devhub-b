@@ -10,6 +10,8 @@ import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
 import teamdevhub.devhub.service.exception.BusinessRuleException;
 
+import static teamdevhub.devhub.small.mock.constant.TestConstant.EMAIL_CODE;
+
 public class FakeEmailVerificationUseCase implements EmailVerificationUseCase {
 
     private final EmailVerificationRepository emailVerificationRepository;
@@ -21,8 +23,8 @@ public class FakeEmailVerificationUseCase implements EmailVerificationUseCase {
     }
 
     @Override
-    public void sendEmailVerification(EmailVerificationRequestDto requestDto) {
-        String email = requestDto.getEmail();
+    public void sendEmailVerification(EmailVerificationRequestDto emailVerificationRequestDto) {
+        String email = emailVerificationRequestDto.getEmail();
 
         if (emailVerificationRepository.existUnexpiredCode(email)) {
             throw AuthRuleException.of(ErrorCode.EMAIL_VERIFICATION_ALREADY_SENT);
@@ -30,7 +32,7 @@ public class FakeEmailVerificationUseCase implements EmailVerificationUseCase {
 
         EmailVerification emailVerification = EmailVerification.issue(
                 email,
-                "123456",
+                EMAIL_CODE,
                 dateTimeProvider.now().plusMinutes(5)
         );
 

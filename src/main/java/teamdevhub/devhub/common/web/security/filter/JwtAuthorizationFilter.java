@@ -19,7 +19,7 @@ import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
-import teamdevhub.devhub.port.out.auth.TokenProvider;
+import teamdevhub.devhub.port.out.auth.TokenParseProvider;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -28,22 +28,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final TokenProvider tokenProvider;
+    private final TokenParseProvider tokenParseProvider;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String token = tokenProvider.resolveToken(httpServletRequest);
+            String token = tokenParseProvider.resolveToken(httpServletRequest);
 
             if (!StringUtils.hasText(token)) {
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
             }
 
-            String pureToken = tokenProvider.removeBearer(token);
-            Claims claims = tokenProvider.parseClaims(pureToken);
+            String pureToken = tokenParseProvider.removeBearer(token);
+            Claims claims = tokenParseProvider.parseClaims(pureToken);
             validateAccessToken(claims);
 
             setAuthentication(claims);

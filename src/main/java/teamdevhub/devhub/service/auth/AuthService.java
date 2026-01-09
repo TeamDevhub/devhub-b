@@ -11,9 +11,9 @@ import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.vo.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
-import teamdevhub.devhub.port.out.auth.Authenticator;
+import teamdevhub.devhub.port.out.auth.AuthenticatedUserProvider;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
-import teamdevhub.devhub.port.out.auth.TokenProvider;
+import teamdevhub.devhub.port.out.auth.TokenIssueProvider;
 import teamdevhub.devhub.service.exception.BusinessRuleException;
 
 @Service
@@ -21,18 +21,18 @@ import teamdevhub.devhub.service.exception.BusinessRuleException;
 @Transactional
 public class AuthService implements AuthUseCase {
 
-    private final TokenProvider tokenProvider;
-    private final Authenticator authenticator;
+    private final TokenIssueProvider tokenIssueProvider;
+    private final AuthenticatedUserProvider authenticatedUserProvider;
     private final UserUseCase userUseCase;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     public LoginResponseDto login(LoginCommand loginCommand) {
-        AuthenticatedUser authenticatedUser = authenticator.authenticate(loginCommand.getEmail(), loginCommand.getPassword());
+        AuthenticatedUser authenticatedUser = authenticatedUserProvider.getAuthenticatedUser(loginCommand.getEmail(), loginCommand.getPassword());
 
-        String prefix = tokenProvider.getPrefix();
-        String accessToken = tokenProvider.createAccessToken(authenticatedUser.userGuid(), authenticatedUser.email(), authenticatedUser.userRole());
-        String refreshToken = tokenProvider.createRefreshToken(authenticatedUser.userGuid());
+        String prefix = tokenIssueProvider.getPrefix();
+        String accessToken = tokenIssueProvider.createAccessToken(authenticatedUser.userGuid(), authenticatedUser.email(), authenticatedUser.userRole());
+        String refreshToken = tokenIssueProvider.createRefreshToken(authenticatedUser.userGuid());
 
         issueRefreshToken(authenticatedUser.userGuid(), refreshToken);
         userUseCase.updateLastLoginDateTime(authenticatedUser.userGuid());
@@ -48,7 +48,7 @@ public class AuthService implements AuthUseCase {
     @Override
     public TokenResponseDto reissueAccessToken(String token) {
 
-        String userGuid = tokenProvider.extractUserGuidFromRefreshToken(token);
+        String userGuid = tokenIssueProvider.extractUserGuidFromRefreshToken(token);
         RefreshToken refreshToken = refreshTokenRepository.findByUserGuid(userGuid);
 
         if (!refreshToken.token().equals(token)) {
@@ -57,7 +57,7 @@ public class AuthService implements AuthUseCase {
 
         AuthenticatedUser authenticatedUser = userUseCase.getUserForReissue(userGuid);
 
-        String newAccessToken = tokenProvider.createAccessToken(
+        String newAccessToken = tokenIssueProvider.createAccessToken(
                 authenticatedUser.userGuid(),
                 authenticatedUser.email(),
                 authenticatedUser.userRole()

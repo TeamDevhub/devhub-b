@@ -25,7 +25,7 @@ class AdminUserControllerTest {
     }
 
     @Test
-    void 관리자_사용자_목록_조회를_하면_AdminUserSummaryResponseDto_리스트와_페이지정보를_반환한다() {
+    void 관리자_사용자_목록_조회를_하면_AdminUserSummaryResponseDto_리스트_페이지정보와_HTTPSTATUS_OK_를_반환한다() {
         // given
         SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
                 .blocked(null)
