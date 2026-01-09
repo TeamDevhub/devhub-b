@@ -27,7 +27,7 @@ public class EmailNotificationSendAdapter implements EmailNotificationSender {
 
     @Override
     @Async
-    public void sendEmail(String email, EmailTemplateType templateType, Map<String, Object> variables) {
+    public void send(String email, EmailTemplateType templateType, Map<String, Object> variables) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(

@@ -16,7 +16,7 @@ public class UserAuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(email);
+        AuthenticatedUser authenticatedUser = userUseCase.getUserForLogin(email);
         return new UserAuthentication(authenticatedUser);
     }
 }

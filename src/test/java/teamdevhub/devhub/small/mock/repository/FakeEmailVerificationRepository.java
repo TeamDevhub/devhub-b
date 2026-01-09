@@ -1,6 +1,7 @@
 package teamdevhub.devhub.small.mock.repository;
 
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
+import teamdevhub.devhub.domain.mail.EmailVerification;
 import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
 
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class FakeEmailVerificationRepository implements EmailVerificationRepository {
 
-    private final HashMap<String, EmailCertification> store;
+    private final HashMap<String, EmailVerification> store;
     private final DateTimeProvider dateTimeProvider;
 
     public FakeEmailVerificationRepository(DateTimeProvider dateTimeProvider) {
@@ -16,31 +17,31 @@ public class FakeEmailVerificationRepository implements EmailVerificationReposit
         this.dateTimeProvider = dateTimeProvider;
     }
 
-    public FakeEmailVerificationRepository(List<EmailCertification> initialData, DateTimeProvider dateTimeProvider) {
+    public FakeEmailVerificationRepository(List<EmailVerification> initialData, DateTimeProvider dateTimeProvider) {
         this.store = new HashMap<>();
         this.dateTimeProvider = dateTimeProvider;
         if (initialData != null) {
-            for (EmailCertification emailCertification : initialData) {
-                store.put(emailCertification.email(), emailCertification);
+            for (EmailVerification emailVerification : initialData) {
+                store.put(emailVerification.getEmail(), emailVerification);
             }
         }
     }
 
     @Override
-    public EmailCertification findByEmail(String email) {
+    public EmailVerification findByEmail(String email) {
         return store.get(email);
     }
 
     @Override
     public boolean existUnexpiredCode(String email) {
-        EmailCertification emailCertification = store.get(email);
-        if (emailCertification == null) return false;
-        return emailCertification.expiredAt().isAfter(dateTimeProvider.now());
+        EmailVerification emailVerification = store.get(email);
+        if (emailVerification == null) return false;
+        return emailVerification.getExpiredAt().isAfter(dateTimeProvider.now());
     }
 
     @Override
-    public void save(EmailCertification emailCertification) {
-        store.put(emailCertification.email(), emailCertification);
+    public void save(EmailVerification emailVerification) {
+        store.put(emailVerification.getEmail(), emailVerification);
     }
 
     @Override

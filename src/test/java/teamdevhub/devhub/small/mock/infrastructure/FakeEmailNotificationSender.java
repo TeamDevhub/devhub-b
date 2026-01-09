@@ -13,7 +13,7 @@ public class FakeEmailNotificationSender implements EmailNotificationSender {
     private final List<SentEmail> sentEmails = new ArrayList<>();
 
     @Override
-    public void sendEmail(
+    public void send(
             String email,
             EmailTemplateType templateType,
             Map<String, Object> variables

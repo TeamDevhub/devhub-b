@@ -47,7 +47,7 @@ public class FakeUserUseCase implements UserUseCase {
     }
 
     @Override
-    public AuthenticatedUser getUserForAuth(String email) {
+    public AuthenticatedUser getUserForLogin(String email) {
         return store.values().stream()
                 .filter(u -> u.getEmail().equals(email))
                 .findFirst()

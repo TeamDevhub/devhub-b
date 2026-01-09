@@ -20,7 +20,7 @@ public class EmailVerificationAdapter implements EmailVerificationRepository {
     private final DateTimeProvider dateTimeProvider;
 
     @Override
-    public EmailVerification getByEmail(String email) {
+    public EmailVerification findByEmail(String email) {
         return jpaEmailCertificationRepository.findById(email)
                 .map(EmailVerificationMapper::toDomain)
                 .orElseThrow(() -> DataAccessException.of(ErrorCode.READ_FAIL));

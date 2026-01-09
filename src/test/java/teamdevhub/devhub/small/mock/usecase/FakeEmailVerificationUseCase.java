@@ -5,6 +5,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
+import teamdevhub.devhub.domain.mail.EmailVerification;
 import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
 import teamdevhub.devhub.service.common.exception.BusinessRuleException;
@@ -27,44 +28,31 @@ public class FakeEmailVerificationUseCase implements EmailVerificationUseCase {
             throw AuthRuleException.of(ErrorCode.EMAIL_VERIFICATION_ALREADY_SENT);
         }
 
-        EmailCertification emailCertification = EmailCertification.of(
+        EmailVerification emailVerification = EmailVerification.issue(
                 email,
                 "123456",
-                dateTimeProvider.now().plusMinutes(5),
-                null
+                dateTimeProvider.now().plusMinutes(5)
         );
 
-        emailVerificationRepository.save(emailCertification);
+        emailVerificationRepository.save(emailVerification);
     }
 
     @Override
-    public void confirmEmailCertificationCode(ConfirmEmailVerificationCommand command) {
-        EmailCertification emailCertification =
-                repository.findByEmail(command.getEmail());
+    public void confirmEmailCertificationCode(ConfirmEmailVerificationCommand confirmEmailVerificationCommand) {
+        EmailVerification emailVerification = emailVerificationRepository.findByEmail(confirmEmailVerificationCommand.getEmail());
 
-        if (emailCertification == null) {
+        if(!emailVerification.verify(confirmEmailVerificationCommand.getCode(), dateTimeProvider.now())) {
             throw BusinessRuleException.of(ErrorCode.EMAIL_NOT_CONFIRMED);
         }
 
-        if (emailCertification.isExpired(dateTimeProvider.now())) {
-            throw BusinessRuleException.of(ErrorCode.EMAIL_NOT_CONFIRMED);
-        }
-
-        if (!emailCertification.code().equals(command.getCode())) {
-            throw BusinessRuleException.of(ErrorCode.EMAIL_NOT_CONFIRMED);
-        }
-
-        EmailCertification verified =
-                emailCertification.withVerifiedAt(dateTimeProvider.now());
-
-        emailVerificationRepository.save(verified);
+        emailVerificationRepository.save(emailVerification);
     }
 
     @Override
     public boolean isVerified(String email) {
-        EmailCertification emailCertification = emailVerificationRepository.findByEmail(email);
-        return emailCertification != null
-                && emailCertification.verifiedAt() != null
-                && emailCertification.expiredAt().isAfter(dateTimeProvider.now());
+        EmailVerification emailVerification = emailVerificationRepository.findByEmail(email);
+        return emailVerification != null
+                && emailVerification.isVerified()
+                && emailVerification.getExpiredAt().isAfter(dateTimeProvider.now());
     }
 }

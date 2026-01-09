@@ -24,7 +24,7 @@ class EmailServiceTest {
 
     private EmailService emailService;
     private FakeEmailNotificationSender fakeEmailSender;
-    private FakeEmailVerificationRepository fakeRepository;
+    private FakeEmailVerificationRepository fakeEmailVerificationRepository;
     private FakeEmailVerificationCodeProvider fakeCodeProvider;
     private FakeDateTimeProvider fakeDateTimeProvider;
 
@@ -32,12 +32,12 @@ class EmailServiceTest {
     void init() {
         fakeEmailSender = new FakeEmailNotificationSender();
         fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
-        fakeRepository = new FakeEmailVerificationRepository(fakeDateTimeProvider);
+        fakeEmailVerificationRepository = new FakeEmailVerificationRepository(fakeDateTimeProvider);
         fakeCodeProvider = new FakeEmailVerificationCodeProvider("123456");
 
         emailService = new EmailService(
                 fakeEmailSender,
-                fakeRepository,
+                fakeEmailVerificationRepository,
                 fakeCodeProvider,
                 fakeDateTimeProvider
         );
@@ -83,11 +83,9 @@ class EmailServiceTest {
         emailService.confirmEmailCertificationCode(confirmEmailVerificationCommand);
 
         //then
-        assertThat().isTrue();
+        assertThat(fakeEmailVerificationRepository.findByEmail(confirmEmailVerificationCommand.getEmail()).isVerified()).isTrue();
     }
 
-    //@Test
-    //emailService.isVerified("test@example.com")
 
     @Test
     void 잘못된_이메일_인증코드를_입력하면_예외가_발생하며_추후_검증완료여부_메서드_호출_시_false_가_반환된다() {

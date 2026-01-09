@@ -55,7 +55,7 @@ public class AuthService implements AuthUseCase {
             throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
         }
 
-        AuthenticatedUser authenticatedUser = userUseCase.getUserForAuth(userGuid);
+        AuthenticatedUser authenticatedUser = userUseCase.getUserForLogin(userGuid);
 
         String newAccessToken = tokenProvider.createAccessToken(
                 authenticatedUser.userGuid(),

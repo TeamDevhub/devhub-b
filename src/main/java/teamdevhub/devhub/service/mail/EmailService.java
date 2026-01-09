@@ -44,12 +44,12 @@ public class EmailService implements EmailVerificationUseCase {
         emailVerificationRepository.save(emailVerification);
 
         Map<String, Object> emailCertificationVariables = Map.of(EmailTemplateVariables.CODE, emailCertificationCode, EmailTemplateVariables.EXPIRE_TIME, EmailTemplateType.EMAIL_CERTIFICATION.getExpireTime());
-        emailNotificationSender.sendEmail(email, EmailTemplateType.EMAIL_CERTIFICATION, emailCertificationVariables);
+        emailNotificationSender.send(email, EmailTemplateType.EMAIL_CERTIFICATION, emailCertificationVariables);
     }
 
     @Override
     public void confirmEmailCertificationCode(ConfirmEmailVerificationCommand confirmEmailVerificationCommand) {
-        EmailVerification emailVerification = emailVerificationRepository.getByEmail(confirmEmailVerificationCommand.getEmail());
+        EmailVerification emailVerification = emailVerificationRepository.findByEmail(confirmEmailVerificationCommand.getEmail());
 
         boolean verified = emailVerification.verify(
                 confirmEmailVerificationCommand.getCode(),
@@ -65,7 +65,7 @@ public class EmailService implements EmailVerificationUseCase {
 
     @Override
     public boolean isVerified(String email) {
-        EmailVerification emailVerification = emailVerificationRepository.getByEmail(email);
+        EmailVerification emailVerification = emailVerificationRepository.findByEmail(email);
         return emailVerification.isVerified() && emailVerification.getExpiredAt().isAfter(dateTimeProvider.now());
     }
 }

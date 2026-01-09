@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
+import teamdevhub.devhub.domain.mail.EmailVerification;
 import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
 import teamdevhub.devhub.domain.user.User;
@@ -66,22 +67,14 @@ class UserServiceTest {
     @BeforeEach
     void init() {
         fakeUserRepository = new FakeUserRepository();
-        fakeEmailCertificationUseCase = new FakeEmailVerificationUseCase();
 
         fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_GUID);
         fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
         fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
         fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
 
-        EmailCertification verifiedEmail  = new EmailCertification(
-                TEST_EMAIL,
-                EMAIL_CODE,
-                fakeDateTimeProvider.now().plusMinutes(5),
-                fakeDateTimeProvider.now()
-        );
-
-        fakeEmailCertificationRepository = new FakeEmailVerificationRepository(List.of(verifiedEmail), fakeDateTimeProvider);
-
+        fakeEmailCertificationRepository = new FakeEmailVerificationRepository(fakeDateTimeProvider);
+        fakeEmailCertificationUseCase = new FakeEmailVerificationUseCase(fakeEmailCertificationRepository, fakeDateTimeProvider);
         userService = new UserService(
                 fakeUserRepository,
                 fakeEmailCertificationUseCase,
@@ -124,7 +117,7 @@ class UserServiceTest {
         fakeUserRepository.saveNewUser(user);
 
         //when
-        userService.getUserForAuth(TEST_EMAIL);
+        userService.getUserForLogin(TEST_EMAIL);
 
         //then
         assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_GUID)).isNotNull();
@@ -180,7 +173,7 @@ class UserServiceTest {
         User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
         fakeUserRepository.saveNewUser(user);
 
-        // when
+        //when
         userService.updateLastLoginDateTime(TEST_GUID);
 
         //then
