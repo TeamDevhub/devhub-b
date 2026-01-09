@@ -13,10 +13,10 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
-import teamdevhub.devhub.adapter.in.common.annotation.LoginUser;
-import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
+import teamdevhub.devhub.adapter.in.web.annotation.LoginUser;
+import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 
@@ -29,35 +29,35 @@ public class AuthController {
     private final EmailVerificationUseCase emailVerificationUseCase;
 
     @PostMapping("/email-verification")
-    public ResponseEntity<ApiDataResponseVo<Void>> sendEmailVerification(@Valid @RequestBody EmailVerificationRequestDto emailVerificationRequestDto) {
+    public ResponseEntity<ApiDataResponseDto<Void>> sendEmailVerification(@Valid @RequestBody EmailVerificationRequestDto emailVerificationRequestDto) {
         emailVerificationUseCase.sendEmailVerification(emailVerificationRequestDto);
         return ResponseEntity.ok(
-                ApiDataResponseVo.successWithoutData(
+                ApiDataResponseDto.successWithoutData(
                         SuccessCode.EMAIL_VERIFICATION_SENT
                 )
         );
     }
 
     @PostMapping("/email-verification/confirm")
-    public ResponseEntity<ApiDataResponseVo<Void>> confirmEmailVerification(@Valid @RequestBody ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto) {
+    public ResponseEntity<ApiDataResponseDto<Void>> confirmEmailVerification(@Valid @RequestBody ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto) {
         ConfirmEmailVerificationCommand confirmEmailVerificationCommand = ConfirmEmailVerificationCommand.of(confirmEmailVerificationRequestDto.getEmail(), confirmEmailVerificationRequestDto.getCode());
         emailVerificationUseCase.confirmEmailVerification(confirmEmailVerificationCommand);
         return ResponseEntity.ok(
-                ApiDataResponseVo.successWithoutData(
+                ApiDataResponseDto.successWithoutData(
                         SuccessCode.EMAIL_VERIFICATION_SUCCESS
                 )
         );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiDataResponseVo<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<ApiDataResponseDto<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
         LoginCommand loginCommand = LoginCommand.fromLoginRequestDto(loginRequestDto);
         LoginResponseDto loginResponseDto = authUseCase.login(loginCommand);
-        ResponseCookie refreshCookie = CookieUtil.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
+        ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                .body(ApiDataResponseVo.successWithData(
+                .body(ApiDataResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,
                         TokenResponseDto.issue(loginResponseDto.getAccessToken())
                         )
@@ -65,13 +65,13 @@ public class AuthController {
     }
 
     @PostMapping("/login/{oauth}")
-    public ResponseEntity<ApiDataResponseVo<Void>> loginWithOauth(@PathVariable String oauth, @RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<ApiDataResponseDto<Void>> loginWithOauth(@PathVariable String oauth, @RequestBody LoginRequestDto loginRequestDto) {
         // LoginResponseDto loginResponseDto = authUseCase.loginWithOauth(oauth);
         // ResponseCookie refreshCookie = CookieUtil.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
         return ResponseEntity.ok()
                 //.header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
                 //.header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                .body(ApiDataResponseVo.successWithoutData(
+                .body(ApiDataResponseDto.successWithoutData(
                                 SuccessCode.LOGIN_SUCCESS
                                 //TokenResponseDto.issue(loginResponseDto.getAccessToken())
                         )
@@ -79,9 +79,9 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<ApiDataResponseVo<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
+    public ResponseEntity<ApiDataResponseDto<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
         return ResponseEntity.ok(
-                ApiDataResponseVo.successWithData(
+                ApiDataResponseDto.successWithData(
                         SuccessCode.CREATE_SUCCESS,
                         authUseCase.reissueAccessToken(refreshToken)
                 )
@@ -89,10 +89,10 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiDataResponseVo<Void>> revoke(@LoginUser AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<ApiDataResponseDto<Void>> revoke(@LoginUser AuthenticatedUser authenticatedUser) {
         authUseCase.revoke(authenticatedUser.email());
         return ResponseEntity.ok(
-                ApiDataResponseVo.successWithoutData(
+                ApiDataResponseDto.successWithoutData(
                         SuccessCode.LOGOUT_SUCCESS
                 )
         );

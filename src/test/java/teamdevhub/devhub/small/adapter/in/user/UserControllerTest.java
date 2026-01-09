@@ -4,13 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
+import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.adapter.in.user.UserController;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
 
@@ -41,7 +41,7 @@ class UserControllerTest {
                 .build();
 
         //when
-        ResponseEntity<ApiDataResponseVo<SignupResponseDto>> response = userController.signup(signupRequestDto);
+        ResponseEntity<ApiDataResponseDto<SignupResponseDto>> response = userController.signup(signupRequestDto);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -56,7 +56,7 @@ class UserControllerTest {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
         //when
-        ResponseEntity<ApiDataResponseVo<UserProfileResponseDto>> response = userController.getProfile(authenticatedUser);
+        ResponseEntity<ApiDataResponseDto<UserProfileResponseDto>> response = userController.getProfile(authenticatedUser);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -78,7 +78,7 @@ class UserControllerTest {
                 .skillList(NEW_SKILL_LIST)
                 .build();
 
-        ResponseEntity<ApiDataResponseVo<Void>> response = userController.updateProfile(updateProfileRequestDto, authenticatedUser);
+        ResponseEntity<ApiDataResponseDto<Void>> response = userController.updateProfile(updateProfileRequestDto, authenticatedUser);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -90,7 +90,7 @@ class UserControllerTest {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
         //when
-        ResponseEntity<ApiDataResponseVo<Void>> response = userController.withdraw(authenticatedUser);
+        ResponseEntity<ApiDataResponseDto<Void>> response = userController.withdraw(authenticatedUser);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

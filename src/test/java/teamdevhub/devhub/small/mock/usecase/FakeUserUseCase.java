@@ -2,11 +2,11 @@ package teamdevhub.devhub.small.mock.usecase;
 
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.record.UserPosition;
-import teamdevhub.devhub.domain.user.record.UserSkill;
+import teamdevhub.devhub.domain.user.vo.UserPosition;
+import teamdevhub.devhub.domain.user.vo.UserSkill;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 
 import java.util.HashMap;

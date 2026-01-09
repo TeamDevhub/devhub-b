@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.out.common.exception.DataAccessException;
-import teamdevhub.devhub.adapter.out.common.util.RelationChangeUtil;
+import teamdevhub.devhub.common.util.RelationChangeUtil;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
@@ -16,11 +16,11 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.record.UserPosition;
-import teamdevhub.devhub.domain.user.record.UserSkill;
+import teamdevhub.devhub.domain.user.vo.UserPosition;
+import teamdevhub.devhub.domain.user.vo.UserSkill;
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
@@ -58,6 +58,7 @@ public class UserAdapter implements UserRepository {
         return UserMapper.toDomain(userEntity, user.getPositions(), user.getSkills());
     }
 
+    //refactor
     @Override
     public void updateLastLoginDateTime(User user) {
         jpaUserRepository.save(UserMapper.toEntity(user));

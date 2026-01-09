@@ -5,8 +5,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.common.security.UserAuthentication;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
+import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.out.auth.Authenticator;
 
 @Component

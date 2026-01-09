@@ -7,7 +7,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 @SpringBootApplication
 @EnableMethodSecurity
-@EnableJpaAuditing(auditorAwareRef = "auditorAwareUtil")
+@EnableJpaAuditing(auditorAwareRef = "auditorAwareProvider")
 public class DevhubApplication {
 
 	public static void main(String[] args) {

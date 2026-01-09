@@ -4,9 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.common.exception.DomainRuleException;
-import teamdevhub.devhub.domain.common.record.audit.AuditInfo;
-import teamdevhub.devhub.domain.user.record.UserPosition;
-import teamdevhub.devhub.domain.user.record.UserSkill;
+import teamdevhub.devhub.domain.common.vo.audit.AuditInfo;
+import teamdevhub.devhub.domain.user.vo.UserPosition;
+import teamdevhub.devhub.domain.user.vo.UserSkill;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

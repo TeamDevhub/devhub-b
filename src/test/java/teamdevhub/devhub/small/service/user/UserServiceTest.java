@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
-import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
+import teamdevhub.devhub.domain.common.vo.auth.RefreshToken;
 import teamdevhub.devhub.domain.mail.EmailVerification;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;

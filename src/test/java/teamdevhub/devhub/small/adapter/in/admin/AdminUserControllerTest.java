@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.admin.user.AdminUserController;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
-import teamdevhub.devhub.adapter.in.common.vo.ApiDataListResponseVo;
-import teamdevhub.devhub.adapter.in.common.pagination.PageVo;
+import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataListResponseDto;
+import teamdevhub.devhub.adapter.in.web.vo.PageVo;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.small.mock.usecase.FakeAdminUserUseCase;
 
@@ -38,13 +38,13 @@ class AdminUserControllerTest {
         int size = 10;
 
         //when
-        ResponseEntity<ApiDataListResponseVo<AdminUserSummaryResponseDto>> response = adminUserController.list(requestDto, page, size);
+        ResponseEntity<ApiDataListResponseDto<AdminUserSummaryResponseDto>> response = adminUserController.list(requestDto, page, size);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
 
-        ApiDataListResponseVo<AdminUserSummaryResponseDto> body = response.getBody();
+        ApiDataListResponseDto<AdminUserSummaryResponseDto> body = response.getBody();
 
         assertThat(body.getDataList()).hasSize(2);
         assertThat(body.getDataList().get(0).getEmail()).isEqualTo("user1@example.com");

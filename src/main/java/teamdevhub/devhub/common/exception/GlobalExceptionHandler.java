@@ -1,6 +1,6 @@
 package teamdevhub.devhub.common.exception;
 
-import teamdevhub.devhub.adapter.in.common.vo.ApiDataResponseVo;
+import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -31,23 +31,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DomainRuleException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<ApiDataResponseVo<?>> handleDomainException(DomainRuleException e) {
+    public ResponseEntity<ApiDataResponseDto<?>> handleDomainException(DomainRuleException e) {
         logException(e);
         return ResponseEntity.badRequest()
-                .body(ApiDataResponseVo.failureWithoutData(e.getErrorCode()));
+                .body(ApiDataResponseDto.failureWithoutData(e.getErrorCode()));
     }
 
     @ExceptionHandler(BusinessRuleException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<ApiDataResponseVo<?>> handleBusinessRuleException(BusinessRuleException e) {
+    public ResponseEntity<ApiDataResponseDto<?>> handleBusinessRuleException(BusinessRuleException e) {
         logException(e);
         return ResponseEntity.badRequest()
-                .body(ApiDataResponseVo.failureWithoutData(e.getErrorCode()));
+                .body(ApiDataResponseDto.failureWithoutData(e.getErrorCode()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<ApiDataResponseVo<?>> handleValidationException(MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiDataResponseDto<?>> handleValidationException(MethodArgumentNotValidException e) {
         logException(e);
         String message = e.getBindingResult()
                 .getFieldErrors()
@@ -57,15 +57,15 @@ public class GlobalExceptionHandler {
                 .orElse("검증 오류");
 
         return ResponseEntity.badRequest()
-                .body(ApiDataResponseVo.failureWithMessage(ErrorCode.VALIDATION_FAIL, message)
+                .body(ApiDataResponseDto.failureWithMessage(ErrorCode.VALIDATION_FAIL, message)
         );
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<ApiDataResponseVo<?>> handleException(Exception e) {
+    public ResponseEntity<ApiDataResponseDto<?>> handleException(Exception e) {
         logException(e);
         return ResponseEntity.badRequest()
-                .body(ApiDataResponseVo.failureFromThrowable(e));
+                .body(ApiDataResponseDto.failureFromThrowable(e));
     }
 }

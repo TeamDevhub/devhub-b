@@ -12,7 +12,7 @@ import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
-import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserPositionRepository;

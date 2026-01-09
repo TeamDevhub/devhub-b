@@ -3,6 +3,7 @@ package teamdevhub.devhub.adapter.out.mail;
 import teamdevhub.devhub.adapter.out.common.exception.DataAccessException;
 import teamdevhub.devhub.adapter.out.mail.entity.EmailVerificationEntity;
 import teamdevhub.devhub.adapter.out.mail.mapper.EmailVerificationMapper;
+import teamdevhub.devhub.adapter.out.mail.persistence.JpaEmailVerificationRepository;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
 import teamdevhub.devhub.domain.mail.EmailVerification;
