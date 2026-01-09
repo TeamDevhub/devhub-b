@@ -11,16 +11,10 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import java.util.List;
 import java.util.Set;
 
+import static teamdevhub.devhub.small.constant.TestConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
 class SignupRequestDtoTest {
-
-    private static final String TEST_EMAIL = "user@example.com";
-    private static final String TEST_PASSWORD = "password123!";
-    private static final String TEST_USERNAME = "User";
-    private static final String TEST_INTRO = "Hello World";
-    private static final List<String> TEST_POSITION_LIST = List.of("001");
-    private static final List<String> TEST_SKILL_LIST = List.of("001");
 
     private Validator validator;
 

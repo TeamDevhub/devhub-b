@@ -9,23 +9,10 @@ import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.record.UserPosition;
 import teamdevhub.devhub.domain.user.record.UserSkill;
 
-import java.util.List;
-import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.small.constant.TestConstant.*;
 
 class UserMapperTest {
-
-    private static final String TEST_GUID = "USERa1b2c3d4e5f6g7h8i9j10k11l12m";
-    private static final String TEST_EMAIL = "user@example.com";
-    private static final String TEST_PASSWORD = "password123";
-    private static final String TEST_USERNAME = "User";
-    private static final String TEST_INTRO = "Hello World";
-    private static final List<String> TEST_POSITION_LIST = List.of("001");
-    private static final List<String> TEST_SKILL_LIST = List.of("001");
-    private static final Set<UserPosition> TEST_POSITIONS = Set.of(new UserPosition("001"));
-    private static final Set<UserSkill> TEST_SKILLS = Set.of(new UserSkill("001"));
-
 
     @Test
     void UserEntity_를_AuthenticatedUser_로_변환할_수_있다() {

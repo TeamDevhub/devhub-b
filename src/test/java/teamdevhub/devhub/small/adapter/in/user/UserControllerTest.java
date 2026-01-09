@@ -14,24 +14,10 @@ import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.small.constant.TestConstant.*;
 
 class UserControllerTest {
-
-    private static final String TEST_GUID = "USERa1b2c3d4e5f6g7h8i9j10k11l12m";
-    private static final String TEST_EMAIL = "user@example.com";
-    private static final String TEST_PASSWORD = "password123";
-    private static final String TEST_USERNAME = "User";
-    private static final String TEST_INTRO = "Hello World";
-    private static final List<String> TEST_POSITION_LIST = List.of("001");
-    private static final List<String> TEST_SKILL_LIST = List.of("001");
-
-    private static final String NEW_USERNAME = "NewUsername";
-    private static final String NEW_INTRO = "NewIntro";
-    private static final List<String> NEW_POSITION_LIST = List.of("002");
-    private static final List<String> NEW_SKILL_LIST = List.of("002");
 
     private UserController userController;
     private FakeUserUseCase fakeUserUseCase;

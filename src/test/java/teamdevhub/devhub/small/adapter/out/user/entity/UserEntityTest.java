@@ -4,22 +4,10 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.UserRole;
 
-import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.small.constant.TestConstant.*;
 
 class UserEntityTest {
-
-    private static final String TEST_GUID = "USERa1b2c3d4e5f6g7h8i9j10k11l12m";
-    private static final String TEST_EMAIL = "user@example.com";
-    private static final String TEST_PASSWORD = "password123";
-    private static final String TEST_USERNAME = "User";
-    private static final String TEST_INTRO = "Hello World";
-
-    private static final double TEST_MANNER = 36.5;
-    private static final boolean TEST_BLOCKED = false;
-    private static final boolean TEST_DELETED = false;
-    private static final LocalDateTime TEST_LAST_LOGIN = LocalDateTime.of(2025, 1, 1, 12, 0);
 
     @Test
     void userEntity_생성_및_getter_테스트() {

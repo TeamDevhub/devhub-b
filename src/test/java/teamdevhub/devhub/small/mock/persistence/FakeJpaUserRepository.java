@@ -18,7 +18,7 @@ public class FakeJpaUserRepository implements JpaUserRepository {
 
     @Override
     public Optional<UserEntity> findByEmail(String email) {
-        return Optional.empty();
+        return Optional.ofNullable(store.get(email));
     }
 
     @Override
@@ -34,6 +34,11 @@ public class FakeJpaUserRepository implements JpaUserRepository {
     @Override
     public <S extends UserEntity> S save(S entity) {
         store.put(entity.getUserGuid(), entity);
+        return entity;
+    }
+
+    public <S extends UserEntity> S saveForSignup(S entity) {
+        store.put(entity.getEmail(), entity);
         return entity;
     }
 

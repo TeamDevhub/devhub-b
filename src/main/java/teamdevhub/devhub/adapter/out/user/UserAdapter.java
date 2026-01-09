@@ -44,7 +44,7 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public AuthenticatedUser findUserByEmailForAuth(String email) {
+    public AuthenticatedUser findUserByEmailForLogin(String email) {
         UserEntity userEntity = jpaUserRepository.findByEmail(email).
                 orElseThrow(() -> DataAccessException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toAuthenticatedUser(userEntity);

@@ -4,18 +4,10 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 
-import java.util.List;
-
+import static teamdevhub.devhub.small.constant.TestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SignupCommandTest {
-
-    private static final String TEST_EMAIL = "user@example.com";
-    private static final String TEST_PASSWORD = "password123!";
-    private static final String TEST_USERNAME = "User";
-    private static final String TEST_INTRO = "Hello World";
-    private static final List<String> TEST_POSITION_LIST = List.of("001");
-    private static final List<String> TEST_SKILL_LIST = List.of("001");
 
     @Test
     void SignupRequestDto_를_SignupCommand_로_변환할_수_있다() {

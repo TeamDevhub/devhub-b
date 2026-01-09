@@ -10,7 +10,7 @@ import teamdevhub.devhub.domain.user.UserRole;
 public interface UserRepository {
 
     void saveAdminUser(User adminUser);
-    AuthenticatedUser findUserByEmailForAuth(String email);
+    AuthenticatedUser findUserByEmailForLogin(String email);
     User saveNewUser(User user);
     void updateLastLoginDateTime(User user);
     User findByUserGuid(String userGuid);

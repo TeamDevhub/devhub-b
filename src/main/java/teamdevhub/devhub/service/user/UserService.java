@@ -47,7 +47,7 @@ public class UserService implements UserUseCase {
 
     @Override
     public AuthenticatedUser getUserForLogin(String email) {
-        return userRepository.findUserByEmailForAuth(email);
+        return userRepository.findUserByEmailForLogin(email);
     }
 
     @Override

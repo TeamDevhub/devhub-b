@@ -4,12 +4,9 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.small.constant.TestConstant.*;
 
 class UserPositionEntityTest {
-
-    private static final String TEST_GUID = "USERa1b2c3d4e5f6g7h8i9j10k11l12m";
-    private static final String POSITION_CD = "001";
-    private static final String USER_POSITION_GUID = "POSa1b2c3d4e5f6g7h8i9j10k11l12";
 
     @Test
     void UserPositionEntity__를_생성하고_getter_를_사용할_수_있다() {

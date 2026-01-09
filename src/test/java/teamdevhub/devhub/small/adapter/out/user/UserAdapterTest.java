@@ -11,12 +11,10 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
+import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.domain.common.record.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.record.UserPosition;
-import teamdevhub.devhub.domain.user.record.UserSkill;
-import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserPositionRepository;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserRepository;
 import teamdevhub.devhub.small.mock.persistence.FakeJpaUserSkillRepository;
@@ -30,27 +28,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.small.constant.TestConstant.*;
 
 class UserAdapterTest {
-
-    private static final String TEST_GUID = "USERa1b2c3d4e5f6g7h8i9j10k11l12m";
-    private static final String TEST_EMAIL = "user@example.com";
-    private static final String TEST_PASSWORD = "password123";
-    private static final String TEST_USERNAME = "User";
-    private static final String TEST_INTRO = "Hello World";
-    private static final List<String> TEST_POSITION_LIST = List.of("001");
-    private static final List<String> TEST_SKILL_LIST = List.of("001");
-    private static final Set<UserPosition> TEST_POSITIONS = Set.of(new UserPosition("001"));
-
-    private static final String ADMIN_GUID = "ADMINa1b2c3d4e5f6g7h8i9j10k11l12";
-    private static final String ADMIN_EMAIL = "admin@example.com";
-    private static final String ADMIN_USERNAME = "AdminUser";
-    private static final String ADMIN_PASSWORD = "adminPassword123";
-    private static final String NEW_USERNAME = "NewUsername";
-    private static final String NEW_INTRO = "NewIntro";
-    private static final Set<UserPosition> NEW_POSITIONS = Set.of(new UserPosition("002"));
-    private static final Set<UserSkill> NEW_SKILLS = Set.of(new UserSkill("002"));
-
 
     private UserAdapter userAdapter;
     private FakeJpaUserRepository fakeJpaUserRepository;
@@ -92,13 +72,13 @@ class UserAdapterTest {
     }
 
     @Test
-    void 이메일로_AuthUser_를_조회한다() {
+    void 로그인을_시도하면_ID_값인_이메일로_AuthenticatedUser_를_조회한다() {
         //given
         User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
-        fakeJpaUserRepository.save(UserMapper.toEntity(adminUser));
+        fakeJpaUserRepository.saveForSignup(UserMapper.toEntity(adminUser));
 
         //when
-        AuthenticatedUser authenticatedUser = userAdapter.findUserByEmailForAuth(ADMIN_GUID);
+        AuthenticatedUser authenticatedUser = userAdapter.findUserByEmailForLogin(ADMIN_EMAIL);
 
         //then
         assertThat(authenticatedUser).isNotNull();

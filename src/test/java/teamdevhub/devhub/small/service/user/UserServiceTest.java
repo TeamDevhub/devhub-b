@@ -4,13 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
-import teamdevhub.devhub.domain.mail.EmailVerification;
-import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.common.record.auth.RefreshToken;
+import teamdevhub.devhub.domain.mail.EmailVerification;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.record.UserPosition;
-import teamdevhub.devhub.domain.user.record.UserSkill;
+import teamdevhub.devhub.service.common.exception.BusinessRuleException;
 import teamdevhub.devhub.service.user.UserService;
 import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
 import teamdevhub.devhub.small.mock.provider.FakePasswordPolicyProvider;
@@ -22,38 +20,12 @@ import teamdevhub.devhub.small.mock.usecase.FakeEmailVerificationUseCase;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
+import static teamdevhub.devhub.small.constant.TestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class UserServiceTest {
-
-    private static final String TEST_GUID = "USERa1b2c3d4e5f6g7h8i9j10k11l12m";
-    private static final String TEST_EMAIL = "user@example.com";
-    private static final String TEST_PASSWORD = "password123";
-    private static final String TEST_USERNAME = "User";
-    private static final String TEST_INTRO = "Hello World";
-
-    private static final List<String> TEST_POSITION_LIST = List.of("001");
-    private static final List<String> TEST_SKILL_LIST = List.of("001");
-    private static final Set<UserPosition> TEST_POSITIONS = Set.of(new UserPosition("001"));
-    private static final Set<UserSkill> TEST_SKILLS = Set.of(new UserSkill("001"));
-
-    private static final String ADMIN_GUID = "ADMINa1b2c3d4e5f6g7h8i9j10k11l12";
-    private static final String ADMIN_EMAIL = "admin@example.com";
-    private static final String ADMIN_USERNAME = "AdminUser";
-    private static final String ADMIN_PASSWORD = "adminPassword123";
-
-    private static final String EMAIL_CODE = "123456";
-    private static final String UNVERIFIED_EMAIL = "unverified@example.com";
-
-    private static final String NEW_USERNAME = "NewUsername";
-    private static final String NEW_INTRO = "NewIntro";
-    private static final List<String> NEW_POSITION_LIST = List.of("002");
-    private static final List<String> NEW_SKILL_LIST = List.of("002");
-    private static final Set<UserPosition> NEW_POSITIONS = Set.of(new UserPosition("002"));
-    private static final Set<UserSkill> NEW_SKILLS = Set.of(new UserSkill("002"));
 
     private UserService userService;
     private FakeUserRepository fakeUserRepository;
@@ -73,7 +45,9 @@ class UserServiceTest {
         fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
         fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
 
-        fakeEmailCertificationRepository = new FakeEmailVerificationRepository(fakeDateTimeProvider);
+        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL, "123456", fakeDateTimeProvider.now().plusMinutes(5));
+        emailVerification.verify("123456", fakeDateTimeProvider.now());
+        fakeEmailCertificationRepository = new FakeEmailVerificationRepository(List.of(emailVerification), fakeDateTimeProvider);
         fakeEmailCertificationUseCase = new FakeEmailVerificationUseCase(fakeEmailCertificationRepository, fakeDateTimeProvider);
         userService = new UserService(
                 fakeUserRepository,
@@ -120,10 +94,10 @@ class UserServiceTest {
         userService.getUserForLogin(TEST_EMAIL);
 
         //then
-        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_GUID)).isNotNull();
-        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_GUID).userGuid()).isEqualTo(TEST_GUID);
-        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_GUID).email()).isEqualTo(TEST_EMAIL);
-        assertThat(fakeUserRepository.findUserByEmailForAuth(TEST_GUID).userRole()).isEqualTo(UserRole.USER);
+        assertThat(fakeUserRepository.findUserByEmailForLogin(TEST_GUID)).isNotNull();
+        assertThat(fakeUserRepository.findUserByEmailForLogin(TEST_GUID).userGuid()).isEqualTo(TEST_GUID);
+        assertThat(fakeUserRepository.findUserByEmailForLogin(TEST_GUID).email()).isEqualTo(TEST_EMAIL);
+        assertThat(fakeUserRepository.findUserByEmailForLogin(TEST_GUID).userRole()).isEqualTo(UserRole.USER);
     }
 
     @Test

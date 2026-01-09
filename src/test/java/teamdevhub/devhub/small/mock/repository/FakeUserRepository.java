@@ -22,7 +22,7 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public AuthenticatedUser findUserByEmailForAuth(String email) {
+    public AuthenticatedUser findUserByEmailForLogin(String email) {
         return store.values().stream()
                 .filter(user -> user.getUserGuid().equals(email))
                 .findFirst()
