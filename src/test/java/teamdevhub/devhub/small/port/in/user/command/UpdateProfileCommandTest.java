@@ -5,6 +5,7 @@ import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
 
 class UpdateProfileCommandTest {
 

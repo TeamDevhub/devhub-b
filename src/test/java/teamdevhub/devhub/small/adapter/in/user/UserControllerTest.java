@@ -15,6 +15,7 @@ import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
 
 class UserControllerTest {
 

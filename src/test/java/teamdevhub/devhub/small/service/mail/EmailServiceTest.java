@@ -66,7 +66,7 @@ class EmailServiceTest {
         emailService.sendEmailVerification(emailVerificationRequestDto);
 
         // then
-        assertThrows(AuthRuleException.class, () ->
+        assertThrows(BusinessRuleException.class, () ->
                 // when
                 emailService.sendEmailVerification(new EmailVerificationRequestDto("test@example.com"))
         );

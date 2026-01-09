@@ -5,6 +5,7 @@ import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
 
 class SignupCommandTest {
 

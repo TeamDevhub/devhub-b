@@ -10,6 +10,7 @@ import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
 
 class UserMapperTest {
 
