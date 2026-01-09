@@ -68,7 +68,9 @@ public class UserAdapter implements UserRepository {
 
     @Override
     public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
-        jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime);
+        if(jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime) == 0) {
+            throw DataAccessException.of(ErrorCode.UPDATE_FAIL);
+        }
     }
 
     @Override
