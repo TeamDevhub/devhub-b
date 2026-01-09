@@ -5,7 +5,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
-import teamdevhub.devhub.adapter.out.exception.DataAccessException;
+import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.common.util.RelationChangeUtil;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
@@ -47,14 +47,14 @@ public class UserAdapter implements UserRepository {
     @Override
     public AuthenticatedUser findAuthenticatedUserByEmail(String email) {
         UserEntity userEntity = jpaUserRepository.findByEmail(email).
-                orElseThrow(() -> DataAccessException.of(ErrorCode.USER_NOT_FOUND));
+                orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toAuthenticatedUser(userEntity);
     }
 
     @Override
     public AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid) {
         UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid).
-                orElseThrow(() -> DataAccessException.of(ErrorCode.USER_NOT_FOUND));
+                orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toAuthenticatedUser(userEntity);
     }
 
@@ -69,14 +69,14 @@ public class UserAdapter implements UserRepository {
     @Override
     public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
         if(jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime) == 0) {
-            throw DataAccessException.of(ErrorCode.UPDATE_FAIL);
+            throw AdapterDataException.of(ErrorCode.UPDATE_FAIL);
         }
     }
 
     @Override
     public User findByUserGuid(String userGuid) {
         UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
-                .orElseThrow(() -> DataAccessException.of(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toDomain(userEntity, loadPositions(userGuid), loadSkills(userGuid));
     }
 

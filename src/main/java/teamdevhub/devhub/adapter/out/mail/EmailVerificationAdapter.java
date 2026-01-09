@@ -1,6 +1,6 @@
 package teamdevhub.devhub.adapter.out.mail;
 
-import teamdevhub.devhub.adapter.out.exception.DataAccessException;
+import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.mail.entity.EmailVerificationEntity;
 import teamdevhub.devhub.adapter.out.mail.mapper.EmailVerificationMapper;
 import teamdevhub.devhub.adapter.out.mail.persistence.JpaEmailVerificationRepository;
@@ -24,7 +24,7 @@ public class EmailVerificationAdapter implements EmailVerificationRepository {
     public EmailVerification findByEmail(String email) {
         return jpaEmailVerificationRepository.findById(email)
                 .map(EmailVerificationMapper::toDomain)
-                .orElseThrow(() -> DataAccessException.of(ErrorCode.READ_FAIL));
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.READ_FAIL));
     }
 
     @Override

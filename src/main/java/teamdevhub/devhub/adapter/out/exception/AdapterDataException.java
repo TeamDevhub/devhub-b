@@ -4,16 +4,16 @@ import lombok.Getter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 
 @Getter
-public class DataAccessException extends RuntimeException {
+public class AdapterDataException extends RuntimeException {
 
     private final ErrorCode errorCode;
 
-    private DataAccessException(ErrorCode errorCode) {
+    private AdapterDataException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 
-    public static DataAccessException of(ErrorCode errorCode) {
-        return new DataAccessException(errorCode);
+    public static AdapterDataException of(ErrorCode errorCode) {
+        return new AdapterDataException(errorCode);
     }
 }
