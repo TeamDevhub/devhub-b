@@ -16,11 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import teamdevhub.devhub.common.web.security.handler.CustomAccessDeniedHandler;
-import teamdevhub.devhub.common.web.security.handler.CustomAuthenticationEntryPoint;
 import teamdevhub.devhub.common.web.security.filter.CustomFilterExceptionHandler;
 import teamdevhub.devhub.common.web.security.filter.JwtAuthorizationFilter;
-import teamdevhub.devhub.port.out.auth.TokenIssueProvider;
+import teamdevhub.devhub.common.web.security.handler.CustomAccessDeniedHandler;
+import teamdevhub.devhub.common.web.security.handler.CustomAuthenticationEntryPoint;
 import teamdevhub.devhub.port.out.auth.TokenParseProvider;
 
 import java.util.List;
