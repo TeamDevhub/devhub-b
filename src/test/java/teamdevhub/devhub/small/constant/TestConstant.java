@@ -16,7 +16,7 @@ public final class TestConstant {
     public static final String TEST_EMAIL =
             "user@example.com";
     public static final String TEST_PASSWORD =
-            "password123";
+            "password123!";
     public static final String TEST_USERNAME =
             "User";
     public static final String TEST_INTRO =
