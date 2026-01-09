@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.mock.infrastructure;
+package teamdevhub.devhub.small.mock.infrastructure;
 
 import teamdevhub.devhub.common.enums.EmailTemplateType;
 import teamdevhub.devhub.port.out.mail.EmailNotificationSender;

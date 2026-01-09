@@ -10,20 +10,19 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.service.exception.BusinessRuleException;
 import teamdevhub.devhub.service.user.UserService;
-import teamdevhub.devhub.small.common.mock.provider.FakeDateTimeProvider;
-import teamdevhub.devhub.small.common.mock.provider.FakePasswordPolicyProvider;
-import teamdevhub.devhub.small.common.mock.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.small.common.mock.repository.FakeEmailVerificationRepository;
-import teamdevhub.devhub.small.common.mock.repository.FakeRefreshTokenRepository;
-import teamdevhub.devhub.small.common.mock.repository.FakeUserRepository;
-import teamdevhub.devhub.small.common.mock.usecase.FakeEmailVerificationUseCase;
+import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
+import teamdevhub.devhub.small.mock.provider.FakePasswordPolicyProvider;
+import teamdevhub.devhub.small.mock.provider.FakeUuidIdentifierProvider;
+import teamdevhub.devhub.small.mock.repository.FakeEmailVerificationRepository;
+import teamdevhub.devhub.small.mock.repository.FakeRefreshTokenRepository;
+import teamdevhub.devhub.small.mock.repository.FakeUserRepository;
+import teamdevhub.devhub.small.mock.usecase.FakeEmailVerificationUseCase;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class UserServiceTest {
 

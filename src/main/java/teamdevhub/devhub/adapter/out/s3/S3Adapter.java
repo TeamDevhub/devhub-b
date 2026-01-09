@@ -9,8 +9,8 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import teamdevhub.devhub.adapter.out.exception.ExternalServiceException;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.service.exception.BusinessRuleException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +49,7 @@ public class S3Adapter {
             return generatePublicUrl(fileName);
 
         } catch (IOException e) {
-            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw ExternalServiceException.of(ErrorCode.UNKNOWN_FAIL);
         }
     }
 
@@ -64,13 +64,13 @@ public class S3Adapter {
                     .key(objectKey)
                     .build());
         } catch (Exception e) {
-            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw ExternalServiceException.of(ErrorCode.UNKNOWN_FAIL);
         }
     }
 
     private String generateFileName(String originalFilename) {
         if (!StringUtils.hasText(originalFilename)) {
-            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw ExternalServiceException.of(ErrorCode.UNKNOWN_FAIL);
         }
 
         String extension = extractExtension(originalFilename);
@@ -80,7 +80,7 @@ public class S3Adapter {
     private String extractExtension(String filename) {
         int idx = filename.lastIndexOf(".");
         if (idx == -1) {
-            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw ExternalServiceException.of(ErrorCode.UNKNOWN_FAIL);
         }
         return filename.substring(idx + 1);
     }
@@ -89,7 +89,7 @@ public class S3Adapter {
         try {
             return new URL(imageUrl).getPath().substring(1);
         } catch (Exception e) {
-            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw ExternalServiceException.of(ErrorCode.UNKNOWN_FAIL);
         }
     }
 

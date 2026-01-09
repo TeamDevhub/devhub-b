@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.mock.persistence;
+package teamdevhub.devhub.small.mock.persistence;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

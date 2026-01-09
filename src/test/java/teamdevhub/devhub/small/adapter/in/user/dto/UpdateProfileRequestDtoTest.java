@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class UpdateProfileRequestDtoTest {
 

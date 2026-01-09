@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.mock.usecase;
+package teamdevhub.devhub.small.mock.usecase;
 
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;

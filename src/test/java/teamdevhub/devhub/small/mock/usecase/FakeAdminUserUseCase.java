@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.mock.usecase;
+package teamdevhub.devhub.small.mock.usecase;
 
 import org.springframework.data.domain.*;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;

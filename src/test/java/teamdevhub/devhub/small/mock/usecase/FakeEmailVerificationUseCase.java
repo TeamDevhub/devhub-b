@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.mock.usecase;
+package teamdevhub.devhub.small.mock.usecase;
 
 import teamdevhub.devhub.port.in.mail.command.ConfirmEmailVerificationCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;

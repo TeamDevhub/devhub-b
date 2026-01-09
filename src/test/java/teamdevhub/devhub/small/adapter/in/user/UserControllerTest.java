@@ -12,10 +12,9 @@ import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.small.common.mock.usecase.FakeUserUseCase;
+import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class UserControllerTest {
 

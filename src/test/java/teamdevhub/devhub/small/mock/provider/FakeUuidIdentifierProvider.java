@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.mock.provider;
+package teamdevhub.devhub.small.mock.provider;
 
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 

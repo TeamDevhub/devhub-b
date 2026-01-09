@@ -5,7 +5,6 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.UserRole;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class UserEntityTest {
 

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.mock.repository;
+package teamdevhub.devhub.small.mock.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

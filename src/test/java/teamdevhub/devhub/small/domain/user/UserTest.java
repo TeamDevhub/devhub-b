@@ -7,7 +7,6 @@ import teamdevhub.devhub.domain.user.UserRole;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class UserTest {
 

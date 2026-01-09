@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.mock.repository;
+package teamdevhub.devhub.small.mock.repository;
 
 import teamdevhub.devhub.domain.vo.auth.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;

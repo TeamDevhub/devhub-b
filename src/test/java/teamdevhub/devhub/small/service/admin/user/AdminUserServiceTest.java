@@ -8,7 +8,7 @@ import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.service.admin.user.AdminUserService;
-import teamdevhub.devhub.small.common.mock.repository.FakeUserRepository;
+import teamdevhub.devhub.small.mock.repository.FakeUserRepository;
 
 import java.util.List;
 

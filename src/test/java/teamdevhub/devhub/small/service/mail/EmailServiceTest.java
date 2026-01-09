@@ -10,10 +10,10 @@ import teamdevhub.devhub.common.enums.EmailTemplateType;
 import teamdevhub.devhub.service.exception.BusinessRuleException;
 import teamdevhub.devhub.service.mail.EmailService;
 import teamdevhub.devhub.service.mail.EmailTemplateVariables;
-import teamdevhub.devhub.small.common.mock.infrastructure.FakeEmailNotificationSender;
-import teamdevhub.devhub.small.common.mock.provider.FakeDateTimeProvider;
-import teamdevhub.devhub.small.common.mock.provider.FakeEmailVerificationCodeProvider;
-import teamdevhub.devhub.small.common.mock.repository.FakeEmailVerificationRepository;
+import teamdevhub.devhub.small.mock.infrastructure.FakeEmailNotificationSender;
+import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
+import teamdevhub.devhub.small.mock.provider.FakeEmailVerificationCodeProvider;
+import teamdevhub.devhub.small.mock.repository.FakeEmailVerificationRepository;
 
 import java.time.LocalDateTime;
 

@@ -5,7 +5,6 @@ import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.domain.user.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.common.mock.constant.TestConstant.*;
 
 class SignupResponseDtoTest {
 
