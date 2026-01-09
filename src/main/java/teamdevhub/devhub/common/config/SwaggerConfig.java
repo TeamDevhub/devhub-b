@@ -20,7 +20,7 @@ public class SwaggerConfig {
                         .title("DevHub API")
                         .description("""
                                 DevHub API 문서입니다.
-                                인증 시 Authorization 탭을 눌러 Bearer Token을 입력하세요.
+                                인증 시 Authorization 탭을 눌러 Bearer Token 을 입력하세요.
                                 """)
                         .version("v1.0.0")
                 )
@@ -36,14 +36,6 @@ public class SwaggerConfig {
                                                 .bearerFormat("JWT")
                                 )
                 );
-    }
-
-    @Bean
-    public GroupedOpenApi projectGroup() {
-        return GroupedOpenApi.builder()
-                .group("Project")
-                .pathsToMatch("/project/**")
-                .build();
     }
 
     @Bean
