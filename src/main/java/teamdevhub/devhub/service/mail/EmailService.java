@@ -3,7 +3,7 @@ package teamdevhub.devhub.service.mail;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailVerificationCommand;
+import teamdevhub.devhub.port.in.mail.command.ConfirmEmailVerificationCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.enums.EmailTemplateType;
@@ -14,7 +14,7 @@ import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
 import teamdevhub.devhub.port.out.mail.EmailNotificationSender;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
 import teamdevhub.devhub.common.provider.verification.EmailVerificationCodeProvider;
-import teamdevhub.devhub.service.common.exception.BusinessRuleException;
+import teamdevhub.devhub.service.exception.BusinessRuleException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

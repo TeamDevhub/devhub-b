@@ -1,6 +1,6 @@
 package teamdevhub.devhub.adapter.out.mail;
 
-import teamdevhub.devhub.adapter.out.common.exception.DataAccessException;
+import teamdevhub.devhub.adapter.out.exception.DataAccessException;
 import teamdevhub.devhub.adapter.out.mail.entity.EmailVerificationEntity;
 import teamdevhub.devhub.adapter.out.mail.mapper.EmailVerificationMapper;
 import teamdevhub.devhub.adapter.out.mail.persistence.JpaEmailVerificationRepository;

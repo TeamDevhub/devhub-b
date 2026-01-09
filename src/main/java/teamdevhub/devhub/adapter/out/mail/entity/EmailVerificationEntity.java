@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.adapter.out.common.entity.BooleanToYNConverter;
+import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
 
 import java.time.LocalDateTime;
 

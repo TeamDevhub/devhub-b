@@ -3,18 +3,18 @@ package teamdevhub.devhub.service.auth;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
+import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
-import teamdevhub.devhub.domain.common.vo.auth.RefreshToken;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.vo.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.auth.Authenticator;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import teamdevhub.devhub.port.out.auth.TokenProvider;
-import teamdevhub.devhub.service.common.exception.BusinessRuleException;
+import teamdevhub.devhub.service.exception.BusinessRuleException;
 
 @Service
 @RequiredArgsConstructor

@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.mock.persistence;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;

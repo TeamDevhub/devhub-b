@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
-import teamdevhub.devhub.adapter.out.common.entity.BooleanToYNConverter;
+import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
 import teamdevhub.devhub.domain.user.UserRole;
 
 import java.time.LocalDateTime;

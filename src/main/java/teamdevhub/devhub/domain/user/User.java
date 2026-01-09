@@ -3,8 +3,8 @@ package teamdevhub.devhub.domain.user;
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.common.exception.DomainRuleException;
-import teamdevhub.devhub.domain.common.vo.audit.AuditInfo;
+import teamdevhub.devhub.domain.exception.DomainRuleException;
+import teamdevhub.devhub.domain.vo.audit.AuditInfo;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
 

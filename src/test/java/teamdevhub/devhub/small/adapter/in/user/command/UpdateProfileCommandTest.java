@@ -1,7 +1,7 @@
 package teamdevhub.devhub.small.adapter.in.user.command;
 
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
+import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;

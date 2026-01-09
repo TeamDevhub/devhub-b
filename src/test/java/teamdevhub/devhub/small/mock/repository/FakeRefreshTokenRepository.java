@@ -1,6 +1,6 @@
 package teamdevhub.devhub.small.mock.repository;
 
-import teamdevhub.devhub.domain.common.vo.auth.RefreshToken;
+import teamdevhub.devhub.domain.vo.auth.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 
 import java.util.HashMap;

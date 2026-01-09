@@ -1,9 +1,9 @@
 package teamdevhub.devhub.small.mock.usecase;
 
 import org.springframework.data.domain.*;
-import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
-import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
+import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
 
 import java.util.ArrayList;

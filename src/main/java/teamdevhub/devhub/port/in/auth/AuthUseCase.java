@@ -1,6 +1,6 @@
 package teamdevhub.devhub.port.in.auth;
 
-import teamdevhub.devhub.adapter.in.auth.command.LoginCommand;
+import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 

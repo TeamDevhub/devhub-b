@@ -1,6 +1,6 @@
 package teamdevhub.devhub.small.mock.usecase;
 
-import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailVerificationCommand;
+import teamdevhub.devhub.port.in.mail.command.ConfirmEmailVerificationCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.exception.AuthRuleException;
@@ -8,7 +8,7 @@ import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
 import teamdevhub.devhub.domain.mail.EmailVerification;
 import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
-import teamdevhub.devhub.service.common.exception.BusinessRuleException;
+import teamdevhub.devhub.service.exception.BusinessRuleException;
 
 public class FakeEmailVerificationUseCase implements EmailVerificationUseCase {
 

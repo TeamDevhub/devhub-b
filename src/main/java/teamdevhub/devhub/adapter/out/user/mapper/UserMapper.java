@@ -1,8 +1,8 @@
 package teamdevhub.devhub.adapter.out.user.mapper;
 
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
-import teamdevhub.devhub.domain.common.vo.audit.AuditInfo;
-import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.vo.audit.AuditInfo;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;

@@ -2,9 +2,9 @@ package teamdevhub.devhub.adapter.out.auth;
 
 import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
 import teamdevhub.devhub.adapter.out.auth.persistence.JpaRefreshTokenRepository;
-import teamdevhub.devhub.adapter.out.common.exception.DataAccessException;
+import teamdevhub.devhub.adapter.out.exception.DataAccessException;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.common.vo.auth.RefreshToken;
+import teamdevhub.devhub.domain.vo.auth.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

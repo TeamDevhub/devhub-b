@@ -1,7 +1,7 @@
 package teamdevhub.devhub.small.adapter.in.admin.command;
 
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
 
 import java.time.LocalDateTime;

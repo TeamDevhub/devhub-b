@@ -2,13 +2,13 @@ package teamdevhub.devhub.small.service.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
-import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
-import teamdevhub.devhub.domain.common.vo.auth.RefreshToken;
+import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
+import teamdevhub.devhub.domain.vo.auth.RefreshToken;
 import teamdevhub.devhub.domain.mail.EmailVerification;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.service.common.exception.BusinessRuleException;
+import teamdevhub.devhub.service.exception.BusinessRuleException;
 import teamdevhub.devhub.service.user.UserService;
 import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
 import teamdevhub.devhub.small.mock.provider.FakePasswordPolicyProvider;

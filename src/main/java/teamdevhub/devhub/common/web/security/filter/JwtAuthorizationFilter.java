@@ -18,7 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.TokenType;
-import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.auth.TokenProvider;
 

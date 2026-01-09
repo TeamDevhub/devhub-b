@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
-import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
+import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.adapter.in.web.converter.PageConverter;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataListResponseDto;
-import teamdevhub.devhub.adapter.in.web.vo.PageVo;
+import teamdevhub.devhub.adapter.in.vo.PageVo;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
 

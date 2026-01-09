@@ -1,8 +1,8 @@
 package teamdevhub.devhub.port.in.user;
 
-import teamdevhub.devhub.adapter.in.user.command.SignupCommand;
-import teamdevhub.devhub.adapter.in.user.command.UpdateProfileCommand;
-import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 

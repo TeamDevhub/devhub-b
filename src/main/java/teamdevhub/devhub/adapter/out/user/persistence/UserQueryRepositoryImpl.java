@@ -5,7 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
-import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.out.user.entity.QUserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 

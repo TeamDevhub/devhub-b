@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
-import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 
 import java.util.Optional;
 

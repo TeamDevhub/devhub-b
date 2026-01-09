@@ -5,9 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.adapter.in.admin.user.command.SearchUserCommand;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
-import teamdevhub.devhub.adapter.in.common.pagination.PageCommand;
+import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
 import teamdevhub.devhub.port.out.user.UserRepository;
 

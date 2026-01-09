@@ -3,7 +3,7 @@ package teamdevhub.devhub.common.web.security.auth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 
 import java.util.Collection;
 import java.util.List;

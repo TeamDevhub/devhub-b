@@ -2,7 +2,7 @@ package teamdevhub.devhub.adapter.out.mail;
 
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import teamdevhub.devhub.adapter.out.common.exception.ExternalServiceException;
+import teamdevhub.devhub.adapter.out.exception.ExternalServiceException;
 import teamdevhub.devhub.common.enums.EmailTemplateType;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.port.out.mail.EmailNotificationSender;

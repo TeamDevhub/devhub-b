@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.adapter.in.web.vo.ErrorResponseVo;
+import teamdevhub.devhub.adapter.in.vo.ErrorResponseVo;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.SuccessCode;
 

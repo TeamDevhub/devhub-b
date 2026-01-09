@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.adapter.out.user.mapper;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.domain.common.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.UserPosition;

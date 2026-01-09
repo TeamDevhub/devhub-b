@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.adapter.in.web.vo.ErrorResponseVo;
-import teamdevhub.devhub.adapter.in.web.vo.PageVo;
+import teamdevhub.devhub.adapter.in.vo.ErrorResponseVo;
+import teamdevhub.devhub.adapter.in.vo.PageVo;
 import teamdevhub.devhub.common.enums.SuccessCode;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package teamdevhub.devhub.adapter.in.web.converter;
 
 import org.springframework.data.domain.Page;
-import teamdevhub.devhub.adapter.in.web.vo.PageVo;
+import teamdevhub.devhub.adapter.in.vo.PageVo;
 
 import java.util.List;
 import java.util.function.Function;
