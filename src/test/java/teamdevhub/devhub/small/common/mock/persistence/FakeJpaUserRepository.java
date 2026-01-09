@@ -28,7 +28,7 @@ public class FakeJpaUserRepository implements JpaUserRepository {
     }
 
     @Override
-    public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
+    public int updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
         UserEntity existedUser = store.get(userGuid);
         if (existedUser != null) {
             UserEntity updatedUser = UserEntity.builder()
@@ -46,7 +46,9 @@ public class FakeJpaUserRepository implements JpaUserRepository {
                     .build();
 
             store.put(userGuid, updatedUser);
+            return 1;
         }
+        return 0;
     }
 
     @Override
