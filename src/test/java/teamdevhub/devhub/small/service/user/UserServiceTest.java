@@ -29,8 +29,8 @@ class UserServiceTest {
 
     private UserService userService;
     private FakeUserRepository fakeUserRepository;
-    private FakeEmailVerificationUseCase fakeEmailCertificationUseCase;
-    private FakeEmailVerificationRepository fakeEmailCertificationRepository;
+    private FakeEmailVerificationUseCase fakeEmailVerificationUseCase;
+    private FakeEmailVerificationRepository fakeEmailVerificationRepository;
     private FakeUuidIdentifierProvider fakeUuidIdentifierProvider;
     private FakePasswordPolicyProvider fakePasswordPolicyProvider;
     private FakeRefreshTokenRepository fakeRefreshTokenRepository;
@@ -47,12 +47,12 @@ class UserServiceTest {
 
         EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL, "123456", fakeDateTimeProvider.now().plusMinutes(5));
         emailVerification.verify("123456", fakeDateTimeProvider.now());
-        fakeEmailCertificationRepository = new FakeEmailVerificationRepository(List.of(emailVerification), fakeDateTimeProvider);
-        fakeEmailCertificationUseCase = new FakeEmailVerificationUseCase(fakeEmailCertificationRepository, fakeDateTimeProvider);
+        fakeEmailVerificationRepository = new FakeEmailVerificationRepository(List.of(emailVerification), fakeDateTimeProvider);
+        fakeEmailVerificationUseCase = new FakeEmailVerificationUseCase(fakeEmailVerificationRepository, fakeDateTimeProvider);
         userService = new UserService(
                 fakeUserRepository,
-                fakeEmailCertificationUseCase,
-                fakeEmailCertificationRepository,
+                fakeEmailVerificationUseCase,
+                fakeEmailVerificationRepository,
                 fakeRefreshTokenRepository,
                 fakePasswordPolicyProvider,
                 fakeUuidIdentifierProvider,
@@ -66,8 +66,8 @@ class UserServiceTest {
         FakeUuidIdentifierProvider adminUuidProvider = new FakeUuidIdentifierProvider(ADMIN_GUID);
         userService = new UserService(
                 fakeUserRepository,
-                fakeEmailCertificationUseCase,
-                fakeEmailCertificationRepository,
+                fakeEmailVerificationUseCase,
+                fakeEmailVerificationRepository,
                 fakeRefreshTokenRepository,
                 fakePasswordPolicyProvider,
                 adminUuidProvider,
@@ -109,7 +109,7 @@ class UserServiceTest {
         User savedUser = userService.signup(signupCommand);
 
         //then
-        assertThat(fakeEmailCertificationRepository.existUnexpiredCode(signupCommand.getEmail())).isFalse();
+        assertThat(fakeEmailVerificationRepository.existUnexpiredCode(signupCommand.getEmail())).isFalse();
         assertThat(fakeUserRepository.saveNewUser(savedUser).getUserGuid()).isEqualTo(TEST_GUID);
         assertThat(fakeUserRepository.saveNewUser(savedUser).getPositions()).isEqualTo(TEST_POSITIONS);
         assertThat(fakeUserRepository.saveNewUser(savedUser).getSkills()).isEqualTo(TEST_SKILLS);

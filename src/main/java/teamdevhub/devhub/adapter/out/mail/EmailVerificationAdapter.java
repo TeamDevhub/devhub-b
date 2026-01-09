@@ -16,19 +16,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class EmailVerificationAdapter implements EmailVerificationRepository {
 
-    private final JpaEmailCertificationRepository jpaEmailCertificationRepository;
+    private final JpaEmailVerificationRepository jpaEmailVerificationRepository;
     private final DateTimeProvider dateTimeProvider;
 
     @Override
     public EmailVerification findByEmail(String email) {
-        return jpaEmailCertificationRepository.findById(email)
+        return jpaEmailVerificationRepository.findById(email)
                 .map(EmailVerificationMapper::toDomain)
                 .orElseThrow(() -> DataAccessException.of(ErrorCode.READ_FAIL));
     }
 
     @Override
     public boolean existUnexpiredCode(String email) {
-        return jpaEmailCertificationRepository.findById(email)
+        return jpaEmailVerificationRepository.findById(email)
                 .filter(emailVerificationEntity -> !emailVerificationEntity.getExpiredAt().isBefore(dateTimeProvider.now()))
                 .isPresent();
     }
@@ -36,11 +36,11 @@ public class EmailVerificationAdapter implements EmailVerificationRepository {
     @Override
     public void save(EmailVerification emailVerification) {
         EmailVerificationEntity emailVerificationEntity = EmailVerificationMapper.toEntity(emailVerification);
-        jpaEmailCertificationRepository.save(emailVerificationEntity);
+        jpaEmailVerificationRepository.save(emailVerificationEntity);
     }
 
     @Override
     public void delete(String email) {
-        jpaEmailCertificationRepository.deleteById(email);
+        jpaEmailVerificationRepository.deleteById(email);
     }
 }

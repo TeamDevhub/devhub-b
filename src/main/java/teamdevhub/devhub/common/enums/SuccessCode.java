@@ -10,8 +10,8 @@ public enum SuccessCode {
     UPDATE_SUCCESS("SUC.DVH.0003", "수정 성공"),
     DELETE_SUCCESS("SUC.DVH.0004", "삭제 성공"),
 
-    EMAIL_CERTIFICATION_SENT("SUC.DVH.0010", "인증코드 발송 성공"),
-    EMAIL_CERTIFICATION_SUCCESS("SUC.DVH.0011", "인증코드 검증 성공"),
+    EMAIL_VERIFICATION_SENT("SUC.DVH.0010", "인증코드 발송 성공"),
+    EMAIL_VERIFICATION_SUCCESS("SUC.DVH.0011", "인증코드 검증 성공"),
     SIGNUP_SUCCESS("SUC.DVH.0012", "회원가입 성공"),
     LOGIN_SUCCESS("SUC.DVH.0013", "로그인 성공"),
     LOGOUT_SUCCESS("SUC.DVH.0014", "로그아웃 성공"),

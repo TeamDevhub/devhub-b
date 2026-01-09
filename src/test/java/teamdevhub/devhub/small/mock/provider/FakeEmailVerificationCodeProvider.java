@@ -4,14 +4,14 @@ import teamdevhub.devhub.common.provider.verification.EmailVerificationCodeProvi
 
 public class FakeEmailVerificationCodeProvider implements EmailVerificationCodeProvider {
 
-    private final String fixedEmailCertificationCode;
+    private final String fixedEmailVerificationCode;
 
-    public FakeEmailVerificationCodeProvider(String fixedEmailCertificationCode) {
-        this.fixedEmailCertificationCode = fixedEmailCertificationCode;
+    public FakeEmailVerificationCodeProvider(String fixedEmailVerificationCode) {
+        this.fixedEmailVerificationCode = fixedEmailVerificationCode;
     }
 
     @Override
-    public String generateEmailCertificationCode() {
-        return fixedEmailCertificationCode;
+    public String generateEmailVerificationCode() {
+        return fixedEmailVerificationCode;
     }
 }

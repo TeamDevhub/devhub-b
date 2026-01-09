@@ -23,22 +23,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class EmailServiceTest {
 
     private EmailService emailService;
-    private FakeEmailNotificationSender fakeEmailSender;
+    private FakeEmailNotificationSender fakeEmailNotificationSender;
     private FakeEmailVerificationRepository fakeEmailVerificationRepository;
-    private FakeEmailVerificationCodeProvider fakeCodeProvider;
+    private FakeEmailVerificationCodeProvider fakeEmailVerificationCodeProvider;
     private FakeDateTimeProvider fakeDateTimeProvider;
 
     @BeforeEach
     void init() {
-        fakeEmailSender = new FakeEmailNotificationSender();
+        fakeEmailNotificationSender = new FakeEmailNotificationSender();
         fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
         fakeEmailVerificationRepository = new FakeEmailVerificationRepository(fakeDateTimeProvider);
-        fakeCodeProvider = new FakeEmailVerificationCodeProvider("123456");
+        fakeEmailVerificationCodeProvider = new FakeEmailVerificationCodeProvider("123456");
 
         emailService = new EmailService(
-                fakeEmailSender,
+                fakeEmailNotificationSender,
                 fakeEmailVerificationRepository,
-                fakeCodeProvider,
+                fakeEmailVerificationCodeProvider,
                 fakeDateTimeProvider
         );
     }
@@ -49,13 +49,13 @@ class EmailServiceTest {
         EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto("test@example.com");
 
         //when
-        emailService.sendEmailCertificationCode(emailVerificationRequestDto);
+        emailService.sendEmailVerification(emailVerificationRequestDto);
 
         //then
-        assertThat(fakeEmailSender.getSentEmails()).hasSize(1);
-        FakeEmailNotificationSender.SentEmail sentEmail = fakeEmailSender.getSentEmails().get(0);
+        assertThat(fakeEmailNotificationSender.getSentEmails()).hasSize(1);
+        FakeEmailNotificationSender.SentEmail sentEmail = fakeEmailNotificationSender.getSentEmails().get(0);
         assertThat(sentEmail.getEmail()).isEqualTo("test@example.com");
-        assertThat(sentEmail.getTemplateType()).isEqualTo(EmailTemplateType.EMAIL_CERTIFICATION);
+        assertThat(sentEmail.getTemplateType()).isEqualTo(EmailTemplateType.EMAIL_VERIFICATION);
         assertThat(sentEmail.getVariable(EmailTemplateVariables.CODE)).isNotNull();
     }
 
@@ -63,12 +63,12 @@ class EmailServiceTest {
     void 아직_이메일인증을_하지_않은_상태에서_다시_발송요청을_하면_예외를_던진다() {
         //given
         EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto("test@example.com");
-        emailService.sendEmailCertificationCode(emailVerificationRequestDto);
+        emailService.sendEmailVerification(emailVerificationRequestDto);
 
         //then
         assertThrows(AuthRuleException.class, () ->
                 //when
-                emailService.sendEmailCertificationCode(new EmailVerificationRequestDto("test@example.com"))
+                emailService.sendEmailVerification(new EmailVerificationRequestDto("test@example.com"))
         );
     }
 
@@ -76,11 +76,11 @@ class EmailServiceTest {
     void 올바른_이메일_인증코드를_입력하면_검증완료여부_메서드_호출_시_true_가_반환된다() {
         //given
         EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto("test@example.com");
-        emailService.sendEmailCertificationCode(emailVerificationRequestDto);
+        emailService.sendEmailVerification(emailVerificationRequestDto);
         ConfirmEmailVerificationCommand confirmEmailVerificationCommand = new ConfirmEmailVerificationCommand("test@example.com", "123456");
 
         //when
-        emailService.confirmEmailCertificationCode(confirmEmailVerificationCommand);
+        emailService.confirmEmailVerification(confirmEmailVerificationCommand);
 
         //then
         assertThat(fakeEmailVerificationRepository.findByEmail(confirmEmailVerificationCommand.getEmail()).isVerified()).isTrue();
@@ -91,13 +91,13 @@ class EmailServiceTest {
     void 잘못된_이메일_인증코드를_입력하면_예외가_발생하며_추후_검증완료여부_메서드_호출_시_false_가_반환된다() {
         //given
         EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto("test@example.com");
-        emailService.sendEmailCertificationCode(emailVerificationRequestDto);
+        emailService.sendEmailVerification(emailVerificationRequestDto);
         ConfirmEmailVerificationCommand confirmEmailVerificationCommand = new ConfirmEmailVerificationCommand("test@example.com", "654321");
 
         //then
         assertThrows(BusinessRuleException.class, () ->
                 //when
-                emailService.confirmEmailCertificationCode(confirmEmailVerificationCommand)
+                emailService.confirmEmailVerification(confirmEmailVerificationCommand)
         );
         assertThat(emailService.isVerified("test@example.com")).isFalse();
     }

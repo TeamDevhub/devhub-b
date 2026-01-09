@@ -10,7 +10,7 @@ public class EmailVerificationCodeUtil implements EmailVerificationCodeProvider 
     private final SecureRandom RANDOM = new SecureRandom();
 
     @Override
-    public String generateEmailCertificationCode() {
+    public String generateEmailVerificationCode() {
         int CODE_LENGTH = 6;
         StringBuilder code = new StringBuilder(CODE_LENGTH);
         for (int i = 0; i < CODE_LENGTH; i++) {

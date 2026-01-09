@@ -29,22 +29,22 @@ public class AuthController {
     private final EmailVerificationUseCase emailVerificationUseCase;
 
     @PostMapping("/email-verification")
-    public ResponseEntity<ApiDataResponseVo<Void>> sendEmailCertificationCode(@Valid @RequestBody EmailVerificationRequestDto emailVerificationRequestDto) {
-        emailVerificationUseCase.sendEmailCertificationCode(emailVerificationRequestDto);
+    public ResponseEntity<ApiDataResponseVo<Void>> sendEmailVerification(@Valid @RequestBody EmailVerificationRequestDto emailVerificationRequestDto) {
+        emailVerificationUseCase.sendEmailVerification(emailVerificationRequestDto);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCode.EMAIL_CERTIFICATION_SENT
+                        SuccessCode.EMAIL_VERIFICATION_SENT
                 )
         );
     }
 
     @PostMapping("/email-verification/confirm")
-    public ResponseEntity<ApiDataResponseVo<Void>> confirmEmailCertificationCode(@Valid @RequestBody ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto) {
+    public ResponseEntity<ApiDataResponseVo<Void>> confirmEmailVerification(@Valid @RequestBody ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto) {
         ConfirmEmailVerificationCommand confirmEmailVerificationCommand = ConfirmEmailVerificationCommand.of(confirmEmailVerificationRequestDto.getEmail(), confirmEmailVerificationRequestDto.getCode());
-        emailVerificationUseCase.confirmEmailCertificationCode(confirmEmailVerificationCommand);
+        emailVerificationUseCase.confirmEmailVerification(confirmEmailVerificationCommand);
         return ResponseEntity.ok(
                 ApiDataResponseVo.successWithoutData(
-                        SuccessCode.EMAIL_CERTIFICATION_SUCCESS
+                        SuccessCode.EMAIL_VERIFICATION_SUCCESS
                 )
         );
     }

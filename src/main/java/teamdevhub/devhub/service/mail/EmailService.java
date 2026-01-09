@@ -31,24 +31,24 @@ public class EmailService implements EmailVerificationUseCase {
     private final DateTimeProvider dateTimeProvider;
 
     @Override
-    public void sendEmailCertificationCode(EmailVerificationRequestDto emailVerificationRequestDto) {
+    public void sendEmailVerification(EmailVerificationRequestDto emailVerificationRequestDto) {
         String email = emailVerificationRequestDto.getEmail();
 
         if (emailVerificationRepository.existUnexpiredCode(email)) {
             throw AuthRuleException.of(ErrorCode.EMAIL_VERIFICATION_ALREADY_SENT);
         }
 
-        String emailCertificationCode = emailVerificationCodeProvider.generateEmailCertificationCode();
+        String emailVerificationCode = emailVerificationCodeProvider.generateEmailVerificationCode();
         LocalDateTime expiredAt = dateTimeProvider.now().plus(Duration.ofMinutes(5));
-        EmailVerification emailVerification = EmailVerification.issue(email, emailCertificationCode, expiredAt);
+        EmailVerification emailVerification = EmailVerification.issue(email, emailVerificationCode, expiredAt);
         emailVerificationRepository.save(emailVerification);
 
-        Map<String, Object> emailCertificationVariables = Map.of(EmailTemplateVariables.CODE, emailCertificationCode, EmailTemplateVariables.EXPIRE_TIME, EmailTemplateType.EMAIL_CERTIFICATION.getExpireTime());
-        emailNotificationSender.send(email, EmailTemplateType.EMAIL_CERTIFICATION, emailCertificationVariables);
+        Map<String, Object> emailVerificationVariables = Map.of(EmailTemplateVariables.CODE, emailVerificationCode, EmailTemplateVariables.EXPIRE_TIME, EmailTemplateType.EMAIL_VERIFICATION.getExpireTime());
+        emailNotificationSender.send(email, EmailTemplateType.EMAIL_VERIFICATION, emailVerificationVariables);
     }
 
     @Override
-    public void confirmEmailCertificationCode(ConfirmEmailVerificationCommand confirmEmailVerificationCommand) {
+    public void confirmEmailVerification(ConfirmEmailVerificationCommand confirmEmailVerificationCommand) {
         EmailVerification emailVerification = emailVerificationRepository.findByEmail(confirmEmailVerificationCommand.getEmail());
 
         boolean verified = emailVerification.verify(

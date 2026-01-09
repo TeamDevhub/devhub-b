@@ -4,7 +4,7 @@ import teamdevhub.devhub.adapter.in.auth.command.ConfirmEmailVerificationCommand
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;
 
 public interface EmailVerificationUseCase {
-    void sendEmailCertificationCode(EmailVerificationRequestDto emailVerificationRequestDto);
-    void confirmEmailCertificationCode(ConfirmEmailVerificationCommand confirmEmailVerificationCommand);
+    void sendEmailVerification(EmailVerificationRequestDto emailVerificationRequestDto);
+    void confirmEmailVerification(ConfirmEmailVerificationCommand confirmEmailVerificationCommand);
     boolean isVerified(String email);
 }

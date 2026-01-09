@@ -21,7 +21,7 @@ public class FakeEmailVerificationUseCase implements EmailVerificationUseCase {
     }
 
     @Override
-    public void sendEmailCertificationCode(EmailVerificationRequestDto requestDto) {
+    public void sendEmailVerification(EmailVerificationRequestDto requestDto) {
         String email = requestDto.getEmail();
 
         if (emailVerificationRepository.existUnexpiredCode(email)) {
@@ -38,7 +38,7 @@ public class FakeEmailVerificationUseCase implements EmailVerificationUseCase {
     }
 
     @Override
-    public void confirmEmailCertificationCode(ConfirmEmailVerificationCommand confirmEmailVerificationCommand) {
+    public void confirmEmailVerification(ConfirmEmailVerificationCommand confirmEmailVerificationCommand) {
         EmailVerification emailVerification = emailVerificationRepository.findByEmail(confirmEmailVerificationCommand.getEmail());
 
         if(!emailVerification.verify(confirmEmailVerificationCommand.getCode(), dateTimeProvider.now())) {
