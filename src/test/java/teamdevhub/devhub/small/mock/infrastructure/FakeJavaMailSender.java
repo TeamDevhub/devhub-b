@@ -42,8 +42,4 @@ public class FakeJavaMailSender implements JavaMailSender {
     public MimeMessage getLastSentMessage() {
         return lastSentMessage;
     }
-
-    static class FakeMimeMessage extends jakarta.mail.internet.MimeMessage {
-        public FakeMimeMessage() { super((jakarta.mail.Session) null); }
-    }
 }

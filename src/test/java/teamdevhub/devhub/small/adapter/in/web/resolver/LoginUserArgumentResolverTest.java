@@ -19,7 +19,6 @@ import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
 class LoginUserArgumentResolverTest {
 
     private LoginUserArgumentResolver loginUserArgumentResolver;
-    private FakeAuthentication fakeAuthentication;
 
     @BeforeEach
     void init() {
