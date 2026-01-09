@@ -20,7 +20,6 @@ import teamdevhub.devhub.port.in.user.UserUseCase;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-@Slf4j
 public class UserController {
 
     private final UserUseCase userUseCase;
@@ -36,16 +35,16 @@ public class UserController {
         );
     }
 
-    @PostMapping("/signup/{oauth}")
-    public ResponseEntity<ApiDataResponseDto<Void>> signupWithOauth(@PathVariable String oauth) {
-        //userUseCase.oauthSignup(oauth)
-        return ResponseEntity.ok(
-                ApiDataResponseDto.successWithoutData(
-                        SuccessCode.SIGNUP_SUCCESS
-                        //SignupResponseDto.fromDomain(userUseCase.signupWithOauth(oauth))
-                )
-        );
-    }
+//    @PostMapping("/signup/{oauth}")
+//    public ResponseEntity<ApiDataResponseDto<Void>> signupWithOauth(@PathVariable String oauth) {
+//        userUseCase.oauthSignup(oauth)
+//        return ResponseEntity.ok(
+//                ApiDataResponseDto.successWithoutData(
+//                        SuccessCode.SIGNUP_SUCCESS
+//                        SignupResponseDto.fromDomain(userUseCase.signupWithOauth(oauth))
+//                )
+//        );
+//    }
 
     @GetMapping("/profile")
     public ResponseEntity<ApiDataResponseDto<UserProfileResponseDto>> getProfile(@LoginUser AuthenticatedUser authenticatedUser) {

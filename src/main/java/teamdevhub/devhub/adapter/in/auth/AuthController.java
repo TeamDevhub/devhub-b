@@ -64,19 +64,19 @@ public class AuthController {
                 );
     }
 
-    @PostMapping("/login/{oauth}")
-    public ResponseEntity<ApiDataResponseDto<Void>> loginWithOauth(@PathVariable String oauth, @RequestBody LoginRequestDto loginRequestDto) {
-        // LoginResponseDto loginResponseDto = authUseCase.loginWithOauth(oauth);
-        // ResponseCookie refreshCookie = CookieUtil.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
-        return ResponseEntity.ok()
-                //.header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
-                //.header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                .body(ApiDataResponseDto.successWithoutData(
-                                SuccessCode.LOGIN_SUCCESS
-                                //TokenResponseDto.issue(loginResponseDto.getAccessToken())
-                        )
-                );
-    }
+//    @PostMapping("/login/{oauth}")
+//    public ResponseEntity<ApiDataResponseDto<Void>> loginWithOauth(@PathVariable String oauth, @RequestBody LoginRequestDto loginRequestDto) {
+//         LoginResponseDto loginResponseDto = authUseCase.loginWithOauth(oauth);
+//         ResponseCookie refreshCookie = CookieUtil.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
+//                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+//                .body(ApiDataResponseDto.successWithoutData(
+//                                SuccessCode.LOGIN_SUCCESS
+//                                TokenResponseDto.issue(loginResponseDto.getAccessToken())
+//                        )
+//                );
+//    }
 
     @PostMapping("/reissue")
     public ResponseEntity<ApiDataResponseDto<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
@@ -90,7 +90,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<ApiDataResponseDto<Void>> revoke(@LoginUser AuthenticatedUser authenticatedUser) {
-        authUseCase.revoke(authenticatedUser.email());
+        authUseCase.revoke(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.LOGOUT_SUCCESS

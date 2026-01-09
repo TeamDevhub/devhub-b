@@ -53,7 +53,7 @@ public class UserAdapter implements UserRepository {
 
     @Override
     public AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid) {
-        UserEntity userEntity = jpaUserRepository.findByEmail(userGuid).
+        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid).
                 orElseThrow(() -> DataAccessException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toAuthenticatedUser(userEntity);
     }

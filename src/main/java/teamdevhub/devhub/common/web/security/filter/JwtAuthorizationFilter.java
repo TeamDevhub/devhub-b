@@ -1,32 +1,30 @@
 package teamdevhub.devhub.common.web.security.filter;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import teamdevhub.devhub.common.exception.AuthRuleException;
-import teamdevhub.devhub.adapter.out.common.provider.jwt.JwtClaims;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import teamdevhub.devhub.adapter.out.common.provider.jwt.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.TokenType;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.out.auth.TokenProvider;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
