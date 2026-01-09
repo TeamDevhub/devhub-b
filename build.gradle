@@ -57,8 +57,6 @@ dependencies {
 	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
 	implementation 'io.micrometer:micrometer-tracing'
 
-	implementation platform('software.amazon.awssdk:bom:2.25.60')
-	implementation 'software.amazon.awssdk:s3'
 	implementation 'commons-io:commons-io:2.15.1'
 }
 
