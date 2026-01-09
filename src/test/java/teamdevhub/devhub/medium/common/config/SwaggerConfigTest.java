@@ -19,12 +19,14 @@ class SwaggerConfigTest {
 
     @Test
     void openAPI_빈이_등록된다() {
+        // given, when, then
         assertThat(openAPI).isNotNull();
         assertThat(openAPI.getInfo().getTitle()).isEqualTo("DevHub API");
     }
 
     @Test
     void userGroup_빈이_등록된다() {
+        // given, when, then
         assertThat(userGroup).isNotNull();
         assertThat(userGroup.getGroup()).isEqualTo("User");
     }

@@ -15,6 +15,7 @@ class QueryDslConfigTest {
 
     @Test
     void jpaQueryFactory_가_생성된다() {
+        // given, when, then
         assertThat(jpaQueryFactory).isNotNull();
     }
 }

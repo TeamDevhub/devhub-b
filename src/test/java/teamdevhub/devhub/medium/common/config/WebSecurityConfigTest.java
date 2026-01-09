@@ -19,27 +19,35 @@ class WebSecurityConfigTest {
 
     @Test
     void 인증없이_접근하면_Unauthorized_상태코드가_반환된다() throws Exception {
+        // given, when
         mockMvc.perform(get("/user/profile"))
+                // then
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void adminURL_은_ADMIN_권한이_있어야_접근이_가능하다() throws Exception {
+        // given, when
         mockMvc.perform(get("/admin/users?page=0&size=10")
                         .with(user("admin@example.com").roles("ADMIN")))
+                // then
                 .andExpect(status().isOk());
     }
 
     @Test
     void adminURL_은_ADMIN_권한이_없으면_접근이_거부된다() throws Exception {
+        // given, when
         mockMvc.perform(get("/admin/users?page=0&size=10")
                         .with(user("user@example.com").roles("USER")))
+                // then
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void Swagger_접근은_모든_사용자가_가능하다() throws Exception {
+        // given, when
         mockMvc.perform(get("/swagger-ui/index.html"))
+                // then
                 .andExpect(status().isOk());
     }
 }

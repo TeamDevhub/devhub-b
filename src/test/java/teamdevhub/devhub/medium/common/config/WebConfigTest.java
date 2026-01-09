@@ -30,18 +30,25 @@ class WebConfigTest {
 
     @Test
     void LoginUserArgumentResolver_가_등록된다() {
-        RequestMappingHandlerAdapter adapter = context.getBean(RequestMappingHandlerAdapter.class);
+        // given
+        RequestMappingHandlerAdapter requestMappingHandlerAdapter = context.getBean(RequestMappingHandlerAdapter.class);
 
-        List<HandlerMethodArgumentResolver> resolvers = adapter.getArgumentResolvers();
+        // when
+        List<HandlerMethodArgumentResolver> resolvers = requestMappingHandlerAdapter.getArgumentResolvers();
+
+        // then
         assertThat(resolvers).contains(loginUserArgumentResolver);
     }
     @Test
     void corsMapping_적용을_확인할_수_있다() throws Exception {
+        // given
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 
+        // when
         mockMvc.perform(options("/any-path")
                         .header("Origin", "http://localhost:5173")
                         .header("Access-Control-Request-Method", "GET"))
+                // then
                 .andExpect(status().isOk())
                 .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"))
                 .andExpect(header().string("Access-Control-Allow-Credentials", "true"));

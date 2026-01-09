@@ -18,36 +18,52 @@ public class ProviderConfigTest {
 
     @Test
     void 날짜_시간_프로바이더가_생성된다() {
+        // given
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
+
+        // when
         DateTimeProvider dateTimeProvider = providerConfig.dateTimeProvider();
 
+        // then
         assertThat(dateTimeProvider).isNotNull();
         assertThat(dateTimeProvider).isInstanceOf(SystemDateTimeProvider.class);
     }
 
     @Test
     void 비밀번호_정책_프로바이더가_생성된다() {
+        // given
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
+
+        // when
         PasswordPolicyProvider passwordPolicyProvider = providerConfig.passwordPolicyProvider();
 
+        // then
         assertThat(passwordPolicyProvider).isNotNull();
         assertThat(passwordPolicyProvider).isInstanceOf(SystemPasswordPolicyProvider.class);
     }
 
     @Test
     void 식별자_프로바이더가_생성된다() {
+        // given
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
+
+        // when
         IdentifierProvider identifierProvider = providerConfig.identifierProvider();
 
+        // then
         assertThat(identifierProvider).isNotNull();
         assertThat(identifierProvider).isInstanceOf(SystemIdentifierProvider.class);
     }
 
     @Test
     void 이메일_인증_코드_프로바이더가_생성된다() {
+        // given
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
+
+        // when
         EmailVerificationCodeProvider emailVerificationCodeProvider = providerConfig.emailVerificationCodeProvider();
 
+        // then
         assertThat(emailVerificationCodeProvider).isNotNull();
         assertThat(emailVerificationCodeProvider).isInstanceOf(SystemEmailVerificationCodeProvider.class);
     }
