@@ -11,7 +11,7 @@ import teamdevhub.devhub.common.enums.ErrorCode;
 @Component
 public class CustomFilterExceptionHandler {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void handle(HttpServletResponse httpServletResponse, ErrorCode errorCode) {
 
@@ -25,7 +25,7 @@ public class CustomFilterExceptionHandler {
             httpServletResponse.setCharacterEncoding("UTF-8");
 
             ApiDataResponseDto<?> result = ApiDataResponseDto.failureWithoutData(errorCode);
-            String json = mapper.writeValueAsString(result);
+            String json = objectMapper.writeValueAsString(result);
 
             httpServletResponse.getWriter().write(json);
             httpServletResponse.getWriter().flush();

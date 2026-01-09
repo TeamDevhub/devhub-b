@@ -14,7 +14,7 @@ import java.io.IOException;
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException accessDeniedException) throws IOException {
@@ -22,6 +22,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
         httpServletResponse.setContentType("application/json;charset=UTF-8");
-        httpServletResponse.getWriter().write(mapper.writeValueAsString(result));
+        httpServletResponse.getWriter().write(objectMapper.writeValueAsString(result));
     }
 }

@@ -15,7 +15,7 @@ import java.io.IOException;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException authenticationException) throws IOException {
@@ -23,6 +23,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.setContentType("application/json;charset=UTF-8");
-        httpServletResponse.getWriter().write(mapper.writeValueAsString(result));
+        httpServletResponse.getWriter().write(objectMapper.writeValueAsString(result));
     }
 }

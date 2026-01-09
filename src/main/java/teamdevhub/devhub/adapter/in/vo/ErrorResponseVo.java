@@ -1,11 +1,15 @@
 package teamdevhub.devhub.adapter.in.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import teamdevhub.devhub.common.enums.ErrorCode;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ErrorResponseVo {
 
     private String code;
