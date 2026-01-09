@@ -31,7 +31,7 @@ class LoginUserArgumentResolverTest {
     }
 
     @Test
-    void UserAuthentication_principal_이면_AuthenticatedUser_반환() {
+    void UserAuthentication_principal_이면_AuthenticatedUser_를_반환한다() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
         UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
@@ -47,7 +47,7 @@ class LoginUserArgumentResolverTest {
     }
 
     @Test
-    void AuthenticatedUser_principal_이면_그대로_반환() {
+    void AuthenticatedUser_principal_이면_그대로_반환한다() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(authenticatedUser));
@@ -60,7 +60,7 @@ class LoginUserArgumentResolverTest {
     }
 
     @Test
-    void principal_없으면_예외_발생() {
+    void principal_이_없으면_예외가_발생한다() {
         // given
         SecurityContextHolder.getContext().setAuthentication(null);
 
@@ -73,7 +73,7 @@ class LoginUserArgumentResolverTest {
     }
 
     @Test
-    void principal_타입_틀리면_예외_발생() {
+    void principal_의_타입_틀리면_예외가_발생한다() {
         // given
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication("invalid-principal"));
 

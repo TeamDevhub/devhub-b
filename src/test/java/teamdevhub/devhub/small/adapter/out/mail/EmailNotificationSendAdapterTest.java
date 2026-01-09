@@ -22,12 +22,12 @@ class EmailNotificationSendAdapterTest {
     @BeforeEach
     void init() {
         fakeMailSender = new FakeJavaMailSender();
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine(); // 실제 프로세스 호출 안 할 거면 OK
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         adapter = new EmailNotificationSendAdapter(fakeMailSender, templateEngine);
     }
 
     @Test
-    void send_호출시_메일_전송됨() throws MessagingException {
+    void send_를_호출하면_메일이_전송된다() throws MessagingException {
         // given
         EmailTemplateType templateType = EmailTemplateType.EMAIL_VERIFICATION;
         Map<String, Object> variables = Map.of(EMAIL_CODE, "5분");

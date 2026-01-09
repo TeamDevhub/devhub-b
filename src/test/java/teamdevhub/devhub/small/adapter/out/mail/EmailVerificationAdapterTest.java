@@ -18,12 +18,11 @@ import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
 class EmailVerificationAdapterTest {
 
     private EmailVerificationAdapter emailVerificationAdapter;
-    private FakeJpaEmailVerificationRepository fakeJpaEmailVerificationRepository;
     private FakeDateTimeProvider fakeDateTimeProvider;
 
     @BeforeEach
     void init() {
-        fakeJpaEmailVerificationRepository = new FakeJpaEmailVerificationRepository();
+        FakeJpaEmailVerificationRepository fakeJpaEmailVerificationRepository = new FakeJpaEmailVerificationRepository();
         fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
         emailVerificationAdapter = new EmailVerificationAdapter(fakeJpaEmailVerificationRepository, fakeDateTimeProvider);
     }
