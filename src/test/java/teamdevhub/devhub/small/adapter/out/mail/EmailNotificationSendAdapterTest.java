@@ -1,43 +1,71 @@
 package teamdevhub.devhub.small.adapter.out.mail;
 
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
+import teamdevhub.devhub.adapter.out.exception.ExternalServiceException;
 import teamdevhub.devhub.adapter.out.mail.EmailNotificationSendAdapter;
 import teamdevhub.devhub.common.enums.EmailTemplateType;
-import teamdevhub.devhub.small.mock.infrastructure.FakeJavaMailSender;
 
 import java.util.Map;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class EmailNotificationSendAdapterTest {
 
-    private EmailNotificationSendAdapter adapter;
-    private FakeJavaMailSender fakeMailSender;
+    private JavaMailSender mailSender;
+    private EmailNotificationSendAdapter emailNotificationSendAdapter;
 
     @BeforeEach
     void init() {
-        fakeMailSender = new FakeJavaMailSender();
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        adapter = new EmailNotificationSendAdapter(fakeMailSender, templateEngine);
+        mailSender = mock(JavaMailSender.class);
+        SpringTemplateEngine templateEngine = mock(SpringTemplateEngine.class);
+        given(templateEngine.process(anyString(), any(Context.class)))
+                .willReturn("<html>email body</html>");
+
+        emailNotificationSendAdapter = new EmailNotificationSendAdapter(mailSender, templateEngine);
     }
 
     @Test
-    void send_를_호출하면_메일이_전송된다() throws MessagingException {
+    void 이메일_전송이_요청된다() {
         // given
-        EmailTemplateType templateType = EmailTemplateType.EMAIL_VERIFICATION;
-        Map<String, Object> variables = Map.of(EMAIL_CODE, "5분");
+        MimeMessage mimeMessage = mock(MimeMessage.class);
+        given(mailSender.createMimeMessage()).willReturn(mimeMessage);
 
         // when
-        adapter.send(TEST_EMAIL, templateType, variables);
+        emailNotificationSendAdapter.send(
+                "test@test.com",
+                EmailTemplateType.EMAIL_VERIFICATION,
+                Map.of("code", "123456")
+        );
 
         // then
-        MimeMessage sentMessage = fakeMailSender.getLastSentMessage();
-        assertThat(sentMessage).isNotNull();
-        assertThat(sentMessage.getAllRecipients()[0].toString()).isEqualTo(TEST_EMAIL);
+        verify(mailSender).send(mimeMessage);
+    }
+
+    @Test
+    void 메일_전송_실패시_도메인_예외로_변환된다() {
+        // given
+        given(mailSender.createMimeMessage())
+                .willThrow(new MailException("fail") {});
+
+        // then
+        assertThatThrownBy(() ->
+                // when
+                emailNotificationSendAdapter.send(
+                        "test@test.com",
+                        EmailTemplateType.EMAIL_VERIFICATION,
+                        Map.of()
+                )
+        ).isInstanceOf(ExternalServiceException.class);
     }
 }

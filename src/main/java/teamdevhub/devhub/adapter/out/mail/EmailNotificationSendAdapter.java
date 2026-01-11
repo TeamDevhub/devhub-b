@@ -1,5 +1,6 @@
 package teamdevhub.devhub.adapter.out.mail;
 
+import org.springframework.mail.MailException;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import teamdevhub.devhub.adapter.out.exception.ExternalServiceException;
@@ -41,7 +42,7 @@ public class EmailNotificationSendAdapter implements EmailNotificationSender {
             helper.setText(buildBody(templateType, variables), true);
 
             mailSender.send(mimeMessage);
-        } catch (MessagingException e) {
+        } catch (MessagingException | MailException e) {
             throw ExternalServiceException.of(ErrorCode.EMAIL_SEND_FAIL);
         }
     }
