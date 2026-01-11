@@ -1,12 +1,13 @@
-package teamdevhub.devhub.common.provider.password;
+package teamdevhub.devhub.adapter.out.common.provider.password;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
 
-public class SystemPasswordPolicyProvider implements PasswordPolicyProvider {
+public class BCryptPasswordPolicyProvider implements PasswordPolicyProvider {
 
     private final PasswordEncoder passwordEncoder;
 
-    public SystemPasswordPolicyProvider(PasswordEncoder passwordEncoder) {
+    public BCryptPasswordPolicyProvider(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 

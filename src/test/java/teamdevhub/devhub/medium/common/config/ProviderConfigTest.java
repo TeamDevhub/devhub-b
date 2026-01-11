@@ -6,12 +6,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import teamdevhub.devhub.common.config.ProviderConfig;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
 import teamdevhub.devhub.common.provider.datetime.SystemDateTimeProvider;
-import teamdevhub.devhub.common.provider.password.PasswordPolicyProvider;
-import teamdevhub.devhub.common.provider.password.SystemPasswordPolicyProvider;
+import teamdevhub.devhub.adapter.out.common.provider.password.BCryptPasswordPolicyProvider;
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.common.provider.uuid.SystemIdentifierProvider;
 import teamdevhub.devhub.common.provider.verification.EmailVerificationCodeProvider;
 import teamdevhub.devhub.common.provider.verification.SystemEmailVerificationCodeProvider;
+import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +42,7 @@ public class ProviderConfigTest {
 
         // then
         assertThat(passwordPolicyProvider).isNotNull();
-        assertThat(passwordPolicyProvider).isInstanceOf(SystemPasswordPolicyProvider.class);
+        assertThat(passwordPolicyProvider).isInstanceOf(BCryptPasswordPolicyProvider.class);
     }
 
     @Test

@@ -18,7 +18,7 @@ import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
-import teamdevhub.devhub.common.provider.password.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 import java.util.Set;

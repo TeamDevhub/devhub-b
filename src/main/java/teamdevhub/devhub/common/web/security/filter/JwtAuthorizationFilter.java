@@ -54,9 +54,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private void validateAccessToken(Claims claims) {
-        TokenType type = TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
+        TokenType tokenType = TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
 
-        if (type != TokenType.ACCESS) {
+        if (tokenType != TokenType.ACCESS) {
             throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
     }

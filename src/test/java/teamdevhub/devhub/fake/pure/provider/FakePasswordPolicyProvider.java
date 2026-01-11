@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.common.provider.password.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
 
 public class FakePasswordPolicyProvider implements PasswordPolicyProvider {
 

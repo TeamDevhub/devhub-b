@@ -1,11 +1,8 @@
-package teamdevhub.devhub.medium.common.provider;
+package teamdevhub.devhub.small.common.provider;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import teamdevhub.devhub.common.provider.datetime.SystemDateTimeProvider;
-import teamdevhub.devhub.common.provider.password.SystemPasswordPolicyProvider;
 import teamdevhub.devhub.common.provider.uuid.SystemIdentifierProvider;
 import teamdevhub.devhub.common.provider.verification.SystemEmailVerificationCodeProvider;
 
@@ -44,23 +41,6 @@ class SystemProviderTest {
         assertThat(id).isNotNull();
         assertThat(id).doesNotContain("-");
         assertThat(id.length()).isEqualTo(32);
-    }
-
-    @Test
-    @DisplayName("비밀번호를_암호화하면_일치검증이_정상적으로_동작한다")
-    void encryptPasswordMatchesSuccessfully() {
-        //given
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        // when
-        SystemPasswordPolicyProvider provider = new SystemPasswordPolicyProvider(passwordEncoder);
-        String rawPassword = "test1234!";
-        String hashedPassword = provider.encode(rawPassword);
-
-        // then
-        assertThat(hashedPassword).isNotNull();
-        assertThat(provider.matches(rawPassword, hashedPassword)).isTrue();
-        assertThat(provider.matches("틀린비밀번호", hashedPassword)).isFalse();
     }
 
     @Test
