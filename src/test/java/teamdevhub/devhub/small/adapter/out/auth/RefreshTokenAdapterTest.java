@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class RefreshTokenAdapterTest {
 
     private RefreshTokenAdapter refreshTokenAdapter;
-    private FakeJpaRefreshTokenRepository fakeJpaRepository;
 
     private static final String USER_GUID = "USER_GUID";
     private static final String TOKEN_1 = "refresh-token-1";
@@ -22,7 +21,7 @@ class RefreshTokenAdapterTest {
 
     @BeforeEach
     void init() {
-        fakeJpaRepository = new FakeJpaRefreshTokenRepository();
+        FakeJpaRefreshTokenRepository fakeJpaRepository = new FakeJpaRefreshTokenRepository();
         refreshTokenAdapter = new RefreshTokenAdapter(fakeJpaRepository);
     }
 

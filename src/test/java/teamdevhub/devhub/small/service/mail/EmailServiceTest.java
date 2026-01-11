@@ -24,15 +24,13 @@ class EmailServiceTest {
     private EmailService emailService;
     private FakeEmailNotificationSender fakeEmailNotificationSender;
     private FakeEmailVerificationRepository fakeEmailVerificationRepository;
-    private FakeEmailVerificationCodeProvider fakeEmailVerificationCodeProvider;
-    private FakeDateTimeProvider fakeDateTimeProvider;
 
     @BeforeEach
     void init() {
         fakeEmailNotificationSender = new FakeEmailNotificationSender();
-        fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
+        FakeDateTimeProvider fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
         fakeEmailVerificationRepository = new FakeEmailVerificationRepository(fakeDateTimeProvider);
-        fakeEmailVerificationCodeProvider = new FakeEmailVerificationCodeProvider("123456");
+        FakeEmailVerificationCodeProvider fakeEmailVerificationCodeProvider = new FakeEmailVerificationCodeProvider("123456");
 
         emailService = new EmailService(
                 fakeEmailNotificationSender,

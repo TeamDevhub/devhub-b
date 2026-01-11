@@ -1,15 +1,13 @@
 package teamdevhub.devhub.service.admin.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
-import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
-import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
+import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 @Service

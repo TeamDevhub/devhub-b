@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageVo<T> {
+public class PageVo {
 
     private int page;
     private int size;
@@ -18,8 +18,8 @@ public class PageVo<T> {
     private boolean first;
     private boolean last;
 
-    public static <T> PageVo<T> from(PageResult<T> pageResult) {
-        return PageVo.<T>builder()
+    public static PageVo from(PageResult<?> pageResult) {
+        return PageVo.builder()
                 .page(pageResult.page())
                 .size(pageResult.size())
                 .totalElements(pageResult.totalElements())

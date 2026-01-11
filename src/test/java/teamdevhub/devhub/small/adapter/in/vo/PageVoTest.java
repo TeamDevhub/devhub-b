@@ -21,7 +21,7 @@ class PageVoTest {
         );
 
         // when
-        PageVo<String> pageVo = PageVo.from(pageResult);
+        PageVo pageVo = PageVo.from(pageResult);
 
         // then
         assertThat(pageVo.getPage()).isEqualTo(1);
@@ -43,7 +43,7 @@ class PageVoTest {
         );
 
         // when
-        PageVo<String> pageVo = PageVo.from(pageResult);
+        PageVo pageVo = PageVo.from(pageResult);
 
         // then
         assertThat(pageVo.isFirst()).isTrue();
@@ -61,7 +61,7 @@ class PageVoTest {
         );
 
         // when
-        PageVo<String> pageVo = PageVo.from(pageResult);
+        PageVo pageVo = PageVo.from(pageResult);
 
         // then
         assertThat(pageVo.isLast()).isTrue();
