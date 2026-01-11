@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.TestConstant.*;
 
 class EmailVerificationAdapterTest {
 

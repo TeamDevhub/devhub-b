@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.web.resolver;
+package teamdevhub.devhub.medium.adapter.in.web.resolver;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import teamdevhub.devhub.small.mock.infrastructure.FakeAuthentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.TestConstant.*;
 
 class LoginUserArgumentResolverTest {
 

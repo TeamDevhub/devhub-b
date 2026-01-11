@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.auth;
+package teamdevhub.devhub.medium.adapter.in.auth;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.TestConstant.*;
 
 class AuthControllerTest {
 

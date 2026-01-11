@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.web.security.auth;
+package teamdevhub.devhub.medium.common.web.security.auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,7 @@ import teamdevhub.devhub.port.in.user.UserUseCase;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.TestConstant.*;
 
 public class UserAuthenticationServiceTest {
 

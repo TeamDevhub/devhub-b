@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.web.security.auth;
+package teamdevhub.devhub.medium.common.web.security.auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,7 +9,7 @@ import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.TestConstant.*;
 
 public class UserAuthenticationTest {
 

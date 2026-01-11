@@ -7,7 +7,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.TestConstant.*;
 
 @SpringBootTest
 public class JpaUserRepositoryTest {

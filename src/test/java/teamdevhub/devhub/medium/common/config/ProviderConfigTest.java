@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.config;
+package teamdevhub.devhub.medium.common.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;

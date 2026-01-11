@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.TestConstant.*;
 
 class UserPositionEntityTest {
 

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.vo;
+package teamdevhub.devhub.medium.adapter.in.vo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;

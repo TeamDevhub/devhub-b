@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.out.mail;
+package teamdevhub.devhub.medium.adapter.out.mail;
 
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;

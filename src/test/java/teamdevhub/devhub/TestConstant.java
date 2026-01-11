@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.mock.constant;
+package teamdevhub.devhub;
 
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;

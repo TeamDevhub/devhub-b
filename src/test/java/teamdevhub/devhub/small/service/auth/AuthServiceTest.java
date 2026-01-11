@@ -13,7 +13,7 @@ import teamdevhub.devhub.small.mock.repository.FakeRefreshTokenRepository;
 import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.TestConstant.*;
 
 class AuthServiceTest {
 

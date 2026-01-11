@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.provider;
+package teamdevhub.devhub.medium.common.provider;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

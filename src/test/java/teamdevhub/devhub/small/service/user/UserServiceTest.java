@@ -23,7 +23,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.*;
+import static teamdevhub.devhub.TestConstant.*;
 
 class UserServiceTest {
 
@@ -31,7 +31,6 @@ class UserServiceTest {
     private FakeUserRepository fakeUserRepository;
     private FakeEmailVerificationUseCase fakeEmailVerificationUseCase;
     private FakeEmailVerificationRepository fakeEmailVerificationRepository;
-    private FakeUuidIdentifierProvider fakeUuidIdentifierProvider;
     private FakePasswordPolicyProvider fakePasswordPolicyProvider;
     private FakeRefreshTokenRepository fakeRefreshTokenRepository;
     private FakeDateTimeProvider fakeDateTimeProvider;
@@ -40,7 +39,7 @@ class UserServiceTest {
     void init() {
         fakeUserRepository = new FakeUserRepository();
 
-        fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_GUID);
+        FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_GUID);
         fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
         fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
         fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));

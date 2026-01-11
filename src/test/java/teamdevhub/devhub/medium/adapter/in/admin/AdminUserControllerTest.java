@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.admin;
+package teamdevhub.devhub.medium.adapter.in.admin;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

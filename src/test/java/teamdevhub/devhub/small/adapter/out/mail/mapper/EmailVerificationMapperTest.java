@@ -8,8 +8,8 @@ import teamdevhub.devhub.domain.mail.EmailVerification;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.EMAIL_CODE;
-import static teamdevhub.devhub.small.mock.constant.TestConstant.TEST_EMAIL;
+import static teamdevhub.devhub.TestConstant.EMAIL_CODE;
+import static teamdevhub.devhub.TestConstant.TEST_EMAIL;
 
 class EmailVerificationMapperTest {
 

@@ -26,8 +26,8 @@ import teamdevhub.devhub.port.out.auth.TokenParseProvider;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static teamdevhub.devhub.medium.mock.constant.TestConstant.TEST_EMAIL;
-import static teamdevhub.devhub.medium.mock.constant.TestConstant.TEST_GUID;
+import static teamdevhub.devhub.TestConstant.TEST_EMAIL;
+import static teamdevhub.devhub.TestConstant.TEST_GUID;
 
 @ExtendWith(MockitoExtension.class)
 class JwtAuthorizationFilterTest {

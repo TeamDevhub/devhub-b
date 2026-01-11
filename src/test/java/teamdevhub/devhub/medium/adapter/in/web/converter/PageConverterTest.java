@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.web.converter;
+package teamdevhub.devhub.medium.adapter.in.web.converter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;

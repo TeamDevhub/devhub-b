@@ -4,7 +4,7 @@ import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.out.auth.AuthenticatedUserProvider;
 
-import static teamdevhub.devhub.small.mock.constant.TestConstant.TEST_GUID;
+import static teamdevhub.devhub.TestConstant.TEST_GUID;
 
 public class FakeAuthenticatedUserProvider implements AuthenticatedUserProvider {
 
