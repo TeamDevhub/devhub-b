@@ -76,17 +76,19 @@ public class UserService implements UserUseCase {
 
     @Override
     public void updateLastLoginDateTime(String userGuid) {
-        userRepository.updateLastLoginDateTime(userGuid, dateTimeProvider.now());
+        User user = getUser(userGuid);
+        user.updateLastLoginDateTime(dateTimeProvider.now());
+        userRepository.updateLastLoginDateTime(user);
     }
 
     @Override
     public User getCurrentUserProfile(String userGuid) {
-        return getUser(userGuid);
+        return getUserWithPositionsAndSkills(userGuid);
     }
 
     @Override
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
-        User user = getUser(updateProfileCommand.getUserGuid());
+        User user = getUserWithPositionsAndSkills(updateProfileCommand.getUserGuid());
 
         Set<UserPosition> positions = updateProfileCommand.getPositionList().stream()
                 .map(UserPosition::new)
@@ -107,8 +109,10 @@ public class UserService implements UserUseCase {
 
     @Override
     public void withdrawUser(String userGuid) {
+        User user = getUser(userGuid);
+        user.withdraw();
         refreshTokenRepository.deleteByUserGuid(userGuid);
-        userRepository.delete(userGuid);
+        userRepository.delete(user);
     }
 
     @Override
@@ -118,5 +122,9 @@ public class UserService implements UserUseCase {
 
     private User getUser(String userGuid) {
         return userRepository.findByUserGuid(userGuid);
+    }
+
+    private User getUserWithPositionsAndSkills(String userGuid) {
+        return userRepository.findByUserGuidWithPositionsAndSkills(userGuid);
     }
 }

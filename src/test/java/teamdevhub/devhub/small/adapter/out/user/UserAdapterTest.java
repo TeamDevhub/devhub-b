@@ -112,8 +112,10 @@ class UserAdapterTest {
         // given
         User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
+        user.updateLastLoginDateTime(fakeDateTimeProvider.now());
+
         // when
-        userAdapter.updateLastLoginDateTime(TEST_GUID_1,fakeDateTimeProvider.now());
+        userAdapter.updateLastLoginDateTime(user);
 
         // then
         assertThat(fakeJpaUserRepository.findByUserGuid(user.getUserGuid())
@@ -132,13 +134,13 @@ class UserAdapterTest {
         fakeJpaUserSkillRepository.saveAll(Set.of(new UserSkillEntity(TEST_GUID_1 + "-skill", TEST_GUID_1, "001")));
 
         // when
-        User found = userAdapter.findByUserGuid(TEST_GUID_1);
+        User foundUser = userAdapter.findByUserGuidWithPositionsAndSkills(TEST_GUID_1);
 
         // then
-        assertThat(found).isNotNull();
-        assertThat(found.getUserGuid()).isEqualTo(TEST_GUID_1);
-        assertThat(found.getPositions()).hasSize(1);
-        assertThat(found.getSkills()).hasSize(1);
+        assertThat(foundUser).isNotNull();
+        assertThat(foundUser.getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(foundUser.getPositions()).hasSize(1);
+        assertThat(foundUser.getSkills()).hasSize(1);
     }
 
     @Test
@@ -209,9 +211,10 @@ class UserAdapterTest {
         // given
         User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
+        user.withdraw();
 
         // when
-        userAdapter.delete(user.getUserGuid());
+        userAdapter.delete(user);
 
         // then
         assertThat(fakeJpaUserRepository.findByUserGuid(user.getUserGuid())

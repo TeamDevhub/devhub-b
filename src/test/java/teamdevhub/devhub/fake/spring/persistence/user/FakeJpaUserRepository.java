@@ -9,7 +9,6 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.domain.user.UserRole;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
@@ -25,54 +24,6 @@ public class FakeJpaUserRepository implements JpaUserRepository {
     @Override
     public Optional<UserEntity> findByUserGuid(String userGuid) {
         return Optional.ofNullable(store.get(userGuid));
-    }
-
-    @Override
-    public int updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
-        UserEntity existedUser = store.get(userGuid);
-        if (existedUser != null) {
-            UserEntity updatedUser = UserEntity.builder()
-                    .userGuid(existedUser.getUserGuid())
-                    .email(existedUser.getEmail())
-                    .username(existedUser.getUsername())
-                    .password(existedUser.getPassword())
-                    .userRole(existedUser.getUserRole())
-                    .introduction(existedUser.getIntroduction())
-                    .mannerDegree(existedUser.getMannerDegree())
-                    .blocked(existedUser.isBlocked())
-                    .blockEndDate(existedUser.getBlockEndDate())
-                    .deleted(existedUser.isDeleted())
-                    .lastLoginDt(lastLoginDateTime)
-                    .build();
-
-            store.put(userGuid, updatedUser);
-            return 1;
-        }
-        return 0;
-    }
-
-    @Override
-    public int updateUserAsDeleted(String userGuid) {
-        UserEntity existedUser = store.get(userGuid);
-        if (existedUser != null) {
-            UserEntity updatedUser = UserEntity.builder()
-                    .userGuid(existedUser.getUserGuid())
-                    .email(existedUser.getEmail())
-                    .username(existedUser.getUsername())
-                    .password(existedUser.getPassword())
-                    .userRole(existedUser.getUserRole())
-                    .introduction(existedUser.getIntroduction())
-                    .mannerDegree(existedUser.getMannerDegree())
-                    .blocked(false)
-                    .blockEndDate(existedUser.getBlockEndDate())
-                    .deleted(true)
-                    .lastLoginDt(existedUser.getLastLoginDt())
-                    .build();
-
-            store.put(userGuid, updatedUser);
-            return 1;
-        }
-        return 0;
     }
 
     @Override

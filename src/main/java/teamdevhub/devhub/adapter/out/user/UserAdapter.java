@@ -1,13 +1,14 @@
 package teamdevhub.devhub.adapter.out.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.adapter.in.vo.PageResult;
-import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
+import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
-import teamdevhub.devhub.common.util.RelationChangeUtil;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
@@ -17,15 +18,16 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
+import teamdevhub.devhub.common.util.RelationChangeUtil;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
-import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -68,14 +70,19 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
-        if(jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime) == 0) {
-            throw AdapterDataException.of(ErrorCode.UPDATE_FAIL);
-        }
+    public void updateLastLoginDateTime(User user) {
+        jpaUserRepository.save(UserMapper.toEntity(user));
     }
 
     @Override
     public User findByUserGuid(String userGuid) {
+        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
+        return UserMapper.toDomain(userEntity, Set.of(), Set.of());
+    }
+
+    @Override
+    public User findByUserGuidWithPositionsAndSkills(String userGuid) {
         UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
                 .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toDomain(userEntity, loadPositions(userGuid), loadSkills(userGuid));
@@ -89,10 +96,8 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public void delete(String userGuid) {
-        if (jpaUserRepository.updateUserAsDeleted(userGuid) == 0) {
-            throw AdapterDataException.of(ErrorCode.DELETE_FAIL);
-        }
+    public void delete(User user) {
+        jpaUserRepository.save(UserMapper.toEntity(user));
     }
 
     @Override

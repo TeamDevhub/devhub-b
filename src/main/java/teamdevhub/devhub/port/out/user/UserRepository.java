@@ -7,18 +7,17 @@ import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 
-import java.time.LocalDateTime;
-
 public interface UserRepository {
 
     void saveAdminUser(User adminUser);
     AuthenticatedUser findAuthenticatedUserByEmail(String email);
     AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid);
     User saveNewUser(User user);
-    void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
+    void updateLastLoginDateTime(User user);
     User findByUserGuid(String userGuid);
+    User findByUserGuidWithPositionsAndSkills(String userGuid);
     void updateUserProfile(User user);
-    void delete(String userGuid);
+    void delete(User user);
     boolean existsByUserRole(UserRole userRole);
     PageResult<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size);
 }

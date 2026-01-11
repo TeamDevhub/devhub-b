@@ -8,7 +8,6 @@ import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,32 +45,17 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
-        User existedUser = store.get(userGuid);
-        if (existedUser != null) {
-            User updatedUser = User.builder()
-                    .userGuid(existedUser.getUserGuid())
-                    .email(existedUser.getEmail())
-                    .username(existedUser.getUsername())
-                    .password(existedUser.getPassword())
-                    .userRole(existedUser.getUserRole())
-                    .introduction(existedUser.getIntroduction())
-                    .positions(existedUser.getPositions())
-                    .skills(existedUser.getSkills())
-                    .mannerDegree(existedUser.getMannerDegree())
-                    .blocked(existedUser.isBlocked())
-                    .blockEndDate(existedUser.getBlockEndDate())
-                    .deleted(existedUser.isDeleted())
-                    .lastLoginDateTime(lastLoginDateTime)
-                    .auditInfo(existedUser.getAuditInfo())
-                    .build();
-
-            store.put(userGuid, updatedUser);
-        }
+    public void updateLastLoginDateTime(User user) {
+        store.put(user.getUserGuid(), user);
     }
 
     @Override
     public User findByUserGuid(String userGuid) {
+        return store.get(userGuid);
+    }
+
+    @Override
+    public User findByUserGuidWithPositionsAndSkills(String userGuid) {
         return store.get(userGuid);
     }
 
@@ -89,28 +73,8 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public void delete(String userGuid) {
-        User existedUser = store.get(userGuid);
-        if (existedUser != null) {
-            User updatedUser = User.builder()
-                    .userGuid(existedUser.getUserGuid())
-                    .email(existedUser.getEmail())
-                    .username(existedUser.getUsername())
-                    .password(existedUser.getPassword())
-                    .userRole(existedUser.getUserRole())
-                    .introduction(existedUser.getIntroduction())
-                    .positions(existedUser.getPositions())
-                    .skills(existedUser.getSkills())
-                    .mannerDegree(existedUser.getMannerDegree())
-                    .blocked(false)
-                    .blockEndDate(existedUser.getBlockEndDate())
-                    .deleted(true)
-                    .lastLoginDateTime(existedUser.getLastLoginDateTime())
-                    .auditInfo(existedUser.getAuditInfo())
-                    .build();
-
-            store.put(userGuid, updatedUser);
-        }
+    public void delete(User user) {
+        store.put(user.getUserGuid(), user);
     }
 
     @Override

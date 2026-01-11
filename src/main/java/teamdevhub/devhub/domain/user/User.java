@@ -55,7 +55,7 @@ public class User {
             LocalDateTime lastLoginDateTime,
             AuditInfo auditInfo
     ) {
-        validate(email, password, userRole, positions, skills);
+        validate(email, password);
 
         this.userGuid = userGuid;
         this.email = email;
@@ -89,6 +89,13 @@ public class User {
             List<String> positionCodes,
             List<String> skillCodes
     ) {
+        if (positionCodes == null || positionCodes.isEmpty()) {
+            throw DomainRuleException.of(ErrorCode.USER_POSITION_REQUIRED);
+        }
+        if (skillCodes == null || skillCodes.isEmpty()) {
+            throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
+        }
+
         return User.builder()
                 .userGuid(userGuid)
                 .email(email)
@@ -159,6 +166,10 @@ public class User {
                 .build();
     }
 
+    public void updateLastLoginDateTime(LocalDateTime now) {
+        this.lastLoginDateTime = now;
+    }
+
     public void withdraw() {
         if (this.deleted) {
             throw DomainRuleException.of(ErrorCode.ALREADY_DELETED);
@@ -200,10 +211,7 @@ public class User {
 
     private void validate(
             String email,
-            String password,
-            UserRole userRole,
-            Set<UserPosition> positions,
-            Set<UserSkill> skills
+            String password
     ) {
         if (!hasText(email)) {
             throw DomainRuleException.of(ErrorCode.USER_ID_FAIL);
@@ -211,17 +219,6 @@ public class User {
 
         if (!hasText(password) || password.length() < 8) {
             throw DomainRuleException.of(ErrorCode.USER_PASSWORD_FAIL);
-        }
-
-        if (userRole != UserRole.USER) {
-            return;
-        }
-
-        if (positions == null || positions.isEmpty()) {
-            throw DomainRuleException.of(ErrorCode.USER_POSITION_REQUIRED);
-        }
-        if (skills == null || skills.isEmpty()) {
-            throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
         }
     }
 
