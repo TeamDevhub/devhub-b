@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.user.dto;
+package teamdevhub.devhub.small.adapter.in.user.dto.request;
 
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;

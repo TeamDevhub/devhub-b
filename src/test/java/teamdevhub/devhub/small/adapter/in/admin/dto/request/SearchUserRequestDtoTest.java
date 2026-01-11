@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.admin.dto;
+package teamdevhub.devhub.small.adapter.in.admin.dto.request;
 
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;

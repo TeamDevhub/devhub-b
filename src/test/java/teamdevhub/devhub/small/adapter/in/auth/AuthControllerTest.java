@@ -1,15 +1,12 @@
-package teamdevhub.devhub.medium.adapter.in.auth;
+package teamdevhub.devhub.small.adapter.in.auth;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.auth.AuthController;
 import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmEmailVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
-import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
+import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
@@ -43,11 +40,8 @@ class AuthControllerTest {
         // given
         EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto(TEST_EMAIL);
 
-        // when
-        ResponseEntity<ApiDataResponseDto<Void>> response = authController.sendEmailVerification(emailVerificationRequestDto);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        // when, then
+        assertThat(authController.sendEmailVerification(emailVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SENT.getCode());
     }
 
     @Test
@@ -56,11 +50,8 @@ class AuthControllerTest {
         fakeEmailVerificationUseCase.sendEmailVerification(new EmailVerificationRequestDto(TEST_EMAIL));
         ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto = new ConfirmEmailVerificationRequestDto(TEST_EMAIL, EMAIL_CODE);
 
-        // when
-        ResponseEntity<ApiDataResponseDto<Void>> response = authController.confirmEmailVerification(confirmEmailVerificationRequestDto);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        // when, then
+        assertThat(authController.confirmEmailVerification(confirmEmailVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SUCCESS.getCode());
     }
 
     @Test
@@ -71,13 +62,10 @@ class AuthControllerTest {
                 .password(TEST_PASSWORD)
                 .build();
 
-        // when
-        ResponseEntity<ApiDataResponseDto<TokenResponseDto>> response = authController.login(loginRequestDto);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData().getAccessToken()).isEqualTo("access-token");
+        // when, then
+        assertThat(authController.login(loginRequestDto).getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
+        assertThat(authController.login(loginRequestDto).getBody()).isNotNull();
+        assertThat(authController.login(loginRequestDto).getBody().getData().getAccessToken()).isEqualTo("access-token");
     }
 
     @Test
@@ -85,11 +73,8 @@ class AuthControllerTest {
         // given
         String refreshToken = "refresh-token";
 
-        // when
-        ResponseEntity<ApiDataResponseDto<TokenResponseDto>> response = authController.refresh(refreshToken);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        // when, then
+        assertThat(authController.refresh(refreshToken).getBody().getCode()).isEqualTo(SuccessCode.CREATE_SUCCESS.getCode());
         assertThat(fakeAuthUseCase.getLastReissueRefreshToken()).isEqualTo("refresh-token");
     }
 
@@ -103,11 +88,8 @@ class AuthControllerTest {
                 UserRole.USER
         );
 
-        // when
-        ResponseEntity<ApiDataResponseDto<Void>> response = authController.revoke(authenticatedUser);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        // when, then
+        assertThat(authController.revoke(authenticatedUser).getBody().getCode()).isEqualTo(SuccessCode.LOGOUT_SUCCESS.getCode());
         assertThat(fakeAuthUseCase.getRevokedUserGuid()).isEqualTo(TEST_GUID);
     }
 }

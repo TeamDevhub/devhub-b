@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.user.dto;
+package teamdevhub.devhub.small.adapter.in.user.dto.request;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;

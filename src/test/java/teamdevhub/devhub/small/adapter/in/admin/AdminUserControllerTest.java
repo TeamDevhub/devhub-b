@@ -1,9 +1,7 @@
-package teamdevhub.devhub.medium.adapter.in.admin;
+package teamdevhub.devhub.small.adapter.in.admin;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.admin.user.AdminUserController;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
@@ -38,14 +36,9 @@ class AdminUserControllerTest {
         int size = 10;
 
         // when
-        ResponseEntity<ApiDataListResponseDto<AdminUserSummaryResponseDto>> response = adminUserController.list(requestDto, page, size);
+        ApiDataListResponseDto<AdminUserSummaryResponseDto> body = adminUserController.list(requestDto, page, size).getBody();
 
         // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotNull();
-
-        ApiDataListResponseDto<AdminUserSummaryResponseDto> body = response.getBody();
-
         assertThat(body.getDataList()).hasSize(2);
         assertThat(body.getDataList().get(0).getEmail()).isEqualTo("user1@example.com");
         assertThat(body.getDataList().get(1).getEmail()).isEqualTo("user2@example.com");

@@ -1,17 +1,13 @@
-package teamdevhub.devhub.medium.adapter.in.user;
+package teamdevhub.devhub.small.adapter.in.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.adapter.in.user.UserController;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
-import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
-import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.fake.pure.usecase.FakeUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,14 +36,10 @@ class UserControllerTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        // when
-        ResponseEntity<ApiDataResponseDto<SignupResponseDto>> response = userController.signup(signupRequestDto);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData().getEmail()).isEqualTo(TEST_EMAIL);
-        assertThat(response.getBody().getData().getUsername()).isEqualTo(TEST_USERNAME);
+        // when, then
+        assertThat(userController.signup(signupRequestDto).getBody()).isNotNull();
+        assertThat(userController.signup(signupRequestDto).getBody().getData().getEmail()).isEqualTo(TEST_EMAIL);
+        assertThat(userController.signup(signupRequestDto).getBody().getData().getUsername()).isEqualTo(TEST_USERNAME);
     }
 
     @Test
@@ -55,14 +47,10 @@ class UserControllerTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
-        // when
-        ResponseEntity<ApiDataResponseDto<UserProfileResponseDto>> response = userController.getProfile(authenticatedUser);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData().getEmail()).isEqualTo(TEST_EMAIL);
-        assertThat(response.getBody().getData().getUsername()).isEqualTo(TEST_USERNAME);
+        // when, then
+        assertThat(userController.getProfile(authenticatedUser).getBody()).isNotNull();
+        assertThat(userController.getProfile(authenticatedUser).getBody().getData().getEmail()).isEqualTo(TEST_EMAIL);
+        assertThat(userController.getProfile(authenticatedUser).getBody().getData().getUsername()).isEqualTo(TEST_USERNAME);
     }
 
     @Test
@@ -78,10 +66,8 @@ class UserControllerTest {
                 .skillList(NEW_SKILL_LIST)
                 .build();
 
-        ResponseEntity<ApiDataResponseDto<Void>> response = userController.updateProfile(updateProfileRequestDto, authenticatedUser);
-
         // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(userController.updateProfile(updateProfileRequestDto, authenticatedUser).getBody().getCode()).isEqualTo(SuccessCode.UPDATE_SUCCESS.getCode());
     }
 
     @Test
@@ -89,11 +75,8 @@ class UserControllerTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
 
-        // when
-        ResponseEntity<ApiDataResponseDto<Void>> response = userController.withdraw(authenticatedUser);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        // when, then
+        assertThat(userController.withdraw(authenticatedUser).getBody().getCode()).isEqualTo(SuccessCode.USER_DELETE_SUCCESS.getCode());
         assertThat(fakeUserUseCase.getCurrentUserProfile(TEST_GUID).isDeleted()).isTrue();
     }
 }
