@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.domain.user;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.domain.user.UserRole;
 
@@ -8,7 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserRoleTest {
 
     @Test
-    void ADMIN_역할은_ROLE_ADMIN_권한을_가진다() {
+    @DisplayName("ADMIN_역할은_ROLE_ADMIN_권한을_가진다")
+    void isAdminRoleHasRoleAdminAuthority() {
         // given, when
         UserRole userRole = UserRole.ADMIN;
 
@@ -17,7 +19,8 @@ class UserRoleTest {
     }
 
     @Test
-    void USER_역할은_ROLE_USER_권한을_가진다() {
+    @DisplayName("USER_역할은_ROLE_USER_권한을_가진다")
+    void isUserRoleHasRoleUserAuthority() {
         // given, when
         UserRole userRole = UserRole.USER;
 
@@ -27,7 +30,8 @@ class UserRoleTest {
     }
 
     @Test
-    void getAuthority_상수_값이_UserRole과_일치한다() {
+    @DisplayName("getAuthority_상수_값이_UserRole_과_일치한다")
+    void getAuthorityMatchesUserRole() {
         // given, when
         assertThat(UserRole.ADMIN.getAuthority())
                 // then

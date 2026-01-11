@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.in.vo;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.vo.ErrorResponseVo;
 import teamdevhub.devhub.common.enums.ErrorCode;
@@ -9,80 +10,83 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ErrorResponseVoTest {
 
     @Test
-    void ErrorCode_로부터_ErrorResponseVo_를_생성한다() {
+    @DisplayName("ErrorCode_로부터_ErrorResponseVo_를_생성한다")
+    void createResponseVoFromErrorCode() {
         // given
         ErrorCode errorCode = ErrorCode.READ_FAIL;
 
         // when
-        ErrorResponseVo response = ErrorResponseVo.of(errorCode);
+        ErrorResponseVo errorResponseVo = ErrorResponseVo.of(errorCode);
 
         // then
-        assertThat(response.getCode()).isEqualTo(errorCode.getCode());
-        assertThat(response.getMessage()).isEqualTo(errorCode.getMessage());
+        assertThat(errorResponseVo.getCode()).isEqualTo(errorCode.getCode());
+        assertThat(errorResponseVo.getMessage()).isEqualTo(errorCode.getMessage());
     }
 
     @Test
-    void 코드와_메시지를_직접_지정하여_ErrorResponseVo_를_생성한다() {
+    @DisplayName("코드와_메시지를_직접_지정하여_ErrorResponseVo_를_생성한다")
+    void createResponseVoWithCustomCodeAndMessage() {
         // given
         String code = "CUSTOM_ERROR";
         String message = "Custom error message";
 
         // when
-        ErrorResponseVo response = ErrorResponseVo.of(code, message);
+        ErrorResponseVo errorResponseVo = ErrorResponseVo.of(code, message);
 
         // then
-        assertThat(response.getCode()).isEqualTo(code);
-        assertThat(response.getMessage()).isEqualTo(message);
+        assertThat(errorResponseVo.getCode()).isEqualTo(code);
+        assertThat(errorResponseVo.getMessage()).isEqualTo(message);
     }
 
     @Test
-    void Throwable_로부터_ErrorResponseVo_를_생성한다() {
+    @DisplayName("Throwable_로부터_ErrorResponseVo_를_생성한다")
+    void createResponseVoFromThrowable() {
         // given
-        RuntimeException exception = new RuntimeException("예외 메시지");
+        RuntimeException runtimeException = new RuntimeException("예외 메시지");
 
         // when
-        ErrorResponseVo response = ErrorResponseVo.of(exception);
+        ErrorResponseVo errorResponseVo = ErrorResponseVo.of(runtimeException);
 
         // then
-        assertThat(response.getCode()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getCode());
-        assertThat(response.getMessage()).isEqualTo("예외 메시지");
+        assertThat(errorResponseVo.getCode()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getCode());
+        assertThat(errorResponseVo.getMessage()).isEqualTo("예외 메시지");
     }
 
     @Test
-    void Throwable_의_메시지가_null_이면_기본_메시지를_사용한다() {
+    @DisplayName("Throwable_의_메시지가_null_이면_기본_메시지를_사용한다")
+    void useDefaultMessageWhenThrowableMessageIsNull() {
         // given
-        RuntimeException exception = new RuntimeException((String) null);
+        RuntimeException runtimeException = new RuntimeException((String) null);
 
         // when
-        ErrorResponseVo response = ErrorResponseVo.of(exception);
+        ErrorResponseVo errorResponseVo = ErrorResponseVo.of(runtimeException);
 
         // then
-        assertThat(response.getCode()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getCode());
-        assertThat(response.getMessage())
-                .isEqualTo("Unexpected system error occurred");
+        assertThat(errorResponseVo.getCode()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getCode());
+        assertThat(errorResponseVo.getMessage()).isEqualTo("Unexpected system error occurred");
     }
 
     @Test
-    void Throwable_의_메시지가_빈값이면_기본_메시지를_사용한다() {
+    @DisplayName("Throwable_의_메시지가_빈값이면_기본_메시지를_사용한다")
+    void useDefaultMessageWhenThrowableMessageIsEmpty() {
         // given
-        RuntimeException exception = new RuntimeException("   ");
+        RuntimeException runtimeException = new RuntimeException("   ");
 
         // when
-        ErrorResponseVo response = ErrorResponseVo.of(exception);
+        ErrorResponseVo errorResponseVo = ErrorResponseVo.of(runtimeException);
 
         // then
-        assertThat(response.getMessage())
-                .isEqualTo("Unexpected system error occurred");
+        assertThat(errorResponseVo.getMessage()).isEqualTo("Unexpected system error occurred");
     }
 
     @Test
-    void Throwable_이_null_이면_기본_메시지를_사용한다() {
-        // when
-        ErrorResponseVo response = ErrorResponseVo.of((Throwable) null);
+    @DisplayName("Throwable_이_null_이면_기본_메시지를_사용한다")
+    void useDefaultMessageWhenThrowableIsNull() {
+        // given
+        ErrorResponseVo errorResponseVo = ErrorResponseVo.of((Throwable) null);
 
-        // then
-        assertThat(response.getCode()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getCode());
-        assertThat(response.getMessage())
-                .isEqualTo("Unexpected system error occurred");
+        // when, then
+        assertThat(errorResponseVo.getCode()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getCode());
+        assertThat(errorResponseVo.getMessage()).isEqualTo("Unexpected system error occurred");
     }
 }

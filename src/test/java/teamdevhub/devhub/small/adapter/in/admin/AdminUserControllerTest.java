@@ -1,6 +1,7 @@
 package teamdevhub.devhub.small.adapter.in.admin;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.admin.user.AdminUserController;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
@@ -11,6 +12,7 @@ import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.fake.pure.usecase.FakeAdminUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class AdminUserControllerTest {
 
@@ -23,9 +25,10 @@ class AdminUserControllerTest {
     }
 
     @Test
-    void 관리자_사용자_목록_조회를_하면_AdminUserSummaryResponseDto_리스트_페이지정보와_HTTPSTATUS_OK_를_반환한다() {
+    @DisplayName("관리자_사용자_목록_조회를_하면_AdminUserSummaryResponseDto_리스트_페이지_정보와_READ_SUCCESS_의_코드를_확인할_수_있다")
+    void returnResponseDtoListWhenFetchingAdminUserList() {
         // given
-        SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
+        SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .blocked(null)
                 .keyword(null)
                 .joinedFrom(null)
@@ -36,21 +39,22 @@ class AdminUserControllerTest {
         int size = 10;
 
         // when
-        ApiDataListResponseDto<AdminUserSummaryResponseDto> body = adminUserController.list(requestDto, page, size).getBody();
+        ApiDataListResponseDto<AdminUserSummaryResponseDto> apiDataListResponseDto = adminUserController.list(searchUserRequestDto, page, size).getBody();
 
         // then
-        assertThat(body.getDataList()).hasSize(2);
-        assertThat(body.getDataList().get(0).getEmail()).isEqualTo("user1@example.com");
-        assertThat(body.getDataList().get(1).getEmail()).isEqualTo("user2@example.com");
+        assertThat(apiDataListResponseDto.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
+        assertThat(apiDataListResponseDto.getDataList()).hasSize(2);
+        assertThat(apiDataListResponseDto.getDataList().get(0).getEmail()).isEqualTo(TEST_EMAIL_1);
+        assertThat(apiDataListResponseDto.getDataList().get(1).getEmail()).isEqualTo(TEST_EMAIL_2);
 
-        PageVo pagination = body.getPagination();
-        assertThat(pagination).isNotNull();
-        assertThat(pagination.getPage()).isEqualTo(0);
-        assertThat(pagination.getSize()).isEqualTo(10);
-        assertThat(pagination.getTotalElements()).isEqualTo(2);
-        assertThat(pagination.getTotalPages()).isEqualTo(1);
+        PageVo pageVo = apiDataListResponseDto.getPagination();
+        assertThat(pageVo).isNotNull();
+        assertThat(pageVo.getPage()).isEqualTo(0);
+        assertThat(pageVo.getSize()).isEqualTo(10);
+        assertThat(pageVo.getTotalElements()).isEqualTo(2);
+        assertThat(pageVo.getTotalPages()).isEqualTo(1);
 
-        assertThat(body.isSuccess()).isTrue();
-        assertThat(body.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
+        assertThat(apiDataListResponseDto.isSuccess()).isTrue();
+        assertThat(apiDataListResponseDto.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
     }
 }

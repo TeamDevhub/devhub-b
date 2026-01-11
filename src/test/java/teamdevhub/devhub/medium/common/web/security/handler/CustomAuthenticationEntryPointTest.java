@@ -1,6 +1,7 @@
 package teamdevhub.devhub.medium.common.web.security.handler;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -21,7 +22,8 @@ class CustomAuthenticationEntryPointTest {
     }
 
     @Test
-    void 인증에_실패하면_401_응답과_JSON_메시지를_작성한다() throws Exception {
+    @DisplayName("인증에_실패하면_401_응답과_JSON_메시지를_작성한다")
+    void handleAuthenticationFailureWith401AndJson() throws Exception {
         // given
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();

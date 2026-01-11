@@ -1,6 +1,7 @@
 package teamdevhub.devhub.small.adapter.out.auth;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.auth.SpringSecurityAuthenticationAdapter;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -12,31 +13,31 @@ import static teamdevhub.devhub.constant.TestConstant.*;
 
 class SpringSecurityAuthenticationAdapterTest {
 
-    private SpringSecurityAuthenticationAdapter authenticationAdapter;
+    private SpringSecurityAuthenticationAdapter springSecurityAuthenticationAdapter;
 
     @BeforeEach
     void init() {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                TEST_GUID,
-                TEST_EMAIL,
-                TEST_PASSWORD,
+                TEST_GUID_1,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
                 UserRole.USER
         );
 
         FakeAuthenticationManager fakeAuthenticationManager = new FakeAuthenticationManager(authenticatedUser);
-
-        authenticationAdapter = new SpringSecurityAuthenticationAdapter(fakeAuthenticationManager);
+        springSecurityAuthenticationAdapter = new SpringSecurityAuthenticationAdapter(fakeAuthenticationManager);
     }
 
     @Test
-    void 이메일과_비밀번호로_AuthenticatedUser_를_가져온다() {
+    @DisplayName("이메일과_비밀번호로_AuthenticatedUser_를_가져온다")
+    void getAuthenticatedUserByEmailAndPassword() {
         // given, when
-        AuthenticatedUser result = authenticationAdapter.getAuthenticatedUser(TEST_EMAIL, TEST_PASSWORD);
+        AuthenticatedUser result = springSecurityAuthenticationAdapter.getAuthenticatedUser(TEST_EMAIL_1, TEST_PASSWORD_1);
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.userGuid()).isEqualTo(TEST_GUID);
-        assertThat(result.email()).isEqualTo(TEST_EMAIL);
+        assertThat(result.userGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(result.email()).isEqualTo(TEST_EMAIL_1);
         assertThat(result.userRole()).isEqualTo(UserRole.USER);
     }
 }

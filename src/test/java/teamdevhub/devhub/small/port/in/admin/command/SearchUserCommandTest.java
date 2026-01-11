@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.port.in.admin.command;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
@@ -11,105 +12,112 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SearchUserCommandTest {
 
     @Test
-    void blocked_가_Y이면_true_로_변환된다() {
+    @DisplayName("blocked_가_Y_이면_true_로_변환된다")
+    void returnTrueWhenBlockedIsY() {
         // given
-        SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
+        SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .blocked("Y")
                 .build();
 
         // when
-        SearchUserCommand command = SearchUserCommand.fromSearchUserRequestDto(requestDto);
+        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(command.getBlocked()).isTrue();
+        assertThat(searchUserCommand.getBlocked()).isTrue();
     }
 
     @Test
-    void blocked_가_N이면_false_로_변환된다() {
+    @DisplayName("blocked_가_N_이면_false_로_변환된다")
+    void returnFalseWhenBlockedIsN() {
         // given
-        SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
+        SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .blocked("N")
                 .build();
 
         // when
-        SearchUserCommand command = SearchUserCommand.fromSearchUserRequestDto(requestDto);
+        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(command.getBlocked()).isFalse();
+        assertThat(searchUserCommand.getBlocked()).isFalse();
     }
 
     @Test
-    void blocked_가_null_이면_null_로_유지된다() {
+    @DisplayName("blocked_가_Y_이면_true_로_변환된다")
+    void returnNullWhenBlockedIsNull() {
         // given
-        SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
+        SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .blocked(null)
                 .build();
 
         // when
-        SearchUserCommand command = SearchUserCommand.fromSearchUserRequestDto(requestDto);
+        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(command.getBlocked()).isNull();
+        assertThat(searchUserCommand.getBlocked()).isNull();
     }
 
     @Test
-    void keyword_가_blank_이면_null_로_변환된다() {
+    @DisplayName("keyword_가_blank_이면_null_로_변환된다")
+    void returnNullWhenKeywordIsBlank() {
         // given
-        SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
+        SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .keyword("   ")
                 .build();
 
         // when
-        SearchUserCommand command = SearchUserCommand.fromSearchUserRequestDto(requestDto);
+        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(command.getKeyword()).isNull();
+        assertThat(searchUserCommand.getKeyword()).isNull();
     }
 
     @Test
-    void keyword_가_존재하면_trim_되어_설정된다() {
+    @DisplayName("keyword_가_존재하면_trim_되어_설정된다")
+    void trimKeywordWhenItExists() {
         // given
-        SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
+        SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .keyword("  hello  ")
                 .build();
 
         // when
-        SearchUserCommand command = SearchUserCommand.fromSearchUserRequestDto(requestDto);
+        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(command.getKeyword()).isEqualTo("hello");
+        assertThat(searchUserCommand.getKeyword()).isEqualTo("hello");
     }
 
     @Test
-    void joinedFrom_과_joinedTo_는_그대로_전달된다() {
+    @DisplayName("joinedFrom_과_joinedTo_는_그대로_전달된다")
+    void preserveJoinedFromAndJoinedToValues() {
         // given
         LocalDateTime joinedFrom = LocalDateTime.of(2024, 1, 1, 0, 0);
         LocalDateTime joinedTo = LocalDateTime.of(2024, 12, 31, 23, 59);
 
-        SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
+        SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .joinedFrom(joinedFrom)
                 .joinedTo(joinedTo)
                 .build();
 
         // when
-        SearchUserCommand command = SearchUserCommand.fromSearchUserRequestDto(requestDto);
+        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(command.getJoinedFrom()).isEqualTo(joinedFrom);
-        assertThat(command.getJoinedTo()).isEqualTo(joinedTo);
+        assertThat(searchUserCommand.getJoinedFrom()).isEqualTo(joinedFrom);
+        assertThat(searchUserCommand.getJoinedTo()).isEqualTo(joinedTo);
     }
 
     @Test
-    void blocked_가_대소문자_구분없이_동작한다() {
+    @DisplayName("blocked_는_대소문자_구분없이_동작한다")
+    void shouldHandleBlockedCaseInsensitively() {
         // given
-        SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
+        SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .blocked("y")
                 .build();
 
         // when
-        SearchUserCommand command = SearchUserCommand.fromSearchUserRequestDto(requestDto);
+        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(command.getBlocked()).isTrue();
+        assertThat(searchUserCommand.getBlocked()).isTrue();
     }
 }

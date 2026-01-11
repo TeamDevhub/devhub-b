@@ -1,6 +1,7 @@
 package teamdevhub.devhub.small.service.admin.user;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
@@ -10,9 +11,8 @@ import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.service.admin.user.AdminUserService;
 import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class AdminUserServiceTest {
 
@@ -26,27 +26,29 @@ class AdminUserServiceTest {
     }
 
     @Test
-    void 관리자는_사용자_목록을_조회할_수_있다() {
+    @DisplayName("사용자_목록을_조회할_수_있다")
+    void canFetchUserList() {
         // given
         User user1 = User.createGeneralUser(
-                "GUID1",
-                "user1@example.com",
-                "test1234",
-                "User1",
-                "Intro",
-                List.of("001"),
-                List.of("001")
+                TEST_GUID_1,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
+                TEST_USERNAME_1,
+                TEST_INTRO_1,
+                TEST_POSITION_LIST,
+                TEST_SKILL_LIST
         );
 
         User user2 = User.createGeneralUser(
-                "GUID2",
-                "user2@example.com",
-                "test4567",
-                "User2",
-                "Intro",
-                List.of("001"),
-                List.of("001")
+                TEST_GUID_2,
+                TEST_EMAIL_2,
+                TEST_PASSWORD_2,
+                TEST_USERNAME_2,
+                TEST_INTRO_2,
+                TEST_POSITION_LIST,
+                TEST_SKILL_LIST
         );
+
         fakeUserRepository.saveNewUser(user1);
         fakeUserRepository.saveNewUser(user2);
 
@@ -59,16 +61,15 @@ class AdminUserServiceTest {
 
         PageCommand pageCommand = PageCommand.of(0,10);
 
-
         // when
-        PageResult<AdminUserSummaryResponseDto> adminUserSummaryResponseDtoList = adminUserService.listUser(searchUserCommand, pageCommand);
-        AdminUserSummaryResponseDto getFirstAdminUserSummaryResponseDto = adminUserSummaryResponseDtoList.content().get(0);
+        PageResult<AdminUserSummaryResponseDto> pageResult = adminUserService.listUser(searchUserCommand, pageCommand);
+        AdminUserSummaryResponseDto adminUserSummaryResponseDto = pageResult.content().get(0);
 
         // then
-        assertThat(adminUserSummaryResponseDtoList).isNotNull();
-        assertThat(adminUserSummaryResponseDtoList.content().size()).isEqualTo(2);
-        assertThat(adminUserSummaryResponseDtoList.totalPages()).isEqualTo(1);
-        assertThat(getFirstAdminUserSummaryResponseDto.getUserGuid()).isEqualTo(user1.getUserGuid());
-        assertThat(getFirstAdminUserSummaryResponseDto.getEmail()).isEqualTo(user1.getEmail());
+        assertThat(pageResult).isNotNull();
+        assertThat(pageResult.content().size()).isEqualTo(2);
+        assertThat(pageResult.totalPages()).isEqualTo(1);
+        assertThat(adminUserSummaryResponseDto.getUserGuid()).isEqualTo(user1.getUserGuid());
+        assertThat(adminUserSummaryResponseDto.getEmail()).isEqualTo(user1.getEmail());
     }
 }

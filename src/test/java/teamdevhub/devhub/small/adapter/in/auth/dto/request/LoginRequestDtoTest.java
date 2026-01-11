@@ -1,28 +1,27 @@
 package teamdevhub.devhub.small.adapter.in.auth.dto.request;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class LoginRequestDtoTest {
 
     @Test
-    void LoginRequestDto_Builder_로_생성후_email_과_password_가_정상적으로_들어가는지_확인할_수_있다() {
+    @DisplayName("LoginRequestDto_Builder_로_생성후_email_과_password_가_정상적으로_들어가는지_확인할_수_있다")
+    void canBindFieldsAfterCreatingDtoWithBuilder() {
         // given
-        String email = "user@example.com";
-        String password = "passw0rd!";
-
-        // when
-        LoginRequestDto dto = LoginRequestDto.builder()
-                .email(email)
-                .password(password)
+        LoginRequestDto loginRequestDto = LoginRequestDto.builder()
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
                 .build();
 
-        // then
-        assertThat(dto).isNotNull();
-        assertThat(dto.getEmail()).isEqualTo(email);
-        assertThat(dto.getPassword()).isEqualTo(password);
+        // when, then
+        assertThat(loginRequestDto).isNotNull();
+        assertThat(loginRequestDto.getEmail()).isEqualTo(TEST_EMAIL_1);
+        assertThat(loginRequestDto.getPassword()).isEqualTo(TEST_PASSWORD_1);
     }
 
 }

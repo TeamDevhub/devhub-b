@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.in.user.dto.request;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 
@@ -9,7 +10,8 @@ import static teamdevhub.devhub.constant.TestConstant.*;
 class UpdateProfileRequestDtoTest {
 
     @Test
-    void 변경된_값은_UpdateProfileRequestDto_로_변환된다() {
+    @DisplayName("변경된_값은_UpdateProfileRequestDto_로_변환된다")
+    void convertUpdatedValuesToRequestDto() {
         // given, when
         UpdateProfileRequestDto updateProfileRequestDto = UpdateProfileRequestDto.builder()
                 .username(NEW_USERNAME)

@@ -1,5 +1,6 @@
 package teamdevhub.devhub.medium.common.exception;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -61,7 +62,8 @@ class GlobalExceptionHandlerTest {
     private void dummyMethod(String param) {}
 
     @Test
-    void 도메인예외_발생시_BAD_REQUEST_반환() throws Exception {
+    @DisplayName("DomainRuleException_이_발생하면_BAD_REQUEST_반환")
+    void returnBadRequestOnDomainRuleException() throws Exception {
         // given, when
         mockMvc.perform(get("/domain-exception"))
                 // then
@@ -72,7 +74,8 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void 비즈니스예외_발생시_BAD_REQUEST_반환() throws Exception {
+    @DisplayName("BusinessRuleException_이_발생하면_BAD_REQUEST_반환")
+    void returnBadRequestOnBusinessRuleException() throws Exception {
         // given, when
         mockMvc.perform(get("/business-exception"))
                 // then
@@ -83,7 +86,8 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void 검증예외_발생시_BAD_REQUEST_반환() throws Exception {
+    @DisplayName("MethodArgumentNotValidException_이_발생하면_BAD_REQUEST_반환")
+    void returnBadRequestOnMethodArgumentNotValidException() throws Exception {
         // given, when
         mockMvc.perform(get("/validation-exception"))
                 // then
@@ -94,7 +98,8 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void 기타예외_발생시_BAD_REQUEST_반환() throws Exception {
+    @DisplayName("기타예외가_발생하면_BAD_REQUEST_반환")
+    void returnBadRequestOnOtherExceptions() throws Exception {
         // given, when
         mockMvc.perform(get("/generic-exception"))
                 // then

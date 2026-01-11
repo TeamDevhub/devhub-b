@@ -1,6 +1,7 @@
 package teamdevhub.devhub.small.adapter.out.mail;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.mail.EmailVerificationAdapter;
@@ -28,58 +29,62 @@ class EmailVerificationAdapterTest {
     }
 
     @Test
-    void 이메일_인증_내역을_조회할_수_있다() {
+    @DisplayName("이메일_인증_내역을_조회할_수_있다")
+    void getEmailVerificationRecord() {
         // given
-        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL, EMAIL_CODE, fakeDateTimeProvider.now().plusMinutes(5));
+        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL_1, EMAIL_CODE, fakeDateTimeProvider.now().plusMinutes(5));
         emailVerificationAdapter.save(emailVerification);
 
         // when
-        EmailVerification foundEmailVerification = emailVerificationAdapter.findByEmail(TEST_EMAIL);
+        EmailVerification foundEmailVerification = emailVerificationAdapter.findByEmail(TEST_EMAIL_1);
 
         // then
         assertThat(foundEmailVerification).isNotNull();
-        assertThat(foundEmailVerification.getEmail()).isEqualTo(TEST_EMAIL);
+        assertThat(foundEmailVerification.getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(foundEmailVerification.getCode()).isEqualTo(EMAIL_CODE);
     }
 
     @Test
-    void 만료되지_않은_코드는_existUnexpiredCode_에서_true_를_반환한다() {
+    @DisplayName("만료되지_않은_코드는_existUnexpiredCode_에서_true_를_반환한다")
+    void existUnexpiredCodeReturnsTrueForUnexpiredCode() {
         // given
-        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL, EMAIL_CODE, fakeDateTimeProvider.now().plusMinutes(5));
+        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL_1, EMAIL_CODE, fakeDateTimeProvider.now().plusMinutes(5));
         emailVerificationAdapter.save(emailVerification);
 
         // when
-        boolean exists = emailVerificationAdapter.existUnexpiredCode(TEST_EMAIL);
+        boolean exists = emailVerificationAdapter.existUnexpiredCode(TEST_EMAIL_1);
 
         // then
         assertThat(exists).isTrue();
     }
 
     @Test
-    void 만료된_코드는_existUnexpiredCode_에서_false_를_반환한다() {
+    @DisplayName("만료된_코드는_existUnexpiredCode_에서_false_를_반환한다")
+    void existUnexpiredCodeReturnsFalseForExpiredCode() {
         // given
-        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL, EMAIL_CODE, fakeDateTimeProvider.now().minusMinutes(1));
+        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL_1, EMAIL_CODE, fakeDateTimeProvider.now().minusMinutes(1));
         emailVerificationAdapter.save(emailVerification);
 
         // when
-        boolean exists = emailVerificationAdapter.existUnexpiredCode(TEST_EMAIL);
+        boolean exists = emailVerificationAdapter.existUnexpiredCode(TEST_EMAIL_1);
 
         // then
         assertThat(exists).isFalse();
     }
 
     @Test
-    void 저장된_이메일_인증_내역을_삭제할_수_있다() {
+    @DisplayName("저장된_이메일_인증_내역을_삭제할_수_있다")
+    void deleteStoredEmailVerificationRecord() {
         // given
-        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL, EMAIL_CODE, fakeDateTimeProvider.now().plusMinutes(5));
+        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL_1, EMAIL_CODE, fakeDateTimeProvider.now().plusMinutes(5));
         emailVerificationAdapter.save(emailVerification);
 
         // when
-        emailVerificationAdapter.delete(TEST_EMAIL);
+        emailVerificationAdapter.delete(TEST_EMAIL_1);
 
         // then
-        assertThat(emailVerificationAdapter.existUnexpiredCode(TEST_EMAIL)).isFalse();
-        assertThatThrownBy(() -> emailVerificationAdapter.findByEmail(TEST_EMAIL))
+        assertThat(emailVerificationAdapter.existUnexpiredCode(TEST_EMAIL_1)).isFalse();
+        assertThatThrownBy(() -> emailVerificationAdapter.findByEmail(TEST_EMAIL_1))
                 .isInstanceOf(AdapterDataException.class)
                 .hasMessageContaining(ErrorCode.READ_FAIL.getMessage());
     }

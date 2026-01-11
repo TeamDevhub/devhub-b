@@ -2,6 +2,7 @@ package teamdevhub.devhub.medium.common.web.security.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -35,7 +36,8 @@ public class CustomAccessDeniedHandlerTest {
     private PrintWriter printWriter;
 
     @Test
-    void 접근_거부_예외가_발생하면_JSON_응답으로_전달한다() throws IOException {
+    @DisplayName("접근_거부_예외가_발생하면_JSON_응답으로_전달한다")
+    void handleAccessDeniedExceptionWithJsonResponse() throws IOException {
         // given
         AccessDeniedException exception = new AccessDeniedException("Access denied");
         when(httpServletResponse.getWriter()).thenReturn(printWriter);

@@ -18,13 +18,13 @@ public class JpaUserRepositoryTest {
     @Test
     void 회원이_저장된다() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         // when
         User savedUser = userRepository.saveNewUser(user);
 
         // then
         assertThat(savedUser.getUserGuid()).isNotNull();
-        assertThat(savedUser.getEmail()).isEqualTo(TEST_EMAIL);
+        assertThat(savedUser.getEmail()).isEqualTo(TEST_EMAIL_1);
     }
 }

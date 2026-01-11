@@ -1,5 +1,6 @@
 package teamdevhub.devhub.medium.common.config;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import teamdevhub.devhub.common.config.ProviderConfig;
@@ -17,7 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ProviderConfigTest {
 
     @Test
-    void 날짜_시간_프로바이더가_생성된다() {
+    @DisplayName("DateTimeProvider_가_생성된다")
+    void createDateTimeProvider() {
         // given
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
 
@@ -30,7 +32,8 @@ public class ProviderConfigTest {
     }
 
     @Test
-    void 비밀번호_정책_프로바이더가_생성된다() {
+    @DisplayName("PasswordPolicyProvider_가_생성된다")
+    void createPasswordPolicyProvider() {
         // given
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
 
@@ -43,7 +46,8 @@ public class ProviderConfigTest {
     }
 
     @Test
-    void 식별자_프로바이더가_생성된다() {
+    @DisplayName("IdentifierProvider_가_생성된다")
+    void createIdentifierProvider() {
         // given
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
 
@@ -56,7 +60,8 @@ public class ProviderConfigTest {
     }
 
     @Test
-    void 이메일_인증_코드_프로바이더가_생성된다() {
+    @DisplayName("EmailVerificationCodeProvider_가_생성된다")
+    void createEmailVerificationCodeProvider() {
         // given
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
 

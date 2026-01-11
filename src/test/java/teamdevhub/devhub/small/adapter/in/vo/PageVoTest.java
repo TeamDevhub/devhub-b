@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.in.vo;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.adapter.in.vo.PageVo;
@@ -11,7 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PageVoTest {
 
     @Test
-    void Page_로부터_PageVo_를_생성한다() {
+    @DisplayName("PageResult_로부터_PageVo_를_생성한다")
+    void createPageVoFromPageResult() {
         // given
         PageResult<String> pageResult = PageResult.of(
                 List.of("data1", "data2"),
@@ -33,7 +35,8 @@ class PageVoTest {
     }
 
     @Test
-    void 첫_페이지일_경우_first_는_true_이고_last_는_false_이다() {
+    @DisplayName("첫_페이지일_경우_first_는_true_이고_last_는_false_이다")
+    void setFirstTrueAndLastFalseForFirstPage() {
         // given
         PageResult<String> pageResult = PageResult.of(
                 List.of("data"),
@@ -51,7 +54,8 @@ class PageVoTest {
     }
 
     @Test
-    void 마지막_페이지일_경우_last_는_true_이다() {
+    @DisplayName("마지막_페이지일_경우_last_는_true_이다")
+    void setLastTrueForLastPage() {
         // given
         PageResult<String> pageResult = PageResult.of(
                 List.of("data"),

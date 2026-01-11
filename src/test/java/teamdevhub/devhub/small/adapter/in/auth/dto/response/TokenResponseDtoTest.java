@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.in.auth.dto.response;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 
@@ -8,7 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TokenResponseDtoTest {
 
     @Test
-    void TokenResponseDto_를_생성할_수_있다() {
+    @DisplayName("TokenResponseDto_를_생성할_수_있다")
+    void canIssueResponseDto() {
         // given
         String accessToken = "access-token-random";
 

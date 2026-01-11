@@ -5,6 +5,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 
@@ -25,13 +26,14 @@ class SignupRequestDtoTest {
     }
 
     @Test
-    void 올바른_데이터는_검증에_통과한다() {
+    @DisplayName("올바른_데이터는_검증에_통과한다")
+    void shouldPassForValidData() {
         // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .username(TEST_USERNAME)
-                .introduction(TEST_INTRO)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .build();
@@ -44,12 +46,13 @@ class SignupRequestDtoTest {
     }
 
     @Test
-    void 이메일이_비어있으면_검증에_실패한다() {
+    @DisplayName("이메일이_비어있으면_검증에_실패한다")
+    void shouldFailWhenEmailIsEmpty() {
         // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email("")
-                .password(TEST_PASSWORD)
-                .introduction(TEST_INTRO)
+                .password(TEST_PASSWORD_1)
+                .introduction(TEST_INTRO_1)
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .build();
@@ -65,12 +68,13 @@ class SignupRequestDtoTest {
     }
 
     @Test
-    void 포지션이_없으면_검증에_실패한다() {
+    @DisplayName("포지션이_없으면_검증에_실패한다")
+    void shouldFailWhenPositionIsMissing() {
         // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .introduction(TEST_INTRO)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .introduction(TEST_INTRO_1)
                 .positionList(null)
                 .skillList(TEST_SKILL_LIST)
                 .build();
@@ -86,12 +90,13 @@ class SignupRequestDtoTest {
     }
 
     @Test
-    void 포지션이_빈_값이면_검증에_실패한다() {
+    @DisplayName("포지션이_빈_값이면_검증에_실패한다")
+    void shouldFailWhenPositionIsEmpty() {
         // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .introduction(TEST_INTRO)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .introduction(TEST_INTRO_1)
                 .positionList(List.of())
                 .skillList(TEST_SKILL_LIST)
                 .build();
@@ -107,12 +112,13 @@ class SignupRequestDtoTest {
     }
 
     @Test
-    void 스킬이_없으면_검증에_실패한다() {
+    @DisplayName("스킬이_없으면_검증에_실패한다")
+    void shouldFailWhenSkillsAreMissing() {
         // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .introduction(TEST_INTRO)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .introduction(TEST_INTRO_1)
                 .positionList(TEST_POSITION_LIST)
                 .skillList(null)
                 .build();
@@ -128,12 +134,13 @@ class SignupRequestDtoTest {
     }
 
     @Test
-    void 스킬이_빈_값이면_검증에_실패한다() {
+    @DisplayName("스킬이_빈_값이면_검증에_실패한다")
+    void shouldFailWhenSkillsAreEmpty() {
         // given
         SignupRequestDto signupRequestDto = SignupRequestDto.builder()
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .introduction(TEST_INTRO)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .introduction(TEST_INTRO_1)
                 .positionList(TEST_POSITION_LIST)
                 .skillList(List.of())
                 .build();

@@ -1,5 +1,6 @@
 package teamdevhub.devhub.medium.common.config;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,7 +30,8 @@ class WebConfigTest {
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Test
-    void LoginUserArgumentResolver_가_등록된다() {
+    @DisplayName("LoginUserArgumentResolver_가_등록된다")
+    void createLoginUserArgumentResolver() {
         // given
         RequestMappingHandlerAdapter requestMappingHandlerAdapter = context.getBean(RequestMappingHandlerAdapter.class);
 
@@ -40,7 +42,8 @@ class WebConfigTest {
         assertThat(resolvers).contains(loginUserArgumentResolver);
     }
     @Test
-    void corsMapping_적용을_확인할_수_있다() throws Exception {
+    @DisplayName("corsMapping_적용을_확인할_수_있다")
+    void verifyCorsMappingApplied() throws Exception {
         // given
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 

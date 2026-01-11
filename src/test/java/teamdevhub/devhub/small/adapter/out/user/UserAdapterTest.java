@@ -1,6 +1,7 @@
 package teamdevhub.devhub.small.adapter.out.user;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
@@ -45,7 +46,7 @@ class UserAdapterTest {
         FakeUserQueryRepository fakeUserQueryRepository = new FakeUserQueryRepository();
         fakeJpaUserPositionRepository = new FakeJpaUserPositionRepository();
         fakeJpaUserSkillRepository = new FakeJpaUserSkillRepository();
-        fakeIdentifierProvider = new FakeUuidIdentifierProvider(TEST_GUID);
+        fakeIdentifierProvider = new FakeUuidIdentifierProvider(TEST_GUID_1);
 
         userAdapter = new UserAdapter(
                 fakeJpaUserRepository,
@@ -57,7 +58,8 @@ class UserAdapterTest {
     }
 
     @Test
-    void 관리자_계정을_데이터베이스에_저장한다() {
+    @DisplayName("관리자_계정을_저장한다")
+    void saveAdminAccount() {
         // given
         User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
@@ -71,7 +73,8 @@ class UserAdapterTest {
     }
 
     @Test
-    void 로그인을_시도하면_ID_값인_이메일로_AuthenticatedUser_를_조회한다() {
+    @DisplayName("로그인을_시도하면_ID_값인_이메일로_AuthenticatedUser_를_조회한다")
+    void getAuthenticatedUserByLoginId() {
         // given
         User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
         fakeJpaUserRepository.saveForSignup(UserMapper.toEntity(adminUser));
@@ -85,30 +88,32 @@ class UserAdapterTest {
     }
 
     @Test
-    void 새로운_사용자를_생성하면_사용자_관심_포지션과_사용자_보유_스킬을_저장한다() {
+    @DisplayName("새로운_사용자를_생성하면_사용자_관심_포지션과_사용자_보유_스킬을_저장한다")
+    void saveUserWithPositionsAndSkills() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         // when
         User savedUser = userAdapter.saveNewUser(user);
 
         // then
-        assertThat(savedUser.getUserGuid()).isEqualTo(TEST_GUID);
-        List<UserPositionEntity> positions = fakeJpaUserPositionRepository.findByUserGuid(TEST_GUID);
+        assertThat(savedUser.getUserGuid()).isEqualTo(TEST_GUID_1);
+        List<UserPositionEntity> positions = fakeJpaUserPositionRepository.findByUserGuid(TEST_GUID_1);
         assertThat(positions).hasSize(1);
         assertThat(positions.iterator().next().getPositionCd()).isEqualTo("001");
-        List<UserSkillEntity> skills = fakeJpaUserSkillRepository.findByUserGuid(TEST_GUID);
+        List<UserSkillEntity> skills = fakeJpaUserSkillRepository.findByUserGuid(TEST_GUID_1);
         assertThat(skills).hasSize(1);
         assertThat(skills.iterator().next().getSkillCd()).isEqualTo("001");
     }
 
     @Test
-    void 사용자가_로그인을_하면_최종_로그인_시간이_변경된다() {
+    @DisplayName("사용자가_로그인을_하면_최종_로그인_시간이_변경된다")
+    void updateLastLoginTime() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
         // when
-        userAdapter.updateLastLoginDateTime(TEST_GUID,fakeDateTimeProvider.now());
+        userAdapter.updateLastLoginDateTime(TEST_GUID_1,fakeDateTimeProvider.now());
 
         // then
         assertThat(fakeJpaUserRepository.findByUserGuid(user.getUserGuid())
@@ -118,27 +123,29 @@ class UserAdapterTest {
     }
 
     @Test
-    void 사용자_식별키로_User_를_조회한다() {
+    @DisplayName("사용자_식별키로_User_를_조회한다")
+    void getUserByIdentifier() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
-        fakeJpaUserPositionRepository.saveAll(Set.of(new UserPositionEntity(TEST_GUID + "-pos", TEST_GUID, "001")));
-        fakeJpaUserSkillRepository.saveAll(Set.of(new UserSkillEntity(TEST_GUID + "-skill", TEST_GUID, "001")));
+        fakeJpaUserPositionRepository.saveAll(Set.of(new UserPositionEntity(TEST_GUID_1 + "-pos", TEST_GUID_1, "001")));
+        fakeJpaUserSkillRepository.saveAll(Set.of(new UserSkillEntity(TEST_GUID_1 + "-skill", TEST_GUID_1, "001")));
 
         // when
-        User found = userAdapter.findByUserGuid(TEST_GUID);
+        User found = userAdapter.findByUserGuid(TEST_GUID_1);
 
         // then
         assertThat(found).isNotNull();
-        assertThat(found.getUserGuid()).isEqualTo(TEST_GUID);
+        assertThat(found.getUserGuid()).isEqualTo(TEST_GUID_1);
         assertThat(found.getPositions()).hasSize(1);
         assertThat(found.getSkills()).hasSize(1);
     }
 
     @Test
-    void 사용자_프로필_정보를_수정하면_변경된_값이_저장된다() {
+    @DisplayName("사용자_프로필_정보를_수정하면_변경된_값이_저장된다")
+    void updateUserProfile() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
         user.updateProfile(NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, NEW_SKILLS);
 
         // when
@@ -154,16 +161,17 @@ class UserAdapterTest {
     }
 
     @Test
-    void 사용자_프로필_정보_일부_포지션만_변경하면_diff_전략에_맞게_처리된다() {
+    @DisplayName("사용자_프로필_정보_일부_포지션만_변경하면_지정한_방식에_맞게_수정된다")
+    void updateUserProfilePositions() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         // when
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
         fakeJpaUserPositionRepository.saveAll(
                 user.getPositions().stream()
                         .map(userPosition -> UserPositionEntity.builder()
-                                .userGuid(TEST_GUID)
+                                .userGuid(TEST_GUID_1)
                                 .userInterestPositionGuid(fakeIdentifierProvider.generateIdentifier())
                                 .positionCd(userPosition.positionCode())
                                 .build())
@@ -173,7 +181,7 @@ class UserAdapterTest {
         fakeJpaUserSkillRepository.saveAll(
                 user.getSkills().stream()
                         .map(userSkill -> UserSkillEntity.builder()
-                                .userGuid(TEST_GUID)
+                                .userGuid(TEST_GUID_1)
                                 .userSkillGuid(fakeIdentifierProvider.generateIdentifier())
                                 .skillCd(userSkill.skillCode())
                                 .build())
@@ -186,9 +194,9 @@ class UserAdapterTest {
         userAdapter.updateUserProfile(user);
 
         // then
-        Set<String> positionsAfterUpdate = fakeJpaUserPositionRepository.findByUserGuid(TEST_GUID)
+        Set<String> positionsAfterUpdate = fakeJpaUserPositionRepository.findByUserGuid(TEST_GUID_1)
                 .stream().map(UserPositionEntity::getPositionCd).collect(Collectors.toSet());
-        Set<String> skillsAfterUpdate = fakeJpaUserSkillRepository.findByUserGuid(TEST_GUID)
+        Set<String> skillsAfterUpdate = fakeJpaUserSkillRepository.findByUserGuid(TEST_GUID_1)
                 .stream().map(UserSkillEntity::getSkillCd).collect(Collectors.toSet());
 
         assertThat(positionsAfterUpdate).containsExactlyInAnyOrder("001");
@@ -196,9 +204,10 @@ class UserAdapterTest {
     }
 
     @Test
-    void 회원탈퇴한_사용자의_deleted_값은_true_이다() {
+    @DisplayName("회원탈퇴한_사용자의_deleted_값은_true_이다")
+    void isDeletedUser() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
         user.withdraw();
 
         // when
@@ -212,7 +221,8 @@ class UserAdapterTest {
     }
 
     @Test
-    void 사용자_권한이_일치한다면_true_를_반환한다() {
+    @DisplayName("사용자_권한이_일치한다면_true_를_반환한다")
+    void isUserRoleMatched() {
         // given
         User user = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
@@ -225,7 +235,8 @@ class UserAdapterTest {
     }
 
     @Test
-    void 사용자_목록_조회를_하면_AdminUserSummaryResponseDto_로_된_Page_데이터를_반환한다() {
+    @DisplayName("사용자_목록_조회를_하면_AdminUserSummaryResponseDto_로_된_PageResult_데이터를_반환한다")
+    void getUserListAsAdminSummary() {
         // given
         PageCommand pageCommand = new PageCommand(0, 10);
         SearchUserCommand searchCommand = new SearchUserCommand(null, null, null, null);

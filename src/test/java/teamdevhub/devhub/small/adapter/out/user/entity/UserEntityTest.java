@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.out.user.entity;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -10,15 +11,16 @@ import static teamdevhub.devhub.constant.TestConstant.*;
 class UserEntityTest {
 
     @Test
-    void userEntity_생성_및_getter_테스트() {
+    @DisplayName("userEntity_생성_및_getter_를_사용할_수_있다")
+    void createEntityAndUseGetter() {
         // given, when
         UserEntity userEntity = UserEntity.builder()
-                .userGuid(TEST_GUID)
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .username(TEST_USERNAME)
+                .userGuid(TEST_GUID_1)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
-                .introduction(TEST_INTRO)
+                .introduction(TEST_INTRO_1)
                 .mannerDegree(TEST_MANNER)
                 .blocked(TEST_BLOCKED)
                 .deleted(TEST_DELETED)
@@ -26,12 +28,12 @@ class UserEntityTest {
                 .build();
 
         // then
-        assertThat(userEntity.getUserGuid()).isEqualTo(TEST_GUID);
-        assertThat(userEntity.getEmail()).isEqualTo(TEST_EMAIL);
-        assertThat(userEntity.getPassword()).isEqualTo(TEST_PASSWORD);
-        assertThat(userEntity.getUsername()).isEqualTo(TEST_USERNAME);
+        assertThat(userEntity.getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(userEntity.getEmail()).isEqualTo(TEST_EMAIL_1);
+        assertThat(userEntity.getPassword()).isEqualTo(TEST_PASSWORD_1);
+        assertThat(userEntity.getUsername()).isEqualTo(TEST_USERNAME_1);
         assertThat(userEntity.getUserRole()).isEqualTo(UserRole.USER);
-        assertThat(userEntity.getIntroduction()).isEqualTo(TEST_INTRO);
+        assertThat(userEntity.getIntroduction()).isEqualTo(TEST_INTRO_1);
         assertThat(userEntity.getMannerDegree()).isEqualTo(TEST_MANNER);
         assertThat(userEntity.isBlocked()).isEqualTo(TEST_BLOCKED);
         assertThat(userEntity.isDeleted()).isEqualTo(TEST_DELETED);

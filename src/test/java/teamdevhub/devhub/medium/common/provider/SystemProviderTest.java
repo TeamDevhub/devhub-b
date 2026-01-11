@@ -1,5 +1,6 @@
 package teamdevhub.devhub.medium.common.provider;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,10 +14,11 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SystemProvidersTest {
+class SystemProviderTest {
 
     @Test
-    void 이메일_인증코드를_생성하면_6자리_숫자로_반환된다() {
+    @DisplayName("이메일_인증코드를_생성하면_6자리_숫자로_반환된다")
+    void generateEmailVerificationCodeReturns6DigitNumber() {
         // given
         SystemEmailVerificationCodeProvider provider = new SystemEmailVerificationCodeProvider();
 
@@ -30,7 +32,8 @@ class SystemProvidersTest {
     }
 
     @Test
-    void 식별자를_생성하면_UUID_기반_32자리_문자열로_반환된다() {
+    @DisplayName("식별자를_생성하면_UUID_기반_32자리_문자열로_반환된다")
+    void generateIdentifierReturns32CharUUID() {
         // given
         SystemIdentifierProvider provider = new SystemIdentifierProvider();
 
@@ -44,7 +47,8 @@ class SystemProvidersTest {
     }
 
     @Test
-    void 비밀번호를_암호화하면_일치검증이_정상적으로_동작한다() {
+    @DisplayName("비밀번호를_암호화하면_일치검증이_정상적으로_동작한다")
+    void encryptPasswordMatchesSuccessfully() {
         //given
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -60,7 +64,8 @@ class SystemProvidersTest {
     }
 
     @Test
-    void 날짜를_포맷하고_다시_파싱하면_원본과_동일하다() {
+    @DisplayName("날짜를_포맷하고_다시_파싱하면_원본과_동일하다")
+    void formatAndParseDateReturnsOriginal() {
         // given
         SystemDateTimeProvider provider = new SystemDateTimeProvider();
         LocalDate today = LocalDate.of(2026, 1, 9);
@@ -76,7 +81,8 @@ class SystemProvidersTest {
     }
 
     @Test
-    void 날짜시간을_포맷하고_다시_파싱하면_원본과_동일하다() {
+    @DisplayName("날짜시간을_포맷하고_다시_파싱하면_원본과_동일하다")
+    void formatAndParseDateTimeReturnsOriginal() {
         // given
         SystemDateTimeProvider provider = new SystemDateTimeProvider();
         LocalDateTime now = LocalDateTime.of(2026, 1, 9, 14, 45, 30);
@@ -92,7 +98,8 @@ class SystemProvidersTest {
     }
 
     @Test
-    void today_와_now_메서드는_현재_날짜와_시간을_반환한다() {
+    @DisplayName("today_와_now_메서드는_현재_날짜와_시간을_반환한다")
+    void todayAndNowReturnCurrentDateTime() {
         // given
         SystemDateTimeProvider provider = new SystemDateTimeProvider();
 

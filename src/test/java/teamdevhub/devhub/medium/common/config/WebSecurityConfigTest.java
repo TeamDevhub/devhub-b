@@ -1,5 +1,6 @@
 package teamdevhub.devhub.medium.common.config;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,7 +19,8 @@ class WebSecurityConfigTest {
     private MockMvc mockMvc;
 
     @Test
-    void 인증없이_접근하면_Unauthorized_상태코드가_반환된다() throws Exception {
+    @DisplayName("인증없이_접근하면_Unauthorized_상태코드가_반환된다")
+    void returnUnauthorizedIfAccessWithoutAuthentication() throws Exception {
         // given, when
         mockMvc.perform(get("/user/profile"))
                 // then
@@ -26,7 +28,8 @@ class WebSecurityConfigTest {
     }
 
     @Test
-    void adminURL_은_ADMIN_권한이_있어야_접근이_가능하다() throws Exception {
+    @DisplayName("adminURL_은_ADMIN_권한이_있어야_접근이_가능하다")
+    void allowAccessToAdminURLWithAdminRole() throws Exception {
         // given, when
         mockMvc.perform(get("/admin/users?page=0&size=10")
                         .with(user("admin@example.com").roles("ADMIN")))
@@ -35,7 +38,8 @@ class WebSecurityConfigTest {
     }
 
     @Test
-    void adminURL_은_ADMIN_권한이_없으면_접근이_거부된다() throws Exception {
+    @DisplayName("adminURL_은_ADMIN_권한이_없으면_접근이_거부된다")
+    void denyAccessToAdminURLWithoutAdminRole() throws Exception {
         // given, when
         mockMvc.perform(get("/admin/users?page=0&size=10")
                         .with(user("user@example.com").roles("USER")))
@@ -44,7 +48,8 @@ class WebSecurityConfigTest {
     }
 
     @Test
-    void Swagger_접근은_모든_사용자가_가능하다() throws Exception {
+    @DisplayName("Swagger_접근은_모든_사용자가_가능하다")
+    void allowAllUsersAccessToSwagger() throws Exception {
         // given, when
         mockMvc.perform(get("/swagger-ui/index.html"))
                 // then

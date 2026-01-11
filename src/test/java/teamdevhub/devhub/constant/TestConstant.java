@@ -16,11 +16,18 @@ public final class TestConstant {
     public static final String ADMIN_USERNAME = "AdminUser";
     public static final String ADMIN_PASSWORD = "adminPassword123";
 
-    public static final String TEST_GUID = "USERa1b2c3d4e5f6g7h8i9j10k11l12m";
-    public static final String TEST_EMAIL = "user@example.com";
-    public static final String TEST_PASSWORD = "password123!";
-    public static final String TEST_USERNAME = "User";
-    public static final String TEST_INTRO = "Hello World";
+    public static final String TEST_GUID_1 = "USER1a1b2c3d4e5f6g7h8i9j10k11l12";
+    public static final String TEST_EMAIL_1 = "user1@example.com";
+    public static final String TEST_PASSWORD_1 = "password123!";
+    public static final String TEST_USERNAME_1 = "User1";
+    public static final String TEST_INTRO_1 = "Hello World";
+
+    public static final String TEST_GUID_2 = "USER2a1b2c3d4e5f6g7h8i9j10k11l12";
+    public static final String TEST_EMAIL_2 = "user2@example.com";
+    public static final String TEST_PASSWORD_2 = "password456!";
+    public static final String TEST_USERNAME_2 = "User2";
+    public static final String TEST_INTRO_2 = "Goodbye World";
+
     public static final double TEST_MANNER = 36.5;
     public static final boolean TEST_BLOCKED = false;
     public static final boolean TEST_DELETED = false;

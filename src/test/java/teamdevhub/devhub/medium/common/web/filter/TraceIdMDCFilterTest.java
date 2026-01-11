@@ -2,6 +2,7 @@ package teamdevhub.devhub.medium.common.web.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -19,7 +20,8 @@ class TraceIdMDCFilterTest {
     private final TraceIdMDCFilter filter = new TraceIdMDCFilter();
 
     @Test
-    void 요청헤더에_traceId가_있으면_MDC_에_같은_traceId_를_설정한다() throws ServletException, IOException {
+    @DisplayName("요청헤더에_traceId가_있으면_MDC_에_같은_traceId_를_설정한다")
+    void setTraceIdInMdcIfHeaderExists() throws ServletException, IOException {
         // given
         MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
         mockHttpServletRequest.addHeader("X-Trace-Id", "existing-trace-id");
@@ -35,7 +37,8 @@ class TraceIdMDCFilterTest {
     }
 
     @Test
-    void 요청헤더가_없으면_MDC_에_새로운_traceId_를_생성해서_설정한다() throws ServletException, IOException {
+    @DisplayName("요청헤더가_없으면_MDC_에_새로운_traceId_를_생성해서_설정한다")
+    void generateAndSetTraceIdInMdcIfHeaderMissing() throws ServletException, IOException {
         // given
         MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
@@ -50,7 +53,8 @@ class TraceIdMDCFilterTest {
     }
 
     @Test
-    void filter_실행후_MDC_는_항상_traceId_를_제거한다() throws ServletException, IOException {
+    @DisplayName("filter_실행후_MDC_는_항상_traceId_를_제거한다")
+    void removeTraceIdFromMdcAfterFilterExecution() throws ServletException, IOException {
         // given
         MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
@@ -64,7 +68,8 @@ class TraceIdMDCFilterTest {
     }
 
     @Test
-    void traceId_는_16자리_문자열로_생성된다() throws ServletException, IOException {
+    @DisplayName("traceId_는_16자리_문자열로_생성된다")
+    void generateTraceIdReturns16CharString() throws ServletException, IOException {
         // given
         MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();

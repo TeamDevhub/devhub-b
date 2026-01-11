@@ -2,6 +2,7 @@ package teamdevhub.devhub.medium.common.web.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
@@ -24,7 +25,8 @@ public class CustomFilterExceptionHandlerTest {
     }
 
     @Test
-    void httpServletResponse_에_에러코드_응답을_JSON_으로_작성한다() throws Exception {
+    @DisplayName("httpServletResponse_에_에러코드_응답을_JSON_으로_작성한다")
+    void writeErrorResponseAsJson() throws Exception {
         // given
         ErrorCode errorCode = ErrorCode.TOKEN_UNSUPPORTED;
 

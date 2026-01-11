@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.in.admin.dto.request;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
 
@@ -10,7 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SearchUserRequestDtoTest {
 
     @Test
-    void builder_로_모든_필드를_생성할_수_있다() {
+    @DisplayName("builder_로_모든_필드를_생성할_수_있다")
+    void canBuildWithBuilder() {
         // given
         LocalDateTime joinedFrom = LocalDateTime.of(2024, 1, 1, 0, 0);
         LocalDateTime joinedTo = LocalDateTime.of(2024, 12, 31, 23, 59);
@@ -31,11 +33,12 @@ class SearchUserRequestDtoTest {
     }
 
     @Test
-    void 모든_필드는_null_이어도_생성된다() {
-        // given, when
+    @DisplayName("모든_필드는_null_이어도_생성된다")
+    void allFieldsCanBeNull() {
+        // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder().build();
 
-        // then
+        // when, then
         assertThat(searchUserRequestDto.getBlocked()).isNull();
         assertThat(searchUserRequestDto.getJoinedFrom()).isNull();
         assertThat(searchUserRequestDto.getJoinedTo()).isNull();

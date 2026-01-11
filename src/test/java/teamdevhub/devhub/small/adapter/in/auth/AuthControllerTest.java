@@ -1,6 +1,7 @@
 package teamdevhub.devhub.small.adapter.in.auth;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.AuthController;
 import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmEmailVerificationRequestDto;
@@ -36,30 +37,33 @@ class AuthControllerTest {
     }
 
     @Test
-    void 이메일_인증_메일_전송에_성공하면_HTTPSTATUS_OK_를_반환한다() {
+    @DisplayName("이메일_인증_메일_전송에_성공하면_EMAIL_VERIFICATION_SENT_CODE_를_확인할_수_있다")
+    void canVerifyCodeWhenSendingEmailVerification() {
         // given
-        EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto(TEST_EMAIL);
+        EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto(TEST_EMAIL_1);
 
         // when, then
         assertThat(authController.sendEmailVerification(emailVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SENT.getCode());
     }
 
     @Test
-    void 이메일_인증_확인에_성공하면_HTTPSTATUS_OK_를_반환한다() {
+    @DisplayName("이메일_인증_확인에_성공하면_EMAIL_VERIFICATION_SUCCESS_의_코드를_확인할_수_있다")
+    void canVerifyCodeWhenConfirmingEmailVerification() {
         // given
-        fakeEmailVerificationUseCase.sendEmailVerification(new EmailVerificationRequestDto(TEST_EMAIL));
-        ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto = new ConfirmEmailVerificationRequestDto(TEST_EMAIL, EMAIL_CODE);
+        fakeEmailVerificationUseCase.sendEmailVerification(new EmailVerificationRequestDto(TEST_EMAIL_1));
+        ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto = new ConfirmEmailVerificationRequestDto(TEST_EMAIL_1, EMAIL_CODE);
 
         // when, then
         assertThat(authController.confirmEmailVerification(confirmEmailVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SUCCESS.getCode());
     }
 
     @Test
-    void 로그인에_성공하면_HTTPSTATUS_OK_를_반환한다() {
+    @DisplayName("로그인에_성공하면_LOGIN_SUCCESS_의_코드를_확인할_수_있다")
+    void canVerifyCodeWhenLoginSucceed() {
         // given
         LoginRequestDto loginRequestDto = LoginRequestDto.builder()
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
                 .build();
 
         // when, then
@@ -69,7 +73,8 @@ class AuthControllerTest {
     }
 
     @Test
-    void 토큰_재발급에_성공하면_HTTPSTATUS_OK_를_반환한다() {
+    @DisplayName("토큰_재발급에_성공하면_CREATE_SUCCESS_의_코드를_확인할_수_있다")
+    void canVerifyCodeWhenRefreshingToken() {
         // given
         String refreshToken = "refresh-token";
 
@@ -79,17 +84,18 @@ class AuthControllerTest {
     }
 
     @Test
-    void 로그아웃에_성공하면_HTTPSTATUS_OK_를_반환한다() {
+    @DisplayName("로그아웃에_성공하면_LOGOUT_SUCCESS_의_코드를_확인할_수_있다")
+    void canVerifyCodeWhenLogoutSucceed() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                TEST_GUID,
-                TEST_EMAIL,
-                TEST_PASSWORD,
+                TEST_GUID_1,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
                 UserRole.USER
         );
 
         // when, then
         assertThat(authController.revoke(authenticatedUser).getBody().getCode()).isEqualTo(SuccessCode.LOGOUT_SUCCESS.getCode());
-        assertThat(fakeAuthUseCase.getRevokedUserGuid()).isEqualTo(TEST_GUID);
+        assertThat(fakeAuthUseCase.getRevokedUserGuid()).isEqualTo(TEST_GUID_1);
     }
 }

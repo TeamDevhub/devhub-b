@@ -3,6 +3,7 @@ package teamdevhub.devhub.medium.common.logging;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import teamdevhub.devhub.common.logging.LoggingAspect;
@@ -17,7 +18,8 @@ class LoggingAspectTest {
     private final LoggingAspect loggingAspect = new LoggingAspect(new ObjectMapper());
 
     @Test
-    void logAround_shouldLogStartAndEnd() throws Throwable {
+    @DisplayName("logAround_는_시작과_끝을_로그한다")
+    void logStartAndEnd() throws Throwable {
         // given
         ProceedingJoinPoint joinPoint = mock(ProceedingJoinPoint.class);
         DummyService target = new DummyService();

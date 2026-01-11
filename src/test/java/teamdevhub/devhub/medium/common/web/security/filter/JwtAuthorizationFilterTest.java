@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -26,8 +27,8 @@ import teamdevhub.devhub.port.out.auth.TokenParseProvider;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static teamdevhub.devhub.constant.TestConstant.TEST_EMAIL;
-import static teamdevhub.devhub.constant.TestConstant.TEST_GUID;
+import static teamdevhub.devhub.constant.TestConstant.TEST_EMAIL_1;
+import static teamdevhub.devhub.constant.TestConstant.TEST_GUID_1;
 
 @ExtendWith(MockitoExtension.class)
 class JwtAuthorizationFilterTest {
@@ -65,7 +66,8 @@ class JwtAuthorizationFilterTest {
     }
 
     @Test
-    void 토큰이_없으면_다음_필터를_실행한다() throws Exception {
+    @DisplayName("토큰이_없으면_다음_필터를_실행한다")
+    void proceedToNextFilterIfNoToken() throws Exception {
         when(tokenParseProvider.resolveToken(httpServletRequest)).thenReturn(null);
 
         filter.doFilter(httpServletRequest, httpServletResponse, filterChain);
@@ -75,7 +77,8 @@ class JwtAuthorizationFilterTest {
     }
 
     @Test
-    void 유효하지_않은_토큰이면_에러핸들러를_호출한다() throws Exception {
+    @DisplayName("유효하지_않은_토큰이면_CustomFilterExceptionHandler_를_호출한다")
+    void callErrorHandlerIfTokenInvalid() throws Exception {
         String token = "Bearer invalid";
         when(tokenParseProvider.resolveToken(httpServletRequest)).thenReturn(token);
         when(tokenParseProvider.removeBearer(token)).thenReturn("invalidToken");
@@ -89,9 +92,10 @@ class JwtAuthorizationFilterTest {
     }
 
     @Test
-    void 유효한_액세스_토큰이면_Authentication_을_설정하고_다음_필터를_실행한다() throws Exception {
+    @DisplayName("유효한_액세스_토큰이면_Authentication_을_설정하고_다음_필터를_실행한다")
+    void setAuthenticationAndProceedIfAccessTokenValid() throws Exception {
         String token = "Bearer valid";
-        Claims claims = makeClaims(TEST_GUID, TEST_EMAIL, UserRole.USER);
+        Claims claims = makeClaims(TEST_GUID_1, TEST_EMAIL_1, UserRole.USER);
 
         when(tokenParseProvider.resolveToken(httpServletRequest)).thenReturn(token);
         when(tokenParseProvider.removeBearer(token)).thenReturn("validToken");
@@ -104,8 +108,8 @@ class JwtAuthorizationFilterTest {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assertThat(authentication).isNotNull();
         AuthenticatedUser user = (AuthenticatedUser) authentication.getPrincipal();
-        assertThat(user.userGuid()).isEqualTo(TEST_GUID);
-        assertThat(user.email()).isEqualTo(TEST_EMAIL);
+        assertThat(user.userGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(user.email()).isEqualTo(TEST_EMAIL_1);
         assertThat(authentication.getAuthorities())
                 .extracting(GrantedAuthority::getAuthority)
                 .containsExactly(UserRole.USER.getAuthority());

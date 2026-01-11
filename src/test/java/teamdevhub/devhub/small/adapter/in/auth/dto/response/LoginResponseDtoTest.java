@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.in.auth.dto.response;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 
@@ -8,7 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LoginResponseDtoTest {
 
     @Test
-    void LoginResponseDto_를_생성하고_toAuthorizationHeader_를_확인할_수_있다() {
+    @DisplayName("LoginResponseDto_를_생성하고_AuthorizationHeader_를_확인할_수_있다")
+    void canGetAuthorizationHeaderAfterCreatingDto() {
         // given
         String prefix = "Bearer";
         String accessToken = "access-token-random";

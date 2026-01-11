@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.out.user.entity;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 
@@ -9,17 +10,18 @@ import static teamdevhub.devhub.constant.TestConstant.*;
 class UserPositionEntityTest {
 
     @Test
-    void UserPositionEntity__를_생성하고_getter_를_사용할_수_있다() {
+    @DisplayName("UserPositionEntity_를_생성하고_getter_를_사용할_수_있다")
+    void createEntityAndUseGetter() {
         // given, when
         UserPositionEntity userPositionEntity = UserPositionEntity.builder()
                 .userInterestPositionGuid(TEST_POSITION_GUID)
-                .userGuid(TEST_GUID)
+                .userGuid(TEST_GUID_1)
                 .positionCd(TEST_POSITION_CD)
                 .build();
 
         // then
         assertThat(userPositionEntity.getUserInterestPositionGuid()).isEqualTo(TEST_POSITION_GUID);
-        assertThat(userPositionEntity.getUserGuid()).isEqualTo(TEST_GUID);
+        assertThat(userPositionEntity.getUserGuid()).isEqualTo(TEST_GUID_1);
         assertThat(userPositionEntity.getPositionCd()).isEqualTo(TEST_POSITION_CD);
     }
 }

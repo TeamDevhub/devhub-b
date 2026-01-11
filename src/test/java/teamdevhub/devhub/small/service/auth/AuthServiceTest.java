@@ -1,6 +1,7 @@
 package teamdevhub.devhub.small.service.auth;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
@@ -38,53 +39,57 @@ class AuthServiceTest {
     }
 
     @Test
-    void 로그인을_하면_액세스토큰과_리프레시토큰이_발급된다() {
+    @DisplayName("로그인을_하면_액세스토큰과_리프레시토큰이_발급된다")
+    void issueAccessAndRefreshTokenWhenLogin() {
         // given
-        LoginCommand loginCommand = new LoginCommand(TEST_EMAIL, TEST_PASSWORD);
+        LoginCommand loginCommand = new LoginCommand(TEST_EMAIL_1, TEST_PASSWORD_1);
 
         // when
         LoginResponseDto loginResponseDto = authService.login(loginCommand);
 
         // then
         assertThat(loginResponseDto).isNotNull();
-        assertThat(loginResponseDto.getAccessToken()).isEqualTo("access-token-" + TEST_GUID);
-        assertThat(loginResponseDto.getRefreshToken()).isEqualTo("refresh-token-" + TEST_GUID);
+        assertThat(loginResponseDto.getAccessToken()).isEqualTo("access-token-" + TEST_GUID_1);
+        assertThat(loginResponseDto.getRefreshToken()).isEqualTo("refresh-token-" + TEST_GUID_1);
         assertThat(loginResponseDto.getPrefix()).isEqualTo("Bearer ");
     }
 
     @Test
-    void 로그인을_하면_리프레시토큰이_저장된다() {
+    @DisplayName("로그인을_하면_리프레시토큰이_저장된다")
+    void storeRefreshTokenWhenLogin() {
         // given
-        LoginCommand loginCommand = new LoginCommand(TEST_EMAIL, TEST_PASSWORD);
+        LoginCommand loginCommand = new LoginCommand(TEST_EMAIL_1, TEST_PASSWORD_1);
 
         // when
         authService.login(loginCommand);
 
         // then
-        RefreshToken refreshToken = fakeRefreshTokenRepository.findByUserGuid(TEST_GUID);
+        RefreshToken refreshToken = fakeRefreshTokenRepository.findByUserGuid(TEST_GUID_1);
 
         assertThat(refreshToken).isNotNull();
-        assertThat(refreshToken.token()).isEqualTo("refresh-token-" + TEST_GUID);
+        assertThat(refreshToken.token()).isEqualTo("refresh-token-" + TEST_GUID_1);
     }
 
     @Test
-    void 로그인을_하면_마지막_로그인_시간이_업데이트된다() {
+    @DisplayName("로그인을_하면_마지막_로그인_시간이_업데이트된다")
+    void updateLastLoginDateTimeWhenLogin() {
         // given
-        LoginCommand loginCommand = new LoginCommand(TEST_EMAIL, TEST_PASSWORD);
+        LoginCommand loginCommand = new LoginCommand(TEST_EMAIL_1, TEST_PASSWORD_1);
 
         // when
         authService.login(loginCommand);
 
         // then
-        assertThat(fakeUserUseCase.isLoginTimeUpdated(TEST_GUID)).isTrue();
+        assertThat(fakeUserUseCase.isLoginTimeUpdated(TEST_GUID_1)).isTrue();
     }
 
     @Test
-    void 리프레시토큰으로_액세스토큰을_재발급할_수_있다() {
+    @DisplayName("리프레시토큰으로_액세스토큰을_재발급할_수_있다")
+    void refreshAccessTokenUsingRefreshToken() {
         // given
-        String refreshToken = "refresh-token-" + TEST_GUID;
+        String refreshToken = "refresh-token-" + TEST_GUID_1;
         fakeRefreshTokenRepository.save(
-                RefreshToken.of(TEST_GUID, refreshToken)
+                RefreshToken.of(TEST_GUID_1, refreshToken)
         );
 
         // when
@@ -92,18 +97,19 @@ class AuthServiceTest {
 
         // then
         assertThat(response).isNotNull();
-        assertThat(response.getAccessToken()).isEqualTo("access-token-" + TEST_GUID);
+        assertThat(response.getAccessToken()).isEqualTo("access-token-" + TEST_GUID_1);
     }
 
     @Test
-    void 로그아웃을_하면_리프레시토큰이_삭제된다() {
+    @DisplayName("로그아웃을_하면_리프레시토큰이_삭제된다")
+    void deleteRefreshTokenWhenLogout() {
         // given
-        fakeRefreshTokenRepository.save(RefreshToken.of(TEST_GUID, "refresh-token-" + TEST_GUID));
+        fakeRefreshTokenRepository.save(RefreshToken.of(TEST_GUID_1, "refresh-token-" + TEST_GUID_1));
 
         // when
-        authService.revoke(TEST_GUID);
+        authService.revoke(TEST_GUID_1);
 
         // then
-        assertThat(fakeRefreshTokenRepository.findByUserGuid(TEST_GUID)).isNull();
+        assertThat(fakeRefreshTokenRepository.findByUserGuid(TEST_GUID_1)).isNull();
     }
 }

@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.domain.user;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.user.User;
@@ -12,7 +13,8 @@ import static teamdevhub.devhub.constant.TestConstant.*;
 class UserTest {
 
     @Test
-    void 관리자_계정은_관심_포지션과_보유_스킬이_빈_값이다() {
+    @DisplayName("관리자_계정은_관심_포지션과_보유_스킬이_빈_값이다")
+    void isAdminAccountPositionsAndSkillsEmpty() {
         // given, when
         User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
@@ -26,17 +28,18 @@ class UserTest {
     }
 
     @Test
-    void 관심_포지션과_보유_스킬을_리스트로_받고_일반_유저를_생성한다() {
+    @DisplayName("관심_포지션과_보유_스킬을_리스트로_받고_일반_유저를_생성한다")
+    void createUserWithPositionsAndSkills() {
         // given,when
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         // then
-        assertThat(user.getUserGuid()).isEqualTo(TEST_GUID);
-        assertThat(user.getEmail()).isEqualTo(TEST_EMAIL);
-        assertThat(user.getPassword()).isEqualTo(TEST_PASSWORD);
-        assertThat(user.getUsername()).isEqualTo(TEST_USERNAME);
+        assertThat(user.getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(user.getEmail()).isEqualTo(TEST_EMAIL_1);
+        assertThat(user.getPassword()).isEqualTo(TEST_PASSWORD_1);
+        assertThat(user.getUsername()).isEqualTo(TEST_USERNAME_1);
         assertThat(user.getUserRole()).isEqualTo(UserRole.USER);
-        assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO);
+        assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO_1);
         assertThat(user.getPositions()).isEqualTo(TEST_POSITIONS);
         assertThat(user.getSkills()).isEqualTo(TEST_SKILLS);
         assertThat(user.isDeleted()).isFalse();
@@ -45,11 +48,12 @@ class UserTest {
     }
 
     @Test
-    void 이메일_값이_공백이면_예외를_던진다() {
+    @DisplayName("이메일_값이_공백이면_예외를_던진다")
+    void throwIfEmailIsBlank() {
 
         assertThatThrownBy(
                 // given,when
-                () -> User.createGeneralUser(TEST_GUID, "", TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST)
+                () -> User.createGeneralUser(TEST_GUID_1, "", TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST)
         )
                 // then
                 .isInstanceOf(DomainRuleException.class)
@@ -57,11 +61,12 @@ class UserTest {
     }
 
     @Test
-    void 비밀번호_길이가_8자보다_짧으면_예외를_던진다() {
+    @DisplayName("비밀번호_길이가_8자보다_짧으면_예외를_던진다")
+    void throwIfPasswordTooShort() {
 
         assertThatThrownBy(
                 // given,when
-                () -> User.createGeneralUser(TEST_GUID, TEST_EMAIL, "123456", TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST)
+                () -> User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, "123456", TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST)
         )
                 // then
                 .isInstanceOf(DomainRuleException.class)
@@ -69,11 +74,12 @@ class UserTest {
     }
 
     @Test
-    void 관심_포지션이_빈값이면_예외를_던진다() {
+    @DisplayName("관심_포지션이_빈값이면_예외를_던진다")
+    void throwIfPositionsEmpty() {
 
         assertThatThrownBy(
                 // given,when
-                () -> User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, null, TEST_SKILL_LIST)
+                () -> User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, null, TEST_SKILL_LIST)
         )
                 // then
                 .isInstanceOf(DomainRuleException.class)
@@ -81,7 +87,21 @@ class UserTest {
     }
 
     @Test
-    void 관리자_계정은_보유_스킬이_빈_값이어도_예외를_던지지_않는다() {
+    @DisplayName("관심_스킬을_빈_값으로_변경하면_예외를_던진다")
+    void throwIfSkillsEmpty() {
+        // given
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
+
+        // when
+        assertThatThrownBy(() -> user.updateProfile(NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, null))
+                // then
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("보유 스킬목록은 필수입니다.");
+    }
+
+    @Test
+    @DisplayName("관리자_계정은_보유_스킬이_빈_값이어도_예외를_던지지_않는다")
+    void allowAdminWithEmptySkills() {
         // given, when
         User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
@@ -90,9 +110,10 @@ class UserTest {
     }
 
     @Test
-    void 탈퇴한_회원은_deleted_값이_true_다() {
+    @DisplayName("탈퇴한_회원은_deleted_값이_true_다")
+    void isDeletedUser() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         // when
         user.withdraw();
@@ -103,9 +124,10 @@ class UserTest {
     }
 
     @Test
-    void 이미_탈퇴한_회원이_재탈퇴를_요청하면_예외를_던진다() {
+    @DisplayName("이미_탈퇴한_회원이_재탈퇴를_요청하면_예외를_던진다")
+    void throwIfAlreadyDeleted() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
         user.withdraw();
 
         // when
@@ -116,9 +138,10 @@ class UserTest {
     }
 
     @Test
-    void 사용자_프로필_정보를_새로운_값으로_변경하면_기존_값이_변경된다() {
+    @DisplayName("사용자_프로필_정보를_새로운_값으로_변경하면_기존_값이_변경된다")
+    void updateUserProfile() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         // when
         user.updateProfile(NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, NEW_SKILLS);
@@ -131,29 +154,18 @@ class UserTest {
     }
 
     @Test
-    void 빈_값_또는_이전과_같은_값으로_변경하면_기존_값은_변경되지_않는다() {
+    @DisplayName("빈_값_또는_이전과_같은_값으로_변경하면_기존_값은_변경되지_않는다")
+    void updateUserProfileIfNotBlankOrChanged() {
         // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         // when
         user.updateProfile("", null, TEST_POSITIONS, NEW_SKILLS);
 
         // then
-        assertThat(user.getUsername()).isEqualTo(TEST_USERNAME);
-        assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO);
+        assertThat(user.getUsername()).isEqualTo(TEST_USERNAME_1);
+        assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO_1);
         assertThat(user.getPositions()).isEqualTo(TEST_POSITIONS);
         assertThat(user.getSkills()).isEqualTo(NEW_SKILLS);
-    }
-
-    @Test
-    void 관심_스킬을_빈_값으로_변경하면_예외를_던진다() {
-        // given
-        User user = User.createGeneralUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, TEST_USERNAME, TEST_INTRO, TEST_POSITION_LIST, TEST_SKILL_LIST);
-
-        // when
-        assertThatThrownBy(() -> user.updateProfile(NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, null))
-                // then
-                .isInstanceOf(DomainRuleException.class)
-                .hasMessageContaining("보유 스킬목록은 필수입니다.");
     }
 }

@@ -9,6 +9,8 @@ import teamdevhub.devhub.port.in.common.command.PageCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+import static teamdevhub.devhub.constant.TestConstant.*;
+
 public class FakeAdminUserUseCase implements AdminUserUseCase {
 
     private final List<AdminUserSummaryResponseDto> adminUserSummaryResponseDtoList = new ArrayList<>();
@@ -16,17 +18,17 @@ public class FakeAdminUserUseCase implements AdminUserUseCase {
     public FakeAdminUserUseCase() {
         adminUserSummaryResponseDtoList.add(
                 AdminUserSummaryResponseDto.builder()
-                        .userGuid("GUID1")
-                        .email("user1@example.com")
-                        .username("User1")
+                        .userGuid(TEST_GUID_1)
+                        .email(TEST_EMAIL_1)
+                        .username(TEST_USERNAME_1)
                         .blocked(false)
                         .build()
         );
         adminUserSummaryResponseDtoList.add(
                 AdminUserSummaryResponseDto.builder()
-                        .userGuid("GUID2")
-                        .email("user2@example.com")
-                        .username("User2")
+                        .userGuid(TEST_GUID_2)
+                        .email(TEST_EMAIL_2)
+                        .username(TEST_USERNAME_2)
                         .blocked(false)
                         .build()
         );
@@ -42,10 +44,7 @@ public class FakeAdminUserUseCase implements AdminUserUseCase {
         int start = page * size;
         int end = Math.min(start + size, adminUserSummaryResponseDtoList.size());
 
-        List<AdminUserSummaryResponseDto> content =
-                start >= end
-                        ? List.of()
-                        : adminUserSummaryResponseDtoList.subList(start, end);
+        List<AdminUserSummaryResponseDto> content = start >= end ? List.of() : adminUserSummaryResponseDtoList.subList(start, end);
 
         return PageResult.of(
                 content,

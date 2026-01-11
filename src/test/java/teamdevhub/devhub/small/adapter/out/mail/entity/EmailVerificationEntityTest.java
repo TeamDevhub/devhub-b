@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.out.mail.entity;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.mail.entity.EmailVerificationEntity;
 
@@ -7,52 +8,55 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.TestConstant.EMAIL_CODE;
-import static teamdevhub.devhub.constant.TestConstant.TEST_EMAIL;
+import static teamdevhub.devhub.constant.TestConstant.TEST_EMAIL_1;
 
 class EmailVerificationEntityTest {
 
     @Test
-    void 빌더로_EmailVerificationEntity_를_생성할_수_있다() {
+    @DisplayName("빌더로_EmailVerificationEntity_를_생성할_수_있다")
+    void createEmailVerificationEntityWithBuilder() {
         // given
         LocalDateTime expiredAt = LocalDateTime.now().plusMinutes(5);
 
         // when
         EmailVerificationEntity emailVerificationEntity = EmailVerificationEntity.builder()
-                .email(TEST_EMAIL)
+                .email(TEST_EMAIL_1)
                 .code(EMAIL_CODE)
                 .expiredAt(expiredAt)
                 .verified(false)
                 .build();
 
         // then
-        assertThat(emailVerificationEntity.getEmail()).isEqualTo(TEST_EMAIL);
+        assertThat(emailVerificationEntity.getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(emailVerificationEntity.getCode()).isEqualTo(EMAIL_CODE);
         assertThat(emailVerificationEntity.getExpiredAt()).isEqualTo(expiredAt);
         assertThat(emailVerificationEntity.isVerified()).isFalse();
     }
 
     @Test
-    void 모든_필드를_포함한_생성자로_객체를_생성할_수_있다() {
+    @DisplayName("모든_필드를_포함한_생성자로_객체를_생성할_수_있다")
+    void createEmailVerificationEntityWithAllArgs() {
         // given
         LocalDateTime expiredAt = LocalDateTime.now().plusMinutes(10);
 
         // when
         EmailVerificationEntity entity = new EmailVerificationEntity(
-                TEST_EMAIL,
+                TEST_EMAIL_1,
                 EMAIL_CODE,
                 expiredAt,
                 true
         );
 
         // then
-        assertThat(entity.getEmail()).isEqualTo(TEST_EMAIL);
+        assertThat(entity.getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(entity.getCode()).isEqualTo(EMAIL_CODE);
         assertThat(entity.getExpiredAt()).isEqualTo(expiredAt);
         assertThat(entity.isVerified()).isTrue();
     }
 
     @Test
-    void 기본_생성자가_존재한다() {
+    @DisplayName("기본_생성자가_존재한다")
+    void createEmailVerificationEntityWithDefaultConstructor() {
         // when
         EmailVerificationEntity emailVerificationEntity = new EmailVerificationEntity();
 

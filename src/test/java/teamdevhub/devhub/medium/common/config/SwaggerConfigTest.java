@@ -1,6 +1,7 @@
 package teamdevhub.devhub.medium.common.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,16 @@ class SwaggerConfigTest {
     private GroupedOpenApi userGroup;
 
     @Test
-    void openAPI_빈이_등록된다() {
+    @DisplayName("openAPI_빈이_등록된다")
+    void createOpenAPIBean() {
         // given, when, then
         assertThat(openAPI).isNotNull();
         assertThat(openAPI.getInfo().getTitle()).isEqualTo("DevHub API");
     }
 
     @Test
-    void userGroup_빈이_등록된다() {
+    @DisplayName("userGroup_빈이_등록된다")
+    void createUserGroupBean() {
         // given, when, then
         assertThat(userGroup).isNotNull();
         assertThat(userGroup.getGroup()).isEqualTo("User");

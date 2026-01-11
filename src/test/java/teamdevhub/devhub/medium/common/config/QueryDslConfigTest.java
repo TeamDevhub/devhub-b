@@ -1,6 +1,7 @@
 package teamdevhub.devhub.medium.common.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,8 @@ class QueryDslConfigTest {
     private JPAQueryFactory jpaQueryFactory;
 
     @Test
-    void jpaQueryFactory_가_생성된다() {
+    @DisplayName("jpaQueryFactory_가_생성된다")
+    void createJPAQueryFactory() {
         // given, when, then
         assertThat(jpaQueryFactory).isNotNull();
     }

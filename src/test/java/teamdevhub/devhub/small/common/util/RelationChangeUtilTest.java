@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.common.util;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.common.util.RelationChangeUtil;
 
@@ -10,7 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RelationChangeUtilTest {
 
     @Test
-    void 기존_데이터와_새로운_데이터_Set_차이를_계산해서_추가해야할_데이터와_삭제해야할_데이터를_반환한다() {
+    @DisplayName("기존_데이터와_새로운_데이터_Set_차이를_계산해서_추가해야할_데이터와_삭제해야할_데이터를_반환한다")
+    void returnAddedAndRemovedDataWhenCalculatingDifferenceBetweenOldAndNewSets() {
         //given
         Set<String> existing = Set.of("A", "B", "C");
         Set<String> incoming = Set.of("B", "C", "D");
@@ -25,7 +27,8 @@ public class RelationChangeUtilTest {
     }
 
     @Test
-    void 기존_데이터와_새로운_데이터_Set_이_같으면_추가와_삭제가_없는_빈_RelationChange_를_반환한다() {
+    @DisplayName("기존_데이터와_새로운_데이터_Set_이_같으면_추가와_삭제가_없는_빈_RelationChange_를_반환한다")
+    void returnEmptyRelationChangeWhenOldAndNewSetsAreEqual() {
         // given
         Set<String> existing = Set.of("X", "Y");
         Set<String> incoming = Set.of("X", "Y");
@@ -40,7 +43,8 @@ public class RelationChangeUtilTest {
     }
 
     @Test
-    void 기존_데이터와_새로운_데이터_Set_이_둘다_빈셋이면_빈_RelationChange_를_반환한다() {
+    @DisplayName("기존_데이터와_새로운_데이터_Set_이_둘다_빈셋이면_빈_RelationChange_를_반환한다")
+    void returnEmptyRelationChangeWhenOldAndNewSetsAreBothEmpty() {
         // given
         Set<String> existing = Set.of();
         Set<String> incoming = Set.of();
@@ -53,7 +57,8 @@ public class RelationChangeUtilTest {
     }
 
     @Test
-    void 기존_데이터_Set_이_빈_Set_이면_모든_새로운_데이터가_추가될_대상으로_인식된다() {
+    @DisplayName("기존_데이터_Set_이_빈_Set_이면_모든_새로운_데이터가_추가될_대상으로_인식된다")
+    void considerAllNewDataAsAddedWhenOldSetIsEmpty() {
         // given
         Set<String> existing = Set.of();
         Set<String> incoming = Set.of("A", "B");
@@ -67,7 +72,8 @@ public class RelationChangeUtilTest {
     }
 
     @Test
-    void 새로운_데이터_Set_이_빈_Set_이면_모든_기존_데이터가_삭제될_대상으로_인식된다() {
+    @DisplayName("새로운_데이터_Set_이_빈_Set_이면_모든_기존_데이터가_삭제될_대상으로_인식된다")
+    void considerAllOldDataAsRemovedWhenNewSetIsEmpty() {
         // given
         Set<String> existing = Set.of("X", "Y");
         Set<String> incoming = Set.of();

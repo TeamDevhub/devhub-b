@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.out.common.converter;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
@@ -10,71 +11,78 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BooleanToYNConverterTest {
 
-    private final BooleanToYNConverter converter = new BooleanToYNConverter();
+    private final BooleanToYNConverter booleanToYNConverter = new BooleanToYNConverter();
 
     @Test
-    void true_는_Y_로_변환된다() {
+    @DisplayName("true_는_Y_로_변환된다")
+    void convertTrueToY() {
         // given, when
-        String result = converter.convertToDatabaseColumn(true);
+        String result = booleanToYNConverter.convertToDatabaseColumn(true);
 
         // then
         assertThat(result).isEqualTo("Y");
     }
 
     @Test
-    void false_는_N_으로_변환된다() {
+    @DisplayName("false_는_N_으로_변환된다")
+    void convertFalseToN() {
         // given, when
-        String result = converter.convertToDatabaseColumn(false);
+        String result = booleanToYNConverter.convertToDatabaseColumn(false);
 
         // then
         assertThat(result).isEqualTo("N");
     }
 
     @Test
-    void null_은_N_으로_변환된다() {
+    @DisplayName("null_은_N_으로_변환된다")
+    void convertNullToN() {
         // given, when
-        String result = converter.convertToDatabaseColumn(null);
+        String result = booleanToYNConverter.convertToDatabaseColumn(null);
 
         // then
         assertThat(result).isEqualTo("N");
     }
 
     @Test
-    void Y_는_true_로_변환된다() {
+    @DisplayName("Y_는_true_로_변환된다")
+    void convertYToTrue() {
         // given, when
-        Boolean result = converter.convertToEntityAttribute("Y");
+        Boolean result = booleanToYNConverter.convertToEntityAttribute("Y");
 
         // then
         assertThat(result).isTrue();
     }
 
     @Test
-    void N_은_false_로_변환된다() {
+    @DisplayName("N_은_false_로_변환된다")
+    void convertNToFalse() {
         // given, when
-        Boolean result = converter.convertToEntityAttribute("N");
+        Boolean result = booleanToYNConverter.convertToEntityAttribute("N");
 
         // then
         assertThat(result).isFalse();
     }
 
     @Test
-    void null_은_false_로_변환된다() {
+    @DisplayName("null_은_false_로_변환된다")
+    void convertNullToFalse() {
         // given, when
-        Boolean result = converter.convertToEntityAttribute(null);
+        Boolean result = booleanToYNConverter.convertToEntityAttribute(null);
 
         // then
         assertThat(result).isFalse();
     }
 
     @Test
-    void Y_N_외의_값이면_예외가_발생한다() {
+    @DisplayName("Y_N_외의_값이면_예외가_발생한다")
+    void throwIfValueIsNotYOrN() {
         // given
         String invalidValue = "X";
 
         // then
         assertThatThrownBy(
                 // when
-                () -> converter.convertToEntityAttribute(invalidValue))
+                () -> booleanToYNConverter.convertToEntityAttribute(invalidValue))
                 .isInstanceOf(AdapterDataException.class)
                 .hasMessageContaining(ErrorCode.BOOLEAN_CONVERT_FAIL.getMessage());
     }

@@ -2,6 +2,7 @@ package teamdevhub.devhub.medium.adapter.out.common.provider.audit;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,7 +34,8 @@ class AuditorAwareProviderTest {
     }
 
     @Test
-    void 인증_정보가_없으면_system_을_반환한다() {
+    @DisplayName("인증_정보가_없으면_system_을_반환한다")
+    void returnSystemIfNoAuthentication() {
         // given
         SecurityContextHolder.clearContext();
 
@@ -45,7 +47,8 @@ class AuditorAwareProviderTest {
     }
 
     @Test
-    void anonymousUser_면_system_을_반환한다() {
+    @DisplayName("anonymousUser_면_system_을_반환한다")
+    void returnSystemIfAnonymousUser() {
         // given
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 "anonymousUser",
@@ -63,13 +66,14 @@ class AuditorAwareProviderTest {
     }
 
     @Test
-    void UserAuthentication_이면_유저_이메일을_반환한다() {
+    @DisplayName("UserAuthentication_이면_유저_이메일을_반환한다")
+    void returnUserEmailIfUserAuthentication() {
         // given
         AuthenticatedUser authenticatedUser =
                 new AuthenticatedUser(
-                        TEST_GUID,
-                        TEST_EMAIL,
-                        TEST_PASSWORD,
+                        TEST_GUID_1,
+                        TEST_EMAIL_1,
+                        TEST_PASSWORD_1,
                         UserRole.USER
                 );
 
@@ -87,16 +91,17 @@ class AuditorAwareProviderTest {
         Optional<String> auditor = auditorAwareProvider.getCurrentAuditor();
 
         // then
-        assertThat(auditor).contains(TEST_EMAIL);
+        assertThat(auditor).contains(TEST_EMAIL_1);
     }
 
     @Test
-    void principal_이_AuthenticatedUser_면_이메일을_반환한다() {
+    @DisplayName("principal_이_AuthenticatedUser_면_이메일을_반환한다")
+    void returnEmailIfPrincipalIsAuthenticatedUser() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                TEST_GUID,
-                TEST_EMAIL,
-                TEST_PASSWORD,
+                TEST_GUID_1,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
                 UserRole.USER
         );
 
@@ -112,11 +117,12 @@ class AuditorAwareProviderTest {
         Optional<String> auditor = auditorAwareProvider.getCurrentAuditor();
 
         // then
-        assertThat(auditor).contains(TEST_EMAIL);
+        assertThat(auditor).contains(TEST_EMAIL_1);
     }
 
     @Test
-    void 알_수_없는_principal_이면_system_을_반환한다() {
+    @DisplayName("알_수_없는_principal_이면_system_을_반환한다")
+    void returnSystemIfPrincipalUnknown() {
         // given
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 new Object(),

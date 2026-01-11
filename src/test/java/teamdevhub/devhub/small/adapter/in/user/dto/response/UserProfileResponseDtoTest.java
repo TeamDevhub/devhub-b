@@ -1,5 +1,6 @@
 package teamdevhub.devhub.small.adapter.in.user.dto.response;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
 import teamdevhub.devhub.constant.TestConstant;
@@ -14,7 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserProfileResponseDtoTest {
 
     @Test
-    void UserProfileResponseDto_fromDomain_모든_필드가_정상적으로_매핑된다() {
+    @DisplayName("UserProfileResponseDto_의_fromDomain_으로_모든_필드가_정상적으로_매핑된다")
+    void bindAllFieldsFromDomainToResponseDto() {
         // given
         AuditInfo auditInfo = new AuditInfo(
                 "creator",
@@ -24,12 +26,12 @@ class UserProfileResponseDtoTest {
         );
 
         User user = User.builder()
-                .userGuid(TestConstant.TEST_GUID)
-                .email(TestConstant.TEST_EMAIL)
-                .password(TestConstant.TEST_PASSWORD)
+                .userGuid(TestConstant.TEST_GUID_1)
+                .email(TestConstant.TEST_EMAIL_1)
+                .password(TestConstant.TEST_PASSWORD_1)
                 .userRole(UserRole.USER)
-                .username(TestConstant.TEST_USERNAME)
-                .introduction(TestConstant.TEST_INTRO)
+                .username(TestConstant.TEST_USERNAME_1)
+                .introduction(TestConstant.TEST_INTRO_1)
                 .positions(TestConstant.TEST_POSITIONS)
                 .skills(TestConstant.TEST_SKILLS)
                 .mannerDegree(TestConstant.TEST_MANNER)
@@ -46,10 +48,10 @@ class UserProfileResponseDtoTest {
         // then
         assertThat(userProfileResponseDto.getPassword()).isNull();
         assertThat(userProfileResponseDto.getUserRole()).isNull();
-        assertThat(userProfileResponseDto.getUserGuid()).isEqualTo(TestConstant.TEST_GUID);
-        assertThat(userProfileResponseDto.getEmail()).isEqualTo(TestConstant.TEST_EMAIL);
-        assertThat(userProfileResponseDto.getUsername()).isEqualTo(TestConstant.TEST_USERNAME);
-        assertThat(userProfileResponseDto.getIntroduction()).isEqualTo(TestConstant.TEST_INTRO);
+        assertThat(userProfileResponseDto.getUserGuid()).isEqualTo(TestConstant.TEST_GUID_1);
+        assertThat(userProfileResponseDto.getEmail()).isEqualTo(TestConstant.TEST_EMAIL_1);
+        assertThat(userProfileResponseDto.getUsername()).isEqualTo(TestConstant.TEST_USERNAME_1);
+        assertThat(userProfileResponseDto.getIntroduction()).isEqualTo(TestConstant.TEST_INTRO_1);
         assertThat(userProfileResponseDto.getPositionList()).containsExactlyElementsOf(TestConstant.TEST_POSITION_LIST);
         assertThat(userProfileResponseDto.getSkillList()).containsExactlyElementsOf(TestConstant.TEST_SKILL_LIST);
         assertThat(userProfileResponseDto.getMannerDegree()).isEqualTo(TestConstant.TEST_MANNER);

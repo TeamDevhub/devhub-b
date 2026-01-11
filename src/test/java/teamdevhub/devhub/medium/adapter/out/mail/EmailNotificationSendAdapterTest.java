@@ -2,6 +2,7 @@ package teamdevhub.devhub.medium.adapter.out.mail;
 
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,6 +20,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class EmailNotificationSendAdapterTest {
 
@@ -36,16 +38,17 @@ class EmailNotificationSendAdapterTest {
     }
 
     @Test
-    void 이메일_전송이_요청된다() {
+    @DisplayName("이메일_전송이_요청된다")
+    void requestEmailSend() {
         // given
         MimeMessage mimeMessage = mock(MimeMessage.class);
         given(mailSender.createMimeMessage()).willReturn(mimeMessage);
 
         // when
         emailNotificationSendAdapter.send(
-                "test@test.com",
+                TEST_EMAIL_1,
                 EmailTemplateType.EMAIL_VERIFICATION,
-                Map.of("code", "123456")
+                Map.of("code", EMAIL_CODE)
         );
 
         // then
@@ -53,19 +56,19 @@ class EmailNotificationSendAdapterTest {
     }
 
     @Test
-    void 메일_전송_실패시_도메인_예외로_변환된다() {
+    @DisplayName("메일_전송_실패시_ExternalServiceException_으로_변환된다")
+    void convertToExternalServiceExceptionIfEmailSendFails() {
         // given
         given(mailSender.createMimeMessage())
                 .willThrow(new MailException("fail") {});
 
         // then
-        assertThatThrownBy(() ->
+        assertThatThrownBy(
                 // when
-                emailNotificationSendAdapter.send(
-                        "test@test.com",
+                () -> emailNotificationSendAdapter.send(
+                        TEST_EMAIL_1,
                         EmailTemplateType.EMAIL_VERIFICATION,
-                        Map.of()
-                )
+                        Map.of())
         ).isInstanceOf(ExternalServiceException.class);
     }
 }

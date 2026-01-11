@@ -2,6 +2,7 @@ package teamdevhub.devhub.medium.adapter.in.web.resolver;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUserArgumentResolver;
@@ -31,9 +32,10 @@ class LoginUserArgumentResolverTest {
     }
 
     @Test
-    void UserAuthentication_principal_이면_AuthenticatedUser_를_반환한다() {
+    @DisplayName("UserAuthentication_principal_이면_AuthenticatedUser_를_반환한다")
+    void returnAuthenticatedUserIfUserAuthenticationPrincipal() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
         UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(userAuthentication));
 
@@ -43,13 +45,14 @@ class LoginUserArgumentResolverTest {
         // then
         assertThat(resolvedValue).isNotNull();
         assertThat(resolvedValue).isInstanceOf(AuthenticatedUser.class);
-        assertThat(((AuthenticatedUser) resolvedValue).email()).isEqualTo(TEST_EMAIL);
+        assertThat(((AuthenticatedUser) resolvedValue).email()).isEqualTo(TEST_EMAIL_1);
     }
 
     @Test
-    void AuthenticatedUser_principal_이면_그대로_반환한다() {
+    @DisplayName("AuthenticatedUser_principal_이면_그대로_반환한다")
+    void returnAuthenticatedUserIfPrincipalIsAlreadyAuthenticatedUser() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID, TEST_EMAIL, TEST_PASSWORD, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(authenticatedUser));
 
         // when
@@ -60,7 +63,8 @@ class LoginUserArgumentResolverTest {
     }
 
     @Test
-    void principal_이_없으면_예외가_발생한다() {
+    @DisplayName("principal_이_없으면_예외가_발생한다")
+    void throwIfPrincipalMissing() {
         // given
         SecurityContextHolder.getContext().setAuthentication(null);
 
@@ -73,7 +77,8 @@ class LoginUserArgumentResolverTest {
     }
 
     @Test
-    void principal_의_타입_틀리면_예외가_발생한다() {
+    @DisplayName("principal_의_타입_틀리면_예외가_발생한다")
+    void throwIfPrincipalTypeMismatch() {
         // given
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication("invalid-principal"));
 
