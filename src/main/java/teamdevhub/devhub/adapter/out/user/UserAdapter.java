@@ -3,6 +3,7 @@ package teamdevhub.devhub.adapter.out.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
+import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
@@ -98,14 +99,19 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size) {
+    public PageResult<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("regDt").descending());
         Page<UserEntity> pagedUserEntityList = userQueryRepository.listUser(searchUserCommand, pageable);
 
         List<AdminUserSummaryResponseDto> userList = pagedUserEntityList.getContent().stream()
                 .map(AdminUserSummaryResponseDto::fromEntity)
                 .toList();
-        return new PageImpl<>(userList, pageable, pagedUserEntityList.getTotalElements());
+
+        return PageResult.of(
+                userList,
+                pagedUserEntityList.getNumber(),
+                pagedUserEntityList.getSize(),
+                pagedUserEntityList.getTotalElements());
     }
 
     private void syncPositions(User user) {

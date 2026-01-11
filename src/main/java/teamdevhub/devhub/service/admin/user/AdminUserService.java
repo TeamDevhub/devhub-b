@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
@@ -19,12 +20,7 @@ public class AdminUserService implements AdminUserUseCase {
     private final UserRepository userRepository;
 
     @Override
-    public Page<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
-        Page<AdminUserSummaryResponseDto> pagedUserList = userRepository.listUser(searchUserCommand, pageCommand.getPage(), pageCommand.getSize());
-        return new PageImpl<>(
-                pagedUserList.getContent(),
-                pagedUserList.getPageable(),
-                pagedUserList.getTotalElements()
-        );
+    public PageResult<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
+        return userRepository.listUser(searchUserCommand, pageCommand.getPage(), pageCommand.getSize());
     }
 }

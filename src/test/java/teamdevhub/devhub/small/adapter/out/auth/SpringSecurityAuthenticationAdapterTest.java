@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.auth.SpringSecurityAuthenticationAdapter;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
-import teamdevhub.devhub.small.mock.infrastructure.FakeAuthenticationManager;
+import teamdevhub.devhub.fake.spring.infrastructure.FakeAuthenticationManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.TestConstant.*;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class SpringSecurityAuthenticationAdapterTest {
 

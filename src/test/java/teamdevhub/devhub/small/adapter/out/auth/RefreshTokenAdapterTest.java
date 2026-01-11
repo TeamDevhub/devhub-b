@@ -6,7 +6,7 @@ import teamdevhub.devhub.adapter.out.auth.RefreshTokenAdapter;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.vo.auth.RefreshToken;
-import teamdevhub.devhub.small.mock.persistence.auth.FakeJpaRefreshTokenRepository;
+import teamdevhub.devhub.fake.spring.persistence.auth.FakeJpaRefreshTokenRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

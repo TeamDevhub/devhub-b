@@ -5,7 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.TestConstant.TEST_PASSWORD;
+import static teamdevhub.devhub.constant.TestConstant.TEST_PASSWORD;
 
 public class PasswordCryptoConfigTest {
 

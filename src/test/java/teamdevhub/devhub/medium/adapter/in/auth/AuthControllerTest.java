@@ -12,16 +12,16 @@ import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
-import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
-import teamdevhub.devhub.small.mock.repository.FakeEmailVerificationRepository;
-import teamdevhub.devhub.small.mock.usecase.FakeAuthUseCase;
-import teamdevhub.devhub.small.mock.usecase.FakeEmailVerificationUseCase;
+import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
+import teamdevhub.devhub.fake.pure.repository.FakeEmailVerificationRepository;
+import teamdevhub.devhub.fake.pure.usecase.FakeAuthUseCase;
+import teamdevhub.devhub.fake.pure.usecase.FakeEmailVerificationUseCase;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.TestConstant.*;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class AuthControllerTest {
 

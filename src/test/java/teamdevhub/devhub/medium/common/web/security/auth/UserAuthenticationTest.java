@@ -9,7 +9,7 @@ import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.TestConstant.*;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 public class UserAuthenticationTest {
 

@@ -10,11 +10,11 @@ import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
-import teamdevhub.devhub.small.mock.infrastructure.FakeAuthentication;
+import teamdevhub.devhub.fake.spring.infrastructure.FakeAuthentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.TestConstant.*;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class LoginUserArgumentResolverTest {
 

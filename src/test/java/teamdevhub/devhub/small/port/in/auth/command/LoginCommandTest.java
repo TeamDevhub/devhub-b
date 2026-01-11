@@ -5,7 +5,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.TestConstant.*;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class LoginCommandTest {
 

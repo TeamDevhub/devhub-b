@@ -2,13 +2,13 @@ package teamdevhub.devhub.small.service.admin.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
-import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
-import teamdevhub.devhub.port.in.common.command.PageCommand;
+import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
+import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.service.admin.user.AdminUserService;
-import teamdevhub.devhub.small.mock.repository.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
 
 import java.util.List;
 
@@ -61,13 +61,13 @@ class AdminUserServiceTest {
 
 
         // when
-        Page<AdminUserSummaryResponseDto> adminUserSummaryResponseDtoList = adminUserService.listUser(searchUserCommand, pageCommand);
-        AdminUserSummaryResponseDto getFirstAdminUserSummaryResponseDto = adminUserSummaryResponseDtoList.getContent().get(0);
+        PageResult<AdminUserSummaryResponseDto> adminUserSummaryResponseDtoList = adminUserService.listUser(searchUserCommand, pageCommand);
+        AdminUserSummaryResponseDto getFirstAdminUserSummaryResponseDto = adminUserSummaryResponseDtoList.content().get(0);
 
         // then
         assertThat(adminUserSummaryResponseDtoList).isNotNull();
-        assertThat(adminUserSummaryResponseDtoList.getContent().size()).isEqualTo(2);
-        assertThat(adminUserSummaryResponseDtoList.getTotalPages()).isEqualTo(1);
+        assertThat(adminUserSummaryResponseDtoList.content().size()).isEqualTo(2);
+        assertThat(adminUserSummaryResponseDtoList.totalPages()).isEqualTo(1);
         assertThat(getFirstAdminUserSummaryResponseDto.getUserGuid()).isEqualTo(user1.getUserGuid());
         assertThat(getFirstAdminUserSummaryResponseDto.getEmail()).isEqualTo(user1.getEmail());
     }

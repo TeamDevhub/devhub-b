@@ -9,10 +9,10 @@ import teamdevhub.devhub.port.in.mail.command.ConfirmEmailVerificationCommand;
 import teamdevhub.devhub.service.exception.BusinessRuleException;
 import teamdevhub.devhub.service.mail.EmailService;
 import teamdevhub.devhub.service.mail.EmailTemplateVariables;
-import teamdevhub.devhub.small.mock.infrastructure.FakeEmailNotificationSender;
-import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
-import teamdevhub.devhub.small.mock.provider.FakeEmailVerificationCodeProvider;
-import teamdevhub.devhub.small.mock.repository.FakeEmailVerificationRepository;
+import teamdevhub.devhub.fake.pure.external.FakeEmailNotificationSender;
+import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
+import teamdevhub.devhub.fake.pure.provider.FakeEmailVerificationCodeProvider;
+import teamdevhub.devhub.fake.pure.repository.FakeEmailVerificationRepository;
 
 import java.time.LocalDateTime;
 

@@ -6,14 +6,14 @@ import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.mail.EmailVerificationAdapter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.mail.EmailVerification;
-import teamdevhub.devhub.small.mock.persistence.mail.FakeJpaEmailVerificationRepository;
-import teamdevhub.devhub.small.mock.provider.FakeDateTimeProvider;
+import teamdevhub.devhub.fake.spring.persistence.mail.FakeJpaEmailVerificationRepository;
+import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.TestConstant.*;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class EmailVerificationAdapterTest {
 

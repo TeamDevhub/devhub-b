@@ -7,27 +7,25 @@ import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.domain.vo.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 import teamdevhub.devhub.service.auth.AuthService;
-import teamdevhub.devhub.small.mock.provider.FakeAuthenticatedUserProvider;
-import teamdevhub.devhub.small.mock.provider.FakeTokenIssueProvider;
-import teamdevhub.devhub.small.mock.repository.FakeRefreshTokenRepository;
-import teamdevhub.devhub.small.mock.usecase.FakeUserUseCase;
+import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserProvider;
+import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
+import teamdevhub.devhub.fake.pure.repository.FakeRefreshTokenRepository;
+import teamdevhub.devhub.fake.pure.usecase.FakeUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.TestConstant.*;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 class AuthServiceTest {
 
     private AuthService authService;
 
-    private FakeTokenIssueProvider fakeTokenIssueProvider;
-    private FakeAuthenticatedUserProvider fakeAuthenticatedUserProvider;
     private FakeUserUseCase fakeUserUseCase;
     private FakeRefreshTokenRepository fakeRefreshTokenRepository;
 
     @BeforeEach
     void init() {
-        fakeTokenIssueProvider = new FakeTokenIssueProvider();
-        fakeAuthenticatedUserProvider = new FakeAuthenticatedUserProvider();
+        FakeTokenIssueProvider fakeTokenIssueProvider = new FakeTokenIssueProvider();
+        FakeAuthenticatedUserProvider fakeAuthenticatedUserProvider = new FakeAuthenticatedUserProvider();
         fakeUserUseCase = new FakeUserUseCase();
         fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
 

@@ -12,7 +12,7 @@ import teamdevhub.devhub.port.in.user.UserUseCase;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static teamdevhub.devhub.TestConstant.*;
+import static teamdevhub.devhub.constant.TestConstant.*;
 
 public class UserAuthenticationServiceTest {
 
