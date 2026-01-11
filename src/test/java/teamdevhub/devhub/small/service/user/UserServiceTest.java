@@ -202,7 +202,7 @@ class UserServiceTest {
         fakeRefreshTokenRepository.save(refreshToken);
 
         // when
-        userService.withdrawCurrentUser(TEST_GUID_1);
+        userService.withdrawUser(TEST_GUID_1);
 
         // then
         assertThat(fakeUserRepository.findByUserGuid(TEST_GUID_1).isDeleted()).isTrue();

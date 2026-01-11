@@ -89,8 +89,10 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public void updateUserForWithdrawal(User user) {
-        jpaUserRepository.save(UserMapper.toEntity(user));
+    public void delete(String userGuid) {
+        if (jpaUserRepository.updateUserAsDeleted(userGuid) == 0) {
+            throw AdapterDataException.of(ErrorCode.DELETE_FAIL);
+        }
     }
 
     @Override
@@ -147,7 +149,7 @@ public class UserAdapter implements UserRepository {
 
         List<UserPositionEntity> userPositionEntityList = positionCodeSet.stream()
                 .map(positionCode -> UserPositionEntity.builder()
-                        .userInterestPositionGuid(identifierProvider.generateIdentifier())
+                        .userPositionGuid(identifierProvider.generateIdentifier())
                         .userGuid(userGuid)
                         .positionCd(positionCode)
                         .build())

@@ -20,7 +20,7 @@ public class UserPositionEntity {
 
     @Id
     @Column(name = "user__position_guid")
-    private String userInterestPositionGuid;
+    private String userPositionGuid;
 
     @Column(name = "user_guid", nullable = false)
     private String userGuid;

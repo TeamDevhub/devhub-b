@@ -14,13 +14,13 @@ class UserPositionEntityTest {
     void createEntityAndUseGetter() {
         // given, when
         UserPositionEntity userPositionEntity = UserPositionEntity.builder()
-                .userInterestPositionGuid(TEST_POSITION_GUID)
+                .userPositionGuid(TEST_POSITION_GUID)
                 .userGuid(TEST_GUID_1)
                 .positionCd(TEST_POSITION_CD)
                 .build();
 
         // then
-        assertThat(userPositionEntity.getUserInterestPositionGuid()).isEqualTo(TEST_POSITION_GUID);
+        assertThat(userPositionEntity.getUserPositionGuid()).isEqualTo(TEST_POSITION_GUID);
         assertThat(userPositionEntity.getUserGuid()).isEqualTo(TEST_GUID_1);
         assertThat(userPositionEntity.getPositionCd()).isEqualTo(TEST_POSITION_CD);
     }

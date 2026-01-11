@@ -89,8 +89,28 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public void updateUserForWithdrawal(User user) {
-        store.get(user.getUserGuid());
+    public void delete(String userGuid) {
+        User existedUser = store.get(userGuid);
+        if (existedUser != null) {
+            User updatedUser = User.builder()
+                    .userGuid(existedUser.getUserGuid())
+                    .email(existedUser.getEmail())
+                    .username(existedUser.getUsername())
+                    .password(existedUser.getPassword())
+                    .userRole(existedUser.getUserRole())
+                    .introduction(existedUser.getIntroduction())
+                    .positions(existedUser.getPositions())
+                    .skills(existedUser.getSkills())
+                    .mannerDegree(existedUser.getMannerDegree())
+                    .blocked(false)
+                    .blockEndDate(existedUser.getBlockEndDate())
+                    .deleted(true)
+                    .lastLoginDateTime(existedUser.getLastLoginDateTime())
+                    .auditInfo(existedUser.getAuditInfo())
+                    .build();
+
+            store.put(userGuid, updatedUser);
+        }
     }
 
     @Override

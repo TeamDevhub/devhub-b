@@ -91,7 +91,7 @@ public class FakeUserUseCase implements UserUseCase {
     }
 
     @Override
-    public void withdrawCurrentUser(String userGuid) {
+    public void withdrawUser(String userGuid) {
         User user = store.get(userGuid);
         if (user != null) {
             user.withdraw();

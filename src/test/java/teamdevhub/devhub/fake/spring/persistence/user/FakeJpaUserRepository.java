@@ -52,6 +52,30 @@ public class FakeJpaUserRepository implements JpaUserRepository {
     }
 
     @Override
+    public int updateUserAsDeleted(String userGuid) {
+        UserEntity existedUser = store.get(userGuid);
+        if (existedUser != null) {
+            UserEntity updatedUser = UserEntity.builder()
+                    .userGuid(existedUser.getUserGuid())
+                    .email(existedUser.getEmail())
+                    .username(existedUser.getUsername())
+                    .password(existedUser.getPassword())
+                    .userRole(existedUser.getUserRole())
+                    .introduction(existedUser.getIntroduction())
+                    .mannerDegree(existedUser.getMannerDegree())
+                    .blocked(false)
+                    .blockEndDate(existedUser.getBlockEndDate())
+                    .deleted(true)
+                    .lastLoginDt(existedUser.getLastLoginDt())
+                    .build();
+
+            store.put(userGuid, updatedUser);
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
     public boolean existsByUserRole(UserRole role) {
         return store.values().stream().anyMatch(u -> u.getUserRole().equals(role));
     }

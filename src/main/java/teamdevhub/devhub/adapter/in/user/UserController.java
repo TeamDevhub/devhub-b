@@ -68,7 +68,7 @@ public class UserController {
 
     @DeleteMapping("/profile")
     public ResponseEntity<ApiDataResponseDto<Void>> withdraw(@LoginUser AuthenticatedUser authenticatedUser) {
-        userUseCase.withdrawCurrentUser(authenticatedUser.userGuid());
+        userUseCase.withdrawUser(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.USER_DELETE_SUCCESS

@@ -172,7 +172,7 @@ class UserAdapterTest {
                 user.getPositions().stream()
                         .map(userPosition -> UserPositionEntity.builder()
                                 .userGuid(TEST_GUID_1)
-                                .userInterestPositionGuid(fakeIdentifierProvider.generateIdentifier())
+                                .userPositionGuid(fakeIdentifierProvider.generateIdentifier())
                                 .positionCd(userPosition.positionCode())
                                 .build())
                         .toList()
@@ -208,10 +208,10 @@ class UserAdapterTest {
     void isDeletedUser() {
         // given
         User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
-        user.withdraw();
+        fakeJpaUserRepository.save(UserMapper.toEntity(user));
 
         // when
-        userAdapter.updateUserForWithdrawal(user);
+        userAdapter.delete(user.getUserGuid());
 
         // then
         assertThat(fakeJpaUserRepository.findByUserGuid(user.getUserGuid())

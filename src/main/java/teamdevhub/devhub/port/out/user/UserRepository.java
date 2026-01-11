@@ -18,7 +18,7 @@ public interface UserRepository {
     void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
     User findByUserGuid(String userGuid);
     void updateUserProfile(User user);
-    void updateUserForWithdrawal(User user);
+    void delete(String userGuid);
     boolean existsByUserRole(UserRole userRole);
     PageResult<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size);
 }

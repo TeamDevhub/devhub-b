@@ -106,11 +106,9 @@ public class UserService implements UserUseCase {
     }
 
     @Override
-    public void withdrawCurrentUser(String userGuid) {
-        User user = getUser(userGuid);
-        user.withdraw();
+    public void withdrawUser(String userGuid) {
         refreshTokenRepository.deleteByUserGuid(userGuid);
-        userRepository.updateUserForWithdrawal(user);
+        userRepository.delete(userGuid);
     }
 
     @Override

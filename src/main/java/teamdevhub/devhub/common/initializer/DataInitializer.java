@@ -46,7 +46,7 @@ public class DataInitializer {
             jpaUserRepository.save(user);
 
             jpaUserPositionRepository.save(UserPositionEntity.builder()
-                    .userInterestPositionGuid(identifierProvider.generateIdentifier())
+                    .userPositionGuid(identifierProvider.generateIdentifier())
                     .userGuid(userGuid)
                     .positionCd(String.format("%03d", i))
                     .build());
