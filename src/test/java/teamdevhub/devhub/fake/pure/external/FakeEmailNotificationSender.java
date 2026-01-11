@@ -27,40 +27,20 @@ public class FakeEmailNotificationSender implements EmailNotificationSender {
         return Collections.unmodifiableList(sentEmails);
     }
 
-    public void clear() {
-        sentEmails.clear();
-    }
+    public record SentEmail(String email, EmailTemplateType templateType, Map<String, Object> variables) {
 
-    public static class SentEmail {
+            public SentEmail(
+                    String email,
+                    EmailTemplateType templateType,
+                    Map<String, Object> variables
+            ) {
+                this.email = email;
+                this.templateType = templateType;
+                this.variables = Map.copyOf(variables);
+            }
 
-        private final String email;
-        private final EmailTemplateType templateType;
-        private final Map<String, Object> variables;
-
-        public SentEmail(
-                String email,
-                EmailTemplateType templateType,
-                Map<String, Object> variables
-        ) {
-            this.email = email;
-            this.templateType = templateType;
-            this.variables = Map.copyOf(variables);
+            public Object getVariable(String key) {
+                return variables.get(key);
+            }
         }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public EmailTemplateType getTemplateType() {
-            return templateType;
-        }
-
-        public Map<String, Object> getVariables() {
-            return variables;
-        }
-
-        public Object getVariable(String key) {
-            return variables.get(key);
-        }
-    }
 }

@@ -51,8 +51,8 @@ class EmailServiceTest {
         // then
         assertThat(fakeEmailNotificationSender.getSentEmails()).hasSize(1);
         FakeEmailNotificationSender.SentEmail sentEmail = fakeEmailNotificationSender.getSentEmails().get(0);
-        assertThat(sentEmail.getEmail()).isEqualTo("test@example.com");
-        assertThat(sentEmail.getTemplateType()).isEqualTo(EmailTemplateType.EMAIL_VERIFICATION);
+        assertThat(sentEmail.email()).isEqualTo("test@example.com");
+        assertThat(sentEmail.templateType()).isEqualTo(EmailTemplateType.EMAIL_VERIFICATION);
         assertThat(sentEmail.getVariable(EmailTemplateVariables.CODE)).isNotNull();
     }
 
