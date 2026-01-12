@@ -18,6 +18,11 @@ public class FakeUserPositionRepository implements UserPositionRepository {
     }
 
     @Override
+    public void replaceAll(Set<UserPosition> positions) {
+
+    }
+
+    @Override
     public void saveAll(Set<UserPosition> positions) {
         if (positions == null || positions.isEmpty()) {
             return;

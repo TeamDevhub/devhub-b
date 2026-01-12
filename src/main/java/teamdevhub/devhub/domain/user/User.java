@@ -4,15 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
-import teamdevhub.devhub.domain.vo.audit.AuditInfo;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.domain.vo.audit.AuditInfo;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 public class User {
