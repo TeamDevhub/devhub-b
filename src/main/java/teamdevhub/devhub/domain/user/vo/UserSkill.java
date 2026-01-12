@@ -1,10 +1,13 @@
 package teamdevhub.devhub.domain.user.vo;
 
-public record UserSkill(String skillCode) {
+import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.domain.exception.DomainRuleException;
+
+public record UserSkill(String userGuid, String skillCode) {
 
     public UserSkill {
         if (skillCode == null || skillCode.isBlank()) {
-            throw new IllegalArgumentException("skillCode must not be blank");
+            throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
         }
     }
 }

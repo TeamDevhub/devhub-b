@@ -41,8 +41,8 @@ public final class TestConstant {
     public static final List<String> TEST_POSITION_LIST = List.of("001");
     public static final List<String> TEST_SKILL_LIST = List.of("001");
 
-    public static final Set<UserPosition> TEST_POSITIONS = Set.of(new UserPosition("001"));
-    public static final Set<UserSkill> TEST_SKILLS = Set.of(new UserSkill("001"));
+    public static final Set<UserPosition> TEST_POSITIONS = Set.of(new UserPosition(TEST_GUID_1,"001"));
+    public static final Set<UserSkill> TEST_SKILLS = Set.of(new UserSkill(TEST_GUID_1, "001"));
 
     public static final String EMAIL_CODE = "123456";
     public static final String UNVERIFIED_EMAIL = "unverified@example.com";
@@ -53,6 +53,6 @@ public final class TestConstant {
     public static final List<String> NEW_POSITION_LIST = List.of("002");
     public static final List<String> NEW_SKILL_LIST = List.of("002");
 
-    public static final Set<UserPosition> NEW_POSITIONS = Set.of(new UserPosition("002"));
-    public static final Set<UserSkill> NEW_SKILLS = Set.of(new UserSkill("002"));
+    public static final Set<UserPosition> NEW_POSITIONS = Set.of(new UserPosition(TEST_GUID_1,"002"));
+    public static final Set<UserSkill> NEW_SKILLS = Set.of(new UserSkill(TEST_GUID_1,"002"));
 }

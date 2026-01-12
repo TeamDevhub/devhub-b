@@ -94,7 +94,7 @@ class UserAdapterTest {
         User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         // when
-        User savedUser = userAdapter.saveNewUser(user);
+        User savedUser = userAdapter.save(user);
 
         // then
         assertThat(savedUser.getUserGuid()).isEqualTo(TEST_GUID_1);

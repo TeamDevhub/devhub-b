@@ -3,6 +3,7 @@ package teamdevhub.devhub.small.service.user;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.fake.pure.repository.*;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.domain.vo.auth.RefreshToken;
@@ -14,9 +15,6 @@ import teamdevhub.devhub.service.user.UserService;
 import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
 import teamdevhub.devhub.fake.pure.provider.FakePasswordPolicyProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.fake.pure.repository.FakeEmailVerificationRepository;
-import teamdevhub.devhub.fake.pure.repository.FakeRefreshTokenRepository;
-import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.usecase.FakeEmailVerificationUseCase;
 
 import java.time.LocalDateTime;
@@ -30,6 +28,8 @@ class UserServiceTest {
 
     private UserService userService;
     private FakeUserRepository fakeUserRepository;
+    private FakeUserPositionRepository fakeUserPositionRepository;
+    private FakeUserSkillRepository fakeUserSkillRepository;
     private FakeEmailVerificationUseCase fakeEmailVerificationUseCase;
     private FakeEmailVerificationRepository fakeEmailVerificationRepository;
     private FakePasswordPolicyProvider fakePasswordPolicyProvider;
@@ -39,6 +39,8 @@ class UserServiceTest {
     @BeforeEach
     void init() {
         fakeUserRepository = new FakeUserRepository();
+        fakeUserPositionRepository = new FakeUserPositionRepository();
+        fakeUserSkillRepository = new FakeUserSkillRepository();
 
         FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_GUID_1);
         fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
@@ -51,6 +53,8 @@ class UserServiceTest {
         fakeEmailVerificationUseCase = new FakeEmailVerificationUseCase(fakeEmailVerificationRepository, fakeDateTimeProvider);
         userService = new UserService(
                 fakeUserRepository,
+                fakeUserPositionRepository,
+                fakeUserSkillRepository,
                 fakeEmailVerificationUseCase,
                 fakeEmailVerificationRepository,
                 fakeRefreshTokenRepository,
@@ -67,6 +71,8 @@ class UserServiceTest {
         FakeUuidIdentifierProvider adminUuidProvider = new FakeUuidIdentifierProvider(ADMIN_GUID);
         userService = new UserService(
                 fakeUserRepository,
+                fakeUserPositionRepository,
+                fakeUserSkillRepository,
                 fakeEmailVerificationUseCase,
                 fakeEmailVerificationRepository,
                 fakeRefreshTokenRepository,
@@ -89,8 +95,8 @@ class UserServiceTest {
     @DisplayName("인증_인가_관련_사용자_정보를_조회한다")
     void fetchUserInfoForAuthentication() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
-        fakeUserRepository.saveNewUser(user);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        fakeUserRepository.save(user);
 
         // when
         userService.getUserForLogin(TEST_EMAIL_1);
@@ -113,10 +119,10 @@ class UserServiceTest {
 
         // then
         assertThat(fakeEmailVerificationRepository.existUnexpiredCode(signupCommand.getEmail())).isFalse();
-        assertThat(fakeUserRepository.saveNewUser(savedUser).getUserGuid()).isEqualTo(TEST_GUID_1);
-        assertThat(fakeUserRepository.saveNewUser(savedUser).getPositions()).isEqualTo(TEST_POSITIONS);
-        assertThat(fakeUserRepository.saveNewUser(savedUser).getSkills()).isEqualTo(TEST_SKILLS);
-        assertThat(fakeUserRepository.saveNewUser(savedUser).getPassword()).isEqualTo(fakePasswordPolicyProvider.encode(TEST_PASSWORD_1));
+        assertThat(fakeUserRepository.save(savedUser).getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(fakeUserRepository.save(savedUser).getPositions()).isEqualTo(TEST_POSITIONS);
+        assertThat(fakeUserRepository.save(savedUser).getSkills()).isEqualTo(TEST_SKILLS);
+        assertThat(fakeUserRepository.save(savedUser).getPassword()).isEqualTo(fakePasswordPolicyProvider.encode(TEST_PASSWORD_1));
     }
 
     @Test
@@ -150,8 +156,8 @@ class UserServiceTest {
     @DisplayName("로그인을_하면_최종_로그인_일시가_변한다")
     void updateLastLoginDateWhenLogin() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
-        fakeUserRepository.saveNewUser(user);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        fakeUserRepository.save(user);
 
         // when
         userService.updateLastLoginDateTime(TEST_GUID_1);
@@ -165,8 +171,8 @@ class UserServiceTest {
     @DisplayName("회원_상세_정보를_조회했을_때_모든_정보가_조회된다")
     void fetchAllUserInformation() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
-        fakeUserRepository.saveNewUser(user);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        fakeUserRepository.save(user);
 
         // when, then
         assertThat(userService.getCurrentUserProfile(user.getUserGuid())).isNotNull();
@@ -178,11 +184,11 @@ class UserServiceTest {
     @DisplayName("회원정보를_수정하면_수정한_값으로_변경된다")
     void updateUserInformationCorrectly() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
-        fakeUserRepository.saveNewUser(user);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        fakeUserRepository.save(user);
 
         // when
-        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_GUID_1, NEW_USERNAME, NEW_INTRO, NEW_POSITION_LIST, NEW_SKILL_LIST);
+        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_GUID_1, NEW_USERNAME, NEW_INTRO, NEW_POSITIONS, NEW_SKILLS);
         userService.updateProfile(updateProfileCommand);
 
         // then
@@ -196,8 +202,8 @@ class UserServiceTest {
     @DisplayName("회원탈퇴한_사용자의_deleted_값은_true_이다")
     void setDeletedTrueWhenUserWithdraws() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
-        fakeUserRepository.saveNewUser(user);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        fakeUserRepository.save(user);
         RefreshToken refreshToken = new RefreshToken(TEST_EMAIL_1, "testToken");
         fakeRefreshTokenRepository.save(refreshToken);
 
@@ -213,8 +219,8 @@ class UserServiceTest {
     @DisplayName("일반_사용자는_USER_권한이_존재한다")
     void haveUserRoleForRegularUser() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
-        fakeUserRepository.saveNewUser(user);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        fakeUserRepository.save(user);
 
         // when, then
         assertThat(userService.existsByUserRole(UserRole.USER)).isTrue();

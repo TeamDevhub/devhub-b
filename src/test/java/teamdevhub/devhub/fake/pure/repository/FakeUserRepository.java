@@ -39,7 +39,7 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public User saveNewUser(User user) {
+    public User save(User user) {
         store.put(user.getUserGuid(), user);
         return user;
     }
@@ -63,11 +63,9 @@ public class FakeUserRepository implements UserRepository {
     public void updateUserProfile(User user) {
         User existedUser = store.get(user.getUserGuid());
         if (existedUser != null) {
-            existedUser.updateProfile(
+            existedUser.updateUsernameAndIntroduction(
                     user.getUsername(),
-                    user.getIntroduction(),
-                    new HashSet<>(user.getPositions()),
-                    new HashSet<>(user.getSkills())
+                    user.getIntroduction()
             );
         }
     }

@@ -62,11 +62,9 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public User saveNewUser(User user) {
+    public User save(User user) {
         UserEntity userEntity = jpaUserRepository.save(UserMapper.toEntity(user));
-        insertPositions(user.getUserGuid(), extractPositionCodes(user));
-        insertSkills(user.getUserGuid(), extractSkillCodes(user));
-        return UserMapper.toDomain(userEntity, user.getPositions(), user.getSkills());
+        return UserMapper.toDomain(userEntity);
     }
 
     @Override
@@ -78,21 +76,19 @@ public class UserAdapter implements UserRepository {
     public User findByUserGuid(String userGuid) {
         UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
                 .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
-        return UserMapper.toDomain(userEntity, Set.of(), Set.of());
+        return UserMapper.toDomain(userEntity);
     }
 
     @Override
     public User findByUserGuidWithPositionsAndSkills(String userGuid) {
         UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
                 .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
-        return UserMapper.toDomain(userEntity, loadPositions(userGuid), loadSkills(userGuid));
+        return UserMapper.toDomain(userEntity);
     }
 
     @Override
     public void updateUserProfile(User user) {
         jpaUserRepository.save(UserMapper.toEntity(user));
-        syncPositions(user);
-        syncSkills(user);
     }
 
     @Override
@@ -137,7 +133,7 @@ public class UserAdapter implements UserRepository {
 
     private Set<UserPosition> loadPositions(String userGuid) {
         return jpaUserPositionRepository.findByUserGuid(userGuid).stream()
-                .map(userPositionEntity -> new UserPosition(userPositionEntity.getPositionCd()))
+                .map(userPositionEntity -> new UserPosition(userPositionEntity.getUserGuid(), userPositionEntity.getPositionCd()))
                 .collect(Collectors.toUnmodifiableSet());
     }
 
@@ -179,7 +175,7 @@ public class UserAdapter implements UserRepository {
 
     private Set<UserSkill> loadSkills(String userGuid) {
         return jpaUserSkillRepository.findByUserGuid(userGuid).stream()
-                .map(userSkillEntity -> new UserSkill(userSkillEntity.getSkillCd()))
+                .map(userSkillEntity -> new UserSkill(userSkillEntity.getUserGuid(), userSkillEntity.getSkillCd()))
                 .collect(Collectors.toUnmodifiableSet());
     }
 

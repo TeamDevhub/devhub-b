@@ -12,7 +12,7 @@ public interface UserRepository {
     void saveAdminUser(User adminUser);
     AuthenticatedUser findAuthenticatedUserByEmail(String email);
     AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid);
-    User saveNewUser(User user);
+    User save(User user);
     void updateLastLoginDateTime(User user);
     User findByUserGuid(String userGuid);
     User findByUserGuidWithPositionsAndSkills(String userGuid);

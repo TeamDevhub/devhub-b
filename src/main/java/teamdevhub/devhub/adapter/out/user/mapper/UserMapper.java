@@ -36,9 +36,7 @@ public class UserMapper {
     }
 
     public static User toDomain(
-            UserEntity userEntity,
-            Set<UserPosition> positions,
-            Set<UserSkill> skills
+            UserEntity userEntity
     ) {
         return User.of(
                 userEntity.getUserGuid(),
@@ -47,8 +45,6 @@ public class UserMapper {
                 userEntity.getUsername(),
                 userEntity.getUserRole(),
                 userEntity.getIntroduction(),
-                positions,
-                skills,
                 userEntity.getMannerDegree(),
                 userEntity.isBlocked(),
                 userEntity.getBlockEndDate(),

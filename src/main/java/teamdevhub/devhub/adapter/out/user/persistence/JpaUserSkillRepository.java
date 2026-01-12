@@ -10,9 +10,9 @@ import java.util.Set;
 
 public interface JpaUserSkillRepository  extends JpaRepository<UserSkillEntity, String> {
     List<UserSkillEntity> findByUserGuid(String userGuid);
+    void deleteByUserGuid(String userGuid);
 
     @Query("select s.skillCd from UserSkillEntity s where s.userGuid = :userGuid")
     Set<String> findCodesByUserGuid(@Param("userGuid") String userGuid);
-
     void deleteByUserGuidAndSkillCdIn(String userGuid, Set<String> toDelete);
 }

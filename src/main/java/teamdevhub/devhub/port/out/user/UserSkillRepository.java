@@ -5,5 +5,7 @@ import teamdevhub.devhub.domain.user.vo.UserSkill;
 import java.util.Set;
 
 public interface UserSkillRepository {
+    void saveAll(Set<UserSkill> skills);
     Set<UserSkill> findByUserGuid(String userGuid);
+    void replaceAll(Set<UserSkill> skills);
 }

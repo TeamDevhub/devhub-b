@@ -8,6 +8,8 @@ import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
+import teamdevhub.devhub.port.out.user.UserPositionRepository;
+import teamdevhub.devhub.port.out.user.UserSkillRepository;
 import teamdevhub.devhub.service.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
@@ -30,6 +32,8 @@ import java.util.stream.Collectors;
 public class UserService implements UserUseCase {
 
     private final UserRepository userRepository;
+    private final UserPositionRepository userPositionRepository;
+    private final UserSkillRepository userSkillRepository;
     private final EmailVerificationUseCase emailVerificationUseCase;
     private final EmailVerificationRepository emailVerificationRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -57,21 +61,16 @@ public class UserService implements UserUseCase {
 
     @Override
     public User signup(SignupCommand signupCommand) {
-        if (!emailVerificationUseCase.isVerified(signupCommand.getEmail())) {
-            throw BusinessRuleException.of(ErrorCode.EMAIL_NOT_CONFIRMED);
-        }
-        String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = passwordPolicyProvider.encode(signupCommand.getPassword());
-        User user = User.createGeneralUser(
-                userGuid,
-                signupCommand.getEmail(),
-                encodedPassword,
-                signupCommand.getUsername(),
-                signupCommand.getIntroduction(),
-                signupCommand.getPositionList(),
-                signupCommand.getSkillList());
-        emailVerificationRepository.delete(signupCommand.getEmail());
-        return userRepository.saveNewUser(user);
+        validateEmailVerification(signupCommand);
+        User user = createUserForSignup(signupCommand);
+
+        saveUserPositions(user.getUserGuid(), signupCommand);
+        saveUserSkills(user.getUserGuid(), signupCommand);
+
+        User savedUser = userRepository.save(user);
+
+        cleanupEmailVerification(signupCommand.getEmail());
+        return savedUser;
     }
 
     @Override
@@ -90,21 +89,14 @@ public class UserService implements UserUseCase {
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
         User user = getUserWithPositionsAndSkills(updateProfileCommand.getUserGuid());
 
-        Set<UserPosition> positions = updateProfileCommand.getPositionList().stream()
-                .map(UserPosition::new)
-                .collect(Collectors.toUnmodifiableSet());
+        if (updateProfileCommand.hasUsernameAndIntroductionChange()) {
+            user.updateUsernameAndIntroduction(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
+            userRepository.updateUserProfile(user);
+        }
 
-        Set<UserSkill> skills = updateProfileCommand.getSkillList().stream()
-                .map(UserSkill::new)
-                .collect(Collectors.toUnmodifiableSet());
-
-        user.updateProfile(
-                updateProfileCommand.getUsername(),
-                updateProfileCommand.getIntroduction(),
-                positions,
-                skills);
-
-        userRepository.updateUserProfile(user);
+        if (updateProfileCommand.hasPositionsAndSkillsChange()) {
+            updatePositionsAndSkills(user, updateProfileCommand);
+        }
     }
 
     @Override
@@ -125,6 +117,52 @@ public class UserService implements UserUseCase {
     }
 
     private User getUserWithPositionsAndSkills(String userGuid) {
-        return userRepository.findByUserGuidWithPositionsAndSkills(userGuid);
+        User user = userRepository.findByUserGuid(userGuid);
+        Set<UserPosition> userPositions = userPositionRepository.findByUserGuid(userGuid);
+        Set<UserSkill> userSkills = userSkillRepository.findByUserGuid(userGuid);
+        user.loadPositionsAndSkills(userPositions, userSkills);
+        return user;
+    }
+
+    private void validateEmailVerification(SignupCommand signupCommand) {
+        if (!emailVerificationUseCase.isVerified(signupCommand.getEmail())) {
+            throw BusinessRuleException.of(ErrorCode.EMAIL_NOT_CONFIRMED);
+        }
+    }
+
+    private User createUserForSignup(SignupCommand signupCommand) {
+        String userGuid = identifierProvider.generateIdentifier();
+        String encodedPassword = passwordPolicyProvider.encode(signupCommand.getPassword());
+        return User.createGeneralUser(
+                userGuid,
+                signupCommand.getEmail(),
+                encodedPassword,
+                signupCommand.getUsername(),
+                signupCommand.getIntroduction());
+    }
+
+    private void saveUserPositions(String userGuid, SignupCommand signupCommand) {
+        Set<UserPosition> positions = signupCommand.getPositionList().stream()
+                .map(position -> new UserPosition(userGuid, position))
+                .collect(Collectors.toUnmodifiableSet());
+        userPositionRepository.saveAll(positions);
+    }
+
+    private void saveUserSkills(String userGuid, SignupCommand signupCommand) {
+        Set<UserSkill> skills = signupCommand.getSkillList().stream()
+                .map(skill -> new UserSkill(userGuid, skill))
+                .collect(Collectors.toUnmodifiableSet());
+        userSkillRepository.saveAll(skills);
+    }
+
+    private void cleanupEmailVerification(String email) {
+        emailVerificationRepository.delete(email);
+    }
+
+    private void updatePositionsAndSkills(User user, UpdateProfileCommand updateProfileCommand) {
+        user.changePositionsAndSkills(updateProfileCommand.getPositions(), updateProfileCommand.getSkills());
+
+        userPositionRepository.replaceAll(updateProfileCommand.getPositions());
+        userSkillRepository.replaceAll(updateProfileCommand.getSkills());
     }
 }

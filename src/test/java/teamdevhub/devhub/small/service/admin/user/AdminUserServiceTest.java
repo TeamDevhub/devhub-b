@@ -49,8 +49,8 @@ class AdminUserServiceTest {
                 TEST_SKILL_LIST
         );
 
-        fakeUserRepository.saveNewUser(user1);
-        fakeUserRepository.saveNewUser(user2);
+        fakeUserRepository.save(user1);
+        fakeUserRepository.save(user2);
 
         SearchUserCommand searchUserCommand = SearchUserCommand.builder()
                 .blocked(null)

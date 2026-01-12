@@ -26,8 +26,8 @@ public class User {
     private String username;
     private String introduction;
 
-    private final Set<UserPosition> positions;
-    private final Set<UserSkill> skills;
+    private Set<UserPosition> positions;
+    private Set<UserSkill> skills;
 
     private double mannerDegree;
 
@@ -85,16 +85,8 @@ public class User {
             String email,
             String password,
             String username,
-            String introduction,
-            List<String> positionCodes,
-            List<String> skillCodes
+            String introduction
     ) {
-        if (positionCodes == null || positionCodes.isEmpty()) {
-            throw DomainRuleException.of(ErrorCode.USER_POSITION_REQUIRED);
-        }
-        if (skillCodes == null || skillCodes.isEmpty()) {
-            throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
-        }
 
         return User.builder()
                 .userGuid(userGuid)
@@ -103,8 +95,6 @@ public class User {
                 .username(username)
                 .userRole(UserRole.USER)
                 .introduction(introduction)
-                .positions(toPositions(positionCodes))
-                .skills(toSkills(skillCodes))
                 .mannerDegree(36.5)
                 .blocked(false)
                 .deleted(false)
@@ -124,8 +114,6 @@ public class User {
                 .password(password)
                 .username(username)
                 .userRole(UserRole.ADMIN)
-                .positions(Set.of())
-                .skills(Set.of())
                 .blocked(false)
                 .deleted(false)
                 .auditInfo(AuditInfo.empty())
@@ -139,8 +127,6 @@ public class User {
             String username,
             UserRole userRole,
             String introduction,
-            Set<UserPosition> positions,
-            Set<UserSkill> skills,
             double mannerDegree,
             boolean blocked,
             LocalDateTime blockEndDate,
@@ -155,8 +141,6 @@ public class User {
                 .username(username)
                 .userRole(userRole)
                 .introduction(introduction)
-                .positions(positions)
-                .skills(skills)
                 .mannerDegree(mannerDegree)
                 .blocked(blocked)
                 .blockEndDate(blockEndDate)
@@ -178,12 +162,8 @@ public class User {
         this.blocked = false;
     }
 
-    public void updateProfile(
-            String newUsername,
-            String newIntroduction,
-            Set<UserPosition> newPositions,
-            Set<UserSkill> newSkills
-    ) {
+    public void updateUsernameAndIntroduction(String newUsername, String newIntroduction) {
+
         if (hasText(newUsername) && !newUsername.equals(this.username)) {
             this.username = newUsername;
         }
@@ -191,19 +171,31 @@ public class User {
         if (hasText(newIntroduction) && !newIntroduction.equals(this.introduction)) {
             this.introduction = newIntroduction;
         }
+    }
+
+    public void changePositionsAndSkills(
+            Set<UserPosition> newPositions,
+            Set<UserSkill> newSkills
+    ) {
+
+        if (newPositions == null && newSkills == null) {
+            return;
+        }
 
         if (newPositions == null || newPositions.isEmpty()) {
             throw DomainRuleException.of(ErrorCode.USER_POSITION_REQUIRED);
-        }
-        if (!new HashSet<>(newPositions).equals(this.positions)) {
-            this.positions.clear();
-            this.positions.addAll(newPositions);
         }
 
         if (newSkills == null || newSkills.isEmpty()) {
             throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
         }
-        if (!new HashSet<>(newSkills).equals(this.skills)) {
+
+        if (!this.positions.equals(newPositions)) {
+            this.positions.clear();
+            this.positions.addAll(newPositions);
+        }
+
+        if (!this.skills.equals(newSkills)) {
             this.skills.clear();
             this.skills.addAll(newSkills);
         }
@@ -226,17 +218,22 @@ public class User {
         return value != null && !value.isBlank();
     }
 
-    private static Set<UserPosition> toPositions(List<String> codes) {
-        if (codes == null) return Set.of();
-        return codes.stream()
-                .map(UserPosition::new)
-                .collect(Collectors.toUnmodifiableSet());
+    public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
+        this.positions = positions;
+        this.skills = skills;
     }
 
-    private static Set<UserSkill> toSkills(List<String> codes) {
-        if (codes == null) return Set.of();
-        return codes.stream()
-                .map(UserSkill::new)
-                .collect(Collectors.toUnmodifiableSet());
-    }
+//    private static Set<UserPosition> toPositions(List<String> codes) {
+//        if (codes == null) return Set.of();
+//        return codes.stream()
+//                .map(UserPosition::new)
+//                .collect(Collectors.toUnmodifiableSet());
+//    }
+//
+//    private static Set<UserSkill> toSkills(List<String> codes) {
+//        if (codes == null) return Set.of();
+//        return codes.stream()
+//                .map(UserSkill::new)
+//                .collect(Collectors.toUnmodifiableSet());
+//    }
 }

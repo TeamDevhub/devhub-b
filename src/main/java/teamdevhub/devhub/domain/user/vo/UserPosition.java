@@ -1,10 +1,13 @@
 package teamdevhub.devhub.domain.user.vo;
 
-public record UserPosition(String positionCode) {
+import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.domain.exception.DomainRuleException;
+
+public record UserPosition(String userGuid, String positionCode) {
 
     public UserPosition {
         if (positionCode == null || positionCode.isBlank()) {
-            throw new IllegalArgumentException("positionCode must not be blank");
+            throw DomainRuleException.of(ErrorCode.USER_POSITION_REQUIRED);
         }
     }
 }
