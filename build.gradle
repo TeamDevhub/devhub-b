@@ -68,18 +68,7 @@ tasks.withType(Test).configureEach {
 	systemProperty "file.encoding", "UTF-8"
 }
 
-def querydslDir = layout.buildDirectory.dir("generated/querydsl")
-
-tasks.withType(JavaCompile).configureEach {
-	options.annotationProcessorPath = configurations.annotationProcessor
-	options.generatedSourceOutputDirectory.set(querydslDir)
-	options.compilerArgs += "-Xlint:deprecation"
-}
-
-tasks.named('compileTestJava') {
-	options.annotationProcessorPath = files()
-}
-
+def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
 
 sourceSets {
 	main {
@@ -87,6 +76,12 @@ sourceSets {
 			srcDir querydslDir
 		}
 	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.generatedSourceOutputDirectory.set(querydslDir)
+	options.annotationProcessorPath = configurations.annotationProcessor
+	options.compilerArgs += "-Xlint:deprecation"
 }
 
 clean.doLast {

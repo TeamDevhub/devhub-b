@@ -93,7 +93,7 @@ class UserAdapterTest {
 
         // then
         assertThat(foundUser).isNotNull();
-        assertThat(foundUser.getUserGuid()).isEqualTo(TEST_GUID_1);[]
+        assertThat(foundUser.getUserGuid()).isEqualTo(TEST_GUID_1);
     }
 
     @Test
