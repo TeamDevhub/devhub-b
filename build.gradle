@@ -29,7 +29,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 
-	runtimeOnly 'com.h2database:h2'
+	runtimeOnly "com.h2database:h2"
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
@@ -46,6 +46,7 @@ dependencies {
 	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
 	implementation 'io.micrometer:micrometer-tracing'
 	implementation 'commons-io:commons-io:2.15.1'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
@@ -67,7 +68,18 @@ tasks.withType(Test).configureEach {
 	systemProperty "file.encoding", "UTF-8"
 }
 
-def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
+def querydslDir = layout.buildDirectory.dir("generated/querydsl")
+
+tasks.withType(JavaCompile).configureEach {
+	options.annotationProcessorPath = configurations.annotationProcessor
+	options.generatedSourceOutputDirectory.set(querydslDir)
+	options.compilerArgs += "-Xlint:deprecation"
+}
+
+tasks.named('compileTestJava') {
+	options.annotationProcessorPath = files()
+}
+
 
 sourceSets {
 	main {
@@ -75,12 +87,6 @@ sourceSets {
 			srcDir querydslDir
 		}
 	}
-}
-
-tasks.withType(JavaCompile).configureEach {
-	options.generatedSourceOutputDirectory.set(querydslDir)
-	options.annotationProcessorPath = configurations.annotationProcessor
-	options.compilerArgs += "-Xlint:deprecation"
 }
 
 clean.doLast {
