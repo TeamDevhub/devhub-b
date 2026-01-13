@@ -21,20 +21,13 @@ public class FakeJpaUserSkillRepository implements JpaUserSkillRepository {
     }
 
     @Override
-    public void deleteByUserGuidAndSkillCd(String userGuid, String skillCd) {
-        Set<UserSkillEntity> skills = store.get(userGuid);
-        if (skills == null) {
-            return;
-        }
+    public void deleteByUserGuidAndSkillCdIn(String userGuid, Set<String> skillCds) {
+        if (skillCds == null || skillCds.isEmpty()) return;
 
-        skills.removeIf(entity ->
-                entity.getUserGuid().equals(userGuid)
-                        && entity.getSkillCd().equals(skillCd)
-        );
+        Set<UserSkillEntity> existing = store.getOrDefault(userGuid, new HashSet<>());
 
-        if (skills.isEmpty()) {
-            store.remove(userGuid);
-        }
+        existing.removeIf(skill -> skillCds.contains(skill.getSkillCd()));
+        store.put(userGuid, existing);
     }
 
     @Override

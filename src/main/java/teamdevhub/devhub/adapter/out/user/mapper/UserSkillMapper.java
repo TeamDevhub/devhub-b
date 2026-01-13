@@ -9,7 +9,7 @@ public class UserSkillMapper {
         return UserSkillEntity.builder()
                 .userSkillGuid(userSkillGuid)
                 .userGuid(userSkill.userGuid())
-                .skillCd(userSkill.skillCode())
+                .skillCd(userSkill.skillCd())
                 .build();
     }
 

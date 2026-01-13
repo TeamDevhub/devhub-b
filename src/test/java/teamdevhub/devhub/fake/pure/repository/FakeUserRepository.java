@@ -61,11 +61,6 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public User findByUserGuidWithPositionsAndSkills(String userGuid) {
-        return store.get(userGuid);
-    }
-
-    @Override
     public void updateUserProfile(User user) {
         User existedUser = store.get(user.getUserGuid());
         if (existedUser != null) {

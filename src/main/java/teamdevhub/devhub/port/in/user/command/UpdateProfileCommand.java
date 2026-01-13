@@ -37,29 +37,23 @@ public class UpdateProfileCommand {
                 .build();
     }
 
-    private static Set<UserPosition> toPositions(
-            List<String> positionList,
-            String userGuid
-    ) {
+    private static Set<UserPosition> toPositions(List<String> positionList, String userGuid) {
         if (positionList == null) {
             return null;
         }
 
         return positionList.stream()
-                .map(positionCode -> new UserPosition(userGuid, positionCode))
+                .map(positionCd -> new UserPosition(userGuid, positionCd))
                 .collect(Collectors.toSet());
     }
 
-    private static Set<UserSkill> toSkills(
-            List<String> skillList,
-            String userGuid
-    ) {
+    private static Set<UserSkill> toSkills(List<String> skillList, String userGuid) {
         if (skillList == null) {
             return null;
         }
 
         return skillList.stream()
-                .map(skillCode -> new UserSkill(userGuid, skillCode))
+                .map(skillCd -> new UserSkill(userGuid, skillCd))
                 .collect(Collectors.toSet());
     }
 

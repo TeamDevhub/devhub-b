@@ -21,20 +21,13 @@ public class FakeJpaUserPositionRepository implements JpaUserPositionRepository 
     }
 
     @Override
-    public void deleteByUserGuidAndPositionCd(String userGuid, String positionCode) {
-        Set<UserPositionEntity> positions = store.get(userGuid);
-        if (positions == null) {
-            return;
-        }
+    public void deleteByUserGuidAndPositionCdIn(String userGuid, Set<String> positionCds) {
+        if (positionCds == null || positionCds.isEmpty()) return;
 
-        positions.removeIf(entity ->
-                entity.getUserGuid().equals(userGuid)
-                        && entity.getPositionCd().equals(positionCode)
-        );
+        Set<UserPositionEntity> existing = store.getOrDefault(userGuid, new HashSet<>());
+        existing.removeIf(pos -> positionCds.contains(pos.getPositionCd()));
 
-        if (positions.isEmpty()) {
-            store.remove(userGuid);
-        }
+        store.put(userGuid, existing);
     }
 
     @Override

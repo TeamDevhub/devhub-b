@@ -68,13 +68,6 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public User findByUserGuidWithPositionsAndSkills(String userGuid) {
-        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
-                .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
-        return UserMapper.toDomain(userEntity);
-    }
-
-    @Override
     public void updateUserProfile(User user) {
         jpaUserRepository.save(UserMapper.toEntity(user));
     }

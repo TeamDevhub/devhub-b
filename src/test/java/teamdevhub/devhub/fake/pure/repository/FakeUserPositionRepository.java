@@ -18,8 +18,26 @@ public class FakeUserPositionRepository implements UserPositionRepository {
     }
 
     @Override
-    public void delete(Set<UserPosition> positions) {
+    public void replace(Set<UserPosition> previousPositions, Set<UserPosition> currentPositions) {
+        if (currentPositions == null) currentPositions = Set.of();
+        if (previousPositions == null) previousPositions = Set.of();
 
+        String userGuid = !currentPositions.isEmpty()
+                ? currentPositions.iterator().next().userGuid()
+                : previousPositions.iterator().next().userGuid();
+
+        Set<UserPosition> existing = store.getOrDefault(userGuid, new HashSet<>());
+
+        Set<UserPosition> toDelete = new HashSet<>(existing);
+        toDelete.removeAll(currentPositions);
+
+        Set<UserPosition> toInsert = new HashSet<>(currentPositions);
+        toInsert.removeAll(existing);
+
+        existing.removeAll(toDelete);
+        existing.addAll(toInsert);
+
+        store.put(userGuid, existing);
     }
 
     @Override

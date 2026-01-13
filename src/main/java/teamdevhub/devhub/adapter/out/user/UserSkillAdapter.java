@@ -6,6 +6,8 @@ import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserSkillMapper;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
+import teamdevhub.devhub.common.util.RelationChangeUtil;
+import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
 import teamdevhub.devhub.port.out.user.UserSkillRepository;
 
@@ -45,16 +47,54 @@ public class UserSkillAdapter implements UserSkillRepository {
     }
 
     @Override
-    public void delete(Set<UserSkill> skills) {
-        if (skills == null || skills.isEmpty()) {
+    public void replace(Set<UserSkill> previousSkills, Set<UserSkill> currentSkills) {
+        if (currentSkills == null || currentSkills.isEmpty()) {
             return;
         }
 
-        skills.forEach(skill ->
-                jpaUserSkillRepository.deleteByUserGuidAndSkillCd(
-                        skill.userGuid(),
-                        skill.skillCode()
-                )
-        );
+        syncSkills(previousSkills, currentSkills);
+    }
+
+    private void syncSkills(Set<UserSkill> previousSkills, Set<UserSkill> currentSkills) {
+        String userGuid = currentSkills.iterator().next().userGuid();
+
+        Set<String> oldSkillCds = previousSkills.stream()
+                .map(UserSkill::skillCd)
+                .collect(Collectors.toSet());
+
+        Set<String> newSkillCds = currentSkills.stream()
+                .map(UserSkill::skillCd)
+                .collect(Collectors.toSet());
+
+        RelationChangeUtil.RelationChange<String> change = RelationChangeUtil.change(oldSkillCds, newSkillCds);
+
+        if (change.isEmpty()) {
+            return;
+        }
+
+        deleteSkills(userGuid, change.toDelete());
+        insertSkills(userGuid, change.toInsert());
+    }
+
+    private void deleteSkills(String userGuid, Set<String> skillCds) {
+        if (!skillCds.isEmpty()) {
+            jpaUserSkillRepository.deleteByUserGuidAndSkillCdIn(userGuid, skillCds);
+        }
+    }
+
+    private void insertSkills(String userGuid, Set<String> skillCds) {
+        if (skillCds.isEmpty()) {
+            return;
+        }
+
+        List<UserSkillEntity> userSkillEntityList = skillCds.stream()
+                .map(skillCd -> UserSkillEntity.builder()
+                        .userSkillGuid(identifierProvider.generateIdentifier())
+                        .userGuid(userGuid)
+                        .skillCd(skillCd)
+                        .build())
+                .toList();
+
+        jpaUserSkillRepository.saveAll(userSkillEntityList);
     }
 }

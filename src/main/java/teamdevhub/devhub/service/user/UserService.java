@@ -3,6 +3,8 @@ package teamdevhub.devhub.service.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamdevhub.devhub.domain.user.vo.UserPositionChangeResult;
+import teamdevhub.devhub.domain.user.vo.UserSkillChangeResult;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.enums.ErrorCode;
@@ -163,20 +165,16 @@ public class UserService implements UserUseCase {
 
 
     private void replacePositions(User user, Set<UserPosition> positions) {
-        Set<UserPosition> oldPositions = Set.copyOf(user.getPositions());
-
-        if (user.changePositions(positions)) {
-            userPositionRepository.delete(oldPositions);
-            userPositionRepository.saveAll(user.getPositions());
+        UserPositionChangeResult userPositionChangeResult = user.changePositions(positions);
+        if (userPositionChangeResult.changed()) {
+            userPositionRepository.replace(userPositionChangeResult.previousPositions(), userPositionChangeResult.currentPositions());
         }
     }
 
     private void replaceSkills(User user, Set<UserSkill> skills) {
-        Set<UserSkill> oldSkills = Set.copyOf(user.getSkills());
-
-        if (user.changeSkills(skills)) {
-            userSkillRepository.delete(oldSkills);
-            userSkillRepository.saveAll(user.getSkills());
+        UserSkillChangeResult userSkillChangeResult = user.changeSkills(skills);
+        if (userSkillChangeResult.changed()) {
+            userSkillRepository.replace(userSkillChangeResult.previousSkills(), userSkillChangeResult.currentSkills());
         }
     }
 }

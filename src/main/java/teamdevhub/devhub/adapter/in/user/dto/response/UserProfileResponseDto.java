@@ -4,9 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserPosition;
+import teamdevhub.devhub.domain.user.vo.UserSkill;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -41,8 +44,8 @@ public class UserProfileResponseDto {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .introduction(user.getIntroduction())
-                .positionList(user.positionList())
-                .skillList(user.skillList())
+                .positionList(positionList(user.getPositions()))
+                .skillList(skillList(user.getSkills()))
                 .mannerDegree(user.getMannerDegree())
                 .blocked(user.isBlocked())
                 .blockEndDate(user.getBlockEndDate())
@@ -53,5 +56,18 @@ public class UserProfileResponseDto {
                 .modifiedBy(user.getAuditInfo().modifiedBy())
                 .modifiedAt(user.getAuditInfo().modifiedAt())
                 .build();
+    }
+
+
+    public static List<String> positionList(Set<UserPosition> userPositions) {
+        return userPositions.stream()
+                .map(UserPosition::positionCd)
+                .toList();
+    }
+
+    public static List<String> skillList(Set<UserSkill> userSkills) {
+        return userSkills.stream()
+                .map(UserSkill::skillCd)
+                .toList();
     }
 }

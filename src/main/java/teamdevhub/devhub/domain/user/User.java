@@ -5,7 +5,9 @@ import lombok.Getter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
+import teamdevhub.devhub.domain.user.vo.UserPositionChangeResult;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.domain.user.vo.UserSkillChangeResult;
 import teamdevhub.devhub.domain.vo.audit.AuditInfo;
 
 import java.time.LocalDateTime;
@@ -159,7 +161,6 @@ public class User {
     }
 
     public void updateUsernameAndIntroduction(String newUsername, String newIntroduction) {
-
         if (hasText(newUsername) && !newUsername.equals(this.username)) {
             this.username = newUsername;
         }
@@ -169,40 +170,37 @@ public class User {
         }
     }
 
-    public boolean changePositions(
-            Set<UserPosition> newPositions
-    ) {
+    public UserPositionChangeResult changePositions(Set<UserPosition> newPositions) {
         if (newPositions == null || newPositions.isEmpty()) {
-            throw DomainRuleException.of(ErrorCode.USER_POSITION_REQUIRED);
+            return UserPositionChangeResult.unchanged(this.positions);
         }
 
         if (!this.positions.equals(newPositions)) {
+            Set<UserPosition> oldPositions = Set.copyOf(this.positions);
             this.positions.clear();
             this.positions.addAll(newPositions);
-            return true;
+            return UserPositionChangeResult.changed(oldPositions, this.positions);
         }
-        return false;
+
+        return UserPositionChangeResult.unchanged(this.positions);
     }
 
-    public boolean changeSkills(
-            Set<UserSkill> newSkills
-    ) {
+    public UserSkillChangeResult changeSkills(Set<UserSkill> newSkills) {
         if (newSkills == null || newSkills.isEmpty()) {
-            throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
+            return UserSkillChangeResult.unchanged(this.skills);
         }
 
         if (!this.skills.equals(newSkills)) {
+            Set<UserSkill> oldSkills = Set.copyOf(this.skills);
             this.skills.clear();
             this.skills.addAll(newSkills);
-            return true;
+            return UserSkillChangeResult.changed(oldSkills, this.skills);
         }
-        return false;
+
+        return UserSkillChangeResult.unchanged(this.skills);
     }
 
-    private void validate(
-            String email,
-            String password
-    ) {
+    private void validate(String email, String password) {
         if (!hasText(email)) {
             throw DomainRuleException.of(ErrorCode.USER_ID_FAIL);
         }
@@ -219,17 +217,5 @@ public class User {
     public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
         this.positions = positions;
         this.skills = skills;
-    }
-
-    public List<String> positionList() {
-        return positions.stream()
-                .map(UserPosition::positionCode)
-                .toList();
-    }
-
-    public List<String> skillList() {
-        return skills.stream()
-                .map(UserSkill::skillCode)
-                .toList();
     }
 }

@@ -9,7 +9,7 @@ public class UserPositionMapper {
         return UserPositionEntity.builder()
                 .userPositionGuid(userPositionGuid)
                 .userGuid(userPosition.userGuid())
-                .positionCd(userPosition.positionCode())
+                .positionCd(userPosition.positionCd())
                 .build();
     }
 

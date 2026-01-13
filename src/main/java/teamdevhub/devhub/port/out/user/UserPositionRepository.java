@@ -7,5 +7,5 @@ import java.util.Set;
 public interface UserPositionRepository {
     void saveAll(Set<UserPosition> positions);
     Set<UserPosition> findByUserGuid(String userGuid);
-    void delete(Set<UserPosition> positions);
+    void replace(Set<UserPosition> previousPositions, Set<UserPosition> changedPositions);
 }

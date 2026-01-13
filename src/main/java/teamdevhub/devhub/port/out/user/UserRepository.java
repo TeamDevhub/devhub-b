@@ -17,7 +17,6 @@ public interface UserRepository {
     User save(User user);
     void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
     User findByUserGuid(String userGuid);
-    User findByUserGuidWithPositionsAndSkills(String userGuid);
     void updateUserProfile(User user);
     void delete(User user);
     boolean existsByUserRole(UserRole userRole);

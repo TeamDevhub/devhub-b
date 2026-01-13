@@ -7,6 +7,5 @@ import java.util.Set;
 public interface UserSkillRepository {
     void saveAll(Set<UserSkill> skills);
     Set<UserSkill> findByUserGuid(String userGuid);
-
-    void delete(Set<UserSkill> skills);
+    void replace(Set<UserSkill> previousSkills, Set<UserSkill> currentSkills);
 }
