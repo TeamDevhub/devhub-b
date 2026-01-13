@@ -7,7 +7,7 @@ plugins {
 
 group = 'teamdevhub'
 version = '0.0.1-SNAPSHOT'
-description = 'DevHub Backend Application'
+description = 'DevHub Backend'
 
 java {
 	toolchain {
