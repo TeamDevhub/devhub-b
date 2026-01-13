@@ -75,9 +75,7 @@ public class UserService implements UserUseCase {
 
     @Override
     public void updateLastLoginDateTime(String userGuid) {
-        User user = getUser(userGuid);
-        user.updateLastLoginDateTime(dateTimeProvider.now());
-        userRepository.updateLastLoginDateTime(user);
+        userRepository.updateLastLoginDateTime(userGuid, dateTimeProvider.now());
     }
 
     @Override
@@ -94,8 +92,12 @@ public class UserService implements UserUseCase {
             userRepository.updateUserProfile(user);
         }
 
-        if (updateProfileCommand.hasPositionsAndSkillsChange()) {
-            updatePositionsAndSkills(user, updateProfileCommand);
+        if (updateProfileCommand.hasPositionsChange()) {
+            replacePositions(user, updateProfileCommand.getPositions());
+        }
+
+        if (updateProfileCommand.hasSkillsChange()) {
+            replaceSkills(user, updateProfileCommand.getSkills());
         }
     }
 
@@ -159,10 +161,22 @@ public class UserService implements UserUseCase {
         emailVerificationRepository.delete(email);
     }
 
-    private void updatePositionsAndSkills(User user, UpdateProfileCommand updateProfileCommand) {
-        user.changePositionsAndSkills(updateProfileCommand.getPositions(), updateProfileCommand.getSkills());
 
-        userPositionRepository.replaceAll(updateProfileCommand.getPositions());
-        userSkillRepository.replaceAll(updateProfileCommand.getSkills());
+    private void replacePositions(User user, Set<UserPosition> positions) {
+        Set<UserPosition> oldPositions = Set.copyOf(user.getPositions());
+
+        if (user.changePositions(positions)) {
+            userPositionRepository.delete(oldPositions);
+            userPositionRepository.saveAll(user.getPositions());
+        }
+    }
+
+    private void replaceSkills(User user, Set<UserSkill> skills) {
+        Set<UserSkill> oldSkills = Set.copyOf(user.getSkills());
+
+        if (user.changeSkills(skills)) {
+            userSkillRepository.delete(oldSkills);
+            userSkillRepository.saveAll(user.getSkills());
+        }
     }
 }

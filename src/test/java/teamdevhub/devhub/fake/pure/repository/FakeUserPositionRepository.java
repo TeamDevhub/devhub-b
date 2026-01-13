@@ -18,7 +18,7 @@ public class FakeUserPositionRepository implements UserPositionRepository {
     }
 
     @Override
-    public void replaceAll(Set<UserPosition> positions) {
+    public void delete(Set<UserPosition> positions) {
 
     }
 

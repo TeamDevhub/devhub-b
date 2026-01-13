@@ -19,22 +19,21 @@ public class UpdateProfileCommand {
     private String userGuid;
 
     private String username;
-
     private String introduction;
 
     private Set<UserPosition> positions;
     private Set<UserSkill> skills;
 
     public static UpdateProfileCommand fromUpdateProfileRequestDto(
-            UpdateProfileRequestDto dto,
+            UpdateProfileRequestDto updateProfileRequestDto,
             String userGuid
     ) {
         return UpdateProfileCommand.builder()
                 .userGuid(userGuid)
-                .username(dto.getUsername())
-                .introduction(dto.getIntroduction())
-                .positions(toPositions(dto.getPositionList(), userGuid))
-                .skills(toSkills(dto.getSkillList(), userGuid))
+                .username(updateProfileRequestDto.getUsername())
+                .introduction(updateProfileRequestDto.getIntroduction())
+                .positions(toPositions(updateProfileRequestDto.getPositionList(), userGuid))
+                .skills(toSkills(updateProfileRequestDto.getSkillList(), userGuid))
                 .build();
     }
 
@@ -47,7 +46,7 @@ public class UpdateProfileCommand {
         }
 
         return positionList.stream()
-                .map(code -> new UserPosition(userGuid, code))
+                .map(positionCode -> new UserPosition(userGuid, positionCode))
                 .collect(Collectors.toSet());
     }
 
@@ -60,7 +59,7 @@ public class UpdateProfileCommand {
         }
 
         return skillList.stream()
-                .map(code -> new UserSkill(userGuid, code))
+                .map(skillCode -> new UserSkill(userGuid, skillCode))
                 .collect(Collectors.toSet());
     }
 
@@ -68,7 +67,11 @@ public class UpdateProfileCommand {
         return username != null || introduction != null;
     }
 
-    public boolean hasPositionsAndSkillsChange() {
-        return positions != null || skills != null;
+    public boolean hasPositionsChange() {
+        return positions != null;
+    }
+
+    public boolean hasSkillsChange() {
+        return skills != null;
     }
 }

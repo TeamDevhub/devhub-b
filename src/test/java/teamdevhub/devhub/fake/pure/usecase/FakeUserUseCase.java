@@ -25,9 +25,7 @@ public class FakeUserUseCase implements UserUseCase {
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 TEST_USERNAME_1,
-                TEST_INTRO_1,
-                TEST_POSITION_LIST,
-                TEST_SKILL_LIST
+                TEST_INTRO_1
         );
         store.put(TEST_GUID_1, testUser);
     }
@@ -63,9 +61,7 @@ public class FakeUserUseCase implements UserUseCase {
                 signupCommand.getEmail(),
                 signupCommand.getPassword(),
                 signupCommand.getUsername(),
-                signupCommand.getIntroduction(),
-                signupCommand.getPositionList(),
-                signupCommand.getSkillList()
+                signupCommand.getIntroduction()
         );
         store.put(user.getUserGuid(), user);
         return user;

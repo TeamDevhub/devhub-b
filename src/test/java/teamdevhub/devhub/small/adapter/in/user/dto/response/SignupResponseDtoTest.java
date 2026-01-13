@@ -14,7 +14,7 @@ class SignupResponseDtoTest {
     @DisplayName("User_도메인을_SignupResponseDto_로_변환할_수_있다")
     void convertDomainToResponseDto() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // when
         SignupResponseDto signupResponseDto = SignupResponseDto.fromDomain(user);

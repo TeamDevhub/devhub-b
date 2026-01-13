@@ -40,7 +40,7 @@ class UserMapperTest {
     @DisplayName("User_를_UserEntity_로_변환할_수_있다")
     void convertDomainToEntity() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // when
         UserEntity userEntity = UserMapper.toEntity(user);
@@ -68,14 +68,12 @@ class UserMapperTest {
                 .build();
 
         // when
-        User user = UserMapper.toDomain(entity, TEST_POSITIONS, TEST_SKILLS);
+        User user = UserMapper.toDomain(entity);
 
         // then
         assertThat(user.getUserGuid()).isEqualTo(TEST_GUID_1);
         assertThat(user.getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(user.getUsername()).isEqualTo(TEST_USERNAME_1);
         assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO_1);
-        assertThat(user.getPositions()).contains(new UserPosition("001"));
-        assertThat(user.getSkills()).contains(new UserSkill("001"));
     }
 }

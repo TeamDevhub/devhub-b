@@ -18,9 +18,10 @@ public class FakeUserSkillRepository implements UserSkillRepository {
     }
 
     @Override
-    public void replaceAll(Set<UserSkill> skills) {
+    public void delete(Set<UserSkill> skills) {
 
     }
+
 
     @Override
     public void saveAll(Set<UserSkill> skills) {

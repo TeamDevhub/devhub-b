@@ -10,6 +10,8 @@ import teamdevhub.devhub.domain.vo.audit.AuditInfo;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -62,8 +64,8 @@ public class User {
         this.userRole = userRole;
         this.introduction = introduction;
 
-        this.positions = new HashSet<>(positions);
-        this.skills = new HashSet<>(skills);
+        this.positions = Objects.requireNonNullElseGet(positions, HashSet::new);
+        this.skills = Objects.requireNonNullElseGet(skills, HashSet::new);
 
         this.mannerDegree = mannerDegree;
         this.blocked = blocked;
@@ -148,10 +150,6 @@ public class User {
                 .build();
     }
 
-    public void updateLastLoginDateTime(LocalDateTime now) {
-        this.lastLoginDateTime = now;
-    }
-
     public void withdraw() {
         if (this.deleted) {
             throw DomainRuleException.of(ErrorCode.ALREADY_DELETED);
@@ -171,32 +169,34 @@ public class User {
         }
     }
 
-    public void changePositionsAndSkills(
-            Set<UserPosition> newPositions,
-            Set<UserSkill> newSkills
+    public boolean changePositions(
+            Set<UserPosition> newPositions
     ) {
-
-        if (newPositions == null && newSkills == null) {
-            return;
-        }
-
         if (newPositions == null || newPositions.isEmpty()) {
             throw DomainRuleException.of(ErrorCode.USER_POSITION_REQUIRED);
-        }
-
-        if (newSkills == null || newSkills.isEmpty()) {
-            throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
         }
 
         if (!this.positions.equals(newPositions)) {
             this.positions.clear();
             this.positions.addAll(newPositions);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changeSkills(
+            Set<UserSkill> newSkills
+    ) {
+        if (newSkills == null || newSkills.isEmpty()) {
+            throw DomainRuleException.of(ErrorCode.USER_SKILL_REQUIRED);
         }
 
         if (!this.skills.equals(newSkills)) {
             this.skills.clear();
             this.skills.addAll(newSkills);
+            return true;
         }
+        return false;
     }
 
     private void validate(
@@ -221,17 +221,15 @@ public class User {
         this.skills = skills;
     }
 
-//    private static Set<UserPosition> toPositions(List<String> codes) {
-//        if (codes == null) return Set.of();
-//        return codes.stream()
-//                .map(UserPosition::new)
-//                .collect(Collectors.toUnmodifiableSet());
-//    }
-//
-//    private static Set<UserSkill> toSkills(List<String> codes) {
-//        if (codes == null) return Set.of();
-//        return codes.stream()
-//                .map(UserSkill::new)
-//                .collect(Collectors.toUnmodifiableSet());
-//    }
+    public List<String> positionList() {
+        return positions.stream()
+                .map(UserPosition::positionCode)
+                .toList();
+    }
+
+    public List<String> skillList() {
+        return skills.stream()
+                .map(UserSkill::skillCode)
+                .toList();
+    }
 }

@@ -22,23 +22,20 @@ public class FakeJpaUserSkillRepository implements JpaUserSkillRepository {
     }
 
     @Override
-    public Set<String> findCodesByUserGuid(String userGuid) {
-        return store.getOrDefault(userGuid, Collections.emptySet())
-                .stream()
-                .map(UserSkillEntity::getSkillCd)
-                .collect(Collectors.toSet());
-    }
+    public void deleteByUserGuidAndSkillCd(String userGuid, String skillCd) {
+        Set<UserSkillEntity> skills = store.get(userGuid);
+        if (skills == null) {
+            return;
+        }
 
-    @Override
-    public void deleteByUserGuidAndSkillCdIn(String userGuid, Set<String> toDelete) {
-        Set<UserSkillEntity> skills = store.getOrDefault(userGuid, new HashSet<>());
-        skills.removeIf(s -> toDelete.contains(s.getSkillCd()));
-        store.put(userGuid, skills);
-    }
+        skills.removeIf(entity ->
+                entity.getUserGuid().equals(userGuid)
+                        && entity.getSkillCd().equals(skillCd)
+        );
 
-    @Override
-    public <S extends UserSkillEntity> S save(S entity) {
-        return null;
+        if (skills.isEmpty()) {
+            store.remove(userGuid);
+        }
     }
 
     @Override
@@ -49,6 +46,11 @@ public class FakeJpaUserSkillRepository implements JpaUserSkillRepository {
         List<S> list = new ArrayList<>();
         entities.forEach(list::add);
         return list;
+    }
+
+    @Override
+    public <S extends UserSkillEntity> S save(S entity) {
+        return null;
     }
 
     @Override

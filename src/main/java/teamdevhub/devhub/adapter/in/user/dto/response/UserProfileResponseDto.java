@@ -4,8 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.vo.UserPosition;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,16 +41,8 @@ public class UserProfileResponseDto {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .introduction(user.getIntroduction())
-                .positionList(
-                        user.getPositions().stream()
-                                .map(UserPosition::positionCode)
-                                .toList()
-                )
-                .skillList(
-                        user.getSkills().stream()
-                                .map(UserSkill::skillCode)
-                                .toList()
-                )
+                .positionList(user.positionList())
+                .skillList(user.skillList())
                 .mannerDegree(user.getMannerDegree())
                 .blocked(user.isBlocked())
                 .blockEndDate(user.getBlockEndDate())

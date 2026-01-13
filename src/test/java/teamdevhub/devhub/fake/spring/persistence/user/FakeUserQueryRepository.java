@@ -21,9 +21,7 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                 "user1@example.com",
                 "test1234",
                 "User1",
-                "Intro",
-                List.of("001"),
-                List.of("001")
+                "Intro"
         );
 
         User user2 = User.createGeneralUser(
@@ -31,9 +29,7 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                 "user2@example.com",
                 "test4567",
                 "User2",
-                "Intro",
-                List.of("001"),
-                List.of("001")
+                "Intro"
         );
 
         store.put(user1.getUserGuid(), UserMapper.toEntity(user1));

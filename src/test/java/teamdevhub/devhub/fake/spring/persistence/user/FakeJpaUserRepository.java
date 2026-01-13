@@ -9,6 +9,7 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.domain.user.UserRole;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
@@ -24,6 +25,11 @@ public class FakeJpaUserRepository implements JpaUserRepository {
     @Override
     public Optional<UserEntity> findByUserGuid(String userGuid) {
         return Optional.ofNullable(store.get(userGuid));
+    }
+
+    @Override
+    public int updateLastLoginDateTime(String userGuid, LocalDateTime now) {
+        return 0;
     }
 
     @Override

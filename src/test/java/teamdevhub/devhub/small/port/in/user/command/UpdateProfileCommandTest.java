@@ -27,6 +27,6 @@ class UpdateProfileCommandTest {
         // then
         assertThat(updateProfileCommand.getUserGuid()).isEqualTo(TEST_GUID_1);
         assertThat(updateProfileCommand.getUsername()).isEqualTo(NEW_USERNAME);
-        assertThat(updateProfileCommand.getPositionList()).isEqualTo(NEW_POSITION_LIST);
+        assertThat(updateProfileCommand.getPositions()).isEqualTo(NEW_POSITIONS);
     }
 }

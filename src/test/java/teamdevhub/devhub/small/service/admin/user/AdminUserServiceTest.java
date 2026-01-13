@@ -34,9 +34,7 @@ class AdminUserServiceTest {
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 TEST_USERNAME_1,
-                TEST_INTRO_1,
-                TEST_POSITION_LIST,
-                TEST_SKILL_LIST
+                TEST_INTRO_1
         );
 
         User user2 = User.createGeneralUser(
@@ -44,9 +42,7 @@ class AdminUserServiceTest {
                 TEST_EMAIL_2,
                 TEST_PASSWORD_2,
                 TEST_USERNAME_2,
-                TEST_INTRO_2,
-                TEST_POSITION_LIST,
-                TEST_SKILL_LIST
+                TEST_INTRO_2
         );
 
         fakeUserRepository.save(user1);

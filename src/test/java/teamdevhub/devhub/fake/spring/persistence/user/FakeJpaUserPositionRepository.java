@@ -10,7 +10,6 @@ import teamdevhub.devhub.adapter.out.user.persistence.JpaUserPositionRepository;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class FakeJpaUserPositionRepository implements JpaUserPositionRepository {
 
@@ -22,18 +21,20 @@ public class FakeJpaUserPositionRepository implements JpaUserPositionRepository 
     }
 
     @Override
-    public Set<String> findCodesByUserGuid(String userGuid) {
-        return store.getOrDefault(userGuid, Collections.emptySet())
-                .stream()
-                .map(UserPositionEntity::getPositionCd)
-                .collect(Collectors.toSet());
-    }
+    public void deleteByUserGuidAndPositionCd(String userGuid, String positionCode) {
+        Set<UserPositionEntity> positions = store.get(userGuid);
+        if (positions == null) {
+            return;
+        }
 
-    @Override
-    public void deleteByUserGuidAndPositionCdIn(String userGuid, Set<String> toDelete) {
-        Set<UserPositionEntity> positions = store.getOrDefault(userGuid, new HashSet<>());
-        positions.removeIf(p -> toDelete.contains(p.getPositionCd()));
-        store.put(userGuid, positions);
+        positions.removeIf(entity ->
+                entity.getUserGuid().equals(userGuid)
+                        && entity.getPositionCd().equals(positionCode)
+        );
+
+        if (positions.isEmpty()) {
+            store.remove(userGuid);
+        }
     }
 
     @Override

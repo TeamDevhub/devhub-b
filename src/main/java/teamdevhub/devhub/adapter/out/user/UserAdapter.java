@@ -10,27 +10,18 @@ import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
-import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
-import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.adapter.out.user.persistence.JpaUserPositionRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
-import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
-import teamdevhub.devhub.common.util.RelationChangeUtil;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.vo.UserPosition;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -38,9 +29,6 @@ public class UserAdapter implements UserRepository {
 
     private final JpaUserRepository jpaUserRepository;
     private final UserQueryRepository userQueryRepository;
-    private final JpaUserPositionRepository jpaUserPositionRepository;
-    private final JpaUserSkillRepository jpaUserSkillRepository;
-    private final IdentifierProvider identifierProvider;
 
     @Override
     public void saveAdminUser(User adminUser) {
@@ -68,8 +56,8 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public void updateLastLoginDateTime(User user) {
-        jpaUserRepository.save(UserMapper.toEntity(user));
+    public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
+        jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime);
     }
 
     @Override
@@ -115,100 +103,5 @@ public class UserAdapter implements UserRepository {
                 pagedUserEntityList.getNumber(),
                 pagedUserEntityList.getSize(),
                 pagedUserEntityList.getTotalElements());
-    }
-
-    private void syncPositions(User user) {
-        String userGuid = user.getUserGuid();
-        RelationChangeUtil.RelationChange<String> relationChange = RelationChangeUtil.change(
-                jpaUserPositionRepository.findCodesByUserGuid(userGuid),
-                extractPositionCodes(user));
-
-        if (relationChange.isEmpty()) {
-            return;
-        }
-
-        deletePositions(userGuid, relationChange.toDelete());
-        insertPositions(userGuid, relationChange.toInsert());
-    }
-
-    private Set<UserPosition> loadPositions(String userGuid) {
-        return jpaUserPositionRepository.findByUserGuid(userGuid).stream()
-                .map(userPositionEntity -> new UserPosition(userPositionEntity.getUserGuid(), userPositionEntity.getPositionCd()))
-                .collect(Collectors.toUnmodifiableSet());
-    }
-
-    private void deletePositions(String userGuid, Set<String> positionCodeSet) {
-        if (!positionCodeSet.isEmpty()) {
-            jpaUserPositionRepository.deleteByUserGuidAndPositionCdIn(userGuid, positionCodeSet);
-        }
-    }
-
-    private void insertPositions(String userGuid, Set<String> positionCodeSet) {
-        if (positionCodeSet.isEmpty()) {
-            return;
-        }
-
-        List<UserPositionEntity> userPositionEntityList = positionCodeSet.stream()
-                .map(positionCode -> UserPositionEntity.builder()
-                        .userPositionGuid(identifierProvider.generateIdentifier())
-                        .userGuid(userGuid)
-                        .positionCd(positionCode)
-                        .build())
-                .toList();
-        jpaUserPositionRepository.saveAll(userPositionEntityList);
-    }
-
-    private void syncSkills(User user) {
-        String userGuid = user.getUserGuid();
-
-        RelationChangeUtil.RelationChange<String> relationChange = RelationChangeUtil.change(
-                jpaUserPositionRepository.findCodesByUserGuid(userGuid),
-                extractSkillCodes(user));
-
-        if (relationChange.isEmpty()) {
-            return;
-        }
-
-        deleteSkills(userGuid, relationChange.toDelete());
-        insertSkills(userGuid, relationChange.toInsert());
-    }
-
-    private Set<UserSkill> loadSkills(String userGuid) {
-        return jpaUserSkillRepository.findByUserGuid(userGuid).stream()
-                .map(userSkillEntity -> new UserSkill(userSkillEntity.getUserGuid(), userSkillEntity.getSkillCd()))
-                .collect(Collectors.toUnmodifiableSet());
-    }
-
-    private void deleteSkills(String userGuid, Set<String> skillCodeSet) {
-        if (!skillCodeSet.isEmpty()) {
-            jpaUserSkillRepository.deleteByUserGuidAndSkillCdIn(userGuid, skillCodeSet);
-        }
-    }
-
-    private void insertSkills(String userGuid, Set<String> skillCodeSet) {
-        if (skillCodeSet.isEmpty()) {
-            return;
-        }
-
-        List<UserSkillEntity> userSkillEntityList = skillCodeSet.stream()
-                .map(skillCode -> UserSkillEntity.builder()
-                        .userSkillGuid(identifierProvider.generateIdentifier())
-                        .userGuid(userGuid)
-                        .skillCd(skillCode)
-                        .build())
-                .toList();
-        jpaUserSkillRepository.saveAll(userSkillEntityList);
-    }
-
-    private Set<String> extractPositionCodes(User user) {
-        return user.getPositions().stream()
-                .map(UserPosition::positionCode)
-                .collect(Collectors.toSet());
-    }
-
-    private Set<String> extractSkillCodes(User user) {
-        return user.getSkills().stream()
-                .map(UserSkill::skillCode)
-                .collect(Collectors.toSet());
     }
 }

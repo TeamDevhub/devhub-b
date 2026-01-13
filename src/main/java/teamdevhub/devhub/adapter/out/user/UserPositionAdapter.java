@@ -1,6 +1,5 @@
 package teamdevhub.devhub.adapter.out.user;
 
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
@@ -20,7 +19,6 @@ public class UserPositionAdapter implements UserPositionRepository {
 
     private final JpaUserPositionRepository jpaUserPositionRepository;
     private final IdentifierProvider identifierProvider;
-    private final EntityManager entityManager;
 
     @Override
     public Set<UserPosition> findByUserGuid(String userGuid) {
@@ -47,25 +45,16 @@ public class UserPositionAdapter implements UserPositionRepository {
     }
 
     @Override
-    public void replaceAll(Set<UserPosition> positions) {
-        if (positions.isEmpty()) {
+    public void delete(Set<UserPosition> positions) {
+        if (positions == null || positions.isEmpty()) {
             return;
         }
 
-        String userGuid = positions.iterator().next().userGuid();
-
-        jpaUserPositionRepository.deleteByUserGuid(userGuid);
-        entityManager.flush();
-        entityManager.clear();
-
-        List<UserPositionEntity> userPositionEntityList = positions.stream()
-                .map(userPosition -> UserPositionEntity.builder()
-                        .userPositionGuid(identifierProvider.generateIdentifier())
-                        .userGuid(userPosition.userGuid())
-                        .positionCd(userPosition.positionCode())
-                        .build())
-                .toList();
-
-        jpaUserPositionRepository.saveAll(userPositionEntityList);
+        positions.forEach(position ->
+                jpaUserPositionRepository.deleteByUserGuidAndPositionCd(
+                        position.userGuid(),
+                        position.positionCode()
+                )
+        );
     }
 }

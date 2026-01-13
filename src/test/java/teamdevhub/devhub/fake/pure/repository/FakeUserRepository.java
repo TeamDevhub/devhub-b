@@ -8,12 +8,15 @@ import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class FakeUserRepository implements UserRepository {
 
     private final Map<String, User> store = new HashMap<>();
+    private final List<String> calledMethods = new ArrayList<>();
+    private final Map<String, LocalDateTime> lastLoginStore = new HashMap<>();
 
     @Override
     public void saveAdminUser(User adminUser) {
@@ -45,8 +48,11 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public void updateLastLoginDateTime(User user) {
-        store.put(user.getUserGuid(), user);
+    public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
+        if (store.containsKey(userGuid)) {
+            calledMethods.add("updateLastLoginDateTime");
+            lastLoginStore.put(userGuid, lastLoginDateTime);
+        }
     }
 
     @Override
@@ -111,5 +117,19 @@ public class FakeUserRepository implements UserRepository {
                 size,
                 totalElements
         );
+    }
+
+    public boolean wasCalled(String methodName) {
+        return calledMethods.contains(methodName);
+    }
+
+    public long callCount(String methodName) {
+        return calledMethods.stream()
+                .filter(methodName::equals)
+                .count();
+    }
+
+    public LocalDateTime lastLoginOf(String userGuid) {
+        return lastLoginStore.get(userGuid);
     }
 }
