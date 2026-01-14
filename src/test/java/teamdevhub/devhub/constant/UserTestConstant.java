@@ -46,6 +46,7 @@ public final class UserTestConstant {
 
     public static final String EMAIL_CODE = "123456";
     public static final String UNVERIFIED_EMAIL = "unverified@example.com";
+
     public static final String NEW_POSITION_CD = "002";
     public static final String NEW_SKILL_CD = "002";
 

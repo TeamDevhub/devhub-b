@@ -11,6 +11,7 @@ import java.util.Set;
 public class FakeUserSkillRepository implements UserSkillRepository {
 
     private final Map<String, Set<UserSkill>> store = new HashMap<>();
+    public boolean replaceCalled = false;
 
     @Override
     public Set<UserSkill> findByUserGuid(String userGuid) {
@@ -19,6 +20,7 @@ public class FakeUserSkillRepository implements UserSkillRepository {
 
     @Override
     public void replace(Set<UserSkill> previousSkills, Set<UserSkill> currentSkills) {
+        replaceCalled = true;
         if (currentSkills == null) {
             currentSkills = Set.of();
         }

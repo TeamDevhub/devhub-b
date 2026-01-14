@@ -11,6 +11,7 @@ import java.util.Set;
 public class FakeUserPositionRepository implements UserPositionRepository {
 
     private final Map<String, Set<UserPosition>> store = new HashMap<>();
+    public boolean replaceCalled = false;
 
     @Override
     public Set<UserPosition> findByUserGuid(String userGuid) {
@@ -19,6 +20,7 @@ public class FakeUserPositionRepository implements UserPositionRepository {
 
     @Override
     public void replace(Set<UserPosition> previousPositions, Set<UserPosition> currentPositions) {
+        replaceCalled = true;
         if (currentPositions == null) currentPositions = Set.of();
         if (previousPositions == null) previousPositions = Set.of();
 
