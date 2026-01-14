@@ -6,7 +6,7 @@ import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class UpdateProfileCommandTest {
 
@@ -22,11 +22,11 @@ class UpdateProfileCommandTest {
                 .build();
 
         // when
-        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, TEST_GUID_1);
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, TEST_USER_GUID_1);
 
         // then
-        assertThat(updateProfileCommand.getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(updateProfileCommand.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(updateProfileCommand.getUsername()).isEqualTo(NEW_USERNAME);
-        assertThat(updateProfileCommand.getPositions()).isEqualTo(NEW_POSITIONS);
+        assertThat(updateProfileCommand.getPositions()).isEqualTo(NEW_USER_POSITIONS);
     }
 }

@@ -6,7 +6,7 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.UserRole;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class UserEntityTest {
 
@@ -15,7 +15,7 @@ class UserEntityTest {
     void createEntityAndUseGetter() {
         // given, when
         UserEntity userEntity = UserEntity.builder()
-                .userGuid(TEST_GUID_1)
+                .userGuid(TEST_USER_GUID_1)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -28,7 +28,7 @@ class UserEntityTest {
                 .build();
 
         // then
-        assertThat(userEntity.getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(userEntity.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(userEntity.getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(userEntity.getPassword()).isEqualTo(TEST_PASSWORD_1);
         assertThat(userEntity.getUsername()).isEqualTo(TEST_USERNAME_1);

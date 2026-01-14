@@ -9,7 +9,7 @@ import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.fake.spring.infrastructure.FakeAuthenticationManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class SpringSecurityAuthenticationAdapterTest {
 
@@ -18,7 +18,7 @@ class SpringSecurityAuthenticationAdapterTest {
     @BeforeEach
     void init() {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                TEST_GUID_1,
+                TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
@@ -36,7 +36,7 @@ class SpringSecurityAuthenticationAdapterTest {
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.userGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(result.userGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(result.email()).isEqualTo(TEST_EMAIL_1);
         assertThat(result.userRole()).isEqualTo(UserRole.USER);
     }

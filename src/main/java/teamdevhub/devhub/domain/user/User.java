@@ -174,8 +174,15 @@ public class User {
             return UserPositionChangeResult.unchanged(this.positions);
         }
 
+        boolean hasNullPositionCd = newPositions.stream()
+                .anyMatch(userPosition -> userPosition.positionCd() == null || userPosition.positionCd().isBlank());
+
+        if (hasNullPositionCd) {
+            return UserPositionChangeResult.unchanged(this.positions);
+        }
+
         if (!this.positions.equals(newPositions)) {
-            Set<UserPosition> oldPositions = Set.copyOf(this.positions);
+            Set<UserPosition> oldPositions = Set.copyOf(positions);
             this.positions.clear();
             this.positions.addAll(newPositions);
             return UserPositionChangeResult.changed(oldPositions, this.positions);
@@ -186,6 +193,13 @@ public class User {
 
     public UserSkillChangeResult changeSkills(Set<UserSkill> newSkills) {
         if (newSkills == null || newSkills.isEmpty()) {
+            return UserSkillChangeResult.unchanged(this.skills);
+        }
+
+        boolean hasNullSkillCd = newSkills.stream()
+                .anyMatch(userSkill -> userSkill.skillCd() == null || userSkill.skillCd().isBlank());
+
+        if (hasNullSkillCd) {
             return UserSkillChangeResult.unchanged(this.skills);
         }
 
@@ -214,7 +228,7 @@ public class User {
     }
 
     public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
-        this.positions = positions;
-        this.skills = skills;
+        this.positions = new HashSet<>(positions);
+        this.skills = new HashSet<>(skills);
     }
 }

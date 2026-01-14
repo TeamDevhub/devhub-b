@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class FakeUserUseCase implements UserUseCase {
 
@@ -21,18 +21,18 @@ public class FakeUserUseCase implements UserUseCase {
 
     public FakeUserUseCase() {
         User testUser = User.createGeneralUser(
-                TEST_GUID_1,
+                TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 TEST_USERNAME_1,
                 TEST_INTRO_1
         );
-        store.put(TEST_GUID_1, testUser);
+        store.put(TEST_USER_GUID_1, testUser);
     }
 
     @Override
     public void initializeAdminUser(String email, String rawPassword, String username) {
-        User admin = User.createAdminUser(ADMIN_GUID, email, rawPassword, username);
+        User admin = User.createAdminUser(ADMIN_USER_GUID, email, rawPassword, username);
         store.put(admin.getUserGuid(), admin);
     }
 
@@ -57,7 +57,7 @@ public class FakeUserUseCase implements UserUseCase {
     @Override
     public User signup(SignupCommand signupCommand) {
         User user = User.createGeneralUser(
-                TEST_GUID_1,
+                TEST_USER_GUID_1,
                 signupCommand.getEmail(),
                 signupCommand.getPassword(),
                 signupCommand.getUsername(),

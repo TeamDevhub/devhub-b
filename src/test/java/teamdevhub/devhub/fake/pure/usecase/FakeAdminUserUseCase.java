@@ -9,7 +9,7 @@ import teamdevhub.devhub.port.in.common.command.PageCommand;
 import java.util.ArrayList;
 import java.util.List;
 
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class FakeAdminUserUseCase implements AdminUserUseCase {
 
@@ -18,7 +18,7 @@ public class FakeAdminUserUseCase implements AdminUserUseCase {
     public FakeAdminUserUseCase() {
         adminUserSummaryResponseDtoList.add(
                 AdminUserSummaryResponseDto.builder()
-                        .userGuid(TEST_GUID_1)
+                        .userGuid(TEST_USER_GUID_1)
                         .email(TEST_EMAIL_1)
                         .username(TEST_USERNAME_1)
                         .blocked(false)
@@ -26,7 +26,7 @@ public class FakeAdminUserUseCase implements AdminUserUseCase {
         );
         adminUserSummaryResponseDtoList.add(
                 AdminUserSummaryResponseDto.builder()
-                        .userGuid(TEST_GUID_2)
+                        .userGuid(TEST_USER_GUID_2)
                         .email(TEST_EMAIL_2)
                         .username(TEST_USERNAME_2)
                         .blocked(false)

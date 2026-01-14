@@ -27,8 +27,8 @@ import teamdevhub.devhub.port.out.auth.TokenParseProvider;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static teamdevhub.devhub.constant.TestConstant.TEST_EMAIL_1;
-import static teamdevhub.devhub.constant.TestConstant.TEST_GUID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 @ExtendWith(MockitoExtension.class)
 class JwtAuthorizationFilterTest {
@@ -95,7 +95,7 @@ class JwtAuthorizationFilterTest {
     @DisplayName("유효한_액세스_토큰이면_Authentication_을_설정하고_다음_필터를_실행한다")
     void setAuthenticationAndProceedIfAccessTokenValid() throws Exception {
         String token = "Bearer valid";
-        Claims claims = makeClaims(TEST_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        Claims claims = makeClaims(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
 
         when(tokenParseProvider.resolveToken(httpServletRequest)).thenReturn(token);
         when(tokenParseProvider.removeBearer(token)).thenReturn("validToken");
@@ -108,7 +108,7 @@ class JwtAuthorizationFilterTest {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assertThat(authentication).isNotNull();
         AuthenticatedUser user = (AuthenticatedUser) authentication.getPrincipal();
-        assertThat(user.userGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(user.userGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(user.email()).isEqualTo(TEST_EMAIL_1);
         assertThat(authentication.getAuthorities())
                 .extracting(GrantedAuthority::getAuthority)

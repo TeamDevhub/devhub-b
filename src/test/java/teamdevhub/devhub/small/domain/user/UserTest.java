@@ -15,15 +15,15 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class UserTest {
 
     @Test
-    @DisplayName("관리자_계정은_관심_포지션과_보유_스킬이_빈_값이다")
+    @DisplayName("관리자_권한의_사용자를_생성한다")
     void isAdminAccountPositionsAndSkillsEmpty() {
         // given, when
-        User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
+        User adminUser = User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
         // then
         assertThat(adminUser.getUserRole()).isEqualTo(UserRole.ADMIN);
@@ -36,13 +36,13 @@ class UserTest {
 
     // need to change
     @Test
-    @DisplayName("관심_포지션과_보유_스킬을_리스트로_받고_일반_유저를_생성한다")
+    @DisplayName("일반_권한의_사용자를_생성한다")
     void createUserWithPositionsAndSkills() {
         // given,when
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // then
-        assertThat(user.getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(user.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(user.getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(user.getPassword()).isEqualTo(TEST_PASSWORD_1);
         assertThat(user.getUsername()).isEqualTo(TEST_USERNAME_1);
@@ -54,12 +54,12 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("이메일_값이_공백이면_예외를_던진다")
+    @DisplayName("사용자의_이메일_값이_공백이면_예외를_던진다")
     void throwIfEmailIsBlank() {
 
         assertThatThrownBy(
                 // given,when
-                () -> User.createGeneralUser(TEST_GUID_1, "", TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1)
+                () -> User.createGeneralUser(TEST_USER_GUID_1, "", TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1)
         )
                 // then
                 .isInstanceOf(DomainRuleException.class)
@@ -67,12 +67,12 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("비밀번호_길이가_8자보다_짧으면_예외를_던진다")
+    @DisplayName("사용자의_비밀번호_길이가_8글자보다_짧으면_예외를_던진다")
     void throwIfPasswordTooShort() {
 
         assertThatThrownBy(
                 // given,when
-                () -> User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, "123456", TEST_USERNAME_1, TEST_INTRO_1)
+                () -> User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, "123456", TEST_USERNAME_1, TEST_INTRO_1)
         )
                 // then
                 .isInstanceOf(DomainRuleException.class)
@@ -80,20 +80,10 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("관리자_계정은_보유_스킬이_빈_값이어도_예외를_던지지_않는다")
-    void allowAdminWithEmptySkills() {
-        // given, when
-        User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
-
-        // then
-        assertThat(adminUser.getUserRole()).isEqualTo(UserRole.ADMIN);
-    }
-
-    @Test
-    @DisplayName("탈퇴한_회원은_deleted_값이_true_다")
+    @DisplayName("탈퇴한_사용자는_deleted_값이_true_다")
     void isDeletedUser() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // when
         user.withdraw();
@@ -107,7 +97,7 @@ class UserTest {
     @DisplayName("이미_탈퇴한_회원이_재탈퇴를_요청하면_예외를_던진다")
     void throwIfAlreadyDeleted() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         user.withdraw();
 
         // when
@@ -118,24 +108,25 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("사용자_프로필_정보를_새로운_값으로_변경하면_기존_값이_변경된다")
+    @DisplayName("사용자_프로필_정보를_새로운값으로_변경하면_기존값이_변경된다")
     void updateUserProfile() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // when
         user.updateUsernameAndIntroduction(NEW_USERNAME, NEW_INTRO);
 
         // then
+        assertThat(user.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(user.getUsername()).isEqualTo(NEW_USERNAME);
         assertThat(user.getIntroduction()).isEqualTo(NEW_INTRO);
     }
 
     @Test
-    @DisplayName("빈_값_또는_이전과_같은_값으로_변경하면_기존_값은_변경되지_않는다")
-    void updateUserProfileIfNotBlankOrChanged() {
+    @DisplayName("변경을_요청한_값이_빈값_또는_이전과_같은_값이라면_기존값은_변경되지_않는다")
+    void keepUserProfileIfNotBlankOrChanged() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // when
         user.updateUsernameAndIntroduction("", null);
@@ -146,47 +137,70 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("관심포지션_변경_있으면_결과는_changed_이다")
-    void changePositions_returnsChangedWhenModified() {
+    @DisplayName("관심포지션이_변경되면_UserPositionChangeResult_의_changed_는_true_이다")
+    void changedIsTrueWhenPositionsChange() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
-        UserPosition pos1 = new UserPosition(TEST_GUID_1, "001");
-        user.loadPositionsAndSkills(new HashSet<>(Set.of(pos1)), new HashSet<>()); // mutable Set
-
-        UserPosition pos2 = new UserPosition(TEST_GUID_1, "002");
-        Set<UserPosition> newPositions = new HashSet<>(Set.of(pos1, pos2)); // mutable Set
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        UserPosition oldPosition = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
+        user.loadPositionsAndSkills(new HashSet<>(Set.of(oldPosition)), new HashSet<>());
 
         // when
-        UserPositionChangeResult result = user.changePositions(newPositions);
+        UserPosition newPosition1 = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
+        UserPosition newPosition2 = new UserPosition(TEST_USER_GUID_1, NEW_POSITION_CD);
+        Set<UserPosition> changedPositions = new HashSet<>(Set.of(newPosition1, newPosition2));
+        UserPositionChangeResult userPositionChangeResult = user.changePositions(changedPositions);
 
         // then
-        assertThat(result.changed()).isTrue();
-        assertThat(result.previousPositions()).containsExactlyInAnyOrder(pos1);
-        assertThat(result.currentPositions()).containsExactlyInAnyOrder(pos1, pos2);
+        assertThat(userPositionChangeResult.changed()).isTrue();
+        assertThat(userPositionChangeResult.previousPositions()).containsExactlyInAnyOrder(oldPosition);
+        assertThat(userPositionChangeResult.currentPositions()).containsExactlyInAnyOrder(newPosition1, newPosition2);
     }
 
     @Test
-    @DisplayName("관심포지션_변경_없으면_unchanged_결과를_반환한다")
-    void changePositions_returnsUnchangedWhenSame() {
+    @DisplayName("관심포지션의_포지션코드가_null_로_들어오면_UserPositionChangeResult_의_changed_는_false_이다")
+    void changedIsFalseWhenPositionsCodeIsNull() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
-        UserPosition pos1 = new UserPosition(TEST_GUID_1, "001");
-        user.loadPositionsAndSkills(Set.of(pos1), Set.of());
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        UserPosition previousPosition = new UserPosition(TEST_USER_GUID_1, "001");
+        user.loadPositionsAndSkills(Set.of(previousPosition), Set.of());
 
         // when
-        UserPositionChangeResult result = user.changePositions(Set.of(pos1));
+        UserPosition newPosition = new UserPosition(TEST_USER_GUID_1, null);
+        Set<UserPosition> newPositions = new HashSet<>();
+        newPositions.add(newPosition);
+        UserPositionChangeResult userPositionChangeResult = user.changePositions(newPositions);
 
         // then
-        assertThat(result.changed()).isFalse();
-        assertThat(result.previousPositions()).containsExactly(pos1);
-        assertThat(result.currentPositions()).containsExactly(pos1);
+        assertThat(userPositionChangeResult.changed()).isFalse();
+        assertThat(userPositionChangeResult.previousPositions()).containsExactly(previousPosition);
+        assertThat(userPositionChangeResult.currentPositions()).containsExactly(previousPosition);
     }
 
     @Test
-    @DisplayName("관심포지션_null_또는_빈값이면_unchanged_반환")
-    void changePositions_returnsUnchangedWhenNullOrEmpty() {
+    @DisplayName("관심포지션의_포지션코드가_동일한_값으로_들어오면_UserPositionChangeResult_의_changed_는_false_이다")
+    void changedIsFalseWhenPositionsCodeIsSameValue() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        UserPosition previousPosition = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
+        user.loadPositionsAndSkills(Set.of(previousPosition), Set.of());
+
+        // when
+        UserPosition newPosition = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
+        Set<UserPosition> newPositions = new HashSet<>();
+        newPositions.add(newPosition);
+        UserPositionChangeResult userPositionChangeResult = user.changePositions(newPositions);
+
+        // then
+        assertThat(userPositionChangeResult.changed()).isFalse();
+        assertThat(userPositionChangeResult.previousPositions()).containsExactly(previousPosition);
+        assertThat(userPositionChangeResult.currentPositions()).containsExactly(newPosition);
+    }
+
+    @Test
+    @DisplayName("관심포지션의_값_자체가_null_또는_빈값이면_UserPositionChangeResult_의_changed_는_false_이다")
+    void changedIsFalseWhenUserPositionsIsNullOrEmpty() {
+        // given
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // when
         UserPositionChangeResult nullResult = user.changePositions(null);
@@ -198,47 +212,77 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("보유스킬_변경_있으면_changed_결과를_반환한다")
-    void changeSkills_returnsChangedWhenModified() {
+    @DisplayName("보유스킬이_변경되면_UserSkillChangeResult_의_changed_는_true_이다")
+    void changedIsTrueWhenSkillsChange() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
-        UserSkill skill1 = new UserSkill(TEST_GUID_1, "SKILL_001");
-        user.loadPositionsAndSkills(Set.of(), new HashSet<>(Set.of(skill1)));
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
-        UserSkill skill2 = new UserSkill(TEST_GUID_1, "SKILL_002");
-        Set<UserSkill> newSkills = new HashSet<>(Set.of(skill1, skill2));
+        UserSkill oldSkill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
+        user.loadPositionsAndSkills(Set.of(), new HashSet<>(Set.of(oldSkill)));
 
         // when
-        UserSkillChangeResult result = user.changeSkills(newSkills);
+        UserSkill newSkill1 = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
+        UserSkill newSkill2 = new UserSkill(TEST_USER_GUID_1, NEW_SKILL_CD);
+        Set<UserSkill> changedSkills = new HashSet<>(Set.of(newSkill1, newSkill2));
+
+        UserSkillChangeResult result = user.changeSkills(changedSkills);
 
         // then
         assertThat(result.changed()).isTrue();
-        assertThat(result.previousSkills()).containsExactly(skill1);
-        assertThat(result.currentSkills()).containsExactlyInAnyOrder(skill1, skill2);
+        assertThat(result.previousSkills()).containsExactly(oldSkill);
+        assertThat(result.currentSkills()).containsExactlyInAnyOrder(newSkill1, newSkill2);
     }
 
+
     @Test
-    @DisplayName("보유스킬_변경_없으면_unchanged_결과를_반환한다")
-    void changeSkills_returnsUnchangedWhenSame() {
+    @DisplayName("보유스킬의_스킬코드가_null_로_들어오면_UserSkillChangeResult_의_changed_는_false_이다")
+    void changedIsFalseWhenSkillsCodeIsNull() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
-        UserSkill skill1 = new UserSkill(TEST_GUID_1, "SKILL_001");
-        user.loadPositionsAndSkills(Set.of(), Set.of(skill1));
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+
+        UserSkill previousSkill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
+        user.loadPositionsAndSkills(Set.of(), Set.of(previousSkill));
 
         // when
-        UserSkillChangeResult result = user.changeSkills(Set.of(skill1));
+        UserSkill newSkill = new UserSkill(TEST_USER_GUID_1, null);
+        Set<UserSkill> newSkills = new HashSet<>();
+        newSkills.add(newSkill);
+
+        UserSkillChangeResult result = user.changeSkills(newSkills);
 
         // then
         assertThat(result.changed()).isFalse();
-        assertThat(result.previousSkills()).containsExactly(skill1);
-        assertThat(result.currentSkills()).containsExactly(skill1);
+        assertThat(result.previousSkills()).containsExactly(previousSkill);
+        assertThat(result.currentSkills()).containsExactly(previousSkill);
     }
 
     @Test
-    @DisplayName("보유스킬_null_또는_빈값이면_unchanged_반환")
-    void changeSkills_returnsUnchangedWhenNullOrEmpty() {
+    @DisplayName("보유스킬의_스킬코드가_동일한_값으로_들어오면_UserSkillChangeResult_의_changed_는_false_이다")
+    void changedIsFalseWhenSkillsCodeIsSameValue() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+
+        UserSkill previousSkill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
+        user.loadPositionsAndSkills(Set.of(), Set.of(previousSkill));
+
+        // when
+        UserSkill newSkill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
+        Set<UserSkill> newSkills = new HashSet<>();
+        newSkills.add(newSkill);
+
+        UserSkillChangeResult result = user.changeSkills(newSkills);
+
+        // then
+        assertThat(result.changed()).isFalse();
+        assertThat(result.previousSkills()).containsExactly(previousSkill);
+        assertThat(result.currentSkills()).containsExactly(newSkill);
+    }
+
+    @Test
+    @DisplayName("보유스킬의_값_자체가_null_또는_빈값이면_UserSkillChangeResult_의_changed_는_false_이다")
+    void changedIsFalseWhenUserSkillsIsNullOrEmpty() {
+        // given
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // when
         UserSkillChangeResult nullResult = user.changeSkills(null);
@@ -250,19 +294,19 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("loadPositionsAndSkills_로_포지션과_스킬을_초기화한다")
+    @DisplayName("사용자의_관심포지션과_보유스킬을_초기화한다")
     void loadPositionsAndSkills_initializesPositionsAndSkills() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
-        UserPosition pos = new UserPosition(TEST_GUID_1, "001");
-        UserSkill skill = new UserSkill(TEST_GUID_1, "SKILL_001");
+        UserPosition userPosition = new UserPosition(TEST_USER_GUID_1, "001");
+        UserSkill userSkill = new UserSkill(TEST_USER_GUID_1, "SKILL_001");
 
         // when
-        user.loadPositionsAndSkills(Set.of(pos), Set.of(skill));
+        user.loadPositionsAndSkills(Set.of(userPosition), Set.of(userSkill));
 
         // then
-        assertThat(user.getPositions()).containsExactly(pos);
-        assertThat(user.getSkills()).containsExactly(skill);
+        assertThat(user.getPositions()).containsExactly(userPosition);
+        assertThat(user.getSkills()).containsExactly(userSkill);
     }
 }

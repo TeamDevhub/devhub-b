@@ -14,7 +14,7 @@ import teamdevhub.devhub.fake.pure.repository.FakeRefreshTokenRepository;
 import teamdevhub.devhub.fake.pure.usecase.FakeUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class AuthServiceTest {
 
@@ -49,8 +49,8 @@ class AuthServiceTest {
 
         // then
         assertThat(loginResponseDto).isNotNull();
-        assertThat(loginResponseDto.getAccessToken()).isEqualTo("access-token-" + TEST_GUID_1);
-        assertThat(loginResponseDto.getRefreshToken()).isEqualTo("refresh-token-" + TEST_GUID_1);
+        assertThat(loginResponseDto.getAccessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
+        assertThat(loginResponseDto.getRefreshToken()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
         assertThat(loginResponseDto.getPrefix()).isEqualTo("Bearer ");
     }
 
@@ -64,10 +64,10 @@ class AuthServiceTest {
         authService.login(loginCommand);
 
         // then
-        RefreshToken refreshToken = fakeRefreshTokenRepository.findByUserGuid(TEST_GUID_1);
+        RefreshToken refreshToken = fakeRefreshTokenRepository.findByUserGuid(TEST_USER_GUID_1);
 
         assertThat(refreshToken).isNotNull();
-        assertThat(refreshToken.token()).isEqualTo("refresh-token-" + TEST_GUID_1);
+        assertThat(refreshToken.token()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
     }
 
     @Test
@@ -80,16 +80,16 @@ class AuthServiceTest {
         authService.login(loginCommand);
 
         // then
-        assertThat(fakeUserUseCase.isLoginTimeUpdated(TEST_GUID_1)).isTrue();
+        assertThat(fakeUserUseCase.isLoginTimeUpdated(TEST_USER_GUID_1)).isTrue();
     }
 
     @Test
     @DisplayName("리프레시토큰으로_액세스토큰을_재발급할_수_있다")
     void refreshAccessTokenUsingRefreshToken() {
         // given
-        String refreshToken = "refresh-token-" + TEST_GUID_1;
+        String refreshToken = "refresh-token-" + TEST_USER_GUID_1;
         fakeRefreshTokenRepository.save(
-                RefreshToken.of(TEST_GUID_1, refreshToken)
+                RefreshToken.of(TEST_USER_GUID_1, refreshToken)
         );
 
         // when
@@ -97,19 +97,19 @@ class AuthServiceTest {
 
         // then
         assertThat(response).isNotNull();
-        assertThat(response.getAccessToken()).isEqualTo("access-token-" + TEST_GUID_1);
+        assertThat(response.getAccessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
     }
 
     @Test
     @DisplayName("로그아웃을_하면_리프레시토큰이_삭제된다")
     void deleteRefreshTokenWhenLogout() {
         // given
-        fakeRefreshTokenRepository.save(RefreshToken.of(TEST_GUID_1, "refresh-token-" + TEST_GUID_1));
+        fakeRefreshTokenRepository.save(RefreshToken.of(TEST_USER_GUID_1, "refresh-token-" + TEST_USER_GUID_1));
 
         // when
-        authService.revoke(TEST_GUID_1);
+        authService.revoke(TEST_USER_GUID_1);
 
         // then
-        assertThat(fakeRefreshTokenRepository.findByUserGuid(TEST_GUID_1)).isNull();
+        assertThat(fakeRefreshTokenRepository.findByUserGuid(TEST_USER_GUID_1)).isNull();
     }
 }

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class AuthControllerTest {
 
@@ -88,7 +88,7 @@ class AuthControllerTest {
     void canVerifyCodeWhenLogoutSucceed() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                TEST_GUID_1,
+                TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
@@ -96,6 +96,6 @@ class AuthControllerTest {
 
         // when, then
         assertThat(authController.revoke(authenticatedUser).getBody().getCode()).isEqualTo(SuccessCode.LOGOUT_SUCCESS.getCode());
-        assertThat(fakeAuthUseCase.getRevokedUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(fakeAuthUseCase.getRevokedUserGuid()).isEqualTo(TEST_USER_GUID_1);
     }
 }

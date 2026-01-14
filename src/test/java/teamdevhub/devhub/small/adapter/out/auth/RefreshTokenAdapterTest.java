@@ -11,7 +11,7 @@ import teamdevhub.devhub.fake.spring.persistence.auth.FakeJpaRefreshTokenReposit
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.constant.TestConstant.TEST_GUID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 class RefreshTokenAdapterTest {
 
@@ -30,13 +30,13 @@ class RefreshTokenAdapterTest {
     @DisplayName("리프레시_토큰이_없으면_새로_저장된다")
     void saveRefreshTokenIfNotExists() {
         // given
-        RefreshToken refreshToken = RefreshToken.of(TEST_GUID_1, TOKEN_1);
+        RefreshToken refreshToken = RefreshToken.of(TEST_USER_GUID_1, TOKEN_1);
 
         // when
         refreshTokenAdapter.save(refreshToken);
 
         // then
-        RefreshToken foundRefreshToken = refreshTokenAdapter.findByUserGuid(TEST_GUID_1);
+        RefreshToken foundRefreshToken = refreshTokenAdapter.findByUserGuid(TEST_USER_GUID_1);
         assertThat(foundRefreshToken.token()).isEqualTo(TOKEN_1);
     }
 
@@ -44,13 +44,13 @@ class RefreshTokenAdapterTest {
     @DisplayName("기존_리프레시_토큰이_있으면_rotate_된다")
     void rotateIfRefreshTokenExists() {
         // given
-        refreshTokenAdapter.save(RefreshToken.of(TEST_GUID_1, TOKEN_1));
+        refreshTokenAdapter.save(RefreshToken.of(TEST_USER_GUID_1, TOKEN_1));
 
         // when
-        refreshTokenAdapter.save(RefreshToken.of(TEST_GUID_1, TOKEN_2));
+        refreshTokenAdapter.save(RefreshToken.of(TEST_USER_GUID_1, TOKEN_2));
 
         // then
-        RefreshToken foundRefreshToken = refreshTokenAdapter.findByUserGuid(TEST_GUID_1);
+        RefreshToken foundRefreshToken = refreshTokenAdapter.findByUserGuid(TEST_USER_GUID_1);
         assertThat(foundRefreshToken.token()).isEqualTo(TOKEN_2);
     }
 
@@ -60,7 +60,7 @@ class RefreshTokenAdapterTest {
         // then
         assertThatThrownBy(
                 // given, when
-                () -> refreshTokenAdapter.findByUserGuid(TEST_GUID_1))
+                () -> refreshTokenAdapter.findByUserGuid(TEST_USER_GUID_1))
                 .isInstanceOf(AdapterDataException.class)
                 .hasMessageContaining(ErrorCode.REFRESH_TOKEN_INVALID.getMessage());
     }
@@ -69,13 +69,13 @@ class RefreshTokenAdapterTest {
     @DisplayName("리프레시_토큰을_삭제할_수_있다")
     void deleteRefreshToken() {
         // given
-        refreshTokenAdapter.save(RefreshToken.of(TEST_GUID_1, TOKEN_1));
+        refreshTokenAdapter.save(RefreshToken.of(TEST_USER_GUID_1, TOKEN_1));
 
         // when
-        refreshTokenAdapter.deleteByUserGuid(TEST_GUID_1);
+        refreshTokenAdapter.deleteByUserGuid(TEST_USER_GUID_1);
 
         // then
-        assertThatThrownBy(() -> refreshTokenAdapter.findByUserGuid(TEST_GUID_1))
+        assertThatThrownBy(() -> refreshTokenAdapter.findByUserGuid(TEST_USER_GUID_1))
                 .isInstanceOf(AdapterDataException.class);
     }
 }

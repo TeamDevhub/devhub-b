@@ -10,7 +10,7 @@ import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserAuthenticationTest {
 
@@ -19,7 +19,7 @@ public class UserAuthenticationTest {
     void wrapAuthenticatedUserToUserDetails() {
         // given, when
         AuthenticatedUser user = new AuthenticatedUser(
-                TEST_GUID_1,
+                TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
@@ -28,7 +28,7 @@ public class UserAuthenticationTest {
 
         // then
         assertThat(authentication.getUser()).isEqualTo(user);
-        assertThat(authentication.getUsername()).isEqualTo(TEST_GUID_1);
+        assertThat(authentication.getUsername()).isEqualTo(TEST_USER_GUID_1);
         assertThat(authentication.getPassword()).isEqualTo(TEST_PASSWORD_1);
 
         Collection<?> authorities = authentication.getAuthorities();
@@ -40,6 +40,6 @@ public class UserAuthenticationTest {
         assertThat(authentication.isAccountNonLocked()).isTrue();
         assertThat(authentication.isCredentialsNonExpired()).isTrue();
         assertThat(authentication.isEnabled()).isTrue();
-        assertThat(authentication.getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(authentication.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
     }
 }

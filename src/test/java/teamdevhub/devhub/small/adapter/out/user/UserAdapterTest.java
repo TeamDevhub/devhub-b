@@ -17,7 +17,7 @@ import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class UserAdapterTest {
 
@@ -39,13 +39,13 @@ class UserAdapterTest {
     @DisplayName("관리자_계정을_저장한다")
     void saveAdminAccount() {
         // given
-        User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
+        User adminUser = User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
         // when
         userAdapter.saveAdminUser(adminUser);
 
         // then
-        UserEntity saved = fakeJpaUserRepository.findByUserGuid(ADMIN_GUID).orElse(null);
+        UserEntity saved = fakeJpaUserRepository.findByUserGuid(ADMIN_USER_GUID).orElse(null);
         assertThat(saved).isNotNull();
         assertThat(saved.getEmail()).isEqualTo(ADMIN_EMAIL);
     }
@@ -54,7 +54,7 @@ class UserAdapterTest {
     @DisplayName("로그인을_시도하면_ID_값인_이메일로_AuthenticatedUser_를_조회한다")
     void getAuthenticatedUserByLoginId() {
         // given
-        User adminUser = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
+        User adminUser = User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
         fakeJpaUserRepository.saveForSignup(UserMapper.toEntity(adminUser));
 
         // when
@@ -69,13 +69,13 @@ class UserAdapterTest {
     @DisplayName("새로운_사용자를_생성하면_사용자_정보를_저장한다")
     void saveUserWithPositionsAndSkills() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // when
         User savedUser = userAdapter.save(user);
 
         // then
-        assertThat(savedUser.getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(savedUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(savedUser.getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(savedUser.getPassword()).isEqualTo(TEST_PASSWORD_1);
         assertThat(savedUser.getUsername()).isEqualTo(TEST_USERNAME_1);
@@ -85,22 +85,22 @@ class UserAdapterTest {
     @DisplayName("사용자_식별키로_User_를_조회한다")
     void getUserByIdentifier() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
 
         // when
-        User foundUser = userAdapter.findByUserGuid(TEST_GUID_1);
+        User foundUser = userAdapter.findByUserGuid(TEST_USER_GUID_1);
 
         // then
         assertThat(foundUser).isNotNull();
-        assertThat(foundUser.getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(foundUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
     }
 
     @Test
     @DisplayName("사용자_프로필_정보를_수정하면_변경된_값이_저장된다")
     void updateUserProfile() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         user.updateUsernameAndIntroduction(NEW_USERNAME, NEW_INTRO);
 
         // when
@@ -119,7 +119,7 @@ class UserAdapterTest {
     @DisplayName("회원탈퇴한_사용자의_deleted_값은_true_이다")
     void isDeletedUser() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
         user.withdraw();
 
@@ -137,7 +137,7 @@ class UserAdapterTest {
     @DisplayName("사용자_권한이_일치한다면_true_를_반환한다")
     void isUserRoleMatched() {
         // given
-        User user = User.createAdminUser(ADMIN_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
+        User user = User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
         fakeJpaUserRepository.save(UserMapper.toEntity(user));
 
         // when

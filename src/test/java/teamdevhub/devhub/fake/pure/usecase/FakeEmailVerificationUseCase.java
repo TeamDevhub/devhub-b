@@ -10,7 +10,7 @@ import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
 import teamdevhub.devhub.service.exception.BusinessRuleException;
 
-import static teamdevhub.devhub.constant.TestConstant.EMAIL_CODE;
+import static teamdevhub.devhub.constant.UserTestConstant.EMAIL_CODE;
 
 public class FakeEmailVerificationUseCase implements EmailVerificationUseCase {
 

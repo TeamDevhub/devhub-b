@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import teamdevhub.devhub.adapter.out.common.provider.password.BCryptPasswordPolicyProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.TEST_PASSWORD_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_PASSWORD_1;
 
 class BCryptPasswordPolicyProviderTest {
 

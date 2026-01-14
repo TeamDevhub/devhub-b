@@ -12,7 +12,7 @@ import teamdevhub.devhub.service.admin.user.AdminUserService;
 import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class AdminUserServiceTest {
 
@@ -30,7 +30,7 @@ class AdminUserServiceTest {
     void canFetchUserList() {
         // given
         User user1 = User.createGeneralUser(
-                TEST_GUID_1,
+                TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 TEST_USERNAME_1,
@@ -38,7 +38,7 @@ class AdminUserServiceTest {
         );
 
         User user2 = User.createGeneralUser(
-                TEST_GUID_2,
+                TEST_USER_GUID_2,
                 TEST_EMAIL_2,
                 TEST_PASSWORD_2,
                 TEST_USERNAME_2,

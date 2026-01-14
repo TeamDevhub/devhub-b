@@ -4,14 +4,14 @@ import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
 import teamdevhub.devhub.port.out.auth.AuthenticatedUserProvider;
 
-import static teamdevhub.devhub.constant.TestConstant.TEST_GUID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 public class FakeAuthenticatedUserProvider implements AuthenticatedUserProvider {
 
     @Override
     public AuthenticatedUser getAuthenticatedUser(String email, String password) {
         return new AuthenticatedUser(
-                TEST_GUID_1,
+                TEST_USER_GUID_1,
                 email,
                 password,
                 UserRole.USER

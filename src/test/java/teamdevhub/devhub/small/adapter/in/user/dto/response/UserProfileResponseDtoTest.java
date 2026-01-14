@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.adapter.in.user.dto.response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
-import teamdevhub.devhub.constant.TestConstant;
+import teamdevhub.devhub.constant.UserTestConstant;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.vo.audit.AuditInfo;
@@ -26,19 +26,19 @@ class UserProfileResponseDtoTest {
         );
 
         User user = User.builder()
-                .userGuid(TestConstant.TEST_GUID_1)
-                .email(TestConstant.TEST_EMAIL_1)
-                .password(TestConstant.TEST_PASSWORD_1)
+                .userGuid(UserTestConstant.TEST_USER_GUID_1)
+                .email(UserTestConstant.TEST_EMAIL_1)
+                .password(UserTestConstant.TEST_PASSWORD_1)
                 .userRole(UserRole.USER)
-                .username(TestConstant.TEST_USERNAME_1)
-                .introduction(TestConstant.TEST_INTRO_1)
-                .positions(TestConstant.TEST_POSITIONS)
-                .skills(TestConstant.TEST_SKILLS)
-                .mannerDegree(TestConstant.TEST_MANNER)
-                .blocked(TestConstant.TEST_BLOCKED)
+                .username(UserTestConstant.TEST_USERNAME_1)
+                .introduction(UserTestConstant.TEST_INTRO_1)
+                .positions(UserTestConstant.TEST_USER_POSITIONS)
+                .skills(UserTestConstant.TEST_USER_SKILLS)
+                .mannerDegree(UserTestConstant.TEST_MANNER)
+                .blocked(UserTestConstant.TEST_BLOCKED)
                 .blockEndDate(null)
-                .deleted(TestConstant.TEST_DELETED)
-                .lastLoginDateTime(TestConstant.TEST_LAST_LOGIN)
+                .deleted(UserTestConstant.TEST_DELETED)
+                .lastLoginDateTime(UserTestConstant.TEST_LAST_LOGIN)
                 .auditInfo(auditInfo)
                 .build();
 
@@ -48,17 +48,17 @@ class UserProfileResponseDtoTest {
         // then
         assertThat(userProfileResponseDto.getPassword()).isNull();
         assertThat(userProfileResponseDto.getUserRole()).isNull();
-        assertThat(userProfileResponseDto.getUserGuid()).isEqualTo(TestConstant.TEST_GUID_1);
-        assertThat(userProfileResponseDto.getEmail()).isEqualTo(TestConstant.TEST_EMAIL_1);
-        assertThat(userProfileResponseDto.getUsername()).isEqualTo(TestConstant.TEST_USERNAME_1);
-        assertThat(userProfileResponseDto.getIntroduction()).isEqualTo(TestConstant.TEST_INTRO_1);
-        assertThat(userProfileResponseDto.getPositionList()).containsExactlyElementsOf(TestConstant.TEST_POSITION_LIST);
-        assertThat(userProfileResponseDto.getSkillList()).containsExactlyElementsOf(TestConstant.TEST_SKILL_LIST);
-        assertThat(userProfileResponseDto.getMannerDegree()).isEqualTo(TestConstant.TEST_MANNER);
-        assertThat(userProfileResponseDto.isBlocked()).isEqualTo(TestConstant.TEST_BLOCKED);
+        assertThat(userProfileResponseDto.getUserGuid()).isEqualTo(UserTestConstant.TEST_USER_GUID_1);
+        assertThat(userProfileResponseDto.getEmail()).isEqualTo(UserTestConstant.TEST_EMAIL_1);
+        assertThat(userProfileResponseDto.getUsername()).isEqualTo(UserTestConstant.TEST_USERNAME_1);
+        assertThat(userProfileResponseDto.getIntroduction()).isEqualTo(UserTestConstant.TEST_INTRO_1);
+        assertThat(userProfileResponseDto.getPositionList()).containsExactlyElementsOf(UserTestConstant.TEST_POSITION_LIST);
+        assertThat(userProfileResponseDto.getSkillList()).containsExactlyElementsOf(UserTestConstant.TEST_SKILL_LIST);
+        assertThat(userProfileResponseDto.getMannerDegree()).isEqualTo(UserTestConstant.TEST_MANNER);
+        assertThat(userProfileResponseDto.isBlocked()).isEqualTo(UserTestConstant.TEST_BLOCKED);
         assertThat(userProfileResponseDto.getBlockEndDate()).isNull();
-        assertThat(userProfileResponseDto.isDeleted()).isEqualTo(TestConstant.TEST_DELETED);
-        assertThat(userProfileResponseDto.getLastLoginDateTime()).isEqualTo(TestConstant.TEST_LAST_LOGIN);
+        assertThat(userProfileResponseDto.isDeleted()).isEqualTo(UserTestConstant.TEST_DELETED);
+        assertThat(userProfileResponseDto.getLastLoginDateTime()).isEqualTo(UserTestConstant.TEST_LAST_LOGIN);
         assertThat(userProfileResponseDto.getCreatedBy()).isEqualTo(auditInfo.createdBy());
         assertThat(userProfileResponseDto.getCreatedAt()).isEqualTo(auditInfo.createdAt());
         assertThat(userProfileResponseDto.getModifiedBy()).isEqualTo(auditInfo.modifiedBy());

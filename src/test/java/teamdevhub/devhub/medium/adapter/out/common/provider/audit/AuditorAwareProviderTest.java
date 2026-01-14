@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class AuditorAwareProviderTest {
 
@@ -71,7 +71,7 @@ class AuditorAwareProviderTest {
         // given
         AuthenticatedUser authenticatedUser =
                 new AuthenticatedUser(
-                        TEST_GUID_1,
+                        TEST_USER_GUID_1,
                         TEST_EMAIL_1,
                         TEST_PASSWORD_1,
                         UserRole.USER
@@ -99,7 +99,7 @@ class AuditorAwareProviderTest {
     void returnEmailIfPrincipalIsAuthenticatedUser() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                TEST_GUID_1,
+                TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER

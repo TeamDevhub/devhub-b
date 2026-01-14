@@ -13,7 +13,7 @@ import teamdevhub.devhub.port.in.user.UserUseCase;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserAuthenticationServiceTest {
 
@@ -23,7 +23,7 @@ public class UserAuthenticationServiceTest {
         // given
         UserUseCase userUseCase = mock(UserUseCase.class);
         AuthenticatedUser user = new AuthenticatedUser(
-                TEST_GUID_1,
+                TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
@@ -38,7 +38,7 @@ public class UserAuthenticationServiceTest {
         assertThat(details).isInstanceOf(UserAuthentication.class);
         UserAuthentication auth = (UserAuthentication) details;
         assertThat(auth.getUser()).isEqualTo(user);
-        assertThat(auth.getUsername()).isEqualTo(TEST_GUID_1);
+        assertThat(auth.getUsername()).isEqualTo(TEST_USER_GUID_1);
         assertThat(auth.getPassword()).isEqualTo(TEST_PASSWORD_1);
     }
 

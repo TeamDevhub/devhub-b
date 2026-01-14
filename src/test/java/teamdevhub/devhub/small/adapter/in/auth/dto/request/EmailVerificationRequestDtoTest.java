@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.TEST_EMAIL_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
 
 class EmailVerificationRequestDtoTest {
 

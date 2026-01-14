@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.TEST_GUID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 public class UserSkillAdapterTest {
 
@@ -22,7 +22,7 @@ public class UserSkillAdapterTest {
     @BeforeEach
     void init() {
         FakeJpaUserSkillRepository jpaUserSkillRepository = new FakeJpaUserSkillRepository();
-        IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_GUID_1);
+        IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
         userSkillAdapter = new UserSkillAdapter(jpaUserSkillRepository, identifierProvider);
     }
 

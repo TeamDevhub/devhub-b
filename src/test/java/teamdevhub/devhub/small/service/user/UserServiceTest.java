@@ -25,7 +25,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class UserServiceTest {
 
@@ -45,7 +45,7 @@ class UserServiceTest {
         fakeUserPositionRepository = new FakeUserPositionRepository();
         fakeUserSkillRepository = new FakeUserSkillRepository();
 
-        FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_GUID_1);
+        FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
         fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
         fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
         fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
@@ -71,7 +71,7 @@ class UserServiceTest {
     @DisplayName("관리자_계정을_생성한다")
     void createAdminAccount() {
         // given
-        FakeUuidIdentifierProvider adminUuidProvider = new FakeUuidIdentifierProvider(ADMIN_GUID);
+        FakeUuidIdentifierProvider adminUuidProvider = new FakeUuidIdentifierProvider(ADMIN_USER_GUID);
         userService = new UserService(
                 fakeUserRepository,
                 fakeUserPositionRepository,
@@ -88,17 +88,17 @@ class UserServiceTest {
         userService.initializeAdminUser(ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
         // then
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_GUID)).isNotNull();
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_GUID).getUsername()).isEqualTo(ADMIN_USERNAME);
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_GUID).getPassword()).isEqualTo(fakePasswordPolicyProvider.encode(ADMIN_PASSWORD));
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_GUID).getUserRole()).isEqualTo(UserRole.ADMIN);
+        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID)).isNotNull();
+        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID).getUsername()).isEqualTo(ADMIN_USERNAME);
+        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID).getPassword()).isEqualTo(fakePasswordPolicyProvider.encode(ADMIN_PASSWORD));
+        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID).getUserRole()).isEqualTo(UserRole.ADMIN);
     }
 
     @Test
     @DisplayName("인증_인가_관련_사용자_정보를_조회한다")
     void fetchUserInfoForAuthentication() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
 
         // when
@@ -106,7 +106,7 @@ class UserServiceTest {
 
         // then
         assertThat(fakeUserRepository.findAuthenticatedUserByEmail(TEST_EMAIL_1)).isNotNull();
-        assertThat(fakeUserRepository.findAuthenticatedUserByEmail(TEST_EMAIL_1).userGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(fakeUserRepository.findAuthenticatedUserByEmail(TEST_EMAIL_1).userGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(fakeUserRepository.findAuthenticatedUserByEmail(TEST_EMAIL_1).email()).isEqualTo(TEST_EMAIL_1);
         assertThat(fakeUserRepository.findAuthenticatedUserByEmail(TEST_EMAIL_1).userRole()).isEqualTo(UserRole.USER);
     }
@@ -122,7 +122,7 @@ class UserServiceTest {
 
         // then
         assertThat(fakeEmailVerificationRepository.existUnexpiredCode(signupCommand.getEmail())).isFalse();
-        assertThat(fakeUserRepository.save(savedUser).getUserGuid()).isEqualTo(TEST_GUID_1);
+        assertThat(fakeUserRepository.save(savedUser).getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(fakeUserRepository.save(savedUser).getPassword()).isEqualTo(fakePasswordPolicyProvider.encode(TEST_PASSWORD_1));
     }
 
@@ -150,25 +150,25 @@ class UserServiceTest {
         userService.signup(signupCommand);
 
         // then
-        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID_1).getLastLoginDateTime()).isNull();
+        assertThat(fakeUserRepository.findByUserGuid(TEST_USER_GUID_1).getLastLoginDateTime()).isNull();
     }
 
     @Test
     @DisplayName("로그인을_하면_최종_로그인_일시가_변한다")
     void updateLastLoginDateWhenLogin() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
 
         // when
-        userService.updateLastLoginDateTime(TEST_GUID_1);
+        userService.updateLastLoginDateTime(TEST_USER_GUID_1);
 
         // then
         assertThat(fakeUserRepository.wasCalled("updateLastLoginDateTime"))
                 .isTrue();
         assertThat(fakeUserRepository.callCount("updateLastLoginDateTime"))
                 .isEqualTo(1);
-        assertThat(fakeUserRepository.lastLoginOf(TEST_GUID_1))
+        assertThat(fakeUserRepository.lastLoginOf(TEST_USER_GUID_1))
                 .isEqualTo(fakeDateTimeProvider.now());
     }
 
@@ -176,7 +176,7 @@ class UserServiceTest {
     @DisplayName("회원_정보를_조회했을_때_모든_정보가_조회된다")
     void fetchAllUserInformation() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
 
         UserPosition userPosition = new UserPosition(user.getUserGuid(), TEST_POSITION_CD);
@@ -199,39 +199,39 @@ class UserServiceTest {
     @DisplayName("닉네임,자기소개는_값이_없거나_null_로_들어오면_사용자가_기본적으로_가지고_있는_값으로_유지된다")
     void nullOrEmptyUsernameAndIntroductionKeepsExistingValues() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
 
         // when
-        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_GUID_1,null,null,null,null);
+        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_USER_GUID_1,null,null,null,null);
         userService.updateProfile(updateProfileCommand);
 
         // then
-        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID_1).getUsername()).isEqualTo(user.getUsername());
-        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID_1).getIntroduction()).isEqualTo(user.getIntroduction());
+        assertThat(fakeUserRepository.findByUserGuid(TEST_USER_GUID_1).getUsername()).isEqualTo(user.getUsername());
+        assertThat(fakeUserRepository.findByUserGuid(TEST_USER_GUID_1).getIntroduction()).isEqualTo(user.getIntroduction());
     }
 
     @Test
     @DisplayName("닉네임,자기소개는_변경된_값으로_들어오면_해당_값으로_변경된다")
     void updateUsernameAndIntroductionCorrectly() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
 
         // when
-        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_GUID_1, NEW_USERNAME,NEW_INTRO,null,null);
+        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_USER_GUID_1, NEW_USERNAME,NEW_INTRO,null,null);
         userService.updateProfile(updateProfileCommand);
 
         // then
-        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID_1).getUsername()).isEqualTo(user.getUsername());
-        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID_1).getIntroduction()).isEqualTo(user.getIntroduction());
+        assertThat(fakeUserRepository.findByUserGuid(TEST_USER_GUID_1).getUsername()).isEqualTo(user.getUsername());
+        assertThat(fakeUserRepository.findByUserGuid(TEST_USER_GUID_1).getIntroduction()).isEqualTo(user.getIntroduction());
     }
 
     @Test
     @DisplayName("관심포지션이_값이_없거나_null_로_들어오면_사용자가_기본적으로_가지고_있는_값으로_유지된다")
     void nullOrEmptyUserPositionsKeepsExistingValues() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
 
         UserPosition userPosition = new UserPosition(user.getUserGuid(), TEST_POSITION_CD);
@@ -239,18 +239,18 @@ class UserServiceTest {
         fakeUserPositionRepository.saveAll(userPositions);
 
         // when
-        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_GUID_1,null,null,null,null);
+        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_USER_GUID_1,null,null,null,null);
         userService.updateProfile(updateProfileCommand);
 
         // then
-        assertThat(fakeUserPositionRepository.findByUserGuid(TEST_GUID_1)).isEqualTo(user.getPositions());
+        assertThat(fakeUserPositionRepository.findByUserGuid(TEST_USER_GUID_1)).isEqualTo(user.getPositions());
     }
 
     @Test
     @DisplayName("관심포지션이_새로운_값_으로_들어오면_새로운_값으로_변경된다")
     void updateNewUserPositionCorrectly() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
 
         UserPosition userPosition = new UserPosition(user.getUserGuid(), TEST_POSITION_CD);
@@ -258,18 +258,18 @@ class UserServiceTest {
         fakeUserPositionRepository.saveAll(userPositions);
 
         // when
-        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_GUID_1,null,null,NEW_POSITIONS,null);
+        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_USER_GUID_1,null,null, NEW_USER_POSITIONS,null);
         userService.updateProfile(updateProfileCommand);
 
         // then
-        assertThat(fakeUserPositionRepository.findByUserGuid(TEST_GUID_1)).isEqualTo(user.getPositions());
+        assertThat(fakeUserPositionRepository.findByUserGuid(TEST_USER_GUID_1)).isEqualTo(user.getPositions());
     }
 
     @Test
     @DisplayName("관심포지션이_기존_값과_새로운_값_으로_들어오면_합쳐진_값으로_변경된다")
     void updateUserPositionWithExistAndNewCorrectly() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
 
         UserPosition userPosition = new UserPosition(user.getUserGuid(), TEST_POSITION_CD);
@@ -280,9 +280,9 @@ class UserServiceTest {
         UserPosition userPosition1 = new UserPosition(user.getUserGuid(), TEST_POSITION_CD);
         UserPosition userPosition2 = new UserPosition(user.getUserGuid(), "002");
         Set<UserPosition> updateUserPosition = Set.of(userPosition1,userPosition2);
-        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_GUID_1,null,null, updateUserPosition,null);
+        UpdateProfileCommand updateProfileCommand = new UpdateProfileCommand(TEST_USER_GUID_1,null,null, updateUserPosition,null);
         userService.updateProfile(updateProfileCommand);
-        Set<UserPosition> positions = fakeUserPositionRepository.findByUserGuid(TEST_GUID_1);
+        Set<UserPosition> positions = fakeUserPositionRepository.findByUserGuid(TEST_USER_GUID_1);
 
         // then
         assertThat(positions)
@@ -295,24 +295,24 @@ class UserServiceTest {
     @DisplayName("회원탈퇴한_사용자의_deleted_값은_true_이다")
     void setDeletedTrueWhenUserWithdraws() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
         RefreshToken refreshToken = new RefreshToken(TEST_EMAIL_1, "testToken");
         fakeRefreshTokenRepository.save(refreshToken);
 
         // when
-        userService.withdrawUser(TEST_GUID_1);
+        userService.withdrawUser(TEST_USER_GUID_1);
 
         // then
-        assertThat(fakeUserRepository.findByUserGuid(TEST_GUID_1).isDeleted()).isTrue();
-        assertThat(fakeRefreshTokenRepository.findByUserGuid(TEST_GUID_1)).isNull();
+        assertThat(fakeUserRepository.findByUserGuid(TEST_USER_GUID_1).isDeleted()).isTrue();
+        assertThat(fakeRefreshTokenRepository.findByUserGuid(TEST_USER_GUID_1)).isNull();
     }
 
     @Test
     @DisplayName("일반_사용자는_USER_권한이_존재한다")
     void haveUserRoleForRegularUser() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
         fakeUserRepository.save(user);
 
         // when, then

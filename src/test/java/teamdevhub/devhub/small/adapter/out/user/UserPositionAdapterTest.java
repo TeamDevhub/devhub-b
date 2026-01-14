@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.TEST_GUID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 public class UserPositionAdapterTest {
 
@@ -23,7 +23,7 @@ public class UserPositionAdapterTest {
     @BeforeEach
     void init() {
         JpaUserPositionRepository jpaUserPositionRepository = new FakeJpaUserPositionRepository();
-        IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_GUID_1);
+        IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
         userPositionAdapter = new UserPositionAdapter(jpaUserPositionRepository, identifierProvider);
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class SignupRequestDtoTest {
 

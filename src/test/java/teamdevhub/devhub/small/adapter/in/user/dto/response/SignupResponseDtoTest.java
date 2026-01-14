@@ -6,7 +6,7 @@ import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.domain.user.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.TestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class SignupResponseDtoTest {
 
@@ -14,7 +14,7 @@ class SignupResponseDtoTest {
     @DisplayName("User_도메인을_SignupResponseDto_로_변환할_수_있다")
     void convertDomainToResponseDto() {
         // given
-        User user = User.createGeneralUser(TEST_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
 
         // when
         SignupResponseDto signupResponseDto = SignupResponseDto.fromDomain(user);
