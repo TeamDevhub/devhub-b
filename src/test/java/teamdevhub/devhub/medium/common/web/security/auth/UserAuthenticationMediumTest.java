@@ -12,7 +12,7 @@ import java.util.Collection;
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-public class UserAuthenticationTest {
+public class UserAuthenticationMediumTest {
 
     @Test
     @DisplayName("AuthenticatedUser_를_Wrapping_해서_UserDetails_가_반환된다")

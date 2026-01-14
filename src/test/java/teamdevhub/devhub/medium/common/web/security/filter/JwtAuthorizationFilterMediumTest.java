@@ -31,7 +31,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 @ExtendWith(MockitoExtension.class)
-class JwtAuthorizationFilterTest {
+class JwtAuthorizationFilterMediumTest {
 
     @Mock
     private TokenParseProvider tokenParseProvider;

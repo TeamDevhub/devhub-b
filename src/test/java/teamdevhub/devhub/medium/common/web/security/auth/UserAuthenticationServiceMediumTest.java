@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-public class UserAuthenticationServiceTest {
+public class UserAuthenticationServiceMediumTest {
 
     @Test
     @DisplayName("존재하는_이메일이면_UserAuthentication_을_반환한다")

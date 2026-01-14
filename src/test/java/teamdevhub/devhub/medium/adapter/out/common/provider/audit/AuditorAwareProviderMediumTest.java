@@ -18,7 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-class AuditorAwareProviderTest {
+class AuditorAwareProviderMediumTest {
 
     private AuditorAwareProvider auditorAwareProvider;
 

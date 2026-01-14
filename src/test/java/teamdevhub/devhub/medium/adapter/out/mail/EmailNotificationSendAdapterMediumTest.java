@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-class EmailNotificationSendAdapterTest {
+class EmailNotificationSendAdapterMediumTest {
 
     private JavaMailSender mailSender;
     private EmailNotificationSendAdapter emailNotificationSendAdapter;

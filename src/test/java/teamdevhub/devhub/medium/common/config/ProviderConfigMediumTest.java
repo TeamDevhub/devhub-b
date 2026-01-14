@@ -15,7 +15,7 @@ import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ProviderConfigTest {
+public class ProviderConfigMediumTest {
 
     @Test
     @DisplayName("DateTimeProvider_가_생성된다")

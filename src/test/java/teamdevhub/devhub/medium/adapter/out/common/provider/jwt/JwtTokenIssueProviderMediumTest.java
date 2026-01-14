@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 import static teamdevhub.devhub.common.enums.ErrorCode.TOKEN_INVALID;
 import static teamdevhub.devhub.domain.user.UserRole.USER;
 
-class JwtTokenIssueProviderTest {
+class JwtTokenIssueProviderMediumTest {
 
     private JwtTokenIssueProvider jwtTokenIssueProvider;
 

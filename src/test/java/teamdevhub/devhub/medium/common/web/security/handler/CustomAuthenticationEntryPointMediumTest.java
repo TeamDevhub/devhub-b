@@ -12,7 +12,7 @@ import teamdevhub.devhub.common.web.security.handler.CustomAuthenticationEntryPo
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CustomAuthenticationEntryPointTest {
+class CustomAuthenticationEntryPointMediumTest {
 
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 

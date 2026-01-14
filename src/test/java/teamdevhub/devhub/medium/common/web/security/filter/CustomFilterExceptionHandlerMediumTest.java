@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-public class CustomFilterExceptionHandlerTest {
+public class CustomFilterExceptionHandlerMediumTest {
 
     private CustomFilterExceptionHandler customFilterExceptionHandler;
     private MockHttpServletResponse mockHttpServletResponse;

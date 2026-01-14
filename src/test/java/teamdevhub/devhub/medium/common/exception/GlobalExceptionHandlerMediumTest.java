@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class GlobalExceptionHandlerTest {
+class GlobalExceptionHandlerMediumTest {
 
     private final GlobalExceptionHandler exceptionHandler = new GlobalExceptionHandler();
 

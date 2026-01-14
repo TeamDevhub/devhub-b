@@ -10,7 +10,7 @@ import teamdevhub.devhub.adapter.out.common.provider.password.BCryptPasswordPoli
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_PASSWORD_1;
 
-class BCryptPasswordPolicyProviderTest {
+class BCryptPasswordPolicyProviderMediumTest {
 
     BCryptPasswordPolicyProvider bCryptPasswordPolicyProvider;
 

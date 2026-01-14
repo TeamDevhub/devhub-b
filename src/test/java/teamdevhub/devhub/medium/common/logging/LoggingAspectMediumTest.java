@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class LoggingAspectTest {
+class LoggingAspectMediumTest {
 
     private final LoggingAspect loggingAspect = new LoggingAspect(new ObjectMapper());
 
