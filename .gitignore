@@ -38,5 +38,5 @@ out/
 
 /src/main/resources/application.yml
 /logs/error.log
-/src/test/resources/application.yml
 /logs/
+/src/test/resources/application.yml
