@@ -92,6 +92,27 @@ class JwtAuthorizationFilterTest {
     }
 
     @Test
+    @DisplayName("액세스_토큰이_아닌_경우_TOKEN_INVALID_예외를_처리한다")
+    void rejectIfTokenTypeIsNotAccess() throws Exception {
+        // given
+        String token = "Bearer valid-refresh-token";
+        Claims claims = makeClaims(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        claims.put(JwtClaims.TOKEN_TYPE, TokenType.REFRESH.name()); // 핵심 포인트
+
+        when(tokenParseProvider.resolveToken(httpServletRequest)).thenReturn(token);
+        when(tokenParseProvider.removeBearer(token)).thenReturn("refreshToken");
+        when(tokenParseProvider.parseClaims("refreshToken")).thenReturn(claims);
+
+        // when
+        filter.doFilter(httpServletRequest, httpServletResponse, filterChain);
+
+        // then
+        verify(customFilterExceptionHandler).handle(eq(httpServletResponse), eq(ErrorCode.TOKEN_INVALID));
+        verify(filterChain, never()).doFilter(httpServletRequest, httpServletResponse);
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
+    }
+
+    @Test
     @DisplayName("유효한_액세스_토큰이면_Authentication_을_설정하고_다음_필터를_실행한다")
     void setAuthenticationAndProceedIfAccessTokenValid() throws Exception {
         String token = "Bearer valid";

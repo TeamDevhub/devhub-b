@@ -91,4 +91,56 @@ class SystemProviderTest {
         assertThat(today).isNotNull();
         assertThat(now).isNotNull();
     }
+
+    @Test
+    @DisplayName("날짜가_null_이면_formatDate_는_빈문자열을_반환한다")
+    void formatDateReturnsEmptyStringWhenDateIsNull() {
+        // given
+        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        String pattern = "yyyy-MM-dd";
+
+        // when
+        String result = provider.formatDate(null, pattern);
+
+        // then
+        assertThat(result).isEqualTo("");
+    }
+
+    @Test
+    @DisplayName("날짜시간이_null_이면_formatDateTime_은_빈문자열을_반환한다")
+    void formatDateTimeReturnsEmptyStringWhenDateTimeIsNull() {
+        // given
+        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+
+        // when
+        String result = provider.formatDateTime(null, pattern);
+
+        // then
+        assertThat(result).isEqualTo("");
+    }
+
+    @Test
+    @DisplayName("날짜문자열이_null_이거나_빈값이면_parseDate_는_null_을_반환한다")
+    void parseDateReturnsNullWhenInputIsEmpty() {
+        // given
+        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        String pattern = "yyyy-MM-dd";
+
+        // when, then
+        assertThat(provider.parseDate(null, pattern)).isNull();
+        assertThat(provider.parseDate("", pattern)).isNull();
+    }
+
+    @Test
+    @DisplayName("날짜시간문자열이_null_이거나_빈값이면_parseDateTime_은_null_을_반환한다")
+    void parseDateTimeReturnsNullWhenInputIsEmpty() {
+        // given
+        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+
+        // when, then
+        assertThat(provider.parseDateTime(null, pattern)).isNull();
+        assertThat(provider.parseDateTime("", pattern)).isNull();
+    }
 }

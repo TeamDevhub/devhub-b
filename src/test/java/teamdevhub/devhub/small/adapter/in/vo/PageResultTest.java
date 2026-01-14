@@ -105,7 +105,7 @@ class PageResultTest {
         // given
         int size = 0;
 
-        // when & then
+        // when, then
         assertThatThrownBy(() ->
                 PageResult.of(List.of(), 0, size, 10)
         )
