@@ -7,6 +7,7 @@ import teamdevhub.devhub.adapter.out.user.mapper.UserPositionMapper;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class UserPositionMapperTest {
 
@@ -14,34 +15,33 @@ class UserPositionMapperTest {
     @DisplayName("레코드에서_엔티티로_전환한다")
     void toEntity_convertsRecordToEntityCorrectly() {
         // given
-        UserPosition record = new UserPosition("user-1", "001");
-        String guid = "pos-guid-123";
+        UserPosition userPosition = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
 
         // when
-        UserPositionEntity entity = UserPositionMapper.toEntity(guid, record);
+        UserPositionEntity userPositionEntity = UserPositionMapper.toEntity(TEST_USER_POSITION_GUID, userPosition);
 
         // then
-        assertThat(entity.getUserPositionGuid()).isEqualTo(guid);
-        assertThat(entity.getUserGuid()).isEqualTo("user-1");
-        assertThat(entity.getPositionCd()).isEqualTo("001");
+        assertThat(userPositionEntity.getUserPositionGuid()).isEqualTo(TEST_USER_POSITION_GUID);
+        assertThat(userPositionEntity.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(userPositionEntity.getPositionCd()).isEqualTo(TEST_POSITION_CD);
     }
 
     @Test
     @DisplayName("엔티티에서_레코드로_전환한다")
     void toRecord_convertsEntityToRecordCorrectly() {
         // given
-        UserPositionEntity entity = UserPositionEntity.builder()
-                .userPositionGuid("pos-guid-123")
-                .userGuid("user-1")
-                .positionCd("001")
+        UserPositionEntity userPositionEntity = UserPositionEntity.builder()
+                .userPositionGuid(TEST_USER_POSITION_GUID)
+                .userGuid(TEST_USER_GUID_1)
+                .positionCd(TEST_POSITION_CD)
                 .build();
 
         // when
-        UserPosition record = UserPositionMapper.toRecord(entity);
+        UserPosition userPosition = UserPositionMapper.toRecord(userPositionEntity);
 
         // then
-        assertThat(record.userGuid()).isEqualTo("user-1");
-        assertThat(record.positionCd()).isEqualTo("001");
+        assertThat(userPosition.userGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(userPosition.positionCd()).isEqualTo(TEST_POSITION_CD);
     }
 
 }

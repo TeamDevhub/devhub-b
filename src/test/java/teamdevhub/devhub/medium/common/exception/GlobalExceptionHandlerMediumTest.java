@@ -49,7 +49,7 @@ class GlobalExceptionHandlerMediumTest {
             }
         @GetMapping("/generic-exception")
         public void genericException() {
-            throw new RuntimeException("테스트 에러");
+            throw new RuntimeException("Test Error Occurred");
         }
     }
 
@@ -94,7 +94,7 @@ class GlobalExceptionHandlerMediumTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.error.code").value(ErrorCode.VALIDATION_FAIL.getCode())); // VALIDATION_FAIL 코드
+                .andExpect(jsonPath("$.error.code").value(ErrorCode.VALIDATION_FAIL.getCode()));
     }
 
     @Test
@@ -106,6 +106,6 @@ class GlobalExceptionHandlerMediumTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.error.message").value("테스트 에러"));
+                .andExpect(jsonPath("$.error.message").value("Test Error Occurred"));
     }
 }

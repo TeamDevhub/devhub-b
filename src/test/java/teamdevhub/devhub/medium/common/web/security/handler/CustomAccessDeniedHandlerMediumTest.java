@@ -36,7 +36,7 @@ public class CustomAccessDeniedHandlerMediumTest {
     private PrintWriter printWriter;
 
     @Test
-    @DisplayName("접근_거부_예외가_발생하면_JSON_응답으로_전달한다")
+    @DisplayName("권한에_따른_접근_거부_예외가_발생하면_JSON_응답으로_전달한다")
     void handleAccessDeniedExceptionWithJsonResponse() throws IOException {
         // given
         AccessDeniedException exception = new AccessDeniedException("Access denied");

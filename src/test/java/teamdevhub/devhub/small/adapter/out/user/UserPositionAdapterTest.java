@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserPositionAdapterTest {
 
@@ -23,7 +23,7 @@ public class UserPositionAdapterTest {
     @BeforeEach
     void init() {
         JpaUserPositionRepository jpaUserPositionRepository = new FakeJpaUserPositionRepository();
-        IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
+        IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_USER_POSITION_GUID);
         userPositionAdapter = new UserPositionAdapter(jpaUserPositionRepository, identifierProvider);
     }
 
@@ -31,47 +31,47 @@ public class UserPositionAdapterTest {
     @DisplayName("전체_관심_포지션을_저장한다")
     void saveAll_savesPositionsCorrectly() {
         // given
-        UserPosition pos1 = new UserPosition("user-1", "001");
-        UserPosition pos2 = new UserPosition("user-1", "002");
-        Set<UserPosition> positions = new HashSet<>(Set.of(pos1, pos2));
+        UserPosition userPosition1 = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
+        UserPosition userPosition2 = new UserPosition(TEST_USER_GUID_1, NEW_POSITION_CD);
+        Set<UserPosition> positions = new HashSet<>(Set.of(userPosition1, userPosition2));
 
         // when
         userPositionAdapter.saveAll(positions);
 
         // then
-        Set<UserPosition> saved = userPositionAdapter.findByUserGuid("user-1");
-        assertThat(saved).hasSize(2)
+        Set<UserPosition> savedUserPositions = userPositionAdapter.findByUserGuid(TEST_USER_GUID_1);
+        assertThat(savedUserPositions).hasSize(2)
                 .extracting(UserPosition::positionCd)
-                .containsExactlyInAnyOrder("001", "002");
+                .containsExactlyInAnyOrder(TEST_POSITION_CD, NEW_POSITION_CD);
     }
 
     @Test
     @DisplayName("관심포지션이_변경되면_모든_변경사항이_반영된다")
     void replace_mergesOldAndNewPositionsCorrectly() {
         // given
-        UserPosition oldPos = new UserPosition("user-1", "001");
+        UserPosition oldPos = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
         Set<UserPosition> previousPositions = new HashSet<>(Set.of(oldPos));
         userPositionAdapter.saveAll(previousPositions);
 
-        UserPosition newPos = new UserPosition("user-1", "002");
+        UserPosition newPos = new UserPosition(TEST_USER_GUID_1, NEW_POSITION_CD);
         Set<UserPosition> currentPositions = new HashSet<>(Set.of(oldPos, newPos));
 
         // when
         userPositionAdapter.replace(previousPositions, currentPositions);
 
         // then
-        Set<UserPosition> finalPositions = userPositionAdapter.findByUserGuid("user-1");
+        Set<UserPosition> finalPositions = userPositionAdapter.findByUserGuid(TEST_USER_GUID_1);
         assertThat(finalPositions).hasSize(2)
                 .extracting(UserPosition::positionCd)
-                .containsExactlyInAnyOrder("001", "002");
+                .containsExactlyInAnyOrder(TEST_POSITION_CD, NEW_POSITION_CD);
     }
 
     @Test
     @DisplayName("변경사항에서_삭제될_값으로_식별된_포지션_값은_삭제된다")
     void replace_removesDeletedPositionsCorrectly() {
         // given
-        UserPosition oldPos1 = new UserPosition("user-1", "001");
-        UserPosition oldPos2 = new UserPosition("user-1", "002");
+        UserPosition oldPos1 = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
+        UserPosition oldPos2 = new UserPosition(TEST_USER_GUID_1, NEW_POSITION_CD);
         Set<UserPosition> previousPositions = new HashSet<>(Set.of(oldPos1, oldPos2));
         userPositionAdapter.saveAll(previousPositions);
 
@@ -81,27 +81,27 @@ public class UserPositionAdapterTest {
         userPositionAdapter.replace(previousPositions, currentPositions);
 
         // then
-        Set<UserPosition> finalPositions = userPositionAdapter.findByUserGuid("user-1");
+        Set<UserPosition> finalPositions = userPositionAdapter.findByUserGuid(TEST_USER_GUID_1);
         assertThat(finalPositions).hasSize(1)
                 .extracting(UserPosition::positionCd)
-                .containsExactly("001");
+                .containsExactly(TEST_POSITION_CD);
     }
 
     @Test
     @DisplayName("변경사항이_존재하지_않으면_변경되지_않는다")
     void replace_noChanges_doesNothing() {
         // given
-        UserPosition pos = new UserPosition("user-1", "001");
-        Set<UserPosition> positions = new HashSet<>(Set.of(pos));
-        userPositionAdapter.saveAll(positions);
+        UserPosition userPosition = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
+        Set<UserPosition> userPositions = new HashSet<>(Set.of(userPosition));
+        userPositionAdapter.saveAll(userPositions);
 
         // when
-        userPositionAdapter.replace(positions, positions); // 같은 값
+        userPositionAdapter.replace(userPositions, userPositions);
 
         // then
-        Set<UserPosition> finalPositions = userPositionAdapter.findByUserGuid("user-1");
+        Set<UserPosition> finalPositions = userPositionAdapter.findByUserGuid(TEST_USER_GUID_1);
         assertThat(finalPositions).hasSize(1)
                 .extracting(UserPosition::positionCd)
-                .containsExactly("001");
+                .containsExactly(TEST_POSITION_CD);
     }
 }

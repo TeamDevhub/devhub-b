@@ -7,6 +7,7 @@ import teamdevhub.devhub.adapter.out.user.mapper.UserSkillMapper;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class UserSkillMapperTest {
 
@@ -14,34 +15,33 @@ class UserSkillMapperTest {
     @DisplayName("레코드에서_엔티티로_전환한다")
     void toEntity_convertsRecordToEntityCorrectly() {
         // given
-        UserSkill record = new UserSkill("user-1", "SKILL_001");
-        String guid = "skill-guid-123";
+        UserSkill userSkill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
 
         // when
-        UserSkillEntity entity = UserSkillMapper.toEntity(guid, record);
+        UserSkillEntity userSkillEntity = UserSkillMapper.toEntity(TEST_USER_SKILL_GUID, userSkill);
 
         // then
-        assertThat(entity.getUserSkillGuid()).isEqualTo(guid);
-        assertThat(entity.getUserGuid()).isEqualTo("user-1");
-        assertThat(entity.getSkillCd()).isEqualTo("SKILL_001");
+        assertThat(userSkillEntity.getUserSkillGuid()).isEqualTo(TEST_USER_SKILL_GUID);
+        assertThat(userSkillEntity.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(userSkillEntity.getSkillCd()).isEqualTo(TEST_SKILL_CD);
     }
 
     @Test
     @DisplayName("엔티티에서_레코드로_전환한다")
     void toRecord_convertsEntityToRecordCorrectly() {
         // given
-        UserSkillEntity entity = UserSkillEntity.builder()
-                .userSkillGuid("skill-guid-123")
-                .userGuid("user-1")
-                .skillCd("SKILL_001")
+        UserSkillEntity userSkillEntity = UserSkillEntity.builder()
+                .userSkillGuid(TEST_USER_SKILL_GUID)
+                .userGuid(TEST_USER_GUID_1)
+                .skillCd(TEST_SKILL_CD)
                 .build();
 
         // when
-        UserSkill record = UserSkillMapper.toRecord(entity);
+        UserSkill userSkill = UserSkillMapper.toRecord(userSkillEntity);
 
         // then
-        assertThat(record.userGuid()).isEqualTo("user-1");
-        assertThat(record.skillCd()).isEqualTo("SKILL_001");
+        assertThat(userSkill.userGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(userSkill.skillCd()).isEqualTo(TEST_SKILL_CD);
     }
 
 }

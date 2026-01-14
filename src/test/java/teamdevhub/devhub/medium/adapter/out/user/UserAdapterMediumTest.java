@@ -22,7 +22,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 @SpringBootTest
 @Transactional
-class UserAdapterTest {
+class UserAdapterMediumTest {
 
     @Autowired
     private UserAdapter userAdapter;
@@ -39,8 +39,7 @@ class UserAdapterTest {
     @DisplayName("관리자_계정을_저장한다")
     void saveAdminAccount() {
         // given
-        User adminUser =
-                User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
+        User adminUser = User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
 
         // when
         userAdapter.saveAdminUser(adminUser);
@@ -55,13 +54,11 @@ class UserAdapterTest {
     @DisplayName("로그인을_시도하면_ID_값인_이메일로_AuthenticatedUser_를_조회한다")
     void getAuthenticatedUserByLoginId() {
         // given
-        User adminUser =
-                User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
+        User adminUser = User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
         jpaUserRepository.save(UserMapper.toEntity(adminUser));
 
         // when
-        AuthenticatedUser authenticatedUser =
-                userAdapter.findAuthenticatedUserByEmail(ADMIN_EMAIL);
+        AuthenticatedUser authenticatedUser = userAdapter.findAuthenticatedUserByEmail(ADMIN_EMAIL);
 
         // then
         assertThat(authenticatedUser).isNotNull();
@@ -72,14 +69,13 @@ class UserAdapterTest {
     @DisplayName("새로운_사용자를_생성하면_사용자_정보를_저장한다")
     void saveUser() {
         // given
-        User user =
-                User.createGeneralUser(
-                        TEST_USER_GUID_1,
-                        TEST_EMAIL_1,
-                        TEST_PASSWORD_1,
-                        TEST_USERNAME_1,
-                        TEST_INTRO_1
-                );
+        User user = User.createGeneralUser(
+                TEST_USER_GUID_1,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
+                TEST_USERNAME_1,
+                TEST_INTRO_1
+        );
 
         // when
         User savedUser = userAdapter.save(user);
@@ -94,14 +90,14 @@ class UserAdapterTest {
     @DisplayName("사용자_식별키로_User_를_조회한다")
     void getUserByIdentifier() {
         // given
-        User user =
-                User.createGeneralUser(
-                        TEST_USER_GUID_1,
-                        TEST_EMAIL_1,
-                        TEST_PASSWORD_1,
-                        TEST_USERNAME_1,
-                        TEST_INTRO_1
-                );
+        User user = User.createGeneralUser(
+                TEST_USER_GUID_1,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
+                TEST_USERNAME_1,
+                TEST_INTRO_1
+        );
+
         jpaUserRepository.save(UserMapper.toEntity(user));
 
         // when
@@ -116,14 +112,14 @@ class UserAdapterTest {
     @DisplayName("사용자_프로필_정보를_수정하면_변경된_값이_저장된다")
     void updateUserProfile() {
         // given
-        User user =
-                User.createGeneralUser(
-                        TEST_USER_GUID_1,
-                        TEST_EMAIL_1,
-                        TEST_PASSWORD_1,
-                        TEST_USERNAME_1,
-                        TEST_INTRO_1
-                );
+        User user = User.createGeneralUser(
+                TEST_USER_GUID_1,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
+                TEST_USERNAME_1,
+                TEST_INTRO_1
+        );
+
         jpaUserRepository.save(UserMapper.toEntity(user));
 
         user.updateUsernameAndIntroduction(NEW_USERNAME, NEW_INTRO);
@@ -144,14 +140,14 @@ class UserAdapterTest {
     @DisplayName("회원탈퇴한_사용자의_deleted_값은_true_이다")
     void isDeletedUser() {
         // given
-        User user =
-                User.createGeneralUser(
-                        TEST_USER_GUID_1,
-                        TEST_EMAIL_1,
-                        TEST_PASSWORD_1,
-                        TEST_USERNAME_1,
-                        TEST_INTRO_1
-                );
+        User user = User.createGeneralUser(
+                TEST_USER_GUID_1,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
+                TEST_USERNAME_1,
+                TEST_INTRO_1
+        );
+
         jpaUserRepository.save(UserMapper.toEntity(user));
 
         user.withdraw();
@@ -160,19 +156,17 @@ class UserAdapterTest {
         userAdapter.delete(user);
 
         // then
-        assertThat(
-                jpaUserRepository.findByUserGuid(user.getUserGuid())
-                        .orElseThrow()
-                        .isDeleted()
-        ).isTrue();
+        assertThat(jpaUserRepository.findByUserGuid(user.getUserGuid())
+                .orElseThrow()
+                .isDeleted())
+                .isTrue();
     }
 
     @Test
     @DisplayName("사용자_권한이_일치한다면_true_를_반환한다")
     void isUserRoleMatched() {
         // given
-        User adminUser =
-                User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
+        User adminUser = User.createAdminUser(ADMIN_USER_GUID, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);
         jpaUserRepository.save(UserMapper.toEntity(adminUser));
 
         // when
@@ -186,31 +180,20 @@ class UserAdapterTest {
     @DisplayName("사용자_목록_조회를_하면_AdminUserSummaryResponseDto_로_된_PageResult_데이터를_반환한다")
     void getUserListAsAdminSummary() {
         // given
-        jpaUserRepository.save(
-                UserMapper.toEntity(
-                        User.createGeneralUser(
-                                "guid-1", "user1@example.com", "password123!", "user1", "intro"
-                        )
-                )
-        );
-        jpaUserRepository.save(
-                UserMapper.toEntity(
-                        User.createGeneralUser(
-                                "guid-2", "user2@example.com", "password123!", "user2", "intro"
-                        )
-                )
-        );
+        User user1 = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
+        User user2 = User.createGeneralUser(TEST_USER_GUID_2, TEST_EMAIL_2, TEST_PASSWORD_2, TEST_USERNAME_2, TEST_INTRO_2);
 
-        SearchUserCommand searchCommand =
-                new SearchUserCommand(null, null, null, null);
+        jpaUserRepository.save(UserMapper.toEntity(user1));
+        jpaUserRepository.save(UserMapper.toEntity(user2));
+
+        SearchUserCommand searchCommand = new SearchUserCommand(null, null, null, null);
 
         // when
-        PageResult<AdminUserSummaryResponseDto> page =
-                userAdapter.listUser(searchCommand, 0, 10);
+        PageResult<AdminUserSummaryResponseDto> page = userAdapter.listUser(searchCommand, 0, 10);
 
         // then
         assertThat(page.content()).hasSize(2);
-        assertThat(page.content().get(0).getEmail()).isEqualTo("user2@example.com");
-        assertThat(page.content().get(1).getEmail()).isEqualTo("user1@example.com");
+        assertThat(page.content().get(0).getEmail()).isEqualTo(TEST_EMAIL_2);
+        assertThat(page.content().get(1).getEmail()).isEqualTo(TEST_EMAIL_1);
     }
 }

@@ -17,6 +17,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static teamdevhub.devhub.common.enums.ErrorCode.TOKEN_INVALID;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 import static teamdevhub.devhub.domain.user.UserRole.USER;
 
 class JwtTokenIssueProviderMediumTest {
@@ -24,7 +26,7 @@ class JwtTokenIssueProviderMediumTest {
     private JwtTokenIssueProvider jwtTokenIssueProvider;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void init() throws Exception {
         jwtTokenIssueProvider = new JwtTokenIssueProvider();
 
         String secret = "abcdefghijklmnopqrstuvwxyz123456";
@@ -40,13 +42,16 @@ class JwtTokenIssueProviderMediumTest {
     @Test
     @DisplayName("accessToken_생성_시_Claims_가_올바르게_설정된다")
     void createAccessTokenTest() {
-        String userGuid = "user-123";
-        String email = "test@example.com";
+        // given
+        String userGuid = TEST_USER_GUID_1;
+        String email = TEST_EMAIL_1;
         String userRole = "USER";
-
         String token = jwtTokenIssueProvider.createAccessToken(userGuid, email, USER);
 
+        // when
         Claims claims = jwtTokenIssueProvider.parseClaims(token);
+
+        // then
         assertThat(claims.getSubject()).isEqualTo(userGuid);
         assertThat(claims.get(JwtClaims.EMAIL, String.class)).isEqualTo(email);
         assertThat(claims.get(JwtClaims.USER_ROLE, String.class)).isEqualTo(userRole);
@@ -56,20 +61,27 @@ class JwtTokenIssueProviderMediumTest {
     @Test
     @DisplayName("refreshToken_생성_및_userGuid_추출한다")
     void createRefreshTokenAndExtractUserGuidTest() {
-        String userGuid = "user-456";
+        // given
+        String userGuid = TEST_USER_GUID_1;
 
+        // when
         String refreshToken = jwtTokenIssueProvider.createRefreshToken(userGuid);
         String extractedGuid = jwtTokenIssueProvider.extractUserGuidFromRefreshToken(refreshToken);
 
+        // then
         assertThat(extractedGuid).isEqualTo(userGuid);
     }
 
     @Test
     @DisplayName("refreshToken_에_accessToken_을_넣으면_예외가_발생한다")
     void extractUserGuidWithAccessTokenThrows() {
-        String token = jwtTokenIssueProvider.createAccessToken("user-789", "a@b.com", USER);
+        // given
+        String token = jwtTokenIssueProvider.createAccessToken(TEST_USER_GUID_1, TEST_EMAIL_1, USER);
 
-        assertThatThrownBy(() -> jwtTokenIssueProvider.extractUserGuidFromRefreshToken(token))
+        // then
+        assertThatThrownBy(
+                // when
+                () -> jwtTokenIssueProvider.extractUserGuidFromRefreshToken(token))
                 .isInstanceOf(AuthRuleException.class)
                 .hasMessageContaining(TOKEN_INVALID.getMessage());
     }
@@ -77,13 +89,16 @@ class JwtTokenIssueProviderMediumTest {
     @Test
     @DisplayName("resolveToken_과_removeBearer_로_Bearer_를_붙이거나_제거할_수_있다")
     void resolveAndRemoveBearerTest() {
+        // given
         HttpServletRequest request = mock(HttpServletRequest.class);
         String tokenValue = "abc123";
         when(request.getHeader("Authorization")).thenReturn("Bearer " + tokenValue);
 
+        // when
         String resolved = jwtTokenIssueProvider.resolveToken(request);
         String cleaned = jwtTokenIssueProvider.removeBearer(resolved);
 
+        // then
         assertThat(resolved).isEqualTo("Bearer " + tokenValue);
         assertThat(cleaned).isEqualTo(tokenValue);
     }
@@ -91,11 +106,17 @@ class JwtTokenIssueProviderMediumTest {
     @Test
     @DisplayName("removeBearer_과정에서_잘못된_토큰이면_예외가_발생한다")
     void removeBearerInvalidTokenThrows() {
-        assertThatThrownBy(() -> jwtTokenIssueProvider.removeBearer(null))
+        // then
+        assertThatThrownBy(
+                // given, when
+                () -> jwtTokenIssueProvider.removeBearer(null))
                 .isInstanceOf(AuthRuleException.class)
                 .hasMessageContaining(TOKEN_INVALID.getMessage());
 
-        assertThatThrownBy(() -> jwtTokenIssueProvider.removeBearer("InvalidToken"))
+        // then
+        assertThatThrownBy(
+                // given, when
+                () -> jwtTokenIssueProvider.removeBearer("InvalidToken"))
                 .isInstanceOf(AuthRuleException.class)
                 .hasMessageContaining(TOKEN_INVALID.getMessage());
     }
@@ -103,6 +124,7 @@ class JwtTokenIssueProviderMediumTest {
     @Test
     @DisplayName("getPrefix_는_Bearer_를_반환한다")
     void getPrefixReturnsBearer() {
+        // given, when, then
         assertThat(jwtTokenIssueProvider.getPrefix()).isEqualTo("Bearer ");
     }
 }

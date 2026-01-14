@@ -56,12 +56,12 @@ class JwtAuthorizationFilterMediumTest {
         SecurityContextHolder.clearContext();
     }
 
-    private Claims makeClaims(String userGuid, String email, UserRole role) {
+    private Claims makeClaims() {
         Claims claims = Jwts.claims();
-        claims.setSubject(userGuid);
+        claims.setSubject(teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1);
         claims.put(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name());
-        claims.put(JwtClaims.EMAIL, email);
-        claims.put(JwtClaims.USER_ROLE, role.name());
+        claims.put(JwtClaims.EMAIL, teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1);
+        claims.put(JwtClaims.USER_ROLE, UserRole.USER.name());
         return claims;
     }
 
@@ -96,7 +96,7 @@ class JwtAuthorizationFilterMediumTest {
     void rejectIfTokenTypeIsNotAccess() throws Exception {
         // given
         String token = "Bearer valid-refresh-token";
-        Claims claims = makeClaims(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        Claims claims = makeClaims();
         claims.put(JwtClaims.TOKEN_TYPE, TokenType.REFRESH.name()); // 핵심 포인트
 
         when(tokenParseProvider.resolveToken(httpServletRequest)).thenReturn(token);
@@ -116,7 +116,7 @@ class JwtAuthorizationFilterMediumTest {
     @DisplayName("유효한_액세스_토큰이면_Authentication_을_설정하고_다음_필터를_실행한다")
     void setAuthenticationAndProceedIfAccessTokenValid() throws Exception {
         String token = "Bearer valid";
-        Claims claims = makeClaims(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        Claims claims = makeClaims();
 
         when(tokenParseProvider.resolveToken(httpServletRequest)).thenReturn(token);
         when(tokenParseProvider.removeBearer(token)).thenReturn("validToken");

@@ -44,7 +44,7 @@ class BCryptPasswordPolicyProviderMediumTest {
         // when, then
         assertThat(hashedPassword).isNotNull();
         assertThat(bCryptPasswordPolicyProvider.matches(TEST_PASSWORD_1, hashedPassword)).isTrue();
-        assertThat(bCryptPasswordPolicyProvider.matches("틀린비밀번호", hashedPassword)).isFalse();
+        assertThat(bCryptPasswordPolicyProvider.matches("wrongPassword", hashedPassword)).isFalse();
     }
 
 }

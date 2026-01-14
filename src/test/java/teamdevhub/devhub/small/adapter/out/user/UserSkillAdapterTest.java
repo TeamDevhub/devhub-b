@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserSkillAdapterTest {
 
@@ -22,7 +22,7 @@ public class UserSkillAdapterTest {
     @BeforeEach
     void init() {
         FakeJpaUserSkillRepository jpaUserSkillRepository = new FakeJpaUserSkillRepository();
-        IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
+        IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_USER_SKILL_GUID);
         userSkillAdapter = new UserSkillAdapter(jpaUserSkillRepository, identifierProvider);
     }
 
@@ -30,47 +30,47 @@ public class UserSkillAdapterTest {
     @DisplayName("전체_스킬을_저장한다")
     void saveAll_savesSkillsCorrectly() {
         // given
-        UserSkill skill1 = new UserSkill("user-1", "001");
-        UserSkill skill2 = new UserSkill("user-1", "002");
+        UserSkill skill1 = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
+        UserSkill skill2 = new UserSkill(TEST_USER_GUID_1, NEW_SKILL_CD);
         Set<UserSkill> skills = new HashSet<>(Set.of(skill1, skill2));
 
         // when
         userSkillAdapter.saveAll(skills);
 
         // then
-        Set<UserSkill> saved = userSkillAdapter.findByUserGuid("user-1");
+        Set<UserSkill> saved = userSkillAdapter.findByUserGuid(TEST_USER_GUID_1);
         assertThat(saved).hasSize(2)
                 .extracting(UserSkill::skillCd)
-                .containsExactlyInAnyOrder("001", "002");
+                .containsExactlyInAnyOrder(TEST_SKILL_CD, NEW_SKILL_CD);
     }
 
     @Test
     @DisplayName("스킬이_변경되면_모든_변경사항이_반영된다")
     void replace_mergesOldAndNewSkillsCorrectly() {
         // given
-        UserSkill oldSkill = new UserSkill("user-1", "001");
+        UserSkill oldSkill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
         Set<UserSkill> previousSkills = new HashSet<>(Set.of(oldSkill));
         userSkillAdapter.saveAll(previousSkills);
 
-        UserSkill newSkill = new UserSkill("user-1", "002");
+        UserSkill newSkill = new UserSkill(TEST_USER_GUID_1, NEW_SKILL_CD);
         Set<UserSkill> currentSkills = new HashSet<>(Set.of(oldSkill, newSkill));
 
         // when
         userSkillAdapter.replace(previousSkills, currentSkills);
 
         // then
-        Set<UserSkill> finalSkills = userSkillAdapter.findByUserGuid("user-1");
+        Set<UserSkill> finalSkills = userSkillAdapter.findByUserGuid(TEST_USER_GUID_1);
         assertThat(finalSkills).hasSize(2)
                 .extracting(UserSkill::skillCd)
-                .containsExactlyInAnyOrder("001", "002");
+                .containsExactlyInAnyOrder(TEST_SKILL_CD, NEW_SKILL_CD);
     }
 
     @Test
     @DisplayName("삭제될_스킬값은_제거된다")
     void replace_removesDeletedSkillsCorrectly() {
         // given
-        UserSkill oldSkill1 = new UserSkill("user-1", "001");
-        UserSkill oldSkill2 = new UserSkill("user-1", "002");
+        UserSkill oldSkill1 = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
+        UserSkill oldSkill2 = new UserSkill(TEST_USER_GUID_1, NEW_SKILL_CD);
         Set<UserSkill> previousSkills = new HashSet<>(Set.of(oldSkill1, oldSkill2));
         userSkillAdapter.saveAll(previousSkills);
 
@@ -80,17 +80,17 @@ public class UserSkillAdapterTest {
         userSkillAdapter.replace(previousSkills, currentSkills);
 
         // then
-        Set<UserSkill> finalSkills = userSkillAdapter.findByUserGuid("user-1");
+        Set<UserSkill> finalSkills = userSkillAdapter.findByUserGuid(TEST_USER_GUID_1);
         assertThat(finalSkills).hasSize(1)
                 .extracting(UserSkill::skillCd)
-                .containsExactly("001");
+                .containsExactly(TEST_SKILL_CD);
     }
 
     @Test
     @DisplayName("변경사항이_없으면_스킬은_그대로 유지된다")
     void replace_noChanges_doesNothing() {
         // given
-        UserSkill skill = new UserSkill("user-1", "001");
+        UserSkill skill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
         Set<UserSkill> skills = new HashSet<>(Set.of(skill));
         userSkillAdapter.saveAll(skills);
 
@@ -98,9 +98,9 @@ public class UserSkillAdapterTest {
         userSkillAdapter.replace(skills, skills);
 
         // then
-        Set<UserSkill> finalSkills = userSkillAdapter.findByUserGuid("user-1");
+        Set<UserSkill> finalSkills = userSkillAdapter.findByUserGuid(TEST_USER_GUID_1);
         assertThat(finalSkills).hasSize(1)
                 .extracting(UserSkill::skillCd)
-                .containsExactly("001");
+                .containsExactly(TEST_SKILL_CD);
     }
 }
