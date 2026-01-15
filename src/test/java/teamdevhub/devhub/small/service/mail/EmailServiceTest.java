@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.service.mail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.auth.EmailVerificationRequestDto;
 import teamdevhub.devhub.common.enums.EmailTemplateType;
 import teamdevhub.devhub.port.in.mail.command.ConfirmEmailVerificationCommand;
 import teamdevhub.devhub.service.exception.BusinessRuleException;

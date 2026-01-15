@@ -1,8 +1,8 @@
 package teamdevhub.devhub.port.in.auth;
 
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
+import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
+import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
 
 public interface AuthUseCase {
     LoginResponseDto login(LoginCommand loginCommand);

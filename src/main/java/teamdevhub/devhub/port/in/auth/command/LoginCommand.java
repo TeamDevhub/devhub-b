@@ -3,7 +3,7 @@ package teamdevhub.devhub.port.in.auth.command;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.auth.LoginRequestDto;
 
 @Getter
 @Builder

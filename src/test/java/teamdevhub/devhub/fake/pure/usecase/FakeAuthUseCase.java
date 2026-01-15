@@ -1,7 +1,7 @@
 package teamdevhub.devhub.fake.pure.usecase;
 
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
+import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
+import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 

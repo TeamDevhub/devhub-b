@@ -1,7 +1,7 @@
 package teamdevhub.devhub.fake.pure.usecase;
 
 import teamdevhub.devhub.port.in.mail.command.ConfirmEmailVerificationCommand;
-import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.auth.EmailVerificationRequestDto;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;

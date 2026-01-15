@@ -1,6 +1,6 @@
 package teamdevhub.devhub.port.in.user.command;
 
-import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.user.SignupRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

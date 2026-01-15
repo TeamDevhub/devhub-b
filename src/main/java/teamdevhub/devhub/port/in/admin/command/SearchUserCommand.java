@@ -3,7 +3,7 @@ package teamdevhub.devhub.port.in.admin.command;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.user.SearchUserRequestDto;
 
 import java.time.LocalDateTime;
 

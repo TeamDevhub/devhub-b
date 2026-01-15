@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.user.dto.response;
+package teamdevhub.devhub.adapter.in.dto.response.user;
 
 import lombok.Builder;
 import lombok.Getter;

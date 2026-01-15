@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.port.in.user.command;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
-import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.user.SignupRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

@@ -1,24 +1,23 @@
-package teamdevhub.devhub.adapter.in.auth.dto.request;
+package teamdevhub.devhub.adapter.in.dto.request.auth;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.common.enums.RegexPattern;
 import teamdevhub.devhub.adapter.in.web.validator.RegexMatch;
 
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequestDto {
+public class ConfirmEmailVerificationRequestDto {
 
-    @NotBlank(message = "이메일은 필수입니다.")
+    @NotBlank
     @RegexMatch(RegexPattern.AUTH_EMAIL)
     private String email;
 
-    @NotBlank(message = "비밀번호는 필수입니다.")
-    @RegexMatch(RegexPattern.AUTH_PASSWORD)
-    private String password;
+    @NotBlank
+    @Size(min = 6, max = 6)
+    private String code;
 }

@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.adapter.in.user.dto.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.user.dto.response.UserDetailResponseDto;
+import teamdevhub.devhub.adapter.in.dto.response.user.UserDetailResponseDto;
 import teamdevhub.devhub.constant.UserTestConstant;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;

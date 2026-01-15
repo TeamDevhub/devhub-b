@@ -1,7 +1,6 @@
-package teamdevhub.devhub.adapter.in.auth.dto.request;
+package teamdevhub.devhub.adapter.in.dto.request.auth;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +10,9 @@ import teamdevhub.devhub.adapter.in.web.validator.RegexMatch;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConfirmEmailVerificationRequestDto {
+public class EmailVerificationRequestDto {
 
     @NotBlank
     @RegexMatch(RegexPattern.AUTH_EMAIL)
     private String email;
-
-    @NotBlank
-    @Size(min = 6, max = 6)
-    private String code;
 }

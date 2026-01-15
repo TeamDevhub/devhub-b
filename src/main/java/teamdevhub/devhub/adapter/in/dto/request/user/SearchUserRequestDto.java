@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.admin.user.dto;
+package teamdevhub.devhub.adapter.in.dto.request.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

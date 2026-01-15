@@ -3,7 +3,7 @@ package teamdevhub.devhub.service.mail;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.auth.EmailVerificationRequestDto;
 import teamdevhub.devhub.common.enums.EmailTemplateType;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;

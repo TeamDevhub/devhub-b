@@ -1,8 +1,7 @@
-package teamdevhub.devhub.adapter.in.user.dto.response;
+package teamdevhub.devhub.adapter.in.dto.response.user;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;

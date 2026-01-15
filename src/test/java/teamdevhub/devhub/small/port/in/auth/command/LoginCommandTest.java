@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.port.in.auth.command;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.auth.LoginRequestDto;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;

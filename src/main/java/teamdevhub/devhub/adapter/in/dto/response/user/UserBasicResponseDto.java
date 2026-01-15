@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.admin.user.dto;
+package teamdevhub.devhub.adapter.in.dto.response.user;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
