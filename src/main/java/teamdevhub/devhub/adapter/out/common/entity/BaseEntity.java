@@ -17,16 +17,16 @@ public abstract class BaseEntity {
 
     @CreatedBy
     @Column(updatable = false)
-    private String rgtrId;
+    private String registrantGuid;
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime regDt;
+    private LocalDateTime registeredDate;
 
     @LastModifiedBy
-    private String mdfrId;
+    private String modifierGuid;
 
     @LastModifiedDate
     @Column
-    private LocalDateTime mdfcnDt;
+    private LocalDateTime modifiedDate;
 }

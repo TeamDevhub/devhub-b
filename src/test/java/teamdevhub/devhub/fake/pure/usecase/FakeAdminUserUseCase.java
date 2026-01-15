@@ -1,7 +1,8 @@
 package teamdevhub.devhub.fake.pure.usecase;
 
-import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
+import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
+import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
@@ -13,20 +14,22 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class FakeAdminUserUseCase implements AdminUserUseCase {
 
-    private final List<AdminUserSummaryResponseDto> adminUserSummaryResponseDtoList = new ArrayList<>();
+    private final List<User> userList = new ArrayList<>();
 
     public FakeAdminUserUseCase() {
-        adminUserSummaryResponseDtoList.add(
-                AdminUserSummaryResponseDto.builder()
+        userList.add(
+                User.builder()
                         .userGuid(TEST_USER_GUID_1)
+                        .password(TEST_PASSWORD_1)
                         .email(TEST_EMAIL_1)
                         .username(TEST_USERNAME_1)
                         .blocked(false)
                         .build()
         );
-        adminUserSummaryResponseDtoList.add(
-                AdminUserSummaryResponseDto.builder()
+        userList.add(
+                User.builder()
                         .userGuid(TEST_USER_GUID_2)
+                        .password(TEST_PASSWORD_2)
                         .email(TEST_EMAIL_2)
                         .username(TEST_USERNAME_2)
                         .blocked(false)
@@ -35,16 +38,16 @@ public class FakeAdminUserUseCase implements AdminUserUseCase {
     }
 
     @Override
-    public PageResult<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
+    public PageResult<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
         int page = pageCommand.getPage();
         int size = pageCommand.getSize();
 
-        long totalElements = adminUserSummaryResponseDtoList.size();
+        long totalElements = userList.size();
 
         int start = page * size;
-        int end = Math.min(start + size, adminUserSummaryResponseDtoList.size());
+        int end = Math.min(start + size, userList.size());
 
-        List<AdminUserSummaryResponseDto> content = start >= end ? List.of() : adminUserSummaryResponseDtoList.subList(start, end);
+        List<User> content = start >= end ? List.of() : userList.subList(start, end);
 
         return PageResult.of(
                 content,

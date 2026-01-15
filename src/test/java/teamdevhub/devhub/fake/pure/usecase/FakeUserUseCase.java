@@ -2,7 +2,7 @@ package teamdevhub.devhub.fake.pure.usecase;
 
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;

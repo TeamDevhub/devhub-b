@@ -16,7 +16,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 
@@ -63,20 +63,6 @@ public class AuthController {
                         )
                 );
     }
-
-//    @PostMapping("/login/{oauth}")
-//    public ResponseEntity<ApiDataResponseDto<Void>> loginWithOauth(@PathVariable String oauth, @RequestBody LoginRequestDto loginRequestDto) {
-//         LoginResponseDto loginResponseDto = authUseCase.loginWithOauth(oauth);
-//         ResponseCookie refreshCookie = CookieUtil.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
-//                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-//                .body(ApiDataResponseDto.successWithoutData(
-//                                SuccessCode.LOGIN_SUCCESS
-//                                TokenResponseDto.issue(loginResponseDto.getAccessToken())
-//                        )
-//                );
-//    }
 
     @PostMapping("/reissue")
     public ResponseEntity<ApiDataResponseDto<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {

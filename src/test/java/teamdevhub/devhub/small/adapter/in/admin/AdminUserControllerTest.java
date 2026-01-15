@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.admin.user.AdminUserController;
-import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
+import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.admin.user.dto.SearchUserRequestDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataListResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageVo;
@@ -25,7 +25,7 @@ class AdminUserControllerTest {
     }
 
     @Test
-    @DisplayName("관리자_사용자_목록_조회를_하면_AdminUserSummaryResponseDto_리스트_페이지_정보와_READ_SUCCESS_의_코드를_확인할_수_있다")
+    @DisplayName("관리자_사용자_목록_조회를_하면_UserBasicResponseDto_리스트_페이지_정보와_READ_SUCCESS_의_코드를_확인할_수_있다")
     void returnResponseDtoListWhenFetchingAdminUserList() {
         // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
@@ -39,7 +39,7 @@ class AdminUserControllerTest {
         int size = 10;
 
         // when
-        ApiDataListResponseDto<AdminUserSummaryResponseDto> apiDataListResponseDto = adminUserController.list(searchUserRequestDto, page, size).getBody();
+        ApiDataListResponseDto<UserBasicResponseDto> apiDataListResponseDto = adminUserController.list(searchUserRequestDto, page, size).getBody();
 
         // then
         assertThat(apiDataListResponseDto.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());

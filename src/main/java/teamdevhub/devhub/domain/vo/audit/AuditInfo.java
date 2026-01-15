@@ -2,16 +2,16 @@ package teamdevhub.devhub.domain.vo.audit;
 
 import java.time.LocalDateTime;
 
-public record AuditInfo(String createdBy, LocalDateTime createdAt, String modifiedBy, LocalDateTime modifiedAt) {
+public record AuditInfo(String registrantGuid, LocalDateTime registeredDate, String modifierGuid, LocalDateTime modifiedDate) {
 
     private static final AuditInfo EMPTY = new AuditInfo(null, null, null, null);
 
-    public static AuditInfo of(String createdBy,
-                               LocalDateTime createdAt,
-                               String modifiedBy,
-                               LocalDateTime modifiedAt)
+    public static AuditInfo of(String registrantGuid,
+                               LocalDateTime registeredDate,
+                               String modifierGuid,
+                               LocalDateTime modifiedDate)
     {
-        return new AuditInfo(createdBy, createdAt, modifiedBy, modifiedAt);
+        return new AuditInfo(registrantGuid, registeredDate, modifierGuid, modifiedDate);
     }
 
     public static AuditInfo empty() {

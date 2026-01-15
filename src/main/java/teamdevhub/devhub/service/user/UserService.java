@@ -13,7 +13,7 @@ import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;
 import teamdevhub.devhub.port.out.user.UserSkillRepository;
 import teamdevhub.devhub.service.exception.BusinessRuleException;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.UserPosition;

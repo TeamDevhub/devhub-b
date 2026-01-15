@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
-import teamdevhub.devhub.adapter.in.user.dto.response.UserProfileResponseDto;
+import teamdevhub.devhub.adapter.in.user.dto.response.UserDetailResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
@@ -46,11 +46,11 @@ public class UserController {
 //    }
 
     @GetMapping("/profile")
-    public ResponseEntity<ApiDataResponseDto<UserProfileResponseDto>> getProfile(@LoginUser AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<ApiDataResponseDto<UserDetailResponseDto>> getProfile(@LoginUser AuthenticatedUser authenticatedUser) {
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithData(
                         SuccessCode.READ_SUCCESS,
-                        UserProfileResponseDto.fromDomain(userUseCase.getCurrentUserProfile(authenticatedUser.userGuid()))
+                        UserDetailResponseDto.fromDomain(userUseCase.getCurrentUserProfile(authenticatedUser.userGuid()))
                 )
         );
     }

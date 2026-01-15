@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
+import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.adapter.out.user.UserAdapter;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
@@ -14,7 +14,7 @@ import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -189,7 +189,7 @@ class UserAdapterMediumTest {
         SearchUserCommand searchCommand = new SearchUserCommand(null, null, null, null);
 
         // when
-        PageResult<AdminUserSummaryResponseDto> page = userAdapter.listUser(searchCommand, 0, 10);
+        PageResult<User> page = userAdapter.listUser(searchCommand, 0, 10);
 
         // then
         assertThat(page.content()).hasSize(2);

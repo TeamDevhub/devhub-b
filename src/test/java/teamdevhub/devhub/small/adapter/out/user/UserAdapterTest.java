@@ -3,14 +3,13 @@ package teamdevhub.devhub.small.adapter.out.user;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.adapter.out.user.UserAdapter;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.fake.spring.persistence.user.FakeJpaUserRepository;
 import teamdevhub.devhub.fake.spring.persistence.user.FakeUserQueryRepository;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
@@ -155,11 +154,11 @@ class UserAdapterTest {
         SearchUserCommand searchCommand = new SearchUserCommand(null, null, null, null);
 
         // when
-        PageResult<AdminUserSummaryResponseDto> page = userAdapter.listUser(searchCommand, pageCommand.getPage(), pageCommand.getSize());
+        PageResult<User> pagedUserList = userAdapter.listUser(searchCommand, pageCommand.getPage(), pageCommand.getSize());
 
         // then
-        assertThat(page.content()).hasSize(2);
-        assertThat(page.content().get(0).getEmail()).isEqualTo("user1@example.com");
-        assertThat(page.content().get(1).getEmail()).isEqualTo("user2@example.com");
+        assertThat(pagedUserList.content()).hasSize(2);
+        assertThat(pagedUserList.content().get(0).getEmail()).isEqualTo("user1@example.com");
+        assertThat(pagedUserList.content().get(1).getEmail()).isEqualTo("user2@example.com");
     }
 }

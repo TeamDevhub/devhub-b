@@ -1,10 +1,10 @@
 package teamdevhub.devhub.fake.pure.repository;
 
-import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
+import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
@@ -82,29 +82,13 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public PageResult<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size) {
-        List<AdminUserSummaryResponseDto> users = store.values().stream()
-                .map(user -> AdminUserSummaryResponseDto.builder()
-                        .userGuid(user.getUserGuid())
-                        .email(user.getEmail())
-                        .username(user.getUsername())
-                        .introduction(user.getIntroduction())
-                        .mannerDegree(user.getMannerDegree())
-                        .blocked(user.isBlocked())
-                        .blockEndDate(user.getBlockEndDate())
-                        .deleted(user.isDeleted())
-                        .lastLoginDateTime(user.getLastLoginDateTime())
-                        .createdBy(user.getAuditInfo().createdBy())
-                        .createdAt(user.getAuditInfo().createdAt())
-                        .modifiedBy(user.getAuditInfo().modifiedBy())
-                        .modifiedAt(user.getAuditInfo().modifiedAt())
-                        .build())
-                .collect(Collectors.toList());
+    public PageResult<User> listUser(SearchUserCommand searchUserCommand, int page, int size) {
+        List<User> userList = new ArrayList<>(store.values());
 
-        long totalElements = users.size();
+        long totalElements = userList.size();
         int start = page * size;
-        int end = Math.min(start + size, users.size());
-        List<AdminUserSummaryResponseDto> pageContent = start >= end ? Collections.emptyList() : users.subList(start, end);
+        int end = Math.min(start + size, userList.size());
+        List<User> pageContent = start >= end ? Collections.emptyList() : userList.subList(start, end);
 
         return PageResult.of(
                 pageContent,

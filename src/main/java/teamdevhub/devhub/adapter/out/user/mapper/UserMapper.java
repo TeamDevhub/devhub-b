@@ -3,7 +3,7 @@ package teamdevhub.devhub.adapter.out.user.mapper;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.vo.audit.AuditInfo;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 
 public class UserMapper {
 
@@ -52,10 +52,10 @@ public class UserMapper {
 
     private static AuditInfo toAuditInfo(UserEntity userEntity) {
         return AuditInfo.of(
-                userEntity.getRgtrId(),
-                userEntity.getRegDt(),
-                userEntity.getMdfrId(),
-                userEntity.getMdfcnDt()
+                userEntity.getRegistrantGuid(),
+                userEntity.getRegisteredDate(),
+                userEntity.getModifierGuid(),
+                userEntity.getModifiedDate()
         );
     }
 }

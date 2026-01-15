@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.adapter.out.common.provider.audit.AuditorAwareProvider;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 
 import java.util.Collections;
 import java.util.Optional;

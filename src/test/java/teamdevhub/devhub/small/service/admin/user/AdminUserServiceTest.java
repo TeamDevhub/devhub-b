@@ -3,7 +3,6 @@ package teamdevhub.devhub.small.service.admin.user;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
@@ -58,14 +57,14 @@ class AdminUserServiceTest {
         PageCommand pageCommand = PageCommand.of(0,10);
 
         // when
-        PageResult<AdminUserSummaryResponseDto> pageResult = adminUserService.listUser(searchUserCommand, pageCommand);
-        AdminUserSummaryResponseDto adminUserSummaryResponseDto = pageResult.content().get(0);
+        PageResult<User> pagedUserList = adminUserService.listUser(searchUserCommand, pageCommand);
+        User user = pagedUserList.content().get(0);
 
         // then
-        assertThat(pageResult).isNotNull();
-        assertThat(pageResult.content().size()).isEqualTo(2);
-        assertThat(pageResult.totalPages()).isEqualTo(1);
-        assertThat(adminUserSummaryResponseDto.getUserGuid()).isEqualTo(user1.getUserGuid());
-        assertThat(adminUserSummaryResponseDto.getEmail()).isEqualTo(user1.getEmail());
+        assertThat(pagedUserList).isNotNull();
+        assertThat(pagedUserList.content().size()).isEqualTo(2);
+        assertThat(pagedUserList.totalPages()).isEqualTo(1);
+        assertThat(user.getUserGuid()).isEqualTo(user1.getUserGuid());
+        assertThat(user.getEmail()).isEqualTo(user1.getEmail());
     }
 }

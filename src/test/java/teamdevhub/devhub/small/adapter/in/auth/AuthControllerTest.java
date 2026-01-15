@@ -9,7 +9,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.EmailVerificationRequestDto
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
 import teamdevhub.devhub.fake.pure.repository.FakeEmailVerificationRepository;
 import teamdevhub.devhub.fake.pure.usecase.FakeAuthUseCase;

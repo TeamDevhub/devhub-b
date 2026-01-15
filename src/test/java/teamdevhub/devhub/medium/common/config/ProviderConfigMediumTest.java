@@ -19,7 +19,7 @@ public class ProviderConfigMediumTest {
 
     @Test
     @DisplayName("DateTimeProvider_가_생성된다")
-    void createDateTimeProvider() {
+    void registeredDateeTimeProvider() {
         // given
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
 

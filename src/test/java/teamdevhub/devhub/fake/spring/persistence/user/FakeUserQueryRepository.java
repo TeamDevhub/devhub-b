@@ -46,10 +46,10 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                         matches &= user.isBlocked() == searchUserCommand.getBlocked();
                     }
                     if (searchUserCommand.getJoinedFrom() != null) {
-                        matches &= user.getRegDt() != null && !user.getRegDt().isBefore(searchUserCommand.getJoinedFrom());
+                        matches &= user.getRegisteredDate() != null && !user.getRegisteredDate().isBefore(searchUserCommand.getJoinedFrom());
                     }
                     if (searchUserCommand.getJoinedTo() != null) {
-                        matches &= user.getRegDt() != null && !user.getRegDt().isAfter(searchUserCommand.getJoinedTo());
+                        matches &= user.getRegisteredDate() != null && !user.getRegisteredDate().isAfter(searchUserCommand.getJoinedTo());
                     }
                     if (searchUserCommand.getKeyword() != null && !searchUserCommand.getKeyword().isBlank()) {
                         matches &= user.getUsername() != null &&
@@ -59,7 +59,7 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                     return matches;
                 })
                 .sorted(Comparator.comparing(
-                        UserEntity::getRegDt,
+                        UserEntity::getRegisteredDate,
                         Comparator.nullsLast(Comparator.naturalOrder())
                 ).reversed())
                 .toList();

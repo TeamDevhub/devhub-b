@@ -31,7 +31,7 @@ public class UserQueryRepositoryImpl implements UserQueryRepository{
                         keywordCondition(searchUserCommand.getKeyword()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(user.regDt.desc())
+                .orderBy(user.registeredDate.desc())
                 .fetch();
 
         Long total = queryFactory
@@ -63,14 +63,14 @@ public class UserQueryRepositoryImpl implements UserQueryRepository{
         if (joinedFrom == null) {
             return null;
         }
-        return QUserEntity.userEntity.regDt.goe(joinedFrom);
+        return QUserEntity.userEntity.registeredDate.goe(joinedFrom);
     }
 
     private BooleanExpression joinedToCondition(LocalDateTime joinedTo) {
         if (joinedTo == null) {
             return null;
         }
-        return QUserEntity.userEntity.regDt.loe(joinedTo);
+        return QUserEntity.userEntity.registeredDate.loe(joinedTo);
     }
 
     private BooleanExpression keywordCondition(String keyword) {

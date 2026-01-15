@@ -1,45 +1,24 @@
 package teamdevhub.devhub.adapter.in.user.dto.response;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 @Getter
-@Builder
-public class UserProfileResponseDto {
-
-    private String userGuid;
-    private String email;
-    private String password;
-    private UserRole userRole;
-
-    private String username;
-    private String introduction;
+@SuperBuilder
+public class UserDetailResponseDto extends UserBasicResponseDto {
 
     private List<String> positionList;
     private List<String> skillList;
 
-    private double mannerDegree;
-
-    private boolean blocked;
-    private LocalDateTime blockEndDate;
-    private boolean deleted;
-    private LocalDateTime lastLoginDateTime;
-
-    private String createdBy;
-    private LocalDateTime createdAt;
-    private String modifiedBy;
-    private LocalDateTime modifiedAt;
-
-    public static UserProfileResponseDto fromDomain(User user) {
-        return UserProfileResponseDto.builder()
+    public static UserDetailResponseDto fromDomain(User user) {
+        return UserDetailResponseDto.builder()
                 .userGuid(user.getUserGuid())
                 .email(user.getEmail())
                 .username(user.getUsername())
@@ -51,13 +30,12 @@ public class UserProfileResponseDto {
                 .blockEndDate(user.getBlockEndDate())
                 .deleted(user.isDeleted())
                 .lastLoginDateTime(user.getLastLoginDateTime())
-                .createdBy(user.getAuditInfo().createdBy())
-                .createdAt(user.getAuditInfo().createdAt())
-                .modifiedBy(user.getAuditInfo().modifiedBy())
-                .modifiedAt(user.getAuditInfo().modifiedAt())
+                .registrantGuid(user.getAuditInfo().registrantGuid())
+                .registeredDate(user.getAuditInfo().registeredDate())
+                .modifierGuid(user.getAuditInfo().modifierGuid())
+                .modifiedDate(user.getAuditInfo().modifiedDate())
                 .build();
     }
-
 
     public static List<String> positionList(Set<UserPosition> userPositions) {
         return userPositions.stream()

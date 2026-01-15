@@ -1,10 +1,10 @@
 package teamdevhub.devhub.port.out.user;
 
-import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
+import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 
 import java.time.LocalDateTime;
@@ -20,5 +20,5 @@ public interface UserRepository {
     void updateUserProfile(User user);
     void delete(User user);
     boolean existsByUserRole(UserRole userRole);
-    PageResult<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size);
+    PageResult<User> listUser(SearchUserCommand searchUserCommand, int page, int size);
 }

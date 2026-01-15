@@ -1,4 +1,4 @@
-package teamdevhub.devhub.domain.vo.auth;
+package teamdevhub.devhub.domain.user.vo;
 
 import teamdevhub.devhub.domain.user.UserRole;
 

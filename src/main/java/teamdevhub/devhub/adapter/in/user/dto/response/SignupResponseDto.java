@@ -13,19 +13,19 @@ public class SignupResponseDto {
     private String email;
     private String username;
 
-    private String createdBy;
-    private LocalDateTime createdAt;
-    private String modifiedBy;
-    private LocalDateTime modifiedAt;
+    private String registrantGuid;
+    private LocalDateTime registeredDate;
+    private String modifierGuid;
+    private LocalDateTime modifiedDate;
 
     public static SignupResponseDto fromDomain(User user) {
         return SignupResponseDto.builder()
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .createdBy(user.getAuditInfo().createdBy())
-                .createdAt(user.getAuditInfo().createdAt())
-                .modifiedBy(user.getAuditInfo().modifiedBy())
-                .modifiedAt(user.getAuditInfo().modifiedAt())
+                .registrantGuid(user.getAuditInfo().registrantGuid())
+                .registeredDate(user.getAuditInfo().registeredDate())
+                .modifierGuid(user.getAuditInfo().modifierGuid())
+                .modifiedDate(user.getAuditInfo().modifiedDate())
                 .build();
     }
 }

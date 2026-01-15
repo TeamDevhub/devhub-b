@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.adapter.in.admin.user.dto.AdminUserSummaryResponseDto;
+import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
@@ -16,7 +16,7 @@ import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.vo.auth.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
@@ -83,12 +83,12 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public PageResult<AdminUserSummaryResponseDto> listUser(SearchUserCommand searchUserCommand, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("regDt").descending());
+    public PageResult<User> listUser(SearchUserCommand searchUserCommand, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("registeredDate").descending());
         Page<UserEntity> pagedUserEntityList = userQueryRepository.listUser(searchUserCommand, pageable);
 
-        List<AdminUserSummaryResponseDto> userList = pagedUserEntityList.getContent().stream()
-                .map(AdminUserSummaryResponseDto::fromEntity)
+        List<User> userList = pagedUserEntityList.getContent().stream()
+                .map(UserMapper::toDomain)
                 .toList();
 
         return PageResult.of(
