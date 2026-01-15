@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;

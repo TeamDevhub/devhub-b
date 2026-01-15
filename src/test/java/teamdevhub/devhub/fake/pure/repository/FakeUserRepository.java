@@ -1,6 +1,5 @@
 package teamdevhub.devhub.fake.pure.repository;
 
-import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -10,7 +9,6 @@ import teamdevhub.devhub.port.out.user.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FakeUserRepository implements UserRepository {
 

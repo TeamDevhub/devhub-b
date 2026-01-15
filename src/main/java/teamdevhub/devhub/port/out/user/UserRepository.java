@@ -1,6 +1,5 @@
 package teamdevhub.devhub.port.out.user;
 
-import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;

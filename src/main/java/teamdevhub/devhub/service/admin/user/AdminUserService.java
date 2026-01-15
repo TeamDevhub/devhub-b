@@ -3,7 +3,6 @@ package teamdevhub.devhub.service.admin.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.adapter.in.admin.user.dto.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
