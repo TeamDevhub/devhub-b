@@ -34,17 +34,6 @@ public class UserController {
         );
     }
 
-//    @PostMapping("/signup/{oauth}")
-//    public ResponseEntity<ApiDataResponseDto<Void>> signupWithOauth(@PathVariable String oauth) {
-//        userUseCase.oauthSignup(oauth)
-//        return ResponseEntity.ok(
-//                ApiDataResponseDto.successWithoutData(
-//                        SuccessCode.SIGNUP_SUCCESS
-//                        SignupResponseDto.fromDomain(userUseCase.signupWithOauth(oauth))
-//                )
-//        );
-//    }
-
     @GetMapping("/profile")
     public ResponseEntity<ApiDataResponseDto<UserDetailResponseDto>> getProfile(@LoginUser AuthenticatedUser authenticatedUser) {
         return ResponseEntity.ok(

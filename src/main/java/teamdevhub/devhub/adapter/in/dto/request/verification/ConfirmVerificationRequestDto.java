@@ -4,7 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.domain.verification.VerificationTarget;
 import teamdevhub.devhub.domain.verification.VerificationType;
+import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
 
 @Getter
 @NoArgsConstructor
@@ -18,4 +20,11 @@ public class ConfirmVerificationRequestDto {
 
     @NotBlank
     private String code;
+
+    public ConfirmVerificationCommand toConfirmVerificationCommand() {
+        return new ConfirmVerificationCommand(
+                VerificationTarget.of(verificationType, value),
+                code
+        );
+    }
 }
