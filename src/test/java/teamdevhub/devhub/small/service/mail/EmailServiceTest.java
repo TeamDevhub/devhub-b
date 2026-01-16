@@ -11,7 +11,7 @@ import teamdevhub.devhub.service.mail.EmailService;
 import teamdevhub.devhub.service.mail.EmailTemplateVariables;
 import teamdevhub.devhub.fake.pure.external.FakeEmailNotificationSender;
 import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
-import teamdevhub.devhub.fake.pure.provider.FakeEmailVerificationCodeProvider;
+import teamdevhub.devhub.fake.pure.provider.FakeVerificationCodeProvider;
 import teamdevhub.devhub.fake.pure.repository.FakeEmailVerificationRepository;
 
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ class EmailServiceTest {
         fakeEmailNotificationSender = new FakeEmailNotificationSender();
         FakeDateTimeProvider fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
         fakeEmailVerificationRepository = new FakeEmailVerificationRepository(fakeDateTimeProvider);
-        FakeEmailVerificationCodeProvider fakeEmailVerificationCodeProvider = new FakeEmailVerificationCodeProvider("123456");
+        FakeVerificationCodeProvider fakeEmailVerificationCodeProvider = new FakeVerificationCodeProvider("123456");
 
         emailService = new EmailService(
                 fakeEmailNotificationSender,

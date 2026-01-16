@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.common.provider.datetime.SystemDateTimeProvider;
 import teamdevhub.devhub.common.provider.uuid.SystemIdentifierProvider;
-import teamdevhub.devhub.common.provider.verification.SystemEmailVerificationCodeProvider;
+import teamdevhub.devhub.common.provider.verification.SystemVerificationCodeProvider;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,10 +17,10 @@ class SystemProviderTest {
     @DisplayName("이메일_인증코드를_생성하면_6자리_숫자로_반환된다")
     void generateEmailVerificationCodeReturns6DigitNumber() {
         // given
-        SystemEmailVerificationCodeProvider provider = new SystemEmailVerificationCodeProvider();
+        SystemVerificationCodeProvider provider = new SystemVerificationCodeProvider();
 
         // when
-        String code = provider.generateEmailVerificationCode();
+        String code = provider.generateVerificationCode();
 
         // then
         assertThat(code).isNotNull();

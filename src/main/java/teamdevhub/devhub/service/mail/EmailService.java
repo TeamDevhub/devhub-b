@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.in.dto.request.auth.EmailVerificationRequestDto
 import teamdevhub.devhub.common.enums.EmailTemplateType;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
-import teamdevhub.devhub.common.provider.verification.EmailVerificationCodeProvider;
+import teamdevhub.devhub.common.provider.verification.VerificationCodeProvider;
 import teamdevhub.devhub.domain.mail.EmailVerification;
 import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 import teamdevhub.devhub.port.in.mail.command.ConfirmEmailVerificationCommand;
@@ -26,7 +26,7 @@ public class EmailService implements EmailVerificationUseCase {
 
     private final EmailNotificationSender emailNotificationSender;
     private final EmailVerificationRepository emailVerificationRepository;
-    private final EmailVerificationCodeProvider emailVerificationCodeProvider;
+    private final VerificationCodeProvider verificationCodeProvider;
     private final DateTimeProvider dateTimeProvider;
 
     @Override
@@ -37,7 +37,7 @@ public class EmailService implements EmailVerificationUseCase {
             throw BusinessRuleException.of(ErrorCode.EMAIL_VERIFICATION_ALREADY_SENT);
         }
 
-        String emailVerificationCode = emailVerificationCodeProvider.generateEmailVerificationCode();
+        String emailVerificationCode = verificationCodeProvider.generateVerificationCode();
         LocalDateTime expiredAt = dateTimeProvider.now().plus(Duration.ofMinutes(5));
         EmailVerification emailVerification = EmailVerification.issue(email, emailVerificationCode, expiredAt);
         emailVerificationRepository.save(emailVerification);

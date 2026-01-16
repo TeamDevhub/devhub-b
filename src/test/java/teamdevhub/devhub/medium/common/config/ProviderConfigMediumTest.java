@@ -9,8 +9,8 @@ import teamdevhub.devhub.common.provider.datetime.SystemDateTimeProvider;
 import teamdevhub.devhub.adapter.out.common.provider.password.BCryptPasswordPolicyProvider;
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.common.provider.uuid.SystemIdentifierProvider;
-import teamdevhub.devhub.common.provider.verification.EmailVerificationCodeProvider;
-import teamdevhub.devhub.common.provider.verification.SystemEmailVerificationCodeProvider;
+import teamdevhub.devhub.common.provider.verification.VerificationCodeProvider;
+import teamdevhub.devhub.common.provider.verification.SystemVerificationCodeProvider;
 import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,11 +66,11 @@ public class ProviderConfigMediumTest {
         ProviderConfig providerConfig = new ProviderConfig(passwordEncoderStub());
 
         // when
-        EmailVerificationCodeProvider emailVerificationCodeProvider = providerConfig.emailVerificationCodeProvider();
+        VerificationCodeProvider verificationCodeProvider = providerConfig.emailVerificationCodeProvider();
 
         // then
-        assertThat(emailVerificationCodeProvider).isNotNull();
-        assertThat(emailVerificationCodeProvider).isInstanceOf(SystemEmailVerificationCodeProvider.class);
+        assertThat(verificationCodeProvider).isNotNull();
+        assertThat(verificationCodeProvider).isInstanceOf(SystemVerificationCodeProvider.class);
     }
 
     private PasswordEncoder passwordEncoderStub() {

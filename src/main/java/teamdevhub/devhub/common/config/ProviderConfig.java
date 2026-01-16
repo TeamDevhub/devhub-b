@@ -9,8 +9,8 @@ import teamdevhub.devhub.common.provider.datetime.SystemDateTimeProvider;
 import teamdevhub.devhub.adapter.out.common.provider.password.BCryptPasswordPolicyProvider;
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.common.provider.uuid.SystemIdentifierProvider;
-import teamdevhub.devhub.common.provider.verification.EmailVerificationCodeProvider;
-import teamdevhub.devhub.common.provider.verification.SystemEmailVerificationCodeProvider;
+import teamdevhub.devhub.common.provider.verification.VerificationCodeProvider;
+import teamdevhub.devhub.common.provider.verification.SystemVerificationCodeProvider;
 import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
 
 @Configuration
@@ -35,7 +35,7 @@ public class ProviderConfig {
     }
 
     @Bean
-    public EmailVerificationCodeProvider emailVerificationCodeProvider() {
-        return new SystemEmailVerificationCodeProvider();
+    public VerificationCodeProvider emailVerificationCodeProvider() {
+        return new SystemVerificationCodeProvider();
     }
 }
