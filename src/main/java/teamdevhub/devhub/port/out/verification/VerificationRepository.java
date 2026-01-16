@@ -1,13 +1,11 @@
 package teamdevhub.devhub.port.out.verification;
 
 import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.domain.verification.VerificationTarget;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 
 public interface VerificationRepository {
 
-    Verification findByTarget(VerificationTarget target);
-
+    Verification findByVerificationTarget(VerificationTarget verificationTarget);
     void save(Verification verification);
-
-    void deleteByTarget(VerificationTarget target);
+    void deleteByVerificationTarget(VerificationTarget verificationTarget);
 }

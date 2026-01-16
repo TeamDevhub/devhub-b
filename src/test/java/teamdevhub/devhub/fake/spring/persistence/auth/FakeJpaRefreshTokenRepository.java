@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
-import teamdevhub.devhub.adapter.out.auth.persistence.JpaRefreshTokenRepository;
+import teamdevhub.devhub.adapter.out.infrastructure.persistence.auth.JpaRefreshTokenRepository;
 
 import java.util.HashMap;
 import java.util.List;

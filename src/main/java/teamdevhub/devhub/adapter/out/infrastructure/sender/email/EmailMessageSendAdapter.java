@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.common.sender;
+package teamdevhub.devhub.adapter.out.infrastructure.sender.email;
 
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +10,10 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import teamdevhub.devhub.adapter.out.exception.ExternalServiceException;
 import teamdevhub.devhub.common.enums.EmailTemplateType;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.verification.VerificationMessage;
-import teamdevhub.devhub.domain.verification.VerificationTarget;
-import teamdevhub.devhub.domain.verification.VerificationType;
-import teamdevhub.devhub.port.out.sender.MessageSender;
+import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.adapter.out.infrastructure.sender.MessageSender;
 
 import java.util.HashMap;
 import java.util.Map;

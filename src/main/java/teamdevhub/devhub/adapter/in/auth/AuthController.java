@@ -6,19 +6,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamdevhub.devhub.port.in.mail.command.ConfirmEmailVerificationCommand;
-import teamdevhub.devhub.port.in.auth.command.LoginCommand;
-import teamdevhub.devhub.adapter.in.dto.request.auth.ConfirmEmailVerificationRequestDto;
-import teamdevhub.devhub.adapter.in.dto.request.auth.EmailVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.dto.request.auth.LoginRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.verification.ConfirmVerificationRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.verification.IssueVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
-import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
+import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
-import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
+import teamdevhub.devhub.port.in.auth.command.LoginCommand;
+import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,11 +25,11 @@ import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
 public class AuthController {
 
     private final AuthUseCase authUseCase;
-    private final EmailVerificationUseCase emailVerificationUseCase;
+    private final SignupVerificationUseCase signupVerificationUseCase;
 
     @PostMapping("/email-verification")
-    public ResponseEntity<ApiDataResponseDto<Void>> sendEmailVerification(@Valid @RequestBody EmailVerificationRequestDto emailVerificationRequestDto) {
-        emailVerificationUseCase.sendEmailVerification(emailVerificationRequestDto);
+    public ResponseEntity<ApiDataResponseDto<Void>> sendEmailVerification(@Valid @RequestBody IssueVerificationRequestDto issueVerificationRequestDto) {
+        signupVerificationUseCase.issueSignupVerification(issueVerificationRequestDto.toIssueVerificationCommand());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.EMAIL_VERIFICATION_SENT
@@ -39,9 +38,8 @@ public class AuthController {
     }
 
     @PostMapping("/email-verification/confirm")
-    public ResponseEntity<ApiDataResponseDto<Void>> confirmEmailVerification(@Valid @RequestBody ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto) {
-        ConfirmEmailVerificationCommand confirmEmailVerificationCommand = ConfirmEmailVerificationCommand.of(confirmEmailVerificationRequestDto.getEmail(), confirmEmailVerificationRequestDto.getCode());
-        emailVerificationUseCase.confirmEmailVerification(confirmEmailVerificationCommand);
+    public ResponseEntity<ApiDataResponseDto<Void>> confirmEmailVerification(@Valid @RequestBody ConfirmVerificationRequestDto confirmVerificationRequestDto) {
+        signupVerificationUseCase.confirmSignupVerification(confirmVerificationRequestDto.toConfirmVerificationCommand());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.EMAIL_VERIFICATION_SUCCESS

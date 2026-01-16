@@ -2,29 +2,26 @@ package teamdevhub.devhub.adapter.out.verification.mapper;
 
 import teamdevhub.devhub.adapter.out.verification.entity.VerificationEntity;
 import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.domain.verification.VerificationTarget;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 
 public class VerificationMapper {
 
-    public static VerificationEntity toEntity(Verification domain) {
+    public static VerificationEntity toEntity(Verification verification) {
         return VerificationEntity.builder()
-                .targetType(domain.target().type())
-                .targetValue(domain.target().value())
-                .code(domain.getCode())
-                .expiredAt(domain.getExpiredAt())
-                .verified(domain.isVerified())
+                .verificationType(verification.getVerificationTarget().type())
+                .targetValue(verification.getVerificationTarget().value())
+                .code(verification.getCode())
+                .expiredAt(verification.getExpiredAt())
+                .verified(verification.isVerified())
                 .build();
     }
 
-    public static Verification toDomain(VerificationEntity entity) {
+    public static Verification toDomain(VerificationEntity verificationEntity) {
         return Verification.restore(
-                VerificationTarget.restore(
-                        entity.getTargetType(),
-                        entity.getTargetValue()
-                ),
-                entity.getCode(),
-                entity.getExpiredAt(),
-                entity.isVerified()
+                VerificationTarget.restore(verificationEntity.getVerificationType(), verificationEntity.getTargetValue()),
+                verificationEntity.getCode(),
+                verificationEntity.getExpiredAt(),
+                verificationEntity.isVerified()
         );
     }
 }

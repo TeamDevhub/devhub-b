@@ -1,4 +1,4 @@
-package teamdevhub.devhub.domain.verification;
+package teamdevhub.devhub.domain.verification.vo;
 
 import java.util.Objects;
 

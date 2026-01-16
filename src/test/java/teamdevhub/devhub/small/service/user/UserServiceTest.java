@@ -8,7 +8,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
-import teamdevhub.devhub.domain.vo.auth.RefreshToken;
+import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
 import teamdevhub.devhub.fake.pure.provider.FakePasswordPolicyProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;

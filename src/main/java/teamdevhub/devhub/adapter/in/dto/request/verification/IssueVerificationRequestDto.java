@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.domain.verification.VerificationTarget;
-import teamdevhub.devhub.domain.verification.VerificationType;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
 
 @Getter

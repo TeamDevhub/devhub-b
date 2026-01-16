@@ -1,22 +1,24 @@
 package teamdevhub.devhub.domain.verification;
 
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Verification {
 
-    private final VerificationTarget target;
+    private final VerificationTarget verificationTarget;
     private final String code;
     private final LocalDateTime expiredAt;
     private boolean verified;
 
     private Verification(
-            VerificationTarget target,
+            VerificationTarget verificationTarget,
             String code,
             LocalDateTime expiredAt,
             boolean verified
     ) {
-        this.target = Objects.requireNonNull(target);
+        this.verificationTarget = Objects.requireNonNull(verificationTarget);
         this.code = code;
         this.expiredAt = expiredAt;
         this.verified = verified;
@@ -59,8 +61,12 @@ public class Verification {
         return verified;
     }
 
-    public VerificationTarget target() {
-        return target;
+    public boolean isExpired(LocalDateTime now) {
+        return expiredAt.isBefore(now);
+    }
+
+    public VerificationTarget getVerificationTarget() {
+        return verificationTarget;
     }
 
     public String getCode() {

@@ -1,8 +1,8 @@
-package teamdevhub.devhub.adapter.out.verification.persistence;
+package teamdevhub.devhub.adapter.out.infrastructure.persistence.verification;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import teamdevhub.devhub.adapter.out.verification.entity.VerificationEntity;
-import teamdevhub.devhub.domain.verification.VerificationType;
+import teamdevhub.devhub.domain.verification.vo.VerificationType;
 
 import java.util.Optional;
 

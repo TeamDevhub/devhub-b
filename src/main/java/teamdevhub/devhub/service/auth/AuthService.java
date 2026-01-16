@@ -8,7 +8,7 @@ import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
-import teamdevhub.devhub.domain.vo.auth.RefreshToken;
+import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.auth.AuthenticatedUserProvider;

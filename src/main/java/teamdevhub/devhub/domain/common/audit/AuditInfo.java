@@ -1,4 +1,4 @@
-package teamdevhub.devhub.domain.vo.audit;
+package teamdevhub.devhub.domain.common.audit;
 
 import java.time.LocalDateTime;
 

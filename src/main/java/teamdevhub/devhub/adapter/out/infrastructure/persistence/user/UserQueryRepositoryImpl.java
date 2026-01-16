@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.user.persistence;
+package teamdevhub.devhub.adapter.out.infrastructure.persistence.user;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

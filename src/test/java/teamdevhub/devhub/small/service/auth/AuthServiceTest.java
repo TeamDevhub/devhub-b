@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
-import teamdevhub.devhub.domain.vo.auth.RefreshToken;
+import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 import teamdevhub.devhub.service.auth.AuthService;
 import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserProvider;

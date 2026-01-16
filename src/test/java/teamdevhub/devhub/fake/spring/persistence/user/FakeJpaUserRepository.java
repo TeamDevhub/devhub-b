@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
-import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
+import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepository;
 import teamdevhub.devhub.domain.user.UserRole;
 
 import java.time.LocalDateTime;

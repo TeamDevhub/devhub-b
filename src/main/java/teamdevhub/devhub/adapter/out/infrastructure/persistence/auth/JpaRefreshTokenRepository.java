@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.auth.persistence;
+package teamdevhub.devhub.adapter.out.infrastructure.persistence.auth;
 
 import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

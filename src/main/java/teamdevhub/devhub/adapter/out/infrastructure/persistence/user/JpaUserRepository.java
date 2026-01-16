@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.user.persistence;
+package teamdevhub.devhub.adapter.out.infrastructure.persistence.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

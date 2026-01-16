@@ -1,4 +1,4 @@
-package teamdevhub.devhub.domain.vo.auth;
+package teamdevhub.devhub.domain.auth.vo;
 
 public record RefreshToken(String userGuid, String token) {
     public static RefreshToken of(String userGuid, String token) {

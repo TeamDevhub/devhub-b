@@ -2,7 +2,7 @@ package teamdevhub.devhub.adapter.out.verification.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import teamdevhub.devhub.domain.verification.VerificationType;
+import teamdevhub.devhub.domain.verification.vo.VerificationType;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "verifications",
         uniqueConstraints = @UniqueConstraint(
-                columnNames = {"target_type", "target_value"}
+                columnNames = {"verification_type", "target_value"}
         )
 )
 @Getter
@@ -24,8 +24,8 @@ public class VerificationEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "target_type", nullable = false)
-    private VerificationType targetType;
+    @Column(name = "verification_type", nullable = false)
+    private VerificationType verificationType;
 
     @Column(name = "target_value", nullable = false)
     private String targetValue;
@@ -33,7 +33,6 @@ public class VerificationEntity {
     @Column
     private String code;
 
-    @Column(name = "expired_at")
     private LocalDateTime expiredAt;
 
     @Column(nullable = false)

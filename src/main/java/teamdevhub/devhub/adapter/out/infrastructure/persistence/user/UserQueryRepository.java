@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.user.persistence;
+package teamdevhub.devhub.adapter.out.infrastructure.persistence.user;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

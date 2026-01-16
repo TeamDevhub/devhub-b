@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.auth.RefreshTokenAdapter;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.vo.auth.RefreshToken;
+import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.fake.spring.persistence.auth.FakeJpaRefreshTokenRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

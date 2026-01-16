@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.adapter.out.user.persistence.UserQueryRepository;
+import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.UserQueryRepository;
 import teamdevhub.devhub.domain.user.User;
 
 import java.util.*;

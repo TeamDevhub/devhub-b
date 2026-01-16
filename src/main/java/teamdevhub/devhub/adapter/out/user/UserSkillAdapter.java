@@ -1,10 +1,10 @@
 package teamdevhub.devhub.adapter.out.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserSkillMapper;
-import teamdevhub.devhub.adapter.out.user.persistence.JpaUserSkillRepository;
+import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserSkillRepository;
 import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.common.util.RelationChangeUtil;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class UserSkillAdapter implements UserSkillRepository {
 

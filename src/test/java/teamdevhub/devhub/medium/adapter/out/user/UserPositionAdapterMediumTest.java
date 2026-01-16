@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.out.user.UserPositionAdapter;
-import teamdevhub.devhub.adapter.out.user.persistence.JpaUserPositionRepository;
+import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserPositionRepository;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 
 import java.util.HashSet;

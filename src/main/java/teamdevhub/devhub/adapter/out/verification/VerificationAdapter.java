@@ -1,42 +1,33 @@
 package teamdevhub.devhub.adapter.out.verification;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.out.verification.mapper.VerificationMapper;
-import teamdevhub.devhub.adapter.out.verification.persistence.JpaVerificationRepository;
+import teamdevhub.devhub.adapter.out.infrastructure.persistence.verification.JpaVerificationRepository;
 import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.domain.verification.VerificationTarget;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.port.out.verification.VerificationRepository;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class VerificationAdapter implements VerificationRepository {
 
     private final JpaVerificationRepository jpaVerificationRepository;
 
     @Override
-    public Verification findByTarget(VerificationTarget target) {
-        return jpaVerificationRepository
-                .findByTargetTypeAndTargetValue(
-                        target.type(),
-                        target.value()
-                )
+    public Verification findByVerificationTarget(VerificationTarget verificationTarget) {
+        return jpaVerificationRepository.findByTargetTypeAndTargetValue(verificationTarget.type(), verificationTarget.value())
                 .map(VerificationMapper::toDomain)
                 .orElseThrow();
     }
 
     @Override
     public void save(Verification verification) {
-        jpaVerificationRepository.save(
-                VerificationMapper.toEntity(verification)
-        );
+        jpaVerificationRepository.save(VerificationMapper.toEntity(verification));
     }
 
     @Override
-    public void deleteByTarget(VerificationTarget target) {
-        jpaVerificationRepository.deleteByTargetTypeAndTargetValue(
-                target.type(),
-                target.value()
-        );
+    public void deleteByVerificationTarget(VerificationTarget target) {
+        jpaVerificationRepository.deleteByTargetTypeAndTargetValue(target.type(), target.value());
     }
 }

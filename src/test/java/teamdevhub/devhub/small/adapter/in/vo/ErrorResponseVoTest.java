@@ -28,7 +28,7 @@ class ErrorResponseVoTest {
     void createResponseVoWithCustomCodeAndMessage() {
         // given
         String code = "CUSTOM_ERROR";
-        String message = "Custom error message";
+        String message = "Custom error getVerificationMessage";
 
         // when
         ErrorResponseVo errorResponseVo = ErrorResponseVo.of(code, message);

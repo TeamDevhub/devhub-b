@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.domain.user.vo.UserPositionChangeResult;
 import teamdevhub.devhub.domain.user.vo.UserSkillChangeResult;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.port.in.mail.EmailVerificationUseCase;
+import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
 import teamdevhub.devhub.port.out.mail.EmailVerificationRepository;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;
 import teamdevhub.devhub.port.out.user.UserSkillRepository;
@@ -36,8 +38,7 @@ public class UserService implements UserUseCase {
     private final UserRepository userRepository;
     private final UserPositionRepository userPositionRepository;
     private final UserSkillRepository userSkillRepository;
-    private final EmailVerificationUseCase emailVerificationUseCase;
-    private final EmailVerificationRepository emailVerificationRepository;
+    private final SignupVerificationUseCase signupVerificationUseCase;
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordPolicyProvider passwordPolicyProvider;
     private final IdentifierProvider identifierProvider;
@@ -63,15 +64,14 @@ public class UserService implements UserUseCase {
 
     @Override
     public User signup(SignupCommand signupCommand) {
-        validateEmailVerification(signupCommand);
-        User user = createUserForSignup(signupCommand);
+        validateSignupVerification(signupCommand.getVerificationTarget());
 
+        User user = createUserForSignup(signupCommand);
         saveUserPositions(user.getUserGuid(), signupCommand);
         saveUserSkills(user.getUserGuid(), signupCommand);
-
         User savedUser = userRepository.save(user);
 
-        cleanupEmailVerification(signupCommand.getEmail());
+        signupVerificationUseCase.consume(signupCommand.getVerificationTarget());
         return savedUser;
     }
 
@@ -128,10 +128,8 @@ public class UserService implements UserUseCase {
         return user;
     }
 
-    private void validateEmailVerification(SignupCommand signupCommand) {
-        if (!emailVerificationUseCase.isVerified(signupCommand.getEmail())) {
-            throw BusinessRuleException.of(ErrorCode.EMAIL_NOT_CONFIRMED);
-        }
+    private void validateSignupVerification(VerificationTarget verificationTarget) {
+        signupVerificationUseCase.assertSignupAllowed(verificationTarget);
     }
 
     private User createUserForSignup(SignupCommand signupCommand) {
@@ -158,11 +156,6 @@ public class UserService implements UserUseCase {
                 .collect(Collectors.toUnmodifiableSet());
         userSkillRepository.saveAll(skills);
     }
-
-    private void cleanupEmailVerification(String email) {
-        emailVerificationRepository.delete(email);
-    }
-
 
     private void replacePositions(User user, Set<UserPosition> positions) {
         UserPositionChangeResult userPositionChangeResult = user.changePositions(positions);

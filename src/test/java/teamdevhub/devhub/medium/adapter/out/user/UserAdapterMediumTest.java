@@ -10,7 +10,7 @@ import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.adapter.out.user.UserAdapter;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.adapter.out.user.persistence.JpaUserRepository;
+import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepository;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
