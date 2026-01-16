@@ -12,8 +12,8 @@ import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.auth.TokenIssueProvider;
-import teamdevhub.devhub.port.out.auth.TokenParseProvider;
+import teamdevhub.devhub.port.out.authentication.TokenIssueProvider;
+import teamdevhub.devhub.port.out.authentication.TokenParseProvider;
 
 import java.security.Key;
 import java.util.Base64;

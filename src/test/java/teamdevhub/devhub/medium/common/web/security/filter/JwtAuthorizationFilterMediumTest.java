@@ -22,7 +22,7 @@ import teamdevhub.devhub.common.web.security.filter.CustomFilterExceptionHandler
 import teamdevhub.devhub.common.web.security.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
-import teamdevhub.devhub.port.out.auth.TokenParseProvider;
+import teamdevhub.devhub.port.out.authentication.TokenParseProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;

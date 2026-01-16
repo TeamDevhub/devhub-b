@@ -13,7 +13,7 @@ import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
-import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
+import teamdevhub.devhub.port.in.user.UserWithdrawUseCase;
 
 @RestController
 @RequestMapping("/user")
@@ -21,6 +21,7 @@ import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 public class UserController {
 
     private final UserUseCase userUseCase;
+    private final UserWithdrawUseCase userWithdrawUseCase;
 
     @PostMapping("/signup")
     public ResponseEntity<ApiDataResponseDto<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
@@ -54,7 +55,7 @@ public class UserController {
 
     @DeleteMapping("/profile")
     public ResponseEntity<ApiDataResponseDto<Void>> withdraw(@LoginUser AuthenticatedUser authenticatedUser) {
-        userUseCase.withdrawUser(authenticatedUser.userGuid());
+        userWithdrawUseCase.withdrawUser(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.USER_DELETE_SUCCESS

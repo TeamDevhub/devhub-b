@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.auth;
+package teamdevhub.devhub.adapter.out.authentication;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
-import teamdevhub.devhub.port.out.auth.AuthenticatedUserProvider;
+import teamdevhub.devhub.port.out.authentication.AuthenticatedUserProvider;
 
 @Component
 @RequiredArgsConstructor

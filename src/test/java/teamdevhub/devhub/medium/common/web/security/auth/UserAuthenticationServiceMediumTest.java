@@ -36,10 +36,10 @@ public class UserAuthenticationServiceMediumTest {
 
         // then
         assertThat(details).isInstanceOf(UserAuthentication.class);
-        UserAuthentication auth = (UserAuthentication) details;
-        assertThat(auth.getUser()).isEqualTo(user);
-        assertThat(auth.getUsername()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(auth.getPassword()).isEqualTo(TEST_PASSWORD_1);
+        UserAuthentication userAuthentication = (UserAuthentication) details;
+        assertThat(userAuthentication.getUser()).isEqualTo(user);
+        assertThat(userAuthentication.getUsername()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(userAuthentication.getPassword()).isEqualTo(TEST_PASSWORD_1);
     }
 
     @Test

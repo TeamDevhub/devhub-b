@@ -87,14 +87,6 @@ public class FakeUserUseCase implements UserUseCase {
     }
 
     @Override
-    public void withdrawUser(String userGuid) {
-        User user = store.get(userGuid);
-        if (user != null) {
-            user.withdraw();
-        }
-    }
-
-    @Override
     public boolean existsByUserRole(UserRole userRole) {
         return store.values().stream().anyMatch(u -> u.getUserRole().equals(userRole));
     }

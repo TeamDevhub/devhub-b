@@ -9,12 +9,11 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.*;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.port.in.auth.AuthenticationUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
-import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.authentication.PasswordPolicyProvider;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;
 import teamdevhub.devhub.port.out.user.UserRepository;
 import teamdevhub.devhub.port.out.user.UserSkillRepository;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 public class UserService implements UserUseCase {
 
     private final SignupVerificationUseCase signupVerificationUseCase;
-    private final AuthenticationUseCase authenticationUseCase;
 
     private final UserRepository userRepository;
     private final UserPositionRepository userPositionRepository;
@@ -95,14 +93,6 @@ public class UserService implements UserUseCase {
         if (updateProfileCommand.hasSkillsChange()) {
             replaceSkills(user, updateProfileCommand.getSkills());
         }
-    }
-
-    @Override
-    public void withdrawUser(String userGuid) {
-        User user = getUser(userGuid);
-        user.withdraw();
-        authenticationUseCase.revoke(userGuid);
-        userRepository.delete(user);
     }
 
     @Override

@@ -14,6 +14,5 @@ public interface UserUseCase {
     void updateLastLoginDateTime(String userGuid);
     User getCurrentUserProfile(String userGuid);
     void updateProfile(UpdateProfileCommand updateProfileCommand);
-    void withdrawUser(String userGuid);
     boolean existsByUserRole(UserRole userRole);
 }

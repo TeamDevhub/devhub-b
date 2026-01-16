@@ -1,7 +1,7 @@
 package teamdevhub.devhub.adapter.out.common.provider.password;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.authentication.PasswordPolicyProvider;
 
 public class BCryptPasswordPolicyProvider implements PasswordPolicyProvider {
 

@@ -2,8 +2,8 @@ package teamdevhub.devhub.fake.pure.usecase;
 
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
-import teamdevhub.devhub.port.in.auth.AuthenticationUseCase;
-import teamdevhub.devhub.port.in.auth.command.LoginCommand;
+import teamdevhub.devhub.port.in.authentication.AuthenticationUseCase;
+import teamdevhub.devhub.port.in.authentication.command.LoginCommand;
 
 public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 

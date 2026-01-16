@@ -1,4 +1,4 @@
-package teamdevhub.devhub.port.out.auth;
+package teamdevhub.devhub.port.out.authentication;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;

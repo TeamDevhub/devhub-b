@@ -33,41 +33,23 @@ public class EmailMessageSendAdapter implements MessageSender {
     }
 
     @Override
-    public void sendVerification(
-            VerificationTarget target,
-            VerificationMessage verificationMessage
-    ) {
+    public void sendVerification(VerificationTarget target, VerificationMessage verificationMessage) {
         EmailTemplateType template = EmailTemplateType.EMAIL_VERIFICATION;
-
-        Map<String, Object> variables =
-                toVariables(template, verificationMessage);
-
-        send(
-                target.value(),
-                template,
-                variables
-        );
+        Map<String, Object> variables = toVariables(template, verificationMessage);
+        send(target.value(), template, variables);
     }
 
-    private Map<String, Object> toVariables(
-            EmailTemplateType template,
-            VerificationMessage message
-    ) {
-        Map<String, Object> vars = new HashMap<>();
-        vars.put("code", message.getCode());
-        vars.put("expireTime", template.getExpireTime());
-        return vars;
+    private Map<String, Object> toVariables(EmailTemplateType template, VerificationMessage message) {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("code", message.getCode());
+        variables.put("expireTime", template.getExpireTime());
+        return variables;
     }
 
-    private void send(
-            String email,
-            EmailTemplateType template,
-            Map<String, Object> variables
-    ) {
+    private void send(String email, EmailTemplateType template, Map<String, Object> variables) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper =
-                    new MimeMessageHelper(message, true, ENCODING);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, ENCODING);
 
             helper.setTo(email);
             helper.setSubject(template.getSubject());
@@ -79,10 +61,7 @@ public class EmailMessageSendAdapter implements MessageSender {
         }
     }
 
-    private String buildBody(
-            EmailTemplateType template,
-            Map<String, Object> variables
-    ) {
+    private String buildBody(EmailTemplateType template, Map<String, Object> variables) {
         Context context = new Context();
         context.setVariables(variables);
         return templateEngine.process(template.getPath(), context);

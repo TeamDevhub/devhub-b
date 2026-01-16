@@ -1,6 +1,6 @@
-package teamdevhub.devhub.port.out.auth;
+package teamdevhub.devhub.port.out.authentication;
 
-import teamdevhub.devhub.domain.auth.vo.RefreshToken;
+import teamdevhub.devhub.domain.authentication.vo.RefreshToken;
 
 public interface RefreshTokenRepository {
     void save(RefreshToken refreshToken);

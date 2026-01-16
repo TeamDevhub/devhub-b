@@ -20,7 +20,7 @@ import teamdevhub.devhub.common.web.security.filter.CustomFilterExceptionHandler
 import teamdevhub.devhub.common.web.security.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.common.web.security.handler.CustomAccessDeniedHandler;
 import teamdevhub.devhub.common.web.security.handler.CustomAuthenticationEntryPoint;
-import teamdevhub.devhub.port.out.auth.TokenParseProvider;
+import teamdevhub.devhub.port.out.authentication.TokenParseProvider;
 
 import java.util.List;
 

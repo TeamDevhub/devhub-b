@@ -1,13 +1,10 @@
 package teamdevhub.devhub.port.in.admin.command;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import teamdevhub.devhub.adapter.in.dto.request.user.SearchUserRequestDto;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Builder
 public record SearchUserCommand(Boolean blocked, LocalDateTime joinedFrom, LocalDateTime joinedTo, String keyword) {
 

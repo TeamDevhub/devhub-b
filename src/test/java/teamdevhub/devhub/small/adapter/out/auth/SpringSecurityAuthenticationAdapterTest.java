@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.adapter.out.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.auth.SpringSecurityAuthenticationAdapter;
+import teamdevhub.devhub.adapter.out.authentication.SpringSecurityAuthenticationAdapter;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.fake.spring.infrastructure.FakeAuthenticationManager;

@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.adapter.in.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.AuthController;
+import teamdevhub.devhub.adapter.in.authentication.AuthenticationController;
 import teamdevhub.devhub.adapter.in.dto.request.auth.LoginRequestDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -14,9 +14,9 @@ import teamdevhub.devhub.fake.pure.usecase.FakeSignupVerificationUseCase;
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-class AuthControllerTest {
+class AuthenticationControllerTest {
 
-    private AuthController authController;
+    private AuthenticationController authenticationController;
     private FakeAuthenticationUseCase fakeAuthenticationUseCase;
     private FakeSignupVerificationUseCase fakeSignupVerificationUseCase;
 
@@ -24,7 +24,7 @@ class AuthControllerTest {
     void init() {
         fakeAuthenticationUseCase = new FakeAuthenticationUseCase();
         fakeSignupVerificationUseCase = new FakeSignupVerificationUseCase();
-        authController = new AuthController(fakeAuthenticationUseCase, fakeSignupVerificationUseCase);
+        authenticationController = new AuthenticationController(fakeAuthenticationUseCase, fakeSignupVerificationUseCase);
     }
 
 //    @Test
@@ -58,9 +58,9 @@ class AuthControllerTest {
                 .build();
 
         // when, then
-        assertThat(authController.login(loginRequestDto).getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
-        assertThat(authController.login(loginRequestDto).getBody()).isNotNull();
-        assertThat(authController.login(loginRequestDto).getBody().getData().getAccessToken()).isEqualTo("access-token");
+        assertThat(authenticationController.login(loginRequestDto).getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
+        assertThat(authenticationController.login(loginRequestDto).getBody()).isNotNull();
+        assertThat(authenticationController.login(loginRequestDto).getBody().getData().getAccessToken()).isEqualTo("access-token");
     }
 
     @Test
@@ -70,7 +70,7 @@ class AuthControllerTest {
         String refreshToken = "refresh-token";
 
         // when, then
-        assertThat(authController.refresh(refreshToken).getBody().getCode()).isEqualTo(SuccessCode.CREATE_SUCCESS.getCode());
+        assertThat(authenticationController.refresh(refreshToken).getBody().getCode()).isEqualTo(SuccessCode.CREATE_SUCCESS.getCode());
         assertThat(fakeAuthenticationUseCase.getLastReissueRefreshToken()).isEqualTo("refresh-token");
     }
 
@@ -86,7 +86,7 @@ class AuthControllerTest {
         );
 
         // when, then
-        assertThat(authController.revoke(authenticatedUser).getBody().getCode()).isEqualTo(SuccessCode.LOGOUT_SUCCESS.getCode());
+        assertThat(authenticationController.revoke(authenticatedUser).getBody().getCode()).isEqualTo(SuccessCode.LOGOUT_SUCCESS.getCode());
         assertThat(fakeAuthenticationUseCase.getRevokedUserGuid()).isEqualTo(TEST_USER_GUID_1);
     }
 }

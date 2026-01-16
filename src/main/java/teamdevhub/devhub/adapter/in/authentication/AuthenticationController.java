@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.auth;
+package teamdevhub.devhub.adapter.in.authentication;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,14 +15,13 @@ import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
-import teamdevhub.devhub.port.in.auth.AuthenticationUseCase;
-import teamdevhub.devhub.port.in.auth.command.LoginCommand;
+import teamdevhub.devhub.port.in.authentication.AuthenticationUseCase;
 import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthenticationController {
 
     private final AuthenticationUseCase authenticationUseCase;
     private final SignupVerificationUseCase signupVerificationUseCase;

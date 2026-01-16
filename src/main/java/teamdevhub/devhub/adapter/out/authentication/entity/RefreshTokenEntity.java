@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.auth.entity;
+package teamdevhub.devhub.adapter.out.authentication.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

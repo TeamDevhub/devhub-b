@@ -11,7 +11,7 @@ import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
 import teamdevhub.devhub.common.provider.uuid.SystemIdentifierProvider;
 import teamdevhub.devhub.common.provider.verification.VerificationCodeProvider;
 import teamdevhub.devhub.common.provider.verification.SystemVerificationCodeProvider;
-import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.authentication.PasswordPolicyProvider;
 
 @Configuration
 @RequiredArgsConstructor
