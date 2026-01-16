@@ -8,7 +8,6 @@ import teamdevhub.devhub.adapter.out.verification.CompositeVerificationIssuer;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.VerificationTarget;
-import teamdevhub.devhub.port.out.sender.MessageSender;
 import teamdevhub.devhub.port.out.verification.VerificationRepository;
 
 @Service

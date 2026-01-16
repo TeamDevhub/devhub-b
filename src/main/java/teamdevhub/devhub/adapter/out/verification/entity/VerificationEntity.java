@@ -6,8 +6,6 @@ import teamdevhub.devhub.domain.verification.VerificationType;
 
 import java.time.LocalDateTime;
 
-import static lombok.AccessLevel.PROTECTED;
-
 @Entity
 @Table(
         name = "verifications",
