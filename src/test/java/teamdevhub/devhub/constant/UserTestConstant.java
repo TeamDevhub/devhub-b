@@ -2,6 +2,8 @@ package teamdevhub.devhub.constant;
 
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.domain.verification.vo.VerificationType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -58,4 +60,6 @@ public final class UserTestConstant {
 
     public static final Set<UserPosition> NEW_USER_POSITIONS = Set.of(new UserPosition(TEST_USER_GUID_1,"002"));
     public static final Set<UserSkill> NEW_USER_SKILLS = Set.of(new UserSkill(TEST_USER_GUID_1,"002"));
+
+    public static final VerificationTarget VERIFICATION_TARGET = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
 }

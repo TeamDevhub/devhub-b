@@ -16,7 +16,7 @@ public class VerificationAdapter implements VerificationRepository {
 
     @Override
     public Verification findByVerificationTarget(VerificationTarget verificationTarget) {
-        return jpaVerificationRepository.findByTargetTypeAndTargetValue(verificationTarget.type(), verificationTarget.value())
+        return jpaVerificationRepository.findByVerificationTypeAndTargetValue(verificationTarget.type(), verificationTarget.value())
                 .map(VerificationMapper::toDomain)
                 .orElseThrow();
     }
@@ -28,6 +28,6 @@ public class VerificationAdapter implements VerificationRepository {
 
     @Override
     public void deleteByVerificationTarget(VerificationTarget target) {
-        jpaVerificationRepository.deleteByTargetTypeAndTargetValue(target.type(), target.value());
+        jpaVerificationRepository.deleteByVerificationTypeAndTargetValue(target.type(), target.value());
     }
 }

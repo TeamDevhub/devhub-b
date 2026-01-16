@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.common.enums.RegexPattern;
 import teamdevhub.devhub.adapter.in.web.validator.RegexMatch;
+import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 @Getter
 @Builder
@@ -21,4 +22,11 @@ public class LoginRequestDto {
     @NotBlank(message = "비밀번호는 필수입니다.")
     @RegexMatch(RegexPattern.AUTH_PASSWORD)
     private String password;
+
+    public LoginCommand toCommand() {
+        return LoginCommand.builder()
+                .email(this.email)
+                .password(this.password)
+                .build();
+    }
 }

@@ -23,8 +23,8 @@ class LoginCommandTest {
         LoginCommand loginCommand = LoginCommand.fromLoginRequestDto(loginRequestDto);
 
         // then
-        assertThat(loginCommand.getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(loginCommand.getPassword()).isEqualTo(TEST_PASSWORD_1);
+        assertThat(loginCommand.email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(loginCommand.password()).isEqualTo(TEST_PASSWORD_1);
     }
 
     @Test
@@ -37,8 +37,8 @@ class LoginCommandTest {
                 .build();
 
         // then
-        assertThat(loginCommand.getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(loginCommand.getPassword()).isEqualTo(TEST_PASSWORD_1);
+        assertThat(loginCommand.email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(loginCommand.password()).isEqualTo(TEST_PASSWORD_1);
     }
 
 }

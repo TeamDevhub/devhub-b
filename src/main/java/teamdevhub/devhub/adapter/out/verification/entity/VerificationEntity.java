@@ -2,6 +2,7 @@ package teamdevhub.devhub.adapter.out.verification.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
 
 import java.time.LocalDateTime;
@@ -36,5 +37,6 @@ public class VerificationEntity {
     private LocalDateTime expiredAt;
 
     @Column(nullable = false)
+    @Convert(converter = BooleanToYNConverter.class)
     private boolean verified;
 }

@@ -3,17 +3,19 @@ package teamdevhub.devhub.small.service.user;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.domain.mail.EmailVerification;
+import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
-import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
 import teamdevhub.devhub.fake.pure.provider.FakePasswordPolicyProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.fake.pure.repository.*;
-import teamdevhub.devhub.fake.pure.usecase.FakeEmailVerificationUseCase;
+import teamdevhub.devhub.fake.pure.repository.FakeUserPositionRepository;
+import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.repository.FakeUserSkillRepository;
+import teamdevhub.devhub.fake.pure.usecase.FakeAuthenticationUseCase;
+import teamdevhub.devhub.fake.pure.usecase.FakeSignupVerificationUseCase;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.service.exception.BusinessRuleException;
@@ -21,7 +23,6 @@ import teamdevhub.devhub.service.user.UserService;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,10 +35,9 @@ class UserServiceTest {
     private FakeUserRepository fakeUserRepository;
     private FakeUserPositionRepository fakeUserPositionRepository;
     private FakeUserSkillRepository fakeUserSkillRepository;
-    private FakeEmailVerificationUseCase fakeEmailVerificationUseCase;
-    private FakeEmailVerificationRepository fakeEmailVerificationRepository;
+    private FakeSignupVerificationUseCase fakeSignupVerificationUseCase;
     private FakePasswordPolicyProvider fakePasswordPolicyProvider;
-    private FakeRefreshTokenRepository fakeRefreshTokenRepository;
+    private FakeAuthenticationUseCase fakeAuthenticationUseCase;
     private FakeDateTimeProvider fakeDateTimeProvider;
 
     @BeforeEach
@@ -46,22 +46,18 @@ class UserServiceTest {
         fakeUserPositionRepository = new FakeUserPositionRepository();
         fakeUserSkillRepository = new FakeUserSkillRepository();
 
+        fakeSignupVerificationUseCase = new FakeSignupVerificationUseCase();
         FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
         fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
-        fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
+        fakeAuthenticationUseCase = new FakeAuthenticationUseCase();
         fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
 
-        EmailVerification emailVerification = EmailVerification.issue(TEST_EMAIL_1, EMAIL_CODE, fakeDateTimeProvider.now().plusMinutes(5));
-        emailVerification.verify(EMAIL_CODE, fakeDateTimeProvider.now());
-        fakeEmailVerificationRepository = new FakeEmailVerificationRepository(List.of(emailVerification), fakeDateTimeProvider);
-        fakeEmailVerificationUseCase = new FakeEmailVerificationUseCase(fakeEmailVerificationRepository, fakeDateTimeProvider);
         userService = new UserService(
+                fakeSignupVerificationUseCase,
+                fakeAuthenticationUseCase,
                 fakeUserRepository,
                 fakeUserPositionRepository,
                 fakeUserSkillRepository,
-                fakeEmailVerificationUseCase,
-                fakeEmailVerificationRepository,
-                fakeRefreshTokenRepository,
                 fakePasswordPolicyProvider,
                 fakeUuidIdentifierProvider,
                 fakeDateTimeProvider
@@ -74,12 +70,11 @@ class UserServiceTest {
         // given
         FakeUuidIdentifierProvider adminUuidProvider = new FakeUuidIdentifierProvider(ADMIN_USER_GUID);
         userService = new UserService(
+                fakeSignupVerificationUseCase,
+                fakeAuthenticationUseCase,
                 fakeUserRepository,
                 fakeUserPositionRepository,
                 fakeUserSkillRepository,
-                fakeEmailVerificationUseCase,
-                fakeEmailVerificationRepository,
-                fakeRefreshTokenRepository,
                 fakePasswordPolicyProvider,
                 adminUuidProvider,
                 fakeDateTimeProvider
@@ -116,13 +111,13 @@ class UserServiceTest {
     @DisplayName("회원가입에_성공하면_이메일_인증_테이블에_해당_사용자의_인증내역이_삭제된다")
     void deleteEmailVerificationRecordWhenSuccessfulSignup() {
         // given
-        SignupCommand signupCommand = new SignupCommand(TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
+        SignupCommand signupCommand = new SignupCommand(TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET);
 
         // when
         User savedUser = userService.signup(signupCommand);
 
         // then
-        assertThat(fakeEmailVerificationRepository.existUnexpiredCode(signupCommand.getEmail())).isFalse();
+        assertThat(fakeSignupVerificationUseCase.getVerification(VERIFICATION_TARGET)).isNull();
         assertThat(fakeUserRepository.save(savedUser).getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(fakeUserRepository.save(savedUser).getPassword()).isEqualTo(fakePasswordPolicyProvider.encode(TEST_PASSWORD_1));
     }

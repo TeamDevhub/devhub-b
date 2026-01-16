@@ -2,10 +2,10 @@ package teamdevhub.devhub.fake.pure.usecase;
 
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
-import teamdevhub.devhub.port.in.auth.AuthUseCase;
+import teamdevhub.devhub.port.in.auth.AuthenticationUseCase;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
-public class FakeAuthUseCase implements AuthUseCase {
+public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     private String revokedUserGuid;
     private String lastReissueRefreshToken;

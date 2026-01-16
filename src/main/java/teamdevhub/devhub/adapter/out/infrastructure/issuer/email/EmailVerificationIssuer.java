@@ -1,6 +1,7 @@
 package teamdevhub.devhub.adapter.out.infrastructure.issuer.email;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
 import teamdevhub.devhub.common.provider.verification.VerificationCodeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
@@ -10,6 +11,7 @@ import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import teamdevhub.devhub.adapter.out.infrastructure.issuer.VerificationIssuer;
 import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
 
+@Component
 @RequiredArgsConstructor
 public class EmailVerificationIssuer implements VerificationIssuer {
 

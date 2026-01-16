@@ -7,7 +7,7 @@ public enum EmailTemplateType {
 
     EMAIL_VERIFICATION(
             "[회원가입] 이메일 인증 코드",
-            "email/getVerification",
+            "email/verification",
             "5분"
     );
 

@@ -13,7 +13,6 @@ import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.user.UserUseCase;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 
 @RestController
@@ -25,11 +24,10 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<ApiDataResponseDto<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
-        SignupCommand signupCommand = SignupCommand.fromSignupUserRequestDto(signupRequestDto);
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithData(
                         SuccessCode.SIGNUP_SUCCESS,
-                        SignupResponseDto.fromDomain(userUseCase.signup(signupCommand))
+                        SignupResponseDto.fromDomain(userUseCase.signup(signupRequestDto.toSignupCommand()))
                 )
         );
     }
@@ -46,8 +44,7 @@ public class UserController {
 
     @PutMapping("/profile")
     public ResponseEntity<ApiDataResponseDto<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, authenticatedUser.userGuid());
-        userUseCase.updateProfile(updateProfileCommand);
+        userUseCase.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS

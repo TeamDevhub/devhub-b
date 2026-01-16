@@ -25,10 +25,10 @@ public class UserQueryRepositoryImpl implements UserQueryRepository{
         List<UserEntity> content = queryFactory
                 .selectFrom(user)
                 .where(
-                        blockedCondition(searchUserCommand.getBlocked()),
-                        joinedFromCondition(searchUserCommand.getJoinedFrom()),
-                        joinedToCondition(searchUserCommand.getJoinedTo()),
-                        keywordCondition(searchUserCommand.getKeyword()))
+                        blockedCondition(searchUserCommand.blocked()),
+                        joinedFromCondition(searchUserCommand.joinedFrom()),
+                        joinedToCondition(searchUserCommand.joinedTo()),
+                        keywordCondition(searchUserCommand.keyword()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(user.registeredDate.desc())
@@ -38,10 +38,10 @@ public class UserQueryRepositoryImpl implements UserQueryRepository{
                 .select(user.count())
                 .from(user)
                 .where(
-                        blockedCondition(searchUserCommand.getBlocked()),
-                        joinedFromCondition(searchUserCommand.getJoinedFrom()),
-                        joinedToCondition(searchUserCommand.getJoinedTo()),
-                        keywordCondition(searchUserCommand.getKeyword())
+                        blockedCondition(searchUserCommand.blocked()),
+                        joinedFromCondition(searchUserCommand.joinedFrom()),
+                        joinedToCondition(searchUserCommand.joinedTo()),
+                        keywordCondition(searchUserCommand.keyword())
                 )
                 .fetchOne();
 

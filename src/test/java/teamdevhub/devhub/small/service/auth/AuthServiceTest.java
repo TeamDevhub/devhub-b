@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
 import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
-import teamdevhub.devhub.service.auth.AuthService;
+import teamdevhub.devhub.service.auth.AuthenticationService;
 import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.repository.FakeRefreshTokenRepository;
@@ -18,7 +18,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class AuthServiceTest {
 
-    private AuthService authService;
+    private AuthenticationService authService;
 
     private FakeUserUseCase fakeUserUseCase;
     private FakeRefreshTokenRepository fakeRefreshTokenRepository;
@@ -30,7 +30,7 @@ class AuthServiceTest {
         fakeUserUseCase = new FakeUserUseCase();
         fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
 
-        authService = new AuthService(
+        authService = new AuthenticationService(
                 fakeTokenIssueProvider,
                 fakeAuthenticatedUserProvider,
                 fakeUserUseCase,

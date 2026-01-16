@@ -19,8 +19,6 @@ public class IssueVerificationRequestDto {
     private String value;
 
     public IssueVerificationCommand toIssueVerificationCommand() {
-        return new IssueVerificationCommand(
-                VerificationTarget.of(verificationType, value)
-        );
+        return new IssueVerificationCommand(VerificationTarget.of(verificationType, value));
     }
 }

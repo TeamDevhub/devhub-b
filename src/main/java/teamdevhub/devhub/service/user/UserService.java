@@ -9,12 +9,12 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.*;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.port.in.auth.AuthenticationUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
 import teamdevhub.devhub.port.out.auth.PasswordPolicyProvider;
-import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;
 import teamdevhub.devhub.port.out.user.UserRepository;
 import teamdevhub.devhub.port.out.user.UserSkillRepository;
@@ -27,11 +27,13 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService implements UserUseCase {
 
+    private final SignupVerificationUseCase signupVerificationUseCase;
+    private final AuthenticationUseCase authenticationUseCase;
+
     private final UserRepository userRepository;
     private final UserPositionRepository userPositionRepository;
     private final UserSkillRepository userSkillRepository;
-    private final SignupVerificationUseCase signupVerificationUseCase;
-    private final RefreshTokenRepository refreshTokenRepository;
+
     private final PasswordPolicyProvider passwordPolicyProvider;
     private final IdentifierProvider identifierProvider;
     private final DateTimeProvider dateTimeProvider;
@@ -99,7 +101,7 @@ public class UserService implements UserUseCase {
     public void withdrawUser(String userGuid) {
         User user = getUser(userGuid);
         user.withdraw();
-        refreshTokenRepository.deleteByUserGuid(userGuid);
+        authenticationUseCase.revoke(userGuid);
         userRepository.delete(user);
     }
 

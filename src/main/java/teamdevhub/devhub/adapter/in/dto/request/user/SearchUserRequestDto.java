@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 
 import java.time.LocalDateTime;
 
@@ -20,4 +21,27 @@ public class SearchUserRequestDto {
     private LocalDateTime joinedTo;
 
     private String keyword;
+
+    public SearchUserCommand toSearchUserCommand() {
+        Boolean blocked = null;
+        if ("Y".equalsIgnoreCase(this.blocked)) {
+            blocked = Boolean.TRUE;
+        }
+
+        if ("N".equalsIgnoreCase(this.blocked)) {
+            blocked = Boolean.FALSE;
+        }
+
+        String keyword = null;
+        if (this.keyword != null && !this.keyword.isBlank()) {
+            keyword = this.keyword.trim();
+        }
+
+        return SearchUserCommand.builder()
+                .blocked(blocked)
+                .joinedFrom(this.joinedFrom)
+                .joinedTo(this.joinedTo)
+                .keyword(keyword)
+                .build();
+    }
 }

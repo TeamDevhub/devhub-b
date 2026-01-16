@@ -23,7 +23,7 @@ class SearchUserCommandTest {
         SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(searchUserCommand.getBlocked()).isTrue();
+        assertThat(searchUserCommand.blocked()).isTrue();
     }
 
     @Test
@@ -38,7 +38,7 @@ class SearchUserCommandTest {
         SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(searchUserCommand.getBlocked()).isFalse();
+        assertThat(searchUserCommand.blocked()).isFalse();
     }
 
     @Test
@@ -53,7 +53,7 @@ class SearchUserCommandTest {
         SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(searchUserCommand.getBlocked()).isNull();
+        assertThat(searchUserCommand.blocked()).isNull();
     }
 
     @Test
@@ -68,7 +68,7 @@ class SearchUserCommandTest {
         SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(searchUserCommand.getKeyword()).isNull();
+        assertThat(searchUserCommand.keyword()).isNull();
     }
 
     @Test
@@ -83,7 +83,7 @@ class SearchUserCommandTest {
         SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(searchUserCommand.getKeyword()).isEqualTo("hello");
+        assertThat(searchUserCommand.keyword()).isEqualTo("hello");
     }
 
     @Test
@@ -102,8 +102,8 @@ class SearchUserCommandTest {
         SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(searchUserCommand.getJoinedFrom()).isEqualTo(joinedFrom);
-        assertThat(searchUserCommand.getJoinedTo()).isEqualTo(joinedTo);
+        assertThat(searchUserCommand.joinedFrom()).isEqualTo(joinedFrom);
+        assertThat(searchUserCommand.joinedTo()).isEqualTo(joinedTo);
     }
 
     @Test
@@ -118,6 +118,6 @@ class SearchUserCommandTest {
         SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
 
         // then
-        assertThat(searchUserCommand.getBlocked()).isTrue();
+        assertThat(searchUserCommand.blocked()).isTrue();
     }
 }

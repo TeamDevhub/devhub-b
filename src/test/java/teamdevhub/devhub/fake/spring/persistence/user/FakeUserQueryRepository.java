@@ -42,18 +42,18 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                 .filter(user -> {
                     boolean matches = true;
 
-                    if (searchUserCommand.getBlocked() != null) {
-                        matches &= user.isBlocked() == searchUserCommand.getBlocked();
+                    if (searchUserCommand.blocked() != null) {
+                        matches &= user.isBlocked() == searchUserCommand.blocked();
                     }
-                    if (searchUserCommand.getJoinedFrom() != null) {
-                        matches &= user.getRegisteredDate() != null && !user.getRegisteredDate().isBefore(searchUserCommand.getJoinedFrom());
+                    if (searchUserCommand.joinedFrom() != null) {
+                        matches &= user.getRegisteredDate() != null && !user.getRegisteredDate().isBefore(searchUserCommand.joinedFrom());
                     }
-                    if (searchUserCommand.getJoinedTo() != null) {
-                        matches &= user.getRegisteredDate() != null && !user.getRegisteredDate().isAfter(searchUserCommand.getJoinedTo());
+                    if (searchUserCommand.joinedTo() != null) {
+                        matches &= user.getRegisteredDate() != null && !user.getRegisteredDate().isAfter(searchUserCommand.joinedTo());
                     }
-                    if (searchUserCommand.getKeyword() != null && !searchUserCommand.getKeyword().isBlank()) {
+                    if (searchUserCommand.keyword() != null && !searchUserCommand.keyword().isBlank()) {
                         matches &= user.getUsername() != null &&
-                                user.getUsername().toLowerCase().contains(searchUserCommand.getKeyword().toLowerCase());
+                                user.getUsername().toLowerCase().contains(searchUserCommand.keyword().toLowerCase());
                     }
 
                     return matches;

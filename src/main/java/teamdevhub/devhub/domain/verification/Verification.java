@@ -7,17 +7,20 @@ import java.util.Objects;
 
 public class Verification {
 
+    private Long id;
     private final VerificationTarget verificationTarget;
     private final String code;
     private final LocalDateTime expiredAt;
     private boolean verified;
 
     private Verification(
+            Long id,
             VerificationTarget verificationTarget,
             String code,
             LocalDateTime expiredAt,
             boolean verified
     ) {
+        this.id = id;
         this.verificationTarget = Objects.requireNonNull(verificationTarget);
         this.code = code;
         this.expiredAt = expiredAt;
@@ -31,22 +34,17 @@ public class Verification {
     ) {
         Objects.requireNonNull(code);
         Objects.requireNonNull(expiredAt);
-        return new Verification(target, code, expiredAt, false);
-    }
-
-    public static Verification confirmed(
-            VerificationTarget target
-    ) {
-        return new Verification(target, null, null, true);
+        return new Verification(null, target, code, expiredAt, false);
     }
 
     public static Verification restore(
+            Long id,
             VerificationTarget target,
             String code,
             LocalDateTime expiredAt,
             boolean verified
     ) {
-        return new Verification(target, code, expiredAt, verified);
+        return new Verification(id, target, code, expiredAt, verified);
     }
 
     public boolean verify(String inputCode, LocalDateTime now) {
@@ -76,4 +74,6 @@ public class Verification {
     public LocalDateTime getExpiredAt() {
         return expiredAt;
     }
+
+    public Long getId() {return id;}
 }

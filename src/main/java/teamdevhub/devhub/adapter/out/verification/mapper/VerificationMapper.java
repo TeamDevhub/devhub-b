@@ -8,6 +8,7 @@ public class VerificationMapper {
 
     public static VerificationEntity toEntity(Verification verification) {
         return VerificationEntity.builder()
+                .id(verification.getId())
                 .verificationType(verification.getVerificationTarget().type())
                 .targetValue(verification.getVerificationTarget().value())
                 .code(verification.getCode())
@@ -18,6 +19,7 @@ public class VerificationMapper {
 
     public static Verification toDomain(VerificationEntity verificationEntity) {
         return Verification.restore(
+                verificationEntity.getId(),
                 VerificationTarget.restore(verificationEntity.getVerificationType(), verificationEntity.getTargetValue()),
                 verificationEntity.getCode(),
                 verificationEntity.getExpiredAt(),

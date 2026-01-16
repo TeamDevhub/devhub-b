@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.common.enums.RegexPattern;
 import teamdevhub.devhub.adapter.in.web.validator.RegexMatch;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.port.in.user.command.SignupCommand;
 
 import java.util.List;
 
@@ -39,4 +42,16 @@ public class SignupRequestDto {
     @NotNull(message = "보유 스킬은 필수입니다.")
     @Size(min = 1, message = "보유 스킬은 최소 1개 이상 선택해야 합니다.")
     private List<@NotBlank String> skillList;
+
+    public SignupCommand toSignupCommand() {
+        return SignupCommand.builder()
+                .email(this.email)
+                .password(this.password)
+                .username(this.username)
+                .introduction(this.introduction)
+                .positionList(this.positionList)
+                .skillList(this.skillList)
+                .verificationTarget(VerificationTarget.of(VerificationType.EMAIL, this.email))
+                .build();
+    }
 }

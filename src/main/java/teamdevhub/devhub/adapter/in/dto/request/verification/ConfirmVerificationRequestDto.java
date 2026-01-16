@@ -22,9 +22,6 @@ public class ConfirmVerificationRequestDto {
     private String code;
 
     public ConfirmVerificationCommand toConfirmVerificationCommand() {
-        return new ConfirmVerificationCommand(
-                VerificationTarget.of(verificationType, value),
-                code
-        );
+        return new ConfirmVerificationCommand(VerificationTarget.of(verificationType, value), code);
     }
 }

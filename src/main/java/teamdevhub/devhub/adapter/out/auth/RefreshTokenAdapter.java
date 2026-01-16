@@ -1,15 +1,15 @@
 package teamdevhub.devhub.adapter.out.auth;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.auth.JpaRefreshTokenRepository;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
+import teamdevhub.devhub.adapter.out.infrastructure.persistence.auth.JpaRefreshTokenRepository;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class RefreshTokenAdapter implements RefreshTokenRepository {
 

@@ -7,7 +7,7 @@ public final class VerificationTarget {
     private final VerificationType verificationType;
     private final String value;
 
-    private VerificationTarget(
+    public VerificationTarget(
             VerificationType verificationType,
             String value,
             boolean validate

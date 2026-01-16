@@ -25,10 +25,9 @@ public class AdminUserController {
 
     @GetMapping()
     public ResponseEntity<ApiDataListResponseDto<UserBasicResponseDto>> list(@ModelAttribute SearchUserRequestDto searchUserRequestDto, @RequestParam int page, @RequestParam int size) {
-        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
         PageCommand pageCommand = PageCommand.of(page, size);
 
-        PageResult<User> pagedUserList = adminUserUseCase.listUser(searchUserCommand, pageCommand);
+        PageResult<User> pagedUserList = adminUserUseCase.listUser(searchUserRequestDto.toSearchUserCommand(), pageCommand);
         List<UserBasicResponseDto> userBasicResponseDtoList = pagedUserList.content().stream()
                         .map(UserBasicResponseDto::fromDomain)
                         .toList();

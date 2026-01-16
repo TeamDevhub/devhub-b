@@ -3,13 +3,13 @@ package teamdevhub.devhub.service.auth;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import teamdevhub.devhub.port.in.auth.AuthenticationUseCase;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
 import teamdevhub.devhub.domain.auth.vo.RefreshToken;
-import teamdevhub.devhub.port.in.auth.AuthUseCase;
 import teamdevhub.devhub.port.in.user.UserUseCase;
 import teamdevhub.devhub.port.out.auth.AuthenticatedUserProvider;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
@@ -19,7 +19,7 @@ import teamdevhub.devhub.service.exception.BusinessRuleException;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AuthService implements AuthUseCase {
+public class AuthenticationService implements AuthenticationUseCase {
 
     private final TokenIssueProvider tokenIssueProvider;
     private final AuthenticatedUserProvider authenticatedUserProvider;
@@ -28,7 +28,7 @@ public class AuthService implements AuthUseCase {
 
     @Override
     public LoginResponseDto login(LoginCommand loginCommand) {
-        AuthenticatedUser authenticatedUser = authenticatedUserProvider.getAuthenticatedUser(loginCommand.getEmail(), loginCommand.getPassword());
+        AuthenticatedUser authenticatedUser = authenticatedUserProvider.getAuthenticatedUser(loginCommand.email(), loginCommand.password());
 
         String prefix = tokenIssueProvider.getPrefix();
         String accessToken = tokenIssueProvider.createAccessToken(authenticatedUser.userGuid(), authenticatedUser.email(), authenticatedUser.userRole());

@@ -15,7 +15,7 @@ import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
-import teamdevhub.devhub.port.in.auth.AuthUseCase;
+import teamdevhub.devhub.port.in.auth.AuthenticationUseCase;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
 
@@ -24,7 +24,7 @@ import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthUseCase authUseCase;
+    private final AuthenticationUseCase authenticationUseCase;
     private final SignupVerificationUseCase signupVerificationUseCase;
 
     @PostMapping("/email-verification")
@@ -49,8 +49,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiDataResponseDto<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
-        LoginCommand loginCommand = LoginCommand.fromLoginRequestDto(loginRequestDto);
-        LoginResponseDto loginResponseDto = authUseCase.login(loginCommand);
+        LoginResponseDto loginResponseDto = authenticationUseCase.login(loginRequestDto.toCommand());
         ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
@@ -67,14 +66,14 @@ public class AuthController {
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithData(
                         SuccessCode.CREATE_SUCCESS,
-                        authUseCase.reissueAccessToken(refreshToken)
+                        authenticationUseCase.reissueAccessToken(refreshToken)
                 )
         );
     }
 
     @PostMapping("/logout")
     public ResponseEntity<ApiDataResponseDto<Void>> revoke(@LoginUser AuthenticatedUser authenticatedUser) {
-        authUseCase.revoke(authenticatedUser.userGuid());
+        authenticationUseCase.revoke(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.LOGOUT_SUCCESS

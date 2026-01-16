@@ -2,7 +2,6 @@ package teamdevhub.devhub.small.adapter.in.auth.dto.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.dto.request.auth.ConfirmEmailVerificationRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
