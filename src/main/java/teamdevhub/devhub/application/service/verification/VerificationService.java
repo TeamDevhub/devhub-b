@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.application.verification.VerificationIssuerSelector;
-import teamdevhub.devhub.port.out.provider.DateTimeProvider;
+import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
@@ -21,7 +21,7 @@ public class VerificationService implements SignupVerificationUseCase {
 
     private final VerificationIssuerSelector verificationIssuerSelector;
     private final NotificationSender notificationSender;
-    private final DateTimeProvider dateTimeProvider;
+    private final TimeProvider timeProvider;
     private final VerificationRepository verificationRepository;
 
     @Override
@@ -35,14 +35,14 @@ public class VerificationService implements SignupVerificationUseCase {
     @Override
     public void confirmSignupVerification(ConfirmVerificationCommand confirmVerificationCommand) {
         Verification verification = verificationRepository.findByVerificationTarget(confirmVerificationCommand.verificationTarget());
-        verification.confirm(confirmVerificationCommand.code(), dateTimeProvider.now());
+        verification.confirm(confirmVerificationCommand.code(), timeProvider.now());
         verificationRepository.save(verification);
     }
 
     @Override
     public void assertSignupAllowed(VerificationTarget verificationTarget) {
         Verification verification = verificationRepository.findByVerificationTarget(verificationTarget);
-        verification.assertValid(dateTimeProvider.now());
+        verification.assertValid(timeProvider.now());
     }
 
     @Override
