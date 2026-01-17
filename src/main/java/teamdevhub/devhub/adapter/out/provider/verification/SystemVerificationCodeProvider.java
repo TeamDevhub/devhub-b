@@ -1,9 +1,11 @@
 package teamdevhub.devhub.adapter.out.provider.verification;
 
+import org.springframework.stereotype.Component;
 import teamdevhub.devhub.port.out.provider.VerificationCodeProvider;
 
 import java.security.SecureRandom;
 
+@Component
 public class SystemVerificationCodeProvider implements VerificationCodeProvider {
 
     private static final int CODE_LENGTH = 6;

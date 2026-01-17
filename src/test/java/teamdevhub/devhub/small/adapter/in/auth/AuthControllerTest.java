@@ -8,8 +8,8 @@ import teamdevhub.devhub.adapter.in.dto.request.auth.LoginRequestDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
-import teamdevhub.devhub.fake.pure.usecase.FakeAuthSessionUseCase;
-import teamdevhub.devhub.fake.pure.usecase.FakeSignupVerificationUseCase;
+import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthSessionUseCase;
+import teamdevhub.devhub.fake.pure.usecase.verification.FakeSignupVerificationUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

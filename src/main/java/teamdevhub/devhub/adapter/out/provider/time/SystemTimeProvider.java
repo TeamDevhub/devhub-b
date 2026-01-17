@@ -1,13 +1,15 @@
 package teamdevhub.devhub.adapter.out.provider.time;
 
+import org.springframework.stereotype.Component;
 import teamdevhub.devhub.common.util.StringUtil;
-import teamdevhub.devhub.port.out.provider.DateTimeProvider;
+import teamdevhub.devhub.port.out.provider.TimeProvider;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class SystemDateTimeProvider implements DateTimeProvider {
+@Component
+public class SystemTimeProvider implements TimeProvider {
 
     public String formatDate(LocalDate date, String pattern) {
         if (date == null) return "";

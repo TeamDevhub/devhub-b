@@ -1,4 +1,4 @@
-package teamdevhub.devhub.fake.pure.usecase;
+package teamdevhub.devhub.fake.pure.usecase.admin.user;
 
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;

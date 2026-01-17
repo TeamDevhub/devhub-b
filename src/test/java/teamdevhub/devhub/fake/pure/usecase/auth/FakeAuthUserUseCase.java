@@ -1,4 +1,4 @@
-package teamdevhub.devhub.fake.pure.usecase;
+package teamdevhub.devhub.fake.pure.usecase.auth;
 
 import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;

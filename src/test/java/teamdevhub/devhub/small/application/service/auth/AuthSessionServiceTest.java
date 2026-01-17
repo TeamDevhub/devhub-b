@@ -9,9 +9,9 @@ import teamdevhub.devhub.application.service.auth.AuthSessionService;
 import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserResolver;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
-import teamdevhub.devhub.fake.pure.repository.FakeRefreshTokenRepository;
-import teamdevhub.devhub.fake.pure.usecase.FakeAuthUserUseCase;
-import teamdevhub.devhub.fake.pure.usecase.FakeUserLoginUseCase;
+import teamdevhub.devhub.fake.pure.repository.auth.FakeRefreshTokenRepository;
+import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthUserUseCase;
+import teamdevhub.devhub.fake.pure.usecase.user.FakeUserLoginUseCase;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;

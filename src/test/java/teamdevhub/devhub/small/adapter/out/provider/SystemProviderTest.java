@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.adapter.out.provider;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.provider.time.SystemDateTimeProvider;
+import teamdevhub.devhub.adapter.out.provider.time.SystemTimeProvider;
 import teamdevhub.devhub.adapter.out.provider.identifier.SystemIdentifierProvider;
 import teamdevhub.devhub.adapter.out.provider.verification.SystemVerificationCodeProvider;
 
@@ -47,7 +47,7 @@ class SystemProviderTest {
     @DisplayName("날짜를_포맷하고_다시_파싱하면_원본과_동일하다")
     void formatAndParseDateReturnsOriginal() {
         // given
-        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        SystemTimeProvider provider = new SystemTimeProvider();
         LocalDate today = LocalDate.of(2026, 1, 9);
         String pattern = "yyyy-MM-dd";
 
@@ -64,7 +64,7 @@ class SystemProviderTest {
     @DisplayName("날짜시간을_포맷하고_다시_파싱하면_원본과_동일하다")
     void formatAndParseDateTimeReturnsOriginal() {
         // given
-        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        SystemTimeProvider provider = new SystemTimeProvider();
         LocalDateTime now = LocalDateTime.of(2026, 1, 9, 14, 45, 30);
         String pattern = "yyyy-MM-dd HH:mm:ss";
 
@@ -81,7 +81,7 @@ class SystemProviderTest {
     @DisplayName("today_와_now_메서드는_현재_날짜와_시간을_반환한다")
     void todayAndNowReturnCurrentDateTime() {
         // given
-        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        SystemTimeProvider provider = new SystemTimeProvider();
 
         // when
         LocalDate today = provider.today();
@@ -96,7 +96,7 @@ class SystemProviderTest {
     @DisplayName("날짜가_null_이면_formatDate_는_빈문자열을_반환한다")
     void formatDateReturnsEmptyStringWhenDateIsNull() {
         // given
-        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        SystemTimeProvider provider = new SystemTimeProvider();
         String pattern = "yyyy-MM-dd";
 
         // when
@@ -110,7 +110,7 @@ class SystemProviderTest {
     @DisplayName("날짜시간이_null_이면_formatDateTime_은_빈문자열을_반환한다")
     void formatDateTimeReturnsEmptyStringWhenDateTimeIsNull() {
         // given
-        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        SystemTimeProvider provider = new SystemTimeProvider();
         String pattern = "yyyy-MM-dd HH:mm:ss";
 
         // when
@@ -124,7 +124,7 @@ class SystemProviderTest {
     @DisplayName("날짜문자열이_null_이거나_빈값이면_parseDate_는_null_을_반환한다")
     void parseDateReturnsNullWhenInputIsEmpty() {
         // given
-        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        SystemTimeProvider provider = new SystemTimeProvider();
         String pattern = "yyyy-MM-dd";
 
         // when, then
@@ -136,7 +136,7 @@ class SystemProviderTest {
     @DisplayName("날짜시간문자열이_null_이거나_빈값이면_parseDateTime_은_null_을_반환한다")
     void parseDateTimeReturnsNullWhenInputIsEmpty() {
         // given
-        SystemDateTimeProvider provider = new SystemDateTimeProvider();
+        SystemTimeProvider provider = new SystemTimeProvider();
         String pattern = "yyyy-MM-dd HH:mm:ss";
 
         // when, then

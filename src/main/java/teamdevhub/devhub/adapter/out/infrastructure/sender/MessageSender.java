@@ -4,6 +4,6 @@ import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 
 public interface MessageSender {
-    boolean supports(VerificationTarget target);
-    void sendVerification(VerificationTarget target, VerificationMessage verificationMessage);
+    boolean supports(VerificationTarget verificationTarget);
+    void sendVerification(VerificationTarget verificationTarget, VerificationMessage verificationMessage);
 }

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.medium.adapter.out.common.provider.password;
+package teamdevhub.devhub.medium.adapter.out.provider.password;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.fake.pure.usecase;
+package teamdevhub.devhub.fake.pure.usecase.user;
 
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.user.usecase.UserLoginUseCase;

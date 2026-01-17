@@ -9,8 +9,8 @@
 //import teamdevhub.devhub.common.enums.SuccessCode;
 //import teamdevhub.devhub.domain.user.UserRole;
 //import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
-//import teamdevhub.devhub.fake.pure.usecase.FakeUserProfileUseCase;
-//import teamdevhub.devhub.fake.pure.usecase.FakeUserWithdrawUseCase;
+//import teamdevhub.devhub.fake.pure.usecase.user.FakeUserProfileUseCase;
+//import teamdevhub.devhub.fake.pure.usecase.user.FakeUserWithdrawUseCase;
 //
 //import static org.assertj.core.api.Assertions.assertThat;
 //import static teamdevhub.devhub.constant.UserTestConstant.*;

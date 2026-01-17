@@ -3,7 +3,7 @@ package teamdevhub.devhub.application.service.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.port.in.user.usecase.UserLoginUseCase;
-import teamdevhub.devhub.port.out.provider.DateTimeProvider;
+import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 @Service
@@ -11,10 +11,10 @@ import teamdevhub.devhub.port.out.user.UserRepository;
 public class UserLoginService implements UserLoginUseCase {
 
     private final UserRepository userRepository;
-    private final DateTimeProvider dateTimeProvider;
+    private final TimeProvider timeProvider;
 
     @Override
     public void updateLastLoginDateTime(String userGuid) {
-        userRepository.updateLastLoginDateTime(userGuid, dateTimeProvider.now());
+        userRepository.updateLastLoginDateTime(userGuid, timeProvider.now());
     }
 }

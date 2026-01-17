@@ -1,15 +1,15 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.port.out.provider.DateTimeProvider;
+import teamdevhub.devhub.port.out.provider.TimeProvider;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class FakeDateTimeProvider implements DateTimeProvider {
+public class FakeTimeProvider implements TimeProvider {
 
     private final LocalDateTime fixedDateTime;
 
-    public FakeDateTimeProvider(LocalDateTime fixedDateTime) {
+    public FakeTimeProvider(LocalDateTime fixedDateTime) {
         this.fixedDateTime = fixedDateTime;
     }
 

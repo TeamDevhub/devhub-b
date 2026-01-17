@@ -28,15 +28,15 @@ public class EmailMessageSendAdapter implements MessageSender {
     private final SpringTemplateEngine templateEngine;
 
     @Override
-    public boolean supports(VerificationTarget target) {
-        return target.verificationType() == VerificationType.EMAIL;
+    public boolean supports(VerificationTarget verificationTarget) {
+        return verificationTarget.verificationType() == VerificationType.EMAIL;
     }
 
     @Override
-    public void sendVerification(VerificationTarget target, VerificationMessage verificationMessage) {
-        EmailTemplateType template = EmailTemplateType.EMAIL_VERIFICATION;
-        Map<String, Object> variables = toVariables(template, verificationMessage);
-        send(target.value(), template, variables);
+    public void sendVerification(VerificationTarget verificationTarget, VerificationMessage verificationMessage) {
+        EmailTemplateType emailTemplateType = EmailTemplateType.EMAIL_VERIFICATION;
+        Map<String, Object> variables = toVariables(emailTemplateType, verificationMessage);
+        send(verificationTarget.value(), emailTemplateType, variables);
     }
 
     private Map<String, Object> toVariables(EmailTemplateType template, VerificationMessage message) {

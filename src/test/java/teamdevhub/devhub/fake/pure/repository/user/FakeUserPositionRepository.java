@@ -1,4 +1,4 @@
-package teamdevhub.devhub.fake.pure.repository;
+package teamdevhub.devhub.fake.pure.repository.user;
 
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;

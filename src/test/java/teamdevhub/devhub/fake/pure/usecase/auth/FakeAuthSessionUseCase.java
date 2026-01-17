@@ -1,4 +1,4 @@
-package teamdevhub.devhub.fake.pure.usecase;
+package teamdevhub.devhub.fake.pure.usecase.auth;
 
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;

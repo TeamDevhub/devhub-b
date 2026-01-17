@@ -9,7 +9,7 @@ import teamdevhub.devhub.adapter.in.dto.request.user.SearchUserRequestDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataListResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageVo;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.fake.pure.usecase.FakeAdminUserUseCase;
+import teamdevhub.devhub.fake.pure.usecase.admin.user.FakeAdminUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.medium.adapter.out.common.provider.audit;
+package teamdevhub.devhub.medium.adapter.out.provider.audit;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

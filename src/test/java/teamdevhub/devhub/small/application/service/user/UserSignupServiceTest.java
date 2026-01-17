@@ -8,10 +8,10 @@
 //import teamdevhub.devhub.domain.user.User;
 //import teamdevhub.devhub.fake.pure.provider.FakePasswordPolicyProvider;
 //import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
-//import teamdevhub.devhub.fake.pure.repository.FakeUserPositionRepository;
-//import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
-//import teamdevhub.devhub.fake.pure.repository.FakeUserSkillRepository;
-//import teamdevhub.devhub.fake.pure.usecase.FakeSignupVerificationUseCase;
+//import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
+//import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
+//import teamdevhub.devhub.fake.pure.repository.user.FakeUserSkillRepository;
+//import teamdevhub.devhub.fake.pure.usecase.verification.FakeSignupVerificationUseCase;
 //import teamdevhub.devhub.port.in.user.command.SignupCommand;
 //
 //import static org.assertj.core.api.Assertions.assertThat;

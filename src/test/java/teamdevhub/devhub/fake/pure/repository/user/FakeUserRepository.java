@@ -1,4 +1,4 @@
-package teamdevhub.devhub.fake.pure.repository;
+package teamdevhub.devhub.fake.pure.repository.user;
 
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;

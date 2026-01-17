@@ -8,9 +8,9 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
-import teamdevhub.devhub.fake.pure.repository.FakeUserPositionRepository;
-import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
-import teamdevhub.devhub.fake.pure.repository.FakeUserSkillRepository;
+import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
+import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.repository.user.FakeUserSkillRepository;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 
 import java.util.HashSet;

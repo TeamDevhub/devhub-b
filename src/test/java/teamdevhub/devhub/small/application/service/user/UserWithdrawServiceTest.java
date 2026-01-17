@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.service.user.UserWithdrawService;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
-import teamdevhub.devhub.fake.pure.usecase.FakeAuthSessionUseCase;
+import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthSessionUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

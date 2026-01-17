@@ -1,4 +1,4 @@
-package teamdevhub.devhub.fake.pure.repository;
+package teamdevhub.devhub.fake.pure.repository.auth;
 
 import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;

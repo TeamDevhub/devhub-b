@@ -3,7 +3,7 @@ package teamdevhub.devhub.port.out.provider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public interface DateTimeProvider {
+public interface TimeProvider {
     String formatDate(LocalDate date, String pattern);
     String formatDateTime(LocalDateTime dateTime, String pattern);
     LocalDate parseDate(String dateStr, String pattern);

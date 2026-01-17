@@ -8,7 +8,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.fake.pure.provider.FakePasswordPolicyProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

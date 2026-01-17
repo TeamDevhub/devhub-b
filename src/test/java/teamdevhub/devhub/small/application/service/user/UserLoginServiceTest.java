@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.service.user.UserLoginService;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
-import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
+import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 
 import java.time.LocalDateTime;
 
@@ -18,12 +18,12 @@ public class UserLoginServiceTest {
     private UserLoginService userLoginService;
 
     private FakeUserRepository fakeUserRepository;
-    private FakeDateTimeProvider fakeDateTimeProvider;
+    private FakeTimeProvider fakeDateTimeProvider;
 
     @BeforeEach
     void init() {
         fakeUserRepository = new FakeUserRepository();
-        fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
+        fakeDateTimeProvider = new FakeTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
 
         userLoginService = new UserLoginService(fakeUserRepository, fakeDateTimeProvider);
     }
