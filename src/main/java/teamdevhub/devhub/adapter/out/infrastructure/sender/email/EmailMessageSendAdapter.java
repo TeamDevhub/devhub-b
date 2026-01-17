@@ -57,7 +57,7 @@ public class EmailMessageSendAdapter implements MessageSender {
 
             mailSender.send(message);
         } catch (Exception e) {
-            throw ExternalServiceException.of(ErrorCode.EMAIL_SEND_FAIL);
+            throw ExternalServiceException.of(ErrorCode.NOTIFICATION_SEND_FAIL);
         }
     }
 

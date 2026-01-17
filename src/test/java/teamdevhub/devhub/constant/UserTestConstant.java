@@ -61,5 +61,6 @@ public final class UserTestConstant {
     public static final Set<UserPosition> NEW_USER_POSITIONS = Set.of(new UserPosition(TEST_USER_GUID_1,"002"));
     public static final Set<UserSkill> NEW_USER_SKILLS = Set.of(new UserSkill(TEST_USER_GUID_1,"002"));
 
-    public static final VerificationTarget VERIFICATION_TARGET = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
+    public static final VerificationTarget VERIFICATION_TARGET_1 = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
+    public static final VerificationTarget VERIFICATION_TARGET_2 = VerificationTarget.of(VerificationType.EMAIL, UNVERIFIED_EMAIL);
 }

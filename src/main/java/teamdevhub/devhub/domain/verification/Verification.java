@@ -54,13 +54,13 @@ public class Verification {
     public void confirm(String code, LocalDateTime now) {
         boolean success = verify(code, now);
         if (!success) {
-            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw DomainRuleException.of(ErrorCode.VERIFICATION_NOT_CONFIRMED);
         }
     }
 
     public void assertValid(LocalDateTime now) {
         if (!isVerified() || isExpired(now)) {
-            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw DomainRuleException.of(ErrorCode.VERIFICATION_NOT_CONFIRMED);
         }
     }
 
@@ -75,5 +75,4 @@ public class Verification {
     private boolean isExpired(LocalDateTime now) {
         return expiredAt.isBefore(now);
     }
-
 }
