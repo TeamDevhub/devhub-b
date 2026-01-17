@@ -1,7 +1,6 @@
 package teamdevhub.devhub.fake.pure.provider;
 
 import teamdevhub.devhub.port.out.provider.VerificationCodeProvider;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
 
 public class FakeVerificationCodeProvider implements VerificationCodeProvider {
 

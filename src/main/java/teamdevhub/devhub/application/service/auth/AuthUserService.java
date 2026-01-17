@@ -20,7 +20,7 @@ public class AuthUserService implements AuthUserUseCase {
 
     @Override
     public void initializeAdminUser(String email, String rawPassword, String username) {
-        if(existsByUserRole(UserRole.ADMIN)) {
+        if(existsByUserRole()) {
             return;
         }
 
@@ -40,7 +40,7 @@ public class AuthUserService implements AuthUserUseCase {
         return userRepository.findAuthenticatedUserByUserGuid(userGuid);
     }
 
-    private boolean existsByUserRole(UserRole userRole) {
-        return userRepository.existsByUserRole(userRole);
+    private boolean existsByUserRole() {
+        return userRepository.existsByUserRole(UserRole.ADMIN);
     }
 }
