@@ -43,7 +43,7 @@ public class EmailMessageSendAdapterTest {
 
     @Test
     @DisplayName("메일_전송_호출시_JavaMailSender_가_호출된다")
-    void sendVerificationCallsMailSender() throws Exception {
+    void sendVerificationCallsMailSender() {
         // given
         VerificationTarget verificationTarget = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL);
         VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, null);
@@ -62,7 +62,7 @@ public class EmailMessageSendAdapterTest {
 
     @Test
     @DisplayName("지원하지_않는_VerificationType_으로_send_하면_예외가_발생한다")
-    void sendVerificationThrowsExternalServiceException() throws Exception {
+    void sendVerificationThrowsExternalServiceException() {
         // given
         VerificationTarget target = VerificationTarget.of(VerificationType.OTP, "010-1234-5678");
         VerificationMessage message = new VerificationMessage("123456", null);
