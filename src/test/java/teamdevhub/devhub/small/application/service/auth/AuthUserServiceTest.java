@@ -3,26 +3,15 @@ package teamdevhub.devhub.small.application.service.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
-import teamdevhub.devhub.application.service.auth.AuthSessionService;
 import teamdevhub.devhub.application.service.auth.AuthUserService;
-import teamdevhub.devhub.application.service.user.UserProfileService;
-import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserResolver;
 import teamdevhub.devhub.fake.pure.provider.FakePasswordPolicyProvider;
-import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.fake.pure.repository.FakeRefreshTokenRepository;
 import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
-import teamdevhub.devhub.fake.pure.usecase.FakeUserProfileUseCase;
-import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 public class AuthUserServiceTest {
 
