@@ -6,22 +6,19 @@ import teamdevhub.devhub.port.out.sender.NotificationSender;
 
 public class FakeNotificationSender implements NotificationSender {
 
-    private boolean called = false;
+    private boolean sent = false;
     private VerificationTarget target;
     private VerificationMessage message;
 
     @Override
-    public void sendVerification(
-            VerificationTarget verificationTarget,
-            VerificationMessage verificationMessage
-    ) {
-        this.called = true;
+    public void sendVerification(VerificationTarget verificationTarget, VerificationMessage verificationMessage) {
+        this.sent = true;
         this.target = verificationTarget;
         this.message = verificationMessage;
     }
 
-    public boolean isCalled() {
-        return called;
+    public boolean isSent() {
+        return sent;
     }
 
     public VerificationTarget getTarget() {

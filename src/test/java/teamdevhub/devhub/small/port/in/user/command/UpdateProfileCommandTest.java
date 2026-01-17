@@ -11,22 +11,85 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 class UpdateProfileCommandTest {
 
     @Test
-    @DisplayName("UpdateProfileRequestDto_를_UpdateProfileCommand_로_변환할_수_있다")
-    void convertRequestDtoToCommand() {
+    @DisplayName("username_이_존재하면_hasUsernameAndIntroductionChange_는_true_이다")
+    void hasUsernameChangeIsTrue() {
         // given
-        UpdateProfileRequestDto updateProfileRequestDto = UpdateProfileRequestDto.builder()
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.builder()
                 .username(NEW_USERNAME)
-                .introduction(NEW_INTRO)
-                .positionList(NEW_POSITION_LIST)
-                .skillList(NEW_SKILL_LIST)
                 .build();
 
-        // when
-        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.fromUpdateProfileRequestDto(updateProfileRequestDto, TEST_USER_GUID_1);
+        // when, then
+        assertThat(updateProfileCommand.hasUsernameAndIntroductionChange()).isTrue();
+    }
 
-        // then
-        assertThat(updateProfileCommand.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(updateProfileCommand.getUsername()).isEqualTo(NEW_USERNAME);
-        assertThat(updateProfileCommand.getPositions()).isEqualTo(NEW_USER_POSITIONS);
+    @Test
+    @DisplayName("introduction_이_존재하면_hasUsernameAndIntroductionChange_는_true_이다")
+    void hasIntroductionChangeIsTrue() {
+        // given
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.builder()
+                .introduction(NEW_INTRO)
+                .build();
+
+        // when, then
+        assertThat(updateProfileCommand.hasUsernameAndIntroductionChange()).isTrue();
+    }
+
+    @Test
+    @DisplayName("username_과_introduction_이_모두_null_이면_hasUsernameAndIntroductionChange_는_false_이다")
+    void hasUsernameAndIntroductionChangeIsFalse() {
+        // given
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.builder()
+                .build();
+
+        // when, then
+        assertThat(updateProfileCommand.hasUsernameAndIntroductionChange()).isFalse();
+    }
+
+    @Test
+    @DisplayName("positions_가_null_이_아니면_hasPositionsChange_는_true_이다")
+    void hasPositionsChangeIsTrue() {
+        // given
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.builder()
+                .positions(NEW_USER_POSITIONS)
+                .build();
+
+        // when, then
+        assertThat(updateProfileCommand.hasPositionsChange()).isTrue();
+    }
+
+    @Test
+    @DisplayName("positions_가_null_이면_hasPositionsChange_는_false_이다")
+    void hasPositionsChangeIsFalse() {
+        // given
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.builder()
+                .positions(null)
+                .build();
+
+        // when, then
+        assertThat(updateProfileCommand.hasPositionsChange()).isFalse();
+    }
+
+    @Test
+    @DisplayName("skills_가_null_이_아니면_hasSkillsChange_는_true_이다")
+    void hasSkillsChangeIsTrue() {
+        // given
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.builder()
+                .skills(NEW_USER_SKILLS)
+                .build();
+
+        // when, then
+        assertThat(updateProfileCommand.hasSkillsChange()).isTrue();
+    }
+
+    @Test
+    @DisplayName("skills_가_null_이면_hasSkillsChange_는_false_이다")
+    void hasSkillsChangeIsFalse() {
+        // given
+        UpdateProfileCommand updateProfileCommand = UpdateProfileCommand.builder()
+                .skills(null)
+                .build();
+
+        // when, then
+        assertThat(updateProfileCommand.hasSkillsChange()).isFalse();
     }
 }

@@ -8,7 +8,7 @@ import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
+import teamdevhub.devhub.port.in.verification.VerificationUseCase;
 import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
 import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
 import teamdevhub.devhub.port.out.sender.NotificationSender;
@@ -17,7 +17,7 @@ import teamdevhub.devhub.port.out.verification.VerificationRepository;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class VerificationService implements SignupVerificationUseCase {
+public class VerificationService implements VerificationUseCase {
 
     private final VerificationIssuerSelector verificationIssuerSelector;
     private final NotificationSender notificationSender;
@@ -25,7 +25,7 @@ public class VerificationService implements SignupVerificationUseCase {
     private final VerificationRepository verificationRepository;
 
     @Override
-    public void issueSignupVerification(IssueVerificationCommand issueVerificationCommand) {
+    public void issueVerification(IssueVerificationCommand issueVerificationCommand) {
         IssuedVerification issuedVerification = verificationIssuerSelector.issueVerification(issueVerificationCommand.verificationTarget());
         verificationRepository.save(issuedVerification.verification());
         issuedVerification.getVerificationMessage()
@@ -33,14 +33,14 @@ public class VerificationService implements SignupVerificationUseCase {
     }
 
     @Override
-    public void confirmSignupVerification(ConfirmVerificationCommand confirmVerificationCommand) {
+    public void confirmVerification(ConfirmVerificationCommand confirmVerificationCommand) {
         Verification verification = verificationRepository.findByVerificationTarget(confirmVerificationCommand.verificationTarget());
         verification.confirm(confirmVerificationCommand.code(), timeProvider.now());
         verificationRepository.save(verification);
     }
 
     @Override
-    public void assertSignupAllowed(VerificationTarget verificationTarget) {
+    public void assertAllowed(VerificationTarget verificationTarget) {
         Verification verification = verificationRepository.findByVerificationTarget(verificationTarget);
         verification.assertValid(timeProvider.now());
     }

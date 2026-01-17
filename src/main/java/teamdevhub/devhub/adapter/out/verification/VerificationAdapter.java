@@ -2,8 +2,10 @@ package teamdevhub.devhub.adapter.out.verification;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.verification.mapper.VerificationMapper;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.verification.JpaVerificationRepository;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.port.out.verification.VerificationRepository;
@@ -18,7 +20,7 @@ public class VerificationAdapter implements VerificationRepository {
     public Verification findByVerificationTarget(VerificationTarget verificationTarget) {
         return jpaVerificationRepository.findByVerificationTypeAndTargetValue(verificationTarget.verificationType(), verificationTarget.value())
                 .map(VerificationMapper::toDomain)
-                .orElseThrow();
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.VERIFICATION_NOT_EXISTED));
     }
 
     @Override

@@ -1,11 +1,16 @@
 package teamdevhub.devhub.fake.pure.usecase.user;
 
 import teamdevhub.devhub.domain.user.User;
+import teamdevhub.devhub.domain.user.vo.UserPosition;
+import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserSignupUseCase;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 

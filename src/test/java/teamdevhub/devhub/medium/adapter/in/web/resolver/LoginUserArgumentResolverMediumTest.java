@@ -4,7 +4,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
+import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUserArgumentResolver;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.exception.AuthRuleException;
@@ -12,6 +14,8 @@ import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
 import teamdevhub.devhub.fake.spring.infrastructure.FakeAuthentication;
+
+import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,6 +25,16 @@ class LoginUserArgumentResolverMediumTest {
 
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
+
+    static class TestController {
+
+        public void testMethod(@LoginUser AuthenticatedUser authenticatedUser) {}
+
+        public void noAnnotationMethod(AuthenticatedUser authenticatedUser) {}
+
+        public void wrongTypeMethod(@LoginUser String user) {}
+    }
+
     @BeforeEach
     void init() {
         loginUserArgumentResolver = new LoginUserArgumentResolver();
@@ -29,6 +43,48 @@ class LoginUserArgumentResolverMediumTest {
     @AfterEach
     void clear() {
         SecurityContextHolder.clearContext();
+    }
+
+    @Test
+    @DisplayName("supportsParameter_는_LoginUser_어노테이션과_AuthenticatedUser_타입을_지원한다")
+    void supportsParameter_returnsTrueForLoginUserAnnotatedAuthenticatedUser() throws NoSuchMethodException {
+        // given
+        Method method = TestController.class.getMethod("testMethod", AuthenticatedUser.class);
+        MethodParameter methodParameter = new MethodParameter(method, 0);
+
+        // when
+        boolean result = loginUserArgumentResolver.supportsParameter(methodParameter);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("supportsParameter_는_어노테이션이_없으면_false_를_반환한다")
+    void supportsParameter_returnsFalseWithoutAnnotation() throws NoSuchMethodException {
+        // given
+        Method method = TestController.class.getMethod("noAnnotationMethod", AuthenticatedUser.class);
+        MethodParameter methodParameter = new MethodParameter(method, 0);
+
+        // when
+        boolean result = loginUserArgumentResolver.supportsParameter(methodParameter);
+
+        // then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    @DisplayName("supportsParameter_는_타입이_다르면_false_를_반환한다")
+    void supportsParameter_returnsFalseForWrongType() throws NoSuchMethodException {
+        // given
+        Method method = TestController.class.getMethod("wrongTypeMethod", String.class);
+        MethodParameter methodParameter = new MethodParameter(method, 0);
+
+        // when
+        boolean result = loginUserArgumentResolver.supportsParameter(methodParameter);
+
+        // then
+        assertThat(result).isFalse();
     }
 
     @Test

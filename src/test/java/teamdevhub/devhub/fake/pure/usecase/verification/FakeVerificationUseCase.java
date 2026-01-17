@@ -5,7 +5,7 @@ import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
-import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
+import teamdevhub.devhub.port.in.verification.VerificationUseCase;
 import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
 import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
 
@@ -13,31 +13,31 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static teamdevhub.devhub.constant.UserTestConstant.EMAIL_CODE;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_CODE;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
 
-public class FakeSignupVerificationUseCase implements SignupVerificationUseCase {
+public class FakeVerificationUseCase implements VerificationUseCase {
 
     private final Map<String, Verification> store = new HashMap<>();
     private final TimeProvider timeProvider = new FakeTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
 
-    public FakeSignupVerificationUseCase() {
+    public FakeVerificationUseCase() {
         VerificationTarget target = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
 
-        Verification verification = Verification.issue(target, EMAIL_CODE, timeProvider.now().plusMinutes(5));
-        verification.confirm(EMAIL_CODE, timeProvider.now());
+        Verification verification = Verification.issue(target, TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
+        verification.confirm(TEST_EMAIL_CODE, timeProvider.now());
         store.put(target.value(), verification);
     }
 
     @Override
-    public void issueSignupVerification(IssueVerificationCommand issueVerificationCommand) {
+    public void issueVerification(IssueVerificationCommand issueVerificationCommand) {
         VerificationTarget verificationTarget = issueVerificationCommand.verificationTarget();
-        Verification verification = Verification.issue(verificationTarget, EMAIL_CODE, timeProvider.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
         store.put(verificationTarget.value(), verification);
     }
 
     @Override
-    public void confirmSignupVerification(ConfirmVerificationCommand confirmVerificationCommand) {
+    public void confirmVerification(ConfirmVerificationCommand confirmVerificationCommand) {
         VerificationTarget verificationTarget = confirmVerificationCommand.verificationTarget();
         Verification verification = store.get(verificationTarget.value());
         verification.confirm(confirmVerificationCommand.code(), timeProvider.now());
@@ -45,7 +45,7 @@ public class FakeSignupVerificationUseCase implements SignupVerificationUseCase 
     }
 
     @Override
-    public void assertSignupAllowed(VerificationTarget verificationTarget) {
+    public void assertAllowed(VerificationTarget verificationTarget) {
         Verification verification = store.get(verificationTarget.value());
         verification.assertValid(timeProvider.now());
     }
@@ -56,7 +56,7 @@ public class FakeSignupVerificationUseCase implements SignupVerificationUseCase 
     }
 
     public void putUnverified(VerificationTarget verificationTarget) {
-        Verification verification = Verification.issue(verificationTarget, EMAIL_CODE, timeProvider.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
         store.put(verificationTarget.value(), verification);
     }
 }

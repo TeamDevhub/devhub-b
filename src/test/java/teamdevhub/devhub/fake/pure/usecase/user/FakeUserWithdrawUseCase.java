@@ -30,4 +30,8 @@ public class FakeUserWithdrawUseCase implements UserWithdrawUseCase {
             user.withdraw();
         }
     }
+
+    public User getUser(String userGuid) {
+        return store.get(userGuid);
+    }
 }

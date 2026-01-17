@@ -9,7 +9,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -61,16 +60,6 @@ public class LoggingAspect {
             return null;
         }
 
-        if (simpleName.contains("SimpleJpaRepository")) {
-            Class<?>[] interfaces = clazz.getInterfaces();
-            for (Class<?> iface : interfaces) {
-                if (iface.getSimpleName().endsWith("Repository")) {
-                    return iface.getSimpleName();
-                }
-            }
-            return "SimpleJpaRepository";
-        }
-
         return simpleName;
     }
 
@@ -94,11 +83,6 @@ public class LoggingAspect {
                             page.getSize(),
                             page.getTotalElements()
                     );
-        }
-
-        if (result instanceof Slice<?> slice) {
-            return "Slice{contentSize=%d, hasNext=%s}"
-                    .formatted(slice.getNumberOfElements(), slice.hasNext());
         }
 
         if (result instanceof Collection<?> coll) {

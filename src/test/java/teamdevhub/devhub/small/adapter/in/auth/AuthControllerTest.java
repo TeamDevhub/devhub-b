@@ -5,11 +5,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.AuthController;
 import teamdevhub.devhub.adapter.in.dto.request.auth.LoginRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.verification.ConfirmVerificationRequestDto;
+import teamdevhub.devhub.adapter.in.dto.request.verification.IssueVerificationRequestDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthSessionUseCase;
-import teamdevhub.devhub.fake.pure.usecase.verification.FakeSignupVerificationUseCase;
+import teamdevhub.devhub.fake.pure.usecase.verification.FakeVerificationUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -18,35 +21,35 @@ class AuthControllerTest {
 
     private AuthController authController;
     private FakeAuthSessionUseCase fakeAuthenticationUseCase;
-    private FakeSignupVerificationUseCase fakeSignupVerificationUseCase;
+    private FakeVerificationUseCase fakeVerificationUseCase;
 
     @BeforeEach
     void init() {
         fakeAuthenticationUseCase = new FakeAuthSessionUseCase();
-        fakeSignupVerificationUseCase = new FakeSignupVerificationUseCase();
-        authController = new AuthController(fakeAuthenticationUseCase, fakeSignupVerificationUseCase);
+        fakeVerificationUseCase = new FakeVerificationUseCase();
+        authController = new AuthController(fakeAuthenticationUseCase, fakeVerificationUseCase);
     }
 
-//    @Test
-//    @DisplayName("이메일_인증_메일_전송에_성공하면_EMAIL_VERIFICATION_SENT_CODE_를_확인할_수_있다")
-//    void canVerifyCodeWhenSendingEmailVerification() {
-//        // given
-//        EmailVerificationRequestDto emailVerificationRequestDto = new EmailVerificationRequestDto(TEST_EMAIL_1);
-//
-//        // when, then
-//        assertThat(authController.sendEmailVerification(emailVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SENT.getCode());
-//    }
-//
-//    @Test
-//    @DisplayName("이메일_인증_확인에_성공하면_EMAIL_VERIFICATION_SUCCESS_의_코드를_확인할_수_있다")
-//    void canVerifyCodeWhenConfirmingEmailVerification() {
-//        // given
-//        fakeEmailVerificationUseCase.sendEmailVerification(new EmailVerificationRequestDto(TEST_EMAIL_1));
-//        ConfirmEmailVerificationRequestDto confirmEmailVerificationRequestDto = new ConfirmEmailVerificationRequestDto(TEST_EMAIL_1, EMAIL_CODE);
-//
-//        // when, then
-//        assertThat(authController.confirmEmailVerification(confirmEmailVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SUCCESS.getCode());
-//    }
+    @Test
+    @DisplayName("이메일_인증_메일_전송에_성공하면_EMAIL_VERIFICATION_SENT_CODE_를_확인할_수_있다")
+    void canVerifyCodeWhenSendingEmailVerification() {
+        // given
+        IssueVerificationRequestDto issueVerificationRequestDto = new IssueVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1);
+
+        // when, then
+        assertThat(authController.sendEmailVerification(issueVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SENT.getCode());
+    }
+
+    @Test
+    @DisplayName("이메일_인증_확인에_성공하면_EMAIL_VERIFICATION_SUCCESS_의_코드를_확인할_수_있다")
+    void canVerifyCodeWhenConfirmingEmailVerification() {
+        // given
+        fakeVerificationUseCase.issueVerification(new IssueVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1).toIssueVerificationCommand());
+        ConfirmVerificationRequestDto confirmVerificationRequestDto = new ConfirmVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1, TEST_EMAIL_CODE);
+
+        // when, then
+        assertThat(authController.confirmEmailVerification(confirmVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SUCCESS.getCode());
+    }
 
     @Test
     @DisplayName("로그인에_성공하면_LOGIN_SUCCESS_의_코드를_확인할_수_있다")

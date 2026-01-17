@@ -11,7 +11,7 @@ import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserSkillRepository;
-import teamdevhub.devhub.fake.pure.usecase.verification.FakeSignupVerificationUseCase;
+import teamdevhub.devhub.fake.pure.usecase.verification.FakeVerificationUseCase;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,13 +21,13 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 public class UserSignupServiceTest {
 
     private UserSignupService userSignupService;
-    private FakeSignupVerificationUseCase fakeSignupVerificationUseCase;
+    private FakeVerificationUseCase fakeSignupVerificationUseCase;
     private FakeUserRepository fakeUserRepository;
     private FakePasswordPolicyProvider fakePasswordPolicyProvider;
 
     @BeforeEach
     void init() {
-        fakeSignupVerificationUseCase = new FakeSignupVerificationUseCase();
+        fakeSignupVerificationUseCase = new FakeVerificationUseCase();
 
         fakeUserRepository = new FakeUserRepository();
         FakeUserPositionRepository fakeUserPositionRepository = new FakeUserPositionRepository();

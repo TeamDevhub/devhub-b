@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.auth.dto.request;
+package teamdevhub.devhub.small.adapter.in.dto.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

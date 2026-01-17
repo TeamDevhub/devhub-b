@@ -23,7 +23,7 @@ public record VerificationTarget(VerificationType verificationType, String value
                     throw new IllegalArgumentException("Invalid email format");
                 }
             }
-            case PHONE -> {
+            case SMS -> {
                 if (!value.matches("^01[0-9]{8,9}$")) {
                     throw new IllegalArgumentException("Invalid phone number format");
                 }

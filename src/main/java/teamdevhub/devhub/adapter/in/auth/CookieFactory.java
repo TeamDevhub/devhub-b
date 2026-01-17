@@ -2,7 +2,7 @@ package teamdevhub.devhub.adapter.in.auth;
 
 import org.springframework.http.ResponseCookie;
 
-class CookieFactory {
+public class CookieFactory {
 
     private static final String COOKIE_NAME = "refreshToken";
     private static final String SAME_SITE = "SameSite";
@@ -11,7 +11,7 @@ class CookieFactory {
 
     private CookieFactory() {}
 
-    static ResponseCookie createRefreshTokenCookie(String refreshToken) {
+    public static ResponseCookie createRefreshTokenCookie(String refreshToken) {
         return ResponseCookie.from(COOKIE_NAME, refreshToken)
                 .httpOnly(true)
                 .secure(true)

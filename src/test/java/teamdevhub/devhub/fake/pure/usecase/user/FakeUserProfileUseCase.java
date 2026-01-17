@@ -14,14 +14,14 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
     private final Map<String, User> store = new HashMap<>();
 
     public FakeUserProfileUseCase() {
-        User testUser = User.createGeneralUser(
+        User user = User.createGeneralUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 TEST_USERNAME_1,
                 TEST_INTRO_1
         );
-        store.put(TEST_USER_GUID_1, testUser);
+        store.put(TEST_USER_GUID_1, user);
     }
 
     @Override
@@ -31,6 +31,9 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
 
     @Override
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
-        store.get(updateProfileCommand.getUserGuid());
+        User user = store.get(updateProfileCommand.getUserGuid());
+        user.updateUsernameAndIntroduction(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
+        user.changePositions(updateProfileCommand.getPositions());
+        user.changeSkills(updateProfileCommand.getSkills());
     }
 }

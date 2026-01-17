@@ -20,7 +20,7 @@ public class EmailVerificationIssuer implements VerificationIssuer {
 
     @Override
     public boolean supports(VerificationTarget verificationTarget) {
-        return verificationTarget.verificationType() == VerificationType.EMAIL || verificationTarget.verificationType() == VerificationType.PHONE;
+        return verificationTarget.verificationType() == VerificationType.EMAIL || verificationTarget.verificationType() == VerificationType.SMS;
     }
 
     @Override

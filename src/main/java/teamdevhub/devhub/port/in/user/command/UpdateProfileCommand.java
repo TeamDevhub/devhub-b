@@ -24,39 +24,6 @@ public class UpdateProfileCommand {
     private Set<UserPosition> positions;
     private Set<UserSkill> skills;
 
-    public static UpdateProfileCommand fromUpdateProfileRequestDto(
-            UpdateProfileRequestDto updateProfileRequestDto,
-            String userGuid
-    ) {
-        return UpdateProfileCommand.builder()
-                .userGuid(userGuid)
-                .username(updateProfileRequestDto.getUsername())
-                .introduction(updateProfileRequestDto.getIntroduction())
-                .positions(toPositions(updateProfileRequestDto.getPositionList(), userGuid))
-                .skills(toSkills(updateProfileRequestDto.getSkillList(), userGuid))
-                .build();
-    }
-
-    private static Set<UserPosition> toPositions(List<String> positionList, String userGuid) {
-        if (positionList == null) {
-            return null;
-        }
-
-        return positionList.stream()
-                .map(positionCd -> new UserPosition(userGuid, positionCd))
-                .collect(Collectors.toSet());
-    }
-
-    private static Set<UserSkill> toSkills(List<String> skillList, String userGuid) {
-        if (skillList == null) {
-            return null;
-        }
-
-        return skillList.stream()
-                .map(skillCd -> new UserSkill(userGuid, skillCd))
-                .collect(Collectors.toSet());
-    }
-
     public boolean hasUsernameAndIntroductionChange() {
         return username != null || introduction != null;
     }

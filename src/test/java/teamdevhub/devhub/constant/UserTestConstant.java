@@ -46,7 +46,8 @@ public final class UserTestConstant {
     public static final Set<UserPosition> TEST_USER_POSITIONS = Set.of(new UserPosition(TEST_USER_GUID_1,"001"));
     public static final Set<UserSkill> TEST_USER_SKILLS = Set.of(new UserSkill(TEST_USER_GUID_1, "001"));
 
-    public static final String EMAIL_CODE = "123456";
+    public static final String TEST_EMAIL_CODE = "123456";
+    public static final String TEST_EMAIL = "test@test.com";
     public static final String UNVERIFIED_EMAIL = "unverified@example.com";
 
     public static final String NEW_POSITION_CD = "002";

@@ -1,26 +1,29 @@
-package teamdevhub.devhub.application.verification;
+package teamdevhub.devhub.fake.pure.issuer;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import teamdevhub.devhub.application.exception.BusinessRuleException;
+import teamdevhub.devhub.application.verification.VerificationIssuerSelector;
 import teamdevhub.devhub.application.verification.issuer.VerificationIssuer;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
-public class CompositeVerificationIssuerSelector implements VerificationIssuerSelector {
+public class FakeVerificationIssuerSelector implements VerificationIssuerSelector {
 
     private final List<VerificationIssuer> issuerList;
 
+    public FakeVerificationIssuerSelector(List<VerificationIssuer> issuerList) {
+        this.issuerList = issuerList;
+    }
+
+    @Override
     public IssuedVerification issueVerification(VerificationTarget verificationTarget) {
         return issuerList.stream()
                 .filter(issuer -> issuer.supports(verificationTarget))
                 .findFirst()
-                .orElseThrow(() -> BusinessRuleException.of(ErrorCode.VERIFICATION_NOT_CONFIRMED))
+                .orElseThrow(
+                        () -> BusinessRuleException.of(ErrorCode.VERIFICATION_NOT_CONFIRMED))
                 .issue(verificationTarget);
     }
 }

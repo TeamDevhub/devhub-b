@@ -2,7 +2,7 @@ package teamdevhub.devhub.adapter.out.infrastructure.sender;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.application.exception.BusinessRuleException;
+import teamdevhub.devhub.adapter.out.exception.ExternalServiceException;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
@@ -24,6 +24,6 @@ public class CompositeMessageSender implements NotificationSender {
         return messageSenderList.stream()
                 .filter(sender -> sender.supports(verificationTarget))
                 .findFirst()
-                .orElseThrow(() -> BusinessRuleException.of(ErrorCode.NOTIFICATION_SEND_FAIL));
+                .orElseThrow(() -> ExternalServiceException.of(ErrorCode.NOTIFICATION_SEND_FAIL));
     }
 }

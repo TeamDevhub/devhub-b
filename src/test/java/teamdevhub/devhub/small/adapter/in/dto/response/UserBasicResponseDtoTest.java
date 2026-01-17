@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.admin.dto.response;
+package teamdevhub.devhub.small.adapter.in.dto.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

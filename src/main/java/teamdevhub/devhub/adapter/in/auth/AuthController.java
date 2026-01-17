@@ -16,7 +16,7 @@ import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.AuthSessionUseCase;
-import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
+import teamdevhub.devhub.port.in.verification.VerificationUseCase;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,11 +24,11 @@ import teamdevhub.devhub.port.in.verification.SignupVerificationUseCase;
 public class AuthController {
 
     private final AuthSessionUseCase authSessionUseCase;
-    private final SignupVerificationUseCase signupVerificationUseCase;
+    private final VerificationUseCase verificationUseCase;
 
     @PostMapping("/email-verification")
     public ResponseEntity<ApiDataResponseDto<Void>> sendEmailVerification(@Valid @RequestBody IssueVerificationRequestDto issueVerificationRequestDto) {
-        signupVerificationUseCase.issueSignupVerification(issueVerificationRequestDto.toIssueVerificationCommand());
+        verificationUseCase.issueVerification(issueVerificationRequestDto.toIssueVerificationCommand());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.EMAIL_VERIFICATION_SENT
@@ -38,7 +38,7 @@ public class AuthController {
 
     @PostMapping("/email-verification/confirm")
     public ResponseEntity<ApiDataResponseDto<Void>> confirmEmailVerification(@Valid @RequestBody ConfirmVerificationRequestDto confirmVerificationRequestDto) {
-        signupVerificationUseCase.confirmSignupVerification(confirmVerificationRequestDto.toConfirmVerificationCommand());
+        verificationUseCase.confirmVerification(confirmVerificationRequestDto.toConfirmVerificationCommand());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.EMAIL_VERIFICATION_SUCCESS

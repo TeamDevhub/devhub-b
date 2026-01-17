@@ -19,12 +19,12 @@ public class VerificationTest {
         LocalDateTime expiredAt = LocalDateTime.now().plusMinutes(5);
 
         // when
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, EMAIL_CODE, expiredAt);
+        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, expiredAt);
 
         // then
         assertThat(verification.isVerified()).isFalse();
         assertThat(verification.getVerificationTarget()).isEqualTo(VERIFICATION_TARGET_1);
-        assertThat(verification.getCode()).isEqualTo(EMAIL_CODE);
+        assertThat(verification.getCode()).isEqualTo(TEST_EMAIL_CODE);
         assertThat(verification.getExpiredAt()).isEqualTo(expiredAt);
     }
 
@@ -33,10 +33,10 @@ public class VerificationTest {
     void confirm_success_whenCodeIsCorrectAndNotExpired() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, EMAIL_CODE, now.plusMinutes(3));
+        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, now.plusMinutes(3));
 
         // when
-        verification.confirm(EMAIL_CODE, now);
+        verification.confirm(TEST_EMAIL_CODE, now);
 
         // then
         assertThat(verification.isVerified()).isTrue();
@@ -46,7 +46,7 @@ public class VerificationTest {
     @DisplayName("잘못된_인증코드를_입력하면_예외를_던진다")
     void throwException_whenCodeIsInvalid() {
         // given
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, EMAIL_CODE, LocalDateTime.now().plusMinutes(3));
+        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, LocalDateTime.now().plusMinutes(3));
 
         // then
         assertThatThrownBy(
@@ -59,12 +59,12 @@ public class VerificationTest {
     @DisplayName("만료된_인증코드를_확인하면_예외를_던진다")
     void throwException_whenVerificationExpired() {
         // given
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, EMAIL_CODE, LocalDateTime.now().minusSeconds(1));
+        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, LocalDateTime.now().minusSeconds(1));
 
         // then
         assertThatThrownBy(
                 // when
-                () -> verification.confirm(EMAIL_CODE, LocalDateTime.now()))
+                () -> verification.confirm(TEST_EMAIL_CODE, LocalDateTime.now()))
                 .isInstanceOf(DomainRuleException.class);
     }
 
@@ -73,11 +73,11 @@ public class VerificationTest {
     void confirmAgain_whenAlreadyVerified() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, EMAIL_CODE, now.plusMinutes(3));
-        verification.confirm(EMAIL_CODE, now);
+        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, now.plusMinutes(3));
+        verification.confirm(TEST_EMAIL_CODE, now);
 
         // when
-        verification.confirm(EMAIL_CODE, now.plusMinutes(1));
+        verification.confirm(TEST_EMAIL_CODE, now.plusMinutes(1));
 
         // then
         assertThat(verification.isVerified()).isTrue();
@@ -88,8 +88,8 @@ public class VerificationTest {
     void assertValid_success_whenVerifiedAndNotExpired() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, EMAIL_CODE, now.plusMinutes(3));
-        verification.confirm(EMAIL_CODE, now);
+        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, now.plusMinutes(3));
+        verification.confirm(TEST_EMAIL_CODE, now);
 
         // then
         assertThatCode(
@@ -102,7 +102,7 @@ public class VerificationTest {
     @DisplayName("미인증_상태라면_assertValid_에서_예외를_던진다")
     void throwException_whenAssertValidAndNotVerified() {
         // given
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, EMAIL_CODE, LocalDateTime.now().plusMinutes(3));
+        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, LocalDateTime.now().plusMinutes(3));
 
         // then
         assertThatThrownBy(
@@ -116,9 +116,9 @@ public class VerificationTest {
     void throwException_whenAssertValidAndExpired() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, EMAIL_CODE, now.plusMinutes(1));
+        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, now.plusMinutes(1));
 
-        verification.confirm(EMAIL_CODE, now);
+        verification.confirm(TEST_EMAIL_CODE, now);
 
         // then
         assertThatThrownBy(
