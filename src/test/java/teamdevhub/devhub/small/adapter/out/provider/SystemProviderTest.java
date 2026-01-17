@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.common.provider;
+package teamdevhub.devhub.small.adapter.out.provider;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

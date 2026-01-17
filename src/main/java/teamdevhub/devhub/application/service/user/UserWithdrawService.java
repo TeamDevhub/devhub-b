@@ -13,8 +13,8 @@ import teamdevhub.devhub.port.out.user.UserRepository;
 @Transactional
 public class UserWithdrawService implements UserWithdrawUseCase {
 
-    private final AuthSessionUseCase authSessionUseCase;
     private final UserRepository userRepository;
+    private final AuthSessionUseCase authSessionUseCase;
 
     @Override
     public void withdrawUser(String userGuid) {

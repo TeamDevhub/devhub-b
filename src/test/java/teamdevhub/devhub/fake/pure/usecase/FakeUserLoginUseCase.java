@@ -1,18 +1,21 @@
 package teamdevhub.devhub.fake.pure.usecase;
 
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.port.in.user.usecase.UserWithdrawUseCase;
+import teamdevhub.devhub.port.in.user.usecase.UserLoginUseCase;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-public class FakeUserWithdrawUseCase implements UserWithdrawUseCase {
+public class FakeUserLoginUseCase implements UserLoginUseCase {
 
     private final Map<String, User> store = new HashMap<>();
+    private final Set<String> updatedLoginUsers = new HashSet<>();
 
-    public FakeUserWithdrawUseCase() {
+    public FakeUserLoginUseCase() {
         User testUser = User.createGeneralUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
@@ -24,10 +27,13 @@ public class FakeUserWithdrawUseCase implements UserWithdrawUseCase {
     }
 
     @Override
-    public void withdrawUser(String userGuid) {
-        User user = store.get(userGuid);
-        if (user != null) {
-            user.withdraw();
-        }
+    public void updateLastLoginDateTime(String userGuid) {
+        updatedLoginUsers.add(userGuid);
     }
+
+    public boolean isLoginTimeUpdated(String userGuid) {
+        return updatedLoginUsers.contains(userGuid);
+    }
+
 }
+

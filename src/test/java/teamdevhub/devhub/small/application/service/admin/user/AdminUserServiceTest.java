@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.service.admin.user;
+package teamdevhub.devhub.small.application.service.admin.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

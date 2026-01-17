@@ -1,4 +1,4 @@
-package teamdevhub.devhub.port.in.user;
+package teamdevhub.devhub.adapter.in.user;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

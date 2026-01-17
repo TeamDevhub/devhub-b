@@ -12,7 +12,6 @@ import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
-import teamdevhub.devhub.port.in.user.UserFacade;
 
 @RestController
 @RequestMapping("/user")

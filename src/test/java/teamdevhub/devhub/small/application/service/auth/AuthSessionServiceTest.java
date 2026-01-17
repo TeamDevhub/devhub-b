@@ -1,39 +1,42 @@
-package teamdevhub.devhub.small.service.auth;
+package teamdevhub.devhub.small.application.service.auth;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
-import teamdevhub.devhub.domain.auth.vo.RefreshToken;
-import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 import teamdevhub.devhub.application.service.auth.AuthSessionService;
+import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserResolver;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.repository.FakeRefreshTokenRepository;
-import teamdevhub.devhub.fake.pure.usecase.FakeUserProfileUseCase;
+import teamdevhub.devhub.fake.pure.usecase.FakeAuthUserUseCase;
+import teamdevhub.devhub.fake.pure.usecase.FakeUserLoginUseCase;
+import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-class AuthServiceTest {
+class AuthSessionServiceTest {
 
-    private AuthSessionService authService;
+    private AuthSessionService authSessionService;
 
-    private FakeUserProfileUseCase fakeUserUseCase;
+    private FakeUserLoginUseCase fakeUserLoginUseCase;
     private FakeRefreshTokenRepository fakeRefreshTokenRepository;
 
     @BeforeEach
     void init() {
         FakeTokenIssueProvider fakeTokenIssueProvider = new FakeTokenIssueProvider();
-        FakeAuthenticatedUserResolver fakeAuthenticatedUserProvider = new FakeAuthenticatedUserResolver();
-        fakeUserUseCase = new FakeUserProfileUseCase();
+        FakeAuthenticatedUserResolver fakeAuthenticatedUserResolver = new FakeAuthenticatedUserResolver();
+        FakeAuthUserUseCase fakeAuthUserUseCase = new FakeAuthUserUseCase();
+        fakeUserLoginUseCase = new FakeUserLoginUseCase();
         fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
 
-        authService = new AuthSessionService(
+        authSessionService = new AuthSessionService(
                 fakeTokenIssueProvider,
-                fakeAuthenticatedUserProvider,
-                fakeUserUseCase,
+                fakeAuthenticatedUserResolver,
+                fakeAuthUserUseCase,
+                fakeUserLoginUseCase,
                 fakeRefreshTokenRepository
         );
     }
@@ -45,7 +48,7 @@ class AuthServiceTest {
         LoginCommand loginCommand = new LoginCommand(TEST_EMAIL_1, TEST_PASSWORD_1);
 
         // when
-        LoginResponseDto loginResponseDto = authService.login(loginCommand);
+        LoginResponseDto loginResponseDto = authSessionService.login(loginCommand);
 
         // then
         assertThat(loginResponseDto).isNotNull();
@@ -61,7 +64,7 @@ class AuthServiceTest {
         LoginCommand loginCommand = new LoginCommand(TEST_EMAIL_1, TEST_PASSWORD_1);
 
         // when
-        authService.login(loginCommand);
+        authSessionService.login(loginCommand);
 
         // then
         RefreshToken refreshToken = fakeRefreshTokenRepository.findByUserGuid(TEST_USER_GUID_1);
@@ -77,10 +80,10 @@ class AuthServiceTest {
         LoginCommand loginCommand = new LoginCommand(TEST_EMAIL_1, TEST_PASSWORD_1);
 
         // when
-        authService.login(loginCommand);
+        authSessionService.login(loginCommand);
 
         // then
-        assertThat(fakeUserUseCase.isLoginTimeUpdated(TEST_USER_GUID_1)).isTrue();
+        assertThat(fakeUserLoginUseCase.isLoginTimeUpdated(TEST_USER_GUID_1)).isTrue();
     }
 
     @Test
@@ -93,7 +96,7 @@ class AuthServiceTest {
         );
 
         // when
-        TokenResponseDto response = authService.reissueAccessToken(refreshToken);
+        TokenResponseDto response = authSessionService.reissueAccessToken(refreshToken);
 
         // then
         assertThat(response).isNotNull();
@@ -107,7 +110,7 @@ class AuthServiceTest {
         fakeRefreshTokenRepository.save(RefreshToken.of(TEST_USER_GUID_1, "refresh-token-" + TEST_USER_GUID_1));
 
         // when
-        authService.revoke(TEST_USER_GUID_1);
+        authSessionService.revoke(TEST_USER_GUID_1);
 
         // then
         assertThat(fakeRefreshTokenRepository.findByUserGuid(TEST_USER_GUID_1)).isNull();
