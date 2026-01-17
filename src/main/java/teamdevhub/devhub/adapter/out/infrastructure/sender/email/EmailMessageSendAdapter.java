@@ -29,7 +29,7 @@ public class EmailMessageSendAdapter implements MessageSender {
 
     @Override
     public boolean supports(VerificationTarget target) {
-        return target.type() == VerificationType.EMAIL;
+        return target.verificationType() == VerificationType.EMAIL;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class EmailMessageSendAdapter implements MessageSender {
 
     private Map<String, Object> toVariables(EmailTemplateType template, VerificationMessage message) {
         Map<String, Object> variables = new HashMap<>();
-        variables.put("code", message.getCode());
+        variables.put("code", message.code());
         variables.put("expireTime", template.getExpireTime());
         return variables;
     }

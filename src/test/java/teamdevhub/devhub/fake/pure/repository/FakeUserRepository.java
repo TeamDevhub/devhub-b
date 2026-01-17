@@ -3,7 +3,7 @@ package teamdevhub.devhub.fake.pure.repository;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 

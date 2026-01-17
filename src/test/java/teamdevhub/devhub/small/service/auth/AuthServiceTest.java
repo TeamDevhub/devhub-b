@@ -5,32 +5,32 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
-import teamdevhub.devhub.domain.authentication.vo.RefreshToken;
-import teamdevhub.devhub.port.in.authentication.command.LoginCommand;
-import teamdevhub.devhub.service.authentication.AuthenticationService;
-import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserProvider;
+import teamdevhub.devhub.domain.auth.vo.RefreshToken;
+import teamdevhub.devhub.port.in.auth.command.LoginCommand;
+import teamdevhub.devhub.application.service.auth.AuthSessionService;
+import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserResolver;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.repository.FakeRefreshTokenRepository;
-import teamdevhub.devhub.fake.pure.usecase.FakeUserUseCase;
+import teamdevhub.devhub.fake.pure.usecase.FakeUserProfileUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class AuthServiceTest {
 
-    private AuthenticationService authService;
+    private AuthSessionService authService;
 
-    private FakeUserUseCase fakeUserUseCase;
+    private FakeUserProfileUseCase fakeUserUseCase;
     private FakeRefreshTokenRepository fakeRefreshTokenRepository;
 
     @BeforeEach
     void init() {
         FakeTokenIssueProvider fakeTokenIssueProvider = new FakeTokenIssueProvider();
-        FakeAuthenticatedUserProvider fakeAuthenticatedUserProvider = new FakeAuthenticatedUserProvider();
-        fakeUserUseCase = new FakeUserUseCase();
+        FakeAuthenticatedUserResolver fakeAuthenticatedUserProvider = new FakeAuthenticatedUserResolver();
+        fakeUserUseCase = new FakeUserProfileUseCase();
         fakeRefreshTokenRepository = new FakeRefreshTokenRepository();
 
-        authService = new AuthenticationService(
+        authService = new AuthSessionService(
                 fakeTokenIssueProvider,
                 fakeAuthenticatedUserProvider,
                 fakeUserUseCase,

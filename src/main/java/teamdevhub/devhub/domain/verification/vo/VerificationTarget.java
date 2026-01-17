@@ -2,75 +2,37 @@ package teamdevhub.devhub.domain.verification.vo;
 
 import java.util.Objects;
 
-public final class VerificationTarget {
+public record VerificationTarget(VerificationType verificationType, String value) {
 
-    private final VerificationType verificationType;
-    private final String value;
-
-    public VerificationTarget(
-            VerificationType verificationType,
-            String value,
-            boolean validate
-    ) {
-        this.verificationType = Objects.requireNonNull(verificationType);
-        this.value = Objects.requireNonNull(value);
-        if (validate) {
-            validate();
-        }
+    public static VerificationTarget of(VerificationType verificationType, String value) {
+        validate(verificationType, value);
+        return new VerificationTarget(verificationType, value);
     }
 
-    public static VerificationTarget of(
-            VerificationType type,
-            String value
-    ) {
-        return new VerificationTarget(type, value, true);
+    public static VerificationTarget fromEntity(VerificationType verificationType, String value) {
+        return new VerificationTarget(verificationType, value);
     }
 
-    public static VerificationTarget restore(
-            VerificationType type,
-            String value
-    ) {
-        return new VerificationTarget(type, value, false);
-    }
+    private static void validate(VerificationType type, String value) {
+        Objects.requireNonNull(type, "verificationType must not be null");
+        Objects.requireNonNull(value, "value must not be null");
 
-    private void validate() {
-        switch (verificationType) {
+        switch (type) {
             case EMAIL -> {
                 if (!value.matches("^[^@]+@[^@]+\\.[^@]+$")) {
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException("Invalid email format");
                 }
             }
             case PHONE -> {
                 if (!value.matches("^01[0-9]{8,9}$")) {
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException("Invalid phone number format");
                 }
             }
             case OTP -> {
                 if (value.isBlank()) {
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException("OTP cannot be blank");
                 }
             }
         }
-    }
-
-    public VerificationType type() {
-        return verificationType;
-    }
-
-    public String value() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof VerificationTarget that)) return false;
-        return verificationType == that.verificationType
-                && value.equals(that.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(verificationType, value);
     }
 }

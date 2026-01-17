@@ -12,7 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import teamdevhub.devhub.service.exception.BusinessRuleException;
+import teamdevhub.devhub.application.exception.BusinessRuleException;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;

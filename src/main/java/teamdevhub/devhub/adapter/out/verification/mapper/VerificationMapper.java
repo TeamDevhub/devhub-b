@@ -9,7 +9,7 @@ public class VerificationMapper {
     public static VerificationEntity toEntity(Verification verification) {
         return VerificationEntity.builder()
                 .id(verification.getId())
-                .verificationType(verification.getVerificationTarget().type())
+                .verificationType(verification.getVerificationTarget().verificationType())
                 .targetValue(verification.getVerificationTarget().value())
                 .code(verification.getCode())
                 .expiredAt(verification.getExpiredAt())
@@ -18,9 +18,9 @@ public class VerificationMapper {
     }
 
     public static Verification toDomain(VerificationEntity verificationEntity) {
-        return Verification.restore(
+        return Verification.of(
                 verificationEntity.getId(),
-                VerificationTarget.restore(verificationEntity.getVerificationType(), verificationEntity.getTargetValue()),
+                VerificationTarget.fromEntity(verificationEntity.getVerificationType(), verificationEntity.getTargetValue()),
                 verificationEntity.getCode(),
                 verificationEntity.getExpiredAt(),
                 verificationEntity.isVerified()

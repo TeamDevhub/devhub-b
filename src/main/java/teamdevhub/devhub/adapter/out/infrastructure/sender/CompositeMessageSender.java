@@ -23,6 +23,6 @@ public class CompositeMessageSender implements NotificationSender {
                 .filter(sender -> sender.supports(verificationTarget))
                 .findFirst()
                 .orElseThrow(
-                        () -> new IllegalStateException("No MessageSender for " + verificationTarget.type()));
+                        () -> new IllegalStateException("No MessageSender for " + verificationTarget.verificationType()));
     }
 }

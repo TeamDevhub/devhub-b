@@ -1,7 +1,7 @@
 package teamdevhub.devhub.fake.pure.usecase;
 
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.port.in.user.UserWithdrawUseCase;
+import teamdevhub.devhub.port.in.user.usecase.UserWithdrawUseCase;
 
 import java.util.HashMap;
 import java.util.HashSet;

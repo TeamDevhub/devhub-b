@@ -3,7 +3,7 @@ package teamdevhub.devhub.fake.pure.provider;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.out.authentication.TokenIssueProvider;
+import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
 
 public class FakeTokenIssueProvider implements TokenIssueProvider {
 

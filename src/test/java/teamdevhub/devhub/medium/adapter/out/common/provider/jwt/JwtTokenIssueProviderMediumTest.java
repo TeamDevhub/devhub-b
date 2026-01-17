@@ -5,8 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.common.provider.jwt.JwtClaims;
-import teamdevhub.devhub.adapter.out.common.provider.jwt.JwtTokenIssueProvider;
+import teamdevhub.devhub.adapter.out.provider.token.JwtClaims;
+import teamdevhub.devhub.adapter.out.provider.token.JwtTokenIssueProvider;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 
 import java.lang.reflect.Field;

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.UserPositionAdapter;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserPositionRepository;
-import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
+import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.fake.spring.persistence.user.FakeJpaUserPositionRepository;

@@ -9,7 +9,7 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
 import teamdevhub.devhub.fake.spring.persistence.user.FakeJpaUserRepository;
 import teamdevhub.devhub.fake.spring.persistence.user.FakeUserQueryRepository;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;

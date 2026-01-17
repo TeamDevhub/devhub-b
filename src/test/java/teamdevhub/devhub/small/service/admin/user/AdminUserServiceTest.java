@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
-import teamdevhub.devhub.service.admin.user.AdminUserService;
+import teamdevhub.devhub.application.service.admin.user.AdminUserService;
 import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

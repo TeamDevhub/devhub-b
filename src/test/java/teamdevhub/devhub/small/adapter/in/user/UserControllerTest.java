@@ -8,8 +8,8 @@ import teamdevhub.devhub.adapter.in.dto.request.user.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.dto.request.user.UpdateProfileRequestDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
-import teamdevhub.devhub.fake.pure.usecase.FakeUserUseCase;
+import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.fake.pure.usecase.FakeUserProfileUseCase;
 import teamdevhub.devhub.fake.pure.usecase.FakeUserWithdrawUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,11 +18,11 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 class UserControllerTest {
 
     private UserController userController;
-    private FakeUserUseCase fakeUserUseCase;
+    private FakeUserProfileUseCase fakeUserUseCase;
 
     @BeforeEach
     void init() {
-        fakeUserUseCase = new FakeUserUseCase();
+        fakeUserUseCase = new FakeUserProfileUseCase();
         FakeUserWithdrawUseCase fakeUserWithdrawUseCase = new FakeUserWithdrawUseCase();
         userController = new UserController(fakeUserUseCase, fakeUserWithdrawUseCase);
     }

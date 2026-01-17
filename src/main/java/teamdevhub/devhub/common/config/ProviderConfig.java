@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
-import teamdevhub.devhub.common.provider.datetime.SystemDateTimeProvider;
-import teamdevhub.devhub.adapter.out.common.provider.password.BCryptPasswordPolicyProvider;
-import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
-import teamdevhub.devhub.common.provider.uuid.SystemIdentifierProvider;
-import teamdevhub.devhub.common.provider.verification.VerificationCodeProvider;
-import teamdevhub.devhub.common.provider.verification.SystemVerificationCodeProvider;
-import teamdevhub.devhub.port.out.authentication.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.provider.DateTimeProvider;
+import teamdevhub.devhub.adapter.out.provider.time.SystemDateTimeProvider;
+import teamdevhub.devhub.adapter.out.provider.password.BCryptPasswordPolicyProvider;
+import teamdevhub.devhub.port.out.provider.IdentifierProvider;
+import teamdevhub.devhub.adapter.out.provider.identifier.SystemIdentifierProvider;
+import teamdevhub.devhub.port.out.provider.VerificationCodeProvider;
+import teamdevhub.devhub.adapter.out.provider.verification.SystemVerificationCodeProvider;
+import teamdevhub.devhub.port.out.provider.PasswordPolicyProvider;
 
 @Configuration
 @RequiredArgsConstructor

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserPositionMapper;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserPositionRepository;
-import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
+import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.common.util.RelationChangeUtil;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;

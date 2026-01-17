@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserSkillMapper;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserSkillRepository;
-import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
+import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.common.util.RelationChangeUtil;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
 import teamdevhub.devhub.port.out.user.UserSkillRepository;

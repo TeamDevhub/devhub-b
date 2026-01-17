@@ -15,7 +15,7 @@ import teamdevhub.devhub.fake.pure.repository.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.repository.FakeUserSkillRepository;
 import teamdevhub.devhub.fake.pure.usecase.FakeSignupVerificationUseCase;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
-import teamdevhub.devhub.service.user.UserService;
+import teamdevhub.devhub.application.service.user.UserProfileService;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -26,7 +26,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class UserServiceTest {
 
-    private UserService userService;
+    private UserProfileService userService;
     private FakeUserRepository fakeUserRepository;
     private FakeUserPositionRepository fakeUserPositionRepository;
     private FakeUserSkillRepository fakeUserSkillRepository;
@@ -45,7 +45,7 @@ class UserServiceTest {
         fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
         fakeDateTimeProvider = new FakeDateTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
 
-        userService = new UserService(
+        userService = new UserProfileService(
                 fakeSignupVerificationUseCase,
                 fakeUserRepository,
                 fakeUserPositionRepository,
@@ -61,7 +61,7 @@ class UserServiceTest {
     void createAdminAccount() {
         // given
         FakeUuidIdentifierProvider adminUuidProvider = new FakeUuidIdentifierProvider(ADMIN_USER_GUID);
-        userService = new UserService(
+        userService = new UserProfileService(
                 fakeSignupVerificationUseCase,
                 fakeUserRepository,
                 fakeUserPositionRepository,

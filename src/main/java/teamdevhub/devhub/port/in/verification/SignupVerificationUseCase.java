@@ -9,6 +9,4 @@ public interface SignupVerificationUseCase {
     void confirmSignupVerification(ConfirmVerificationCommand confirmVerificationCommand);
     void assertSignupAllowed(VerificationTarget verificationTarget);
     void consume(VerificationTarget verificationTarget);
-    void validateSignupVerification(VerificationTarget verificationTarget);
-
 }

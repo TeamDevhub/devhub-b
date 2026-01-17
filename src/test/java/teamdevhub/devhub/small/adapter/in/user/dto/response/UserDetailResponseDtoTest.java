@@ -6,7 +6,7 @@ import teamdevhub.devhub.adapter.in.dto.response.user.UserDetailResponseDto;
 import teamdevhub.devhub.constant.UserTestConstant;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.common.audit.AuditInfo;
+import teamdevhub.devhub.domain.common.vo.AuditInfo;
 
 import java.time.LocalDateTime;
 

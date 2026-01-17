@@ -8,7 +8,7 @@ import teamdevhub.devhub.domain.user.vo.UserPosition;
 import teamdevhub.devhub.domain.user.vo.UserPositionChangeResult;
 import teamdevhub.devhub.domain.user.vo.UserSkill;
 import teamdevhub.devhub.domain.user.vo.UserSkillChangeResult;
-import teamdevhub.devhub.domain.common.audit.AuditInfo;
+import teamdevhub.devhub.domain.common.vo.AuditInfo;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

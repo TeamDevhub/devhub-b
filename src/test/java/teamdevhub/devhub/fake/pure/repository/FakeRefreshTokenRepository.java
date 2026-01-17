@@ -1,7 +1,7 @@
 package teamdevhub.devhub.fake.pure.repository;
 
-import teamdevhub.devhub.domain.authentication.vo.RefreshToken;
-import teamdevhub.devhub.port.out.authentication.RefreshTokenRepository;
+import teamdevhub.devhub.domain.auth.vo.RefreshToken;
+import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 
 import java.util.HashMap;
 

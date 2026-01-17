@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.common.provider.uuid.IdentifierProvider;
+import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 
 public class FakeUuidIdentifierProvider implements IdentifierProvider {
 

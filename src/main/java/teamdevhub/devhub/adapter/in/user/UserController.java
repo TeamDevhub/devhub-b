@@ -11,24 +11,22 @@ import teamdevhub.devhub.adapter.in.dto.response.user.UserDetailResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.domain.user.vo.AuthenticatedUser;
-import teamdevhub.devhub.port.in.user.UserUseCase;
-import teamdevhub.devhub.port.in.user.UserWithdrawUseCase;
+import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.port.in.user.UserFacade;
 
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserUseCase userUseCase;
-    private final UserWithdrawUseCase userWithdrawUseCase;
+    private final UserFacade userFacade;
 
     @PostMapping("/signup")
     public ResponseEntity<ApiDataResponseDto<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithData(
                         SuccessCode.SIGNUP_SUCCESS,
-                        SignupResponseDto.fromDomain(userUseCase.signup(signupRequestDto.toSignupCommand()))
+                        SignupResponseDto.fromDomain(userFacade.signup(signupRequestDto.toSignupCommand()))
                 )
         );
     }
@@ -38,14 +36,14 @@ public class UserController {
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithData(
                         SuccessCode.READ_SUCCESS,
-                        UserDetailResponseDto.fromDomain(userUseCase.getCurrentUserProfile(authenticatedUser.userGuid()))
+                        UserDetailResponseDto.fromDomain(userFacade.getUserDetailProfile(authenticatedUser.userGuid()))
                 )
         );
     }
 
     @PutMapping("/profile")
     public ResponseEntity<ApiDataResponseDto<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-        userUseCase.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
+        userFacade.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS
@@ -55,7 +53,7 @@ public class UserController {
 
     @DeleteMapping("/profile")
     public ResponseEntity<ApiDataResponseDto<Void>> withdraw(@LoginUser AuthenticatedUser authenticatedUser) {
-        userWithdrawUseCase.withdrawUser(authenticatedUser.userGuid());
+        userFacade.withdrawUser(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
                         SuccessCode.USER_DELETE_SUCCESS

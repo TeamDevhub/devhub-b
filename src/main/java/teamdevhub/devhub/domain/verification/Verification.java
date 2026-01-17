@@ -1,13 +1,17 @@
 package teamdevhub.devhub.domain.verification;
 
+import lombok.Getter;
+import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Getter
 public class Verification {
 
-    private Long id;
+    private final Long id;
     private final VerificationTarget verificationTarget;
     private final String code;
     private final LocalDateTime expiredAt;
@@ -37,7 +41,7 @@ public class Verification {
         return new Verification(null, target, code, expiredAt, false);
     }
 
-    public static Verification restore(
+    public static Verification of(
             Long id,
             VerificationTarget target,
             String code,
@@ -47,7 +51,20 @@ public class Verification {
         return new Verification(id, target, code, expiredAt, verified);
     }
 
-    public boolean verify(String inputCode, LocalDateTime now) {
+    public void confirm(String code, LocalDateTime now) {
+        boolean success = verify(code, now);
+        if (!success) {
+            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
+        }
+    }
+
+    public void assertValid(LocalDateTime now) {
+        if (!isVerified() || isExpired(now)) {
+            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
+        }
+    }
+
+    private boolean verify(String inputCode, LocalDateTime now) {
         if (verified) return true;
         if (expiredAt.isBefore(now)) return false;
         if (!Objects.equals(code, inputCode)) return false;
@@ -55,25 +72,8 @@ public class Verification {
         return true;
     }
 
-    public boolean isVerified() {
-        return verified;
-    }
-
-    public boolean isExpired(LocalDateTime now) {
+    private boolean isExpired(LocalDateTime now) {
         return expiredAt.isBefore(now);
     }
 
-    public VerificationTarget getVerificationTarget() {
-        return verificationTarget;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public LocalDateTime getExpiredAt() {
-        return expiredAt;
-    }
-
-    public Long getId() {return id;}
 }

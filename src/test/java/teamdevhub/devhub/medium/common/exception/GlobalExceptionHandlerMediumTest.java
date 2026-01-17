@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.exception.GlobalExceptionHandler;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
-import teamdevhub.devhub.service.exception.BusinessRuleException;
+import teamdevhub.devhub.application.exception.BusinessRuleException;
 
 import java.lang.reflect.Method;
 

@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.usecase;
 
-import teamdevhub.devhub.common.provider.datetime.DateTimeProvider;
+import teamdevhub.devhub.port.out.provider.DateTimeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.fake.pure.provider.FakeDateTimeProvider;
@@ -28,34 +28,18 @@ public class FakeSignupVerificationUseCase implements SignupVerificationUseCase 
     public void confirmSignupVerification(ConfirmVerificationCommand confirmVerificationCommand) {
         VerificationTarget target = confirmVerificationCommand.verificationTarget();
         Verification verification = store.get(target.value());
-        if (verification == null || !verification.verify(confirmVerificationCommand.code(), dateTimeProvider.now())) {
-            throw new RuntimeException("Verification failed");
-        }
+        verification.confirm(confirmVerificationCommand.code(), dateTimeProvider.now());
         store.put(target.value(), verification);
     }
 
     @Override
     public void assertSignupAllowed(VerificationTarget target) {
         Verification verification = store.get(target.value());
-        if (verification == null || !verification.isVerified() || verification.isExpired(dateTimeProvider.now())) {
-            throw new RuntimeException("Signup not allowed");
-        }
+        verification.assertValid(dateTimeProvider.now());
     }
 
     @Override
     public void consume(VerificationTarget verificationTarget) {
         store.remove(verificationTarget.value());
-    }
-
-    @Override
-    public void validateSignupVerification(VerificationTarget verificationTarget) {
-        Verification verification = store.get(verificationTarget.value());
-        if (verification == null || !verification.isVerified()) {
-            throw new RuntimeException("Verification not valid");
-        }
-    }
-
-    public Verification getVerification(VerificationTarget target) {
-        return store.get(target.value());
     }
 }
