@@ -17,13 +17,15 @@ public class CompositeMessageSender implements NotificationSender {
     private final List<MessageSender> messageSenderList;
 
     public void sendVerification(VerificationTarget verificationTarget, VerificationMessage verificationMessage) {
-        findMessageSender(verificationTarget).sendVerification(verificationTarget, verificationMessage);
+        findMessageSender(verificationTarget)
+                .sendVerification(verificationTarget, verificationMessage);
     }
 
     private MessageSender findMessageSender(VerificationTarget verificationTarget) {
         return messageSenderList.stream()
                 .filter(sender -> sender.supports(verificationTarget))
                 .findFirst()
-                .orElseThrow(() -> ExternalServiceException.of(ErrorCode.NOTIFICATION_SEND_FAIL));
+                .orElseThrow(
+                        () -> ExternalServiceException.of(ErrorCode.NOTIFICATION_SEND_FAIL));
     }
 }

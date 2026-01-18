@@ -20,10 +20,10 @@ public class UserQueryRepositoryImpl implements UserQueryRepository{
 
     @Override
     public Page<UserEntity> listUser(SearchUserCommand searchUserCommand, Pageable pageable) {
-        QUserEntity user = QUserEntity.userEntity;
+        QUserEntity userEntity = QUserEntity.userEntity;
 
         List<UserEntity> content = queryFactory
-                .selectFrom(user)
+                .selectFrom(userEntity)
                 .where(
                         blockedCondition(searchUserCommand.blocked()),
                         joinedFromCondition(searchUserCommand.joinedFrom()),
@@ -31,18 +31,17 @@ public class UserQueryRepositoryImpl implements UserQueryRepository{
                         keywordCondition(searchUserCommand.keyword()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(user.registeredDate.desc())
+                .orderBy(userEntity.registeredDate.desc())
                 .fetch();
 
         Long total = queryFactory
-                .select(user.count())
-                .from(user)
+                .select(userEntity.count())
+                .from(userEntity)
                 .where(
                         blockedCondition(searchUserCommand.blocked()),
                         joinedFromCondition(searchUserCommand.joinedFrom()),
                         joinedToCondition(searchUserCommand.joinedTo()),
-                        keywordCondition(searchUserCommand.keyword())
-                )
+                        keywordCondition(searchUserCommand.keyword()))
                 .fetchOne();
 
         if (total == null) {

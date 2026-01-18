@@ -31,9 +31,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static User toDomain(
-            UserEntity userEntity
-    ) {
+    public static User toDomain(UserEntity userEntity) {
         return User.of(
                 userEntity.getUserGuid(),
                 userEntity.getEmail(),

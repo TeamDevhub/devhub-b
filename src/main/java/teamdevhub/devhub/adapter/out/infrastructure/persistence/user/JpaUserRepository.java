@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface JpaUserRepository extends JpaRepository<UserEntity, String> {
+
     Optional<UserEntity> findByEmail(String email);
     Optional<UserEntity> findByUserGuid(String userGuid);
 
     @Modifying
-    @Query("update UserEntity u set u.lastLoginDt = :now where u.userGuid = :userGuid")
-    int updateLastLoginDateTime(@Param("userGuid") String userGuid, @Param("now") LocalDateTime now);
+    @Query("update UserEntity u set u.lastLoginDt = :lastLoginDateTime where u.userGuid = :userGuid")
+    int updateLastLoginDateTime(@Param("userGuid") String userGuid, @Param("now") LocalDateTime lastLoginDateTime);
 
-    boolean existsByUserRole(UserRole role);
+    boolean existsByUserRole(UserRole userRole);
 }

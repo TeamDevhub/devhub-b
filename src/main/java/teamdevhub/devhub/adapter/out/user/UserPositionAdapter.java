@@ -22,14 +22,6 @@ public class UserPositionAdapter implements UserPositionRepository {
     private final IdentifierProvider identifierProvider;
 
     @Override
-    public Set<UserPosition> findByUserGuid(String userGuid) {
-        return jpaUserPositionRepository.findByUserGuid(userGuid)
-                .stream()
-                .map(UserPositionMapper::toRecord)
-                .collect(Collectors.toSet());
-    }
-
-    @Override
     public void saveAll(Set<UserPosition> positions) {
         if (positions.isEmpty()) {
             return;
@@ -43,6 +35,14 @@ public class UserPositionAdapter implements UserPositionRepository {
                 .toList();
 
         jpaUserPositionRepository.saveAll(userPositionEntityList);
+    }
+
+    @Override
+    public Set<UserPosition> findByUserGuid(String userGuid) {
+        return jpaUserPositionRepository.findByUserGuid(userGuid)
+                .stream()
+                .map(UserPositionMapper::toRecord)
+                .collect(Collectors.toSet());
     }
 
     @Override

@@ -8,16 +8,16 @@ import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
         name = "verifications",
         uniqueConstraints = @UniqueConstraint(
                 columnNames = {"verification_type", "target_value"}
         )
 )
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VerificationEntity {
 
     @Id

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface JpaUserPositionRepository extends JpaRepository<UserPositionEntity, String> {
+
     List<UserPositionEntity> findByUserGuid(String userGuid);
     void deleteByUserGuidAndPositionCdIn(String userGuid, Set<String> positionCds);
 }

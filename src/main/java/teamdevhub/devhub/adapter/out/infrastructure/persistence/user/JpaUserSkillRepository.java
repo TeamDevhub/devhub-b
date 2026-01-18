@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface JpaUserSkillRepository  extends JpaRepository<UserSkillEntity, String> {
+
     List<UserSkillEntity> findByUserGuid(String userGuid);
     void deleteByUserGuidAndSkillCdIn(String userGuid, Set<String> skillCds);
 }

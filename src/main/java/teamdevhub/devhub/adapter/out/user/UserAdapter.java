@@ -35,6 +35,12 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
+    public User save(User user) {
+        UserEntity userEntity = jpaUserRepository.save(UserMapper.toEntity(user));
+        return UserMapper.toDomain(userEntity);
+    }
+
+    @Override
     public AuthenticatedUser findAuthenticatedUserByEmail(String email) {
         UserEntity userEntity = jpaUserRepository.findByEmail(email).
                 orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
@@ -49,21 +55,15 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public User save(User user) {
-        UserEntity userEntity = jpaUserRepository.save(UserMapper.toEntity(user));
+    public User findByUserGuid(String userGuid) {
+        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toDomain(userEntity);
     }
 
     @Override
     public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
         jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime);
-    }
-
-    @Override
-    public User findByUserGuid(String userGuid) {
-        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
-                .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
-        return UserMapper.toDomain(userEntity);
     }
 
     @Override

@@ -7,6 +7,7 @@ import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import java.util.Optional;
 
 public interface JpaVerificationRepository extends JpaRepository<VerificationEntity, Long> {
-    Optional<VerificationEntity> findByVerificationTypeAndTargetValue(VerificationType targetType, String targetValue);
-    void deleteByVerificationTypeAndTargetValue(VerificationType targetType, String targetValue);
+
+    Optional<VerificationEntity> findByVerificationTypeAndTargetValue(VerificationType verificationType, String targetValue);
+    void deleteByVerificationTypeAndTargetValue(VerificationType verificationType, String targetValue);
 }

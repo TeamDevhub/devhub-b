@@ -6,5 +6,6 @@ import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 
 public interface UserQueryRepository {
+
     Page<UserEntity> listUser(SearchUserCommand searchUserCommand, Pageable pageable);
 }

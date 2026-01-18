@@ -33,8 +33,8 @@ public class FakeJpaUserRepository implements JpaUserRepository {
     }
 
     @Override
-    public boolean existsByUserRole(UserRole role) {
-        return store.values().stream().anyMatch(u -> u.getUserRole().equals(role));
+    public boolean existsByUserRole(UserRole userRole) {
+        return store.values().stream().anyMatch(u -> u.getUserRole().equals(userRole));
     }
 
     @Override
