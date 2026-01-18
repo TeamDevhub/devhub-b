@@ -18,8 +18,8 @@ import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
 import teamdevhub.devhub.application.exception.BusinessRuleException;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class AuthSessionService implements AuthSessionUseCase {
 
     private final TokenIssueProvider tokenIssueProvider;

@@ -31,11 +31,7 @@ public class Verification {
         this.verified = verified;
     }
 
-    public static Verification issue(
-            VerificationTarget target,
-            String code,
-            LocalDateTime expiredAt
-    ) {
+    public static Verification issue(VerificationTarget target, String code, LocalDateTime expiredAt) {
         Objects.requireNonNull(code);
         Objects.requireNonNull(expiredAt);
         return new Verification(null, target, code, expiredAt, false);

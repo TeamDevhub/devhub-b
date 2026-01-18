@@ -1,5 +1,6 @@
 package teamdevhub.devhub.application.service.auth;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
@@ -11,12 +12,13 @@ import teamdevhub.devhub.port.out.provider.PasswordPolicyProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthUserService implements AuthUserUseCase {
 
-    private final UserRepository userRepository;
     private final PasswordPolicyProvider passwordPolicyProvider;
     private final IdentifierProvider identifierProvider;
+    private final UserRepository userRepository;
 
     @Override
     public void initializeAdminUser(String email, String rawPassword, String username) {

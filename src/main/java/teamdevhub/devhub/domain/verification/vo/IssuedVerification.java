@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public record IssuedVerification(Verification verification, VerificationMessage verificationMessage) {
 
-    public static IssuedVerification withVerificationMessage(Verification verification, VerificationMessage message) {
-        return new IssuedVerification(verification, message);
+    public static IssuedVerification withVerificationMessage(Verification verification, VerificationMessage verificationMessage) {
+        return new IssuedVerification(verification, verificationMessage);
     }
 
     public Optional<VerificationMessage> getVerificationMessage() {

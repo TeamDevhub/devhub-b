@@ -1,5 +1,6 @@
 package teamdevhub.devhub.application.service.user;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.domain.user.User;
@@ -19,17 +20,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserSignupService implements UserSignupUseCase {
 
+    private final PasswordPolicyProvider passwordPolicyProvider;
+    private final IdentifierProvider identifierProvider;
     private final VerificationUseCase verificationUseCase;
-
     private final UserRepository userRepository;
     private final UserPositionRepository userPositionRepository;
     private final UserSkillRepository userSkillRepository;
-
-    private final PasswordPolicyProvider passwordPolicyProvider;
-    private final IdentifierProvider identifierProvider;
 
     @Override
     public User signup(SignupCommand signupCommand) {

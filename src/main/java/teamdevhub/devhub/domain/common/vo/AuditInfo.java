@@ -6,11 +6,7 @@ public record AuditInfo(String registrantGuid, LocalDateTime registeredDate, Str
 
     private static final AuditInfo EMPTY = new AuditInfo(null, null, null, null);
 
-    public static AuditInfo of(String registrantGuid,
-                               LocalDateTime registeredDate,
-                               String modifierGuid,
-                               LocalDateTime modifiedDate)
-    {
+    public static AuditInfo of(String registrantGuid, LocalDateTime registeredDate, String modifierGuid, LocalDateTime modifiedDate) {
         return new AuditInfo(registrantGuid, registeredDate, modifierGuid, modifiedDate);
     }
 

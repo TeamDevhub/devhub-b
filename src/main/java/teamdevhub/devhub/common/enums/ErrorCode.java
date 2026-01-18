@@ -32,6 +32,11 @@ public enum ErrorCode {
     VERIFICATION_FAIL("ERR.DVH.0022", "본인인증에 실패했습니다.", BAD_REQUEST),
     VERIFICATION_INVALID("ERR.DVH.0023", "본인인증 코드가 일치하지 않습니다.", BAD_REQUEST),
     VERIFICATION_NOT_EXISTED("ERR.DVH.0024", "본인인증 내역이 존재하지 않습니다.", BAD_REQUEST),
+    VERIFICATION_TYPE_REQUIRED("ERR.DVH.0025",  "인증 유형은 필수입니다.", BAD_REQUEST),
+    VERIFICATION_VALUE_REQUIRED("ERR.DVH.0026", "인증 값은 필수입니다.", BAD_REQUEST),
+    INVALID_EMAIL_FORMAT("ERR.DVH.0027", "이메일 형식이 올바르지 않습니다.", BAD_REQUEST),
+    INVALID_PHONE_NUMBER_FORMAT("ERR.DVH.0028", "휴대폰 번호 형식이 올바르지 않습니다.", BAD_REQUEST),
+    OTP_BLANK("ERR.DVH.0029", "OTP 값은 비어 있을 수 없습니다.", BAD_REQUEST),
 
     USER_ID_FAIL("ERR.DVH.0030", "사용자 ID 값이 잘못되었습니다.",BAD_REQUEST),
     USER_PASSWORD_FAIL("ERR.DVH.0031", "사용자 비밀번호 값이 잘못되었습니다.",BAD_REQUEST),
@@ -41,7 +46,7 @@ public enum ErrorCode {
 
     NOTIFICATION_SEND_FAIL("ERR.DVH.0050", "발송이 실패했습니다.",INTERNAL_SERVER_ERROR),
 
-    BOOLEAN_CONVERT_FAIL("ERR.DVH.0051", "Boolean 값 변환에 실패했습니다.",INTERNAL_SERVER_ERROR),
+    BOOLEAN_CONVERT_FAIL("ERR.DVH.0070", "Boolean 값 변환에 실패했습니다.",INTERNAL_SERVER_ERROR),
 
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다.",BAD_REQUEST);
 

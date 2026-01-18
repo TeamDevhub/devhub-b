@@ -13,15 +13,16 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserWithdrawServiceTest {
 
-    private UserWithdrawService userWithdrawService;
     private FakeUserRepository fakeUserRepository;
+
+    private UserWithdrawService userWithdrawService;
 
     @BeforeEach
     void init() {
-        fakeUserRepository = new FakeUserRepository();
         FakeAuthSessionUseCase fakeAuthSessionUseCase = new FakeAuthSessionUseCase();
+        fakeUserRepository = new FakeUserRepository();
 
-        userWithdrawService = new UserWithdrawService(fakeUserRepository, fakeAuthSessionUseCase);
+        userWithdrawService = new UserWithdrawService(fakeAuthSessionUseCase, fakeUserRepository);
     }
 
     @Test

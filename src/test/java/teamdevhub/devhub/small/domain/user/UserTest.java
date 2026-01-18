@@ -153,7 +153,7 @@ class UserTest {
         // then
         assertThat(userPositionChangeResult.changed()).isTrue();
         assertThat(userPositionChangeResult.previousPositions()).containsExactlyInAnyOrder(oldPosition);
-        assertThat(userPositionChangeResult.currentPositions()).containsExactlyInAnyOrder(newPosition1, newPosition2);
+        assertThat(userPositionChangeResult.changedPositions()).containsExactlyInAnyOrder(newPosition1, newPosition2);
     }
 
     @Test
@@ -173,7 +173,7 @@ class UserTest {
         // then
         assertThat(userPositionChangeResult.changed()).isFalse();
         assertThat(userPositionChangeResult.previousPositions()).containsExactly(previousPosition);
-        assertThat(userPositionChangeResult.currentPositions()).containsExactly(previousPosition);
+        assertThat(userPositionChangeResult.changedPositions()).containsExactly(previousPosition);
     }
 
     @Test
@@ -193,7 +193,7 @@ class UserTest {
         // then
         assertThat(userPositionChangeResult.changed()).isFalse();
         assertThat(userPositionChangeResult.previousPositions()).containsExactly(previousPosition);
-        assertThat(userPositionChangeResult.currentPositions()).containsExactly(newPosition);
+        assertThat(userPositionChangeResult.changedPositions()).containsExactly(newPosition);
     }
 
     @Test
@@ -230,7 +230,7 @@ class UserTest {
         // then
         assertThat(result.changed()).isTrue();
         assertThat(result.previousSkills()).containsExactly(oldSkill);
-        assertThat(result.currentSkills()).containsExactlyInAnyOrder(newSkill1, newSkill2);
+        assertThat(result.changedSkills()).containsExactlyInAnyOrder(newSkill1, newSkill2);
     }
 
 
@@ -253,7 +253,7 @@ class UserTest {
         // then
         assertThat(result.changed()).isFalse();
         assertThat(result.previousSkills()).containsExactly(previousSkill);
-        assertThat(result.currentSkills()).containsExactly(previousSkill);
+        assertThat(result.changedSkills()).containsExactly(previousSkill);
     }
 
     @Test
@@ -275,7 +275,7 @@ class UserTest {
         // then
         assertThat(result.changed()).isFalse();
         assertThat(result.previousSkills()).containsExactly(previousSkill);
-        assertThat(result.currentSkills()).containsExactly(newSkill);
+        assertThat(result.changedSkills()).containsExactly(newSkill);
     }
 
     @Test

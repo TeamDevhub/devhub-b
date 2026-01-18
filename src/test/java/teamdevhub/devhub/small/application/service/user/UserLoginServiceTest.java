@@ -15,17 +15,17 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserLoginServiceTest {
 
-    private UserLoginService userLoginService;
-
     private FakeUserRepository fakeUserRepository;
     private FakeTimeProvider fakeDateTimeProvider;
 
+    private UserLoginService userLoginService;
+
     @BeforeEach
     void init() {
-        fakeUserRepository = new FakeUserRepository();
         fakeDateTimeProvider = new FakeTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
+        fakeUserRepository = new FakeUserRepository();
 
-        userLoginService = new UserLoginService(fakeUserRepository, fakeDateTimeProvider);
+        userLoginService = new UserLoginService(fakeDateTimeProvider,fakeUserRepository);
     }
 
     @Test

@@ -11,8 +11,8 @@ import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class AdminUserService implements AdminUserUseCase {
 
     private final UserRepository userRepository;

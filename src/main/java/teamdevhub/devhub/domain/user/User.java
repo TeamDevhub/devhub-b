@@ -59,16 +59,19 @@ public class User {
         validate(email, password);
 
         this.userGuid = userGuid;
+
         this.email = email;
         this.password = password;
-        this.username = username;
         this.userRole = userRole;
+
+        this.username = username;
         this.introduction = introduction;
 
         this.positions = Objects.requireNonNullElseGet(positions, HashSet::new);
         this.skills = Objects.requireNonNullElseGet(skills, HashSet::new);
 
         this.mannerDegree = mannerDegree;
+
         this.blocked = blocked;
         this.blockEndDate = blockEndDate;
         this.deleted = deleted;
@@ -93,8 +96,8 @@ public class User {
                 .userGuid(userGuid)
                 .email(email)
                 .password(password)
-                .username(username)
                 .userRole(UserRole.USER)
+                .username(username)
                 .introduction(introduction)
                 .mannerDegree(36.5)
                 .blocked(false)
@@ -113,8 +116,8 @@ public class User {
                 .userGuid(userGuid)
                 .email(email)
                 .password(password)
-                .username(username)
                 .userRole(UserRole.ADMIN)
+                .username(username)
                 .blocked(false)
                 .deleted(false)
                 .auditInfo(AuditInfo.empty())
@@ -139,8 +142,8 @@ public class User {
                 .userGuid(userGuid)
                 .email(email)
                 .password(password)
-                .username(username)
                 .userRole(userRole)
+                .username(username)
                 .introduction(introduction)
                 .mannerDegree(mannerDegree)
                 .blocked(blocked)

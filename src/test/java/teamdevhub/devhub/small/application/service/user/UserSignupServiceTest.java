@@ -20,29 +20,28 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserSignupServiceTest {
 
-    private UserSignupService userSignupService;
+    private FakePasswordPolicyProvider fakePasswordPolicyProvider;
     private FakeVerificationUseCase fakeSignupVerificationUseCase;
     private FakeUserRepository fakeUserRepository;
-    private FakePasswordPolicyProvider fakePasswordPolicyProvider;
+
+    private UserSignupService userSignupService;
 
     @BeforeEach
     void init() {
+        fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
+        FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
         fakeSignupVerificationUseCase = new FakeVerificationUseCase();
-
         fakeUserRepository = new FakeUserRepository();
         FakeUserPositionRepository fakeUserPositionRepository = new FakeUserPositionRepository();
         FakeUserSkillRepository fakeUserSkillRepository = new FakeUserSkillRepository();
 
-        FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
-        fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
-
         userSignupService = new UserSignupService(
+                fakePasswordPolicyProvider,
+                fakeUuidIdentifierProvider,
                 fakeSignupVerificationUseCase,
                 fakeUserRepository,
                 fakeUserPositionRepository,
-                fakeUserSkillRepository,
-                fakePasswordPolicyProvider,
-                fakeUuidIdentifierProvider
+                fakeUserSkillRepository
         );
     }
 

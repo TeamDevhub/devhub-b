@@ -16,10 +16,10 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class AuthUserServiceTest {
 
-    private AuthUserService authUserService;
-
-    private FakeUserRepository fakeUserRepository;
     private FakePasswordPolicyProvider fakePasswordPolicyProvider;
+    private FakeUserRepository fakeUserRepository;
+
+    private AuthUserService authUserService;
 
     @BeforeEach
     void init() {
@@ -27,11 +27,7 @@ public class AuthUserServiceTest {
         fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
         FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
 
-        authUserService = new AuthUserService(
-                fakeUserRepository,
-                fakePasswordPolicyProvider,
-                fakeUuidIdentifierProvider
-        );
+        authUserService = new AuthUserService(fakePasswordPolicyProvider, fakeUuidIdentifierProvider, fakeUserRepository);
     }
 
     @Test
@@ -39,11 +35,7 @@ public class AuthUserServiceTest {
     void createAdminAccount() {
         // given
         FakeUuidIdentifierProvider fakeAdminUuidIdentifierProvider = new FakeUuidIdentifierProvider(ADMIN_USER_GUID);
-        authUserService = new AuthUserService(
-                fakeUserRepository,
-                fakePasswordPolicyProvider,
-                fakeAdminUuidIdentifierProvider
-        );
+        authUserService = new AuthUserService(fakePasswordPolicyProvider, fakeAdminUuidIdentifierProvider, fakeUserRepository);
 
         // when
         authUserService.initializeAdminUser(ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME);

@@ -1,6 +1,7 @@
 package teamdevhub.devhub.domain.verification.vo;
 
-import java.util.Objects;
+import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.domain.exception.DomainRuleException;
 
 public record VerificationTarget(VerificationType verificationType, String value) {
 
@@ -13,26 +14,17 @@ public record VerificationTarget(VerificationType verificationType, String value
         return new VerificationTarget(verificationType, value);
     }
 
-    private static void validate(VerificationType type, String value) {
-        Objects.requireNonNull(type, "verificationType must not be null");
-        Objects.requireNonNull(value, "value must not be null");
+    private static void validate(VerificationType verificationType, String value) {
+        validateRequired(verificationType, value);
+        verificationType.validate(value);
+    }
 
-        switch (type) {
-            case EMAIL -> {
-                if (!value.matches("^[^@]+@[^@]+\\.[^@]+$")) {
-                    throw new IllegalArgumentException("Invalid email format");
-                }
-            }
-            case SMS -> {
-                if (!value.matches("^01[0-9]{8,9}$")) {
-                    throw new IllegalArgumentException("Invalid phone number format");
-                }
-            }
-            case OTP -> {
-                if (value.isBlank()) {
-                    throw new IllegalArgumentException("OTP cannot be blank");
-                }
-            }
+    private static void validateRequired(VerificationType verificationType, String value) {
+        if (verificationType == null) {
+            throw DomainRuleException.of(ErrorCode.VERIFICATION_TYPE_REQUIRED);
+        }
+        if (value == null) {
+            throw DomainRuleException.of(ErrorCode.VERIFICATION_VALUE_REQUIRED);
         }
     }
 }

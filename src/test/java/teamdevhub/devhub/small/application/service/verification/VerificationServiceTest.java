@@ -28,10 +28,10 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class VerificationServiceTest {
 
-    private VerificationService verificationService;
-
-    private FakeVerificationRepository verificationRepository;
     private FakeNotificationSender notificationSender;
+    private FakeVerificationRepository verificationRepository;
+
+    private VerificationService verificationService;
 
     @BeforeEach
     void init() {
@@ -39,14 +39,13 @@ public class VerificationServiceTest {
 
         VerificationIssuer verificationIssuer = new FakeEmailVerificationIssuer(VerificationType.EMAIL, TEST_EMAIL_CODE, timeProvider);
         VerificationIssuerSelector issuerSelector = new FakeVerificationIssuerSelector(List.of(verificationIssuer));
-
         verificationRepository = new FakeVerificationRepository();
         notificationSender = new FakeNotificationSender();
 
         verificationService = new VerificationService(
+                timeProvider,
                 issuerSelector,
                 notificationSender,
-                timeProvider,
                 verificationRepository
         );
     }

@@ -1,5 +1,6 @@
 package teamdevhub.devhub.application.service.user;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.port.in.user.usecase.UserLoginUseCase;
@@ -7,11 +8,12 @@ import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserLoginService implements UserLoginUseCase {
 
-    private final UserRepository userRepository;
     private final TimeProvider timeProvider;
+    private final UserRepository userRepository;
 
     @Override
     public void updateLastLoginDateTime(String userGuid) {

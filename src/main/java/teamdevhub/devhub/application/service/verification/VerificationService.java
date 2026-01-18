@@ -15,13 +15,13 @@ import teamdevhub.devhub.port.out.sender.NotificationSender;
 import teamdevhub.devhub.port.out.verification.VerificationRepository;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class VerificationService implements VerificationUseCase {
 
+    private final TimeProvider timeProvider;
     private final VerificationIssuerSelector verificationIssuerSelector;
     private final NotificationSender notificationSender;
-    private final TimeProvider timeProvider;
     private final VerificationRepository verificationRepository;
 
     @Override

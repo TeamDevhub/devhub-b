@@ -17,8 +17,8 @@ import teamdevhub.devhub.port.out.user.UserSkillRepository;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class UserProfileService implements UserProfileUseCase {
 
     private final UserRepository userRepository;
@@ -59,14 +59,14 @@ public class UserProfileService implements UserProfileUseCase {
     private void replacePositions(User user, Set<UserPosition> positions) {
         UserPositionChangeResult userPositionChangeResult = user.changePositions(positions);
         if (userPositionChangeResult.changed()) {
-            userPositionRepository.replace(userPositionChangeResult.previousPositions(), userPositionChangeResult.currentPositions());
+            userPositionRepository.replace(userPositionChangeResult.previousPositions(), userPositionChangeResult.changedPositions());
         }
     }
 
     private void replaceSkills(User user, Set<UserSkill> skills) {
         UserSkillChangeResult userSkillChangeResult = user.changeSkills(skills);
         if (userSkillChangeResult.changed()) {
-            userSkillRepository.replace(userSkillChangeResult.previousSkills(), userSkillChangeResult.currentSkills());
+            userSkillRepository.replace(userSkillChangeResult.previousSkills(), userSkillChangeResult.changedSkills());
         }
     }
 }

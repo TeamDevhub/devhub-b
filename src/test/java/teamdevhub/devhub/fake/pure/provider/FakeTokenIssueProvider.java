@@ -24,7 +24,7 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
     @Override
     public String createRefreshToken(String userGuid) {
         String token = REFRESH_PREFIX + userGuid;
-        refreshTokenMap.put(token, userGuid); // 토큰 저장
+        refreshTokenMap.put(token, userGuid);
         return token;
     }
 

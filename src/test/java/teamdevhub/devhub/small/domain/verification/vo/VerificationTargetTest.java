@@ -2,6 +2,8 @@ package teamdevhub.devhub.small.domain.verification.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
 
@@ -25,8 +27,8 @@ public class VerificationTargetTest {
     void throwExceptionWhenInvalidEmailFormat() {
         assertThatThrownBy(() ->
                 VerificationTarget.of(VerificationType.EMAIL, "invalid-email"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Invalid email format");
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.INVALID_EMAIL_FORMAT.getMessage());
     }
 
     @Test
@@ -43,8 +45,8 @@ public class VerificationTargetTest {
     void throwExceptionWhenInvalidPhoneFormat() {
         assertThatThrownBy(() ->
                 VerificationTarget.of(VerificationType.SMS, "123456"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Invalid phone number format");
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.INVALID_PHONE_NUMBER_FORMAT.getMessage());
     }
 
     @Test
@@ -61,8 +63,8 @@ public class VerificationTargetTest {
     void throwExceptionWhenOtpIsBlank() {
         assertThatThrownBy(() ->
                 VerificationTarget.of(VerificationType.OTP, " "))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("OTP cannot be blank");
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.OTP_BLANK.getMessage());
     }
 
     @Test
@@ -70,8 +72,8 @@ public class VerificationTargetTest {
     void throwExceptionWhenVerificationTypeIsNull() {
         assertThatThrownBy(() ->
                 VerificationTarget.of(null, "test@test.com"))
-                .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("verificationType must not be null");
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.VERIFICATION_TYPE_REQUIRED.getMessage());
     }
 
     @Test
@@ -79,7 +81,7 @@ public class VerificationTargetTest {
     void throwExceptionWhenValueIsNull() {
         assertThatThrownBy(() ->
                 VerificationTarget.of(VerificationType.EMAIL, null))
-                .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("value must not be null");
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.VERIFICATION_VALUE_REQUIRED.getMessage());
     }
 }
