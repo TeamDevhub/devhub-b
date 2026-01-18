@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface TimeProvider {
+
     LocalDateTime now();
     LocalDate today();
     String formatDate(LocalDate date, String pattern);

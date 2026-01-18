@@ -60,6 +60,6 @@ public class CompositeVerificationIssuerSelectorTest {
         assertThatThrownBy(() ->
                 compositeVerificationIssuerSelector.issueVerification(verificationTarget))
                 .isInstanceOf(BusinessRuleException.class)
-                .hasMessageContaining(ErrorCode.VERIFICATION_NOT_CONFIRMED.getMessage());
+                .hasMessageContaining(ErrorCode.VERIFICATION_FAIL.getMessage());
     }
 }

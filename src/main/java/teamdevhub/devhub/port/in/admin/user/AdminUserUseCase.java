@@ -6,5 +6,6 @@ import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
 
 public interface AdminUserUseCase {
+
     PageResult<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand);
 }

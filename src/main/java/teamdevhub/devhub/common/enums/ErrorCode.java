@@ -29,7 +29,7 @@ public enum ErrorCode {
     EMAIL_DUPLICATED("ERR.DVH.0020", "중복된 이메일을 사용할 수는 없습니다.", BAD_REQUEST),
 
     VERIFICATION_ALREADY_SENT("ERR.DVH.0021", "본인인증 코드가 이미 발송되었습니다. 잠시 후 재시도해주세요.", BAD_REQUEST),
-    VERIFICATION_NOT_CONFIRMED("ERR.DVH.0022", "본인인증에 실패했습니다.", BAD_REQUEST),
+    VERIFICATION_FAIL("ERR.DVH.0022", "본인인증에 실패했습니다.", BAD_REQUEST),
     VERIFICATION_INVALID("ERR.DVH.0023", "본인인증 코드가 일치하지 않습니다.", BAD_REQUEST),
     VERIFICATION_NOT_EXISTED("ERR.DVH.0024", "본인인증 내역이 존재하지 않습니다.", BAD_REQUEST),
 

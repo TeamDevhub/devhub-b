@@ -37,7 +37,7 @@ class GlobalExceptionHandlerMediumTest {
 
         @GetMapping("/business-exception")
         public void businessException() {
-            throw BusinessRuleException.of(ErrorCode.VERIFICATION_NOT_CONFIRMED);
+            throw BusinessRuleException.of(ErrorCode.VERIFICATION_FAIL);
         }
 
         @GetMapping("/validation-exception")
@@ -82,7 +82,7 @@ class GlobalExceptionHandlerMediumTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.error.code").value(ErrorCode.VERIFICATION_NOT_CONFIRMED.getCode()));
+                .andExpect(jsonPath("$.error.code").value(ErrorCode.VERIFICATION_FAIL.getCode()));
     }
 
     @Test

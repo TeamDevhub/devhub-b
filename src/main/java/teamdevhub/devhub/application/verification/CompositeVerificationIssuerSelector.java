@@ -20,7 +20,7 @@ public class CompositeVerificationIssuerSelector implements VerificationIssuerSe
         return issuerList.stream()
                 .filter(issuer -> issuer.supports(verificationTarget))
                 .findFirst()
-                .orElseThrow(() -> BusinessRuleException.of(ErrorCode.VERIFICATION_NOT_CONFIRMED))
+                .orElseThrow(() -> BusinessRuleException.of(ErrorCode.VERIFICATION_FAIL))
                 .issue(verificationTarget);
     }
 }

@@ -23,7 +23,7 @@ public class FakeVerificationIssuerSelector implements VerificationIssuerSelecto
                 .filter(issuer -> issuer.supports(verificationTarget))
                 .findFirst()
                 .orElseThrow(
-                        () -> BusinessRuleException.of(ErrorCode.VERIFICATION_NOT_CONFIRMED))
+                        () -> BusinessRuleException.of(ErrorCode.VERIFICATION_FAIL))
                 .issue(verificationTarget);
     }
 }

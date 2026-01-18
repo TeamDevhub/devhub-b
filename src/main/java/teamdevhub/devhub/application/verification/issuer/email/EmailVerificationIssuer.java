@@ -24,10 +24,9 @@ public class EmailVerificationIssuer implements VerificationIssuer {
     }
 
     @Override
-    public IssuedVerification issue(VerificationTarget target) {
+    public IssuedVerification issue(VerificationTarget verificationTarget) {
         String verificationCode = verificationCodeProvider.generateVerificationCode();
-
-        Verification verification = Verification.issue(target, verificationCode, timeProvider.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationCode, timeProvider.now().plusMinutes(5));
         VerificationMessage verificationMessage = new VerificationMessage(verificationCode, timeProvider.now().plusMinutes(5));
 
         return IssuedVerification.withVerificationMessage(verification, verificationMessage);
