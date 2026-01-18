@@ -1,5 +1,6 @@
 package teamdevhub.devhub.port.in.user.command;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.adapter.in.dto.request.user.SignupRequestDto;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class SignupCommand {
 
     private final String email;

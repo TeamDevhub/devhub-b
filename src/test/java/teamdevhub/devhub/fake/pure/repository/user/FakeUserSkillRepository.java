@@ -19,25 +19,25 @@ public class FakeUserSkillRepository implements UserSkillRepository {
     }
 
     @Override
-    public void replace(Set<UserSkill> previousSkills, Set<UserSkill> currentSkills) {
+    public void replace(Set<UserSkill> previousSkills, Set<UserSkill> changedSkills) {
         replaceCalled = true;
-        if (currentSkills == null) {
-            currentSkills = Set.of();
+        if (changedSkills == null) {
+            changedSkills = Set.of();
         }
         if (previousSkills == null) {
             previousSkills = Set.of();
         }
 
-        String userGuid = !currentSkills.isEmpty()
-                ? currentSkills.iterator().next().userGuid()
+        String userGuid = !changedSkills.isEmpty()
+                ? changedSkills.iterator().next().userGuid()
                 : previousSkills.iterator().next().userGuid();
 
         Set<UserSkill> existing = store.getOrDefault(userGuid, new HashSet<>());
 
         Set<UserSkill> toDelete = new HashSet<>(existing);
-        toDelete.removeAll(currentSkills);
+        toDelete.removeAll(changedSkills);
 
-        Set<UserSkill> toInsert = new HashSet<>(currentSkills);
+        Set<UserSkill> toInsert = new HashSet<>(changedSkills);
         toInsert.removeAll(existing);
 
         existing.removeAll(toDelete);

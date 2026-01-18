@@ -46,12 +46,12 @@ public class UserSkillAdapter implements UserSkillRepository {
     }
 
     @Override
-    public void replace(Set<UserSkill> previousSkills, Set<UserSkill> currentSkills) {
-        if (currentSkills == null || currentSkills.isEmpty()) {
+    public void replace(Set<UserSkill> previousSkills, Set<UserSkill> changedSkills) {
+        if (changedSkills == null || changedSkills.isEmpty()) {
             return;
         }
 
-        syncSkills(previousSkills, currentSkills);
+        syncSkills(previousSkills, changedSkills);
     }
 
     private void syncSkills(Set<UserSkill> previousSkills, Set<UserSkill> currentSkills) {

@@ -11,13 +11,14 @@ import java.time.LocalDateTime;
 public interface UserRepository {
 
     void saveAdminUser(User adminUser);
+    User save(User user);
     AuthenticatedUser findAuthenticatedUserByEmail(String email);
     AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid);
-    User save(User user);
-    void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
     User findByUserGuid(String userGuid);
+    void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
     void updateUserProfile(User user);
     void delete(User user);
     boolean existsByUserRole(UserRole userRole);
+
     PageResult<User> listUser(SearchUserCommand searchUserCommand, int page, int size);
 }

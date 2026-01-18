@@ -5,7 +5,7 @@ import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 
 public interface VerificationRepository {
 
-    Verification findByVerificationTarget(VerificationTarget verificationTarget);
     void save(Verification verification);
+    Verification findByVerificationTarget(VerificationTarget verificationTarget);
     void deleteByVerificationTarget(VerificationTarget verificationTarget);
 }
