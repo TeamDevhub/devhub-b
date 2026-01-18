@@ -21,10 +21,6 @@ public class FakeNotificationSender implements NotificationSender {
         return sent;
     }
 
-    public VerificationTarget getTarget() {
-        return target;
-    }
-
     public VerificationMessage getMessage() {
         return message;
     }
