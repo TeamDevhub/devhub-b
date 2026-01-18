@@ -48,8 +48,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             setAuthentication(claims);
             filterChain.doFilter(httpServletRequest, httpServletResponse);
-        } catch (AuthRuleException e) {
-            customFilterExceptionHandler.handle(httpServletResponse, e.getErrorCode());
+        } catch (AuthRuleException authRuleException) {
+            customFilterExceptionHandler.handle(httpServletResponse, authRuleException.getErrorCode());
         }
     }
 
@@ -66,18 +66,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String email = claims.get(JwtClaims.EMAIL, String.class);
         UserRole userRole = UserRole.valueOf(claims.get(JwtClaims.USER_ROLE, String.class));
 
-        AuthenticatedUser authenticatedUser =
-                AuthenticatedUser.of(userGuid, email, null, userRole);
+        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(userGuid, email, null, userRole);
+        Collection<? extends GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userRole.getAuthority()));
 
-        Collection<? extends GrantedAuthority> authorities =
-                List.of(new SimpleGrantedAuthority(userRole.getAuthority()));
-
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(
-                        authenticatedUser,
-                        null,
-                        authorities
-                );
+        Authentication authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null, authorities);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

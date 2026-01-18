@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.verification.VerificationAdapter;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
@@ -63,7 +64,7 @@ public class VerificationAdapterTest {
                 () -> verificationAdapter.findByVerificationTarget(
                 VerificationTarget.of(VerificationType.EMAIL, "not_exist@test.com")))
                 .isInstanceOf(AdapterDataException.class)
-                .hasMessageContaining("인증내역이 존재하지 않습니다.");
+                .hasMessageContaining(ErrorCode.VERIFICATION_NOT_EXISTED.getMessage());
     }
 
     @Test

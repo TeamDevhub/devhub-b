@@ -8,12 +8,12 @@ import static org.springframework.http.HttpStatus.*;
 @Getter
 public enum ErrorCode {
 
-    VALIDATION_FAIL("ERR.DVH.000", "검증 오류", BAD_REQUEST),
+    VALIDATION_FAIL("ERR.DVH.000", "검증 오류가 발생했습니다.", BAD_REQUEST),
 
-    READ_FAIL("ERR.DVH.0001", "조회 오류", INTERNAL_SERVER_ERROR),
-    CREATE_FAIL("ERR.DVH.0002", "작성 오류",INTERNAL_SERVER_ERROR),
-    UPDATE_FAIL("ERR.DVH.0003", "수정 오류",INTERNAL_SERVER_ERROR),
-    DELETE_FAIL("ERR.DVH.0004", "삭제 오류",INTERNAL_SERVER_ERROR),
+    READ_FAIL("ERR.DVH.0001", "조회 오류가 발생했습니다.", INTERNAL_SERVER_ERROR),
+    CREATE_FAIL("ERR.DVH.0002", "작성 오류가 발생했습니다.",INTERNAL_SERVER_ERROR),
+    UPDATE_FAIL("ERR.DVH.0003", "수정 오류가 발생했습니다.",INTERNAL_SERVER_ERROR),
+    DELETE_FAIL("ERR.DVH.0004", "삭제 오류가 발생했습니다.",INTERNAL_SERVER_ERROR),
 
     TOKEN_EXPIRED("ERR.DVH.0010", "토큰이 만료되었습니다.", BAD_REQUEST),
     TOKEN_INVALID("ERR.DVH.0011", "유효하지 않은 토큰입니다.", BAD_REQUEST),
@@ -23,13 +23,15 @@ public enum ErrorCode {
     REFRESH_TOKEN_INVALID("ERR.DVH.0015", "유효하지 않은 토큰입니다.", UNAUTHORIZED),
     AUTH_INVALID("ERR.DVH.0016", "유효하지 않은 인증 정보입니다.", UNAUTHORIZED),
     AUTH_FAIL("ERR.DVH.0017", "인증에 실패했습니다.", UNAUTHORIZED),
+
     SIGNUP_FAIL("ERR.DVH.0018", "회원가입에 실패했습니다.", BAD_REQUEST),
     LOGIN_FAIL("ERR.DVH.0019", "로그인에 실패했습니다.", BAD_REQUEST),
     EMAIL_DUPLICATED("ERR.DVH.0020", "중복된 이메일을 사용할 수는 없습니다.", BAD_REQUEST),
-    VERIFICATION_ALREADY_SENT("ERR.DVH.0021", "인증 코드가 이미 발송되었습니다. 잠시 후 재시도해주세요.", BAD_REQUEST),
-    VERIFICATION_NOT_CONFIRMED("ERR.DVH.0022", "인증에 실패했습니다.", BAD_REQUEST),
-    VERIFICATION_INVALID("ERR.DVH.0023", "인증코드가 일치하지 않습니다.", BAD_REQUEST),
-    VERIFICATION_NOT_EXISTED("ERR.DVH.0024", "인증내역이 존재하지 않습니다.", BAD_REQUEST),
+
+    VERIFICATION_ALREADY_SENT("ERR.DVH.0021", "본인인증 코드가 이미 발송되었습니다. 잠시 후 재시도해주세요.", BAD_REQUEST),
+    VERIFICATION_NOT_CONFIRMED("ERR.DVH.0022", "본인인증에 실패했습니다.", BAD_REQUEST),
+    VERIFICATION_INVALID("ERR.DVH.0023", "본인인증 코드가 일치하지 않습니다.", BAD_REQUEST),
+    VERIFICATION_NOT_EXISTED("ERR.DVH.0024", "본인인증 내역이 존재하지 않습니다.", BAD_REQUEST),
 
     USER_ID_FAIL("ERR.DVH.0030", "사용자 ID 값이 잘못되었습니다.",BAD_REQUEST),
     USER_PASSWORD_FAIL("ERR.DVH.0031", "사용자 비밀번호 값이 잘못되었습니다.",BAD_REQUEST),
@@ -38,7 +40,8 @@ public enum ErrorCode {
     USER_SKILL_REQUIRED("ERR.DVH.0034", "보유 스킬목록은 필수입니다.", BAD_REQUEST),
 
     NOTIFICATION_SEND_FAIL("ERR.DVH.0050", "발송이 실패했습니다.",INTERNAL_SERVER_ERROR),
-    BOOLEAN_CONVERT_FAIL("ERR.DVH.0051", "boolean 값 변환에 실패했습니다.",INTERNAL_SERVER_ERROR),
+
+    BOOLEAN_CONVERT_FAIL("ERR.DVH.0051", "Boolean 값 변환에 실패했습니다.",INTERNAL_SERVER_ERROR),
 
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다.",BAD_REQUEST);
 

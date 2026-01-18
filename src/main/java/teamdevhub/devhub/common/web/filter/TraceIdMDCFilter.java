@@ -4,20 +4,24 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 
 import java.io.IOException;
 import java.util.UUID;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Component
+@RequiredArgsConstructor
 public class TraceIdMDCFilter extends OncePerRequestFilter {
 
     private static final String TRACE_ID_KEY = "traceId";
+    private final IdentifierProvider identifierProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -27,10 +31,7 @@ public class TraceIdMDCFilter extends OncePerRequestFilter {
                 traceId = httpServletRequest.getHeader("X-Trace-Id");
 
                 if (traceId == null || traceId.isBlank()) {
-                    traceId = UUID.randomUUID()
-                            .toString()
-                            .replace("-", "")
-                            .substring(0, 16);
+                    traceId = identifierProvider.generateIdentifier().substring(0, 16);
                 }
 
                 MDC.put(TRACE_ID_KEY, traceId);

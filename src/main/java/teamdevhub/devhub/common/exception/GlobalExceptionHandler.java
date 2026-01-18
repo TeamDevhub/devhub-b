@@ -47,14 +47,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<ApiDataResponseDto<?>> handleValidationException(MethodArgumentNotValidException e) {
-        logException(e);
-        String message = e.getBindingResult()
+    public ResponseEntity<ApiDataResponseDto<?>> handleValidationException(MethodArgumentNotValidException methodArgumentNotValidException) {
+        logException(methodArgumentNotValidException);
+        String message = methodArgumentNotValidException.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .findFirst()
                 .map(FieldError::getDefaultMessage)
-                .orElse("검증 오류");
+                .orElse(ErrorCode.VALIDATION_FAIL.getMessage());
 
         return ResponseEntity.badRequest()
                 .body(ApiDataResponseDto.failureWithMessage(ErrorCode.VALIDATION_FAIL, message)

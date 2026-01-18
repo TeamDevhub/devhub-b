@@ -4,39 +4,39 @@ public final class StringUtil {
 
     private StringUtil() {}
 
-    public static boolean isEmpty(String str) {
-        if (str == null) {
+    public static boolean isEmpty(String string) {
+        if (string == null) {
             return true;
         }
 
-        return str.isBlank();
+        return string.isBlank();
     }
 
-    public static boolean isNotEmpty(String str) {
-        return !isEmpty(str);
+    public static boolean isNotEmpty(String string) {
+        return !isEmpty(string);
     }
 
-    public static String defaultIfEmpty(String str, String defaultStr) {
-        if (isEmpty(str)) {
-            return defaultStr;
+    public static String defaultIfEmpty(String string, String defaultString) {
+        if (isEmpty(string)) {
+            return defaultString;
         }
 
-        return str;
+        return string;
     }
 
-    public static String truncate(String str, int maxLength) {
-        if (isEmpty(str)) {
-            return str;
+    public static String truncate(String string, int maxLength) {
+        if (isEmpty(string)) {
+            return string;
         }
 
         if (maxLength < 0) {
             throw new IllegalArgumentException("maxLength must be positive");
         }
 
-        if (str.length() <= maxLength) {
-            return str;
+        if (string.length() <= maxLength) {
+            return string;
         }
 
-        return str.substring(0, maxLength);
+        return string.substring(0, maxLength);
     }
 }

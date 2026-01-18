@@ -22,19 +22,16 @@ public class SwaggerConfig {
                                 DevHub API 문서입니다.
                                 인증 시 Authorization 탭을 눌러 Bearer Token 을 입력하세요.
                                 """)
-                        .version("v1.0.0")
-                )
+                        .version("v1.0.0"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
-                .components(
-                        new Components()
-                                .addSecuritySchemes(
-                                        securitySchemeName,
-                                        new SecurityScheme()
-                                                .name(securitySchemeName)
-                                                .type(SecurityScheme.Type.HTTP)
-                                                .scheme("bearer")
-                                                .bearerFormat("JWT")
-                                )
+                .components(new Components()
+                        .addSecuritySchemes(
+                                securitySchemeName,
+                                new SecurityScheme()
+                                        .name(securitySchemeName)
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT"))
                 );
     }
 

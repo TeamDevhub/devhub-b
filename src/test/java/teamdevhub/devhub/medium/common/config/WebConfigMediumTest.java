@@ -41,19 +41,4 @@ class WebConfigMediumTest {
         // then
         assertThat(resolvers).contains(loginUserArgumentResolver);
     }
-    @Test
-    @DisplayName("corsMapping_적용을_확인할_수_있다")
-    void verifyCorsMappingApplied() throws Exception {
-        // given
-        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-
-        // when
-        mockMvc.perform(options("/any-path")
-                        .header("Origin", "http://localhost:5173")
-                        .header("Access-Control-Request-Method", "GET"))
-                // then
-                .andExpect(status().isOk())
-                .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"))
-                .andExpect(header().string("Access-Control-Allow-Credentials", "true"));
-    }
 }

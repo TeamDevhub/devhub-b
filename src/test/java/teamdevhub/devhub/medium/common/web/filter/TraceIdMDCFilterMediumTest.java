@@ -8,6 +8,7 @@ import org.slf4j.MDC;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import teamdevhub.devhub.common.web.filter.TraceIdMDCFilter;
+import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 
 import java.io.IOException;
 
@@ -17,7 +18,8 @@ import static org.mockito.Mockito.verify;
 
 class TraceIdMDCFilterMediumTest {
 
-    private final TraceIdMDCFilter filter = new TraceIdMDCFilter();
+    private final FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider("LOG1a1b2c3d4e5f6g7h8i9j10k11l12m");
+    private final TraceIdMDCFilter filter = new TraceIdMDCFilter(fakeUuidIdentifierProvider);
 
     @Test
     @DisplayName("요청헤더에_traceId가_있으면_MDC_에_같은_traceId_를_설정한다")
