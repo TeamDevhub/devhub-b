@@ -31,7 +31,7 @@ public class AuthController {
         verificationUseCase.issueVerification(issueVerificationRequestDto.toIssueVerificationCommand());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
-                        SuccessCode.EMAIL_VERIFICATION_SENT
+                        SuccessCode.VERIFICATION_SENT
                 )
         );
     }
@@ -41,7 +41,7 @@ public class AuthController {
         verificationUseCase.confirmVerification(confirmVerificationRequestDto.toConfirmVerificationCommand());
         return ResponseEntity.ok(
                 ApiDataResponseDto.successWithoutData(
-                        SuccessCode.EMAIL_VERIFICATION_SUCCESS
+                        SuccessCode.VERIFICATION_SUCCESS
                 )
         );
     }

@@ -37,7 +37,7 @@ class AuthControllerTest {
         IssueVerificationRequestDto issueVerificationRequestDto = new IssueVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1);
 
         // when, then
-        assertThat(authController.sendEmailVerification(issueVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SENT.getCode());
+        assertThat(authController.sendEmailVerification(issueVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.VERIFICATION_SENT.getCode());
     }
 
     @Test
@@ -48,7 +48,7 @@ class AuthControllerTest {
         ConfirmVerificationRequestDto confirmVerificationRequestDto = new ConfirmVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1, TEST_EMAIL_CODE);
 
         // when, then
-        assertThat(authController.confirmEmailVerification(confirmVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.EMAIL_VERIFICATION_SUCCESS.getCode());
+        assertThat(authController.confirmEmailVerification(confirmVerificationRequestDto).getBody().getCode()).isEqualTo(SuccessCode.VERIFICATION_SUCCESS.getCode());
     }
 
     @Test
