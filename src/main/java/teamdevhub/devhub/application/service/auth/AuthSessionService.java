@@ -47,7 +47,7 @@ public class AuthSessionService implements AuthSessionUseCase {
         String userGuid = tokenIssueProvider.extractUserGuidFromRefreshToken(token);
         RefreshToken refreshToken = refreshTokenRepository.findByUserGuid(userGuid);
 
-        if (!refreshToken.token().equals(token)) {
+        if (refreshToken == null || !refreshToken.token().equals(token)) {
             throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
         }
 

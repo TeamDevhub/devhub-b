@@ -53,10 +53,14 @@ dependencies {
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 	annotationProcessor 'org.projectlombok:lombok'
 
+	testCompileOnly 'org.projectlombok:lombok'
+
 	testImplementation 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 }
 

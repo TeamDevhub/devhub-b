@@ -5,11 +5,16 @@ import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FakeTokenIssueProvider implements TokenIssueProvider {
 
     private static final String PREFIX = "Bearer ";
     private static final String ACCESS_PREFIX = "access-token-";
     private static final String REFRESH_PREFIX = "refresh-token-";
+
+    private final Map<String, String> refreshTokenMap = new HashMap<>();
 
     @Override
     public String createAccessToken(String userGuid, String email, UserRole userRole) {
@@ -18,7 +23,9 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
 
     @Override
     public String createRefreshToken(String userGuid) {
-        return REFRESH_PREFIX + userGuid;
+        String token = REFRESH_PREFIX + userGuid;
+        refreshTokenMap.put(token, userGuid); // 토큰 저장
+        return token;
     }
 
     @Override
@@ -26,7 +33,13 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
         if (refreshToken == null || !refreshToken.startsWith(REFRESH_PREFIX)) {
             throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
-        return refreshToken.substring(REFRESH_PREFIX.length());
+
+        String userGuid = refreshTokenMap.get(refreshToken);
+        if (userGuid == null) {
+            return refreshToken.substring(REFRESH_PREFIX.length());
+        }
+
+        return userGuid;
     }
 
     @Override

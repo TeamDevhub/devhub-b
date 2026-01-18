@@ -42,6 +42,14 @@ public class EmailMessageSendAdapterTest {
     }
 
     @Test
+    @DisplayName("VerificationType_이_SMS_이면_supports_는_false_를_반환한다")
+    void supportsReturnsFalseForSMS() {
+        VerificationTarget verificationTarget = VerificationTarget.of(VerificationType.SMS, "01012345678");
+
+        assertThat(emailMessageSendAdapter.supports(verificationTarget)).isFalse();
+    }
+
+    @Test
     @DisplayName("메일_전송_호출시_JavaMailSender_가_호출된다")
     void sendVerificationCallsMailSender() {
         // given

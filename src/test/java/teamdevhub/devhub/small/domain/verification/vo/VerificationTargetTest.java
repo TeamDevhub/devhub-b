@@ -30,7 +30,7 @@ public class VerificationTargetTest {
     }
 
     @Test
-    @DisplayName("PHONE_타입과_올바른_전화번호_값으로_VerificationTarget_생성에_성공한다")
+    @DisplayName("SMS_타입과_올바른_전화번호_값으로_VerificationTarget_생성에_성공한다")
     void createVerificationTargetWithValidPhone() {
         VerificationTarget verificationTarget= VerificationTarget.of(VerificationType.SMS, "01012345678");
 
@@ -39,7 +39,7 @@ public class VerificationTargetTest {
     }
 
     @Test
-    @DisplayName("PHONE_타입과_잘못된_전화번호_형식이면_예외를_던진다")
+    @DisplayName("SMS_타입과_잘못된_전화번호_형식이면_예외를_던진다")
     void throwExceptionWhenInvalidPhoneFormat() {
         assertThatThrownBy(() ->
                 VerificationTarget.of(VerificationType.SMS, "123456"))

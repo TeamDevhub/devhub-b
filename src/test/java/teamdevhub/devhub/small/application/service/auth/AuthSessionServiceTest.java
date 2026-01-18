@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
+import teamdevhub.devhub.application.exception.BusinessRuleException;
 import teamdevhub.devhub.application.service.auth.AuthSessionService;
 import teamdevhub.devhub.domain.auth.vo.RefreshToken;
 import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserResolver;
@@ -15,6 +16,7 @@ import teamdevhub.devhub.fake.pure.usecase.user.FakeUserLoginUseCase;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class AuthSessionServiceTest {
@@ -101,6 +103,21 @@ class AuthSessionServiceTest {
         // then
         assertThat(response).isNotNull();
         assertThat(response.getAccessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
+    }
+
+    @Test
+    @DisplayName("저장된_리프레시토큰과_다른_토큰으로_재발급하면_예외가_발생한다")
+    void reissueAccessTokenWithInvalidTokenThrows() {
+        // given
+        String validRefreshToken = "refresh-token-" + TEST_USER_GUID_1;
+        fakeRefreshTokenRepository.save(RefreshToken.of(TEST_USER_GUID_1, validRefreshToken));
+        String invalidRefreshToken = "refresh-token-invalid-" + TEST_USER_GUID_1;
+
+        // when, then
+        assertThatThrownBy(
+                () -> authSessionService.reissueAccessToken(invalidRefreshToken))
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessageContaining("유효하지 않은 토큰입니다.");
     }
 
     @Test
