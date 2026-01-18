@@ -28,7 +28,7 @@ class ErrorResponseVoTest {
     void createResponseVoWithCustomCodeAndMessage() {
         // given
         String code = ErrorCode.READ_FAIL.getCode();
-        String message = ErrorCode.READ_FAIL.getMessage();;
+        String message = ErrorCode.READ_FAIL.getMessage();
 
         // when
         ErrorResponseVo errorResponseVo = ErrorResponseVo.of(code, message);

@@ -13,7 +13,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Component
