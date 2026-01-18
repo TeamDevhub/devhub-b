@@ -1,6 +1,7 @@
 package teamdevhub.devhub.adapter.in.dto.response.user;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import teamdevhub.devhub.domain.user.User;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @SuperBuilder
+@NoArgsConstructor
 public class UserBasicResponseDto {
 
     private String userGuid;

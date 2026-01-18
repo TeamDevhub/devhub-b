@@ -1,6 +1,7 @@
 package teamdevhub.devhub.adapter.in.dto.response.user;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.UserPosition;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Getter
 @SuperBuilder
+@NoArgsConstructor
 public class UserDetailResponseDto extends UserBasicResponseDto {
 
     private List<String> positionList;
