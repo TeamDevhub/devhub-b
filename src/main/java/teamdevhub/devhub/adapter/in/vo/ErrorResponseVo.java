@@ -13,7 +13,6 @@ import teamdevhub.devhub.common.enums.ErrorCode;
 public class ErrorResponseVo {
 
     private String code;
-
     private String message;
 
     public static ErrorResponseVo of(ErrorCode errorCode) {
@@ -40,11 +39,11 @@ public class ErrorResponseVo {
 
     private static String resolveMessage(Throwable throwable) {
         if (throwable == null) {
-            return "Unexpected system error occurred";
+            return ErrorCode.UNKNOWN_FAIL.getMessage();
         }
 
         if (throwable.getMessage() == null || throwable.getMessage().isBlank()) {
-            return "Unexpected system error occurred";
+            return ErrorCode.UNKNOWN_FAIL.getMessage();
         }
 
         return throwable.getMessage();

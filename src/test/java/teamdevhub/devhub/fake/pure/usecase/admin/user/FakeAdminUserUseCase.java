@@ -38,8 +38,8 @@ public class FakeAdminUserUseCase implements AdminUserUseCase {
 
     @Override
     public PageResult<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
-        int page = pageCommand.getPage();
-        int size = pageCommand.getSize();
+        int page = pageCommand.page();
+        int size = pageCommand.size();
 
         long totalElements = userList.size();
 

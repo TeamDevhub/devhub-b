@@ -10,16 +10,13 @@ import teamdevhub.devhub.common.enums.SuccessCode;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ApiDataResponseDto<T> {
 
     private boolean success;
-
     private String code;
-
     private T data;
-
     private ErrorResponseVo error;
 
     public static <T> ApiDataResponseDto<T> successWithData(SuccessCode successCode, T data) {

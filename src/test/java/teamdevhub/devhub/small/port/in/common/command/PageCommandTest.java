@@ -15,8 +15,8 @@ class PageCommandTest {
         PageCommand pageCommand = PageCommand.of(2, 20);
 
         // when, then
-        assertThat(pageCommand.getPage()).isEqualTo(2);
-        assertThat(pageCommand.getSize()).isEqualTo(20);
+        assertThat(pageCommand.page()).isEqualTo(2);
+        assertThat(pageCommand.size()).isEqualTo(20);
     }
 
     @Test
@@ -26,7 +26,7 @@ class PageCommandTest {
         PageCommand pageCommand = PageCommand.of(0, 0);
 
         // when, then
-        assertThat(pageCommand.getSize()).isEqualTo(1);
+        assertThat(pageCommand.size()).isEqualTo(1);
     }
 
     @Test
@@ -36,7 +36,7 @@ class PageCommandTest {
         PageCommand pageCommand = PageCommand.of(0, 1000);
 
         // when, then
-        assertThat(pageCommand.getSize()).isEqualTo(100);
+        assertThat(pageCommand.size()).isEqualTo(100);
     }
 
     @Test
@@ -46,7 +46,7 @@ class PageCommandTest {
         PageCommand pageCommand = PageCommand.of(-1, 10);
 
         // when, then
-        assertThat(pageCommand.getPage()).isEqualTo(0);
+        assertThat(pageCommand.page()).isEqualTo(0);
     }
 
     @Test
@@ -56,8 +56,8 @@ class PageCommandTest {
         PageCommand pageCommand = PageCommand.of(-5, -10);
 
         // when, then
-        assertThat(pageCommand.getPage()).isEqualTo(0);
-        assertThat(pageCommand.getSize()).isEqualTo(1);
+        assertThat(pageCommand.page()).isEqualTo(0);
+        assertThat(pageCommand.size()).isEqualTo(1);
     }
 
 }

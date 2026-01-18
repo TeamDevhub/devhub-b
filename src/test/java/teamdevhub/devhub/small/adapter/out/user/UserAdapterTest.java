@@ -154,7 +154,7 @@ class UserAdapterTest {
         SearchUserCommand searchCommand = new SearchUserCommand(null, null, null, null);
 
         // when
-        PageResult<User> pagedUserList = userAdapter.listUser(searchCommand, pageCommand.getPage(), pageCommand.getSize());
+        PageResult<User> pagedUserList = userAdapter.listUser(searchCommand, pageCommand.page(), pageCommand.size());
 
         // then
         assertThat(pagedUserList.content()).hasSize(2);

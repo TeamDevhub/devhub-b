@@ -15,12 +15,13 @@ public class UserBasicResponseDto {
 
     private String username;
     private String introduction;
-
     private double mannerDegree;
 
     private boolean blocked;
     private LocalDateTime blockEndDate;
+
     private boolean deleted;
+
     private LocalDateTime lastLoginDateTime;
 
     private String registrantGuid;

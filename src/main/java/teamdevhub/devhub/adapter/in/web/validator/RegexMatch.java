@@ -13,10 +13,7 @@ import java.lang.annotation.*;
 public @interface RegexMatch {
 
     RegexPattern value();
-
     String message() default "잘못된 형식입니다.";
-
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
 }

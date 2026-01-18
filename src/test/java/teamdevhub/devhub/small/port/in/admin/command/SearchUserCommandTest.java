@@ -20,7 +20,7 @@ class SearchUserCommandTest {
                 .build();
 
         // when
-        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
+        SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
         assertThat(searchUserCommand.blocked()).isTrue();
@@ -35,7 +35,7 @@ class SearchUserCommandTest {
                 .build();
 
         // when
-        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
+        SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
         assertThat(searchUserCommand.blocked()).isFalse();
@@ -50,7 +50,7 @@ class SearchUserCommandTest {
                 .build();
 
         // when
-        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
+        SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
         assertThat(searchUserCommand.blocked()).isNull();
@@ -65,7 +65,7 @@ class SearchUserCommandTest {
                 .build();
 
         // when
-        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
+        SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
         assertThat(searchUserCommand.keyword()).isNull();
@@ -80,7 +80,7 @@ class SearchUserCommandTest {
                 .build();
 
         // when
-        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
+        SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
         assertThat(searchUserCommand.keyword()).isEqualTo("hello");
@@ -99,7 +99,7 @@ class SearchUserCommandTest {
                 .build();
 
         // when
-        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
+        SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
         assertThat(searchUserCommand.joinedFrom()).isEqualTo(joinedFrom);
@@ -115,7 +115,7 @@ class SearchUserCommandTest {
                 .build();
 
         // when
-        SearchUserCommand searchUserCommand = SearchUserCommand.fromSearchUserRequestDto(searchUserRequestDto);
+        SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
         assertThat(searchUserCommand.blocked()).isTrue();

@@ -20,8 +20,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.hasParameterAnnotation(LoginUser.class) &&
-                methodParameter.getParameterType().equals(AuthenticatedUser.class);
+        return methodParameter.hasParameterAnnotation(LoginUser.class) && methodParameter.getParameterType().equals(AuthenticatedUser.class);
     }
 
     @Override
@@ -30,9 +29,14 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) {
 
-        Object principal = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+        Object principal = Optional
+                .ofNullable(SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                )
                 .map(Authentication::getPrincipal)
-                .orElseThrow(() -> AuthRuleException.of(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(
+                        () -> AuthRuleException.of(ErrorCode.USER_NOT_FOUND));
 
         if (principal instanceof UserAuthentication userAuthentication) {
             return userAuthentication.getUser();

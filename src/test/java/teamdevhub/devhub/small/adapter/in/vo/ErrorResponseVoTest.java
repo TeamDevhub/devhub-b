@@ -27,8 +27,8 @@ class ErrorResponseVoTest {
     @DisplayName("코드와_메시지를_직접_지정하여_ErrorResponseVo_를_생성한다")
     void createResponseVoWithCustomCodeAndMessage() {
         // given
-        String code = "CUSTOM_ERROR";
-        String message = "Custom error getVerificationMessage";
+        String code = ErrorCode.READ_FAIL.getCode();
+        String message = ErrorCode.READ_FAIL.getMessage();;
 
         // when
         ErrorResponseVo errorResponseVo = ErrorResponseVo.of(code, message);
@@ -42,14 +42,14 @@ class ErrorResponseVoTest {
     @DisplayName("Throwable_로부터_ErrorResponseVo_를_생성한다")
     void createResponseVoFromThrowable() {
         // given
-        RuntimeException runtimeException = new RuntimeException("예외 메시지");
+        RuntimeException runtimeException = new RuntimeException("테스트 예외 메시지");
 
         // when
         ErrorResponseVo errorResponseVo = ErrorResponseVo.of(runtimeException);
 
         // then
         assertThat(errorResponseVo.getCode()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getCode());
-        assertThat(errorResponseVo.getMessage()).isEqualTo("예외 메시지");
+        assertThat(errorResponseVo.getMessage()).isEqualTo("테스트 예외 메시지");
     }
 
     @Test
@@ -63,7 +63,7 @@ class ErrorResponseVoTest {
 
         // then
         assertThat(errorResponseVo.getCode()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getCode());
-        assertThat(errorResponseVo.getMessage()).isEqualTo("Unexpected system error occurred");
+        assertThat(errorResponseVo.getMessage()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getMessage());
     }
 
     @Test
@@ -76,7 +76,7 @@ class ErrorResponseVoTest {
         ErrorResponseVo errorResponseVo = ErrorResponseVo.of(runtimeException);
 
         // then
-        assertThat(errorResponseVo.getMessage()).isEqualTo("Unexpected system error occurred");
+        assertThat(errorResponseVo.getMessage()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getMessage());
     }
 
     @Test
@@ -87,6 +87,6 @@ class ErrorResponseVoTest {
 
         // when, then
         assertThat(errorResponseVo.getCode()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getCode());
-        assertThat(errorResponseVo.getMessage()).isEqualTo("Unexpected system error occurred");
+        assertThat(errorResponseVo.getMessage()).isEqualTo(ErrorCode.UNKNOWN_FAIL.getMessage());
     }
 }

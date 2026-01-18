@@ -11,8 +11,8 @@ import teamdevhub.devhub.port.in.user.usecase.UserSignupUseCase;
 import teamdevhub.devhub.port.in.user.usecase.UserWithdrawUseCase;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class UserFacade {
 
     private final UserSignupUseCase userSignupUseCase;

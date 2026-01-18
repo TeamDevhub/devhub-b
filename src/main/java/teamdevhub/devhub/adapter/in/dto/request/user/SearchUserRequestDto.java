@@ -10,16 +10,13 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class SearchUserRequestDto {
 
     private String blocked;
-
     private LocalDateTime joinedFrom;
-
     private LocalDateTime joinedTo;
-
     private String keyword;
 
     public SearchUserCommand toSearchUserCommand() {

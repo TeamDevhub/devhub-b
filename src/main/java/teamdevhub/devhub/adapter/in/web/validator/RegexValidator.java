@@ -14,15 +14,16 @@ public class RegexValidator implements ConstraintValidator<RegexMatch, String> {
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
 
         if (value == null) return true;
 
         boolean matched = value.matches(regexPattern.regexp());
 
         if (!matched) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(regexPattern.message())
+            constraintValidatorContext.disableDefaultConstraintViolation();
+            constraintValidatorContext
+                    .buildConstraintViolationWithTemplate(regexPattern.message())
                     .addConstraintViolation();
         }
 

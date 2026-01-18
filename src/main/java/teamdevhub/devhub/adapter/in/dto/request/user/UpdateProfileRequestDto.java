@@ -14,16 +14,13 @@ import java.util.stream.Collectors;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class UpdateProfileRequestDto {
 
     private String username;
-
     private String introduction;
-
     private List<String> positionList;
-
     private List<String> skillList;
 
     public UpdateProfileCommand toUpdateProfileCommand(String userGuid) {

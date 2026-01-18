@@ -19,8 +19,8 @@ import teamdevhub.devhub.port.in.auth.AuthSessionUseCase;
 import teamdevhub.devhub.port.in.verification.VerificationUseCase;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthSessionUseCase authSessionUseCase;

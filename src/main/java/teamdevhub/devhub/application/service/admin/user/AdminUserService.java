@@ -19,6 +19,6 @@ public class AdminUserService implements AdminUserUseCase {
 
     @Override
     public PageResult<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
-        return userRepository.listUser(searchUserCommand, pageCommand.getPage(), pageCommand.getSize());
+        return userRepository.listUser(searchUserCommand, pageCommand.page(), pageCommand.size());
     }
 }

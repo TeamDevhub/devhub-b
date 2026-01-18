@@ -12,18 +12,14 @@ import java.util.List;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ApiDataListResponseDto<T> {
 
     private boolean success;
-
     private String code;
-
     private List<T> dataList;
-
     private PageVo pagination;
-
     private ErrorResponseVo error;
 
     public static <T> ApiDataListResponseDto<T> successWithDataList(SuccessCode successCode, List<T> dataList, PageVo pageVo) {

@@ -1,15 +1,9 @@
 package teamdevhub.devhub.port.in.common.command;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
 
-@Getter
-@AllArgsConstructor
-public class PageCommand {
-
-    private final int page;
-
-    private final int size;
+@Builder
+public record PageCommand(int page, int size) {
 
     private static final int MAX_SIZE = 100;
 

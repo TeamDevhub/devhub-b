@@ -11,8 +11,8 @@ import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class LoginRequestDto {
 
     @NotBlank(message = "이메일은 필수입니다.")
