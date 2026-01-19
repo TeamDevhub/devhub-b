@@ -2,6 +2,7 @@ package teamdevhub.devhub.medium.adapter.out.user;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -66,7 +67,8 @@ class UserQueryRepositoryImplMediumTest {
     }
 
     @Test
-    void listUser_withBlockedFilter_returnsCorrectResults() {
+    @DisplayName("차단된_사용자_검색조건이_적용되면_차단된_사용자만_조회된다")
+    void listUser_withBlockedTrueFilter_returnsCorrectResults() {
         // given
         SearchUserCommand searchUserCommand = new SearchUserCommand(
             true,

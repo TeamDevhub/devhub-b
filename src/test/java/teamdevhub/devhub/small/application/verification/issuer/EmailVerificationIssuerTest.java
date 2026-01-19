@@ -28,7 +28,7 @@ public class EmailVerificationIssuerTest {
     }
 
     @Test
-    @DisplayName("supports_EMAIL_타입이면_true_를_반환한다")
+    @DisplayName("EMAIL_타입이면_true_를_반환한다")
     void supports_emailType_returnsTrue() {
         // given
         VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, "test@test.com");
@@ -41,7 +41,7 @@ public class EmailVerificationIssuerTest {
     }
 
     @Test
-    @DisplayName("supports_SMS_타입이면_false_를_반환환다")
+    @DisplayName("SMS_타입이면_false_를_반환환다")
     void supports_smsType_returnsTrue() {
         // given
         VerificationTarget verificationTarget = new VerificationTarget(VerificationType.SMS, "01012341234");
@@ -54,7 +54,7 @@ public class EmailVerificationIssuerTest {
     }
 
     @Test
-    @DisplayName("issue_EMAIL_인증이면_코드와_만료시간이_포함된_IssuedVerification_을_반환한다")
+    @DisplayName("EMAIL_인증이면_코드와_만료시간이_포함된_IssuedVerification_을_반환한다")
     void issue_emailType_returnsIssuedVerification() {
         // given
         VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, "test@test.com");

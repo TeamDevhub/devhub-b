@@ -62,7 +62,7 @@ class GlobalExceptionHandlerMediumTest {
     private void dummyMethod(String param) {}
 
     @Test
-    @DisplayName("DomainRuleException_이_발생하면_BAD_REQUEST_반환")
+    @DisplayName("DomainRuleException_이_발생하면_BAD_REQUEST_반환한다")
     void returnBadRequestOnDomainRuleException() throws Exception {
         // given, when
         mockMvc.perform(get("/domain-exception"))
@@ -74,7 +74,7 @@ class GlobalExceptionHandlerMediumTest {
     }
 
     @Test
-    @DisplayName("BusinessRuleException_이_발생하면_BAD_REQUEST_반환")
+    @DisplayName("BusinessRuleException_이_발생하면_BAD_REQUEST_반환한다")
     void returnBadRequestOnBusinessRuleException() throws Exception {
         // given, when
         mockMvc.perform(get("/business-exception"))
@@ -86,7 +86,7 @@ class GlobalExceptionHandlerMediumTest {
     }
 
     @Test
-    @DisplayName("MethodArgumentNotValidException_이_발생하면_BAD_REQUEST_반환")
+    @DisplayName("MethodArgumentNotValidException_이_발생하면_BAD_REQUEST_반환한다")
     void returnBadRequestOnMethodArgumentNotValidException() throws Exception {
         // given, when
         mockMvc.perform(get("/validation-exception"))
@@ -98,7 +98,7 @@ class GlobalExceptionHandlerMediumTest {
     }
 
     @Test
-    @DisplayName("기타예외가_발생하면_BAD_REQUEST_반환")
+    @DisplayName("기타예외가_발생하면_BAD_REQUEST_반환한다")
     void returnBadRequestOnOtherExceptions() throws Exception {
         // given, when
         mockMvc.perform(get("/generic-exception"))
