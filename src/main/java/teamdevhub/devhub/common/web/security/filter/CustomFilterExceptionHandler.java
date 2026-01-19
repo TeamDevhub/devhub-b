@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
+import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.ErrorCode;
 
 @Slf4j
@@ -24,7 +24,7 @@ public class CustomFilterExceptionHandler {
             httpServletResponse.setContentType("application/json");
             httpServletResponse.setCharacterEncoding("UTF-8");
 
-            ApiDataResponseDto<?> result = ApiDataResponseDto.failureWithoutData(errorCode);
+            DataApiResponseDto<?> result = DataApiResponseDto.failureWithoutData(errorCode);
             String json = objectMapper.writeValueAsString(result);
 
             httpServletResponse.getWriter().write(json);

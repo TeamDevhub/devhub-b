@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiDataListResponseDto<T> {
+public class DataListApiResponseDto<T> {
 
     private boolean success;
     private String code;
@@ -22,8 +22,8 @@ public class ApiDataListResponseDto<T> {
     private PageVo pagination;
     private ErrorResponseVo error;
 
-    public static <T> ApiDataListResponseDto<T> successWithDataList(SuccessCode successCode, List<T> dataList, PageVo pageVo) {
-        return ApiDataListResponseDto.<T>builder()
+    public static <T> DataListApiResponseDto<T> successWithDataList(SuccessCode successCode, List<T> dataList, PageVo pageVo) {
+        return DataListApiResponseDto.<T>builder()
                 .success(true)
                 .code(successCode.getCode())
                 .dataList(dataList)

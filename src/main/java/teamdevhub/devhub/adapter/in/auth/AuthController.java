@@ -11,7 +11,7 @@ import teamdevhub.devhub.adapter.in.dto.request.verification.ConfirmVerification
 import teamdevhub.devhub.adapter.in.dto.request.verification.IssueVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
-import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
+import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
@@ -27,42 +27,42 @@ public class AuthController {
     private final VerificationUseCase verificationUseCase;
 
     @PostMapping("/email-verification")
-    public ResponseEntity<ApiDataResponseDto<Void>> sendEmailVerification(@Valid @RequestBody IssueVerificationRequestDto issueVerificationRequestDto) {
+    public ResponseEntity<DataApiResponseDto<Void>> sendEmailVerification(@Valid @RequestBody IssueVerificationRequestDto issueVerificationRequestDto) {
         verificationUseCase.issueVerification(issueVerificationRequestDto.toIssueVerificationCommand());
         return ResponseEntity.ok(
-                ApiDataResponseDto.successWithoutData(
+                DataApiResponseDto.successWithoutData(
                         SuccessCode.VERIFICATION_SENT
                 )
         );
     }
 
     @PostMapping("/email-verification/confirm")
-    public ResponseEntity<ApiDataResponseDto<Void>> confirmEmailVerification(@Valid @RequestBody ConfirmVerificationRequestDto confirmVerificationRequestDto) {
+    public ResponseEntity<DataApiResponseDto<Void>> confirmEmailVerification(@Valid @RequestBody ConfirmVerificationRequestDto confirmVerificationRequestDto) {
         verificationUseCase.confirmVerification(confirmVerificationRequestDto.toConfirmVerificationCommand());
         return ResponseEntity.ok(
-                ApiDataResponseDto.successWithoutData(
+                DataApiResponseDto.successWithoutData(
                         SuccessCode.VERIFICATION_SUCCESS
                 )
         );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiDataResponseDto<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
         LoginResponseDto loginResponseDto = authSessionUseCase.login(loginRequestDto.toCommand());
         ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                .body(ApiDataResponseDto.successWithData(
+                .body(DataApiResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,
                         TokenResponseDto.issue(loginResponseDto.getAccessToken()))
                 );
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<ApiDataResponseDto<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
+    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
         return ResponseEntity.ok(
-                ApiDataResponseDto.successWithData(
+                DataApiResponseDto.successWithData(
                         SuccessCode.CREATE_SUCCESS,
                         authSessionUseCase.reissueAccessToken(refreshToken)
                 )
@@ -70,10 +70,10 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiDataResponseDto<Void>> revoke(@LoginUser AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<DataApiResponseDto<Void>> revoke(@LoginUser AuthenticatedUser authenticatedUser) {
         authSessionUseCase.revoke(authenticatedUser.userGuid());
         return ResponseEntity.ok(
-                ApiDataResponseDto.successWithoutData(
+                DataApiResponseDto.successWithoutData(
                         SuccessCode.LOGOUT_SUCCESS
                 )
         );

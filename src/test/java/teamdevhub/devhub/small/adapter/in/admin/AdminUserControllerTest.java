@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.admin.user.AdminUserController;
 import teamdevhub.devhub.adapter.in.dto.response.user.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.dto.request.user.SearchUserRequestDto;
-import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataListResponseDto;
+import teamdevhub.devhub.adapter.in.web.dto.response.DataListApiResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageVo;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.fake.pure.usecase.admin.user.FakeAdminUserUseCase;
@@ -39,22 +39,22 @@ class AdminUserControllerTest {
         int size = 10;
 
         // when
-        ApiDataListResponseDto<UserBasicResponseDto> apiDataListResponseDto = adminUserController.list(searchUserRequestDto, page, size).getBody();
+        DataListApiResponseDto<UserBasicResponseDto> dataListApiResponseDto = adminUserController.list(searchUserRequestDto, page, size).getBody();
 
         // then
-        assertThat(apiDataListResponseDto.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
-        assertThat(apiDataListResponseDto.getDataList()).hasSize(2);
-        assertThat(apiDataListResponseDto.getDataList().get(0).getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(apiDataListResponseDto.getDataList().get(1).getEmail()).isEqualTo(TEST_EMAIL_2);
+        assertThat(dataListApiResponseDto.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
+        assertThat(dataListApiResponseDto.getDataList()).hasSize(2);
+        assertThat(dataListApiResponseDto.getDataList().get(0).getEmail()).isEqualTo(TEST_EMAIL_1);
+        assertThat(dataListApiResponseDto.getDataList().get(1).getEmail()).isEqualTo(TEST_EMAIL_2);
 
-        PageVo pageVo = apiDataListResponseDto.getPagination();
+        PageVo pageVo = dataListApiResponseDto.getPagination();
         assertThat(pageVo).isNotNull();
         assertThat(pageVo.getPage()).isEqualTo(0);
         assertThat(pageVo.getSize()).isEqualTo(10);
         assertThat(pageVo.getTotalElements()).isEqualTo(2);
         assertThat(pageVo.getTotalPages()).isEqualTo(1);
 
-        assertThat(apiDataListResponseDto.isSuccess()).isTrue();
-        assertThat(apiDataListResponseDto.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
+        assertThat(dataListApiResponseDto.isSuccess()).isTrue();
+        assertThat(dataListApiResponseDto.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
     }
 }

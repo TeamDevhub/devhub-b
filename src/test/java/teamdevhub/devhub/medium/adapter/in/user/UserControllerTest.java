@@ -11,7 +11,7 @@ import teamdevhub.devhub.adapter.in.dto.response.user.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.dto.response.user.UserDetailResponseDto;
 import teamdevhub.devhub.adapter.in.user.UserController;
 import teamdevhub.devhub.adapter.in.user.UserFacade;
-import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataResponseDto;
+import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
@@ -55,7 +55,7 @@ class UserControllerTest {
         when(userFacade.signup(any())).thenReturn(user);
 
         // when
-        ResponseEntity<ApiDataResponseDto<SignupResponseDto>> response = userController.signup(signupRequestDto);
+        ResponseEntity<DataApiResponseDto<SignupResponseDto>> response = userController.signup(signupRequestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -80,7 +80,7 @@ class UserControllerTest {
         when(userFacade.getUserDetailProfile(authenticatedUser.userGuid())).thenReturn(user);
 
         // when
-        ResponseEntity<ApiDataResponseDto<UserDetailResponseDto>> response = userController.getProfile(authenticatedUser);
+        ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> response = userController.getProfile(authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -105,7 +105,7 @@ class UserControllerTest {
         doNothing().when(userFacade).updateProfile(any());
 
         // when
-        ResponseEntity<ApiDataResponseDto<Void>> response = userController.updateProfile(updateProfileRequestDto, authenticatedUser);
+        ResponseEntity<DataApiResponseDto<Void>> response = userController.updateProfile(updateProfileRequestDto, authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -120,7 +120,7 @@ class UserControllerTest {
         doNothing().when(userFacade).withdrawUser(authenticatedUser.userGuid());
 
         // when
-        ResponseEntity<ApiDataResponseDto<Void>> response = userController.withdraw(authenticatedUser);
+        ResponseEntity<DataApiResponseDto<Void>> response = userController.withdraw(authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();

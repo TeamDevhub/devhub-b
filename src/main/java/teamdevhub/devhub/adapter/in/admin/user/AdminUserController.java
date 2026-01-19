@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.in.dto.request.user.SearchUserRequestDto;
 import teamdevhub.devhub.adapter.in.dto.response.user.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.vo.PageResult;
 import teamdevhub.devhub.adapter.in.vo.PageVo;
-import teamdevhub.devhub.adapter.in.web.dto.response.ApiDataListResponseDto;
+import teamdevhub.devhub.adapter.in.web.dto.response.DataListApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
@@ -23,14 +23,14 @@ public class AdminUserController {
     private final AdminUserUseCase adminUserUseCase;
 
     @GetMapping()
-    public ResponseEntity<ApiDataListResponseDto<UserBasicResponseDto>> list(@ModelAttribute SearchUserRequestDto searchUserRequestDto, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<DataListApiResponseDto<UserBasicResponseDto>> list(@ModelAttribute SearchUserRequestDto searchUserRequestDto, @RequestParam int page, @RequestParam int size) {
         PageResult<User> pagedUserList = adminUserUseCase.listUser(searchUserRequestDto.toSearchUserCommand(), PageCommand.of(page, size));
         List<UserBasicResponseDto> userBasicResponseDtoList = pagedUserList.content().stream()
                         .map(UserBasicResponseDto::fromDomain)
                         .toList();
 
         return ResponseEntity.ok(
-                ApiDataListResponseDto.successWithDataList(
+                DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
                         userBasicResponseDtoList,
                         PageVo.from(pagedUserList))
