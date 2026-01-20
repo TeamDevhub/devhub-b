@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.adapter.out.provider.token.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.web.security.filter.CustomFilterExceptionHandler;
@@ -58,9 +59,10 @@ class JwtAuthorizationFilterMediumTest {
 
     private Claims makeClaims() {
         Claims claims = Jwts.claims();
-        claims.setSubject(teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1);
+        claims.setSubject(TEST_USER_GUID_1);
         claims.put(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name());
-        claims.put(JwtClaims.EMAIL, teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1);
+        claims.put(JwtClaims.SIGNUP_STATUS, SignupStatus.COMPLETED.name());
+        claims.put(JwtClaims.EMAIL, TEST_EMAIL_1);
         claims.put(JwtClaims.USER_ROLE, UserRole.USER.name());
         return claims;
     }

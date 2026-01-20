@@ -6,6 +6,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.response.OauthCallbackResponseDto;
 import teamdevhub.devhub.application.oauth.OauthProviderSelector;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.common.enums.SignupStatus;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.oauth.usecase.OauthCallbackUseCase;
@@ -35,7 +36,7 @@ public class OauthCallbackService implements OauthCallbackUseCase {
         OauthClient oauthClient = oauthProviderSelector.select(verificationProvider);
         OauthUser oauthUser = oauthClient.fetchUser(authorizationCode);
 
-        Optional<User> optionalUser = userRepository.findOptionalByEmail(oauthUser.email());
+        Optional<AuthenticatedUser> optionalUser = userRepository.findOptionalByEmail(oauthUser.email());
 
         if (optionalUser.isPresent()) {
             String tempToken = tokenIssueProvider.createTempToken(oauthUser.oauthId(), SignupStatus.COMPLETED, verificationProvider, oauthUser.email());

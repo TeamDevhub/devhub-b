@@ -43,13 +43,14 @@ public class JwtTokenProvider implements TokenIssueProvider, TokenParseProvider 
     }
 
     @Override
-    public String createAccessToken(String userGuid, String email, UserRole userRole) {
+    public String createAccessToken(String userGuid, SignupStatus signupStatus, String email, UserRole userRole) {
         Date now = new Date();
         return Jwts.builder()
                 .setSubject(userGuid)
+                .claim(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
+                .claim(JwtClaims.SIGNUP_STATUS, signupStatus.name())
                 .claim(JwtClaims.EMAIL, email)
                 .claim(JwtClaims.USER_ROLE, userRole.name())
-                .claim(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
                 .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
                 .setIssuedAt(now)
                 .signWith(key, signatureAlgorithm)
@@ -142,6 +143,7 @@ public class JwtTokenProvider implements TokenIssueProvider, TokenParseProvider 
 
         return new AccessTokenInfo(
                 claims.getSubject(),
+                SignupStatus.valueOf(claims.get(JwtClaims.SIGNUP_STATUS, String.class)),
                 claims.get(JwtClaims.EMAIL, String.class),
                 UserRole.valueOf(claims.get(JwtClaims.USER_ROLE, String.class))
         );

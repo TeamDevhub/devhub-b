@@ -3,7 +3,7 @@ package teamdevhub.devhub.fake.spring.persistence.user;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
@@ -31,7 +31,7 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        CreateUserCommand generalUserCreateCommand1 = CreateUserCommand.generalUserCreateCommand(signupCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser1 = User.createGeneralUser(generalUserCreateCommand1);
 
         SignupCommand signupCommand2 = SignupCommand.builder()
@@ -44,7 +44,7 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_2)
                 .build();
-        CreateUserCommand generalUserCreateCommand2 = CreateUserCommand.generalUserCreateCommand(signupCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
         User testUser2 = User.createGeneralUser(generalUserCreateCommand2);
 
         store.put(testUser1.getUserGuid(), UserMapper.toEntity(testUser1));

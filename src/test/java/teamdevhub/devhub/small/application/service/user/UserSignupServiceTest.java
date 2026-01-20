@@ -4,11 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.service.user.UserSignupService;
+import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.fake.pure.provider.FakePasswordPolicyProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
@@ -83,7 +84,7 @@ public class UserSignupServiceTest {
     @DisplayName("관리자_계정이_이미_존재하면_새로운_계정을_생성하지_않는다")
     void doNotCreateAdminWhenAlreadyExists() {
         // given
-        CreateUserCommand adminUserCreateCommand = new CreateUserCommand(ADMIN_USER_GUID_1, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of(), VERIFICATION_TARGET_1);
+        UserCreateCommand adminUserCreateCommand = new UserCreateCommand(ADMIN_USER_GUID_1, VerificationProvider.EMAIL, ADMIN_EMAIL_1, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of());
         User existedAdminUser = User.createAdminUser(adminUserCreateCommand);
         fakeUserRepository.saveAdminUser(existedAdminUser);
 

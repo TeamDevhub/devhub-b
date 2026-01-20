@@ -57,20 +57,20 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
+    public Optional<AuthenticatedUser> findOptionalByEmail(String email) {
+        return jpaUserRepository.findByEmail(email).map(UserMapper::toAuthenticatedUser);
+    }
+
+    @Override
+    public Optional<AuthenticatedUser> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
+        return jpaUserRepository.findByProviderAndOauthId(verificationProvider, oauthId).map(UserMapper::toAuthenticatedUser);
+    }
+
+    @Override
     public User findByUserGuid(String userGuid) {
         UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
                 .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toDomain(userEntity);
-    }
-
-    @Override
-    public Optional<User> findOptionalByEmail(String email) {
-        return jpaUserRepository.findByEmail(email).map(UserMapper::toDomain);
-    }
-
-    @Override
-    public Optional<User> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
-        return jpaUserRepository.findByProviderAndOauthId(verificationProvider, oauthId).map(UserMapper::toDomain);
     }
 
     @Override

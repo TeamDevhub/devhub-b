@@ -3,6 +3,7 @@ package teamdevhub.devhub.medium.common.web.security.auth;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
@@ -20,6 +21,7 @@ public class UserAuthenticationMediumTest {
         // given, when
         AuthenticatedUser user = new AuthenticatedUser(
                 TEST_USER_GUID_1,
+                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER

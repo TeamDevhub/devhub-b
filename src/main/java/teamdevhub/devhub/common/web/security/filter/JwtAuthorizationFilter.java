@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import teamdevhub.devhub.adapter.out.provider.token.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+//추후 수정
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
@@ -63,10 +65,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private void setAuthentication(Claims claims) {
         String userGuid = claims.getSubject();
+        SignupStatus signupStatus = SignupStatus.valueOf(claims.get(JwtClaims.SIGNUP_STATUS, String.class));
         String email = claims.get(JwtClaims.EMAIL, String.class);
         UserRole userRole = UserRole.valueOf(claims.get(JwtClaims.USER_ROLE, String.class));
 
-        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(userGuid, email, null, userRole);
+        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(userGuid, signupStatus, email, null, userRole);
         Collection<? extends GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userRole.getAuthority()));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null, authorities);

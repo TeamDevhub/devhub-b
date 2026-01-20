@@ -28,17 +28,19 @@ public class AuthenticationService implements AuthenticationUseCase {
     private final UserLoginUseCase userLoginUseCase;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    private record IssuedToken(String prefix, String accessToken, String refreshToken) {}
+
     @Override
     public LoginResponseDto login(LoginCommand loginCommand) {
         AuthenticatedUser authenticatedUser = authenticatedUserResolver.getAuthenticatedUser(loginCommand.email(), loginCommand.password());
+        IssuedToken token = issueLoginToken(authenticatedUser);
+        return LoginResponseDto.ofEmailUser(token.prefix(), token.accessToken(), token.refreshToken());
+    }
 
-        String prefix = tokenIssueProvider.getPrefix();
-        String accessToken = tokenIssueProvider.createAccessToken(authenticatedUser.userGuid(), authenticatedUser.email(), authenticatedUser.userRole());
-        String refreshToken = tokenIssueProvider.createRefreshToken(authenticatedUser.userGuid());
-
-        issueRefreshToken(authenticatedUser.userGuid(), refreshToken);
-        userLoginUseCase.updateLastLoginDateTime(authenticatedUser.userGuid());
-        return LoginResponseDto.ofEmailUser(prefix, accessToken, refreshToken);
+    @Override
+    public LoginResponseDto loginWithOauth(AuthenticatedUser authenticatedUser) {
+        IssuedToken token = issueLoginToken(authenticatedUser);
+        return LoginResponseDto.existedOAuthUser(token.prefix(), token.accessToken(), token.refreshToken(), authenticatedUser.signupStatus());
     }
 
     @Override
@@ -55,6 +57,7 @@ public class AuthenticationService implements AuthenticationUseCase {
 
         String newAccessToken = tokenIssueProvider.createAccessToken(
                 authenticatedUser.userGuid(),
+                authenticatedUser.signupStatus(),
                 authenticatedUser.email(),
                 authenticatedUser.userRole()
         );
@@ -70,5 +73,21 @@ public class AuthenticationService implements AuthenticationUseCase {
     private void issueRefreshToken(String userGuid, String token) {
         RefreshTokenInfo refreshTokenInfo = RefreshTokenInfo.of(userGuid, token);
         refreshTokenRepository.save(refreshTokenInfo);
+    }
+
+    private IssuedToken issueLoginToken(AuthenticatedUser authenticatedUser) {
+        String prefix = tokenIssueProvider.getPrefix();
+        String accessToken = tokenIssueProvider.createAccessToken(
+                authenticatedUser.userGuid(),
+                authenticatedUser.signupStatus(),
+                authenticatedUser.email(),
+                authenticatedUser.userRole()
+        );
+        String refreshToken = tokenIssueProvider.createRefreshToken(authenticatedUser.userGuid());
+
+        issueRefreshToken(authenticatedUser.userGuid(), refreshToken);
+        userLoginUseCase.updateLastLoginDateTime(authenticatedUser.userGuid());
+
+        return new IssuedToken(prefix, accessToken, refreshToken);
     }
 }

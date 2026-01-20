@@ -8,7 +8,9 @@ import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 public class UserMapper {
 
     public static AuthenticatedUser toAuthenticatedUser(UserEntity userEntity) {
-        return AuthenticatedUser.of(userEntity.getUserGuid(),
+        return AuthenticatedUser.of(
+                userEntity.getUserGuid(),
+                userEntity.getSignupStatus(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.getUserRole()

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.provider.token.JwtClaims;
 import teamdevhub.devhub.adapter.out.provider.token.JwtTokenProvider;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 
 import java.lang.reflect.Field;
@@ -46,7 +47,7 @@ class JwtTokenProviderMediumTest {
         String userGuid = TEST_USER_GUID_1;
         String email = TEST_EMAIL_1;
         String userRole = "USER";
-        String token = jwtTokenProvider.createAccessToken(userGuid, email, USER);
+        String token = jwtTokenProvider.createAccessToken(userGuid, SignupStatus.COMPLETED, email, USER);
 
         // when
         Claims claims = jwtTokenProvider.parseClaims(token);
@@ -76,7 +77,7 @@ class JwtTokenProviderMediumTest {
     @DisplayName("refreshToken_에_accessToken_을_넣으면_예외가_발생한다")
     void extractUserGuidWithAccessTokenThrows() {
         // given
-        String token = jwtTokenProvider.createAccessToken(TEST_USER_GUID_1, TEST_EMAIL_1, USER);
+        String token = jwtTokenProvider.createAccessToken(TEST_USER_GUID_1, SignupStatus.COMPLETED, TEST_EMAIL_1, USER);
 
         // then
         assertThatThrownBy(

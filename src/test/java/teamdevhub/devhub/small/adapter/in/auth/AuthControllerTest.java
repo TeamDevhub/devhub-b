@@ -11,9 +11,11 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -83,7 +85,7 @@ class AuthControllerTest {
                 .refreshToken("refresh-token")
                 .build();
 
-        when(authFacade.login(any())).thenReturn(loginResponseDto);
+        when(authFacade.login((LoginCommand) any())).thenReturn(loginResponseDto);
 
         // when
         ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = authController.login(loginRequestDto);
@@ -93,7 +95,7 @@ class AuthControllerTest {
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
         assertThat(response.getBody().getData()).isNotNull();
 
-        verify(authFacade).login(any());
+        verify(authFacade).login((LoginCommand) any());
     }
 
     @Test
@@ -122,6 +124,7 @@ class AuthControllerTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
+                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER

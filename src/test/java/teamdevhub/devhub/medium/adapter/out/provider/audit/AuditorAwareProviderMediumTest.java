@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.adapter.out.provider.audit.AuditorAwareProvider;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
@@ -69,21 +70,17 @@ class AuditorAwareProviderMediumTest {
     @DisplayName("UserAuthentication_이면_유저_이메일을_반환한다")
     void returnUserEmailIfUserAuthentication() {
         // given
-        AuthenticatedUser authenticatedUser =
-                new AuthenticatedUser(
-                        TEST_USER_GUID_1,
-                        TEST_EMAIL_1,
-                        TEST_PASSWORD_1,
-                        UserRole.USER
-                );
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(
+                TEST_USER_GUID_1,
+                SignupStatus.COMPLETED,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
+                UserRole.USER
+        );
 
         UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userAuthentication,
-                null,
-                Collections.emptyList()
-        );
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userAuthentication, null, Collections.emptyList());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -100,16 +97,13 @@ class AuditorAwareProviderMediumTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
+                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
         );
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                authenticatedUser,
-                null,
-                Collections.emptyList()
-        );
+        Authentication authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null, Collections.emptyList());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

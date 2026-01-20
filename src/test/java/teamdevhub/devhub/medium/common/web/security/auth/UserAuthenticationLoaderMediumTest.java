@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.common.web.security.auth.UserAuthenticationLoader;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -33,6 +34,7 @@ public class UserAuthenticationLoaderMediumTest {
         // given
         AuthenticatedUser user = new AuthenticatedUser(
                 TEST_USER_GUID_1,
+                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER

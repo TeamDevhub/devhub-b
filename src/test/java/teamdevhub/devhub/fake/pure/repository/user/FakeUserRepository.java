@@ -28,7 +28,7 @@ public class FakeUserRepository implements UserRepository {
         return store.values().stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getSignupStatus(), user.getEmail(), user.getPassword(), user.getUserRole()))
                 .orElse(null);
     }
 
@@ -37,8 +37,23 @@ public class FakeUserRepository implements UserRepository {
         return store.values().stream()
                 .filter(user -> user.getUserGuid().equals(userGuid))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getSignupStatus(), user.getEmail(), user.getPassword(), user.getUserRole()))
                 .orElse(null);
+    }
+
+    @Override
+    public Optional<AuthenticatedUser> findOptionalByEmail(String email) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<AuthenticatedUser> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public User findByUserGuid(String userGuid) {
+        return store.get(userGuid);
     }
 
     @Override
@@ -53,23 +68,6 @@ public class FakeUserRepository implements UserRepository {
             calledMethods.add("updateLastLoginDateTime");
             lastLoginStore.put(userGuid, lastLoginDateTime);
         }
-    }
-
-    @Override
-    public User findByUserGuid(String userGuid) {
-        return store.get(userGuid);
-    }
-
-    @Override
-    public Optional<User> findOptionalByEmail(String email) {
-        return store.values().stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst();
-    }
-
-    @Override
-    public Optional<User> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
-        return Optional.empty();
     }
 
     @Override

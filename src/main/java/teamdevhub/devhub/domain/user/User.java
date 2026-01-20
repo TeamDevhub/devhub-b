@@ -11,7 +11,7 @@ import teamdevhub.devhub.domain.user.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.domain.common.vo.AuditInfo;
-import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
 
 import java.time.LocalDateTime;
@@ -97,7 +97,7 @@ public class User {
         }
     }
 
-    public static User createAdminUser(CreateUserCommand adminUserCreateCommand) {
+    public static User createAdminUser(UserCreateCommand adminUserCreateCommand) {
         return User.builder()
                 .userGuid(adminUserCreateCommand.userGuid())
                 .signupStatus(SignupStatus.COMPLETED)
@@ -113,7 +113,7 @@ public class User {
                 .build();
     }
 
-    public static User createGeneralUser(CreateUserCommand generalUserCreateCommand) {
+    public static User createGeneralUser(UserCreateCommand generalUserCreateCommand) {
         return User.builder()
                 .userGuid(generalUserCreateCommand.userGuid())
                 .signupStatus(SignupStatus.COMPLETED)
@@ -131,24 +131,16 @@ public class User {
                 .build();
     }
 
-    public static User createOauthUser(
-            String userGuid,
-            VerificationProvider verificationProvider,
-            String oauthId,
-            String email,
-            String password,
-            String username,
-            String introduction
-    ) {
+    public static User createOauthUser(UserCreateCommand oauthUserCreateCommand) {
         return User.builder()
-                .userGuid(userGuid)
+                .userGuid(oauthUserCreateCommand.userGuid())
                 .signupStatus(SignupStatus.PENDING)
-                .verificationProvider(verificationProvider)
-                .oauthId(oauthId)
-                .email(email)
-                .password(password)
-                .username(username)
-                .introduction(introduction)
+                .verificationProvider(oauthUserCreateCommand.verificationProvider())
+                .oauthId(oauthUserCreateCommand.oauthId())
+                .email(oauthUserCreateCommand.email())
+                .password(oauthUserCreateCommand.encodedPassword())
+                .username(oauthUserCreateCommand.username())
+                .introduction(oauthUserCreateCommand.introduction())
                 .userRole(UserRole.USER)
                 .mannerDegree(36.5)
                 .blocked(false)

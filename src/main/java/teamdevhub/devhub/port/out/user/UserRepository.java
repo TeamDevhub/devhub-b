@@ -16,9 +16,9 @@ public interface UserRepository {
     User save(User user);
     AuthenticatedUser findAuthenticatedUserByEmail(String email);
     AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid);
+    Optional<AuthenticatedUser> findOptionalByEmail(String email);
+    Optional<AuthenticatedUser> findByOAuth(VerificationProvider verificationProvider, String oauthId);
     User findByUserGuid(String userGuid);
-    Optional<User> findOptionalByEmail(String email);
-    Optional<User> findByOAuth(VerificationProvider verificationProvider, String oauthId);
     void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
     void updateUserProfile(User user);
     void delete(User user);
