@@ -1,6 +1,8 @@
 package teamdevhub.devhub.fake.pure.usecase.user;
 
 import teamdevhub.devhub.domain.user.User;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserLoginUseCase;
 
 import java.util.HashMap;
@@ -16,13 +18,19 @@ public class FakeUserLoginUseCase implements UserLoginUseCase {
     private final Set<String> updatedLoginUsers = new HashSet<>();
 
     public FakeUserLoginUseCase() {
-        User testUser = User.createGeneralUser(
-                TEST_USER_GUID_1,
-                TEST_EMAIL_1,
-                TEST_PASSWORD_1,
-                TEST_USERNAME_1,
-                TEST_INTRO_1
-        );
+        SignupCommand signupCommand = SignupCommand.builder()
+                .userGuid(null)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+        CreateUserCommand generalUserCreateCommand = CreateUserCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalUserCreateCommand);
+
         store.put(TEST_USER_GUID_1, testUser);
     }
 

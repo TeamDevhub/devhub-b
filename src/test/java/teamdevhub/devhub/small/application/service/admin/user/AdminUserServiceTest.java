@@ -3,12 +3,14 @@ package teamdevhub.devhub.small.application.service.admin.user;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.vo.PageResult;
+import teamdevhub.devhub.adapter.in.common.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.application.service.admin.user.AdminUserService;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
+import teamdevhub.devhub.port.in.user.command.SignupCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -28,24 +30,34 @@ class AdminUserServiceTest {
     @DisplayName("사용자_목록을_조회할_수_있다")
     void canFetchUserList() {
         // given
-        User user1 = User.createGeneralUser(
-                TEST_USER_GUID_1,
-                TEST_EMAIL_1,
-                TEST_PASSWORD_1,
-                TEST_USERNAME_1,
-                TEST_INTRO_1
-        );
+        SignupCommand signupCommand1 = SignupCommand.builder()
+                .userGuid(null)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+        CreateUserCommand generalUserCreateCommand1 = CreateUserCommand.generalUserCreateCommand(signupCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser1 = User.createGeneralUser(generalUserCreateCommand1);
 
-        User user2 = User.createGeneralUser(
-                TEST_USER_GUID_2,
-                TEST_EMAIL_2,
-                TEST_PASSWORD_2,
-                TEST_USERNAME_2,
-                TEST_INTRO_2
-        );
+        SignupCommand signupCommand2 = SignupCommand.builder()
+                .userGuid(null)
+                .email(TEST_EMAIL_2)
+                .password(TEST_PASSWORD_2)
+                .username(TEST_USERNAME_2)
+                .introduction(TEST_INTRO_2)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_2)
+                .build();
+        CreateUserCommand generalUserCreateCommand2 = CreateUserCommand.generalUserCreateCommand(signupCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        User testUser2 = User.createGeneralUser(generalUserCreateCommand2);
 
-        fakeUserRepository.save(user1);
-        fakeUserRepository.save(user2);
+        fakeUserRepository.save(testUser1);
+        fakeUserRepository.save(testUser2);
 
         SearchUserCommand searchUserCommand = SearchUserCommand.builder()
                 .blocked(null)
@@ -64,7 +76,7 @@ class AdminUserServiceTest {
         assertThat(pagedUserList).isNotNull();
         assertThat(pagedUserList.content().size()).isEqualTo(2);
         assertThat(pagedUserList.totalPages()).isEqualTo(1);
-        assertThat(user.getUserGuid()).isEqualTo(user1.getUserGuid());
-        assertThat(user.getEmail()).isEqualTo(user1.getEmail());
+        assertThat(user.getUserGuid()).isEqualTo(testUser1.getUserGuid());
+        assertThat(user.getEmail()).isEqualTo(testUser1.getEmail());
     }
 }

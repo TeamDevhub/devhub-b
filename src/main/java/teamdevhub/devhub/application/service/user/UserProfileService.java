@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.UserPosition;
-import teamdevhub.devhub.domain.user.vo.UserPositionChangeResult;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
-import teamdevhub.devhub.domain.user.vo.UserSkillChangeResult;
+import teamdevhub.devhub.domain.user.vo.position.UserPosition;
+import teamdevhub.devhub.domain.user.vo.position.UserPositionChangeResult;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
+import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserProfileUseCase;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;
@@ -35,7 +36,8 @@ public class UserProfileService implements UserProfileUseCase {
         User user = getUserWithPositionsAndSkills(updateProfileCommand.getUserGuid());
 
         if (updateProfileCommand.hasUsernameAndIntroductionChange()) {
-            user.updateUsernameAndIntroduction(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
+            UpdateUserCommand updateUserCommand = new UpdateUserCommand(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
+            user.updateBasicProfile(updateUserCommand);
             userRepository.updateUserProfile(user);
         }
 

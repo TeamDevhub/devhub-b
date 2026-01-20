@@ -3,12 +3,16 @@ package teamdevhub.devhub.domain.user;
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.common.enums.VerificationProvider;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
-import teamdevhub.devhub.domain.user.vo.UserPosition;
-import teamdevhub.devhub.domain.user.vo.UserPositionChangeResult;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
-import teamdevhub.devhub.domain.user.vo.UserSkillChangeResult;
+import teamdevhub.devhub.domain.user.vo.position.UserPosition;
+import teamdevhub.devhub.domain.user.vo.position.UserPositionChangeResult;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.domain.common.vo.AuditInfo;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -19,6 +23,9 @@ import java.util.Set;
 public class User {
 
     private final String userGuid;
+    private SignupStatus signupStatus;
+    private VerificationProvider verificationProvider;
+    private String oauthId;
 
     private final String email;
     private String password;
@@ -35,13 +42,16 @@ public class User {
     private boolean blocked;
     private LocalDateTime blockEndDate;
     private boolean deleted;
-    private LocalDateTime lastLoginDateTime;
+    private LocalDateTime lastLoginDate;
 
     private final AuditInfo auditInfo;
 
     @Builder
     private User(
             String userGuid,
+            SignupStatus signupStatus,
+            VerificationProvider verificationProvider,
+            String oauthId,
             String email,
             String password,
             String username,
@@ -53,12 +63,15 @@ public class User {
             boolean blocked,
             LocalDateTime blockEndDate,
             boolean deleted,
-            LocalDateTime lastLoginDateTime,
+            LocalDateTime lastLoginDate,
             AuditInfo auditInfo
     ) {
         validate(email, password);
 
         this.userGuid = userGuid;
+        this.signupStatus = signupStatus;
+        this.verificationProvider = verificationProvider;
+        this.oauthId = oauthId;
 
         this.email = email;
         this.password = password;
@@ -75,7 +88,7 @@ public class User {
         this.blocked = blocked;
         this.blockEndDate = blockEndDate;
         this.deleted = deleted;
-        this.lastLoginDateTime = lastLoginDateTime;
+        this.lastLoginDate = lastLoginDate;
 
         if (auditInfo == null) {
             this.auditInfo = AuditInfo.empty();
@@ -84,21 +97,33 @@ public class User {
         }
     }
 
-    public static User createGeneralUser(
-            String userGuid,
-            String email,
-            String password,
-            String username,
-            String introduction
-    ) {
-
+    public static User createAdminUser(CreateUserCommand adminUserCreateCommand) {
         return User.builder()
-                .userGuid(userGuid)
-                .email(email)
-                .password(password)
+                .userGuid(adminUserCreateCommand.userGuid())
+                .signupStatus(SignupStatus.COMPLETED)
+                .verificationProvider(VerificationProvider.EMAIL)
+                .oauthId(adminUserCreateCommand.email())
+                .email(adminUserCreateCommand.email())
+                .password(adminUserCreateCommand.encodedPassword())
+                .userRole(UserRole.ADMIN)
+                .username(adminUserCreateCommand.username())
+                .blocked(false)
+                .deleted(false)
+                .auditInfo(AuditInfo.empty())
+                .build();
+    }
+
+    public static User createGeneralUser(CreateUserCommand generalUserCreateCommand) {
+        return User.builder()
+                .userGuid(generalUserCreateCommand.userGuid())
+                .signupStatus(SignupStatus.COMPLETED)
+                .verificationProvider(VerificationProvider.EMAIL)
+                .oauthId(generalUserCreateCommand.email())
+                .email(generalUserCreateCommand.email())
+                .password(generalUserCreateCommand.encodedPassword())
                 .userRole(UserRole.USER)
-                .username(username)
-                .introduction(introduction)
+                .username(generalUserCreateCommand.username())
+                .introduction(generalUserCreateCommand.introduction())
                 .mannerDegree(36.5)
                 .blocked(false)
                 .deleted(false)
@@ -106,18 +131,26 @@ public class User {
                 .build();
     }
 
-    public static User createAdminUser(
+    public static User createOauthUser(
             String userGuid,
+            VerificationProvider verificationProvider,
+            String oauthId,
             String email,
             String password,
-            String username
+            String username,
+            String introduction
     ) {
         return User.builder()
                 .userGuid(userGuid)
+                .signupStatus(SignupStatus.PENDING)
+                .verificationProvider(verificationProvider)
+                .oauthId(oauthId)
                 .email(email)
                 .password(password)
-                .userRole(UserRole.ADMIN)
                 .username(username)
+                .introduction(introduction)
+                .userRole(UserRole.USER)
+                .mannerDegree(36.5)
                 .blocked(false)
                 .deleted(false)
                 .auditInfo(AuditInfo.empty())
@@ -126,6 +159,9 @@ public class User {
 
     public static User of(
             String userGuid,
+            SignupStatus signupStatus,
+            VerificationProvider verificationProvider,
+            String oauthId,
             String email,
             String password,
             String username,
@@ -140,6 +176,9 @@ public class User {
     ) {
         return User.builder()
                 .userGuid(userGuid)
+                .signupStatus(signupStatus)
+                .verificationProvider(verificationProvider)
+                .oauthId(oauthId)
                 .email(email)
                 .password(password)
                 .userRole(userRole)
@@ -149,7 +188,7 @@ public class User {
                 .blocked(blocked)
                 .blockEndDate(blockEndDate)
                 .deleted(deleted)
-                .lastLoginDateTime(lastLoginDateTime)
+                .lastLoginDate(lastLoginDateTime)
                 .auditInfo(auditInfo)
                 .build();
     }
@@ -162,13 +201,13 @@ public class User {
         this.blocked = false;
     }
 
-    public void updateUsernameAndIntroduction(String newUsername, String newIntroduction) {
-        if (hasText(newUsername) && !newUsername.equals(this.username)) {
-            this.username = newUsername;
+    public void updateBasicProfile(UpdateUserCommand updateUserCommand) {
+        if (hasText(updateUserCommand.username()) && !updateUserCommand.username().equals(this.username)) {
+            this.username = updateUserCommand.username();
         }
 
-        if (hasText(newIntroduction) && !newIntroduction.equals(this.introduction)) {
-            this.introduction = newIntroduction;
+        if (hasText(updateUserCommand.introduction()) && !updateUserCommand.introduction().equals(this.introduction)) {
+            this.introduction = updateUserCommand.introduction();
         }
     }
 
@@ -219,10 +258,6 @@ public class User {
     private void validate(String email, String password) {
         if (!hasText(email)) {
             throw DomainRuleException.of(ErrorCode.USER_ID_FAIL);
-        }
-
-        if (!hasText(password) || password.length() < 8) {
-            throw DomainRuleException.of(ErrorCode.USER_PASSWORD_FAIL);
         }
     }
 

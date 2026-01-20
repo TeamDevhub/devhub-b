@@ -6,7 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
-import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.port.out.auth.AuthenticatedUserResolver;
 
 @Component

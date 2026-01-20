@@ -11,7 +11,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
-import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 
 import java.util.Optional;
 

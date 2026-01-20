@@ -4,18 +4,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.port.in.auth.AuthUserUseCase;
+import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
+import teamdevhub.devhub.port.in.user.usecase.UserSignupUseCase;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class AdminInitializer implements CommandLineRunner {
 
-    private final AuthUserUseCase authUserUseCase;
+    private final UserSignupUseCase userSignupUseCase;
 
     @Override
     public void run(String... args) {
-        authUserUseCase.initializeAdminUser("admin@admin.co.kr", "admin1234!", "admin");
+        AdminSignupCommand adminSignupCommand = new AdminSignupCommand(null, "admin@admin.co.kr", "admin1234!", "admin", "", null, null, null);
+        userSignupUseCase.initializeAdminUser(adminSignupCommand);
         log.info("기본 ADMIN 계정 생성됨 - ID : admin@admin.co.kr / PW : admin1234!");
     }
 }

@@ -1,9 +1,11 @@
 package teamdevhub.devhub.fake.pure.repository.user;
 
-import teamdevhub.devhub.adapter.in.vo.PageResult;
+import teamdevhub.devhub.adapter.in.common.vo.PageResult;
+import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
@@ -59,13 +61,23 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findOptionalByEmail(String email) {
+        return store.values().stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<User> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
+        return Optional.empty();
+    }
+
+    @Override
     public void updateUserProfile(User user) {
         User existedUser = store.get(user.getUserGuid());
         if (existedUser != null) {
-            existedUser.updateUsernameAndIntroduction(
-                    user.getUsername(),
-                    user.getIntroduction()
-            );
+            UpdateUserCommand updateUserCommand = new UpdateUserCommand(user.getUsername(), user.getIntroduction());
+            existedUser.updateBasicProfile(updateUserCommand);
         }
     }
 

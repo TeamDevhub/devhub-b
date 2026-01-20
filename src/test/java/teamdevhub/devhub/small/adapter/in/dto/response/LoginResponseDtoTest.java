@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.adapter.in.dto.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.dto.response.auth.LoginResponseDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +17,7 @@ public class LoginResponseDtoTest {
         String refreshToken = "refresh-token-random";
 
         // when
-        LoginResponseDto loginResponseDto = LoginResponseDto.of(prefix, accessToken, refreshToken);
+        LoginResponseDto loginResponseDto = LoginResponseDto.ofEmailUser(prefix, accessToken, refreshToken);
 
         // then
         assertThat(loginResponseDto).isNotNull();

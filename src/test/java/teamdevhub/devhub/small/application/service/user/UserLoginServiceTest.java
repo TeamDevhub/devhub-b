@@ -5,8 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.service.user.UserLoginService;
 import teamdevhub.devhub.domain.user.User;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
+import teamdevhub.devhub.port.in.user.command.SignupCommand;
 
 import java.time.LocalDateTime;
 
@@ -32,8 +34,19 @@ public class UserLoginServiceTest {
     @DisplayName("로그인을_하면_최종_로그인_일시가_변한다")
     void updateLastLoginDateWhenLogin() {
         // given
-        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
-        fakeUserRepository.save(user);
+        SignupCommand signupCommand = SignupCommand.builder()
+                .userGuid(null)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+        CreateUserCommand generalUserCreateCommand = CreateUserCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        fakeUserRepository.save(testUser);
 
         // when
         userLoginService.updateLastLoginDateTime(TEST_USER_GUID_1);
@@ -41,6 +54,6 @@ public class UserLoginServiceTest {
         // then
         assertThat(fakeUserRepository.wasCalled("updateLastLoginDateTime")).isTrue();
         assertThat(fakeUserRepository.callCount("updateLastLoginDateTime")).isEqualTo(1);
-        assertThat(fakeUserRepository.lastLoginOf(user.getUserGuid())).isEqualTo(fakeDateTimeProvider.now());
+        assertThat(fakeUserRepository.lastLoginOf(testUser.getUserGuid())).isEqualTo(fakeDateTimeProvider.now());
     }
 }

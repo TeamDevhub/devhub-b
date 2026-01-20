@@ -44,6 +44,8 @@ public enum ErrorCode {
     USER_POSITION_REQUIRED("ERR.DVH.0033", "관심 포지션은 필수입니다.", BAD_REQUEST),
     USER_SKILL_REQUIRED("ERR.DVH.0034", "보유 스킬목록은 필수입니다.", BAD_REQUEST),
 
+    OAUTH_FAIL("ERR.DVH.0040", "지원하지 않는 OAuth 로그인입니다.", BAD_REQUEST),
+
     NOTIFICATION_SEND_FAIL("ERR.DVH.0050", "발송이 실패했습니다.",INTERNAL_SERVER_ERROR),
 
     BOOLEAN_CONVERT_FAIL("ERR.DVH.0070", "Boolean 값 변환에 실패했습니다.",INTERNAL_SERVER_ERROR),

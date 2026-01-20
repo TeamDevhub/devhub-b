@@ -5,8 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.service.user.UserWithdrawService;
 import teamdevhub.devhub.domain.user.User;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
-import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthSessionUseCase;
+import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
+import teamdevhub.devhub.port.in.user.command.SignupCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -19,7 +21,7 @@ public class UserWithdrawServiceTest {
 
     @BeforeEach
     void init() {
-        FakeAuthSessionUseCase fakeAuthSessionUseCase = new FakeAuthSessionUseCase();
+        FakeAuthenticationUseCase fakeAuthSessionUseCase = new FakeAuthenticationUseCase();
         fakeUserRepository = new FakeUserRepository();
 
         userWithdrawService = new UserWithdrawService(fakeAuthSessionUseCase, fakeUserRepository);
@@ -29,14 +31,26 @@ public class UserWithdrawServiceTest {
     @DisplayName("회원탈퇴한_사용자의_deleted_값은_true_이고_blocked_값은_false_이다")
     void setDeletedTrueWhenUserWithdraws() {
         // given
-        User user = User.createGeneralUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1);
-        fakeUserRepository.save(user);
+        SignupCommand signupCommand = SignupCommand.builder()
+                .userGuid(null)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+        CreateUserCommand generalUserCreateCommand = CreateUserCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalUserCreateCommand);
+
+        fakeUserRepository.save(testUser);
 
         // when
-        userWithdrawService.withdrawUser(TEST_USER_GUID_1);
+        userWithdrawService.withdrawUser(testUser.getUserGuid());
 
         // then
-        assertThat(fakeUserRepository.findByUserGuid(TEST_USER_GUID_1).isDeleted()).isTrue();
-        assertThat(fakeUserRepository.findByUserGuid(TEST_USER_GUID_1).isBlocked()).isFalse();
+        assertThat(fakeUserRepository.findByUserGuid(testUser.getUserGuid()).isDeleted()).isTrue();
+        assertThat(fakeUserRepository.findByUserGuid(testUser.getUserGuid()).isBlocked()).isFalse();
     }
 }

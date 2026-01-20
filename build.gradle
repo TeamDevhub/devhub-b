@@ -34,6 +34,7 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
 	implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+	implementation "com.google.api-client:google-api-client:2.6.0"
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -58,8 +59,6 @@ dependencies {
 	testImplementation 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation "org.testcontainers:junit-jupiter"
-	testImplementation "org.testcontainers:mysql"
 	testImplementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 
 	testAnnotationProcessor 'org.projectlombok:lombok'

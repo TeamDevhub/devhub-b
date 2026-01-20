@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
 import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
+import teamdevhub.devhub.common.enums.VerificationProvider;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.user.UserRole;
 
 import java.time.LocalDateTime;
@@ -32,6 +34,17 @@ public class UserEntity extends BaseEntity {
     @Id @Column(length = 32, nullable = false, unique = true)
     private String userGuid;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "signup_status")
+    private SignupStatus signupStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider")
+    private VerificationProvider provider;
+
+    @Column
+    private String oauthId;
+
     @Column(nullable = false)
     private String email;
 
@@ -55,11 +68,13 @@ public class UserEntity extends BaseEntity {
     @Convert(converter = BooleanToYNConverter.class)
     private boolean blocked;
 
+    @Column
     private LocalDateTime blockEndDate;
 
     @Column(nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
     private boolean deleted;
 
-    private LocalDateTime lastLoginDt;
+    @Column
+    private LocalDateTime lastLoginDate;
 }

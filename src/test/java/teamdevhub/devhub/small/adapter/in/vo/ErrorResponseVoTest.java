@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.adapter.in.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.vo.ErrorResponseVo;
+import teamdevhub.devhub.adapter.in.common.vo.ErrorResponseVo;
 import teamdevhub.devhub.common.enums.ErrorCode;
 
 import static org.assertj.core.api.Assertions.assertThat;

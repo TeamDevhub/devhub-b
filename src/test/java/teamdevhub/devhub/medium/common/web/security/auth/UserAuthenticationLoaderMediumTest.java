@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.common.web.security.auth.UserAuthenticationLoader;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
-import teamdevhub.devhub.port.in.auth.AuthUserUseCase;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.port.in.auth.usecase.AuthenticatedUserUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,13 +18,13 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserAuthenticationLoaderMediumTest {
 
-    private AuthUserUseCase authUserUseCase;
+    private AuthenticatedUserUseCase authenticatedUserUseCase;
     private UserAuthenticationLoader userAuthenticationLoader;
 
     @BeforeEach
     public void init() {
-        authUserUseCase = mock(AuthUserUseCase.class);
-        userAuthenticationLoader = new UserAuthenticationLoader(authUserUseCase);
+        authenticatedUserUseCase = mock(AuthenticatedUserUseCase.class);
+        userAuthenticationLoader = new UserAuthenticationLoader(authenticatedUserUseCase);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class UserAuthenticationLoaderMediumTest {
                 TEST_PASSWORD_1,
                 UserRole.USER
         );
-        when(authUserUseCase.getUserForLogin(TEST_EMAIL_1)).thenReturn(user);
+        when(authenticatedUserUseCase.getUserForLogin(TEST_EMAIL_1)).thenReturn(user);
 
         // when
         UserDetails details = userAuthenticationLoader.loadUserByUsername(TEST_EMAIL_1);
@@ -56,12 +56,12 @@ public class UserAuthenticationLoaderMediumTest {
         // given
 
         // when
-        when(authUserUseCase.getUserForLogin("notfound@example.com"))
+        when(authenticatedUserUseCase.getUserForLogin("notfound@example.com"))
                 .thenThrow(new UsernameNotFoundException("User not found"));
 
 
         // then
         assertThrows(UsernameNotFoundException.class, () -> userAuthenticationLoader.loadUserByUsername("notfound@example.com"));
-        verify(authUserUseCase).getUserForLogin("notfound@example.com");
+        verify(authenticatedUserUseCase).getUserForLogin("notfound@example.com");
     }
 }

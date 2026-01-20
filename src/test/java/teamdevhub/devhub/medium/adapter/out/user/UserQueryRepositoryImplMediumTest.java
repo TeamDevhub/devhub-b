@@ -45,7 +45,7 @@ class UserQueryRepositoryImplMediumTest {
                 .blocked(false)
                 .deleted(false)
                 .introduction(TEST_INTRO_1)
-                .lastLoginDt(LocalDateTime.now().minusDays(1))
+                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
@@ -58,7 +58,7 @@ class UserQueryRepositoryImplMediumTest {
                 .blocked(true)
                 .deleted(false)
                 .introduction(TEST_INTRO_2)
-                .lastLoginDt(LocalDateTime.now().minusDays(1))
+                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         entityManager.persist(userEntity1);

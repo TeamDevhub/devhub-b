@@ -24,7 +24,7 @@ class UserEntityTest {
                 .mannerDegree(TEST_MANNER)
                 .blocked(TEST_BLOCKED)
                 .deleted(TEST_DELETED)
-                .lastLoginDt(TEST_LAST_LOGIN)
+                .lastLoginDate(TEST_LAST_LOGIN)
                 .build();
 
         // then
@@ -37,6 +37,6 @@ class UserEntityTest {
         assertThat(userEntity.getMannerDegree()).isEqualTo(TEST_MANNER);
         assertThat(userEntity.isBlocked()).isEqualTo(TEST_BLOCKED);
         assertThat(userEntity.isDeleted()).isEqualTo(TEST_DELETED);
-        assertThat(userEntity.getLastLoginDt()).isEqualTo(TEST_LAST_LOGIN);
+        assertThat(userEntity.getLastLoginDate()).isEqualTo(TEST_LAST_LOGIN);
     }
 }

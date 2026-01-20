@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.UserSkillAdapter;
 import teamdevhub.devhub.port.out.provider.IdentifierProvider;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.fake.spring.persistence.user.FakeJpaUserSkillRepository;
 

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepository;
+import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.user.UserRole;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,11 @@ public class FakeJpaUserRepository implements JpaUserRepository {
     @Override
     public Optional<UserEntity> findByUserGuid(String userGuid) {
         return Optional.ofNullable(store.get(userGuid));
+    }
+
+    @Override
+    public Optional<UserEntity> findByProviderAndOauthId(VerificationProvider verificationProvider, String oauthId) {
+        return Optional.empty();
     }
 
     @Override

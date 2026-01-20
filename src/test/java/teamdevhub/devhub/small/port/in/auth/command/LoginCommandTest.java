@@ -23,5 +23,4 @@ class LoginCommandTest {
         assertThat(loginCommand.email()).isEqualTo(TEST_EMAIL_1);
         assertThat(loginCommand.password()).isEqualTo(TEST_PASSWORD_1);
     }
-
 }

@@ -1,7 +1,7 @@
 package teamdevhub.devhub.adapter.out.user.mapper;
 
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 
 public class UserSkillMapper {
 

@@ -21,7 +21,7 @@ import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.web.security.filter.CustomFilterExceptionHandler;
 import teamdevhub.devhub.common.web.security.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.port.out.provider.TokenParseProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;

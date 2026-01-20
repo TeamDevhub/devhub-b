@@ -2,9 +2,9 @@ package teamdevhub.devhub.small.adapter.in.dto.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.dto.request.user.UpdateProfileRequestDto;
-import teamdevhub.devhub.domain.user.vo.UserPosition;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
+import teamdevhub.devhub.domain.user.vo.position.UserPosition;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 
 import java.util.List;

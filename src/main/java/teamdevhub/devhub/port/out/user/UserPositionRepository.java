@@ -1,6 +1,6 @@
 package teamdevhub.devhub.port.out.user;
 
-import teamdevhub.devhub.domain.user.vo.UserPosition;
+import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 
 import java.util.Set;
 

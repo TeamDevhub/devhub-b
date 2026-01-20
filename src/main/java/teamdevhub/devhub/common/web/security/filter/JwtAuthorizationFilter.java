@@ -18,7 +18,7 @@ import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.port.out.provider.TokenParseProvider;
 
 import java.io.IOException;

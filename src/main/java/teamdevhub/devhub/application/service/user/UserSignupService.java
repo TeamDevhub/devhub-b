@@ -4,9 +4,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.UserPosition;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.position.UserPosition;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserSignupUseCase;
 import teamdevhub.devhub.port.in.verification.VerificationUseCase;
@@ -16,6 +19,7 @@ import teamdevhub.devhub.port.out.user.UserPositionRepository;
 import teamdevhub.devhub.port.out.user.UserRepository;
 import teamdevhub.devhub.port.out.user.UserSkillRepository;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,15 +36,29 @@ public class UserSignupService implements UserSignupUseCase {
     private final UserSkillRepository userSkillRepository;
 
     @Override
-    public User signup(SignupCommand signupCommand) {
-        validateSignupVerification(signupCommand.getVerificationTarget());
+    public void initializeAdminUser(AdminSignupCommand adminSignupCommand) {
+        if(existsByUserRole()) {
+            return;
+        }
 
-        User user = createUserForSignup(signupCommand);
-        saveUserPositions(user.getUserGuid(), signupCommand);
-        saveUserSkills(user.getUserGuid(), signupCommand);
+        String userGuid = identifierProvider.generateIdentifier();
+        String encodedPassword = passwordPolicyProvider.encode(adminSignupCommand.getPassword());
+
+        CreateUserCommand adminUserCreateCommand = CreateUserCommand.adminUserCreateCommand(adminSignupCommand, userGuid, encodedPassword);
+        User adminUser = User.createAdminUser(adminUserCreateCommand);
+        userRepository.saveAdminUser(adminUser);
+    }
+
+    @Override
+    public User signup(SignupCommand signupCommand) {
+        validateSignupVerification(signupCommand.verificationTarget());
+
+        User user = createGeneralUser(signupCommand);
+        saveUserPositions(user.getUserGuid(), signupCommand.positionList());
+        saveUserSkills(user.getUserGuid(), signupCommand.skillList());
         User savedUser = userRepository.save(user);
 
-        verificationUseCase.consume(signupCommand.getVerificationTarget());
+        verificationUseCase.consume(signupCommand.verificationTarget());
         return savedUser;
     }
 
@@ -48,28 +66,30 @@ public class UserSignupService implements UserSignupUseCase {
         verificationUseCase.assertAllowed(verificationTarget);
     }
 
-    private User createUserForSignup(SignupCommand signupCommand) {
+    private User createGeneralUser(SignupCommand signupCommand) {
         String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = passwordPolicyProvider.encode(signupCommand.getPassword());
-        return User.createGeneralUser(
-                userGuid,
-                signupCommand.getEmail(),
-                encodedPassword,
-                signupCommand.getUsername(),
-                signupCommand.getIntroduction());
+        String encodedPassword = passwordPolicyProvider.encode(signupCommand.password());
+
+        CreateUserCommand generalUserCreateCommand = CreateUserCommand.generalUserCreateCommand(signupCommand, userGuid, encodedPassword);
+        return User.createGeneralUser(generalUserCreateCommand);
     }
 
-    private void saveUserPositions(String userGuid, SignupCommand signupCommand) {
-        Set<UserPosition> positions = signupCommand.getPositionList().stream()
+    private void saveUserPositions(String userGuid, List<String> positionList) {
+        Set<UserPosition> positions = positionList.stream()
                 .map(position -> new UserPosition(userGuid, position))
                 .collect(Collectors.toUnmodifiableSet());
         userPositionRepository.saveAll(positions);
     }
 
-    private void saveUserSkills(String userGuid, SignupCommand signupCommand) {
-        Set<UserSkill> skills = signupCommand.getSkillList().stream()
+    private void saveUserSkills(String userGuid, List<String> skillList) {
+        Set<UserSkill> skills = skillList.stream()
                 .map(skill -> new UserSkill(userGuid, skill))
                 .collect(Collectors.toUnmodifiableSet());
         userSkillRepository.saveAll(skills);
     }
+
+    private boolean existsByUserRole() {
+        return userRepository.existsByUserRole(UserRole.ADMIN);
+    }
+
 }

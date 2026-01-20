@@ -3,8 +3,8 @@ package teamdevhub.devhub.port.in.user.command;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.domain.user.vo.UserPosition;
-import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.domain.user.vo.position.UserPosition;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 
 import java.util.Set;
 

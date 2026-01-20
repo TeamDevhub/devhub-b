@@ -8,13 +8,13 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import teamdevhub.devhub.adapter.in.dto.request.auth.LoginRequestDto;
-import teamdevhub.devhub.adapter.in.dto.request.user.SignupRequestDto;
-import teamdevhub.devhub.adapter.in.dto.request.verification.ConfirmVerificationRequestDto;
-import teamdevhub.devhub.adapter.in.dto.request.verification.IssueVerificationRequestDto;
-import teamdevhub.devhub.adapter.in.dto.response.auth.TokenResponseDto;
-import teamdevhub.devhub.adapter.in.dto.response.user.SignupResponseDto;
-import teamdevhub.devhub.adapter.in.dto.response.user.UserDetailResponseDto;
+import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
+import teamdevhub.devhub.adapter.in.user.dto.request.EmailSignupRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmVerificationRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.request.IssueVerificationRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
+import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
+import teamdevhub.devhub.adapter.in.user.dto.response.UserDetailResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
@@ -36,18 +36,18 @@ public class UserSignupAndLoginLargeTest {
     @DisplayName("이메일_인증_회원가입_로그인_프로필조회_E2E_테스트")
     void fromVerificationToGetProfile() {
         testRestTemplate.postForEntity(
-                "/auth/email-verification",
+                "/auth/verification/email",
                 new IssueVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1),
                 Void.class
         );
 
         testRestTemplate.postForEntity(
-                "/auth/email-verification/confirm",
+                "/auth/verification/email/confirm",
                 new ConfirmVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1, "123456"),
                 Void.class
         );
 
-        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
+        EmailSignupRequestDto emailSignupRequestDto = EmailSignupRequestDto.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -57,9 +57,9 @@ public class UserSignupAndLoginLargeTest {
                 .build();
 
         ResponseEntity<DataApiResponseDto<SignupResponseDto>> signupResponse = testRestTemplate.exchange(
-                "/user/signup",
+                "/user/signup/email",
                 HttpMethod.POST,
-                new HttpEntity<>(signupRequestDto),
+                new HttpEntity<>(emailSignupRequestDto),
                 new ParameterizedTypeReference<>() {}
         );
 
@@ -79,13 +79,13 @@ public class UserSignupAndLoginLargeTest {
 
         assertThat(setCookies).anyMatch(cookie -> cookie.contains("refreshToken"));
 
-        ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> response = testRestTemplate.exchange(
+        ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> updateProfileResponse = testRestTemplate.exchange(
                 "/user/profile",
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 new ParameterizedTypeReference<>() {}
         );
 
-        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
+        assertThat(updateProfileResponse.getBody().getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
     }
 }

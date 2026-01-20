@@ -3,7 +3,7 @@ package teamdevhub.devhub.adapter.out.user.mapper;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.common.vo.AuditInfo;
-import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 
 public class UserMapper {
 
@@ -18,6 +18,9 @@ public class UserMapper {
     public static UserEntity toEntity(User user) {
         return UserEntity.builder()
                 .userGuid(user.getUserGuid())
+                .signupStatus(user.getSignupStatus())
+                .provider(user.getVerificationProvider())
+                .oauthId(user.getOauthId())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .username(user.getUsername())
@@ -27,13 +30,16 @@ public class UserMapper {
                 .blocked(user.isBlocked())
                 .blockEndDate(user.getBlockEndDate())
                 .deleted(user.isDeleted())
-                .lastLoginDt(user.getLastLoginDateTime())
+                .lastLoginDate(user.getLastLoginDate())
                 .build();
     }
 
     public static User toDomain(UserEntity userEntity) {
         return User.of(
                 userEntity.getUserGuid(),
+                userEntity.getSignupStatus(),
+                userEntity.getProvider(),
+                userEntity.getOauthId(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.getUsername(),
@@ -43,7 +49,7 @@ public class UserMapper {
                 userEntity.isBlocked(),
                 userEntity.getBlockEndDate(),
                 userEntity.isDeleted(),
-                userEntity.getLastLoginDt(),
+                userEntity.getLastLoginDate(),
                 toAuditInfo(userEntity)
         );
     }

@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.out.user.UserPositionAdapter;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserPositionRepository;
-import teamdevhub.devhub.domain.user.vo.UserPosition;
+import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 
 import java.util.HashSet;
 import java.util.Set;

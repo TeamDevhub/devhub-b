@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.adapter.in.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.vo.PageResult;
+import teamdevhub.devhub.adapter.in.common.vo.PageResult;
 
 import java.util.List;
 

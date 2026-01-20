@@ -1,6 +1,6 @@
 package teamdevhub.devhub.port.out.user;
 
-import teamdevhub.devhub.domain.user.vo.UserSkill;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 
 import java.util.Set;
 

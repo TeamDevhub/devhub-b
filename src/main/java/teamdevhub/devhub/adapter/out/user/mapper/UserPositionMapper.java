@@ -1,7 +1,7 @@
 package teamdevhub.devhub.adapter.out.user.mapper;
 
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
-import teamdevhub.devhub.domain.user.vo.UserPosition;
+import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 
 public class UserPositionMapper {
 

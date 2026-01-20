@@ -1,6 +1,10 @@
 package teamdevhub.devhub.fake.pure.provider;
 
+import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
+import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
 import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.common.enums.VerificationProvider;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
@@ -26,6 +30,21 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
         String token = REFRESH_PREFIX + userGuid;
         refreshTokenMap.put(token, userGuid);
         return token;
+    }
+
+    @Override
+    public String createTempToken(String oauthId, SignupStatus signupStatus, VerificationProvider verificationProvider, String email) {
+        return "";
+    }
+
+    @Override
+    public AccessTokenInfo getAccessTokenInfo(String accessToken) {
+        return null;
+    }
+
+    @Override
+    public TempTokenInfo getTempTokenInfo(String tempToken) {
+        return null;
     }
 
     @Override

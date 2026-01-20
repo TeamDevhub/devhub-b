@@ -6,21 +6,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.adapter.in.vo.PageResult;
+import teamdevhub.devhub.adapter.in.common.vo.PageResult;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.UserQueryRepository;
 import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.auth.vo.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -59,6 +61,16 @@ public class UserAdapter implements UserRepository {
         UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
                 .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toDomain(userEntity);
+    }
+
+    @Override
+    public Optional<User> findOptionalByEmail(String email) {
+        return jpaUserRepository.findByEmail(email).map(UserMapper::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
+        return jpaUserRepository.findByProviderAndOauthId(verificationProvider, oauthId).map(UserMapper::toDomain);
     }
 
     @Override

@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.adapter.in.dto.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.dto.response.user.UserBasicResponseDto;
+import teamdevhub.devhub.adapter.in.user.dto.response.UserBasicResponseDto;
 import teamdevhub.devhub.domain.user.User;
 
 import java.time.LocalDateTime;
@@ -28,7 +28,7 @@ class UserBasicResponseDtoTest {
                 .blocked(true)
                 .blockEndDate(now.plusDays(7))
                 .deleted(false)
-                .lastLoginDateTime(now.minusDays(1))
+                .lastLoginDate(now.minusDays(1))
                 .build();
 
         // when
@@ -43,6 +43,6 @@ class UserBasicResponseDtoTest {
         assertThat(userBasicResponseDto.isBlocked()).isEqualTo(user.isBlocked());
         assertThat(userBasicResponseDto.getBlockEndDate()).isEqualTo(user.getBlockEndDate());
         assertThat(userBasicResponseDto.isDeleted()).isEqualTo(user.isDeleted());
-        assertThat(userBasicResponseDto.getLastLoginDateTime()).isEqualTo(user.getLastLoginDateTime());
+        assertThat(userBasicResponseDto.getLastLoginDateTime()).isEqualTo(user.getLastLoginDate());
     }
 }
