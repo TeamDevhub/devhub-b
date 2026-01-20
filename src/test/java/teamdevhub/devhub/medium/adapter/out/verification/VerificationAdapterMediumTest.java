@@ -109,12 +109,6 @@ class VerificationAdapterMediumTest {
         verificationAdapter.deleteByVerificationTarget(verificationTarget);
 
         // then
-        assertThat(
-                jpaVerificationRepository
-                        .findByVerificationTypeAndTargetValue(
-                                VerificationType.EMAIL,
-                                "delete@email.com"
-                        )
-        ).isEmpty();
+        assertThat(jpaVerificationRepository.findByVerificationTypeAndTargetValue(VerificationType.EMAIL, "delete@email.com")).isEmpty();
     }
 }

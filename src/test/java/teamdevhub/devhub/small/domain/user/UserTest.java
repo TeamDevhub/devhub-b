@@ -3,6 +3,7 @@ package teamdevhub.devhub.small.domain.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.common.enums.VerificationProvider;
+import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -12,6 +13,7 @@ import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.port.in.oauth.command.OauthSignupCommand;
 import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 
@@ -27,7 +29,7 @@ class UserTest {
 
     @Test
     @DisplayName("관리자_권한의_사용자를_생성한다")
-    void isAdminAccountPositionsAndSkillsEmpty() {
+    void createAdminUser() {
         // given
         AdminSignupCommand adminSignupCommand = AdminSignupCommand.builder()
                 .userGuid(null)
@@ -42,21 +44,21 @@ class UserTest {
         UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(adminSignupCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
 
         // when
-        User adminUser = User.createAdminUser(adminUserCreateCommand);
+        User createdAdminUser = User.createAdminUser(adminUserCreateCommand);
 
         // then
-        assertThat(adminUser.getUserRole()).isEqualTo(UserRole.ADMIN);
-        assertThat(adminUser.getUsername()).isEqualTo(ADMIN_USERNAME_1);
-        assertThat(adminUser.getPositions()).isEmpty();
-        assertThat(adminUser.getSkills()).isEmpty();
-        assertThat(adminUser.isDeleted()).isFalse();
-        assertThat(adminUser.isBlocked()).isFalse();
+        assertThat(createdAdminUser.getUserRole()).isEqualTo(UserRole.ADMIN);
+        assertThat(createdAdminUser.getVerificationProvider()).isEqualTo(VerificationProvider.EMAIL);
+        assertThat(createdAdminUser.getUsername()).isEqualTo(ADMIN_USERNAME_1);
+        assertThat(createdAdminUser.getPositions()).isEmpty();
+        assertThat(createdAdminUser.getSkills()).isEmpty();
+        assertThat(createdAdminUser.isDeleted()).isFalse();
+        assertThat(createdAdminUser.isBlocked()).isFalse();
     }
 
-    // need to change
     @Test
     @DisplayName("일반_권한의_사용자를_생성한다")
-    void createUserWithPositionsAndSkills() {
+    void createGeneralUser() {
         // given
         SignupCommand signupCommand = SignupCommand.builder()
                 .userGuid(null)
@@ -71,18 +73,48 @@ class UserTest {
         UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
 
         // when
-        User generalUser = User.createGeneralUser(generalUserCreateCommand);
+        User createdGeneralUser = User.createGeneralUser(generalUserCreateCommand);
 
         // then
-        assertThat(generalUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(generalUser.getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(generalUser.getPassword()).isEqualTo(TEST_PASSWORD_1);
-        assertThat(generalUser.getUsername()).isEqualTo(TEST_USERNAME_1);
-        assertThat(generalUser.getUserRole()).isEqualTo(UserRole.USER);
-        assertThat(generalUser.getIntroduction()).isEqualTo(TEST_INTRO_1);
-        assertThat(generalUser.isDeleted()).isFalse();
-        assertThat(generalUser.isBlocked()).isFalse();
-        assertThat(generalUser.getMannerDegree()).isEqualTo(36.5);
+        assertThat(createdGeneralUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(createdGeneralUser.getVerificationProvider()).isEqualTo(VerificationProvider.EMAIL);
+        assertThat(createdGeneralUser.getEmail()).isEqualTo(TEST_EMAIL_1);
+        assertThat(createdGeneralUser.getPassword()).isEqualTo(TEST_PASSWORD_1);
+        assertThat(createdGeneralUser.getUsername()).isEqualTo(TEST_USERNAME_1);
+        assertThat(createdGeneralUser.getUserRole()).isEqualTo(UserRole.USER);
+        assertThat(createdGeneralUser.getIntroduction()).isEqualTo(TEST_INTRO_1);
+        assertThat(createdGeneralUser.isDeleted()).isFalse();
+        assertThat(createdGeneralUser.isBlocked()).isFalse();
+        assertThat(createdGeneralUser.getMannerDegree()).isEqualTo(36.5);
+    }
+
+    @Test
+    @DisplayName("Oauth_사용자를_생성한다")
+    void createOauthUser() {
+        // given
+        OauthUser oauthUser = new OauthUser("testOauthId", VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        OauthSignupCommand oauthSignupCommand = OauthSignupCommand.builder()
+                .tempToken("tempToken")
+                .username(TEST_USERNAME_1)
+                .password(TEST_PASSWORD_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .build();
+        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(oauthSignupCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+
+        // when
+        User createdOauthUser = User.createOauthUser(oauthUserCreateCommand);
+
+        // then
+        assertThat(createdOauthUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(createdOauthUser.getVerificationProvider()).isEqualTo(oauthUser.verificationProvider());
+        assertThat(createdOauthUser.getEmail()).isEqualTo(oauthUser.email());
+        assertThat(createdOauthUser.getPassword()).isEqualTo(oauthSignupCommand.password());
+        assertThat(createdOauthUser.getUsername()).isEqualTo(oauthSignupCommand.username());
+        assertThat(createdOauthUser.isDeleted()).isFalse();
+        assertThat(createdOauthUser.isBlocked()).isFalse();
+        assertThat(createdOauthUser.getMannerDegree()).isEqualTo(36.5);
     }
 
     @Test

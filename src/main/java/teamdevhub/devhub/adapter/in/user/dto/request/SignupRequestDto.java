@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmailSignupRequestDto {
+public class SignupRequestDto {
 
     @NotBlank(message = "이메일은 필수입니다.")
     @RegexMatch(RegexPattern.AUTH_EMAIL)

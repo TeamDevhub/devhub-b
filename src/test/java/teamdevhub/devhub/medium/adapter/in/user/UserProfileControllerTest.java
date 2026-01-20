@@ -31,38 +31,6 @@ class UserProfileControllerTest {
         userProfileController = new UserProfileController(userFacade);
     }
 
-//    @Test
-//    @DisplayName("회원가입에_성공하면_SIGNUP_SUCCESS_의_코드를_확인할_수_있다")
-//    void canVerifyCodeWhenSignupSucceed() {
-//        // given
-//        EmailSignupRequestDto emailSignupRequestDto = EmailSignupRequestDto.builder()
-//                .email(TEST_EMAIL_1)
-//                .password(TEST_PASSWORD_1)
-//                .username(TEST_USERNAME_1)
-//                .introduction(TEST_INTRO_1)
-//                .positionList(TEST_POSITION_LIST)
-//                .skillList(TEST_SKILL_LIST)
-//                .build();
-//
-//        User user = User.builder()
-//                .email(emailSignupRequestDto.getEmail())
-//                .password(TEST_PASSWORD_1)
-//                .username(emailSignupRequestDto.getUsername())
-//                .userRole(UserRole.USER)
-//                .build();
-//
-//        when(userFacade.signupWithOauth(any())).thenReturn(user);
-//
-//        // when
-//        ResponseEntity<DataApiResponseDto<SignupResponseDto>> response = userProfileController.signupWithOauth(emailSignupRequestDto);
-//
-//        // then
-//        assertThat(response.getBody()).isNotNull();
-//        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.SIGNUP_SUCCESS.getCode());
-//        assertThat(response.getBody().getData().getEmail()).isEqualTo(TEST_EMAIL_1);
-//        assertThat(response.getBody().getData().getUsername()).isEqualTo(TEST_USERNAME_1);
-//        verify(userFacade).signupWithOauth(any());
-//    }
 
     @Test
     @DisplayName("유저_프로필_정보_조회에_성공하면_READ_SUCCESS_의_코드를_확인할_수_있다")

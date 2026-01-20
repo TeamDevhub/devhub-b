@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.in.auth;
+package teamdevhub.devhub.medium.adapter.in.auth;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,45 +31,6 @@ class AuthControllerTest {
         authFacade = Mockito.mock(AuthFacade.class);
         authController = new AuthController(authFacade);
     }
-//
-//    @Test
-//    @DisplayName("이메일_인증_메일_전송에_성공하면_VERIFICATION_SENT_코드를_확인할_수_있다")
-//    void canVerifyCodeWhenSendingEmailVerification() {
-//        // given
-//        IssueVerificationRequestDto issueVerificationRequestDto = new IssueVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1);
-//        doNothing().when(authFacade).issueEmailVerification(any());
-//
-//        // when
-//        ResponseEntity<DataApiResponseDto<Void>> response = authController.sendEmailVerification(issueVerificationRequestDto);
-//
-//        // then
-//        assertThat(response.getBody()).isNotNull();
-//        assertThat(response.getBody().getCode())
-//                .isEqualTo(SuccessCode.VERIFICATION_SENT.getCode());
-//
-//        verify(authFacade).issueEmailVerification(any());
-//    }
-//
-//    @Test
-//    @DisplayName("이메일_인증_확인에_성공하면_VERIFICATION_SUCCESS_코드를_확인할_수_있다")
-//    void canVerifyCodeWhenConfirmingEmailVerification() {
-//        // given
-//        ConfirmVerificationRequestDto confirmVerificationRequestDto = new ConfirmVerificationRequestDto(
-//                VerificationType.EMAIL,
-//                TEST_EMAIL_1,
-//                TEST_EMAIL_CODE
-//        );
-//        doNothing().when(authFacade).confirmEmailVerification(any());
-//
-//        // when
-//        ResponseEntity<DataApiResponseDto<Void>> response = authController.confirmEmailVerification(confirmVerificationRequestDto);
-//
-//        // then
-//        assertThat(response.getBody()).isNotNull();
-//        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.VERIFICATION_SUCCESS.getCode());
-//
-//        verify(authFacade).confirmEmailVerification(any());
-//    }
 
     @Test
     @DisplayName("로그인에_성공하면_LOGIN_SUCCESS_코드를_확인할_수_있다")

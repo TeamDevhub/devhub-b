@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
-import teamdevhub.devhub.adapter.in.user.dto.request.EmailSignupRequestDto;
+import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.request.IssueVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
@@ -47,7 +47,7 @@ public class UserSignupAndLoginLargeTest {
                 Void.class
         );
 
-        EmailSignupRequestDto emailSignupRequestDto = EmailSignupRequestDto.builder()
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -59,7 +59,7 @@ public class UserSignupAndLoginLargeTest {
         ResponseEntity<DataApiResponseDto<SignupResponseDto>> signupResponse = testRestTemplate.exchange(
                 "/user/signup/email",
                 HttpMethod.POST,
-                new HttpEntity<>(emailSignupRequestDto),
+                new HttpEntity<>(signupRequestDto),
                 new ParameterizedTypeReference<>() {}
         );
 

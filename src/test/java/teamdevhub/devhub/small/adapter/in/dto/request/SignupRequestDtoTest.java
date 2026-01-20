@@ -7,7 +7,7 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.user.dto.request.EmailSignupRequestDto;
+import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +15,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.*;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-class EmailSignupRequestDtoTest {
+class SignupRequestDtoTest {
 
     private Validator validator;
 
@@ -29,7 +29,7 @@ class EmailSignupRequestDtoTest {
     @DisplayName("올바른_데이터는_검증에_통과한다")
     void shouldPassForValidData() {
         // given
-        EmailSignupRequestDto emailSignupRequestDto = EmailSignupRequestDto.builder()
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -39,7 +39,7 @@ class EmailSignupRequestDtoTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<EmailSignupRequestDto>> violations = validator.validate(emailSignupRequestDto);
+        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
         // then
         assertThat(violations).isEmpty();
@@ -49,7 +49,7 @@ class EmailSignupRequestDtoTest {
     @DisplayName("이메일이_비어있으면_검증에_실패한다")
     void shouldFailWhenEmailIsEmpty() {
         // given
-        EmailSignupRequestDto emailSignupRequestDto = EmailSignupRequestDto.builder()
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email("")
                 .password(TEST_PASSWORD_1)
                 .introduction(TEST_INTRO_1)
@@ -58,7 +58,7 @@ class EmailSignupRequestDtoTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<EmailSignupRequestDto>> violations = validator.validate(emailSignupRequestDto);
+        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
         // then
         assertThat(violations.stream()
@@ -71,7 +71,7 @@ class EmailSignupRequestDtoTest {
     @DisplayName("포지션이_없으면_검증에_실패한다")
     void shouldFailWhenPositionIsMissing() {
         // given
-        EmailSignupRequestDto emailSignupRequestDto = EmailSignupRequestDto.builder()
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .introduction(TEST_INTRO_1)
@@ -80,7 +80,7 @@ class EmailSignupRequestDtoTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<EmailSignupRequestDto>> violations = validator.validate(emailSignupRequestDto);
+        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
         // then
         assertThat(violations.stream()
@@ -93,7 +93,7 @@ class EmailSignupRequestDtoTest {
     @DisplayName("포지션이_빈_값이면_검증에_실패한다")
     void shouldFailWhenPositionIsEmpty() {
         // given
-        EmailSignupRequestDto emailSignupRequestDto = EmailSignupRequestDto.builder()
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .introduction(TEST_INTRO_1)
@@ -102,7 +102,7 @@ class EmailSignupRequestDtoTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<EmailSignupRequestDto>> violations = validator.validate(emailSignupRequestDto);
+        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
         // then
         assertThat(violations.stream()
@@ -115,7 +115,7 @@ class EmailSignupRequestDtoTest {
     @DisplayName("스킬이_없으면_검증에_실패한다")
     void shouldFailWhenSkillsAreMissing() {
         // given
-        EmailSignupRequestDto emailSignupRequestDto = EmailSignupRequestDto.builder()
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .introduction(TEST_INTRO_1)
@@ -124,7 +124,7 @@ class EmailSignupRequestDtoTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<EmailSignupRequestDto>> violations = validator.validate(emailSignupRequestDto);
+        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
         // then
         assertThat(violations.stream()
@@ -137,7 +137,7 @@ class EmailSignupRequestDtoTest {
     @DisplayName("스킬이_빈_값이면_검증에_실패한다")
     void shouldFailWhenSkillsAreEmpty() {
         // given
-        EmailSignupRequestDto emailSignupRequestDto = EmailSignupRequestDto.builder()
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .introduction(TEST_INTRO_1)
@@ -146,7 +146,7 @@ class EmailSignupRequestDtoTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<EmailSignupRequestDto>> violations = validator.validate(emailSignupRequestDto);
+        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(signupRequestDto);
 
         // then
         assertThat(violations.stream()
