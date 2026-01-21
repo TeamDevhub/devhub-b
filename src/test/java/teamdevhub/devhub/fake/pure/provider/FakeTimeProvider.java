@@ -2,7 +2,6 @@ package teamdevhub.devhub.fake.pure.provider;
 
 import teamdevhub.devhub.port.out.provider.TimeProvider;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
