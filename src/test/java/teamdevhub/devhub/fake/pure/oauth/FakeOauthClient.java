@@ -2,7 +2,7 @@ package teamdevhub.devhub.fake.pure.oauth;
 
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
-import teamdevhub.devhub.port.out.auth.OauthClient;
+import teamdevhub.devhub.port.out.oauth.OauthClient;
 
 public class FakeOauthClient implements OauthClient {
 

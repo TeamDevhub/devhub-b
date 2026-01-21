@@ -1,5 +1,6 @@
 package teamdevhub.devhub.fake.pure.usecase.verification;
 
+import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
@@ -22,17 +23,18 @@ public class FakeVerificationUseCase implements VerificationUseCase {
     private final TimeProvider timeProvider = new FakeTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
 
     public FakeVerificationUseCase() {
-        VerificationTarget target = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
-
-        Verification verification = Verification.issue(target, TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
+        VerificationTarget verificationTarget = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
         verification.confirm(TEST_EMAIL_CODE, timeProvider.now());
-        store.put(target.value(), verification);
+        store.put(verificationTarget.value(), verification);
     }
 
     @Override
     public void issueVerification(IssueVerificationCommand issueVerificationCommand) {
         VerificationTarget verificationTarget = issueVerificationCommand.verificationTarget();
-        Verification verification = Verification.issue(verificationTarget, TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
         store.put(verificationTarget.value(), verification);
     }
 
@@ -56,7 +58,8 @@ public class FakeVerificationUseCase implements VerificationUseCase {
     }
 
     public void putUnverified(VerificationTarget verificationTarget) {
-        Verification verification = Verification.issue(verificationTarget, TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
         store.put(verificationTarget.value(), verification);
     }
 }

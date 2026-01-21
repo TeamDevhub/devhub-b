@@ -4,6 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.verification.Verification;
+import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
+import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.domain.verification.vo.VerificationType;
 
 import java.time.LocalDateTime;
 
@@ -17,9 +20,11 @@ public class VerificationTest {
     void issueVerification_isUnverified() {
         // given
         LocalDateTime expiredAt = LocalDateTime.now().plusMinutes(5);
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, expiredAt);
 
         // when
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, expiredAt);
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         // then
         assertThat(verification.isVerified()).isFalse();
@@ -33,7 +38,9 @@ public class VerificationTest {
     void confirm_success_whenCodeIsCorrectAndNotExpired() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, now.plusMinutes(3));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         // when
         verification.confirm(TEST_EMAIL_CODE, now);
@@ -46,7 +53,9 @@ public class VerificationTest {
     @DisplayName("잘못된_인증코드를_입력하면_예외를_던진다")
     void throwException_whenCodeIsInvalid() {
         // given
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, LocalDateTime.now().plusMinutes(3));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         // then
         assertThatThrownBy(
@@ -59,7 +68,9 @@ public class VerificationTest {
     @DisplayName("만료된_인증코드를_확인하면_예외를_던진다")
     void throwException_whenVerificationExpired() {
         // given
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, LocalDateTime.now().minusSeconds(1));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().minusMinutes(1));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         // then
         assertThatThrownBy(
@@ -73,8 +84,9 @@ public class VerificationTest {
     void confirmAgain_whenAlreadyVerified() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, now.plusMinutes(3));
-        verification.confirm(TEST_EMAIL_CODE, now);
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         // when
         verification.confirm(TEST_EMAIL_CODE, now.plusMinutes(1));
@@ -88,7 +100,9 @@ public class VerificationTest {
     void assertValid_success_whenVerifiedAndNotExpired() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, now.plusMinutes(3));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
         verification.confirm(TEST_EMAIL_CODE, now);
 
         // then
@@ -102,7 +116,9 @@ public class VerificationTest {
     @DisplayName("미인증_상태라면_assertValid_에서_예외를_던진다")
     void throwException_whenAssertValidAndNotVerified() {
         // given
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, LocalDateTime.now().plusMinutes(3));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         // then
         assertThatThrownBy(
@@ -116,7 +132,9 @@ public class VerificationTest {
     void throwException_whenAssertValidAndExpired() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Verification verification = Verification.issue(VERIFICATION_TARGET_1, TEST_EMAIL_CODE, now.plusMinutes(1));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusMinutes(1));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         verification.confirm(TEST_EMAIL_CODE, now);
 

@@ -3,7 +3,7 @@ package teamdevhub.devhub.application.service.verification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.application.verification.VerificationIssuerSelector;
+import teamdevhub.devhub.port.out.selector.VerificationIssuerSelector;
 import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
@@ -11,7 +11,7 @@ import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.port.in.verification.VerificationUseCase;
 import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
 import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
-import teamdevhub.devhub.port.out.sender.NotificationSender;
+import teamdevhub.devhub.port.out.selector.NotificationSenderSelector;
 import teamdevhub.devhub.port.out.verification.VerificationRepository;
 
 @Service
@@ -21,7 +21,7 @@ public class VerificationService implements VerificationUseCase {
 
     private final TimeProvider timeProvider;
     private final VerificationIssuerSelector verificationIssuerSelector;
-    private final NotificationSender notificationSender;
+    private final NotificationSenderSelector notificationSenderSelector;
     private final VerificationRepository verificationRepository;
 
     @Override
@@ -29,7 +29,7 @@ public class VerificationService implements VerificationUseCase {
         IssuedVerification issuedVerification = verificationIssuerSelector.issueVerification(issueVerificationCommand.verificationTarget());
         verificationRepository.save(issuedVerification.verification());
         issuedVerification.getVerificationMessage()
-                .ifPresent(verificationMessage -> notificationSender.sendVerification(issueVerificationCommand.verificationTarget(), verificationMessage));
+                .ifPresent(verificationMessage -> notificationSenderSelector.sendVerification(issueVerificationCommand.verificationTarget(), verificationMessage));
     }
 
     @Override

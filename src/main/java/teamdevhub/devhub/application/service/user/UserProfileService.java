@@ -8,7 +8,7 @@ import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.domain.user.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
-import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserProfileUseCase;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;
@@ -33,20 +33,20 @@ public class UserProfileService implements UserProfileUseCase {
 
     @Override
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
-        User user = getUserWithPositionsAndSkills(updateProfileCommand.getUserGuid());
+        User user = getUserWithPositionsAndSkills(updateProfileCommand.userGuid());
 
         if (updateProfileCommand.hasUsernameAndIntroductionChange()) {
-            UpdateUserCommand updateUserCommand = new UpdateUserCommand(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
-            user.updateBasicProfile(updateUserCommand);
+            UserUpdateCommand userUpdateCommand = new UserUpdateCommand(updateProfileCommand.username(), updateProfileCommand.introduction());
+            user.updateBasicProfile(userUpdateCommand);
             userRepository.updateUserProfile(user);
         }
 
         if (updateProfileCommand.hasPositionsChange()) {
-            replacePositions(user, updateProfileCommand.getPositions());
+            replacePositions(user, updateProfileCommand.positions());
         }
 
         if (updateProfileCommand.hasSkillsChange()) {
-            replaceSkills(user, updateProfileCommand.getSkills());
+            replaceSkills(user, updateProfileCommand.skills());
         }
     }
 

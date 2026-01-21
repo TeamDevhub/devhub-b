@@ -4,7 +4,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import teamdevhub.devhub.port.out.provider.VerificationCodeProvider;
-import teamdevhub.devhub.port.out.sender.NotificationSender;
+import teamdevhub.devhub.port.out.selector.NotificationSenderSelector;
 
 @TestConfiguration
 public class TestConfig {
@@ -17,7 +17,7 @@ public class TestConfig {
 
     @Bean
     @Primary
-    NotificationSender notificationSender() {
+    NotificationSenderSelector notificationSender() {
         return (to, content) -> {};
     }
 }

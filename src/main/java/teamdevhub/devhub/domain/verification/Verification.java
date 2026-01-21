@@ -1,8 +1,10 @@
 package teamdevhub.devhub.domain.verification;
 
+import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
+import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 
 import java.time.LocalDateTime;
@@ -17,6 +19,7 @@ public class Verification {
     private final LocalDateTime expiredAt;
     private boolean verified;
 
+    @Builder
     private Verification(
             Long id,
             VerificationTarget verificationTarget,
@@ -31,20 +34,30 @@ public class Verification {
         this.verified = verified;
     }
 
-    public static Verification issue(VerificationTarget target, String code, LocalDateTime expiredAt) {
-        Objects.requireNonNull(code);
-        Objects.requireNonNull(expiredAt);
-        return new Verification(null, target, code, expiredAt, false);
+    public static Verification issue(VerificationTarget verificationTarget, VerificationMessage verificationMessage) {
+        return Verification.builder()
+                .id(null)
+                .verificationTarget(verificationTarget)
+                .code(verificationMessage.code())
+                .expiredAt(verificationMessage.expiredAt())
+                .verified(false)
+                .build();
     }
 
     public static Verification of(
             Long id,
-            VerificationTarget target,
+            VerificationTarget verificationTarget,
             String code,
             LocalDateTime expiredAt,
             boolean verified
     ) {
-        return new Verification(id, target, code, expiredAt, verified);
+        return Verification.builder()
+                .id(id)
+                .verificationTarget(verificationTarget)
+                .code(code)
+                .expiredAt(expiredAt)
+                .verified(verified)
+                .build();
     }
 
     public void confirm(String code, LocalDateTime now) {

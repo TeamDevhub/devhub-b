@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.verification.entity.VerificationEntity;
 import teamdevhub.devhub.adapter.out.verification.mapper.VerificationMapper;
 import teamdevhub.devhub.domain.verification.Verification;
+import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
 
@@ -20,7 +21,9 @@ public class VerificationMapperTest {
     @DisplayName("Verification_을_VerificationEntity_로_올바르게_변환한다")
     void convertsDomainToEntity() {
         // given
-        Verification verification = Verification.issue(VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1), TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        Verification verification = Verification.issue(verificationTarget,verificationMessage);
 
         // when
         VerificationEntity verificationEntity = VerificationMapper.toEntity(verification);

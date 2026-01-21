@@ -2,7 +2,7 @@ package teamdevhub.devhub.fake.pure.usecase.user;
 
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserProfileUseCase;
@@ -40,10 +40,10 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
 
     @Override
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
-        User user = store.get(updateProfileCommand.getUserGuid());
-        UpdateUserCommand updateUserCommand = new UpdateUserCommand(updateProfileCommand.getUsername(), updateProfileCommand.getIntroduction());
-        user.updateBasicProfile(updateUserCommand);
-        user.changePositions(updateProfileCommand.getPositions());
-        user.changeSkills(updateProfileCommand.getSkills());
+        User user = store.get(updateProfileCommand.userGuid());
+        UserUpdateCommand userUpdateCommand = new UserUpdateCommand(updateProfileCommand.username(), updateProfileCommand.introduction());
+        user.updateBasicProfile(userUpdateCommand);
+        user.changePositions(updateProfileCommand.positions());
+        user.changeSkills(updateProfileCommand.skills());
     }
 }

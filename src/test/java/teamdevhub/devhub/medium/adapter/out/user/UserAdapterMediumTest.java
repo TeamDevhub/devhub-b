@@ -7,22 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.in.common.vo.PageResult;
+import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.user.UserAdapter;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepository;
+import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 @SpringBootTest
@@ -92,6 +97,121 @@ class UserAdapterMediumTest {
         assertThat(authenticatedUser).isNotNull();
         assertThat(authenticatedUser.email()).isEqualTo(testUser.getEmail());
     }
+
+    @Test
+    @DisplayName("userGuid_로 AuthenticatedUser_를 조회한다")
+    void findAuthenticatedUserByUserGuid() {
+        // given
+        SignupCommand signupCommand = SignupCommand.builder()
+                .userGuid(null)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+
+        UserCreateCommand createCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User user = User.createGeneralUser(createCommand);
+
+        jpaUserRepository.save(UserMapper.toEntity(user));
+
+        // when
+        AuthenticatedUser authenticatedUser = userAdapter.findAuthenticatedUserByUserGuid(TEST_USER_GUID_1);
+
+        // then
+        assertThat(authenticatedUser).isNotNull();
+        assertThat(authenticatedUser.userGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(authenticatedUser.email()).isEqualTo(TEST_EMAIL_1);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 userGuid_면 USER_NOT_FOUND 예외가 발생한다")
+    void findAuthenticatedUserByUserGuid_notFound() {
+        // expect
+        assertThatThrownBy(
+                () -> userAdapter.findAuthenticatedUserByUserGuid("NOT_EXIST_GUID"))
+                .isInstanceOf(AdapterDataException.class)
+                .hasMessageContaining(ErrorCode.USER_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("이메일로 조회 시 Optional AuthenticatedUser_를 반환한다")
+    void findOptionalByEmail_exists() {
+        // given
+        SignupCommand signupCommand = SignupCommand.builder()
+                .userGuid(null)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+
+        UserCreateCommand createCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User user = User.createGeneralUser(createCommand);
+
+        jpaUserRepository.save(UserMapper.toEntity(user));
+
+        // when
+        Optional<AuthenticatedUser> result = userAdapter.findOptionalByEmail(TEST_EMAIL_1);
+
+        // then
+        assertThat(result).isPresent();
+        assertThat(result.get().email()).isEqualTo(TEST_EMAIL_1);
+    }
+
+    @Test
+    @DisplayName("OAuth_Provider_와 oauthId로 AuthenticatedUser_를 조회한다")
+    void findByOAuth() {
+        // given
+        UserEntity userEntity = UserEntity.builder()
+                .userGuid(TEST_USER_GUID_1)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .provider(VerificationProvider.GOOGLE)
+                .oauthId("oauth-id-123")
+                .userRole(UserRole.USER)
+                .build();
+
+        jpaUserRepository.save(userEntity);
+
+        // when
+        Optional<AuthenticatedUser> result =
+                userAdapter.findByOAuth(VerificationProvider.GOOGLE, "oauth-id-123");
+
+        // then
+        assertThat(result).isPresent();
+        assertThat(result.get().email()).isEqualTo(TEST_EMAIL_1);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 OAuth 정보면 Optional.empty를 반환한다")
+    void findByOAuth_empty() {
+        // when
+        Optional<AuthenticatedUser> result =
+                userAdapter.findByOAuth(VerificationProvider.GOOGLE, "not-exist-oauth-id");
+
+        // then
+        assertThat(result).isEmpty();
+    }
+
+
+    @Test
+    @DisplayName("존재하지 않는 이메일이면 Optional.empty_를 반환한다")
+    void findOptionalByEmail_empty() {
+        // when
+        Optional<AuthenticatedUser> result = userAdapter.findOptionalByEmail("not-exist@test.com");
+
+        // then
+        assertThat(result).isEmpty();
+    }
+
 
     @Test
     @DisplayName("새로운_사용자를_생성하면_사용자_정보를_저장한다")
@@ -164,8 +284,8 @@ class UserAdapterMediumTest {
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser));
-        UpdateUserCommand updateUserCommand = new UpdateUserCommand(NEW_USERNAME, NEW_INTRO);
-        testUser.updateBasicProfile(updateUserCommand);
+        UserUpdateCommand userUpdateCommand = new UserUpdateCommand(NEW_USERNAME, NEW_INTRO);
+        testUser.updateBasicProfile(userUpdateCommand);
 
         // when
         userAdapter.updateUserProfile(testUser);

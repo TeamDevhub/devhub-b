@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.issuer;
 
-import teamdevhub.devhub.application.verification.issuer.VerificationIssuer;
+import teamdevhub.devhub.port.out.verification.VerificationIssuer;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
 import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
@@ -31,9 +31,9 @@ public class FakeEmailVerificationIssuer implements VerificationIssuer {
 
     @Override
     public IssuedVerification issue(VerificationTarget verificationTarget) {
-        Verification verification = Verification.issue(verificationTarget, fixedCode, timeProvider.now().plusMinutes(5));
-        VerificationMessage message = new VerificationMessage(fixedCode, timeProvider.now().plusMinutes(5));
+        VerificationMessage verificationMessage = new VerificationMessage(fixedCode, timeProvider.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
-        return IssuedVerification.withVerificationMessage(verification, message);
+        return IssuedVerification.withVerificationMessage(verification, verificationMessage);
     }
 }

@@ -10,7 +10,7 @@ import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
 import teamdevhub.devhub.fake.spring.persistence.user.FakeJpaUserRepository;
 import teamdevhub.devhub.fake.spring.persistence.user.FakeUserQueryRepository;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
@@ -164,8 +164,8 @@ class UserAdapterTest {
         UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
-        UpdateUserCommand updateUserCommand = new UpdateUserCommand(NEW_USERNAME, NEW_INTRO);
-        testUser.updateBasicProfile(updateUserCommand);
+        UserUpdateCommand userUpdateCommand = new UserUpdateCommand(NEW_USERNAME, NEW_INTRO);
+        testUser.updateBasicProfile(userUpdateCommand);
 
         // when
         userAdapter.updateUserProfile(testUser);

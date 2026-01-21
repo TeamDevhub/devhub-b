@@ -13,7 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import teamdevhub.devhub.adapter.out.provider.token.JwtClaims;
+import teamdevhub.devhub.adapter.out.infrastructure.token.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.TokenType;

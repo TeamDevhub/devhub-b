@@ -12,7 +12,7 @@ import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.domain.common.vo.AuditInfo;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -193,13 +193,13 @@ public class User {
         this.blocked = false;
     }
 
-    public void updateBasicProfile(UpdateUserCommand updateUserCommand) {
-        if (hasText(updateUserCommand.username()) && !updateUserCommand.username().equals(this.username)) {
-            this.username = updateUserCommand.username();
+    public void updateBasicProfile(UserUpdateCommand userUpdateCommand) {
+        if (hasText(userUpdateCommand.username()) && !userUpdateCommand.username().equals(this.username)) {
+            this.username = userUpdateCommand.username();
         }
 
-        if (hasText(updateUserCommand.introduction()) && !updateUserCommand.introduction().equals(this.introduction)) {
-            this.introduction = updateUserCommand.introduction();
+        if (hasText(userUpdateCommand.introduction()) && !userUpdateCommand.introduction().equals(this.introduction)) {
+            this.introduction = userUpdateCommand.introduction();
         }
     }
 
@@ -247,6 +247,11 @@ public class User {
         return UserSkillChangeResult.unchanged(this.skills);
     }
 
+    public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
+        this.positions = new HashSet<>(positions);
+        this.skills = new HashSet<>(skills);
+    }
+
     private void validate(String email, String password) {
         if (!hasText(email)) {
             throw DomainRuleException.of(ErrorCode.USER_ID_FAIL);
@@ -255,10 +260,5 @@ public class User {
 
     private boolean hasText(String value) {
         return value != null && !value.isBlank();
-    }
-
-    public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
-        this.positions = new HashSet<>(positions);
-        this.skills = new HashSet<>(skills);
     }
 }

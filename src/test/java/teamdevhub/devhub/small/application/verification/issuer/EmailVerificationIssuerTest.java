@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.application.verification.issuer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.application.verification.issuer.email.EmailVerificationIssuer;
+import teamdevhub.devhub.adapter.out.verification.issuer.EmailVerificationIssuer;
 import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;

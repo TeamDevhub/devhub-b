@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.sender;
 
-import teamdevhub.devhub.adapter.out.infrastructure.sender.MessageSender;
+import teamdevhub.devhub.port.out.sender.MessageSender;
 import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;

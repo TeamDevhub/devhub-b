@@ -12,6 +12,7 @@ import teamdevhub.devhub.adapter.out.verification.VerificationAdapter;
 import teamdevhub.devhub.adapter.out.verification.mapper.VerificationMapper;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.verification.Verification;
+import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
 
@@ -40,9 +41,8 @@ class VerificationAdapterMediumTest {
     void saveVerification() {
         // given
         VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, "test@email.com");
-
-        Verification verification =
-                Verification.issue(verificationTarget, "123456", LocalDateTime.now().plusMinutes(5));
+        VerificationMessage verificationMessage = new VerificationMessage("123456",LocalDateTime.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         // when
         verificationAdapter.save(verification);
@@ -61,11 +61,9 @@ class VerificationAdapterMediumTest {
     @DisplayName("인증대상으로_인증정보를_조회한다")
     void findByVerificationTarget() {
         // given
-        VerificationTarget verificationTarget =
-                new VerificationTarget(VerificationType.EMAIL, "test@email.com");
-
-        Verification verification =
-                Verification.issue(verificationTarget, "654321", LocalDateTime.now().plusMinutes(5));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, "test@email.com");
+        VerificationMessage verificationMessage = new VerificationMessage("654321",LocalDateTime.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         jpaVerificationRepository.save(VerificationMapper.toEntity(verification));
 
@@ -82,13 +80,11 @@ class VerificationAdapterMediumTest {
     @DisplayName("인증정보가_없으면_예외를_발생시킨다")
     void findByVerificationTarget_notExists_throwsException() {
         // given
-        VerificationTarget verificationTarget =
-                new VerificationTarget(VerificationType.EMAIL, "notfound@email.com");
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, "notfound@email.com");
 
         // when then
         assertThatThrownBy(
-                () -> verificationAdapter.findByVerificationTarget(verificationTarget)
-        )
+                () -> verificationAdapter.findByVerificationTarget(verificationTarget))
                 .isInstanceOf(AdapterDataException.class)
                 .hasMessageContaining(ErrorCode.VERIFICATION_NOT_EXISTED.getMessage());
     }
@@ -97,11 +93,9 @@ class VerificationAdapterMediumTest {
     @DisplayName("인증대상으로_인증정보를_삭제한다")
     void deleteByVerificationTarget() {
         // given
-        VerificationTarget verificationTarget =
-                new VerificationTarget(VerificationType.EMAIL, "delete@email.com");
-
-        Verification verification =
-                Verification.issue(verificationTarget, "000000", LocalDateTime.now().plusMinutes(5));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, "delete@email.com");
+        VerificationMessage verificationMessage = new VerificationMessage("000000",LocalDateTime.now().plusMinutes(5));
+        Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
         jpaVerificationRepository.save(VerificationMapper.toEntity(verification));
 

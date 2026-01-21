@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import teamdevhub.devhub.adapter.out.exception.ExternalServiceException;
-import teamdevhub.devhub.adapter.out.infrastructure.sender.email.EmailMessageSendAdapter;
+import teamdevhub.devhub.adapter.out.infrastructure.notification.sender.EmailMessageSendAdapter;
 import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;

@@ -29,12 +29,12 @@ class UpdateProfileRequestDtoTest {
         UpdateProfileCommand updateProfileCommand = updateProfileRequestDto.toUpdateProfileCommand(TEST_USER_GUID_1);
 
         // then
-        assertThat(updateProfileCommand.getUsername()).isEqualTo(NEW_USERNAME);
-        assertThat(updateProfileCommand.getIntroduction()).isEqualTo(NEW_INTRO);
-        assertThat(updateProfileCommand.getPositions()).hasSize(NEW_POSITION_LIST.size())
+        assertThat(updateProfileCommand.username()).isEqualTo(NEW_USERNAME);
+        assertThat(updateProfileCommand.introduction()).isEqualTo(NEW_INTRO);
+        assertThat(updateProfileCommand.positions()).hasSize(NEW_POSITION_LIST.size())
                 .extracting(UserPosition::positionCd)
                 .containsExactlyInAnyOrderElementsOf(NEW_POSITION_LIST);
-        assertThat(updateProfileCommand.getSkills()).hasSize(NEW_SKILL_LIST.size())
+        assertThat(updateProfileCommand.skills()).hasSize(NEW_SKILL_LIST.size())
                 .extracting(UserSkill::skillCd)
                 .containsExactlyInAnyOrderElementsOf(NEW_SKILL_LIST);
     }
@@ -52,7 +52,7 @@ class UpdateProfileRequestDtoTest {
         UpdateProfileCommand updateProfileCommand = updateProfileRequestDto.toUpdateProfileCommand(TEST_USER_GUID_1);
 
         // then
-        assertThat(updateProfileCommand.getPositions()).isNull();
+        assertThat(updateProfileCommand.positions()).isNull();
     }
 
     @Test
@@ -68,7 +68,7 @@ class UpdateProfileRequestDtoTest {
         UpdateProfileCommand updateProfileCommand = updateProfileRequestDto.toUpdateProfileCommand(TEST_USER_GUID_1);
 
         // then
-        assertThat(updateProfileCommand.getSkills()).isNull();
+        assertThat(updateProfileCommand.skills()).isNull();
     }
 
     @Test
@@ -83,7 +83,7 @@ class UpdateProfileRequestDtoTest {
         UpdateProfileCommand updateProfileCommand = updateProfileRequestDto.toUpdateProfileCommand(TEST_USER_GUID_1);
 
         // then
-        assertThat(updateProfileCommand.getPositions()).isEmpty();
+        assertThat(updateProfileCommand.positions()).isEmpty();
     }
 
     @Test
@@ -98,6 +98,6 @@ class UpdateProfileRequestDtoTest {
         UpdateProfileCommand updateProfileCommand = updateProfileRequestDto.toUpdateProfileCommand(TEST_USER_GUID_1);
 
         // then
-        assertThat(updateProfileCommand.getSkills()).isEmpty();
+        assertThat(updateProfileCommand.skills()).isEmpty();
     }
 }

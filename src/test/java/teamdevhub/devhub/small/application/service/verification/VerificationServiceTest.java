@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.exception.BusinessRuleException;
 import teamdevhub.devhub.application.service.verification.VerificationService;
-import teamdevhub.devhub.application.verification.VerificationIssuerSelector;
-import teamdevhub.devhub.application.verification.issuer.VerificationIssuer;
+import teamdevhub.devhub.port.out.selector.VerificationIssuerSelector;
+import teamdevhub.devhub.port.out.verification.VerificationIssuer;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
@@ -15,7 +15,7 @@ import teamdevhub.devhub.fake.pure.issuer.FakeEmailVerificationIssuer;
 import teamdevhub.devhub.fake.pure.issuer.FakeVerificationIssuerSelector;
 import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
 import teamdevhub.devhub.fake.pure.repository.verification.FakeVerificationRepository;
-import teamdevhub.devhub.fake.pure.sender.FakeNotificationSender;
+import teamdevhub.devhub.fake.pure.sender.FakeNotificationSenderSelector;
 import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
 import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
 import teamdevhub.devhub.port.out.provider.TimeProvider;
@@ -28,7 +28,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class VerificationServiceTest {
 
-    private FakeNotificationSender notificationSender;
+    private FakeNotificationSenderSelector notificationSender;
     private FakeVerificationRepository verificationRepository;
 
     private VerificationService verificationService;
@@ -40,7 +40,7 @@ public class VerificationServiceTest {
         VerificationIssuer verificationIssuer = new FakeEmailVerificationIssuer(VerificationType.EMAIL, TEST_EMAIL_CODE, timeProvider);
         VerificationIssuerSelector issuerSelector = new FakeVerificationIssuerSelector(List.of(verificationIssuer));
         verificationRepository = new FakeVerificationRepository();
-        notificationSender = new FakeNotificationSender();
+        notificationSender = new FakeNotificationSenderSelector();
 
         verificationService = new VerificationService(
                 timeProvider,

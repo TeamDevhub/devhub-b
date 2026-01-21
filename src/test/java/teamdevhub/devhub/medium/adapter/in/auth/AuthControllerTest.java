@@ -46,7 +46,7 @@ class AuthControllerTest {
                 .refreshToken("refresh-token")
                 .build();
 
-        when(authFacade.login((LoginCommand) any())).thenReturn(loginResponseDto);
+        when(authFacade.login(any())).thenReturn(loginResponseDto);
 
         // when
         ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = authController.login(loginRequestDto);
@@ -56,7 +56,7 @@ class AuthControllerTest {
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
         assertThat(response.getBody().getData()).isNotNull();
 
-        verify(authFacade).login((LoginCommand) any());
+        verify(authFacade).login(any());
     }
 
     @Test

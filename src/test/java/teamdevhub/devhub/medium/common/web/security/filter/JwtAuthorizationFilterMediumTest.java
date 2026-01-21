@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import teamdevhub.devhub.adapter.out.provider.token.JwtClaims;
+import teamdevhub.devhub.adapter.out.infrastructure.token.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.TokenType;

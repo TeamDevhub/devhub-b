@@ -48,7 +48,7 @@ class RefreshTokenInfoAdapterMediumTest {
     }
 
     @Test
-    @DisplayName("이미_존재하는_리프레시_토큰이_있다면_토큰을_회전시킨다")
+    @DisplayName("이미_존재하는_리프레시_토큰이_있다면_토큰을_변경시킨다")
     void saveRefreshToken_rotate() {
         // given
         jpaRefreshTokenRepository.save(RefreshTokenEntity.of("USER_GUID_1", "OLD_REFRESH_TOKEN"));

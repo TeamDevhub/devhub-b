@@ -12,7 +12,7 @@ import teamdevhub.devhub.domain.user.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
 import teamdevhub.devhub.port.in.oauth.command.OauthSignupCommand;
 import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
 import teamdevhub.devhub.port.in.user.command.SignupCommand;
@@ -200,8 +200,8 @@ class UserTest {
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         // when
-        UpdateUserCommand updateUserCommand = new UpdateUserCommand(NEW_USERNAME, NEW_INTRO);
-        testUser.updateBasicProfile(updateUserCommand);
+        UserUpdateCommand userUpdateCommand = new UserUpdateCommand(NEW_USERNAME, NEW_INTRO);
+        testUser.updateBasicProfile(userUpdateCommand);
 
         // then
         assertThat(testUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
@@ -227,8 +227,8 @@ class UserTest {
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         // when
-        UpdateUserCommand updateUserCommand = new UpdateUserCommand("", "");
-        testUser.updateBasicProfile(updateUserCommand);
+        UserUpdateCommand userUpdateCommand = new UserUpdateCommand("", "");
+        testUser.updateBasicProfile(userUpdateCommand);
 
         // then
         assertThat(testUser.getUsername()).isEqualTo(TEST_USERNAME_1);

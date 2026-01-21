@@ -7,6 +7,7 @@ import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.verification.VerificationAdapter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.verification.Verification;
+import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import teamdevhub.devhub.fake.spring.persistence.verificaiton.FakeJpaVerificationRepository;
@@ -32,7 +33,9 @@ public class VerificationAdapterTest {
     @DisplayName("Verification_을_저장하면_FakeJpaRepository_에_존재한다")
     void saveVerificationStoresEntity() {
         // given
-        Verification verification = Verification.issue(VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1), TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        Verification verification = Verification.issue(verificationTarget,verificationMessage);
 
         // when
         verificationAdapter.save(verification);
@@ -45,7 +48,9 @@ public class VerificationAdapterTest {
     @DisplayName("VerificationTarget_으로_조회하면_도메인_Verification_을_얻는다")
     void findByVerificationTargetReturnsDomain() {
         // given
-        Verification verification = Verification.issue(VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1), TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        Verification verification = Verification.issue(verificationTarget,verificationMessage);
         verificationAdapter.save(verification);
 
         // when
@@ -71,7 +76,9 @@ public class VerificationAdapterTest {
     @DisplayName("VerificationTarget_으로_삭제하면_FakeJpaRepository_에서_사라진다")
     void deleteByVerificationTargetRemovesEntity() {
         // given
-        Verification verification = Verification.issue(VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1), TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
+        VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, LocalDateTime.now().plusHours(1));
+        Verification verification = Verification.issue(verificationTarget,verificationMessage);
         verificationAdapter.save(verification);
         assertThat(fakeJpaVerificationRepository.exists(VerificationType.EMAIL, TEST_EMAIL_1)).isTrue();
 

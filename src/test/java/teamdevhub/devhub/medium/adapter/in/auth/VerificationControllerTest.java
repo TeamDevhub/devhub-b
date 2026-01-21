@@ -112,6 +112,4 @@ public class VerificationControllerTest {
 
         verify(authFacade).handleOAuthCallback(provider, code);
     }
-
-
 }
