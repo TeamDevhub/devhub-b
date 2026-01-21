@@ -37,6 +37,19 @@ public class OauthCallbackServiceTest {
     }
 
     @Test
+    @DisplayName("Oauth_인증_제공자에_따른_리다이렉트_URL_을_생성할_수_있다")
+    void handleOAuthCallback_createAuthorizationUrl_with_provider() {
+        // given
+        String provider = "google";
+
+        // when
+        String redirectAuthorizationUrl = oauthCallbackService.createAuthorizationUrl(provider);
+
+        // then
+        assertThat(redirectAuthorizationUrl).isEqualTo("https://oauth.test/authorize/");
+    }
+
+    @Test
     @DisplayName("기존_OAuth_유저면_COMPLETED_상태의_토큰이_발급된다")
     void handleOAuthCallback_completed_whenUserExists() {
         // given

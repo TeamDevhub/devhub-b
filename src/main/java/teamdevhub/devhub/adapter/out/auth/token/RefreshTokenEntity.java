@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.auth.entity;
+package teamdevhub.devhub.adapter.out.auth.token;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,11 +28,11 @@ public class RefreshTokenEntity {
         this.token = token;
     }
 
-    public static RefreshTokenEntity of(String userGuid, String refreshToken) {
-        return new RefreshTokenEntity(userGuid, refreshToken);
+    public static RefreshTokenEntity of(String userGuid, String token) {
+        return new RefreshTokenEntity(userGuid, token);
     }
 
-    public void rotate(String newToken) {
+    void rotate(String newToken) {
         this.token = newToken;
     }
 }

@@ -5,13 +5,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.infrastructure.token.JwtTokenCodec;
 import teamdevhub.devhub.common.enums.SignupStatus;
+import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
+import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
+import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static teamdevhub.devhub.common.enums.ErrorCode.TOKEN_EXPIRED;
 import static teamdevhub.devhub.common.enums.ErrorCode.TOKEN_INVALID;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
@@ -23,7 +29,8 @@ class JwtTokenCodecMediumTest {
 
     @BeforeEach
     void init() throws Exception {
-        jwtTokenCodec = new JwtTokenCodec();
+        FakeTimeProvider fakeTimeProvider = new FakeTimeProvider(LocalDateTime.now());
+        jwtTokenCodec = new JwtTokenCodec(fakeTimeProvider);
 
         String secret = "abcdefghijklmnopqrstuvwxyz123456";
         String base64Key = Base64.getEncoder().encodeToString(secret.getBytes());
@@ -36,82 +43,171 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("refreshToken_생성_및_userGuid_추출한다")
-    void createRefreshTokenAndExtractUserGuidTest() {
+    @DisplayName("accessToken_생성_후_토큰_정보를_정상적으로_추출한다")
+    void createAccessTokenAndExtractInfo() {
+        // given
+        String userGuid = TEST_USER_GUID_1;
+
+        // when
+        String accessToken = jwtTokenCodec.createAccessToken(
+                userGuid,
+                SignupStatus.COMPLETED,
+                TEST_EMAIL_1,
+                USER
+        );
+        AccessTokenInfo accessTokenInfo = jwtTokenCodec.getAccessTokenInfo(accessToken);
+
+        // then
+        assertThat(accessTokenInfo.userGuid()).isEqualTo(userGuid);
+        assertThat(accessTokenInfo.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
+        assertThat(accessTokenInfo.email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(accessTokenInfo.userRole()).isEqualTo(USER);
+    }
+
+    @Test
+    @DisplayName("refreshToken_을_accessToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다.")
+    void extractAccessTokenInfoWithRefreshTokenThrows() {
+        // given
+        String refreshToken = jwtTokenCodec.createRefreshToken(TEST_USER_GUID_1);
+
+        // when, then
+        assertThatThrownBy(() ->
+                jwtTokenCodec.getAccessTokenInfo(refreshToken))
+                .isInstanceOf(AuthRuleException.class)
+                .hasMessageContaining(TOKEN_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("refreshToken_생성_후_userGuid_를_정상_추출할_수_있다.")
+    void createRefreshTokenAndExtractUserGuid() {
         // given
         String userGuid = TEST_USER_GUID_1;
 
         // when
         String refreshToken = jwtTokenCodec.createRefreshToken(userGuid);
-        String extractedGuid = jwtTokenCodec.getRefreshTokenInfo(refreshToken).userGuid();
+        String extracted = jwtTokenCodec.getRefreshTokenInfo(refreshToken).userGuid();
 
         // then
-        assertThat(extractedGuid).isEqualTo(userGuid);
+        assertThat(extracted).isEqualTo(userGuid);
     }
 
     @Test
-    @DisplayName("refreshToken_에_accessToken_을_넣으면_예외가_발생한다")
-    void extractUserGuidWithAccessTokenThrows() {
+    @DisplayName("accessToken_을_refreshToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다.")
+    void extractRefreshTokenInfoWithAccessTokenThrows() {
         // given
-        String token = jwtTokenCodec.createAccessToken(TEST_USER_GUID_1, SignupStatus.COMPLETED, TEST_EMAIL_1, USER);
-
-        // then
-        assertThatThrownBy(
-                // when
-                () -> jwtTokenCodec.getRefreshTokenInfo(token))
-                .isInstanceOf(AuthRuleException.class)
-                .hasMessageContaining(TOKEN_INVALID.getMessage());
-    }
-
-    @Test
-    @DisplayName("removeBearer_로_Bearer_를_제거할_수_있다")
-    void removeBearer_strips_Bearer_prefix() {
-        // given
-        String tokenWithBearer = "Bearer abc123";
-
-        // when
-        String cleaned = jwtTokenCodec.removeBearer(tokenWithBearer);
-
-        // then
-        assertThat(cleaned).isEqualTo("abc123");
-    }
-
-    @Test
-    @DisplayName("Bearer_가_없는_토큰이면_예외가_발생한다")
-    void removeBearer_with_no_prefix_returns_same_token() {
-        // given
-        String token = "abc123";
+        String accessToken = jwtTokenCodec.createAccessToken(
+                TEST_USER_GUID_1,
+                SignupStatus.COMPLETED,
+                TEST_EMAIL_1,
+                USER
+        );
 
         // when, then
-        assertThatThrownBy(() -> jwtTokenCodec.removeBearer(token))
+        assertThatThrownBy(() ->
+                jwtTokenCodec.getRefreshTokenInfo(accessToken))
                 .isInstanceOf(AuthRuleException.class)
                 .hasMessageContaining(TOKEN_INVALID.getMessage());
     }
 
     @Test
-    @DisplayName("removeBearer_null_입력_시_예외가_발생한다")
-    void removeBearerNullThrows() {
-        // given, when, then
-        assertThatThrownBy(() -> jwtTokenCodec.removeBearer(null))
+    @DisplayName("tempToken_생성_후_토큰_정보가_정상_추출된다.")
+    void createTempTokenAndExtractInfo() {
+        // given
+        String oauthId = "oauth-id-123";
+
+        // when
+        String tempToken = jwtTokenCodec.createTempToken(
+                oauthId,
+                SignupStatus.PENDING,
+                VerificationProvider.GOOGLE,
+                TEST_EMAIL_1
+        );
+        TempTokenInfo tempTokenInfo = jwtTokenCodec.getTempTokenInfo(tempToken);
+
+        // then
+        assertThat(tempTokenInfo.oauthId()).isEqualTo(oauthId);
+        assertThat(tempTokenInfo.signupStatus()).isEqualTo(SignupStatus.PENDING);
+        assertThat(tempTokenInfo.verificationProvider()).isEqualTo(VerificationProvider.GOOGLE);
+        assertThat(tempTokenInfo.email()).isEqualTo(TEST_EMAIL_1);
+    }
+
+    @Test
+    @DisplayName("accessToken_을_tempToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다.")
+    void extractTempTokenInfoWithAccessTokenThrows() {
+        // given
+        String accessToken = jwtTokenCodec.createAccessToken(
+                TEST_USER_GUID_1,
+                SignupStatus.COMPLETED,
+                TEST_EMAIL_1,
+                USER
+        );
+
+        // when, then
+        assertThatThrownBy(() ->
+                jwtTokenCodec.getTempTokenInfo(accessToken))
                 .isInstanceOf(AuthRuleException.class)
                 .hasMessageContaining(TOKEN_INVALID.getMessage());
     }
 
     @Test
-    @DisplayName("removeBearer_과정에서_잘못된_토큰이면_예외가_발생한다")
-    void removeBearerInvalidTokenThrows() {
-        // then
-        assertThatThrownBy(
-                // given, when
-                () -> jwtTokenCodec.removeBearer(null))
-                .isInstanceOf(AuthRuleException.class)
-                .hasMessageContaining(TOKEN_INVALID.getMessage());
+    @DisplayName("Bearer_prefix_를_정상적으로_제거한다.")
+    void removeBearer_success() {
+        // given
+        String tokenWithBearer = "Bearer abc.def.ghi";
+
+        // when
+        String result = jwtTokenCodec.removeBearer(tokenWithBearer);
 
         // then
-        assertThatThrownBy(
-                // given, when
-                () -> jwtTokenCodec.removeBearer("InvalidToken"))
+        assertThat(result).isEqualTo("abc.def.ghi");
+    }
+
+    @Test
+    @DisplayName("Bearer_prefix_없으면_TOKEN_INVALID_예외가_발생한다.")
+    void removeBearer_withoutPrefixThrows() {
+        // when, then
+        assertThatThrownBy(() ->
+                jwtTokenCodec.removeBearer("abc.def.ghi"))
                 .isInstanceOf(AuthRuleException.class)
                 .hasMessageContaining(TOKEN_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("Bearer_null_입력_시_TOKEN_INVALID_예외가_발생한다.")
+    void removeBearer_nullThrows() {
+        // when, then
+        assertThatThrownBy(() ->
+                jwtTokenCodec.removeBearer(null))
+                .isInstanceOf(AuthRuleException.class)
+                .hasMessageContaining(TOKEN_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("만료된_accessToken_은_TOKEN_EXPIRED_예외가_발생한다.")
+    void expiredAccessTokenThrowsAgain() throws NoSuchFieldException, IllegalAccessException {
+        // given
+        FakeTimeProvider fakeTimeProvider = new FakeTimeProvider(LocalDateTime.now().minusHours(1));
+        jwtTokenCodec = new JwtTokenCodec(fakeTimeProvider);
+        String secret = "abcdefghijklmnopqrstuvwxyz123456";
+        String base64Key = Base64.getEncoder().encodeToString(secret.getBytes());
+
+        Field secretKeyField = JwtTokenCodec.class.getDeclaredField("secretKey");
+        secretKeyField.setAccessible(true);
+        secretKeyField.set(jwtTokenCodec, base64Key);
+
+        jwtTokenCodec.init();
+
+        String token = jwtTokenCodec.createAccessToken(
+                TEST_USER_GUID_1,
+                SignupStatus.COMPLETED,
+                TEST_EMAIL_1,
+                USER
+        );
+
+        // when, then
+        assertThatThrownBy(() ->
+                jwtTokenCodec.getAccessTokenInfo(token))
+                .isInstanceOf(AuthRuleException.class)
+                .hasMessageContaining(TOKEN_EXPIRED.getMessage());
     }
 }

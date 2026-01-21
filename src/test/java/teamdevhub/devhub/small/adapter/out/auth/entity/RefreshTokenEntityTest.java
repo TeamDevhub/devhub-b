@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.adapter.out.auth.entity;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
+import teamdevhub.devhub.adapter.out.auth.token.RefreshTokenEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -38,19 +38,5 @@ class RefreshTokenEntityTest {
         // then
         assertThat(refreshTokenEntity.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(refreshTokenEntity.getToken()).isEqualTo(token);
-    }
-
-    @Test
-    @DisplayName("rotate_메서드를_호출하면_token_값이_새로운_값으로_변경된다")
-    void testRotateToken() {
-        // given
-        RefreshTokenEntity refreshTokenEntity = RefreshTokenEntity.of(TEST_USER_GUID_1, "old-token");
-        String newToken = "new-token";
-
-        // when
-        refreshTokenEntity.rotate(newToken);
-
-        // then
-        assertThat(refreshTokenEntity.getToken()).isEqualTo(newToken);
     }
 }

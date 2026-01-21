@@ -2,15 +2,21 @@ package teamdevhub.devhub.fake.pure.provider;
 
 import teamdevhub.devhub.port.out.provider.TimeProvider;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class FakeTimeProvider implements TimeProvider {
 
-    private final LocalDateTime fixedDateTime;
+    private final LocalDateTime currentDateTime;
 
-    public FakeTimeProvider(LocalDateTime fixedDateTime) {
-        this.fixedDateTime = fixedDateTime;
+    public FakeTimeProvider(LocalDateTime initialDateTime) {
+        this.currentDateTime = initialDateTime;
+    }
+
+    @Override
+    public LocalDateTime now() {
+        return currentDateTime;
     }
 
     @Override
@@ -36,10 +42,5 @@ public class FakeTimeProvider implements TimeProvider {
     @Override
     public LocalDate today() {
         return null;
-    }
-
-    @Override
-    public LocalDateTime now() {
-        return fixedDateTime;
     }
 }

@@ -3,6 +3,7 @@ package teamdevhub.devhub.adapter.out.infrastructure.token;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -15,20 +16,23 @@ import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
 import teamdevhub.devhub.port.out.provider.TokenParseProvider;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
 
+    private final TimeProvider timeProvider;
+
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long ACCESS_TOKEN_TIME = 30 * 60 * 1000L;
-    private static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L;
-    private static final long TEMP_TOKEN_TIME = 30 * 1000L;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -43,42 +47,45 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
 
     @Override
     public String createAccessToken(String userGuid, SignupStatus signupStatus, String email, UserRole userRole) {
-        Date now = new Date();
+        LocalDateTime now = timeProvider.now();
+        LocalDateTime expireAt = now.plusMinutes(30);
         return Jwts.builder()
                 .setSubject(userGuid)
                 .claim(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
                 .claim(JwtClaims.SIGNUP_STATUS, signupStatus.name())
                 .claim(JwtClaims.EMAIL, email)
                 .claim(JwtClaims.USER_ROLE, userRole.name())
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
-                .setIssuedAt(now)
+                .setIssuedAt(toDate(now))
+                .setExpiration(toDate(expireAt))
                 .signWith(key, signatureAlgorithm)
                 .compact();
     }
 
     @Override
     public String createRefreshToken(String userGuid) {
-        Date now = new Date();
+        LocalDateTime now = timeProvider.now();
+        LocalDateTime expireAt = now.plusDays(7);
         return Jwts.builder()
                         .setSubject(userGuid)
                         .claim(JwtClaims.TOKEN_TYPE, TokenType.REFRESH.name())
-                        .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
-                        .setIssuedAt(now)
+                        .setIssuedAt(toDate(now))
+                        .setExpiration(toDate(expireAt))
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }
 
     @Override
     public String createTempToken(String oauthId, SignupStatus signupStatus, VerificationProvider verificationProvider, String email) {
-        Date now = new Date();
+        LocalDateTime now = timeProvider.now();
+        LocalDateTime expireAt = now.plusMinutes(3);
         return Jwts.builder()
                 .setSubject(oauthId)
                 .claim(JwtClaims.TOKEN_TYPE, TokenType.TEMP.name())
                 .claim(JwtClaims.SIGNUP_STATUS, signupStatus.name())
                 .claim(JwtClaims.OAUTH_PROVIDER, verificationProvider.name())
                 .claim(JwtClaims.EMAIL, email)
-                .setExpiration(new Date(now.getTime() + TEMP_TOKEN_TIME))
-                .setIssuedAt(now)
+                .setIssuedAt(toDate(now))
+                .setExpiration(toDate(expireAt))
                 .signWith(key, signatureAlgorithm)
                 .compact();
     }
@@ -162,5 +169,9 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         } catch (JwtException | IllegalArgumentException e) {
             throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
+    }
+
+    private Date toDate(LocalDateTime ldt) {
+        return Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

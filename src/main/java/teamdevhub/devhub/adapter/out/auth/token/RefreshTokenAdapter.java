@@ -1,8 +1,7 @@
-package teamdevhub.devhub.adapter.out.auth;
+package teamdevhub.devhub.adapter.out.auth.token;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.auth.JpaRefreshTokenRepository;
 import teamdevhub.devhub.common.enums.ErrorCode;
@@ -20,7 +19,9 @@ public class RefreshTokenAdapter implements RefreshTokenRepository {
         jpaRefreshTokenRepository.findByUserGuid(refreshToken.userGuid())
                 .ifPresentOrElse(
                         refreshTokenEntity -> refreshTokenEntity.rotate(refreshToken.token()),
-                        () -> jpaRefreshTokenRepository.save(RefreshTokenEntity.of(refreshToken.userGuid(), refreshToken.token()))
+                        () -> jpaRefreshTokenRepository.save(
+                                RefreshTokenMapper.toEntity(refreshToken)
+                        )
                 );
     }
 

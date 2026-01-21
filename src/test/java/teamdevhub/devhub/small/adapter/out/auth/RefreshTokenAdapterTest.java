@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.adapter.out.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.auth.RefreshTokenAdapter;
+import teamdevhub.devhub.adapter.out.auth.token.RefreshTokenAdapter;
 import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.auth.RefreshToken;
