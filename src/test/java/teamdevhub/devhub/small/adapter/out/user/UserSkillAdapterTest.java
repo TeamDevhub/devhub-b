@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.out.user.UserSkillAdapter;
 import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.fake.spring.persistence.user.FakeJpaUserSkillRepository;
+import teamdevhub.devhub.fake.framework.persistence.user.FakeJpaUserSkillRepository;
 
 import java.util.HashSet;
 import java.util.Set;

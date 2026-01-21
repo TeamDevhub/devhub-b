@@ -1,21 +1,21 @@
 package teamdevhub.devhub.fake.pure.repository.auth;
 
-import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
+import teamdevhub.devhub.domain.auth.RefreshToken;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 
 import java.util.HashMap;
 
 public class FakeRefreshTokenRepository implements RefreshTokenRepository {
 
-    private final HashMap<String, RefreshTokenInfo> store = new HashMap<>();
+    private final HashMap<String, RefreshToken> store = new HashMap<>();
 
     @Override
-    public void save(RefreshTokenInfo refreshTokenInfo) {
-        store.put(refreshTokenInfo.userGuid(), refreshTokenInfo);
+    public void save(RefreshToken refreshToken) {
+        store.put(refreshToken.userGuid(), refreshToken);
     }
 
     @Override
-    public RefreshTokenInfo findByUserGuid(String userGuid) {
+    public RefreshToken findByUserGuid(String userGuid) {
         return store.get(userGuid);
     }
 

@@ -10,6 +10,7 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     private String revokedUserGuid;
     private String lastReissueRefreshToken;
+    private AuthenticatedUser lastLoginUser;
 
     @Override
     public LoginResponseDto login(LoginCommand loginCommand) {
@@ -21,7 +22,12 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     @Override
     public LoginResponseDto loginWithOauth(AuthenticatedUser authenticatedUser) {
-        return null;
+        this.lastLoginUser = authenticatedUser;
+        return LoginResponseDto.builder()
+                .accessToken("access-token")
+                .refreshToken("refresh-token")
+                .signupStatus(authenticatedUser.signupStatus())
+                .build();
     }
 
     @Override
@@ -41,5 +47,9 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     public String getLastReissueRefreshToken() {
         return lastReissueRefreshToken;
+    }
+
+    public AuthenticatedUser getLastLoginUser() {
+        return lastLoginUser;
     }
 }

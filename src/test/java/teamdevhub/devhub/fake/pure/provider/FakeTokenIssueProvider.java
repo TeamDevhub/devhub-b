@@ -1,9 +1,7 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
 
@@ -15,6 +13,7 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
     private static final String PREFIX = "Bearer ";
     private static final String ACCESS_PREFIX = "access-token-";
     private static final String REFRESH_PREFIX = "refresh-token-";
+    private static final String TEMP_PREFIX = "temp-token-";
 
     private final Map<String, String> refreshTokenMap = new HashMap<>();
 
@@ -32,25 +31,6 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
 
     @Override
     public String createTempToken(String oauthId, SignupStatus signupStatus, VerificationProvider verificationProvider, String email) {
-        return "";
-    }
-
-    @Override
-    public String extractUserGuidFromRefreshToken(String refreshToken) {
-        if (refreshToken == null || !refreshToken.startsWith(REFRESH_PREFIX)) {
-            throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
-        }
-
-        String userGuid = refreshTokenMap.get(refreshToken);
-        if (userGuid == null) {
-            return refreshToken.substring(REFRESH_PREFIX.length());
-        }
-
-        return userGuid;
-    }
-
-    @Override
-    public String getPrefix() {
-        return PREFIX;
+        return TEMP_PREFIX + oauthId;
     }
 }

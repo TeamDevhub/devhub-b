@@ -43,12 +43,33 @@ public class FakeUserRepository implements UserRepository {
 
     @Override
     public Optional<AuthenticatedUser> findOptionalByEmail(String email) {
-        return Optional.empty();
+        return store.values().stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .map(user -> new AuthenticatedUser(
+                        user.getUserGuid(),
+                        user.getSignupStatus(),
+                        user.getEmail(),
+                        user.getPassword(),
+                        user.getUserRole()
+                ));
     }
 
     @Override
     public Optional<AuthenticatedUser> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
-        return Optional.empty();
+        return store.values().stream()
+                .filter(user ->
+                        verificationProvider == user.getVerificationProvider() &&
+                                oauthId.equals(user.getOauthId())
+                )
+                .findFirst()
+                .map(user -> new AuthenticatedUser(
+                        user.getUserGuid(),
+                        user.getSignupStatus(),
+                        user.getEmail(),
+                        user.getPassword(),
+                        user.getUserRole()
+                ));
     }
 
     @Override

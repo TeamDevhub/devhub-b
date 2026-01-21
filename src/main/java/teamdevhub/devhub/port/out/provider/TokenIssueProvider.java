@@ -9,6 +9,4 @@ public interface TokenIssueProvider {
     String createAccessToken(String userGuid, SignupStatus signupStatus, String email, UserRole userRole);
     String createRefreshToken(String email);
     String createTempToken(String oauthId, SignupStatus signupStatus, VerificationProvider verificationProvider, String email);
-    String extractUserGuidFromRefreshToken(String refreshToken);
-    String getPrefix();
 }

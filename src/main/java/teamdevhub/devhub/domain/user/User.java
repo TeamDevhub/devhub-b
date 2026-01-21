@@ -185,6 +185,10 @@ public class User {
                 .build();
     }
 
+    public void completeSignup() {
+        this.signupStatus = SignupStatus.COMPLETED;
+    }
+
     public void withdraw() {
         if (this.deleted) {
             throw DomainRuleException.of(ErrorCode.ALREADY_DELETED);

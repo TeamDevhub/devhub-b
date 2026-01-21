@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.out.auth.AuthenticatedUserAdapter;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.fake.spring.infrastructure.FakeAuthenticationManager;
+import teamdevhub.devhub.fake.framework.infrastructure.FakeAuthenticationManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

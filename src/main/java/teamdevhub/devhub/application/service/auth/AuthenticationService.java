@@ -3,19 +3,21 @@ package teamdevhub.devhub.application.service.auth;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import teamdevhub.devhub.common.enums.TokenPrefix;
 import teamdevhub.devhub.port.in.auth.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
+import teamdevhub.devhub.domain.auth.RefreshToken;
 import teamdevhub.devhub.port.in.auth.usecase.AuthenticatedUserUseCase;
 import teamdevhub.devhub.port.in.user.usecase.UserLoginUseCase;
 import teamdevhub.devhub.port.out.auth.AuthenticatedUserResolver;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
 import teamdevhub.devhub.application.exception.BusinessRuleException;
+import teamdevhub.devhub.port.out.provider.TokenParseProvider;
 
 @Service
 @Transactional
@@ -23,6 +25,7 @@ import teamdevhub.devhub.application.exception.BusinessRuleException;
 public class AuthenticationService implements AuthenticationUseCase {
 
     private final TokenIssueProvider tokenIssueProvider;
+    private final TokenParseProvider tokenParseProvider;
     private final AuthenticatedUserResolver authenticatedUserResolver;
     private final AuthenticatedUserUseCase authenticatedUserUseCase;
     private final UserLoginUseCase userLoginUseCase;
@@ -46,10 +49,10 @@ public class AuthenticationService implements AuthenticationUseCase {
     @Override
     public TokenResponseDto reissueAccessToken(String token) {
 
-        String userGuid = tokenIssueProvider.extractUserGuidFromRefreshToken(token);
-        RefreshTokenInfo refreshTokenInfo = refreshTokenRepository.findByUserGuid(userGuid);
+        String userGuid = tokenParseProvider.getRefreshTokenInfo(token).userGuid();
+        RefreshToken refreshToken = refreshTokenRepository.findByUserGuid(userGuid);
 
-        if (refreshTokenInfo == null || !refreshTokenInfo.token().equals(token)) {
+        if (refreshToken == null || !refreshToken.token().equals(token)) {
             throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
         }
 
@@ -71,12 +74,12 @@ public class AuthenticationService implements AuthenticationUseCase {
     }
 
     private void issueRefreshToken(String userGuid, String token) {
-        RefreshTokenInfo refreshTokenInfo = RefreshTokenInfo.of(userGuid, token);
-        refreshTokenRepository.save(refreshTokenInfo);
+        RefreshToken refreshToken = RefreshToken.of(userGuid, token);
+        refreshTokenRepository.save(refreshToken);
     }
 
     private IssuedToken issueLoginToken(AuthenticatedUser authenticatedUser) {
-        String prefix = tokenIssueProvider.getPrefix();
+        String prefix = TokenPrefix.BEARER.value();
         String accessToken = tokenIssueProvider.createAccessToken(
                 authenticatedUser.userGuid(),
                 authenticatedUser.signupStatus(),

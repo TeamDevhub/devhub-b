@@ -16,6 +16,9 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 public class FakeUserSignupUseCase implements UserSignupUseCase {
 
     private final Map<String, User> store = new HashMap<>();
+    private OauthSignupCommand lastOauthSignupCommand;
+    private OauthUser lastOauthUser;
+    boolean called = false;
 
     @Override
     public void initializeAdminUser(AdminSignupCommand adminSignupCommand) {
@@ -34,6 +37,20 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
 
     @Override
     public void signupWithOauth(OauthSignupCommand oauthSignupCommand, OauthUser oauthUser) {
+        this.called = true;
+        this.lastOauthSignupCommand = oauthSignupCommand;
+        this.lastOauthUser = oauthUser;
+    }
 
+    public boolean isSignupCalled() {
+        return called;
+    }
+
+    public OauthSignupCommand getLastOauthSignupCommand() {
+        return lastOauthSignupCommand;
+    }
+
+    public OauthUser getLastOauthUser() {
+        return lastOauthUser;
     }
 }

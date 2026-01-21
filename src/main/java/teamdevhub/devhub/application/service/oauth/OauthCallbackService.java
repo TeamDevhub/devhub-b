@@ -3,7 +3,7 @@ package teamdevhub.devhub.application.service.oauth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthCallbackResponseDto;
-import teamdevhub.devhub.port.out.selector.OauthClientSelector;
+import teamdevhub.devhub.application.selector.oauth.OauthClientSelector;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
@@ -35,7 +35,7 @@ public class OauthCallbackService implements OauthCallbackUseCase {
         OauthClient oauthClient = oauthClientSelector.select(verificationProvider);
         OauthUser oauthUser = oauthClient.fetchUser(authorizationCode);
 
-        Optional<AuthenticatedUser> optionalUser = userRepository.findOptionalByEmail(oauthUser.email());
+        Optional<AuthenticatedUser> optionalUser = userRepository.findByOAuth(oauthUser.verificationProvider(), oauthUser.oauthId());
 
         if (optionalUser.isPresent()) {
             String tempToken = tokenIssueProvider.createTempToken(oauthUser.oauthId(), SignupStatus.COMPLETED, verificationProvider, oauthUser.email());

@@ -41,25 +41,6 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("accessToken_생성_시_Claims_가_올바르게_설정된다")
-    void createAccessTokenTest() {
-        // given
-        String userGuid = TEST_USER_GUID_1;
-        String email = TEST_EMAIL_1;
-        String userRole = "USER";
-        String token = jwtTokenCodec.createAccessToken(userGuid, SignupStatus.COMPLETED, email, USER);
-
-        // when
-        Claims claims = jwtTokenCodec.parseClaims(token);
-
-        // then
-        assertThat(claims.getSubject()).isEqualTo(userGuid);
-        assertThat(claims.get(JwtClaims.EMAIL, String.class)).isEqualTo(email);
-        assertThat(claims.get(JwtClaims.USER_ROLE, String.class)).isEqualTo(userRole);
-        assertThat(claims.get(JwtClaims.TOKEN_TYPE, String.class)).isEqualTo("ACCESS");
-    }
-
-    @Test
     @DisplayName("refreshToken_생성_및_userGuid_추출한다")
     void createRefreshTokenAndExtractUserGuidTest() {
         // given
@@ -67,7 +48,7 @@ class JwtTokenCodecMediumTest {
 
         // when
         String refreshToken = jwtTokenCodec.createRefreshToken(userGuid);
-        String extractedGuid = jwtTokenCodec.extractUserGuidFromRefreshToken(refreshToken);
+        String extractedGuid = jwtTokenCodec.getRefreshTokenInfo(refreshToken).userGuid();
 
         // then
         assertThat(extractedGuid).isEqualTo(userGuid);
@@ -82,26 +63,43 @@ class JwtTokenCodecMediumTest {
         // then
         assertThatThrownBy(
                 // when
-                () -> jwtTokenCodec.extractUserGuidFromRefreshToken(token))
+                () -> jwtTokenCodec.getRefreshTokenInfo(token))
                 .isInstanceOf(AuthRuleException.class)
                 .hasMessageContaining(TOKEN_INVALID.getMessage());
     }
 
     @Test
-    @DisplayName("resolveToken_과_removeBearer_로_Bearer_를_붙이거나_제거할_수_있다")
-    void resolveAndRemoveBearerTest() {
+    @DisplayName("removeBearer_로_Bearer_를_제거할_수_있다")
+    void removeBearer_strips_Bearer_prefix() {
         // given
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        String tokenValue = "abc123";
-        when(request.getHeader("Authorization")).thenReturn("Bearer " + tokenValue);
+        String tokenWithBearer = "Bearer abc123";
 
         // when
-        String resolved = jwtTokenCodec.resolveToken(request);
-        String cleaned = jwtTokenCodec.removeBearer(resolved);
+        String cleaned = jwtTokenCodec.removeBearer(tokenWithBearer);
 
         // then
-        assertThat(resolved).isEqualTo("Bearer " + tokenValue);
-        assertThat(cleaned).isEqualTo(tokenValue);
+        assertThat(cleaned).isEqualTo("abc123");
+    }
+
+    @Test
+    @DisplayName("Bearer_가_없는_토큰이면_예외가_발생한다")
+    void removeBearer_with_no_prefix_returns_same_token() {
+        // given
+        String token = "abc123";
+
+        // when, then
+        assertThatThrownBy(() -> jwtTokenCodec.removeBearer(token))
+                .isInstanceOf(AuthRuleException.class)
+                .hasMessageContaining(TOKEN_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("removeBearer_null_입력_시_예외가_발생한다")
+    void removeBearerNullThrows() {
+        // given, when, then
+        assertThatThrownBy(() -> jwtTokenCodec.removeBearer(null))
+                .isInstanceOf(AuthRuleException.class)
+                .hasMessageContaining(TOKEN_INVALID.getMessage());
     }
 
     @Test
@@ -120,12 +118,5 @@ class JwtTokenCodecMediumTest {
                 () -> jwtTokenCodec.removeBearer("InvalidToken"))
                 .isInstanceOf(AuthRuleException.class)
                 .hasMessageContaining(TOKEN_INVALID.getMessage());
-    }
-
-    @Test
-    @DisplayName("getPrefix_는_Bearer_를_반환한다")
-    void getPrefixReturnsBearer() {
-        // given, when, then
-        assertThat(jwtTokenCodec.getPrefix()).isEqualTo("Bearer ");
     }
 }

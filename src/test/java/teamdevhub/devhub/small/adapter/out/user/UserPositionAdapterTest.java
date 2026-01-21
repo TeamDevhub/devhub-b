@@ -8,7 +8,7 @@ import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserPosi
 import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.fake.spring.persistence.user.FakeJpaUserPositionRepository;
+import teamdevhub.devhub.fake.framework.persistence.user.FakeJpaUserPositionRepository;
 
 import java.util.HashSet;
 import java.util.Set;

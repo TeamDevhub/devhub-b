@@ -10,7 +10,7 @@ import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
-import teamdevhub.devhub.fake.spring.persistence.verificaiton.FakeJpaVerificationRepository;
+import teamdevhub.devhub.fake.framework.persistence.verificaiton.FakeJpaVerificationRepository;
 
 import java.time.LocalDateTime;
 

@@ -18,6 +18,7 @@ import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
+import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.port.out.provider.TokenParseProvider;
@@ -26,18 +27,18 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-//추후 수정
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final TokenParseProvider tokenParseProvider;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
+    private static final String AUTHORIZATION_HEADER = "Authorization";
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String token = tokenParseProvider.resolveToken(httpServletRequest);
+            String token = httpServletRequest.getHeader(AUTHORIZATION_HEADER);
 
             if (!StringUtils.hasText(token)) {
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
@@ -45,35 +46,32 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
 
             String pureToken = tokenParseProvider.removeBearer(token);
-            Claims claims = tokenParseProvider.parseClaims(pureToken);
-            validateAccessToken(claims);
+            AccessTokenInfo accessTokenInfo = tokenParseProvider.getAccessTokenInfo(pureToken);
+            validateAccessToken(accessTokenInfo);
+            setAuthentication(accessTokenInfo);
 
-            setAuthentication(claims);
             filterChain.doFilter(httpServletRequest, httpServletResponse);
         } catch (AuthRuleException authRuleException) {
             customFilterExceptionHandler.handle(httpServletResponse, authRuleException.getErrorCode());
         }
     }
 
-    private void validateAccessToken(Claims claims) {
-        TokenType tokenType = TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
-
-        if (tokenType != TokenType.ACCESS) {
+    private void validateAccessToken(AccessTokenInfo accessTokenInfo) {
+        if (accessTokenInfo.tokentype() != TokenType.ACCESS) {
             throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
     }
 
-    private void setAuthentication(Claims claims) {
-        String userGuid = claims.getSubject();
-        SignupStatus signupStatus = SignupStatus.valueOf(claims.get(JwtClaims.SIGNUP_STATUS, String.class));
-        String email = claims.get(JwtClaims.EMAIL, String.class);
-        UserRole userRole = UserRole.valueOf(claims.get(JwtClaims.USER_ROLE, String.class));
-
-        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(userGuid, signupStatus, email, null, userRole);
-        Collection<? extends GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userRole.getAuthority()));
-
+    private void setAuthentication(AccessTokenInfo accessTokenInfo) {
+        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(
+                accessTokenInfo.userGuid(),
+                accessTokenInfo.signupStatus(),
+                accessTokenInfo.email(),
+                null,
+                accessTokenInfo.userRole()
+        );
+        Collection<? extends GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(accessTokenInfo.userRole().getAuthority()));
         Authentication authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null, authorities);
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
