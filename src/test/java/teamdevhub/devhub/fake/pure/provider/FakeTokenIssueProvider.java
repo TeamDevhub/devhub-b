@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class FakeTokenIssueProvider implements TokenIssueProvider {
 
-    private static final String PREFIX = "Bearer ";
     private static final String ACCESS_PREFIX = "access-token-";
     private static final String REFRESH_PREFIX = "refresh-token-";
     private static final String TEMP_PREFIX = "temp-token-";

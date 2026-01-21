@@ -9,7 +9,6 @@ import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     private String revokedUserGuid;
-    private String lastReissueRefreshToken;
     private AuthenticatedUser lastLoginUser;
 
     @Override
@@ -43,10 +42,6 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     public String getRevokedUserGuid() {
         return revokedUserGuid;
-    }
-
-    public String getLastReissueRefreshToken() {
-        return lastReissueRefreshToken;
     }
 
     public AuthenticatedUser getLastLoginUser() {

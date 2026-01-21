@@ -31,8 +31,6 @@ public class AuthenticationService implements AuthenticationUseCase {
     private final UserLoginUseCase userLoginUseCase;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private record IssuedToken(String prefix, String accessToken, String refreshToken) {}
-
     @Override
     public LoginResponseDto login(LoginCommand loginCommand) {
         AuthenticatedUser authenticatedUser = authenticatedUserResolver.getAuthenticatedUser(loginCommand.email(), loginCommand.password());
