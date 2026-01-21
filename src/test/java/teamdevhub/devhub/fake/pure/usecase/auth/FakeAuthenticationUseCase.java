@@ -31,7 +31,6 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     @Override
     public TokenResponseDto reissueAccessToken(String refreshToken) {
-        this.lastReissueRefreshToken = refreshToken;
         return TokenResponseDto.issue("new-access-token");
     }
 
