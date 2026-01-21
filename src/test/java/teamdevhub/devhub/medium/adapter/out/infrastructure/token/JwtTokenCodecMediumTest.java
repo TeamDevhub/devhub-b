@@ -1,11 +1,8 @@
 package teamdevhub.devhub.medium.adapter.out.infrastructure.token;
 
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.infrastructure.token.JwtClaims;
 import teamdevhub.devhub.adapter.out.infrastructure.token.JwtTokenCodec;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.exception.AuthRuleException;
@@ -15,8 +12,6 @@ import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static teamdevhub.devhub.common.enums.ErrorCode.TOKEN_INVALID;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;

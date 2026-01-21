@@ -1,6 +1,5 @@
 package teamdevhub.devhub.common.web.security.filter;
 
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,13 +12,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import teamdevhub.devhub.adapter.out.infrastructure.token.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
-import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.port.out.provider.TokenParseProvider;
 

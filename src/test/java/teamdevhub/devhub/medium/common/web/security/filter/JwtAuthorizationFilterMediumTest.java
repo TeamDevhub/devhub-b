@@ -1,41 +1,26 @@
 package teamdevhub.devhub.medium.common.web.security.filter;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import teamdevhub.devhub.adapter.out.infrastructure.token.JwtClaims;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
-import teamdevhub.devhub.common.web.security.filter.CustomFilterExceptionHandler;
 import teamdevhub.devhub.common.web.security.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
-import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.fake.pure.handler.FakeCustomFilterExceptionHandler;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
-import teamdevhub.devhub.port.out.provider.TokenParseProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 class JwtAuthorizationFilterMediumTest {
 
