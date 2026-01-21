@@ -11,5 +11,4 @@ public class DevhubApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DevhubApplication.class, args);
 	}
-
 }

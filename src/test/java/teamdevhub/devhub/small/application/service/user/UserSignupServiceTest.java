@@ -10,7 +10,7 @@ import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.fake.pure.provider.FakePasswordPolicyProvider;
+import teamdevhub.devhub.fake.pure.provider.FakeEncodedPasswordProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
@@ -27,7 +27,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserSignupServiceTest {
 
-    private FakePasswordPolicyProvider fakePasswordPolicyProvider;
+    private FakeEncodedPasswordProvider fakePasswordPolicyProvider;
     private FakeVerificationUseCase fakeSignupVerificationUseCase;
     private FakeUserRepository fakeUserRepository;
     private FakeUserPositionRepository fakeUserPositionRepository;
@@ -37,7 +37,7 @@ public class UserSignupServiceTest {
 
     @BeforeEach
     void init() {
-        fakePasswordPolicyProvider = new FakePasswordPolicyProvider();
+        fakePasswordPolicyProvider = new FakeEncodedPasswordProvider();
         FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
         fakeSignupVerificationUseCase = new FakeVerificationUseCase();
         fakeUserRepository = new FakeUserRepository();

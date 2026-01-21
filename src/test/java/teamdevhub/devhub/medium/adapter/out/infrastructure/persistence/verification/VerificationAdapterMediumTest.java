@@ -1,4 +1,4 @@
-package teamdevhub.devhub.medium.adapter.out.verification;
+package teamdevhub.devhub.medium.adapter.out.infrastructure.persistence.verification;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

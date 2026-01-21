@@ -16,7 +16,7 @@ import teamdevhub.devhub.port.in.user.command.SignupCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserSignupUseCase;
 import teamdevhub.devhub.port.in.verification.VerificationUseCase;
 import teamdevhub.devhub.port.out.provider.IdentifierProvider;
-import teamdevhub.devhub.port.out.provider.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.provider.EncodedPasswordProvider;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;
 import teamdevhub.devhub.port.out.user.UserRepository;
 import teamdevhub.devhub.port.out.user.UserSkillRepository;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserSignupService implements UserSignupUseCase {
 
-    private final PasswordPolicyProvider passwordPolicyProvider;
+    private final EncodedPasswordProvider encodedPasswordProvider;
     private final IdentifierProvider identifierProvider;
     private final VerificationUseCase verificationUseCase;
     private final UserRepository userRepository;
@@ -44,7 +44,7 @@ public class UserSignupService implements UserSignupUseCase {
         }
 
         String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = passwordPolicyProvider.encode(adminSignupCommand.password());
+        String encodedPassword = encodedPasswordProvider.encode(adminSignupCommand.password());
 
         UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(adminSignupCommand, userGuid, encodedPassword);
         User adminUser = User.createAdminUser(adminUserCreateCommand);
@@ -78,7 +78,7 @@ public class UserSignupService implements UserSignupUseCase {
 
     private User createGeneralUser(SignupCommand signupCommand) {
         String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = passwordPolicyProvider.encode(signupCommand.password());
+        String encodedPassword = encodedPasswordProvider.encode(signupCommand.password());
 
         UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, userGuid, encodedPassword);
         return User.createGeneralUser(generalUserCreateCommand);
@@ -86,7 +86,7 @@ public class UserSignupService implements UserSignupUseCase {
 
     private User createOauthUserForSignup(OauthSignupCommand oauthSignupCommand, OauthUser oauthUser) {
         String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = passwordPolicyProvider.encode(oauthSignupCommand.password());
+        String encodedPassword = encodedPasswordProvider.encode(oauthSignupCommand.password());
 
         UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(oauthSignupCommand, oauthUser, userGuid, encodedPassword);
         return User.createOauthUser(oauthUserCreateCommand);

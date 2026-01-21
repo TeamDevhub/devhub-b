@@ -5,19 +5,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import teamdevhub.devhub.adapter.out.provider.password.SystemPasswordPolicyProvider;
+import teamdevhub.devhub.adapter.out.provider.password.SystemEncodedPasswordProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_PASSWORD_1;
 
-class SystemPasswordPolicyProviderMediumTest {
+class SystemEncodedPasswordProviderMediumTest {
 
-    SystemPasswordPolicyProvider systemPasswordPolicyProvider;
+    SystemEncodedPasswordProvider systemPasswordPolicyProvider;
 
     @BeforeEach
     void init() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        systemPasswordPolicyProvider = new SystemPasswordPolicyProvider(passwordEncoder);
+        systemPasswordPolicyProvider = new SystemEncodedPasswordProvider(passwordEncoder);
     }
 
     @Test

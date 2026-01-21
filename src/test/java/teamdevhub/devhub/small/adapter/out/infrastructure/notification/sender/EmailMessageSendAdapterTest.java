@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.out.infrastructure;
+package teamdevhub.devhub.small.adapter.out.infrastructure.notification.sender;
 
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;

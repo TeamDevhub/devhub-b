@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.adapter.out.infrastructure;
+package teamdevhub.devhub.small.adapter.out.infrastructure.notification.selector;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

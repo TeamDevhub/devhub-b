@@ -1,4 +1,4 @@
-package teamdevhub.devhub.medium.adapter.out.user;
+package teamdevhub.devhub.medium.adapter.out.infrastructure.persistence.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

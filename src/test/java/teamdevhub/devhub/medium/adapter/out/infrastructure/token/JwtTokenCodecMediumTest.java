@@ -1,4 +1,4 @@
-package teamdevhub.devhub.medium.adapter.out.provider.jwt;
+package teamdevhub.devhub.medium.adapter.out.infrastructure.token;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;

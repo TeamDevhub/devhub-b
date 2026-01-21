@@ -1,4 +1,4 @@
-package teamdevhub.devhub.medium.adapter.out.user;
+package teamdevhub.devhub.medium.adapter.out.infrastructure.persistence.user;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;

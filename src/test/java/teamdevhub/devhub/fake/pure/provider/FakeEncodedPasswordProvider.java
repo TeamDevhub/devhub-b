@@ -1,8 +1,8 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.port.out.provider.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.provider.EncodedPasswordProvider;
 
-public class FakePasswordPolicyProvider implements PasswordPolicyProvider {
+public class FakeEncodedPasswordProvider implements EncodedPasswordProvider {
 
     private static final String PREFIX = "ENC.";
 

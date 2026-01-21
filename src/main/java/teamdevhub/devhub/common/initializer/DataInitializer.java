@@ -12,7 +12,7 @@ import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepo
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserSkillRepository;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.provider.IdentifierProvider;
-import teamdevhub.devhub.port.out.provider.PasswordPolicyProvider;
+import teamdevhub.devhub.port.out.provider.EncodedPasswordProvider;
 
 @Slf4j
 @Component
@@ -23,13 +23,13 @@ public class DataInitializer {
     private final JpaUserPositionRepository jpaUserPositionRepository;
     private final JpaUserSkillRepository jpaUserSkillRepository;
     private final IdentifierProvider identifierProvider;
-    private final PasswordPolicyProvider passwordPolicyProvider;
+    private final EncodedPasswordProvider encodedPasswordProvider;
 
     @PostConstruct
     public void init() {
         for (int i = 0; i <= 2; i++) {
             String userGuid = identifierProvider.generateIdentifier();
-            String password = passwordPolicyProvider.encode("password123!");
+            String password = encodedPasswordProvider.encode("password123!");
 
             UserEntity user = UserEntity.builder()
                     .userGuid(userGuid)

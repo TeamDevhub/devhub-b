@@ -1,4 +1,4 @@
-package teamdevhub.devhub.medium.adapter.out.auth;
+package teamdevhub.devhub.medium.adapter.out.infrastructure.persistence.auth;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
