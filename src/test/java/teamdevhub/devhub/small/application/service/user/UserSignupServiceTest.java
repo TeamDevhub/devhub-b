@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.service.user.UserSignupService;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
@@ -15,14 +14,12 @@ import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserSkillRepository;
-import teamdevhub.devhub.fake.pure.usecase.verification.FakeVerificationUseCase;
 import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserSignupServiceTest {

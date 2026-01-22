@@ -3,24 +3,12 @@ package teamdevhub.devhub.small.port.in.auth.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
-import teamdevhub.devhub.application.service.oauth.vo.OauthCallbackResult;
-import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
-import teamdevhub.devhub.common.enums.SignupStatus;
-import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
 import teamdevhub.devhub.port.in.auth.OauthAuthFacade;
-import teamdevhub.devhub.port.in.auth.usecase.AuthenticationUseCase;
-import teamdevhub.devhub.port.in.oauth.command.ResolveOauthUserCommand;
-import teamdevhub.devhub.port.in.oauth.usecase.OauthAuthenticationUseCase;
-import teamdevhub.devhub.port.in.oauth.usecase.OauthResolveUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class OauthAuthFacadeTest {
 

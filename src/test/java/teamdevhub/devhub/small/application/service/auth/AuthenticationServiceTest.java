@@ -4,19 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
-import teamdevhub.devhub.application.exception.BusinessRuleException;
 import teamdevhub.devhub.application.service.auth.AuthenticationService;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.auth.RefreshToken;
-import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.repository.auth.FakeRefreshTokenRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class AuthenticationServiceTest {
