@@ -5,8 +5,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamdevhub.devhub.adapter.in.auth.AuthFacade;
-import teamdevhub.devhub.adapter.in.auth.CookieFactory;
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
@@ -14,6 +12,7 @@ import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.port.in.auth.AuthFacade;
 
 @RestController
 @RequestMapping("/auth")
@@ -46,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<DataApiResponseDto<Void>> revoke(@LoginUser AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<DataApiResponseDto<Void>> logout(@LoginUser AuthenticatedUser authenticatedUser) {
         authFacade.logout(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(

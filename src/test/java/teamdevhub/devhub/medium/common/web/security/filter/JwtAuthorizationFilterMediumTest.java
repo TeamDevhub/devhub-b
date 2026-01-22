@@ -21,25 +21,24 @@ import teamdevhub.devhub.fake.pure.handler.FakeCustomFilterExceptionHandler;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class JwtAuthorizationFilterMediumTest {
 
+    private JwtAuthorizationFilter jwtAuthorizationFilter;
+
     private FakeTokenParseProvider tokenParseProvider;
     private FakeCustomFilterExceptionHandler customFilterExceptionHandler;
-    private JwtAuthorizationFilter filter;
 
     private MockHttpServletRequest httpServletRequest;
     private MockHttpServletResponse httpServletResponse;
     private MockFilterChain filterChain;
 
-    private static final String TEST_USER_GUID_1 = "user-guid-1";
-    private static final String TEST_EMAIL_1 = "test@email.com";
-
     @BeforeEach
     void init() {
         tokenParseProvider = new FakeTokenParseProvider();
         customFilterExceptionHandler = new FakeCustomFilterExceptionHandler();
-        filter = new JwtAuthorizationFilter(tokenParseProvider, customFilterExceptionHandler);
+        jwtAuthorizationFilter = new JwtAuthorizationFilter(tokenParseProvider, customFilterExceptionHandler);
 
         httpServletRequest = new MockHttpServletRequest();
         httpServletResponse = new MockHttpServletResponse();
@@ -64,7 +63,7 @@ class JwtAuthorizationFilterMediumTest {
         // given
 
         // when
-        filter.doFilter(httpServletRequest, httpServletResponse, filterChain);
+        jwtAuthorizationFilter.doFilter(httpServletRequest, httpServletResponse, filterChain);
 
         // then
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
@@ -83,10 +82,10 @@ class JwtAuthorizationFilterMediumTest {
                 throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
             }
         };
-        filter = new JwtAuthorizationFilter(tokenParseProvider, customFilterExceptionHandler);
+        jwtAuthorizationFilter = new JwtAuthorizationFilter(tokenParseProvider, customFilterExceptionHandler);
 
         // when
-        filter.doFilter(httpServletRequest, httpServletResponse, filterChain);
+        jwtAuthorizationFilter.doFilter(httpServletRequest, httpServletResponse, filterChain);
 
         // then
         assertThat(customFilterExceptionHandler.isHandled()).isTrue();
@@ -110,7 +109,7 @@ class JwtAuthorizationFilterMediumTest {
         tokenParseProvider.givenAccessToken("refresh-token", tokenInfo);
 
         // when
-        filter.doFilter(httpServletRequest, httpServletResponse, filterChain);
+        jwtAuthorizationFilter.doFilter(httpServletRequest, httpServletResponse, filterChain);
 
         // then
         assertThat(customFilterExceptionHandler.isHandled()).isTrue();
@@ -128,7 +127,7 @@ class JwtAuthorizationFilterMediumTest {
         tokenParseProvider.givenAccessToken("valid", tokenInfo);
 
         // when
-        filter.doFilter(httpServletRequest, httpServletResponse, filterChain);
+        jwtAuthorizationFilter.doFilter(httpServletRequest, httpServletResponse, filterChain);
 
         // then
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

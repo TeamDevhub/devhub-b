@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.adapter.in.web.validator.RegexMatch;
 import teamdevhub.devhub.common.enums.RegexPattern;
-import teamdevhub.devhub.port.in.oauth.command.OauthSignupCommand;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OauthSignupRequestDto {
+public class SignupOauthRequestDto {
 
     @NotBlank(message = "TEMP 토큰은 필수입니다.")
     private String tempToken;
@@ -39,8 +39,8 @@ public class OauthSignupRequestDto {
     @Size(min = 1, message = "보유 스킬은 최소 1개 이상 선택해야 합니다.")
     private List<@NotBlank String> skillList;
 
-    public OauthSignupCommand toCommand() {
-        return OauthSignupCommand.builder()
+    public SignupOauthUserCommand toCommand() {
+        return SignupOauthUserCommand.builder()
                 .tempToken(this.tempToken)
                 .password(this.password)
                 .username(this.username)

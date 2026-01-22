@@ -1,7 +1,10 @@
 package teamdevhub.devhub.domain.user.vo.position;
 
+import lombok.Builder;
+
 import java.util.Set;
 
+@Builder
 public record UserPositionChangeResult(boolean changed, Set<UserPosition> previousPositions, Set<UserPosition> changedPositions) {
 
     public static UserPositionChangeResult changed(Set<UserPosition> previousPositions, Set<UserPosition> changedPositions) {

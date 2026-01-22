@@ -42,11 +42,8 @@ class GlobalExceptionHandlerMediumTest {
 
         @GetMapping("/validation-exception")
         public void validationException() throws Exception {
-            throw new MethodArgumentNotValidException(
-                    getFakeMethodParameter(),
-                    new BindException(new Object(), ErrorCode.VALIDATION_FAIL.getCode())
-            );
-            }
+            throw new MethodArgumentNotValidException(getFakeMethodParameter(), new BindException(new Object(), ErrorCode.VALIDATION_FAIL.getCode()));}
+
         @GetMapping("/generic-exception")
         public void genericException() {
             throw new RuntimeException("Test Error Occurred");

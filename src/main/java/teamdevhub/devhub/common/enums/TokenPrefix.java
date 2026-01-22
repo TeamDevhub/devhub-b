@@ -1,8 +1,22 @@
 package teamdevhub.devhub.common.enums;
 
 public enum TokenPrefix {
+
     BEARER("Bearer ");
+
     private final String value;
+
     TokenPrefix(String value) { this.value = value; }
-    public String value() { return value; }
+
+    public String withToken(String token) {
+        return value + token;
+    }
+
+    public boolean matches(String token) {
+        return token != null && token.startsWith(value);
+    }
+
+    public String strip(String token) {
+        return token.substring(value.length());
+    }
 }

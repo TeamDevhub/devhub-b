@@ -9,7 +9,7 @@ import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.UserQueryRepository;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.*;
 
@@ -21,7 +21,7 @@ public class FakeUserQueryRepository implements UserQueryRepository {
     private final Map<String, UserEntity> store = new HashMap<>();
 
     public FakeUserQueryRepository() {
-        SignupCommand signupCommand1 = SignupCommand.builder()
+        SignupUserCommand signupUserCommand1 = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -31,10 +31,10 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser1 = User.createGeneralUser(generalUserCreateCommand1);
 
-        SignupCommand signupCommand2 = SignupCommand.builder()
+        SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_2)
                 .password(TEST_PASSWORD_2)
@@ -44,7 +44,7 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_2)
                 .build();
-        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
         User testUser2 = User.createGeneralUser(generalUserCreateCommand2);
 
         store.put(testUser1.getUserGuid(), UserMapper.toEntity(testUser1));

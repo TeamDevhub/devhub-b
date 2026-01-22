@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.request.OauthLoginRequestDto;
-import teamdevhub.devhub.port.in.oauth.command.OauthLoginCommand;
+import teamdevhub.devhub.port.in.oauth.command.ResolveOauthUserCommand;
 
 import java.util.Set;
 
@@ -33,10 +33,10 @@ public class OauthLoginRequestDtoTest {
                 .build();
 
         // when
-        OauthLoginCommand oauthLoginCommand = oauthLoginRequestDto.toCommand();
+        ResolveOauthUserCommand resolveOauthUserCommand = oauthLoginRequestDto.toCommand();
 
         // then
-        assertThat(oauthLoginCommand.tempToken()).isEqualTo("temp-token-123");
+        assertThat(resolveOauthUserCommand.tempToken()).isEqualTo("temp-token-123");
     }
 
     @Test

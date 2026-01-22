@@ -17,7 +17,7 @@ import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.List;
 
@@ -28,11 +28,13 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 public class AdminUserControllerTest {
 
     private AdminUserController adminUserController;
+
     private AdminUserUseCase adminUserUseCase;
 
     @BeforeEach
     void init() {
         adminUserUseCase = Mockito.mock(AdminUserUseCase.class);
+
         adminUserController = new AdminUserController(adminUserUseCase);
     }
 
@@ -40,7 +42,7 @@ public class AdminUserControllerTest {
     @DisplayName("관리자계정이_사용자_목록_조회_시_UserBasicResponseDto_리스트와_페이지 정보_READ_SUCCESS_코드를_반환한다.")
     void returnResponseDtoListWhenFetchingAdminUserList() {
         // given
-        SignupCommand signupCommand1 = SignupCommand.builder()
+        SignupUserCommand signupUserCommand1 = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -51,11 +53,11 @@ public class AdminUserControllerTest {
                 .build();
 
         UserCreateCommand userCreateCommand1 = UserCreateCommand.generalUserCreateCommand(
-                signupCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+                signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
 
         User testUser1 = User.createGeneralUser(userCreateCommand1);
 
-        SignupCommand signupCommand2 = SignupCommand.builder()
+        SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
                 .email(TEST_EMAIL_2)
                 .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
@@ -66,7 +68,7 @@ public class AdminUserControllerTest {
                 .build();
 
         UserCreateCommand userCreateCommand2 = UserCreateCommand.generalUserCreateCommand(
-                signupCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+                signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
 
         User testUser2 = User.createGeneralUser(userCreateCommand2);
 

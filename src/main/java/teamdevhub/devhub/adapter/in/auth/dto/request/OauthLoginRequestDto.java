@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.port.in.oauth.command.OauthLoginCommand;
+import teamdevhub.devhub.port.in.oauth.command.ResolveOauthUserCommand;
 
 @Getter
 @Builder
@@ -16,8 +16,8 @@ public class OauthLoginRequestDto {
     @NotBlank(message = "필수값이 누락되었습니다.")
     private String tempToken;
 
-    public OauthLoginCommand toCommand() {
-        return OauthLoginCommand.builder()
+    public ResolveOauthUserCommand toCommand() {
+        return ResolveOauthUserCommand.builder()
                 .tempToken(this.tempToken)
                 .build();
     }

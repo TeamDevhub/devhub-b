@@ -19,12 +19,14 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserAuthenticationLoaderMediumTest {
 
-    private AuthenticatedUserUseCase authenticatedUserUseCase;
     private UserAuthenticationLoader userAuthenticationLoader;
+
+    private AuthenticatedUserUseCase authenticatedUserUseCase;
 
     @BeforeEach
     public void init() {
         authenticatedUserUseCase = mock(AuthenticatedUserUseCase.class);
+
         userAuthenticationLoader = new UserAuthenticationLoader(authenticatedUserUseCase);
     }
 

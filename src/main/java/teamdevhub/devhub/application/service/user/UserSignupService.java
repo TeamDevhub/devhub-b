@@ -10,11 +10,11 @@ import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.port.in.oauth.command.OauthSignupCommand;
-import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
+import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserSignupUseCase;
-import teamdevhub.devhub.port.in.verification.VerificationUseCase;
+import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
 import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.port.out.provider.EncodedPasswordProvider;
 import teamdevhub.devhub.port.out.user.UserPositionRepository;
@@ -32,63 +32,53 @@ public class UserSignupService implements UserSignupUseCase {
 
     private final EncodedPasswordProvider encodedPasswordProvider;
     private final IdentifierProvider identifierProvider;
-    private final VerificationUseCase verificationUseCase;
     private final UserRepository userRepository;
     private final UserPositionRepository userPositionRepository;
     private final UserSkillRepository userSkillRepository;
 
     @Override
-    public void initializeAdminUser(AdminSignupCommand adminSignupCommand) {
+    public void initializeAdminUser(SignupAdminCommand signupAdminCommand) {
         if(existsByUserRole()) {
             return;
         }
 
         String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = encodedPasswordProvider.encode(adminSignupCommand.password());
+        String encodedPassword = encodedPasswordProvider.encode(signupAdminCommand.password());
 
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(adminSignupCommand, userGuid, encodedPassword);
+        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, userGuid, encodedPassword);
         User adminUser = User.createAdminUser(adminUserCreateCommand);
         userRepository.saveAdminUser(adminUser);
     }
 
     @Override
-    public User signup(SignupCommand signupCommand) {
-        validateSignupVerification(signupCommand.verificationTarget());
-
-        User user = createGeneralUser(signupCommand);
-        saveUserPositions(user.getUserGuid(), signupCommand.positionList());
-        saveUserSkills(user.getUserGuid(), signupCommand.skillList());
-        User savedUser = userRepository.save(user);
-
-        verificationUseCase.consume(signupCommand.verificationTarget());
-        return savedUser;
+    public User signup(SignupUserCommand signupUserCommand) {
+        User user = createGeneralUser(signupUserCommand);
+        saveUserPositions(user.getUserGuid(), signupUserCommand.positionList());
+        saveUserSkills(user.getUserGuid(), signupUserCommand.skillList());
+        return userRepository.save(user);
     }
 
     @Override
-    public void signupWithOauth(OauthSignupCommand oauthSignupCommand, OauthUser oauthUser) {
-        User user = createOauthUserForSignup(oauthSignupCommand, oauthUser);
-        saveUserPositions(user.getUserGuid(), oauthSignupCommand.positionList());
-        saveUserSkills(user.getUserGuid(), oauthSignupCommand.skillList());
+    public void signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
+        User user = createOauthUserForSignup(signupOauthUserCommand, oauthUser);
+        saveUserPositions(user.getUserGuid(), signupOauthUserCommand.positionList());
+        saveUserSkills(user.getUserGuid(), signupOauthUserCommand.skillList());
         userRepository.save(user);
     }
 
-    private void validateSignupVerification(VerificationTarget verificationTarget) {
-        verificationUseCase.assertAllowed(verificationTarget);
-    }
-
-    private User createGeneralUser(SignupCommand signupCommand) {
+    private User createGeneralUser(SignupUserCommand signupUserCommand) {
         String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = encodedPasswordProvider.encode(signupCommand.password());
+        String encodedPassword = encodedPasswordProvider.encode(signupUserCommand.password());
 
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, userGuid, encodedPassword);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, userGuid, encodedPassword);
         return User.createGeneralUser(generalUserCreateCommand);
     }
 
-    private User createOauthUserForSignup(OauthSignupCommand oauthSignupCommand, OauthUser oauthUser) {
+    private User createOauthUserForSignup(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
         String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = encodedPasswordProvider.encode(oauthSignupCommand.password());
+        String encodedPassword = encodedPasswordProvider.encode(signupOauthUserCommand.password());
 
-        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(oauthSignupCommand, oauthUser, userGuid, encodedPassword);
+        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, userGuid, encodedPassword);
         return User.createOauthUser(oauthUserCreateCommand);
     }
 

@@ -6,14 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.adapter.in.auth.AuthFacade;
 import teamdevhub.devhub.adapter.in.auth.controller.OauthController;
 import teamdevhub.devhub.adapter.in.auth.dto.request.OauthLoginRequestDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
-import teamdevhub.devhub.adapter.in.user.dto.request.OauthSignupRequestDto;
+import teamdevhub.devhub.adapter.in.user.dto.request.SignupOauthRequestDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
+import teamdevhub.devhub.port.in.auth.AuthFacade;
+import teamdevhub.devhub.port.in.user.UserSignupFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,55 +24,57 @@ import static org.mockito.Mockito.when;
 public class OauthControllerTest {
 
     private OauthController oauthController;
+
+    private UserSignupFacade userSignupFacade;
     private AuthFacade authFacade;
 
     @BeforeEach
     void init() {
+        userSignupFacade = Mockito.mock(UserSignupFacade.class);
         authFacade = Mockito.mock(AuthFacade.class);
-        oauthController = new OauthController(authFacade);
+
+        oauthController = new OauthController(userSignupFacade, authFacade);
     }
 
     @Test
-    @DisplayName("OAuth_회원가입에_성공하면_LoginResponseDto_를_반환한다")
+    @DisplayName("OAuth_회원가입에_성공하면_OauthAuthResponseDto_를_반환한다")
     void signupWithOauth_returnsLoginResponse() {
         // given
-        OauthSignupRequestDto requestDto = Mockito.mock(OauthSignupRequestDto.class);
+        SignupOauthRequestDto requestDto = Mockito.mock(SignupOauthRequestDto.class);
 
-        LoginResponseDto loginResponseDto = LoginResponseDto.builder()
-                .prefix("Bearer")
+        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.builder()
                 .accessToken("access-token")
                 .refreshToken("refresh-token")
                 .build();
 
-        when(authFacade.signupWithOauth(any())).thenReturn(loginResponseDto);
+        when(userSignupFacade.signupWithOauth(any())).thenReturn(oauthAuthResponseDto);
 
         // when
-        ResponseEntity<DataApiResponseDto<LoginResponseDto>> response = oauthController.signup(requestDto);
+        ResponseEntity<DataApiResponseDto<OauthAuthResponseDto>> response = oauthController.signup(requestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
-        assertThat(response.getBody().getData()).isEqualTo(loginResponseDto);
+        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.SIGNUP_SUCCESS.getCode());
+        assertThat(response.getBody().getData()).isEqualTo(oauthAuthResponseDto);
 
-        verify(authFacade).signupWithOauth(any());
+        verify(userSignupFacade).signupWithOauth(any());
     }
 
     @Test
     @DisplayName("OAuth_로그인에_성공하면_토큰과_헤더를_반환한다")
     void loginWithOauth_setsAuthorizationAndCookieHeaders() {
         // given
-        OauthLoginRequestDto requestDto = Mockito.mock(OauthLoginRequestDto.class);
+        OauthLoginRequestDto oauthLoginRequestDto = Mockito.mock(OauthLoginRequestDto.class);
 
-        LoginResponseDto loginResponseDto = LoginResponseDto.builder()
-                .prefix("Bearer")
+        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.builder()
                 .accessToken("access-token")
                 .refreshToken("refresh-token")
                 .build();
 
-        when(authFacade.loginWithOauth(any())).thenReturn(loginResponseDto);
+        when(authFacade.loginWithOauth(any())).thenReturn(oauthAuthResponseDto);
 
         // when
-        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.login(requestDto);
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.login(oauthLoginRequestDto);
 
         // then
         assertThat(response.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)).isTrue();

@@ -3,8 +3,8 @@ package teamdevhub.devhub.small.application.service.oauth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthCallbackResponseDto;
-import teamdevhub.devhub.application.service.oauth.OauthCallbackService;
+import teamdevhub.devhub.application.service.oauth.vo.OauthCallbackResult;
+import teamdevhub.devhub.application.service.oauth.OauthAuthenticationService;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
@@ -14,14 +14,14 @@ import teamdevhub.devhub.fake.pure.oauth.FakeOauthClient;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.selector.FakeOauthClientSelector;
-import teamdevhub.devhub.port.in.oauth.command.OauthSignupCommand;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-public class OauthCallbackServiceTest {
+public class OauthAuthenticationServiceTest {
 
-    private OauthCallbackService oauthCallbackService;
+    private OauthAuthenticationService oauthAuthenticationService;
 
     private FakeUserRepository userRepository;
     private FakeOauthClient oauthClient;
@@ -33,7 +33,7 @@ public class OauthCallbackServiceTest {
         FakeTokenIssueProvider tokenIssueProvider = new FakeTokenIssueProvider();
         userRepository = new FakeUserRepository();
 
-        oauthCallbackService = new OauthCallbackService(tokenIssueProvider, fakeOauthClientSelector, userRepository);
+        oauthAuthenticationService = new OauthAuthenticationService(tokenIssueProvider, fakeOauthClientSelector, userRepository);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class OauthCallbackServiceTest {
         String provider = "google";
 
         // when
-        String redirectAuthorizationUrl = oauthCallbackService.createAuthorizationUrl(provider);
+        String redirectAuthorizationUrl = oauthAuthenticationService.createAuthorizationUrl(provider);
 
         // then
         assertThat(redirectAuthorizationUrl).isEqualTo("https://oauth.test/authorize/");
@@ -56,7 +56,7 @@ public class OauthCallbackServiceTest {
         OauthUser oauthUser = new OauthUser("oauth-id", VerificationProvider.GOOGLE, "test@test.com");
         oauthClient.withOauthUser(oauthUser);
 
-        OauthSignupCommand oauthSignupCommand = OauthSignupCommand.builder()
+        SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()
                 .tempToken("tempToken")
                 .username(TEST_USERNAME_1)
                 .password(TEST_PASSWORD_1)
@@ -64,15 +64,15 @@ public class OauthCallbackServiceTest {
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .build();
-        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(oauthSignupCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User createdOauthUser = User.createOauthUser(oauthUserCreateCommand);
         userRepository.save(createdOauthUser);
 
         // when
-        OauthCallbackResponseDto oauthCallbackResponseDto = oauthCallbackService.handleOAuthCallback(VerificationProvider.GOOGLE, "authorization-code");
+        OauthCallbackResult oauthCallbackResult = oauthAuthenticationService.handleOAuthCallback(VerificationProvider.GOOGLE, "authorization-code");
 
         // then
-        assertThat(oauthCallbackResponseDto.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
+        assertThat(oauthCallbackResult.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
     }
 
     @Test
@@ -83,9 +83,9 @@ public class OauthCallbackServiceTest {
         oauthClient.withOauthUser(oauthUser);
 
         // when
-        OauthCallbackResponseDto oauthCallbackResponseDto = oauthCallbackService.handleOAuthCallback(VerificationProvider.GOOGLE, "authorization-code");
+        OauthCallbackResult oauthCallbackResult = oauthAuthenticationService.handleOAuthCallback(VerificationProvider.GOOGLE, "authorization-code");
 
         // then
-        assertThat(oauthCallbackResponseDto.signupStatus()).isEqualTo(SignupStatus.PENDING);
+        assertThat(oauthCallbackResult.signupStatus()).isEqualTo(SignupStatus.PENDING);
     }
 }

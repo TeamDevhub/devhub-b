@@ -7,15 +7,15 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.user.dto.request.OauthSignupRequestDto;
-import teamdevhub.devhub.port.in.oauth.command.OauthSignupCommand;
+import teamdevhub.devhub.adapter.in.user.dto.request.SignupOauthRequestDto;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OauthSignupRequestDtoTest {
+public class SignupOauthRequestDtoTest {
 
     private Validator validator;
 
@@ -29,7 +29,7 @@ public class OauthSignupRequestDtoTest {
     @DisplayName("모든_필드가_올바르면_OauthSignupCommand_로_변환된다")
     void convertOauthSignupRequestDtoToCommand() {
         // given
-        OauthSignupRequestDto oauthSignupRequestDto = OauthSignupRequestDto.builder()
+        SignupOauthRequestDto signupOauthRequestDto = SignupOauthRequestDto.builder()
                 .tempToken("temp-token-123")
                 .password("Password123!")
                 .username("testUser")
@@ -39,25 +39,25 @@ public class OauthSignupRequestDtoTest {
                 .build();
 
         // when
-        OauthSignupCommand oauthSignupCommand = oauthSignupRequestDto.toCommand();
+        SignupOauthUserCommand signupOauthUserCommand = signupOauthRequestDto.toCommand();
 
         // then
-        assertThat(oauthSignupCommand.tempToken()).isEqualTo("temp-token-123");
-        assertThat(oauthSignupCommand.password()).isEqualTo("Password123!");
-        assertThat(oauthSignupCommand.username()).isEqualTo("testUser");
-        assertThat(oauthSignupCommand.introduction()).isEqualTo("안녕하세요");
-        assertThat(oauthSignupCommand.positionList()).containsExactly("BACKEND");
-        assertThat(oauthSignupCommand.skillList()).containsExactly("JAVA", "SPRING");
+        assertThat(signupOauthUserCommand.tempToken()).isEqualTo("temp-token-123");
+        assertThat(signupOauthUserCommand.password()).isEqualTo("Password123!");
+        assertThat(signupOauthUserCommand.username()).isEqualTo("testUser");
+        assertThat(signupOauthUserCommand.introduction()).isEqualTo("안녕하세요");
+        assertThat(signupOauthUserCommand.positionList()).containsExactly("BACKEND");
+        assertThat(signupOauthUserCommand.skillList()).containsExactly("JAVA", "SPRING");
     }
 
     @Test
     @DisplayName("필수_필드가_null_이거나_빈값이면_검증에_실패한다")
     void validationFailsForOauthSignupRequestDto() {
         // given
-        OauthSignupRequestDto oauthSignupRequestDto = new OauthSignupRequestDto();
+        SignupOauthRequestDto signupOauthRequestDto = new SignupOauthRequestDto();
 
         // when
-        Set<ConstraintViolation<OauthSignupRequestDto>> violations = validator.validate(oauthSignupRequestDto);
+        Set<ConstraintViolation<SignupOauthRequestDto>> violations = validator.validate(signupOauthRequestDto);
 
         // then
         assertThat(violations).isNotEmpty();
@@ -75,7 +75,7 @@ public class OauthSignupRequestDtoTest {
     @DisplayName("positionList_와_skillList_가_빈_리스트면_검증에_실패한다")
     void validationFailsWhenListsAreEmpty() {
         // given
-        OauthSignupRequestDto oauthSignupRequestDto = OauthSignupRequestDto.builder()
+        SignupOauthRequestDto signupOauthRequestDto = SignupOauthRequestDto.builder()
                 .tempToken("temp-token-123")
                 .password("Password123!")
                 .positionList(List.of())
@@ -83,7 +83,7 @@ public class OauthSignupRequestDtoTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<OauthSignupRequestDto>> violations = validator.validate(oauthSignupRequestDto);
+        Set<ConstraintViolation<SignupOauthRequestDto>> violations = validator.validate(signupOauthRequestDto);
 
         // then
         assertThat(violations.stream()

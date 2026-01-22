@@ -13,9 +13,9 @@ import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
-import teamdevhub.devhub.port.in.oauth.command.OauthSignupCommand;
-import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
+import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +31,7 @@ class UserTest {
     @DisplayName("관리자_권한의_사용자를_생성한다")
     void createAdminUser() {
         // given
-        AdminSignupCommand adminSignupCommand = AdminSignupCommand.builder()
+        SignupAdminCommand signupAdminCommand = SignupAdminCommand.builder()
                 .userGuid(null)
                 .email(ADMIN_EMAIL_1)
                 .password(ADMIN_PASSWORD_1)
@@ -41,7 +41,7 @@ class UserTest {
                 .skillList(List.of())
                 .verificationTarget(null)
                 .build();
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(adminSignupCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
 
         // when
         User createdAdminUser = User.createAdminUser(adminUserCreateCommand);
@@ -60,7 +60,7 @@ class UserTest {
     @DisplayName("일반_권한의_사용자를_생성한다")
     void createGeneralUser() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -70,7 +70,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
 
         // when
         User createdGeneralUser = User.createGeneralUser(generalUserCreateCommand);
@@ -93,7 +93,7 @@ class UserTest {
     void createOauthUser() {
         // given
         OauthUser oauthUser = new OauthUser("testOauthId", VerificationProvider.GOOGLE, TEST_EMAIL_1);
-        OauthSignupCommand oauthSignupCommand = OauthSignupCommand.builder()
+        SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()
                 .tempToken("tempToken")
                 .username(TEST_USERNAME_1)
                 .password(TEST_PASSWORD_1)
@@ -101,7 +101,7 @@ class UserTest {
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .build();
-        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(oauthSignupCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
 
         // when
         User createdOauthUser = User.createOauthUser(oauthUserCreateCommand);
@@ -110,8 +110,8 @@ class UserTest {
         assertThat(createdOauthUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(createdOauthUser.getVerificationProvider()).isEqualTo(oauthUser.verificationProvider());
         assertThat(createdOauthUser.getEmail()).isEqualTo(oauthUser.email());
-        assertThat(createdOauthUser.getPassword()).isEqualTo(oauthSignupCommand.password());
-        assertThat(createdOauthUser.getUsername()).isEqualTo(oauthSignupCommand.username());
+        assertThat(createdOauthUser.getPassword()).isEqualTo(signupOauthUserCommand.password());
+        assertThat(createdOauthUser.getUsername()).isEqualTo(signupOauthUserCommand.username());
         assertThat(createdOauthUser.isDeleted()).isFalse();
         assertThat(createdOauthUser.isBlocked()).isFalse();
         assertThat(createdOauthUser.getMannerDegree()).isEqualTo(36.5);
@@ -136,7 +136,7 @@ class UserTest {
     @DisplayName("탈퇴한_사용자는_deleted_값이_true_다")
     void isDeletedUser() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -146,7 +146,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         // when
@@ -161,7 +161,7 @@ class UserTest {
     @DisplayName("이미_탈퇴한_회원이_재탈퇴를_요청하면_예외를_던진다")
     void throwIfAlreadyDeleted() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -171,7 +171,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
         testUser.withdraw();
 
@@ -186,7 +186,7 @@ class UserTest {
     @DisplayName("사용자_프로필_정보를_새로운값으로_변경하면_기존값이_변경된다")
     void updateUserProfile() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -196,7 +196,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         // when
@@ -213,7 +213,7 @@ class UserTest {
     @DisplayName("변경을_요청한_값이_빈값_또는_이전과_같은_값이라면_기존값은_변경되지_않는다")
     void keepUserProfileIfNotBlankOrChanged() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -223,7 +223,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         // when
@@ -239,7 +239,7 @@ class UserTest {
     @DisplayName("관심포지션이_변경되면_UserPositionChangeResult_의_changed_는_true_이다")
     void changedIsTrueWhenPositionsChange() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -249,7 +249,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         UserPosition oldPosition = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
@@ -271,7 +271,7 @@ class UserTest {
     @DisplayName("관심포지션의_포지션코드가_null_로_들어오면_UserPositionChangeResult_의_changed_는_false_이다")
     void changedIsFalseWhenPositionsCodeIsNull() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -281,7 +281,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         UserPosition previousPosition = new UserPosition(TEST_USER_GUID_1, "001");
@@ -303,7 +303,7 @@ class UserTest {
     @DisplayName("관심포지션의_포지션코드가_동일한_값으로_들어오면_UserPositionChangeResult_의_changed_는_false_이다")
     void changedIsFalseWhenPositionsCodeIsSameValue() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -313,7 +313,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         UserPosition previousPosition = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
@@ -335,7 +335,7 @@ class UserTest {
     @DisplayName("관심포지션의_값_자체가_null_또는_빈값이면_UserPositionChangeResult_의_changed_는_false_이다")
     void changedIsFalseWhenUserPositionsIsNullOrEmpty() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -345,7 +345,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         // when
@@ -361,7 +361,7 @@ class UserTest {
     @DisplayName("보유스킬이_변경되면_UserSkillChangeResult_의_changed_는_true_이다")
     void changedIsTrueWhenSkillsChange() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -371,7 +371,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         UserSkill oldSkill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
@@ -395,7 +395,7 @@ class UserTest {
     @DisplayName("보유스킬의_스킬코드가_null_로_들어오면_UserSkillChangeResult_의_changed_는_false_이다")
     void changedIsFalseWhenSkillsCodeIsNull() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -405,7 +405,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         UserSkill previousSkill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
@@ -428,7 +428,7 @@ class UserTest {
     @DisplayName("보유스킬의_스킬코드가_동일한_값으로_들어오면_UserSkillChangeResult_의_changed_는_false_이다")
     void changedIsFalseWhenSkillsCodeIsSameValue() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -438,7 +438,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         UserSkill previousSkill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
@@ -461,7 +461,7 @@ class UserTest {
     @DisplayName("보유스킬의_값_자체가_null_또는_빈값이면_UserSkillChangeResult_의_changed_는_false_이다")
     void changedIsFalseWhenUserSkillsIsNullOrEmpty() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -471,7 +471,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         // when
@@ -487,7 +487,7 @@ class UserTest {
     @DisplayName("사용자의_관심포지션과_보유스킬을_초기화한다")
     void loadPositionsAndSkills_initializesPositionsAndSkills() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -497,7 +497,7 @@ class UserTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         UserPosition userPosition = new UserPosition(TEST_USER_GUID_1, "001");

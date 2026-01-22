@@ -8,13 +8,14 @@ import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserDetailResponseDto;
 import teamdevhub.devhub.adapter.in.user.controller.UserProfileController;
-import teamdevhub.devhub.adapter.in.user.UserFacade;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.port.in.user.UserWithdrawFacade;
+import teamdevhub.devhub.port.in.user.usecase.UserProfileUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -23,14 +24,17 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 class UserProfileControllerTest {
 
     private UserProfileController userProfileController;
-    private UserFacade userFacade;
+
+    private UserProfileUseCase userProfileUseCase;
+    private UserWithdrawFacade userWithdrawFacade;
 
     @BeforeEach
     void init() {
-        userFacade = Mockito.mock(UserFacade.class);
-        userProfileController = new UserProfileController(userFacade);
-    }
+        userProfileUseCase = Mockito.mock(UserProfileUseCase.class);
+        userWithdrawFacade = Mockito.mock(UserWithdrawFacade.class);
 
+        userProfileController = new UserProfileController(userProfileUseCase, userWithdrawFacade);
+    }
 
     @Test
     @DisplayName("유저_프로필_정보_조회에_성공하면_READ_SUCCESS_의_코드를_확인할_수_있다")
@@ -44,7 +48,7 @@ class UserProfileControllerTest {
                 .userRole(UserRole.USER)
                 .build();
 
-        when(userFacade.getUserDetailProfile(authenticatedUser.userGuid())).thenReturn(user);
+        when(userProfileUseCase.getCurrentUserProfile(authenticatedUser.userGuid())).thenReturn(user);
 
         // when
         ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> response = userProfileController.getProfile(authenticatedUser);
@@ -54,7 +58,8 @@ class UserProfileControllerTest {
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
         assertThat(response.getBody().getData().getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(response.getBody().getData().getUsername()).isEqualTo(TEST_USERNAME_1);
-        verify(userFacade).getUserDetailProfile(authenticatedUser.userGuid());
+
+        verify(userProfileUseCase).getCurrentUserProfile(authenticatedUser.userGuid());
     }
 
     @Test
@@ -69,7 +74,7 @@ class UserProfileControllerTest {
                 .skillList(NEW_SKILL_LIST)
                 .build();
 
-        doNothing().when(userFacade).updateProfile(any());
+        doNothing().when(userProfileUseCase).updateProfile(any());
 
         // when
         ResponseEntity<DataApiResponseDto<Void>> response = userProfileController.updateProfile(updateProfileRequestDto, authenticatedUser);
@@ -84,7 +89,7 @@ class UserProfileControllerTest {
     void canVerifyCodeWhenDeletingUserAccount() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, SignupStatus.COMPLETED, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
-        doNothing().when(userFacade).withdrawUser(authenticatedUser.userGuid());
+        doNothing().when(userWithdrawFacade).withdraw(authenticatedUser.userGuid());
 
         // when
         ResponseEntity<DataApiResponseDto<Void>> response = userProfileController.withdraw(authenticatedUser);
@@ -92,6 +97,7 @@ class UserProfileControllerTest {
         // then
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.USER_DELETE_SUCCESS.getCode());
-        verify(userFacade).withdrawUser(authenticatedUser.userGuid());
+
+        verify(userWithdrawFacade).withdraw(authenticatedUser.userGuid());
     }
 }

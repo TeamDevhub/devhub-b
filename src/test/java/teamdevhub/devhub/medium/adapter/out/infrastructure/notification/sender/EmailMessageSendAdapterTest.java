@@ -22,6 +22,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 public class EmailMessageSendAdapterTest {
 
     private EmailMessageSendAdapter emailMessageSendAdapter;
+
     private JavaMailSender mailSender;
     private SpringTemplateEngine templateEngine;
 

@@ -1,13 +1,15 @@
 package teamdevhub.devhub.domain.user.vo.user;
 
+import lombok.Builder;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
-import teamdevhub.devhub.port.in.oauth.command.OauthSignupCommand;
-import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
+import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.List;
 
+@Builder
 public record UserCreateCommand(
         String userGuid,
         VerificationProvider verificationProvider,
@@ -20,45 +22,45 @@ public record UserCreateCommand(
         List<String> skillList
 ) {
 
-    public static UserCreateCommand adminUserCreateCommand(AdminSignupCommand adminSignupCommand, String userGuid, String encodedPassword) {
+    public static UserCreateCommand adminUserCreateCommand(SignupAdminCommand signupAdminCommand, String userGuid, String encodedPassword) {
         return new UserCreateCommand(
                 userGuid,
                 VerificationProvider.EMAIL,
-                adminSignupCommand.email(),
-                adminSignupCommand.email(),
+                signupAdminCommand.email(),
+                signupAdminCommand.email(),
                 encodedPassword,
-                adminSignupCommand.username(),
-                adminSignupCommand.introduction(),
-                adminSignupCommand.positionList(),
-                adminSignupCommand.skillList()
+                signupAdminCommand.username(),
+                signupAdminCommand.introduction(),
+                signupAdminCommand.positionList(),
+                signupAdminCommand.skillList()
         );
     }
 
-    public static UserCreateCommand generalUserCreateCommand(SignupCommand signupCommand, String userGuid, String encodedPassword) {
+    public static UserCreateCommand generalUserCreateCommand(SignupUserCommand signupUserCommand, String userGuid, String encodedPassword) {
         return new UserCreateCommand(
                 userGuid,
                 VerificationProvider.EMAIL,
-                signupCommand.email(),
-                signupCommand.email(),
+                signupUserCommand.email(),
+                signupUserCommand.email(),
                 encodedPassword,
-                signupCommand.username(),
-                signupCommand.introduction(),
-                signupCommand.positionList(),
-                signupCommand.skillList()
+                signupUserCommand.username(),
+                signupUserCommand.introduction(),
+                signupUserCommand.positionList(),
+                signupUserCommand.skillList()
         );
     }
 
-    public static UserCreateCommand oauthUserCreateCommand(OauthSignupCommand oauthSignupCommand, OauthUser oauthUser, String userGuid, String encodedPassword) {
+    public static UserCreateCommand oauthUserCreateCommand(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser, String userGuid, String encodedPassword) {
         return new UserCreateCommand(
                 userGuid,
                 oauthUser.verificationProvider(),
                 oauthUser.oauthId(),
                 oauthUser.email(),
                 encodedPassword,
-                oauthSignupCommand.username(),
-                oauthSignupCommand.introduction(),
-                oauthSignupCommand.positionList(),
-                oauthSignupCommand.skillList()
+                signupOauthUserCommand.username(),
+                signupOauthUserCommand.introduction(),
+                signupOauthUserCommand.positionList(),
+                signupOauthUserCommand.skillList()
         );
     }
 }

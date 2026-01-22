@@ -6,7 +6,7 @@ import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import java.util.List;
 
 @Builder
-public record AdminSignupCommand(String userGuid, String email, String password, String username, String introduction,
+public record SignupAdminCommand(String userGuid, String email, String password, String username, String introduction,
                                  List<String> positionList, List<String> skillList,
                                  VerificationTarget verificationTarget) {
 

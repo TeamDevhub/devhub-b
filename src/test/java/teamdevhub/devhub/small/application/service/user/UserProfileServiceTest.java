@@ -12,7 +12,7 @@ import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserSkillRepository;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 
 import java.util.HashSet;
@@ -45,7 +45,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_정보를_조회했을_때_모든_정보가_조회된다")
     void fetchAllUserInformation() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -55,7 +55,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
         fakeUserRepository.save(testUser);
 
@@ -80,7 +80,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_닉네임,자기소개는_값이_없거나_null_로_들어오면_사용자가_기본적으로_가지고_있는_값으로_유지된다")
     void nullOrEmptyUsernameAndIntroductionKeepsExistingValues() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -90,7 +90,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
         fakeUserRepository.save(testUser);
 
@@ -107,7 +107,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_닉네임,자기소개는_변경된_값으로_들어오면_해당_값으로_변경된다")
     void updateUsernameAndIntroductionCorrectly() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -117,7 +117,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
         fakeUserRepository.save(testUser);
 
@@ -134,7 +134,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_관심포지션이_값이_없거나_null_로_들어오면_사용자가_기본적으로_가지고_있는_값으로_유지된다")
     void nullOrEmptyUserPositionsKeepsExistingValues() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -144,7 +144,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -166,7 +166,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_관심포지션의_포지션코드_값이_null_로_들어오면_변경되지_않는다")
     void nullPositionCodeWithUserPositionsKeepsExistingValues() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -176,7 +176,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -196,7 +196,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_관심포지션의_포지션코드_값이_빈값으로_들어오면_변경되지_않는다")
     void emptyPositionCodeWithUserPositionsKeepsExistingValues() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -206,7 +206,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -226,7 +226,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_관심포지션이_동일한_값으로_들어오면_변경되지_않는다")
     void sameUserPositionsKeepsExistingValues() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -236,7 +236,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -255,7 +255,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_관심포지션이_새로운_값_으로_들어오면_새로운_값으로_변경된다")
     void updateNewUserPositionCorrectly() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -265,7 +265,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -284,7 +284,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_관심포지션이_기존_값과_새로운_값_으로_들어오면_합쳐진_값으로_변경된다")
     void updateUserPositionWithExistAndNewCorrectly() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -294,7 +294,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -320,7 +320,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_보유스킬이_값이_없거나_null_로_들어오면_사용자가_기본적으로_가지고_있는_값으로_유지된다")
     void nullOrEmptyUserSkillsKeepsExistingValues() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -330,7 +330,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -349,7 +349,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_보유스킬의_스킬코드_값이_null_로_들어오면_변경되지_않는다")
     void nullSkillCodeWithUserSkillsKeepsExistingValues() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -359,7 +359,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -379,7 +379,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_보유스킬의_스킬코드_값이_빈값으로_들어오면_변경되지_않는다")
     void emptySkillCodeWithUserSkillsKeepsExistingValues() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -389,7 +389,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -409,7 +409,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_보유스킬이_동일한_값으로_들어오면_사용자가_기본적으로_가지고_있는_값으로_유지된다")
     void sameUserSkillsKeepsExistingValues() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -419,7 +419,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -438,7 +438,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_보유스킬이_새로운_값으로_들어오면_새로운_값으로_변경된다")
     void updateNewUserSkillCorrectly() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -448,7 +448,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -467,7 +467,7 @@ class UserProfileServiceTest {
     @DisplayName("사용자_프로필_수정에서_관심스킬이_기존_값과_새로운_값으로_들어오면_합쳐진_값으로_변경된다")
     void updateUserSkillWithExistAndNewCorrectly() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -477,7 +477,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);
@@ -505,7 +505,7 @@ class UserProfileServiceTest {
     @DisplayName("일반_사용자는_USER_권한이_존재한다")
     void haveUserRoleForGeneralUser() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -515,7 +515,7 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeUserRepository.save(testUser);

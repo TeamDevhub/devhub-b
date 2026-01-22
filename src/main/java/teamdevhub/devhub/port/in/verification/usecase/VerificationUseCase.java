@@ -1,4 +1,4 @@
-package teamdevhub.devhub.port.in.verification;
+package teamdevhub.devhub.port.in.verification.usecase;
 
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;

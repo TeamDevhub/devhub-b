@@ -11,7 +11,7 @@ import teamdevhub.devhub.common.enums.RegexPattern;
 import teamdevhub.devhub.adapter.in.web.validator.RegexMatch;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.List;
 
@@ -43,8 +43,8 @@ public class SignupRequestDto {
     @Size(min = 1, message = "보유 스킬은 최소 1개 이상 선택해야 합니다.")
     private List<@NotBlank String> skillList;
 
-    public SignupCommand toSignupCommand() {
-        return SignupCommand.builder()
+    public SignupUserCommand toSignupCommand() {
+        return SignupUserCommand.builder()
                 .email(this.email)
                 .password(this.password)
                 .username(this.username)

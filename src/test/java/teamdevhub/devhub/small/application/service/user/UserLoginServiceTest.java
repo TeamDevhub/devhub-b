@@ -8,7 +8,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.time.LocalDateTime;
 
@@ -34,7 +34,7 @@ public class UserLoginServiceTest {
     @DisplayName("로그인을_하면_최종_로그인_일시가_변한다")
     void updateLastLoginDateWhenLogin() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -44,7 +44,7 @@ public class UserLoginServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
         fakeUserRepository.save(testUser);
 

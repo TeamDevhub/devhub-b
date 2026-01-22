@@ -2,5 +2,5 @@ package teamdevhub.devhub.port.in.user.usecase;
 
 public interface UserWithdrawUseCase {
 
-    void withdrawUser(String userGuid);
+    void withdraw(String userGuid);
 }

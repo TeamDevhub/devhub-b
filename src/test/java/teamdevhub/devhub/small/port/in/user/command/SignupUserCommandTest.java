@@ -2,18 +2,18 @@ package teamdevhub.devhub.small.port.in.user.command;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-class SignupCommandTest {
+class SignupUserCommandTest {
 
     @Test
     @DisplayName("Builder_로_SignupCommand_를_생성할_수_있다")
     void convertRequestDtoToCommand() {
         // given, when
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -24,11 +24,11 @@ class SignupCommandTest {
                 .build();
 
         // then
-        assertThat(signupCommand.email()).isEqualTo(TEST_EMAIL_1);
-        assertThat(signupCommand.password()).isEqualTo(TEST_PASSWORD_1);
-        assertThat(signupCommand.username()).isEqualTo(TEST_USERNAME_1);
-        assertThat(signupCommand.introduction()).isEqualTo(TEST_INTRO_1);
-        assertThat(signupCommand.positionList()).containsExactlyElementsOf(TEST_POSITION_LIST);
-        assertThat(signupCommand.skillList()).containsExactlyElementsOf(TEST_SKILL_LIST);
+        assertThat(signupUserCommand.email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(signupUserCommand.password()).isEqualTo(TEST_PASSWORD_1);
+        assertThat(signupUserCommand.username()).isEqualTo(TEST_USERNAME_1);
+        assertThat(signupUserCommand.introduction()).isEqualTo(TEST_INTRO_1);
+        assertThat(signupUserCommand.positionList()).containsExactlyElementsOf(TEST_POSITION_LIST);
+        assertThat(signupUserCommand.skillList()).containsExactlyElementsOf(TEST_SKILL_LIST);
     }
 }

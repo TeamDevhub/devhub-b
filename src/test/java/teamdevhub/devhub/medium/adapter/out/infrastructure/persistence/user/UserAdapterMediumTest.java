@@ -20,8 +20,8 @@ import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
-import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +49,7 @@ class UserAdapterMediumTest {
     @DisplayName("관리자_계정을_저장한다")
     void saveAdminAccount() {
         // given
-        AdminSignupCommand adminSignupCommand = AdminSignupCommand.builder()
+        SignupAdminCommand signupAdminCommand = SignupAdminCommand.builder()
                 .userGuid(null)
                 .email(ADMIN_EMAIL_1)
                 .password(ADMIN_PASSWORD_1)
@@ -59,7 +59,7 @@ class UserAdapterMediumTest {
                 .skillList(List.of())
                 .verificationTarget(null)
                 .build();
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(adminSignupCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
         User adminUser = User.createAdminUser(adminUserCreateCommand);
 
         // when
@@ -75,7 +75,7 @@ class UserAdapterMediumTest {
     @DisplayName("로그인을_시도하면_ID_값인_이메일로_AuthenticatedUser_를_조회한다")
     void getAuthenticatedUserByLoginId() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -85,7 +85,7 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser));
@@ -102,7 +102,7 @@ class UserAdapterMediumTest {
     @DisplayName("userGuid_로 AuthenticatedUser_를 조회한다")
     void findAuthenticatedUserByUserGuid() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -113,7 +113,7 @@ class UserAdapterMediumTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        UserCreateCommand createCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand createCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User user = User.createGeneralUser(createCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(user));
@@ -141,7 +141,7 @@ class UserAdapterMediumTest {
     @DisplayName("이메일로 조회 시 Optional AuthenticatedUser_를 반환한다")
     void findOptionalByEmail_exists() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -152,7 +152,7 @@ class UserAdapterMediumTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        UserCreateCommand createCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand createCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User user = User.createGeneralUser(createCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(user));
@@ -217,7 +217,7 @@ class UserAdapterMediumTest {
     @DisplayName("새로운_사용자를_생성하면_사용자_정보를_저장한다")
     void saveUser() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -227,7 +227,7 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         // when
@@ -243,7 +243,7 @@ class UserAdapterMediumTest {
     @DisplayName("사용자_식별키로_User_를_조회한다")
     void getUserByIdentifier() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -253,7 +253,7 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser));
@@ -270,7 +270,7 @@ class UserAdapterMediumTest {
     @DisplayName("사용자_프로필_정보를_수정하면_변경된_값이_저장된다")
     void updateUserProfile() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -280,7 +280,7 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser));
@@ -303,7 +303,7 @@ class UserAdapterMediumTest {
     @DisplayName("회원탈퇴한_사용자의_deleted_값은_true_이다")
     void isDeletedUser() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -313,7 +313,7 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser));
@@ -334,7 +334,7 @@ class UserAdapterMediumTest {
     @DisplayName("사용자_권한이_일치한다면_true_를_반환한다")
     void isUserRoleMatched() {
         // given
-        AdminSignupCommand adminSignupCommand = AdminSignupCommand.builder()
+        SignupAdminCommand signupAdminCommand = SignupAdminCommand.builder()
                 .userGuid(null)
                 .email(ADMIN_EMAIL_1)
                 .password(ADMIN_PASSWORD_1)
@@ -344,7 +344,7 @@ class UserAdapterMediumTest {
                 .skillList(List.of())
                 .verificationTarget(null)
                 .build();
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(adminSignupCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
         User adminUser = User.createAdminUser(adminUserCreateCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(adminUser));
@@ -360,7 +360,7 @@ class UserAdapterMediumTest {
     @DisplayName("사용자_목록_조회를_하면_AdminUserSummaryResponseDto_로_된_PageResult_데이터를_반환한다")
     void getUserListAsAdminSummary() {
         // given
-        SignupCommand signupCommand1 = SignupCommand.builder()
+        SignupUserCommand signupUserCommand1 = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -370,10 +370,10 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser1 = User.createGeneralUser(generalUserCreateCommand1);
 
-        SignupCommand signupCommand2 = SignupCommand.builder()
+        SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_2)
                 .password(TEST_PASSWORD_2)
@@ -383,7 +383,7 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_2)
                 .build();
-        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
         User testUser2 = User.createGeneralUser(generalUserCreateCommand2);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser1));

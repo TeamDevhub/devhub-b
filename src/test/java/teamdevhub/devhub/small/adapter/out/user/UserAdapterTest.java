@@ -15,8 +15,8 @@ import teamdevhub.devhub.fake.framework.persistence.user.FakeJpaUserRepository;
 import teamdevhub.devhub.fake.framework.persistence.user.FakeUserQueryRepository;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
-import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ class UserAdapterTest {
     @DisplayName("관리자_계정을_저장한다")
     void saveAdminAccount() {
         // given
-        AdminSignupCommand adminSignupCommand = AdminSignupCommand.builder()
+        SignupAdminCommand signupAdminCommand = SignupAdminCommand.builder()
                 .userGuid(null)
                 .email(ADMIN_EMAIL_1)
                 .password(ADMIN_PASSWORD_1)
@@ -53,7 +53,7 @@ class UserAdapterTest {
                 .skillList(List.of())
                 .verificationTarget(null)
                 .build();
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(adminSignupCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
         User adminUser = User.createAdminUser(adminUserCreateCommand);
 
         // when
@@ -69,7 +69,7 @@ class UserAdapterTest {
     @DisplayName("로그인을_시도하면_ID_값인_이메일로_AuthenticatedUser_를_조회한다")
     void getAuthenticatedUserByLoginId() {
         // given
-        AdminSignupCommand adminSignupCommand = AdminSignupCommand.builder()
+        SignupAdminCommand signupAdminCommand = SignupAdminCommand.builder()
                 .userGuid(null)
                 .email(ADMIN_EMAIL_1)
                 .password(ADMIN_PASSWORD_1)
@@ -79,7 +79,7 @@ class UserAdapterTest {
                 .skillList(List.of())
                 .verificationTarget(null)
                 .build();
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(adminSignupCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
         User adminUser = User.createAdminUser(adminUserCreateCommand);
 
         fakeJpaUserRepository.saveForSignup(UserMapper.toEntity(adminUser));
@@ -98,7 +98,7 @@ class UserAdapterTest {
     @DisplayName("새로운_사용자를_생성하면_사용자_정보를_저장한다")
     void saveUserWithPositionsAndSkills() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -108,7 +108,7 @@ class UserAdapterTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         // when
@@ -124,7 +124,7 @@ class UserAdapterTest {
     @DisplayName("사용자_식별키로_User_를_조회한다")
     void getUserByIdentifier() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -134,7 +134,7 @@ class UserAdapterTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeJpaUserRepository.save(UserMapper.toEntity(testUser));
@@ -151,7 +151,7 @@ class UserAdapterTest {
     @DisplayName("사용자_프로필_정보를_수정하면_변경된_값이_저장된다")
     void updateUserProfile() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -161,7 +161,7 @@ class UserAdapterTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         UserUpdateCommand userUpdateCommand = new UserUpdateCommand(NEW_USERNAME, NEW_INTRO);
@@ -183,7 +183,7 @@ class UserAdapterTest {
     @DisplayName("회원탈퇴한_사용자의_deleted_값은_true_이다")
     void isDeletedUser() {
         // given
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -193,7 +193,7 @@ class UserAdapterTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         fakeJpaUserRepository.save(UserMapper.toEntity(testUser));
@@ -213,7 +213,7 @@ class UserAdapterTest {
     @DisplayName("사용자_권한이_일치한다면_true_를_반환한다")
     void isUserRoleMatched() {
         // given
-        AdminSignupCommand adminSignupCommand = AdminSignupCommand.builder()
+        SignupAdminCommand signupAdminCommand = SignupAdminCommand.builder()
                 .userGuid(null)
                 .email(ADMIN_EMAIL_1)
                 .password(ADMIN_PASSWORD_1)
@@ -223,7 +223,7 @@ class UserAdapterTest {
                 .skillList(List.of())
                 .verificationTarget(null)
                 .build();
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(adminSignupCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
         User adminUser = User.createAdminUser(adminUserCreateCommand);
 
         fakeJpaUserRepository.save(UserMapper.toEntity(adminUser));

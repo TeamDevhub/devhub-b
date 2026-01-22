@@ -1,7 +1,10 @@
 package teamdevhub.devhub.adapter.in.common.vo;
 
+import lombok.Builder;
+
 import java.util.List;
 
+@Builder
 public record PageResult<T>(List<T> content, int page, int size, long totalElements, int totalPages, boolean first, boolean last) {
 
     public static <T> PageResult<T> of(List<T> content, int page, int size, long totalElements) {

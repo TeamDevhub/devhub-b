@@ -19,14 +19,16 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 public class CustomFilterExceptionHandlerMediumTest {
 
     private CustomFilterExceptionHandler customFilterExceptionHandler;
+
     private MockHttpServletResponse mockHttpServletResponse;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void init() {
-        customFilterExceptionHandler = new CustomFilterExceptionHandler();
         mockHttpServletResponse = new MockHttpServletResponse();
         objectMapper = new ObjectMapper();
+
+        customFilterExceptionHandler = new CustomFilterExceptionHandler();
     }
 
     @Test

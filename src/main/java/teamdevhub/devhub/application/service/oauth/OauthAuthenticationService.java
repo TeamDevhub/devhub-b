@@ -2,13 +2,13 @@ package teamdevhub.devhub.application.service.oauth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthCallbackResponseDto;
 import teamdevhub.devhub.application.selector.oauth.OauthClientSelector;
+import teamdevhub.devhub.application.service.oauth.vo.OauthCallbackResult;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
-import teamdevhub.devhub.port.in.oauth.usecase.OauthCallbackUseCase;
+import teamdevhub.devhub.port.in.oauth.usecase.OauthAuthenticationUseCase;
 import teamdevhub.devhub.port.out.oauth.OauthClient;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class OauthCallbackService implements OauthCallbackUseCase {
+public class OauthAuthenticationService implements OauthAuthenticationUseCase {
 
     private final TokenIssueProvider tokenIssueProvider;
     private final OauthClientSelector oauthClientSelector;
@@ -31,7 +31,7 @@ public class OauthCallbackService implements OauthCallbackUseCase {
     }
 
     @Override
-    public OauthCallbackResponseDto handleOAuthCallback(VerificationProvider verificationProvider, String authorizationCode) {
+    public OauthCallbackResult handleOAuthCallback(VerificationProvider verificationProvider, String authorizationCode) {
         OauthClient oauthClient = oauthClientSelector.select(verificationProvider);
         OauthUser oauthUser = oauthClient.fetchUser(authorizationCode);
 
@@ -39,10 +39,10 @@ public class OauthCallbackService implements OauthCallbackUseCase {
 
         if (optionalUser.isPresent()) {
             String tempToken = tokenIssueProvider.createTempToken(oauthUser.oauthId(), SignupStatus.COMPLETED, verificationProvider, oauthUser.email());
-            return OauthCallbackResponseDto.existedUser(tempToken);
+            return OauthCallbackResult.existedUser(tempToken);
         } else {
             String tempToken = tokenIssueProvider.createTempToken(oauthUser.oauthId(), SignupStatus.PENDING, verificationProvider, oauthUser.email());
-            return OauthCallbackResponseDto.requiresSignupUser(tempToken);
+            return OauthCallbackResult.requiresSignupUser(tempToken);
         }
     }
 }

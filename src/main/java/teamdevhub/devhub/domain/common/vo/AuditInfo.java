@@ -1,7 +1,10 @@
 package teamdevhub.devhub.domain.common.vo;
 
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 
+@Builder
 public record AuditInfo(String registrantGuid, LocalDateTime registeredDate, String modifierGuid, LocalDateTime modifiedDate) {
 
     private static final AuditInfo EMPTY = new AuditInfo(null, null, null, null);

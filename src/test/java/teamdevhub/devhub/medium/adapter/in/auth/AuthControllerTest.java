@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.adapter.in.auth.AuthFacade;
 import teamdevhub.devhub.adapter.in.auth.controller.AuthController;
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
@@ -15,6 +14,7 @@ import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.port.in.auth.AuthFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -23,11 +23,13 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 class AuthControllerTest {
 
     private AuthController authController;
+
     private AuthFacade authFacade;
 
     @BeforeEach
     void init() {
         authFacade = Mockito.mock(AuthFacade.class);
+
         authController = new AuthController(authFacade);
     }
 
@@ -93,7 +95,7 @@ class AuthControllerTest {
         doNothing().when(authFacade).logout(TEST_USER_GUID_1);
 
         // when
-        ResponseEntity<DataApiResponseDto<Void>> response = authController.revoke(authenticatedUser);
+        ResponseEntity<DataApiResponseDto<Void>> response = authController.logout(authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();

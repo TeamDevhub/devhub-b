@@ -2,7 +2,7 @@ package teamdevhub.devhub.fake.pure.usecase.user;
 
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserWithdrawUseCase;
 
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class FakeUserWithdrawUseCase implements UserWithdrawUseCase {
     private final Map<String, User> store = new HashMap<>();
 
     public FakeUserWithdrawUseCase() {
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -25,14 +25,14 @@ public class FakeUserWithdrawUseCase implements UserWithdrawUseCase {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         store.put(TEST_USER_GUID_1, testUser);
     }
 
     @Override
-    public void withdrawUser(String userGuid) {
+    public void withdraw(String userGuid) {
         User user = store.get(userGuid);
         if (user != null) {
             user.withdraw();

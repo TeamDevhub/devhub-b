@@ -1,0 +1,68 @@
+package teamdevhub.devhub.small.port.in.auth.facade;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
+import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserResolver;
+import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticatedUserUseCase;
+import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
+import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
+import teamdevhub.devhub.fake.pure.usecase.user.FakeUserLoginUseCase;
+import teamdevhub.devhub.port.in.auth.AuthFacade;
+import teamdevhub.devhub.port.in.auth.command.LoginCommand;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
+
+public class AuthFacadeTest {
+
+    private AuthFacade authFacade;
+
+    private FakeAuthenticatedUserUseCase authenticatedUserUseCase;
+    private FakeAuthenticationUseCase authenticationUseCase;
+    private FakeOauthResolveUseCase oauthResolveUseCase;
+    private FakeUserLoginUseCase userLoginUseCase;
+    private FakeAuthenticatedUserResolver authenticatedUserResolver;
+
+    @BeforeEach
+    void init() {
+        authenticatedUserUseCase = new FakeAuthenticatedUserUseCase();
+        authenticationUseCase = new FakeAuthenticationUseCase();
+        oauthResolveUseCase = new FakeOauthResolveUseCase();
+        userLoginUseCase = new FakeUserLoginUseCase();
+        authenticatedUserResolver = new FakeAuthenticatedUserResolver();
+
+        authFacade = new AuthFacade(
+                authenticatedUserUseCase,
+                authenticationUseCase,
+                oauthResolveUseCase,
+                userLoginUseCase,
+                authenticatedUserResolver
+        );
+    }
+
+    @Test
+    @DisplayName("loginCommand_로_로그인_할_수_있다.")
+    void loginWithLoginCommand() {
+        // given
+        LoginCommand loginCommand = new LoginCommand(TEST_EMAIL_1, TEST_PASSWORD_1);
+
+        // when
+        LoginResponseDto loginResponseDto = authFacade.login(loginCommand);
+
+        // then
+        assertThat(loginResponseDto.getAccessToken()).isEqualTo("access-token");
+    }
+
+    @Test
+    @DisplayName("logout_은_revoke_를_호출한다")
+    void logoutRevokesToken() {
+        // given, when
+        authFacade.logout(TEST_USER_GUID_1);
+
+        // then
+        assertThat(authenticationUseCase.getRevokedUserGuid()).isEqualTo(TEST_USER_GUID_1);
+    }
+}
+

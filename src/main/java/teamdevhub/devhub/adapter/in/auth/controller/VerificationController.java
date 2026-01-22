@@ -5,12 +5,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamdevhub.devhub.adapter.in.auth.AuthFacade;
 import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.request.IssueVerificationRequestDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthCallbackResponseDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
+import teamdevhub.devhub.port.in.auth.OauthAuthFacade;
+import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
 
 import java.io.IOException;
 
@@ -19,11 +20,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class VerificationController {
 
-    private final AuthFacade authFacade;
+    private final VerificationUseCase verificationUseCase;
+    private final OauthAuthFacade oauthAuthFacade;
 
     @PostMapping("/email")
     public ResponseEntity<DataApiResponseDto<Void>> sendEmailVerification(@Valid @RequestBody IssueVerificationRequestDto issueVerificationRequestDto) {
-        authFacade.issueEmailVerification(issueVerificationRequestDto.toIssueVerificationCommand());
+        verificationUseCase.issueVerification(issueVerificationRequestDto.toIssueVerificationCommand());
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.VERIFICATION_SENT
@@ -33,7 +35,7 @@ public class VerificationController {
 
     @PostMapping("/email/confirm")
     public ResponseEntity<DataApiResponseDto<Void>> confirmEmailVerification(@Valid @RequestBody ConfirmVerificationRequestDto confirmVerificationRequestDto) {
-        authFacade.confirmEmailVerification(confirmVerificationRequestDto.toConfirmVerificationCommand());
+        verificationUseCase.confirmVerification(confirmVerificationRequestDto.toConfirmVerificationCommand());
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.VERIFICATION_SUCCESS
@@ -43,16 +45,16 @@ public class VerificationController {
 
     @GetMapping("/oauth/{provider}")
     public void redirectToProvider(@PathVariable String provider, HttpServletResponse httpServletResponse) throws IOException {
-        String authorizationUrl = authFacade.createOAuthAuthorizationUrl(provider);
+        String authorizationUrl = oauthAuthFacade.createOAuthAuthorizationUrl(provider);
         httpServletResponse.sendRedirect(authorizationUrl);
     }
 
     @GetMapping("/oauth/{provider}/callback")
-    public ResponseEntity<DataApiResponseDto<OauthCallbackResponseDto>> handleOauthCallback(@PathVariable String provider, @RequestParam String code) {
+    public ResponseEntity<DataApiResponseDto<OauthAuthResponseDto>> handleOauthCallback(@PathVariable String provider, @RequestParam String code) {
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(
                         SuccessCode.CREATE_SUCCESS,
-                        authFacade.handleOAuthCallback(provider, code)
+                        oauthAuthFacade.handleOAuthCallback(provider, code)
                 )
         );
     }

@@ -1,8 +1,10 @@
 package teamdevhub.devhub.domain.verification.vo;
 
+import lombok.Builder;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
 
+@Builder
 public record VerificationTarget(VerificationType verificationType, String value) {
 
     public static VerificationTarget of(VerificationType verificationType, String value) {

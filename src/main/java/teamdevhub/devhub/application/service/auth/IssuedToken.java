@@ -1,7 +1,6 @@
 package teamdevhub.devhub.application.service.auth;
 
- record IssuedToken(
-        String prefix,
-        String accessToken,
-        String refreshToken
-) {}
+import lombok.Builder;
+
+@Builder
+record IssuedToken(String accessToken, String refreshToken) {}

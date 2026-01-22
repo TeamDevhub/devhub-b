@@ -28,11 +28,8 @@ class LoginUserArgumentResolverMediumTest {
 
 
     static class TestController {
-
         public void testMethod(@LoginUser AuthenticatedUser authenticatedUser) {}
-
         public void noAnnotationMethod(AuthenticatedUser authenticatedUser) {}
-
         public void wrongTypeMethod(@LoginUser String user) {}
     }
 

@@ -6,14 +6,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.adapter.in.auth.AuthFacade;
 import teamdevhub.devhub.adapter.in.auth.controller.VerificationController;
 import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.request.IssueVerificationRequestDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthCallbackResponseDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
+import teamdevhub.devhub.application.service.oauth.vo.OauthCallbackResult;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.port.in.auth.OauthAuthFacade;
+import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,12 +27,16 @@ import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_CODE;
 public class VerificationControllerTest {
 
     private VerificationController verificationController;
-    private AuthFacade authFacade;
+
+    private VerificationUseCase verificationUseCase;
+    private OauthAuthFacade oauthAuthFacade;
 
     @BeforeEach
     void init() {
-        authFacade = Mockito.mock(AuthFacade.class);
-        verificationController = new VerificationController(authFacade);
+        verificationUseCase = Mockito.mock(VerificationUseCase.class);
+        oauthAuthFacade = Mockito.mock(OauthAuthFacade.class);
+
+        verificationController = new VerificationController(verificationUseCase, oauthAuthFacade);
     }
 
     @Test
@@ -38,17 +44,16 @@ public class VerificationControllerTest {
     void canVerifyCodeWhenSendingEmailVerification() {
         // given
         IssueVerificationRequestDto issueVerificationRequestDto = new IssueVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1);
-        doNothing().when(authFacade).issueEmailVerification(any());
+        doNothing().when(verificationUseCase).issueVerification(any());
 
         // when
         ResponseEntity<DataApiResponseDto<Void>> response = verificationController.sendEmailVerification(issueVerificationRequestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getCode())
-                .isEqualTo(SuccessCode.VERIFICATION_SENT.getCode());
+        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.VERIFICATION_SENT.getCode());
 
-        verify(authFacade).issueEmailVerification(any());
+        verify(verificationUseCase).issueVerification(any());
     }
 
     @Test
@@ -60,7 +65,7 @@ public class VerificationControllerTest {
                 TEST_EMAIL_1,
                 TEST_EMAIL_CODE
         );
-        doNothing().when(authFacade).confirmEmailVerification(any());
+        doNothing().when(verificationUseCase).confirmVerification(any());
 
         // when
         ResponseEntity<DataApiResponseDto<Void>> response = verificationController.confirmEmailVerification(confirmVerificationRequestDto);
@@ -69,7 +74,7 @@ public class VerificationControllerTest {
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.VERIFICATION_SUCCESS.getCode());
 
-        verify(authFacade).confirmEmailVerification(any());
+        verify(verificationUseCase).confirmVerification(any());
     }
 
     @Test
@@ -80,14 +85,14 @@ public class VerificationControllerTest {
         String authorizationUrl = "https://google.com/oauth/authorize";
 
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-        Mockito.when(authFacade.createOAuthAuthorizationUrl(provider))
+        Mockito.when(oauthAuthFacade.createOAuthAuthorizationUrl(provider))
                 .thenReturn(authorizationUrl);
 
         // when
         verificationController.redirectToProvider(provider, response);
 
         // then
-        verify(authFacade).createOAuthAuthorizationUrl(provider);
+        verify(oauthAuthFacade).createOAuthAuthorizationUrl(provider);
         verify(response).sendRedirect(authorizationUrl);
     }
 
@@ -97,19 +102,20 @@ public class VerificationControllerTest {
         // given
         String provider = "github";
         String code = "authorization-code";
-        OauthCallbackResponseDto callbackResponse = OauthCallbackResponseDto.existedUser("TEMP_TOKEN");
+        OauthCallbackResult oauthCallbackResult = OauthCallbackResult.existedUser("TEMP_TOKEN");
+        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.fromCallback(oauthCallbackResult);
 
-        Mockito.when(authFacade.handleOAuthCallback(provider, code))
-                .thenReturn(callbackResponse);
+        Mockito.when(oauthAuthFacade.handleOAuthCallback(provider, code))
+                .thenReturn(oauthAuthResponseDto);
 
         // when
-        ResponseEntity<DataApiResponseDto<OauthCallbackResponseDto>> response = verificationController.handleOauthCallback(provider, code);
+        ResponseEntity<DataApiResponseDto<OauthAuthResponseDto>> response = verificationController.handleOauthCallback(provider, code);
 
         // then
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.CREATE_SUCCESS.getCode());
-        assertThat(response.getBody().getData()).isEqualTo(callbackResponse);
+        assertThat(response.getBody().getData()).isEqualTo(oauthAuthResponseDto);
 
-        verify(authFacade).handleOAuthCallback(provider, code);
+        verify(oauthAuthFacade).handleOAuthCallback(provider, code);
     }
 }

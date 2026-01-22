@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.enums.SignupStatus;
-import teamdevhub.devhub.common.enums.TokenType;
-import teamdevhub.devhub.common.enums.VerificationProvider;
+import teamdevhub.devhub.common.enums.*;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
@@ -31,8 +28,6 @@ import java.util.Date;
 public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
 
     private final TimeProvider timeProvider;
-
-    private static final String BEARER_PREFIX = "Bearer ";
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -92,10 +87,10 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
 
     @Override
     public String removeBearer(String token) {
-        if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
-            return token.substring(BEARER_PREFIX.length());
+        if (!TokenPrefix.BEARER.matches(token)) {
+            throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
-        throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
+        return TokenPrefix.BEARER.strip(token);
     }
 
     @Override

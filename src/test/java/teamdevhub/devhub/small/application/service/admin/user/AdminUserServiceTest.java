@@ -10,7 +10,7 @@ import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.application.service.admin.user.AdminUserService;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -30,7 +30,7 @@ class AdminUserServiceTest {
     @DisplayName("사용자_목록을_조회할_수_있다")
     void canFetchUserList() {
         // given
-        SignupCommand signupCommand1 = SignupCommand.builder()
+        SignupUserCommand signupUserCommand1 = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -40,10 +40,10 @@ class AdminUserServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser1 = User.createGeneralUser(generalUserCreateCommand1);
 
-        SignupCommand signupCommand2 = SignupCommand.builder()
+        SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_2)
                 .password(TEST_PASSWORD_2)
@@ -53,7 +53,7 @@ class AdminUserServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_2)
                 .build();
-        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
         User testUser2 = User.createGeneralUser(generalUserCreateCommand2);
 
         fakeUserRepository.save(testUser1);

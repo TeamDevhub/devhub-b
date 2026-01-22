@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.in.auth;
+package teamdevhub.devhub.adapter.in.auth.controller;
 
 import org.springframework.http.ResponseCookie;
 

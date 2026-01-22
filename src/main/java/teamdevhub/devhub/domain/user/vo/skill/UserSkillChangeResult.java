@@ -1,7 +1,10 @@
 package teamdevhub.devhub.domain.user.vo.skill;
 
+import lombok.Builder;
+
 import java.util.Set;
 
+@Builder
 public record UserSkillChangeResult(boolean changed, Set<UserSkill> previousSkills, Set<UserSkill> changedSkills) {
 
     public static UserSkillChangeResult changed(Set<UserSkill> previousSkills, Set<UserSkill> changedSkills) {

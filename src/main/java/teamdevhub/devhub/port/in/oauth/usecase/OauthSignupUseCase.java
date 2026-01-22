@@ -1,8 +1,9 @@
 package teamdevhub.devhub.port.in.oauth.usecase;
 
-import teamdevhub.devhub.port.in.oauth.command.OauthSignupCommand;
+import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 
 public interface OauthSignupUseCase {
 
-    String signupWithOauth(OauthSignupCommand oauthSignupCommand);
+    OauthUser signupWithOauth(SignupOauthUserCommand signupOauthUserCommand);
 }

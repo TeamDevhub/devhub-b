@@ -1,9 +1,11 @@
 package teamdevhub.devhub.domain.verification.vo;
 
+import lombok.Builder;
 import teamdevhub.devhub.domain.verification.Verification;
 
 import java.util.Optional;
 
+@Builder
 public record IssuedVerification(Verification verification, VerificationMessage verificationMessage) {
 
     public static IssuedVerification withVerificationMessage(Verification verification, VerificationMessage verificationMessage) {

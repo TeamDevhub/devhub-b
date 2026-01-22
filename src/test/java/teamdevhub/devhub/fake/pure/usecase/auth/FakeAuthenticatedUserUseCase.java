@@ -4,7 +4,7 @@ import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.port.in.auth.usecase.AuthenticatedUserUseCase;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ public class FakeAuthenticatedUserUseCase implements AuthenticatedUserUseCase {
     private final Map<String, User> store = new HashMap<>();
 
     public FakeAuthenticatedUserUseCase() {
-        SignupCommand signupCommand = SignupCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -26,7 +26,7 @@ public class FakeAuthenticatedUserUseCase implements AuthenticatedUserUseCase {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
 
         store.put(TEST_USER_GUID_1, testUser);

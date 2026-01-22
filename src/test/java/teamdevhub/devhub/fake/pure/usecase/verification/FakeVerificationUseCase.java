@@ -6,7 +6,7 @@ import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
-import teamdevhub.devhub.port.in.verification.VerificationUseCase;
+import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
 import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
 import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
 

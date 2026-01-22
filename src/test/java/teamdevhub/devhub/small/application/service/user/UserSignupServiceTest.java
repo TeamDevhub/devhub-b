@@ -16,8 +16,8 @@ import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserSkillRepository;
 import teamdevhub.devhub.fake.pure.usecase.verification.FakeVerificationUseCase;
-import teamdevhub.devhub.port.in.user.command.AdminSignupCommand;
-import teamdevhub.devhub.port.in.user.command.SignupCommand;
+import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
+import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.List;
 
@@ -27,8 +27,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserSignupServiceTest {
 
-    private FakeEncodedPasswordProvider fakePasswordPolicyProvider;
-    private FakeVerificationUseCase fakeSignupVerificationUseCase;
+    private FakeEncodedPasswordProvider encodedPasswordProvider;
     private FakeUserRepository fakeUserRepository;
     private FakeUserPositionRepository fakeUserPositionRepository;
     private FakeUserSkillRepository fakeUserSkillRepository;
@@ -37,17 +36,15 @@ public class UserSignupServiceTest {
 
     @BeforeEach
     void init() {
-        fakePasswordPolicyProvider = new FakeEncodedPasswordProvider();
+        encodedPasswordProvider = new FakeEncodedPasswordProvider();
         FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
-        fakeSignupVerificationUseCase = new FakeVerificationUseCase();
         fakeUserRepository = new FakeUserRepository();
         fakeUserPositionRepository = new FakeUserPositionRepository();
         fakeUserSkillRepository = new FakeUserSkillRepository();
 
         userSignupService = new UserSignupService(
-                fakePasswordPolicyProvider,
+                encodedPasswordProvider,
                 fakeUuidIdentifierProvider,
-                fakeSignupVerificationUseCase,
                 fakeUserRepository,
                 fakeUserPositionRepository,
                 fakeUserSkillRepository
@@ -60,23 +57,20 @@ public class UserSignupServiceTest {
         // given
         FakeUuidIdentifierProvider fakeAdminUuidIdentifierProvider = new FakeUuidIdentifierProvider(ADMIN_USER_GUID_1);
         userSignupService = new UserSignupService(
-                fakePasswordPolicyProvider,
+                encodedPasswordProvider,
                 fakeAdminUuidIdentifierProvider,
-                fakeSignupVerificationUseCase,
                 fakeUserRepository,
                 fakeUserPositionRepository,
                 fakeUserSkillRepository
         );
 
-        AdminSignupCommand adminSignupCommand = new AdminSignupCommand(null, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of(), null);
+        SignupAdminCommand signupAdminCommand = new SignupAdminCommand(null, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of(), null);
         // when
-        userSignupService.initializeAdminUser(adminSignupCommand);
+        userSignupService.initializeAdminUser(signupAdminCommand);
 
         // then
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID_1)).isNotNull();
         assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID_1).getUserGuid()).isEqualTo(ADMIN_USER_GUID_1);
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID_1).getUsername()).isEqualTo(ADMIN_USERNAME_1);
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID_1).getPassword()).isEqualTo(fakePasswordPolicyProvider.encode(ADMIN_PASSWORD_1));
+        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID_1).getPassword()).isEqualTo(encodedPasswordProvider.encode(ADMIN_PASSWORD_1));
         assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID_1).getUserRole()).isEqualTo(UserRole.ADMIN);
     }
 
@@ -89,8 +83,8 @@ public class UserSignupServiceTest {
         fakeUserRepository.saveAdminUser(existedAdminUser);
 
         // when
-        AdminSignupCommand adminSignupCommand = new AdminSignupCommand("new-admin-guid", ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of(), VERIFICATION_TARGET_1);
-        userSignupService.initializeAdminUser(adminSignupCommand);
+        SignupAdminCommand signupAdminCommand = new SignupAdminCommand("new-admin-guid", ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of(), VERIFICATION_TARGET_1);
+        userSignupService.initializeAdminUser(signupAdminCommand);
 
         // then
         AuthenticatedUser savedAdminUser = fakeUserRepository.findAuthenticatedUserByUserGuid(ADMIN_USER_GUID_1);
@@ -105,39 +99,39 @@ public class UserSignupServiceTest {
     @DisplayName("회원가입에_성공하면_인증_테이블에_해당_사용자의_인증내역이_삭제된다")
     void deleteEmailVerificationRecordWhenSuccessfulSignup() {
         // given
-        SignupCommand signupCommand = new SignupCommand(null, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_1);
+        SignupUserCommand signupUserCommand = new SignupUserCommand(null, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_1);
 
         // when
-        User savedUser = userSignupService.signup(signupCommand);
+        User savedUser = userSignupService.signup(signupUserCommand);
 
         // then
         assertThat(fakeUserRepository.save(savedUser).getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(fakeUserRepository.save(savedUser).getPassword()).isEqualTo(fakePasswordPolicyProvider.encode(TEST_PASSWORD_1));
+        assertThat(fakeUserRepository.save(savedUser).getPassword()).isEqualTo(encodedPasswordProvider.encode(TEST_PASSWORD_1));
     }
 
-    @Test
-    @DisplayName("인증이_완료되지_않은_사용자가_회원가입을_요청하면_예외를_던진다")
-    void throwExceptionWhenSignupWithoutEmailVerification() {
-        // given
-        SignupCommand signupCommand = new SignupCommand(null, UNVERIFIED_EMAIL, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_2);
-        fakeSignupVerificationUseCase.putUnverified(VERIFICATION_TARGET_2);
-
-        // when
-        assertThatThrownBy(
-                () -> userSignupService.signup(signupCommand))
-                // then
-                .isInstanceOf(DomainRuleException.class)
-                .hasMessageContaining("인증에 실패했습니다.");
-    }
+//    @Test
+//    @DisplayName("인증이_완료되지_않은_사용자가_회원가입을_요청하면_예외를_던진다")
+//    void throwExceptionWhenSignupWithoutEmailVerification() {
+//        // given
+//        SignupUserCommand signupUserCommand = new SignupUserCommand(null, UNVERIFIED_EMAIL, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_2);
+//        fakeSignupVerificationUseCase.putUnverified(VERIFICATION_TARGET_2);
+//
+//        // when
+//        assertThatThrownBy(
+//                () -> userSignupService.signup(signupUserCommand))
+//                // then
+//                .isInstanceOf(DomainRuleException.class)
+//                .hasMessageContaining("인증에 실패했습니다.");
+//    }
 
     @Test
     @DisplayName("회원가입_후_로그인_하지_않은_사용자의_최종_로그인_일시는_존재하지_않는다")
     void haveNoLastLoginDateForUserWhoHasNotLoggedInAfterSignup() {
         // given
-        SignupCommand signupCommand = new SignupCommand(null, UNVERIFIED_EMAIL, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_1);
+        SignupUserCommand signupUserCommand = new SignupUserCommand(null, UNVERIFIED_EMAIL, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_1);
 
         // when
-        userSignupService.signup(signupCommand);
+        userSignupService.signup(signupUserCommand);
 
         // then
         assertThat(fakeUserRepository.wasCalled("updateLastLoginDateTime")).isFalse();

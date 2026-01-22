@@ -7,8 +7,8 @@ import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 public interface AuthenticationUseCase {
 
-    LoginResponseDto login(LoginCommand loginCommand);
+    LoginResponseDto login(AuthenticatedUser authenticatedUser);
     LoginResponseDto loginWithOauth(AuthenticatedUser authenticatedUser);
-    TokenResponseDto reissueAccessToken(String refreshToken);
+    TokenResponseDto reissueAccessToken(AuthenticatedUser authenticatedUser);
     void revoke(String userGuid);
 }
