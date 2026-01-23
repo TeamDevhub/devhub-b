@@ -97,5 +97,4 @@ public class UserSignupService implements UserSignupUseCase {
     private boolean existsByUserRole() {
         return userRepository.existsByUserRole(UserRole.ADMIN);
     }
-
 }

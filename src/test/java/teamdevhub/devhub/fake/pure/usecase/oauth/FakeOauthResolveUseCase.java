@@ -11,16 +11,20 @@ import teamdevhub.devhub.port.in.oauth.usecase.OauthResolveUseCase;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
+@Setter
 public class FakeOauthResolveUseCase implements OauthResolveUseCase {
 
     private ResolveOauthUserCommand lastCommand;
-
-    @Setter
+    private OauthUserResult oauthUserResult;
     private boolean loginAvailableScenario = true;
 
     @Override
     public OauthUserResult resolveOauthUser(ResolveOauthUserCommand resolveOauthUserCommand) {
         this.lastCommand = resolveOauthUserCommand;
+
+        if (oauthUserResult != null) {
+            return oauthUserResult;
+        }
 
         if (loginAvailableScenario) {
             AuthenticatedUser fakeUser = AuthenticatedUser.builder()
@@ -31,7 +35,7 @@ public class FakeOauthResolveUseCase implements OauthResolveUseCase {
                     .build();
             return OauthUserResult.success(fakeUser);
         } else {
-            return OauthUserResult.requiresSignup("fake-temp-token");
+            return OauthUserResult.requiresSignup(resolveOauthUserCommand.tempToken());
         }
     }
 

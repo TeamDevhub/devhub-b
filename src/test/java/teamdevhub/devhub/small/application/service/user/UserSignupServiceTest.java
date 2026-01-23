@@ -6,18 +6,23 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.service.user.UserSignupService;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.position.UserPosition;
+import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
 import teamdevhub.devhub.fake.pure.provider.FakeEncodedPasswordProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserSkillRepository;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -106,20 +111,60 @@ public class UserSignupServiceTest {
         assertThat(fakeUserRepository.save(savedUser).getPassword()).isEqualTo(encodedPasswordProvider.encode(TEST_PASSWORD_1));
     }
 
-//    @Test
-//    @DisplayName("인증이_완료되지_않은_사용자가_회원가입을_요청하면_예외를_던진다")
-//    void throwExceptionWhenSignupWithoutEmailVerification() {
-//        // given
-//        SignupUserCommand signupUserCommand = new SignupUserCommand(null, UNVERIFIED_EMAIL, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_2);
-//        fakeSignupVerificationUseCase.putUnverified(VERIFICATION_TARGET_2);
-//
-//        // when
-//        assertThatThrownBy(
-//                () -> userSignupService.signup(signupUserCommand))
-//                // then
-//                .isInstanceOf(DomainRuleException.class)
-//                .hasMessageContaining("인증에 실패했습니다.");
-//    }
+    @Test
+    @DisplayName("회원가입_성공시_유저_포지션과_스킬이_저장된다")
+    void signupStoresPositionsAndSkills() {
+        // given
+        SignupUserCommand signupUserCommand = new SignupUserCommand(
+                null,
+                TEST_EMAIL_1,
+                TEST_PASSWORD_1,
+                TEST_USERNAME_1,
+                TEST_INTRO_1,
+                TEST_POSITION_LIST,
+                TEST_SKILL_LIST,
+                VERIFICATION_TARGET_1
+        );
+
+        // when
+        userSignupService.signup(signupUserCommand);
+        User persistedUser = fakeUserRepository.findByUserGuid(TEST_USER_GUID_1);
+        Set<UserPosition> positions = fakeUserPositionRepository.findByUserGuid(TEST_USER_GUID_1);
+        Set<UserSkill> skills = fakeUserSkillRepository.findByUserGuid(TEST_USER_GUID_1);
+
+        // then
+        assertThat(persistedUser).isNotNull();
+        assertThat(persistedUser.getPassword()).isEqualTo(encodedPasswordProvider.encode(TEST_PASSWORD_1));
+        assertThat(positions).extracting(UserPosition::positionCd).containsExactlyInAnyOrderElementsOf(TEST_POSITION_LIST);
+        assertThat(skills).extracting(UserSkill::skillCd)
+                .containsExactlyInAnyOrderElementsOf(TEST_SKILL_LIST);
+    }
+
+    @Test
+    @DisplayName("Oauth_회원가입이_성공하면_포지션과_스킬이_저장된다")
+    void signupWithOauthStoresPositionsAndSkills() {
+        SignupOauthUserCommand signupOauthUserCommand = new SignupOauthUserCommand(
+                TEMP_TOKEN,
+                TEST_PASSWORD_1,
+                TEST_USERNAME_1,
+                TEST_INTRO_1,
+                TEST_POSITION_LIST,
+                TEST_SKILL_LIST
+        );
+
+        OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+
+        userSignupService.signupWithOauth(signupOauthUserCommand, oauthUser);
+
+        Set<UserPosition> positions = fakeUserPositionRepository.findByUserGuid(TEST_USER_GUID_1);
+        Set<UserSkill> skills = fakeUserSkillRepository.findByUserGuid(TEST_USER_GUID_1);
+        User persistedUser = fakeUserRepository.findByUserGuid(TEST_USER_GUID_1);
+
+        assertThat(positions).extracting(UserPosition::positionCd).containsExactlyInAnyOrderElementsOf(TEST_POSITION_LIST);
+        assertThat(skills).extracting(UserSkill::skillCd).containsExactlyInAnyOrderElementsOf(TEST_SKILL_LIST);
+        assertThat(persistedUser).isNotNull();
+        assertThat(persistedUser.getUserRole()).isEqualTo(UserRole.USER);
+    }
 
     @Test
     @DisplayName("회원가입_후_로그인_하지_않은_사용자의_최종_로그인_일시는_존재하지_않는다")
