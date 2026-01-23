@@ -128,7 +128,7 @@ class UserSkillAdapterMediumTest {
     }
 
     @Test
-    @DisplayName("replace가_null_또는_빈_셋이면_아무것도_수정하지_않는다")
+    @DisplayName("replace_가_null_또는_빈_셋이면_아무것도_수정하지_않는다")
     void replace_nullOrEmpty_doesNothing() {
         // given
         UserSkill skill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);

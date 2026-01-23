@@ -191,7 +191,7 @@ class UserAdapterMediumTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 OAuth 정보면 Optional.empty를 반환한다")
+    @DisplayName("존재하지 않는 OAuth 정보면 Optional.empty_를 반환한다")
     void findByOAuth_empty() {
         // when
         Optional<AuthenticatedUser> result =

@@ -16,6 +16,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 public class FakeUserSignupUseCase implements UserSignupUseCase {
 
     private final Map<String, User> store = new HashMap<>();
+
     private SignupOauthUserCommand lastSignupOauthUserCommand;
     private OauthUser lastOauthUser;
     boolean called = false;

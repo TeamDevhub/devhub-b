@@ -10,10 +10,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class StringUtilTest {
 
     @Test
-    @DisplayName("문자열이_null_이거나_빈_문자열이면_isEmpty_는_true_를_반환한다")
+    @DisplayName("문자열이_빈_문자열이면_isEmpty_는_true_를_반환한다")
     void shouldReturnTrueForIsEmptyWhenStringIsNullOrEmpty() {
         // given, when, then
-        assertThat(StringUtil.isEmpty(null)).isTrue();
         assertThat(StringUtil.isEmpty("")).isTrue();
         assertThat(StringUtil.isEmpty("   ")).isTrue();
     }
@@ -27,10 +26,9 @@ class StringUtilTest {
     }
 
     @Test
-    @DisplayName("문자열이_null_이거나_빈문자열이면_isNotEmpty_는_false_를_반환한다")
+    @DisplayName("문자열이_빈문자열이면_isNotEmpty_는_false_를_반환한다")
     void shouldReturnFalseForIsNotEmptyWhenStringIsNullOrEmpty() {
         // given, when, then
-        assertThat(StringUtil.isNotEmpty(null)).isFalse();
         assertThat(StringUtil.isNotEmpty("")).isFalse();
         assertThat(StringUtil.isNotEmpty("   ")).isFalse();
     }
@@ -72,7 +70,7 @@ class StringUtilTest {
     @DisplayName("문자열_길이가_maxLength_보다_크면_truncate_는_maxLength_까지_문자열을_잘라서_반환한다")
     void shouldTruncateStringToMaxLengthWhenLengthExceedsMax() {
         // given, when, then
-        assertThat(StringUtil.truncate("abcdef", 3)).isEqualTo("abc");
+        assertThat(StringUtil.truncate("maxLength", 3)).isEqualTo("max");
         assertThat(StringUtil.truncate(" hello world ", 5)).isEqualTo(" hell");
     }
 

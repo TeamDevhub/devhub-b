@@ -17,7 +17,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static teamdevhub.devhub.constant.UserTestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_CODE;
 
 public class EmailMessageSendAdapterTest {
 

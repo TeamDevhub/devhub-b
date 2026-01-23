@@ -3,18 +3,17 @@ package teamdevhub.devhub.fake.framework.persistence.user;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
+import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.UserQueryRepository;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.UserQueryRepository;
 import teamdevhub.devhub.domain.user.User;
+import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import java.util.*;
 
 import static teamdevhub.devhub.constant.UserTestConstant.*;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_PASSWORD_2;
 
 public class FakeUserQueryRepository implements UserQueryRepository {
 
