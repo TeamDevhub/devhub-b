@@ -11,7 +11,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.provider.FakeEncodedPasswordProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
@@ -80,8 +80,8 @@ public class UserSignupServiceTest {
     @DisplayName("관리자_계정이_이미_존재하면_새로운_계정을_생성하지_않는다")
     void doNotCreateAdminWhenAlreadyExists() {
         // given
-        UserCreateCommand adminUserCreateCommand = new UserCreateCommand(ADMIN_USER_GUID_1, VerificationProvider.EMAIL, ADMIN_EMAIL_1, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of());
-        User existedAdminUser = User.createAdminUser(adminUserCreateCommand);
+        CreateUserCommand adminCreateUserCommand = new CreateUserCommand(ADMIN_USER_GUID_1, VerificationProvider.EMAIL, ADMIN_EMAIL_1, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of());
+        User existedAdminUser = User.createAdminUser(adminCreateUserCommand);
         userRepository.saveAdminUser(existedAdminUser);
 
         // when

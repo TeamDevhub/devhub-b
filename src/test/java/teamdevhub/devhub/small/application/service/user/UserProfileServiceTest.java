@@ -8,7 +8,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserSkillRepository;
@@ -56,8 +56,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
         userRepository.save(testUser);
 
         UserPosition userPosition = new UserPosition(testUser.getUserGuid(), TEST_POSITION_CD);
@@ -91,8 +91,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
         userRepository.save(testUser);
 
         // when
@@ -118,8 +118,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
         userRepository.save(testUser);
 
         // when
@@ -145,8 +145,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
 
@@ -177,8 +177,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         userPositionRepository.saveAll(TEST_USER_POSITIONS);
@@ -207,8 +207,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         userPositionRepository.saveAll(TEST_USER_POSITIONS);
@@ -237,8 +237,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         userPositionRepository.saveAll(TEST_USER_POSITIONS);
@@ -266,8 +266,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         userPositionRepository.saveAll(TEST_USER_POSITIONS);
@@ -295,8 +295,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         userPositionRepository.saveAll(TEST_USER_POSITIONS);
@@ -331,8 +331,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         skillRepository.saveAll(TEST_USER_SKILLS);
@@ -360,8 +360,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         skillRepository.saveAll(TEST_USER_SKILLS);
@@ -390,8 +390,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         skillRepository.saveAll(TEST_USER_SKILLS);
@@ -420,8 +420,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         skillRepository.saveAll(TEST_USER_SKILLS);
@@ -449,8 +449,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         skillRepository.saveAll(TEST_USER_SKILLS);
@@ -478,8 +478,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
         skillRepository.saveAll(TEST_USER_SKILLS);
@@ -516,8 +516,8 @@ class UserProfileServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
 

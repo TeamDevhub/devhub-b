@@ -2,7 +2,7 @@ package teamdevhub.devhub.fake.pure.usecase.auth;
 
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.port.in.auth.usecase.AuthenticatedUserUseCase;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
@@ -26,8 +26,8 @@ public class FakeAuthenticatedUserUseCase implements AuthenticatedUserUseCase {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         store.put(TEST_USER_GUID_1, testUser);
     }

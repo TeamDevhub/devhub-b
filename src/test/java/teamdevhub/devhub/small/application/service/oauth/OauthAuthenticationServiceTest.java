@@ -9,7 +9,7 @@ import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.oauth.FakeOauthClient;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
@@ -64,8 +64,8 @@ public class OauthAuthenticationServiceTest {
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .build();
-        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User createdOauthUser = User.createOauthUser(oauthUserCreateCommand);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
         userRepository.save(createdOauthUser);
 
         // when

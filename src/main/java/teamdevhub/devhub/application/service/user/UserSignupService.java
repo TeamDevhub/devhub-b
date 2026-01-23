@@ -8,7 +8,7 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
@@ -43,8 +43,8 @@ public class UserSignupService implements UserSignupUseCase {
         String userGuid = identifierProvider.generateIdentifier();
         String encodedPassword = encodedPasswordProvider.encode(signupAdminCommand.password());
 
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, userGuid, encodedPassword);
-        User adminUser = User.createAdminUser(adminUserCreateCommand);
+        CreateUserCommand adminCreateUserCommand = CreateUserCommand.adminUserCreateCommand(signupAdminCommand, userGuid, encodedPassword);
+        User adminUser = User.createAdminUser(adminCreateUserCommand);
         userRepository.saveAdminUser(adminUser);
     }
 
@@ -68,16 +68,16 @@ public class UserSignupService implements UserSignupUseCase {
         String userGuid = identifierProvider.generateIdentifier();
         String encodedPassword = encodedPasswordProvider.encode(signupUserCommand.password());
 
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, userGuid, encodedPassword);
-        return User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, userGuid, encodedPassword);
+        return User.createGeneralUser(generalCreateUserCommand);
     }
 
     private User createOauthUserForSignup(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
         String userGuid = identifierProvider.generateIdentifier();
         String encodedPassword = encodedPasswordProvider.encode(signupOauthUserCommand.password());
 
-        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, userGuid, encodedPassword);
-        return User.createOauthUser(oauthUserCreateCommand);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, userGuid, encodedPassword);
+        return User.createOauthUser(oauthCreateUserCommand);
     }
 
     private void saveUserPositions(String userGuid, List<String> positionList) {

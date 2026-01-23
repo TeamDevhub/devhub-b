@@ -17,8 +17,8 @@ import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
@@ -59,8 +59,8 @@ class UserAdapterMediumTest {
                 .skillList(List.of())
                 .verificationTarget(null)
                 .build();
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
-        User adminUser = User.createAdminUser(adminUserCreateCommand);
+        CreateUserCommand adminCreateUserCommand = CreateUserCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        User adminUser = User.createAdminUser(adminCreateUserCommand);
 
         // when
         userAdapter.saveAdminUser(adminUser);
@@ -85,8 +85,8 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser));
 
@@ -113,7 +113,7 @@ class UserAdapterMediumTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        UserCreateCommand createCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand createCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User user = User.createGeneralUser(createCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(user));
@@ -152,7 +152,7 @@ class UserAdapterMediumTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        UserCreateCommand createCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand createCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User user = User.createGeneralUser(createCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(user));
@@ -227,8 +227,8 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         // when
         User savedUser = userAdapter.save(testUser);
@@ -253,8 +253,8 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser));
 
@@ -280,12 +280,12 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser));
-        UserUpdateCommand userUpdateCommand = new UserUpdateCommand(NEW_USERNAME, NEW_INTRO);
-        testUser.updateBasicProfile(userUpdateCommand);
+        UpdateUserCommand updateUserCommand = new UpdateUserCommand(NEW_USERNAME, NEW_INTRO);
+        testUser.updateBasicProfile(updateUserCommand);
 
         // when
         userAdapter.updateUserProfile(testUser);
@@ -313,8 +313,8 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser));
 
@@ -344,8 +344,8 @@ class UserAdapterMediumTest {
                 .skillList(List.of())
                 .verificationTarget(null)
                 .build();
-        UserCreateCommand adminUserCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
-        User adminUser = User.createAdminUser(adminUserCreateCommand);
+        CreateUserCommand adminCreateUserCommand = CreateUserCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        User adminUser = User.createAdminUser(adminCreateUserCommand);
 
         jpaUserRepository.save(UserMapper.toEntity(adminUser));
 
@@ -370,8 +370,8 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser1 = User.createGeneralUser(generalUserCreateCommand1);
+        CreateUserCommand generalCreateUserCommand1 = CreateUserCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser1 = User.createGeneralUser(generalCreateUserCommand1);
 
         SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
                 .userGuid(null)
@@ -383,8 +383,8 @@ class UserAdapterMediumTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_2)
                 .build();
-        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
-        User testUser2 = User.createGeneralUser(generalUserCreateCommand2);
+        CreateUserCommand generalCreateUserCommand2 = CreateUserCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        User testUser2 = User.createGeneralUser(generalCreateUserCommand2);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser1));
         jpaUserRepository.save(UserMapper.toEntity(testUser2));

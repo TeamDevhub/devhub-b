@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.common.vo.PageResult;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
 import teamdevhub.devhub.application.service.admin.user.AdminUserService;
@@ -42,8 +42,8 @@ class AdminUserServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser1 = User.createGeneralUser(generalUserCreateCommand1);
+        CreateUserCommand generalCreateUserCommand1 = CreateUserCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser1 = User.createGeneralUser(generalCreateUserCommand1);
 
         SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
                 .userGuid(null)
@@ -55,8 +55,8 @@ class AdminUserServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_2)
                 .build();
-        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
-        User testUser2 = User.createGeneralUser(generalUserCreateCommand2);
+        CreateUserCommand generalCreateUserCommand2 = CreateUserCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        User testUser2 = User.createGeneralUser(generalCreateUserCommand2);
 
         userRepository.save(testUser1);
         userRepository.save(testUser2);

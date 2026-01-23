@@ -2,7 +2,7 @@ package teamdevhub.devhub.fake.pure.usecase.user;
 
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 import teamdevhub.devhub.port.in.user.command.SignupAdminCommand;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
@@ -23,15 +23,15 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
 
     @Override
     public void initializeAdminUser(SignupAdminCommand signupAdminCommand) {
-        UserCreateCommand userCreateCommand = UserCreateCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
-        User adminUser = User.createAdminUser(userCreateCommand);
+        CreateUserCommand createUserCommand = CreateUserCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        User adminUser = User.createAdminUser(createUserCommand);
         store.put(adminUser.getUserGuid(), adminUser);
     }
 
     @Override
     public User signup(SignupUserCommand signupUserCommand) {
-        UserCreateCommand userCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User user = User.createGeneralUser(userCreateCommand);
+        CreateUserCommand createUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User user = User.createGeneralUser(createUserCommand);
         store.put(user.getUserGuid(), user);
         return user;
     }
@@ -41,8 +41,8 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
         this.called = true;
         this.lastSignupOauthUserCommand = signupOauthUserCommand;
         this.lastOauthUser = oauthUser;
-        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User createdOauthUser = User.createOauthUser(oauthUserCreateCommand);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
         store.put(createdOauthUser.getUserGuid(), createdOauthUser);
         return createdOauthUser;
     }

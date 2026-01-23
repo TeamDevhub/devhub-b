@@ -11,8 +11,8 @@ import teamdevhub.devhub.domain.user.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.domain.common.vo.AuditInfo;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -97,33 +97,33 @@ public class User {
         }
     }
 
-    public static User createAdminUser(UserCreateCommand adminUserCreateCommand) {
+    public static User createAdminUser(CreateUserCommand adminCreateUserCommand) {
         return User.builder()
-                .userGuid(adminUserCreateCommand.userGuid())
+                .userGuid(adminCreateUserCommand.userGuid())
                 .signupStatus(SignupStatus.COMPLETED)
                 .verificationProvider(VerificationProvider.EMAIL)
-                .oauthId(adminUserCreateCommand.email())
-                .email(adminUserCreateCommand.email())
-                .password(adminUserCreateCommand.encodedPassword())
+                .oauthId(adminCreateUserCommand.email())
+                .email(adminCreateUserCommand.email())
+                .password(adminCreateUserCommand.encodedPassword())
                 .userRole(UserRole.ADMIN)
-                .username(adminUserCreateCommand.username())
+                .username(adminCreateUserCommand.username())
                 .blocked(false)
                 .deleted(false)
                 .auditInfo(AuditInfo.empty())
                 .build();
     }
 
-    public static User createGeneralUser(UserCreateCommand generalUserCreateCommand) {
+    public static User createGeneralUser(CreateUserCommand generalCreateUserCommand) {
         return User.builder()
-                .userGuid(generalUserCreateCommand.userGuid())
+                .userGuid(generalCreateUserCommand.userGuid())
                 .signupStatus(SignupStatus.COMPLETED)
                 .verificationProvider(VerificationProvider.EMAIL)
-                .oauthId(generalUserCreateCommand.email())
-                .email(generalUserCreateCommand.email())
-                .password(generalUserCreateCommand.encodedPassword())
+                .oauthId(generalCreateUserCommand.email())
+                .email(generalCreateUserCommand.email())
+                .password(generalCreateUserCommand.encodedPassword())
                 .userRole(UserRole.USER)
-                .username(generalUserCreateCommand.username())
-                .introduction(generalUserCreateCommand.introduction())
+                .username(generalCreateUserCommand.username())
+                .introduction(generalCreateUserCommand.introduction())
                 .mannerDegree(36.5)
                 .blocked(false)
                 .deleted(false)
@@ -131,16 +131,16 @@ public class User {
                 .build();
     }
 
-    public static User createOauthUser(UserCreateCommand oauthUserCreateCommand) {
+    public static User createOauthUser(CreateUserCommand oauthCreateUserCommand) {
         return User.builder()
-                .userGuid(oauthUserCreateCommand.userGuid())
+                .userGuid(oauthCreateUserCommand.userGuid())
                 .signupStatus(SignupStatus.PENDING)
-                .verificationProvider(oauthUserCreateCommand.verificationProvider())
-                .oauthId(oauthUserCreateCommand.oauthId())
-                .email(oauthUserCreateCommand.email())
-                .password(oauthUserCreateCommand.encodedPassword())
-                .username(oauthUserCreateCommand.username())
-                .introduction(oauthUserCreateCommand.introduction())
+                .verificationProvider(oauthCreateUserCommand.verificationProvider())
+                .oauthId(oauthCreateUserCommand.oauthId())
+                .email(oauthCreateUserCommand.email())
+                .password(oauthCreateUserCommand.encodedPassword())
+                .username(oauthCreateUserCommand.username())
+                .introduction(oauthCreateUserCommand.introduction())
                 .userRole(UserRole.USER)
                 .mannerDegree(36.5)
                 .blocked(false)
@@ -197,13 +197,13 @@ public class User {
         this.blocked = false;
     }
 
-    public void updateBasicProfile(UserUpdateCommand userUpdateCommand) {
-        if (hasText(userUpdateCommand.username()) && !userUpdateCommand.username().equals(this.username)) {
-            this.username = userUpdateCommand.username();
+    public void updateBasicProfile(UpdateUserCommand updateUserCommand) {
+        if (hasText(updateUserCommand.username()) && !updateUserCommand.username().equals(this.username)) {
+            this.username = updateUserCommand.username();
         }
 
-        if (hasText(userUpdateCommand.introduction()) && !userUpdateCommand.introduction().equals(this.introduction)) {
-            this.introduction = userUpdateCommand.introduction();
+        if (hasText(updateUserCommand.introduction()) && !updateUserCommand.introduction().equals(this.introduction)) {
+            this.introduction = updateUserCommand.introduction();
         }
     }
 

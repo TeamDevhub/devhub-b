@@ -1,8 +1,8 @@
 package teamdevhub.devhub.fake.pure.usecase.user;
 
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
-import teamdevhub.devhub.domain.user.vo.user.UserUpdateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 import teamdevhub.devhub.port.in.user.command.UpdateProfileCommand;
 import teamdevhub.devhub.port.in.user.usecase.UserProfileUseCase;
@@ -27,8 +27,8 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         store.put(TEST_USER_GUID_1, testUser);
     }
@@ -41,8 +41,8 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
     @Override
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
         User user = store.get(updateProfileCommand.userGuid());
-        UserUpdateCommand userUpdateCommand = new UserUpdateCommand(updateProfileCommand.username(), updateProfileCommand.introduction());
-        user.updateBasicProfile(userUpdateCommand);
+        UpdateUserCommand updateUserCommand = new UpdateUserCommand(updateProfileCommand.username(), updateProfileCommand.introduction());
+        user.updateBasicProfile(updateUserCommand);
         user.changePositions(updateProfileCommand.positions());
         user.changeSkills(updateProfileCommand.skills());
     }

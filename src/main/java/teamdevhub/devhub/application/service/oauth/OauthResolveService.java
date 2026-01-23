@@ -19,7 +19,7 @@ public class OauthResolveService implements OauthResolveUseCase {
     private final UserRepository userRepository;
 
     @Override
-    public OauthUserResult resolveOauthUser(ResolveOauthUserCommand resolveOauthUserCommand) {
+    public OauthUserResult findOrRequireSignup(ResolveOauthUserCommand resolveOauthUserCommand) {
         TempTokenInfo tempTokenInfo = tokenParseProvider.getTempTokenInfo(resolveOauthUserCommand.tempToken());
         return userRepository
                 .findByOAuth(tempTokenInfo.verificationProvider(), tempTokenInfo.oauthId())

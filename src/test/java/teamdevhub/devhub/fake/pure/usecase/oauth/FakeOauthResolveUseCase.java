@@ -21,7 +21,7 @@ public class FakeOauthResolveUseCase implements OauthResolveUseCase {
     private boolean loginAvailableScenario = true;
 
     @Override
-    public OauthUserResult resolveOauthUser(ResolveOauthUserCommand resolveOauthUserCommand) {
+    public OauthUserResult findOrRequireSignup(ResolveOauthUserCommand resolveOauthUserCommand) {
         this.lastCommand = resolveOauthUserCommand;
 
         if (oauthUserResult != null) {

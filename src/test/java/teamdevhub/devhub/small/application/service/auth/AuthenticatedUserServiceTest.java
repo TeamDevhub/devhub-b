@@ -10,7 +10,7 @@ import teamdevhub.devhub.domain.auth.RefreshToken;
 import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
 import teamdevhub.devhub.fake.pure.repository.auth.FakeRefreshTokenRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
@@ -52,8 +52,8 @@ public class AuthenticatedUserServiceTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);
 
@@ -80,8 +80,8 @@ public class AuthenticatedUserServiceTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
         userRepository.save(testUser);
 
         RefreshToken refreshToken = new RefreshToken(testUser.getUserGuid(), REFRESH_TOKEN);
@@ -112,8 +112,8 @@ public class AuthenticatedUserServiceTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalUserCreateCommand);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         String invalidToken = "invalid-refresh-token";
         tokenParseProvider.givenRefreshToken(invalidToken, new RefreshTokenInfo(TEST_USER_GUID_1));

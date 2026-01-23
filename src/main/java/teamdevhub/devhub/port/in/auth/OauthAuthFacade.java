@@ -30,7 +30,7 @@ public class OauthAuthFacade {
 
         if (oauthCallbackResult.signupStatus() == SignupStatus.COMPLETED) {
             ResolveOauthUserCommand resolveOauthUserCommand = new ResolveOauthUserCommand(oauthCallbackResult.tempToken());
-            OauthUserResult oauthUserResult = oauthResolveUseCase.resolveOauthUser(resolveOauthUserCommand);
+            OauthUserResult oauthUserResult = oauthResolveUseCase.findOrRequireSignup(resolveOauthUserCommand);
             LoginResponseDto loginResponseDto = authenticationUseCase.loginWithOauth(oauthUserResult.authenticatedUser());
             return OauthAuthResponseDto.loggedIn(loginResponseDto);
         }

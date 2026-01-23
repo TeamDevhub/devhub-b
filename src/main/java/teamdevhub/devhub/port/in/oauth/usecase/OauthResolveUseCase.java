@@ -7,6 +7,6 @@ import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 
 public interface OauthResolveUseCase {
 
-    OauthUserResult resolveOauthUser(ResolveOauthUserCommand resolveOauthUserCommand);
+    OauthUserResult findOrRequireSignup(ResolveOauthUserCommand resolveOauthUserCommand);
     OauthUser extractOauthUser(SignupOauthUserCommand signupOauthUserCommand);
 }

@@ -13,7 +13,7 @@ import teamdevhub.devhub.adapter.in.user.dto.response.UserBasicResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataListApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
 import teamdevhub.devhub.port.in.common.command.PageCommand;
@@ -52,10 +52,10 @@ public class AdminUserControllerTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        UserCreateCommand userCreateCommand1 = UserCreateCommand.generalUserCreateCommand(
+        CreateUserCommand createUserCommand1 = CreateUserCommand.generalUserCreateCommand(
                 signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
 
-        User testUser1 = User.createGeneralUser(userCreateCommand1);
+        User testUser1 = User.createGeneralUser(createUserCommand1);
 
         SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
                 .email(TEST_EMAIL_2)
@@ -67,10 +67,10 @@ public class AdminUserControllerTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        UserCreateCommand userCreateCommand2 = UserCreateCommand.generalUserCreateCommand(
+        CreateUserCommand createUserCommand2 = CreateUserCommand.generalUserCreateCommand(
                 signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
 
-        User testUser2 = User.createGeneralUser(userCreateCommand2);
+        User testUser2 = User.createGeneralUser(createUserCommand2);
 
         PageResult<User> pageResult = PageResult.of(
                 List.of(testUser1, testUser2),

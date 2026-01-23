@@ -7,7 +7,7 @@ import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.UserQueryRe
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
@@ -30,8 +30,8 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        UserCreateCommand generalUserCreateCommand1 = UserCreateCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser1 = User.createGeneralUser(generalUserCreateCommand1);
+        CreateUserCommand generalCreateUserCommand1 = CreateUserCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser1 = User.createGeneralUser(generalCreateUserCommand1);
 
         SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
                 .userGuid(null)
@@ -43,8 +43,8 @@ public class FakeUserQueryRepository implements UserQueryRepository {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_2)
                 .build();
-        UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
-        User testUser2 = User.createGeneralUser(generalUserCreateCommand2);
+        CreateUserCommand generalCreateUserCommand2 = CreateUserCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        User testUser2 = User.createGeneralUser(generalCreateUserCommand2);
 
         store.put(testUser1.getUserGuid(), UserMapper.toEntity(testUser1));
         store.put(testUser2.getUserGuid(), UserMapper.toEntity(testUser2));

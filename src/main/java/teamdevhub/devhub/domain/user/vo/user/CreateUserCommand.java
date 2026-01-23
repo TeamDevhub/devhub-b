@@ -10,7 +10,7 @@ import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 import java.util.List;
 
 @Builder
-public record UserCreateCommand(
+public record CreateUserCommand(
         String userGuid,
         VerificationProvider verificationProvider,
         String oauthId,
@@ -22,8 +22,8 @@ public record UserCreateCommand(
         List<String> skillList
 ) {
 
-    public static UserCreateCommand adminUserCreateCommand(SignupAdminCommand signupAdminCommand, String userGuid, String encodedPassword) {
-        return new UserCreateCommand(
+    public static CreateUserCommand adminUserCreateCommand(SignupAdminCommand signupAdminCommand, String userGuid, String encodedPassword) {
+        return new CreateUserCommand(
                 userGuid,
                 VerificationProvider.EMAIL,
                 signupAdminCommand.email(),
@@ -36,8 +36,8 @@ public record UserCreateCommand(
         );
     }
 
-    public static UserCreateCommand generalUserCreateCommand(SignupUserCommand signupUserCommand, String userGuid, String encodedPassword) {
-        return new UserCreateCommand(
+    public static CreateUserCommand generalUserCreateCommand(SignupUserCommand signupUserCommand, String userGuid, String encodedPassword) {
+        return new CreateUserCommand(
                 userGuid,
                 VerificationProvider.EMAIL,
                 signupUserCommand.email(),
@@ -50,8 +50,8 @@ public record UserCreateCommand(
         );
     }
 
-    public static UserCreateCommand oauthUserCreateCommand(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser, String userGuid, String encodedPassword) {
-        return new UserCreateCommand(
+    public static CreateUserCommand oauthUserCreateCommand(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser, String userGuid, String encodedPassword) {
+        return new CreateUserCommand(
                 userGuid,
                 oauthUser.verificationProvider(),
                 oauthUser.oauthId(),

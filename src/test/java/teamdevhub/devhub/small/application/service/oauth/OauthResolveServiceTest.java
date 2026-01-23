@@ -11,7 +11,7 @@ import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.UserCreateCommand;
+import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 import teamdevhub.devhub.port.in.oauth.command.ResolveOauthUserCommand;
@@ -52,15 +52,15 @@ class OauthResolveServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User createdOauthUser = User.createOauthUser(oauthUserCreateCommand);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
         createdOauthUser.completeSignup();
         userRepository.save(createdOauthUser);
 
         ResolveOauthUserCommand resolveOauthUserCommand = new ResolveOauthUserCommand(TEMP_TOKEN);
 
         // when
-        OauthUserResult oauthUserResult = oauthResolveService.resolveOauthUser(resolveOauthUserCommand);
+        OauthUserResult oauthUserResult = oauthResolveService.findOrRequireSignup(resolveOauthUserCommand);
 
         // then
         assertThat(oauthUserResult.loginAvailable()).isTrue();
@@ -77,7 +77,7 @@ class OauthResolveServiceTest {
         ResolveOauthUserCommand resolveOauthUserCommand = new ResolveOauthUserCommand(TEMP_TOKEN);
 
         // when
-        OauthUserResult oauthUserResult = oauthResolveService.resolveOauthUser(resolveOauthUserCommand);
+        OauthUserResult oauthUserResult = oauthResolveService.findOrRequireSignup(resolveOauthUserCommand);
 
         // then
         assertThat(oauthUserResult.loginAvailable()).isFalse();
