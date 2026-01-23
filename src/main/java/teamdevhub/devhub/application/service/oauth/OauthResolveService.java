@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
 import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
+import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.port.in.oauth.command.ResolveOauthUserCommand;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 import teamdevhub.devhub.port.in.oauth.usecase.OauthResolveUseCase;
 import teamdevhub.devhub.port.out.provider.TokenParseProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
@@ -23,5 +25,11 @@ public class OauthResolveService implements OauthResolveUseCase {
                 .findByOAuth(tempTokenInfo.verificationProvider(), tempTokenInfo.oauthId())
                 .map(OauthUserResult::success)
                 .orElseGet(() -> OauthUserResult.requiresSignup(resolveOauthUserCommand.tempToken()));
+    }
+
+    @Override
+    public OauthUser extractOauthUser(SignupOauthUserCommand signupOauthUserCommand) {
+        TempTokenInfo tempTokenInfo = tokenParseProvider.getTempTokenInfo(signupOauthUserCommand.tempToken());
+        return new OauthUser(tempTokenInfo.oauthId(), tempTokenInfo.verificationProvider(), tempTokenInfo.email());
     }
 }

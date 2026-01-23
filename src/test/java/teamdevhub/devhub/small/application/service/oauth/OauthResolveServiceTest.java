@@ -83,4 +83,27 @@ class OauthResolveServiceTest {
         assertThat(oauthUserResult.loginAvailable()).isFalse();
         assertThat(oauthUserResult.authenticatedUser()).isNull();
     }
+
+    @Test
+    @DisplayName("Oauth_회원가입_성공하면_tempToken_을_반환한다")
+    void signup_with_oauth_success_returns_tempToken() {
+        // given
+        TempTokenInfo tempTokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, TokenType.TEMP, SignupStatus.PENDING, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        tokenParseProvider.givenTempToken(TEMP_TOKEN, tempTokenInfo);
+
+        SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()
+                .tempToken(TEMP_TOKEN)
+                .username(TEST_USERNAME_1)
+                .password(TEST_PASSWORD_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .build();
+
+        // when
+        OauthUser oauthUser = oauthResolveService.extractOauthUser(signupOauthUserCommand);
+
+        // then
+        assertThat(oauthUser.oauthId()).isEqualTo(tempTokenInfo.oauthId());
+    }
 }

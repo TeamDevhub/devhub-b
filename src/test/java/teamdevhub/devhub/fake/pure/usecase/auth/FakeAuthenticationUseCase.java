@@ -22,8 +22,8 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
     public LoginResponseDto loginWithOauth(AuthenticatedUser authenticatedUser) {
         this.lastLoginUser = authenticatedUser;
         return LoginResponseDto.builder()
-                .accessToken("access-token")
-                .refreshToken("refresh-token")
+                .accessToken("oauth-access-token")
+                .refreshToken("oauth-refresh-token")
                 .build();
     }
 

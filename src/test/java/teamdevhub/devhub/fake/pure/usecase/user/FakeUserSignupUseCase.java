@@ -36,10 +36,14 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
     }
 
     @Override
-    public void signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
+    public User signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
         this.called = true;
         this.lastSignupOauthUserCommand = signupOauthUserCommand;
         this.lastOauthUser = oauthUser;
+        UserCreateCommand oauthUserCreateCommand = UserCreateCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User createdOauthUser = User.createOauthUser(oauthUserCreateCommand);
+        store.put(createdOauthUser.getUserGuid(), createdOauthUser);
+        return createdOauthUser;
     }
 
     public boolean isSignupCalled() {

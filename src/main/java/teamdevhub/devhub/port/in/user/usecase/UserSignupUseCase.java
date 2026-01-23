@@ -10,5 +10,5 @@ public interface UserSignupUseCase {
 
     void initializeAdminUser(SignupAdminCommand signupAdminCommand);
     User signup(SignupUserCommand signupUserCommand);
-    void signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser);
+    User signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser);
 }

@@ -52,6 +52,20 @@ class UserPositionAdapterMediumTest {
     }
 
     @Test
+    @DisplayName("saveAll_은_빈_Set_이면_아무것도_저장하지_않는다")
+    void saveAll_emptySet_doesNothing() {
+        // given
+        Set<UserPosition> emptyPositions = new HashSet<>();
+
+        // when
+        userPositionAdapter.saveAll(emptyPositions);
+
+        // then
+        Set<UserPosition> saved = userPositionAdapter.findByUserGuid(TEST_USER_GUID_1);
+        assertThat(saved).isEmpty();
+    }
+
+    @Test
     @DisplayName("관심포지션이_변경되면_모든_변경사항이_반영된다")
     void replace_mergesOldAndNewPositionsCorrectly() {
         // given
@@ -119,4 +133,29 @@ class UserPositionAdapterMediumTest {
                 .containsExactly(TEST_POSITION_CD);
     }
 
+    @Test
+    @DisplayName("replace_는_null_또는_빈_셋이면_아무것도_수정하지_않는다")
+    void replace_nullOrEmpty_doesNothing() {
+        // given
+        UserPosition pos = new UserPosition(TEST_USER_GUID_1, TEST_POSITION_CD);
+        Set<UserPosition> previousPositions = new HashSet<>(Set.of(pos));
+        userPositionAdapter.saveAll(previousPositions);
+
+        // when
+        userPositionAdapter.replace(previousPositions, null);
+        // then
+        Set<UserPosition> finalPositions1 = userPositionAdapter.findByUserGuid(TEST_USER_GUID_1);
+        assertThat(finalPositions1).hasSize(1)
+                .extracting(UserPosition::positionCd)
+                .containsExactly(TEST_POSITION_CD);
+
+        // when
+        userPositionAdapter.replace(previousPositions, new HashSet<>());
+
+        // then
+        Set<UserPosition> finalPositions2 = userPositionAdapter.findByUserGuid(TEST_USER_GUID_1);
+        assertThat(finalPositions2).hasSize(1)
+                .extracting(UserPosition::positionCd)
+                .containsExactly(TEST_POSITION_CD);
+    }
 }

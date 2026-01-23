@@ -33,6 +33,9 @@ class UserQueryRepositoryImplMediumTest {
 
     @BeforeEach
     void init() {
+        entityManager.createQuery("DELETE FROM UserEntity").executeUpdate();
+        entityManager.flush();
+
         String randomGuid1 = UUID.randomUUID().toString().replace("-", "");
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
@@ -68,21 +71,62 @@ class UserQueryRepositoryImplMediumTest {
 
     @Test
     @DisplayName("차단된_사용자_검색조건이_적용되면_차단된_사용자만_조회된다")
-    void listUser_withBlockedTrueFilter_returnsCorrectResults() {
+    void listUserWithBlockedTrueFilterReturnsCorrectResults() {
         // given
-        SearchUserCommand searchUserCommand = new SearchUserCommand(
-            true,
-            null,
-            null,
-            null);
-
+        SearchUserCommand searchUserCommand = new SearchUserCommand(true, null, null, null);
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        Page<UserEntity> pagedUserEntity = userQueryRepository.listUser(searchUserCommand, pageable);
+        Page<UserEntity> result = userQueryRepository.listUser(searchUserCommand, pageable);
 
         // then
-        assertThat(pagedUserEntity.getContent()).hasSize(1);
-        assertThat(pagedUserEntity.getContent().get(0).getUsername()).isEqualTo(TEST_USERNAME_2);
+        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().get(0).getUsername()).isEqualTo(TEST_USERNAME_2);
+    }
+
+    @Test
+    @DisplayName("키워드_검색조건이_적용되면_해당_사용자만_조회된다")
+    void listUserWithKeywordFilterReturnsCorrectResults() {
+        // given
+        SearchUserCommand searchUserCommand = new SearchUserCommand(null, null, null, TEST_USERNAME_1);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // when
+        Page<UserEntity> result = userQueryRepository.listUser(searchUserCommand, pageable);
+
+        // then
+        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().get(0).getUsername()).isEqualTo(TEST_USERNAME_1);
+    }
+
+    @Test
+    @DisplayName("모든_조건이_조합되면_해당_사용자만_조회된다")
+    void listUserWithAllFiltersReturnsCorrectResults() {
+        // given
+        LocalDateTime joinedFrom = LocalDateTime.now().minusDays(3);
+        LocalDateTime joinedTo = LocalDateTime.now();
+        SearchUserCommand searchUserCommand = new SearchUserCommand(true, joinedFrom, joinedTo, TEST_USERNAME_2);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // when
+        Page<UserEntity> result = userQueryRepository.listUser(searchUserCommand, pageable);
+
+        // then
+        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().get(0).getUsername()).isEqualTo(TEST_USERNAME_2);
+    }
+
+    @Test
+    @DisplayName("조건이_없으면_모든_사용자를_조회한다")
+    void listUserWithNoFiltersReturnsAllResults() {
+        // given
+        SearchUserCommand searchUserCommand = new SearchUserCommand(null, null, null, null);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // when
+        Page<UserEntity> result = userQueryRepository.listUser(searchUserCommand, pageable);
+
+        // then
+        assertThat(result.getContent()).hasSize(2);
     }
 }

@@ -51,6 +51,20 @@ class UserSkillAdapterMediumTest {
     }
 
     @Test
+    @DisplayName("saveAll_은_빈_셋이면_아무것도_저장하지_않는다")
+    void saveAll_emptySet_doesNothing() {
+        // given
+        Set<UserSkill> emptySkills = new HashSet<>();
+
+        // when
+        userSkillAdapter.saveAll(emptySkills);
+
+        // then
+        Set<UserSkill> saved = userSkillAdapter.findByUserGuid(TEST_USER_GUID_1);
+        assertThat(saved).isEmpty();
+    }
+
+    @Test
     @DisplayName("스킬이 변경되면 모든 변경사항이 반영된다")
     void replace_mergesOldAndNewSkillsCorrectly() {
         // given
@@ -109,6 +123,31 @@ class UserSkillAdapterMediumTest {
         Set<UserSkill> finalSkills = userSkillAdapter.findByUserGuid(TEST_USER_GUID_1);
 
         assertThat(finalSkills).hasSize(1)
+                .extracting(UserSkill::skillCd)
+                .containsExactly(TEST_SKILL_CD);
+    }
+
+    @Test
+    @DisplayName("replace가_null_또는_빈_셋이면_아무것도_수정하지_않는다")
+    void replace_nullOrEmpty_doesNothing() {
+        // given
+        UserSkill skill = new UserSkill(TEST_USER_GUID_1, TEST_SKILL_CD);
+        Set<UserSkill> previousSkills = new HashSet<>(Set.of(skill));
+        userSkillAdapter.saveAll(previousSkills);
+
+        // when
+        userSkillAdapter.replace(previousSkills, null);
+        userSkillAdapter.replace(previousSkills, new HashSet<>());
+
+        // then
+        Set<UserSkill> finalSkills1 = userSkillAdapter.findByUserGuid(TEST_USER_GUID_1);
+
+        assertThat(finalSkills1).hasSize(1)
+                .extracting(UserSkill::skillCd)
+                .containsExactly(TEST_SKILL_CD);
+
+        Set<UserSkill> finalSkills2 = userSkillAdapter.findByUserGuid(TEST_USER_GUID_1);
+        assertThat(finalSkills2).hasSize(1)
                 .extracting(UserSkill::skillCd)
                 .containsExactly(TEST_SKILL_CD);
     }

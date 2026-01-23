@@ -57,11 +57,11 @@ public class UserSignupService implements UserSignupUseCase {
     }
 
     @Override
-    public void signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
+    public User signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
         User user = createOauthUserForSignup(signupOauthUserCommand, oauthUser);
         saveUserPositions(user.getUserGuid(), signupOauthUserCommand.positionList());
         saveUserSkills(user.getUserGuid(), signupOauthUserCommand.skillList());
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     private User createGeneralUser(SignupUserCommand signupUserCommand) {

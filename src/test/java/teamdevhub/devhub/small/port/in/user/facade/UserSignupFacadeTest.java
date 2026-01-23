@@ -3,12 +3,14 @@ package teamdevhub.devhub.small.port.in.user.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
+import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
-import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthSignupUseCase;
 import teamdevhub.devhub.fake.pure.usecase.user.FakeUserSignupUseCase;
 import teamdevhub.devhub.fake.pure.usecase.verification.FakeVerificationUseCase;
+import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 import teamdevhub.devhub.port.in.user.UserSignupFacade;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
@@ -21,7 +23,6 @@ public class UserSignupFacadeTest {
 
     private FakeUserSignupUseCase userSignupUseCase;
     private FakeOauthResolveUseCase oauthResolveUseCase;
-    private FakeOauthSignupUseCase oauthSignupUseCase;
     private FakeAuthenticationUseCase authenticationUseCase;
     private FakeVerificationUseCase verificationUseCase;
 
@@ -29,14 +30,12 @@ public class UserSignupFacadeTest {
     void init() {
         userSignupUseCase = new FakeUserSignupUseCase();
         oauthResolveUseCase = new FakeOauthResolveUseCase();
-        oauthSignupUseCase = new FakeOauthSignupUseCase();
         authenticationUseCase = new FakeAuthenticationUseCase();
         verificationUseCase = new FakeVerificationUseCase();
 
         userSignupFacade = new UserSignupFacade(
                 userSignupUseCase,
                 oauthResolveUseCase,
-                oauthSignupUseCase,
                 authenticationUseCase,
                 verificationUseCase
         );
@@ -68,10 +67,8 @@ public class UserSignupFacadeTest {
         assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO_1);
     }
 
-    /**
-     * 테스트케이스 보완 필요
     @Test
-    @DisplayName("signupWithOauth_는_signup_후_login_을_연속_호출한다")
+    @DisplayName("signupWithOauth_는_signup_후_oauth-access-token_을_포함한_로그인_성공으로_이어진다")
     void signupWithOauth_callsSignupThenLogin() {
         // given
         SignupOauthUserCommand signupCommand = new SignupOauthUserCommand(TEMP_TOKEN, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
@@ -80,8 +77,8 @@ public class UserSignupFacadeTest {
         OauthAuthResponseDto oauthAuthResponseDto = userSignupFacade.signupWithOauth(signupCommand);
 
         // then
-        assertThat(oauthAuthResponseDto.getAccessToken()).isEqualTo("oauth-access");
-        assertThat(oauthResolveUseCase.getLastCommand().tempToken()).isEqualTo("TEMP_TOKEN");
+        assertThat(oauthAuthResponseDto.getAccessToken()).isEqualTo("oauth-access-token");
+        assertThat(oauthAuthResponseDto.getSignupStatus()).isEqualTo(SignupStatus.COMPLETED);
+        assertThat(oauthAuthResponseDto.getTempToken()).isNull();
     }
-     */
 }

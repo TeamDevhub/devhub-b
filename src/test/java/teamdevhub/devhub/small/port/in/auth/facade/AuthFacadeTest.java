@@ -59,7 +59,7 @@ public class AuthFacadeTest {
     }
 
     @Test
-    @DisplayName("loginWithOauth_로그인_가능한_경우_accessToken_을_반환한다")
+    @DisplayName("loginWithOauth_로그인_가능한_경우_oauth-access-token_을_반환한다")
     void loginWithOauth_WhenLoginAvailable_ReturnsLoginResponse() {
         // given
         oauthResolveUseCase.setLoginAvailableScenario(true);
@@ -69,7 +69,7 @@ public class AuthFacadeTest {
         OauthAuthResponseDto oauthAuthResponseDto = authFacade.loginWithOauth(resolveOauthUserCommand);
 
         // then
-        assertThat(oauthAuthResponseDto.getAccessToken()).isEqualTo("access-token");
+        assertThat(oauthAuthResponseDto.getAccessToken()).isEqualTo("oauth-access-token");
         assertThat(oauthResolveUseCase.getLastCommand()).isEqualTo(resolveOauthUserCommand);
     }
 

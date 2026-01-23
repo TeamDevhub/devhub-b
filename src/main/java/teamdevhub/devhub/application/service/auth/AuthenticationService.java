@@ -7,6 +7,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.domain.auth.RefreshToken;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.port.in.auth.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.port.out.auth.RefreshTokenRepository;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
