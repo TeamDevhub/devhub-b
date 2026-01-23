@@ -39,7 +39,7 @@ public class AdminUserControllerTest {
     }
 
     @Test
-    @DisplayName("관리자계정이_사용자_목록_조회_시_UserBasicResponseDto_리스트와_페이지 정보_READ_SUCCESS_코드를_반환한다.")
+    @DisplayName("관리자계정이_사용자_목록_조회_시_UserBasicResponseDto_리스트와_페이지 정보_READ_SUCCESS_코드를_반환한다")
     void returnResponseDtoListWhenFetchingAdminUserList() {
         // given
         SignupUserCommand signupUserCommand1 = SignupUserCommand.builder()

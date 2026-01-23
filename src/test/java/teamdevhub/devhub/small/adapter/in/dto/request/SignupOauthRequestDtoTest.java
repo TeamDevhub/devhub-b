@@ -65,10 +65,10 @@ public class SignupOauthRequestDtoTest {
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
-                .contains("TEMP 토큰은 필수입니다.",
-                        "비밀번호는 필수입니다.",
-                        "관심 포지션은 필수입니다.",
-                        "보유 스킬은 필수입니다.");
+                .contains("TEMP 토큰은 필수입니다",
+                        "비밀번호는 필수입니다",
+                        "관심 포지션은 필수입니다",
+                        "보유 스킬은 필수입니다");
     }
 
     @Test
@@ -89,7 +89,7 @@ public class SignupOauthRequestDtoTest {
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
-                .contains("관심 포지션은 최소 1개 이상 선택해야 합니다.",
-                        "보유 스킬은 최소 1개 이상 선택해야 합니다.");
+                .contains("관심 포지션은 최소 1개 이상 선택해야 합니다",
+                        "보유 스킬은 최소 1개 이상 선택해야 합니다");
     }
 }

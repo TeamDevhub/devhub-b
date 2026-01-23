@@ -13,7 +13,7 @@ import teamdevhub.devhub.port.in.oauth.command.ResolveOauthUserCommand;
 @NoArgsConstructor
 public class OauthLoginRequestDto {
 
-    @NotBlank(message = "필수값이 누락되었습니다.")
+    @NotBlank(message = "필수값이 누락되었습니다")
     private String tempToken;
 
     public ResolveOauthUserCommand toCommand() {

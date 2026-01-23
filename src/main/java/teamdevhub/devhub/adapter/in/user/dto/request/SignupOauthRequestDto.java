@@ -19,10 +19,10 @@ import java.util.List;
 @NoArgsConstructor
 public class SignupOauthRequestDto {
 
-    @NotBlank(message = "TEMP 토큰은 필수입니다.")
+    @NotBlank(message = "TEMP 토큰은 필수입니다")
     private String tempToken;
 
-    @NotBlank(message = "비밀번호는 필수입니다.")
+    @NotBlank(message = "비밀번호는 필수입니다")
     @RegexMatch(RegexPattern.AUTH_PASSWORD)
     private String password;
 
@@ -31,12 +31,12 @@ public class SignupOauthRequestDto {
 
     private String introduction;
 
-    @NotNull(message = "관심 포지션은 필수입니다.")
-    @Size(min = 1, message = "관심 포지션은 최소 1개 이상 선택해야 합니다.")
+    @NotNull(message = "관심 포지션은 필수입니다")
+    @Size(min = 1, message = "관심 포지션은 최소 1개 이상 선택해야 합니다")
     private List<@NotBlank String> positionList;
 
-    @NotNull(message = "보유 스킬은 필수입니다.")
-    @Size(min = 1, message = "보유 스킬은 최소 1개 이상 선택해야 합니다.")
+    @NotNull(message = "보유 스킬은 필수입니다")
+    @Size(min = 1, message = "보유 스킬은 최소 1개 이상 선택해야 합니다")
     private List<@NotBlank String> skillList;
 
     public SignupOauthUserCommand toCommand() {

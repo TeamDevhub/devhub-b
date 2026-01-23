@@ -3,7 +3,9 @@ package teamdevhub.devhub.small.application.service.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.application.exception.BusinessRuleException;
 import teamdevhub.devhub.application.service.auth.AuthenticatedUserService;
+import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.auth.RefreshToken;
 import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
@@ -15,11 +17,12 @@ import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class AuthenticatedUserServiceTest {
 
-    private AuthenticatedUserService authUserService;
+    private AuthenticatedUserService authenticatedUserService;
 
     private FakeTokenParseProvider tokenParseProvider;
     private FakeUserRepository userRepository;
@@ -31,7 +34,7 @@ public class AuthenticatedUserServiceTest {
         userRepository = new FakeUserRepository();
         refreshTokenRepository = new FakeRefreshTokenRepository();
 
-        authUserService = new AuthenticatedUserService(tokenParseProvider, userRepository, refreshTokenRepository);
+        authenticatedUserService = new AuthenticatedUserService(tokenParseProvider, userRepository, refreshTokenRepository);
     }
 
     @Test
@@ -55,7 +58,7 @@ public class AuthenticatedUserServiceTest {
         userRepository.save(testUser);
 
         // when
-        authUserService.getUserForLogin(testUser.getEmail());
+        authenticatedUserService.getUserForLogin(testUser.getEmail());
 
         // then
         assertThat(userRepository.findAuthenticatedUserByEmail(testUser.getEmail()).userGuid()).isEqualTo(testUser.getUserGuid());
@@ -86,11 +89,38 @@ public class AuthenticatedUserServiceTest {
         refreshTokenRepository.givenRefreshToken(refreshToken);
 
         // when
-        AuthenticatedUser reissueUser = authUserService.getUserForReissue(refreshToken.token());
+        AuthenticatedUser reissueUser = authenticatedUserService.getUserForReissue(refreshToken.token());
 
         // then
         assertThat(reissueUser.userGuid()).isEqualTo(testUser.getUserGuid());
         assertThat(reissueUser.userRole()).isEqualTo(testUser.getUserRole());
     }
 
+
+    @Test
+    @DisplayName("저장되지 않은_리프레시_토큰으로_재발급을_요청하면_예외가_발생한다")
+    void fetchUserForReissueWithInvalidTokenThrows() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .userGuid(null)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+
+        UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        User testUser = User.createGeneralUser(generalUserCreateCommand);
+
+        String invalidToken = "invalid-refresh-token";
+        tokenParseProvider.givenRefreshToken(invalidToken, new RefreshTokenInfo(TEST_USER_GUID_1));
+
+        // when, then
+        assertThatThrownBy(() -> authenticatedUserService.getUserForReissue(invalidToken))
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessageContaining(ErrorCode.REFRESH_TOKEN_INVALID.getMessage());
+    }
 }

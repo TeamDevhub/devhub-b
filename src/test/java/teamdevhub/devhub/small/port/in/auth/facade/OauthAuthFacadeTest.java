@@ -35,7 +35,7 @@ public class OauthAuthFacadeTest {
     }
 
     @Test
-    @DisplayName("provider_를_받으면_createOAuthAuthorizationUrl_로_리다이렉트_URL_을_리턴받을_수_있다.")
+    @DisplayName("provider_를_받으면_createOAuthAuthorizationUrl_로_리다이렉트_URL_을_리턴받을_수_있다")
     void createOAuthAuthorizationUrlDelegates() {
         // when
         String redirectUrl = oauthAuthFacade.createOAuthAuthorizationUrl("google");
@@ -45,7 +45,7 @@ public class OauthAuthFacadeTest {
     }
 
     @Test
-    @DisplayName("가입된_유저면_로그인_처리_후_OauthAuthResponseDto.loggedIn_을_반환한다.")
+    @DisplayName("가입된_유저면_로그인_처리_후_OauthAuthResponseDto.loggedIn_을_반환한다")
     void handleOAuthCallbackLoginForCompletedUser() {
         // given
         AuthenticatedUser signupCompletedUser = new AuthenticatedUser(
@@ -68,7 +68,7 @@ public class OauthAuthFacadeTest {
     }
 
     @Test
-    @DisplayName("가입되지_않은_유저면_로그인_처리_후_OauthAuthResponseDto.fromCallback_을_반환한다.")
+    @DisplayName("가입되지_않은_유저면_로그인_처리_후_OauthAuthResponseDto.fromCallback_을_반환한다")
     void handleOAuthCallback_RequiresSignup() {
         // given
         oauthAuthenticationUseCase.setCallbackResult(new OauthCallbackResult(SignupStatus.PENDING, TEMP_TOKEN));

@@ -65,7 +65,7 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("refreshToken_을_accessToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다.")
+    @DisplayName("refreshToken_을_accessToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다")
     void extractAccessTokenInfoWithRefreshTokenThrows() {
         // given
         String refreshToken = jwtTokenCodec.createRefreshToken(TEST_USER_GUID_1);
@@ -78,7 +78,7 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("refreshToken_생성_후_userGuid_를_정상_추출할_수_있다.")
+    @DisplayName("refreshToken_생성_후_userGuid_를_정상_추출할_수_있다")
     void createRefreshTokenAndExtractUserGuid() {
         // given
         String userGuid = TEST_USER_GUID_1;
@@ -92,7 +92,7 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("accessToken_을_refreshToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다.")
+    @DisplayName("accessToken_을_refreshToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다")
     void extractRefreshTokenInfoWithAccessTokenThrows() {
         // given
         String accessToken = jwtTokenCodec.createAccessToken(
@@ -110,7 +110,7 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("tempToken_생성_후_토큰_정보가_정상_추출된다.")
+    @DisplayName("tempToken_생성_후_토큰_정보가_정상_추출된다")
     void createTempTokenAndExtractInfo() {
         // given
         String oauthId = "oauth-id-123";
@@ -132,7 +132,7 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("accessToken_을_tempToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다.")
+    @DisplayName("accessToken_을_tempToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다")
     void extractTempTokenInfoWithAccessTokenThrows() {
         // given
         String accessToken = jwtTokenCodec.createAccessToken(
@@ -150,7 +150,7 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("Bearer_prefix_를_정상적으로_제거한다.")
+    @DisplayName("Bearer_prefix_를_정상적으로_제거한다")
     void removeBearer_success() {
         // given
         String tokenWithBearer = "Bearer abc.def.ghi";
@@ -163,7 +163,7 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("Bearer_prefix_없으면_TOKEN_INVALID_예외가_발생한다.")
+    @DisplayName("Bearer_prefix_없으면_TOKEN_INVALID_예외가_발생한다")
     void removeBearer_withoutPrefixThrows() {
         // when, then
         assertThatThrownBy(() ->
@@ -173,7 +173,7 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("Bearer_null_입력_시_TOKEN_INVALID_예외가_발생한다.")
+    @DisplayName("Bearer_null_입력_시_TOKEN_INVALID_예외가_발생한다")
     void removeBearer_nullThrows() {
         // when, then
         assertThatThrownBy(() ->
@@ -183,7 +183,7 @@ class JwtTokenCodecMediumTest {
     }
 
     @Test
-    @DisplayName("만료된_accessToken_은_TOKEN_EXPIRED_예외가_발생한다.")
+    @DisplayName("만료된_accessToken_은_TOKEN_EXPIRED_예외가_발생한다")
     void expiredAccessTokenThrowsAgain() throws NoSuchFieldException, IllegalAccessException {
         // given
         FakeTimeProvider fakeTimeProvider = new FakeTimeProvider(LocalDateTime.now().minusHours(1));

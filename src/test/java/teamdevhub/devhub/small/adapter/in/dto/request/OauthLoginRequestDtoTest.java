@@ -50,6 +50,6 @@ public class OauthLoginRequestDtoTest {
 
         // then
         assertThat(violations).hasSize(1);
-        assertThat(violations.iterator().next().getMessage()).isEqualTo("필수값이 누락되었습니다.");
+        assertThat(violations.iterator().next().getMessage()).isEqualTo("필수값이 누락되었습니다");
     }
 }

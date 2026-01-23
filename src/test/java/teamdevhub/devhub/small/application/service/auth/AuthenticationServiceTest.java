@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.application.service.auth.AuthenticationService;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.auth.RefreshToken;
@@ -96,36 +97,10 @@ class AuthenticationServiceTest {
         assertThat(loginResponseDto.getRefreshToken()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
     }
 
-    /**
-     * 테스트케이스 수정 필요
     @Test
-    @DisplayName("로그인을_하면_마지막_로그인_시간이_업데이트된다")
-    void updateLastLoginDateTimeWhenLogin() {
+    @DisplayName("액세스토큰을_재발급할_수_있다")
+    void reissueAccessToken() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
-                TEST_EMAIL_1,
-                TEST_PASSWORD_1,
-                UserRole.USER
-        );
-
-        // when
-        authenticationService.login(authenticatedUser);
-
-        // then
-        assertThat(fakeUserLoginUseCase.isLoginTimeUpdated(TEST_USER_GUID_1)).isTrue();
-    }
-
-    @Test
-    @DisplayName("리프레시토큰으로_액세스토큰을_재발급할_수_있다")
-    void refreshAccessTokenUsingRefreshToken() {
-        // given
-        String refreshToken = "refresh-token-" + TEST_USER_GUID_1;
-        RefreshTokenInfo refreshTokenInfo = new RefreshTokenInfo(TEST_USER_GUID_1);
-        fakeTokenParseProvider.givenRefreshToken(refreshToken, refreshTokenInfo);
-        refreshTokenRepository.save(RefreshToken.of(TEST_USER_GUID_1, refreshToken));
-
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 SignupStatus.COMPLETED,
@@ -141,35 +116,6 @@ class AuthenticationServiceTest {
         assertThat(tokenResponseDto).isNotNull();
         assertThat(tokenResponseDto.getAccessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
     }
-
-    @Test
-    @DisplayName("저장된_리프레시토큰과_다른_토큰으로_재발급하면_예외가_발생한다")
-    void reissueAccessTokenWithInvalidTokenThrows() {
-        // given
-        String validRefreshToken = "refresh-token-" + TEST_USER_GUID_1;
-        RefreshTokenInfo refreshTokenInfo1 = new RefreshTokenInfo(TEST_USER_GUID_1);
-        fakeTokenParseProvider.givenRefreshToken(validRefreshToken, refreshTokenInfo1);
-        refreshTokenRepository.save(RefreshToken.of(TEST_USER_GUID_1, validRefreshToken));
-
-        String invalidRefreshToken = "refresh-token-invalid-" + TEST_USER_GUID_1;
-        RefreshTokenInfo refreshTokenInfo2 = new RefreshTokenInfo(TEST_USER_GUID_1);
-        fakeTokenParseProvider.givenRefreshToken(invalidRefreshToken, refreshTokenInfo2);
-
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
-                TEST_EMAIL_1,
-                TEST_PASSWORD_1,
-                UserRole.USER
-        );
-
-        // when, then
-        assertThatThrownBy(
-                () -> authenticationService.reissueAccessToken(authenticatedUser))
-                .isInstanceOf(BusinessRuleException.class)
-                .hasMessageContaining("유효하지 않은 토큰입니다.");
-    }
-     */
 
     @Test
     @DisplayName("로그아웃을_하면_리프레시토큰이_삭제된다")

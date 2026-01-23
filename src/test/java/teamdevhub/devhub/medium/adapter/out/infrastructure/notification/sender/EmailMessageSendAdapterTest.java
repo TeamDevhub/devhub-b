@@ -79,6 +79,6 @@ public class EmailMessageSendAdapterTest {
         // when, then
         assertThatThrownBy(() -> emailMessageSendAdapter.sendVerification(target, message))
                 .isInstanceOf(ExternalServiceException.class)
-                .hasMessageContaining("발송이 실패했습니다.");
+                .hasMessageContaining("발송이 실패했습니다");
     }
 }

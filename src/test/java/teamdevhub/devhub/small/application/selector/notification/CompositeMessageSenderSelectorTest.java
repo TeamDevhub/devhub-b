@@ -90,6 +90,6 @@ public class CompositeMessageSenderSelectorTest {
         // when, then
         assertThatThrownBy(() -> compositeMessageSenderSelector.sendVerification(unsupportedVerificationTarget, verificationMessage))
                 .isInstanceOf(ExternalServiceException.class)
-                .hasMessageContaining("발송이 실패했습니다.");
+                .hasMessageContaining("발송이 실패했습니다");
     }
 }

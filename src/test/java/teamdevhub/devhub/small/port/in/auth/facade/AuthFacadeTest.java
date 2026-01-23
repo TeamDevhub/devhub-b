@@ -46,7 +46,7 @@ public class AuthFacadeTest {
     }
 
     @Test
-    @DisplayName("loginCommand_로_로그인_할_수_있다.")
+    @DisplayName("loginCommand_로_로그인_할_수_있다")
     void loginWithLoginCommand() {
         // given
         LoginCommand loginCommand = new LoginCommand(TEST_EMAIL_1, TEST_PASSWORD_1);
@@ -59,7 +59,7 @@ public class AuthFacadeTest {
     }
 
     @Test
-    @DisplayName("loginWithOauth_로그인_가능한_경우_accessToken_을_반환한다.")
+    @DisplayName("loginWithOauth_로그인_가능한_경우_accessToken_을_반환한다")
     void loginWithOauth_WhenLoginAvailable_ReturnsLoginResponse() {
         // given
         oauthResolveUseCase.setLoginAvailableScenario(true);
@@ -74,7 +74,7 @@ public class AuthFacadeTest {
     }
 
     @Test
-    @DisplayName("loginWithOauth_회원가입_필요한_경우_tempToken_을_반환한다.")
+    @DisplayName("loginWithOauth_회원가입_필요한_경우_tempToken_을_반환한다")
     void loginWithOauth_WhenSignupRequired_ReturnsTempToken() {
         // given
         oauthResolveUseCase.setLoginAvailableScenario(false);

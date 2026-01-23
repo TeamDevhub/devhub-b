@@ -64,7 +64,7 @@ class SignupRequestDtoTest {
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
-                .contains("이메일은 필수입니다.");
+                .contains("이메일은 필수입니다");
     }
 
     @Test
@@ -86,7 +86,7 @@ class SignupRequestDtoTest {
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
-                .contains("관심 포지션은 필수입니다.");
+                .contains("관심 포지션은 필수입니다");
     }
 
     @Test
@@ -108,7 +108,7 @@ class SignupRequestDtoTest {
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
-                .contains("관심 포지션은 최소 1개 이상 선택해야 합니다.");
+                .contains("관심 포지션은 최소 1개 이상 선택해야 합니다");
     }
 
     @Test
@@ -130,7 +130,7 @@ class SignupRequestDtoTest {
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
-                .contains("보유 스킬은 필수입니다.");
+                .contains("보유 스킬은 필수입니다");
     }
 
     @Test
@@ -152,6 +152,6 @@ class SignupRequestDtoTest {
         assertThat(violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .toList())
-                .contains("보유 스킬은 최소 1개 이상 선택해야 합니다.");
+                .contains("보유 스킬은 최소 1개 이상 선택해야 합니다");
     }
 }

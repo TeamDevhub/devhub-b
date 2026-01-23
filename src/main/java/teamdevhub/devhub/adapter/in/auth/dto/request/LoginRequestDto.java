@@ -15,11 +15,11 @@ import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 @NoArgsConstructor
 public class LoginRequestDto {
 
-    @NotBlank(message = "이메일은 필수입니다.")
+    @NotBlank(message = "이메일은 필수입니다")
     @RegexMatch(RegexPattern.AUTH_EMAIL)
     private String email;
 
-    @NotBlank(message = "비밀번호는 필수입니다.")
+    @NotBlank(message = "비밀번호는 필수입니다")
     @RegexMatch(RegexPattern.AUTH_PASSWORD)
     private String password;
 

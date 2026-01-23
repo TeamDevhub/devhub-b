@@ -129,7 +129,7 @@ class UserTest {
         )
                 // then
                 .isInstanceOf(DomainRuleException.class)
-                .hasMessageContaining("사용자 ID 값이 잘못되었습니다.");
+                .hasMessageContaining("사용자 ID 값이 잘못되었습니다");
     }
 
     @Test
@@ -179,7 +179,7 @@ class UserTest {
         assertThatThrownBy(testUser::withdraw)
                 // then
                 .isInstanceOf(DomainRuleException.class)
-                .hasMessageContaining("이미 탈퇴한 회원입니다.");
+                .hasMessageContaining("이미 탈퇴한 회원입니다");
     }
 
     @Test
