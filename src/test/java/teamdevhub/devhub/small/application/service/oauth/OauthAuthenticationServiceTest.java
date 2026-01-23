@@ -38,7 +38,7 @@ public class OauthAuthenticationServiceTest {
 
     @Test
     @DisplayName("Oauth_인증_제공자에_따른_리다이렉트_URL_을_생성할_수_있다")
-    void handleOAuthCallback_createAuthorizationUrl_with_provider() {
+    void handleOAuthCallbackCreateAuthorizationUrlWithProvider() {
         // given
         String provider = "google";
 
@@ -51,7 +51,7 @@ public class OauthAuthenticationServiceTest {
 
     @Test
     @DisplayName("기존_OAuth_유저면_COMPLETED_상태의_토큰이_발급된다")
-    void handleOAuthCallback_completed_whenUserExists() {
+    void handleOAuthCallbackCompletedWhenUserExists() {
         // given
         OauthUser oauthUser = new OauthUser("oauth-id", VerificationProvider.GOOGLE, "test@test.com");
         oauthClient.withOauthUser(oauthUser);
@@ -77,7 +77,7 @@ public class OauthAuthenticationServiceTest {
 
     @Test
     @DisplayName("신규_OAuth_유저면_PENDING_상태의_토큰이_발급된다")
-    void handleOAuthCallback_pending_whenUserNotExists() {
+    void handleOAuthCallbackPendingWhenUserNotExists() {
         // given
         OauthUser oauthUser = new OauthUser("oauth-id", VerificationProvider.GOOGLE, "test@test.com");
         oauthClient.withOauthUser(oauthUser);

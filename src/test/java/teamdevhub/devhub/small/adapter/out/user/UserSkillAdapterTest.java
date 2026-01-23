@@ -23,6 +23,7 @@ public class UserSkillAdapterTest {
     void init() {
         FakeJpaUserSkillRepository jpaUserSkillRepository = new FakeJpaUserSkillRepository();
         IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_USER_SKILL_GUID);
+
         userSkillAdapter = new UserSkillAdapter(jpaUserSkillRepository, identifierProvider);
     }
 

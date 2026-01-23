@@ -24,6 +24,7 @@ public class UserPositionAdapterTest {
     void init() {
         JpaUserPositionRepository jpaUserPositionRepository = new FakeJpaUserPositionRepository();
         IdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_USER_POSITION_GUID);
+
         userPositionAdapter = new UserPositionAdapter(jpaUserPositionRepository, identifierProvider);
     }
 

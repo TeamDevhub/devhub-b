@@ -28,15 +28,14 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class VerificationServiceTest {
 
+    private VerificationService verificationService;
+
     private FakeNotificationSenderSelector notificationSender;
     private FakeVerificationRepository verificationRepository;
-
-    private VerificationService verificationService;
 
     @BeforeEach
     void init() {
         TimeProvider timeProvider = new FakeTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
-
         VerificationIssuer verificationIssuer = new FakeEmailVerificationIssuer(VerificationType.EMAIL, TEST_EMAIL_CODE, timeProvider);
         VerificationIssuerSelector issuerSelector = new FakeVerificationIssuerSelector(List.of(verificationIssuer));
         verificationRepository = new FakeVerificationRepository();
@@ -51,8 +50,8 @@ public class VerificationServiceTest {
     }
 
     @Test
-    @DisplayName("인증을 발급하면 저장되고 알림이 전송된다")
-    void issueVerification_success() {
+    @DisplayName("인증을_발급하면_저장되고_알림이_전송된다")
+    void issueVerificationSuccess() {
         // given
         VerificationTarget verificationTarget = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
 
@@ -69,8 +68,8 @@ public class VerificationServiceTest {
     }
 
     @Test
-    @DisplayName("올바른 코드로 인증 확인에 성공한다")
-    void confirmVerification_success() {
+    @DisplayName("올바른_인증코드로_인증_확인에_성공한다")
+    void confirmVerificationSuccess() {
         // given
         VerificationTarget verificationTarget = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
         verificationService.issueVerification(new IssueVerificationCommand(verificationTarget));
@@ -85,8 +84,8 @@ public class VerificationServiceTest {
     }
 
     @Test
-    @DisplayName("인증되지 않은 상태에서 assertAllowed 호출 시 예외")
-    void assertAllowed_fail_whenNotConfirmed() {
+    @DisplayName("인증되지_않은_상태에서_assertAllowed_호출_시_예외가_발생한다")
+    void assertAllowedFailWhenNotConfirmed() {
         // given
         VerificationTarget verificationTarget = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
 
@@ -99,8 +98,8 @@ public class VerificationServiceTest {
     }
 
     @Test
-    @DisplayName("인증 완료 후 assertAllowed 통과")
-    void assertAllowed_success() {
+    @DisplayName("인증_완료_후_assertAllowed_통과한다")
+    void assertAllowedSuccess() {
         // given
         VerificationTarget verificationTarget = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
 

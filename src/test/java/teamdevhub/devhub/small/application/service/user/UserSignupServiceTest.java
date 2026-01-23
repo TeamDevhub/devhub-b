@@ -29,27 +29,27 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserSignupServiceTest {
 
-    private FakeEncodedPasswordProvider encodedPasswordProvider;
-    private FakeUserRepository fakeUserRepository;
-    private FakeUserPositionRepository fakeUserPositionRepository;
-    private FakeUserSkillRepository fakeUserSkillRepository;
-
     private UserSignupService userSignupService;
+
+    private FakeEncodedPasswordProvider encodedPasswordProvider;
+    private FakeUserRepository userRepository;
+    private FakeUserPositionRepository userPositionRepository;
+    private FakeUserSkillRepository userSkillRepository;
 
     @BeforeEach
     void init() {
         encodedPasswordProvider = new FakeEncodedPasswordProvider();
         FakeUuidIdentifierProvider fakeUuidIdentifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
-        fakeUserRepository = new FakeUserRepository();
-        fakeUserPositionRepository = new FakeUserPositionRepository();
-        fakeUserSkillRepository = new FakeUserSkillRepository();
+        userRepository = new FakeUserRepository();
+        userPositionRepository = new FakeUserPositionRepository();
+        userSkillRepository = new FakeUserSkillRepository();
 
         userSignupService = new UserSignupService(
                 encodedPasswordProvider,
                 fakeUuidIdentifierProvider,
-                fakeUserRepository,
-                fakeUserPositionRepository,
-                fakeUserSkillRepository
+                userRepository,
+                userPositionRepository,
+                userSkillRepository
         );
     }
 
@@ -61,9 +61,9 @@ public class UserSignupServiceTest {
         userSignupService = new UserSignupService(
                 encodedPasswordProvider,
                 fakeAdminUuidIdentifierProvider,
-                fakeUserRepository,
-                fakeUserPositionRepository,
-                fakeUserSkillRepository
+                userRepository,
+                userPositionRepository,
+                userSkillRepository
         );
 
         SignupAdminCommand signupAdminCommand = new SignupAdminCommand(null, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of(), null);
@@ -71,9 +71,9 @@ public class UserSignupServiceTest {
         userSignupService.initializeAdminUser(signupAdminCommand);
 
         // then
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID_1).getUserGuid()).isEqualTo(ADMIN_USER_GUID_1);
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID_1).getPassword()).isEqualTo(encodedPasswordProvider.encode(ADMIN_PASSWORD_1));
-        assertThat(fakeUserRepository.findByUserGuid(ADMIN_USER_GUID_1).getUserRole()).isEqualTo(UserRole.ADMIN);
+        assertThat(userRepository.findByUserGuid(ADMIN_USER_GUID_1).getUserGuid()).isEqualTo(ADMIN_USER_GUID_1);
+        assertThat(userRepository.findByUserGuid(ADMIN_USER_GUID_1).getPassword()).isEqualTo(encodedPasswordProvider.encode(ADMIN_PASSWORD_1));
+        assertThat(userRepository.findByUserGuid(ADMIN_USER_GUID_1).getUserRole()).isEqualTo(UserRole.ADMIN);
     }
 
     @Test
@@ -82,19 +82,19 @@ public class UserSignupServiceTest {
         // given
         UserCreateCommand adminUserCreateCommand = new UserCreateCommand(ADMIN_USER_GUID_1, VerificationProvider.EMAIL, ADMIN_EMAIL_1, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of());
         User existedAdminUser = User.createAdminUser(adminUserCreateCommand);
-        fakeUserRepository.saveAdminUser(existedAdminUser);
+        userRepository.saveAdminUser(existedAdminUser);
 
         // when
         SignupAdminCommand signupAdminCommand = new SignupAdminCommand("new-admin-guid", ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of(), VERIFICATION_TARGET_1);
         userSignupService.initializeAdminUser(signupAdminCommand);
 
         // then
-        AuthenticatedUser savedAdminUser = fakeUserRepository.findAuthenticatedUserByUserGuid(ADMIN_USER_GUID_1);
+        AuthenticatedUser savedAdminUser = userRepository.findAuthenticatedUserByUserGuid(ADMIN_USER_GUID_1);
         assertThat(savedAdminUser).isNotNull();
         assertThat(savedAdminUser.userGuid()).isEqualTo(ADMIN_USER_GUID_1);
         assertThat(savedAdminUser.userRole()).isEqualTo(UserRole.ADMIN);
 
-        assertThat(fakeUserRepository.findByUserGuid("new-admin-guid")).isNull();
+        assertThat(userRepository.findByUserGuid("new-admin-guid")).isNull();
     }
 
     @Test
@@ -107,8 +107,8 @@ public class UserSignupServiceTest {
         User savedUser = userSignupService.signup(signupUserCommand);
 
         // then
-        assertThat(fakeUserRepository.save(savedUser).getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(fakeUserRepository.save(savedUser).getPassword()).isEqualTo(encodedPasswordProvider.encode(TEST_PASSWORD_1));
+        assertThat(userRepository.save(savedUser).getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(userRepository.save(savedUser).getPassword()).isEqualTo(encodedPasswordProvider.encode(TEST_PASSWORD_1));
     }
 
     @Test
@@ -128,9 +128,9 @@ public class UserSignupServiceTest {
 
         // when
         userSignupService.signup(signupUserCommand);
-        User persistedUser = fakeUserRepository.findByUserGuid(TEST_USER_GUID_1);
-        Set<UserPosition> positions = fakeUserPositionRepository.findByUserGuid(TEST_USER_GUID_1);
-        Set<UserSkill> skills = fakeUserSkillRepository.findByUserGuid(TEST_USER_GUID_1);
+        User persistedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
+        Set<UserPosition> positions = userPositionRepository.findByUserGuid(TEST_USER_GUID_1);
+        Set<UserSkill> skills = userSkillRepository.findByUserGuid(TEST_USER_GUID_1);
 
         // then
         assertThat(persistedUser).isNotNull();
@@ -156,9 +156,9 @@ public class UserSignupServiceTest {
 
         userSignupService.signupWithOauth(signupOauthUserCommand, oauthUser);
 
-        Set<UserPosition> positions = fakeUserPositionRepository.findByUserGuid(TEST_USER_GUID_1);
-        Set<UserSkill> skills = fakeUserSkillRepository.findByUserGuid(TEST_USER_GUID_1);
-        User persistedUser = fakeUserRepository.findByUserGuid(TEST_USER_GUID_1);
+        Set<UserPosition> positions = userPositionRepository.findByUserGuid(TEST_USER_GUID_1);
+        Set<UserSkill> skills = userSkillRepository.findByUserGuid(TEST_USER_GUID_1);
+        User persistedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
 
         assertThat(positions).extracting(UserPosition::positionCd).containsExactlyInAnyOrderElementsOf(TEST_POSITION_LIST);
         assertThat(skills).extracting(UserSkill::skillCd).containsExactlyInAnyOrderElementsOf(TEST_SKILL_LIST);
@@ -176,6 +176,6 @@ public class UserSignupServiceTest {
         userSignupService.signup(signupUserCommand);
 
         // then
-        assertThat(fakeUserRepository.wasCalled("updateLastLoginDateTime")).isFalse();
+        assertThat(userRepository.wasCalled("updateLastLoginDateTime")).isFalse();
     }
 }

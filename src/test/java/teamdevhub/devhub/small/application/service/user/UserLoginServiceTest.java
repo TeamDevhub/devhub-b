@@ -17,17 +17,17 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserLoginServiceTest {
 
-    private FakeUserRepository fakeUserRepository;
-    private FakeTimeProvider fakeDateTimeProvider;
-
     private UserLoginService userLoginService;
+
+    private FakeUserRepository userRepository;
+    private FakeTimeProvider timeProvider;
 
     @BeforeEach
     void init() {
-        fakeDateTimeProvider = new FakeTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
-        fakeUserRepository = new FakeUserRepository();
+        timeProvider = new FakeTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
+        userRepository = new FakeUserRepository();
 
-        userLoginService = new UserLoginService(fakeDateTimeProvider,fakeUserRepository);
+        userLoginService = new UserLoginService(timeProvider, userRepository);
     }
 
     @Test
@@ -46,14 +46,14 @@ public class UserLoginServiceTest {
                 .build();
         UserCreateCommand generalUserCreateCommand = UserCreateCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User testUser = User.createGeneralUser(generalUserCreateCommand);
-        fakeUserRepository.save(testUser);
+        userRepository.save(testUser);
 
         // when
         userLoginService.updateLastLoginDateTime(TEST_USER_GUID_1);
 
         // then
-        assertThat(fakeUserRepository.wasCalled("updateLastLoginDateTime")).isTrue();
-        assertThat(fakeUserRepository.callCount("updateLastLoginDateTime")).isEqualTo(1);
-        assertThat(fakeUserRepository.lastLoginOf(testUser.getUserGuid())).isEqualTo(fakeDateTimeProvider.now());
+        assertThat(userRepository.wasCalled("updateLastLoginDateTime")).isTrue();
+        assertThat(userRepository.callCount("updateLastLoginDateTime")).isEqualTo(1);
+        assertThat(userRepository.lastLoginOf(testUser.getUserGuid())).isEqualTo(timeProvider.now());
     }
 }

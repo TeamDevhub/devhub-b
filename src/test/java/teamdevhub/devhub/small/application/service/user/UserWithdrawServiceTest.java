@@ -14,9 +14,9 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserWithdrawServiceTest {
 
-    private FakeUserRepository userRepository;
-
     private UserWithdrawService userWithdrawService;
+
+    private FakeUserRepository userRepository;
 
     @BeforeEach
     void init() {

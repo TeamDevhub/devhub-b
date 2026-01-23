@@ -26,6 +26,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 class UserAdapterTest {
 
     private UserAdapter userAdapter;
+
     private FakeJpaUserRepository fakeJpaUserRepository;
 
     @BeforeEach
@@ -33,10 +34,7 @@ class UserAdapterTest {
         fakeJpaUserRepository = new FakeJpaUserRepository();
         FakeUserQueryRepository fakeUserQueryRepository = new FakeUserQueryRepository();
 
-        userAdapter = new UserAdapter(
-                fakeJpaUserRepository,
-                fakeUserQueryRepository
-        );
+        userAdapter = new UserAdapter(fakeJpaUserRepository, fakeUserQueryRepository);
     }
 
     @Test

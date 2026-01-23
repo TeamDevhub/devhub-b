@@ -18,12 +18,14 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 class AdminUserServiceTest {
 
     private AdminUserService adminUserService;
-    private FakeUserRepository fakeUserRepository;
+
+    private FakeUserRepository userRepository;
 
     @BeforeEach
     void init() {
-        fakeUserRepository = new FakeUserRepository();
-        adminUserService = new AdminUserService(fakeUserRepository);
+        userRepository = new FakeUserRepository();
+
+        adminUserService = new AdminUserService(userRepository);
     }
 
     @Test
@@ -56,8 +58,8 @@ class AdminUserServiceTest {
         UserCreateCommand generalUserCreateCommand2 = UserCreateCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
         User testUser2 = User.createGeneralUser(generalUserCreateCommand2);
 
-        fakeUserRepository.save(testUser1);
-        fakeUserRepository.save(testUser2);
+        userRepository.save(testUser1);
+        userRepository.save(testUser2);
 
         SearchUserCommand searchUserCommand = SearchUserCommand.builder()
                 .blocked(null)
