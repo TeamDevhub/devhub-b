@@ -41,13 +41,12 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
     }
 
     @Override
-    public String createAccessToken(String userGuid, SignupStatus signupStatus, String email, UserRole userRole) {
+    public String createAccessToken(String userGuid, String email, UserRole userRole) {
         LocalDateTime now = timeProvider.now();
         LocalDateTime expireAt = now.plusMinutes(30);
         return Jwts.builder()
                 .setSubject(userGuid)
                 .claim(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
-                .claim(JwtClaims.SIGNUP_STATUS, signupStatus.name())
                 .claim(JwtClaims.EMAIL, email)
                 .claim(JwtClaims.USER_ROLE, userRole.name())
                 .setIssuedAt(toDate(now))
@@ -70,13 +69,12 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
     }
 
     @Override
-    public String createTempToken(String oauthId, SignupStatus signupStatus, VerificationProvider verificationProvider, String email) {
+    public String createTempToken(String oauthId, VerificationProvider verificationProvider, String email) {
         LocalDateTime now = timeProvider.now();
         LocalDateTime expireAt = now.plusMinutes(3);
         return Jwts.builder()
                 .setSubject(oauthId)
                 .claim(JwtClaims.TOKEN_TYPE, TokenType.TEMP.name())
-                .claim(JwtClaims.SIGNUP_STATUS, signupStatus.name())
                 .claim(JwtClaims.OAUTH_PROVIDER, verificationProvider.name())
                 .claim(JwtClaims.EMAIL, email)
                 .setIssuedAt(toDate(now))
@@ -105,7 +103,6 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         return new AccessTokenInfo(
                 claims.getSubject(),
                 TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class)),
-                SignupStatus.valueOf(claims.get(JwtClaims.SIGNUP_STATUS, String.class)),
                 claims.get(JwtClaims.EMAIL, String.class),
                 UserRole.valueOf(claims.get(JwtClaims.USER_ROLE, String.class))
         );
@@ -123,7 +120,6 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         return new TempTokenInfo(
                 claims.getSubject(),
                 TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class)),
-                SignupStatus.valueOf(claims.get(JwtClaims.SIGNUP_STATUS, String.class)),
                 VerificationProvider.valueOf(claims.get(JwtClaims.OAUTH_PROVIDER, String.class)),
                 claims.get(JwtClaims.EMAIL, String.class)
         );

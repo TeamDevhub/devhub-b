@@ -6,5 +6,5 @@ import teamdevhub.devhub.common.enums.VerificationProvider;
 public interface OauthAuthenticationUseCase {
 
     String createAuthorizationUrl(String provider);
-    OauthCallbackResult handleOAuthCallback(VerificationProvider verificationProvider, String code);
+    String handleOAuthCallback(VerificationProvider verificationProvider, String code);
 }

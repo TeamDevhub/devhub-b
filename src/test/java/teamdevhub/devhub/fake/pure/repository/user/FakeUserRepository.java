@@ -2,9 +2,9 @@ package teamdevhub.devhub.fake.pure.repository.user;
 
 import teamdevhub.devhub.adapter.in.common.vo.PageResult;
 import teamdevhub.devhub.common.enums.VerificationProvider;
+import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 import teamdevhub.devhub.port.out.user.UserRepository;
@@ -28,7 +28,7 @@ public class FakeUserRepository implements UserRepository {
         return store.values().stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getSignupStatus(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
                 .orElse(null);
     }
 
@@ -37,7 +37,7 @@ public class FakeUserRepository implements UserRepository {
         return store.values().stream()
                 .filter(user -> user.getUserGuid().equals(userGuid))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getSignupStatus(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(),user.getEmail(), user.getPassword(), user.getUserRole()))
                 .orElse(null);
     }
 
@@ -48,7 +48,6 @@ public class FakeUserRepository implements UserRepository {
                 .findFirst()
                 .map(user -> new AuthenticatedUser(
                         user.getUserGuid(),
-                        user.getSignupStatus(),
                         user.getEmail(),
                         user.getPassword(),
                         user.getUserRole()
@@ -65,7 +64,6 @@ public class FakeUserRepository implements UserRepository {
                 .findFirst()
                 .map(user -> new AuthenticatedUser(
                         user.getUserGuid(),
-                        user.getSignupStatus(),
                         user.getEmail(),
                         user.getPassword(),
                         user.getUserRole()

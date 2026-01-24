@@ -35,7 +35,6 @@ public class AuthenticationService implements AuthenticationUseCase {
     public TokenResponseDto reissueAccessToken(AuthenticatedUser authenticatedUser) {
         String newAccessToken = tokenIssueProvider.createAccessToken(
                 authenticatedUser.userGuid(),
-                authenticatedUser.signupStatus(),
                 authenticatedUser.email(),
                 authenticatedUser.userRole()
         );
@@ -50,7 +49,6 @@ public class AuthenticationService implements AuthenticationUseCase {
     private IssuedToken issueLoginToken(AuthenticatedUser authenticatedUser) {
         String accessToken = tokenIssueProvider.createAccessToken(
                 authenticatedUser.userGuid(),
-                authenticatedUser.signupStatus(),
                 authenticatedUser.email(),
                 authenticatedUser.userRole()
         );

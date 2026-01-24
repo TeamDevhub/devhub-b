@@ -70,7 +70,7 @@ public class AuthFacadeTest {
 
         // then
         assertThat(oauthAuthResponseDto.getAccessToken()).isEqualTo("oauth-access-token");
-        assertThat(oauthResolveUseCase.getLastCommand()).isEqualTo(resolveOauthUserCommand);
+        assertThat(oauthResolveUseCase.getLastTempToken()).isEqualTo(resolveOauthUserCommand);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class AuthFacadeTest {
 
         // then
         assertThat(oauthAuthResponseDto.getTempToken()).isEqualTo(TEMP_TOKEN);
-        assertThat(oauthResolveUseCase.getLastCommand()).isEqualTo(resolveOauthUserCommand);
+        assertThat(oauthResolveUseCase.getLastTempToken()).isEqualTo(resolveOauthUserCommand);
     }
 
     @Test

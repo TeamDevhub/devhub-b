@@ -10,7 +10,6 @@ public class UserMapper {
     public static AuthenticatedUser toAuthenticatedUser(UserEntity userEntity) {
         return AuthenticatedUser.of(
                 userEntity.getUserGuid(),
-                userEntity.getSignupStatus(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.getUserRole()
@@ -20,7 +19,6 @@ public class UserMapper {
     public static UserEntity toEntity(User user) {
         return UserEntity.builder()
                 .userGuid(user.getUserGuid())
-                .signupStatus(user.getSignupStatus())
                 .provider(user.getVerificationProvider())
                 .oauthId(user.getOauthId())
                 .email(user.getEmail())
@@ -39,7 +37,6 @@ public class UserMapper {
     public static User toDomain(UserEntity userEntity) {
         return User.of(
                 userEntity.getUserGuid(),
-                userEntity.getSignupStatus(),
                 userEntity.getProvider(),
                 userEntity.getOauthId(),
                 userEntity.getEmail(),

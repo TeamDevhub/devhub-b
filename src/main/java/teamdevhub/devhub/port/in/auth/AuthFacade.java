@@ -33,7 +33,7 @@ public class AuthFacade {
     }
 
     public OauthAuthResponseDto loginWithOauth(ResolveOauthUserCommand resolveOauthUserCommand) {
-        OauthUserResult oauthUserResult = oauthResolveUseCase.findOrRequireSignup(resolveOauthUserCommand);
+        OauthUserResult oauthUserResult = oauthResolveUseCase.findOrRequireSignup(resolveOauthUserCommand.tempToken());
 
         if (oauthUserResult.loginAvailable()) {
             LoginResponseDto loginResponseDto = authenticationUseCase.loginWithOauth(oauthUserResult.authenticatedUser());

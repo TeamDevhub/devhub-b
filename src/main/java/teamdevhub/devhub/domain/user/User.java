@@ -4,13 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.common.enums.SignupStatus;
+import teamdevhub.devhub.domain.common.vo.AuditInfo;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
 import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.domain.user.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkillChangeResult;
-import teamdevhub.devhub.domain.common.vo.AuditInfo;
 import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
 
@@ -23,7 +22,6 @@ import java.util.Set;
 public class User {
 
     private final String userGuid;
-    private SignupStatus signupStatus;
     private VerificationProvider verificationProvider;
     private String oauthId;
 
@@ -49,7 +47,6 @@ public class User {
     @Builder
     private User(
             String userGuid,
-            SignupStatus signupStatus,
             VerificationProvider verificationProvider,
             String oauthId,
             String email,
@@ -69,7 +66,6 @@ public class User {
         validate(email, password);
 
         this.userGuid = userGuid;
-        this.signupStatus = signupStatus;
         this.verificationProvider = verificationProvider;
         this.oauthId = oauthId;
 
@@ -100,7 +96,6 @@ public class User {
     public static User createAdminUser(CreateUserCommand adminCreateUserCommand) {
         return User.builder()
                 .userGuid(adminCreateUserCommand.userGuid())
-                .signupStatus(SignupStatus.COMPLETED)
                 .verificationProvider(VerificationProvider.EMAIL)
                 .oauthId(adminCreateUserCommand.email())
                 .email(adminCreateUserCommand.email())
@@ -116,7 +111,6 @@ public class User {
     public static User createGeneralUser(CreateUserCommand generalCreateUserCommand) {
         return User.builder()
                 .userGuid(generalCreateUserCommand.userGuid())
-                .signupStatus(SignupStatus.COMPLETED)
                 .verificationProvider(VerificationProvider.EMAIL)
                 .oauthId(generalCreateUserCommand.email())
                 .email(generalCreateUserCommand.email())
@@ -134,7 +128,6 @@ public class User {
     public static User createOauthUser(CreateUserCommand oauthCreateUserCommand) {
         return User.builder()
                 .userGuid(oauthCreateUserCommand.userGuid())
-                .signupStatus(SignupStatus.PENDING)
                 .verificationProvider(oauthCreateUserCommand.verificationProvider())
                 .oauthId(oauthCreateUserCommand.oauthId())
                 .email(oauthCreateUserCommand.email())
@@ -151,7 +144,6 @@ public class User {
 
     public static User of(
             String userGuid,
-            SignupStatus signupStatus,
             VerificationProvider verificationProvider,
             String oauthId,
             String email,
@@ -168,7 +160,6 @@ public class User {
     ) {
         return User.builder()
                 .userGuid(userGuid)
-                .signupStatus(signupStatus)
                 .verificationProvider(verificationProvider)
                 .oauthId(oauthId)
                 .email(email)
@@ -183,10 +174,6 @@ public class User {
                 .lastLoginDate(lastLoginDateTime)
                 .auditInfo(auditInfo)
                 .build();
-    }
-
-    public void completeSignup() {
-        this.signupStatus = SignupStatus.COMPLETED;
     }
 
     public void withdraw() {

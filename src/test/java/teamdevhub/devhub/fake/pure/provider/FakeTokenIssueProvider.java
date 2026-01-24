@@ -17,7 +17,7 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
     private final Map<String, String> refreshTokenMap = new HashMap<>();
 
     @Override
-    public String createAccessToken(String userGuid, SignupStatus signupStatus, String email, UserRole userRole) {
+    public String createAccessToken(String userGuid, String email, UserRole userRole) {
         return ACCESS_PREFIX + userGuid;
     }
 
@@ -29,7 +29,7 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
     }
 
     @Override
-    public String createTempToken(String oauthId, SignupStatus signupStatus, VerificationProvider verificationProvider, String email) {
+    public String createTempToken(String oauthId, VerificationProvider verificationProvider, String email) {
         return TEMP_PREFIX + oauthId;
     }
 }

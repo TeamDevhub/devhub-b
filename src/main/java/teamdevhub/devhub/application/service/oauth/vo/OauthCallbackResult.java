@@ -1,16 +1,15 @@
 package teamdevhub.devhub.application.service.oauth.vo;
 
 import lombok.Builder;
-import teamdevhub.devhub.common.enums.SignupStatus;
 
 @Builder
-public record OauthCallbackResult(SignupStatus signupStatus, String tempToken) {
+public record OauthCallbackResult(String tempToken) {
 
     public static OauthCallbackResult existedUser(String tempToken) {
-        return new OauthCallbackResult(SignupStatus.COMPLETED, tempToken);
+        return new OauthCallbackResult(tempToken);
     }
 
     public static OauthCallbackResult requiresSignupUser(String tempToken) {
-        return new OauthCallbackResult(SignupStatus.PENDING, tempToken);
+        return new OauthCallbackResult(tempToken);
     }
 }

@@ -2,7 +2,6 @@ package teamdevhub.devhub.adapter.in.user.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.user.User;
 
 import java.time.LocalDateTime;
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
 @Builder
 public class SignupResponseDto {
 
-    private SignupStatus signupStatus;
     private String email;
     private String username;
 
@@ -22,7 +20,6 @@ public class SignupResponseDto {
 
     public static SignupResponseDto fromDomain(User user) {
         return SignupResponseDto.builder()
-                .signupStatus(user.getSignupStatus())
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .registrantGuid(user.getAuditInfo().registrantGuid())

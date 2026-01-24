@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.infrastructure.token.JwtTokenCodec;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
@@ -51,7 +50,6 @@ class JwtTokenCodecMediumTest {
         // when
         String accessToken = jwtTokenCodec.createAccessToken(
                 userGuid,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 USER
         );
@@ -59,7 +57,6 @@ class JwtTokenCodecMediumTest {
 
         // then
         assertThat(accessTokenInfo.userGuid()).isEqualTo(userGuid);
-        assertThat(accessTokenInfo.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
         assertThat(accessTokenInfo.email()).isEqualTo(TEST_EMAIL_1);
         assertThat(accessTokenInfo.userRole()).isEqualTo(USER);
     }
@@ -97,7 +94,6 @@ class JwtTokenCodecMediumTest {
         // given
         String accessToken = jwtTokenCodec.createAccessToken(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 USER
         );
@@ -118,7 +114,6 @@ class JwtTokenCodecMediumTest {
         // when
         String tempToken = jwtTokenCodec.createTempToken(
                 oauthId,
-                SignupStatus.PENDING,
                 VerificationProvider.GOOGLE,
                 TEST_EMAIL_1
         );
@@ -126,7 +121,6 @@ class JwtTokenCodecMediumTest {
 
         // then
         assertThat(tempTokenInfo.oauthId()).isEqualTo(oauthId);
-        assertThat(tempTokenInfo.signupStatus()).isEqualTo(SignupStatus.PENDING);
         assertThat(tempTokenInfo.verificationProvider()).isEqualTo(VerificationProvider.GOOGLE);
         assertThat(tempTokenInfo.email()).isEqualTo(TEST_EMAIL_1);
     }
@@ -137,7 +131,6 @@ class JwtTokenCodecMediumTest {
         // given
         String accessToken = jwtTokenCodec.createAccessToken(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 USER
         );
@@ -199,7 +192,6 @@ class JwtTokenCodecMediumTest {
 
         String token = jwtTokenCodec.createAccessToken(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 USER
         );

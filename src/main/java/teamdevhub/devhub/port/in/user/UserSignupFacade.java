@@ -36,7 +36,6 @@ public class UserSignupFacade {
 
         AuthenticatedUser authenticatedUser = AuthenticatedUser.builder()
                 .userGuid(savedUser.getUserGuid())
-                .signupStatus(savedUser.getSignupStatus())
                 .email(savedUser.getEmail())
                 .password(savedUser.getPassword())
                 .userRole(savedUser.getUserRole())
