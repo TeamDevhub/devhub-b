@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.user.FakeUserWithdrawUseCase;
-import teamdevhub.devhub.port.in.user.UserWithdrawFacade;
+import teamdevhub.devhub.port.in.user.facade.UserWithdrawFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;

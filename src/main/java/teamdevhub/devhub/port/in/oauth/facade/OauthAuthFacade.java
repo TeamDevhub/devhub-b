@@ -1,4 +1,4 @@
-package teamdevhub.devhub.port.in.auth;
+package teamdevhub.devhub.port.in.oauth.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -11,7 +11,7 @@ import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
-import teamdevhub.devhub.port.in.auth.OauthAuthFacade;
+import teamdevhub.devhub.port.in.oauth.facade.OauthAuthFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

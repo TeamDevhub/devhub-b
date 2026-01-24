@@ -12,7 +12,7 @@ import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.port.in.auth.AuthFacade;
+import teamdevhub.devhub.port.in.auth.facade.AuthFacade;
 
 @RestController
 @RequestMapping("/auth")

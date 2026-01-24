@@ -8,7 +8,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticatedUserUseCase;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.user.FakeUserLoginUseCase;
-import teamdevhub.devhub.port.in.auth.AuthFacade;
+import teamdevhub.devhub.port.in.auth.facade.AuthFacade;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;

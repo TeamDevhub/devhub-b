@@ -1,4 +1,4 @@
-package teamdevhub.devhub.port.in.user;
+package teamdevhub.devhub.port.in.user.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

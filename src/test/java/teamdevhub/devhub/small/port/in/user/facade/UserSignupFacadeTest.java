@@ -11,7 +11,7 @@ import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
 import teamdevhub.devhub.fake.pure.usecase.user.FakeUserSignupUseCase;
 import teamdevhub.devhub.fake.pure.usecase.verification.FakeVerificationUseCase;
 import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
-import teamdevhub.devhub.port.in.user.UserSignupFacade;
+import teamdevhub.devhub.port.in.user.facade.UserSignupFacade;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;

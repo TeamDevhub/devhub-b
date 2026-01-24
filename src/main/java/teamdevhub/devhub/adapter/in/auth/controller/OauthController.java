@@ -12,8 +12,8 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupOauthRequestDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.port.in.auth.OauthAuthFacade;
-import teamdevhub.devhub.port.in.user.UserSignupFacade;
+import teamdevhub.devhub.port.in.oauth.facade.OauthAuthFacade;
+import teamdevhub.devhub.port.in.user.facade.UserSignupFacade;
 
 import java.io.IOException;
 

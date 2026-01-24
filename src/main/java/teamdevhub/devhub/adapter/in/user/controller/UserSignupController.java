@@ -11,7 +11,7 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.port.in.user.UserSignupFacade;
+import teamdevhub.devhub.port.in.user.facade.UserSignupFacade;
 
 @RestController
 @RequestMapping("/user")
