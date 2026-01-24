@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.auth.controller.OauthController;
-import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static teamdevhub.devhub.constant.UserTestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.TEMP_TOKEN;
 
 public class OauthControllerTest {
 
