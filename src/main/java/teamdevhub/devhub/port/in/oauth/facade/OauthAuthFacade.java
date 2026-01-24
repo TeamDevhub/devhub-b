@@ -2,6 +2,7 @@ package teamdevhub.devhub.port.in.oauth.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
 import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
@@ -12,6 +13,7 @@ import teamdevhub.devhub.port.in.oauth.usecase.OauthAuthenticationUseCase;
 import teamdevhub.devhub.port.in.oauth.usecase.OauthResolveUseCase;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OauthAuthFacade {
 

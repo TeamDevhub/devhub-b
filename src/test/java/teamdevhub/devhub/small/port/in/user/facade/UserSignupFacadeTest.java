@@ -5,14 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
 import teamdevhub.devhub.common.enums.SignupStatus;
-import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
 import teamdevhub.devhub.fake.pure.usecase.user.FakeUserSignupUseCase;
 import teamdevhub.devhub.fake.pure.usecase.verification.FakeVerificationUseCase;
 import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
-import teamdevhub.devhub.port.in.user.facade.UserSignupFacade;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
+import teamdevhub.devhub.port.in.user.facade.UserSignupFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -57,14 +56,10 @@ public class UserSignupFacadeTest {
         );
 
         // when
-        User user = userSignupFacade.signup(signupUserCommand);
+        userSignupFacade.signup(signupUserCommand);
 
         // then
-        assertThat(user).isNotNull();
-        assertThat(user.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(user.getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(user.getUsername()).isEqualTo(TEST_USERNAME_1);
-        assertThat(user.getIntroduction()).isEqualTo(TEST_INTRO_1);
+        assertThat(userSignupUseCase.isSignupCalled()).isTrue();
     }
 
     @Test

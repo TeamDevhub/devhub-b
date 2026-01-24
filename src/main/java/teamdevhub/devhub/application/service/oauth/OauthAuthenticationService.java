@@ -2,6 +2,7 @@ package teamdevhub.devhub.application.service.oauth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.application.selector.oauth.OauthClientSelector;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
@@ -10,6 +11,7 @@ import teamdevhub.devhub.port.out.oauth.OauthClient;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OauthAuthenticationService implements OauthAuthenticationUseCase {
 

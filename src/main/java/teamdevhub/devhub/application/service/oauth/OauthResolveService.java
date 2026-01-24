@@ -2,6 +2,7 @@ package teamdevhub.devhub.application.service.oauth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
 import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
@@ -11,6 +12,7 @@ import teamdevhub.devhub.port.out.provider.TokenParseProvider;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OauthResolveService implements OauthResolveUseCase {
 

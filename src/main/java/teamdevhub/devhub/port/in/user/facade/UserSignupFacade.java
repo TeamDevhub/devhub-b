@@ -2,6 +2,7 @@ package teamdevhub.devhub.port.in.user.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
@@ -15,6 +16,7 @@ import teamdevhub.devhub.port.in.user.usecase.UserSignupUseCase;
 import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserSignupFacade {
 
@@ -23,11 +25,10 @@ public class UserSignupFacade {
     private final AuthenticationUseCase authenticationUseCase;
     private final VerificationUseCase verificationUseCase;
 
-    public User signup(SignupUserCommand signupUserCommand) {
+    public void signup(SignupUserCommand signupUserCommand) {
         verificationUseCase.assertAllowed(signupUserCommand.verificationTarget());
-        User savedUser = userSignupUseCase.signup(signupUserCommand);
+        userSignupUseCase.signup(signupUserCommand);
         verificationUseCase.consume(signupUserCommand.verificationTarget());
-        return savedUser;
     }
 
     public OauthAuthResponseDto signupWithOauth(SignupOauthUserCommand signupOauthUserCommand) {

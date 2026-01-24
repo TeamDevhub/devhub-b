@@ -20,12 +20,12 @@ public class UserSignupController {
 
     private final UserSignupFacade userSignupFacade;
 
-    @PostMapping("/signup/email")
-    public ResponseEntity<DataApiResponseDto<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+    @PostMapping("/signup")
+    public ResponseEntity<DataApiResponseDto<Void>> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+        userSignupFacade.signup(signupRequestDto.toSignupCommand());
         return ResponseEntity.ok(
-                DataApiResponseDto.successWithData(
-                        SuccessCode.SIGNUP_SUCCESS,
-                        SignupResponseDto.fromDomain(userSignupFacade.signup(signupRequestDto.toSignupCommand()))
+                DataApiResponseDto.successWithoutData(
+                        SuccessCode.SIGNUP_SUCCESS
                 )
         );
     }

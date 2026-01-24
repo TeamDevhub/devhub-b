@@ -1,8 +1,8 @@
 package teamdevhub.devhub.application.service.auth;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.application.exception.BusinessRuleException;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.auth.RefreshToken;

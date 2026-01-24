@@ -56,12 +56,15 @@ public class OauthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<DataApiResponseDto<OauthAuthResponseDto>> signup(@RequestBody SignupOauthRequestDto signupOauthRequestDto) {
-        return ResponseEntity.ok(
-                DataApiResponseDto.successWithData(
-                        SuccessCode.SIGNUP_SUCCESS,
-                        userSignupFacade.signupWithOauth(signupOauthRequestDto.toCommand())
-                )
-        );
+    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> signup(@RequestBody SignupOauthRequestDto signupOauthRequestDto) {
+        OauthAuthResponseDto oauthAuthResponseDto = userSignupFacade.signupWithOauth(signupOauthRequestDto.toCommand());
+        ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResponseDto.getRefreshToken());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, oauthAuthResponseDto.toAuthorizationHeader())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .body(DataApiResponseDto.successWithData(
+                        SuccessCode.LOGIN_SUCCESS,
+                        TokenResponseDto.issueAccessToken(oauthAuthResponseDto.getAccessToken()))
+                );
     }
 }

@@ -32,10 +32,16 @@ class UserQueryRepositoryImplMediumTest {
     private EntityManager entityManager;
 
     @BeforeEach
-    void init() {
+    void cleanUp() {
         entityManager.createQuery("DELETE FROM UserEntity").executeUpdate();
         entityManager.flush();
+        entityManager.clear();
+    }
 
+    @Test
+    @DisplayName("차단된_사용자_검색조건이_적용되면_차단된_사용자만_조회된다")
+    void listUserWithBlockedTrueFilterReturnsCorrectResults() {
+        // given
         String randomGuid1 = UUID.randomUUID().toString().replace("-", "");
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
@@ -67,12 +73,7 @@ class UserQueryRepositoryImplMediumTest {
         entityManager.persist(userEntity1);
         entityManager.persist(userEntity2);
         entityManager.flush();
-    }
 
-    @Test
-    @DisplayName("차단된_사용자_검색조건이_적용되면_차단된_사용자만_조회된다")
-    void listUserWithBlockedTrueFilterReturnsCorrectResults() {
-        // given
         SearchUserCommand searchUserCommand = new SearchUserCommand(true, null, null, null);
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -88,6 +89,38 @@ class UserQueryRepositoryImplMediumTest {
     @DisplayName("키워드_검색조건이_적용되면_해당_사용자만_조회된다")
     void listUserWithKeywordFilterReturnsCorrectResults() {
         // given
+        String randomGuid1 = UUID.randomUUID().toString().replace("-", "");
+        String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
+        UserEntity userEntity1 = UserEntity.builder()
+                .userGuid(randomGuid1)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .userRole(UserRole.USER)
+                .mannerDegree(50.0)
+                .blocked(false)
+                .deleted(false)
+                .introduction(TEST_INTRO_1)
+                .lastLoginDate(LocalDateTime.now().minusDays(1))
+                .build();
+
+        UserEntity userEntity2 = UserEntity.builder()
+                .userGuid(randomGuid2)
+                .email(TEST_EMAIL_2)
+                .password(TEST_PASSWORD_2)
+                .username(TEST_USERNAME_2)
+                .userRole(UserRole.USER)
+                .mannerDegree(50.0)
+                .blocked(true)
+                .deleted(false)
+                .introduction(TEST_INTRO_2)
+                .lastLoginDate(LocalDateTime.now().minusDays(1))
+                .build();
+
+        entityManager.persist(userEntity1);
+        entityManager.persist(userEntity2);
+        entityManager.flush();
+
         SearchUserCommand searchUserCommand = new SearchUserCommand(null, null, null, TEST_USERNAME_1);
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -103,6 +136,38 @@ class UserQueryRepositoryImplMediumTest {
     @DisplayName("모든_조건이_조합되면_해당_사용자만_조회된다")
     void listUserWithAllFiltersReturnsCorrectResults() {
         // given
+        String randomGuid1 = UUID.randomUUID().toString().replace("-", "");
+        String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
+        UserEntity userEntity1 = UserEntity.builder()
+                .userGuid(randomGuid1)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .userRole(UserRole.USER)
+                .mannerDegree(50.0)
+                .blocked(false)
+                .deleted(false)
+                .introduction(TEST_INTRO_1)
+                .lastLoginDate(LocalDateTime.now().minusDays(1))
+                .build();
+
+        UserEntity userEntity2 = UserEntity.builder()
+                .userGuid(randomGuid2)
+                .email(TEST_EMAIL_2)
+                .password(TEST_PASSWORD_2)
+                .username(TEST_USERNAME_2)
+                .userRole(UserRole.USER)
+                .mannerDegree(50.0)
+                .blocked(true)
+                .deleted(false)
+                .introduction(TEST_INTRO_2)
+                .lastLoginDate(LocalDateTime.now().minusDays(1))
+                .build();
+
+        entityManager.persist(userEntity1);
+        entityManager.persist(userEntity2);
+        entityManager.flush();
+
         LocalDateTime joinedFrom = LocalDateTime.now().minusDays(3);
         LocalDateTime joinedTo = LocalDateTime.now();
         SearchUserCommand searchUserCommand = new SearchUserCommand(true, joinedFrom, joinedTo, TEST_USERNAME_2);
@@ -120,6 +185,38 @@ class UserQueryRepositoryImplMediumTest {
     @DisplayName("조건이_없으면_모든_사용자를_조회한다")
     void listUserWithNoFiltersReturnsAllResults() {
         // given
+        String randomGuid1 = UUID.randomUUID().toString().replace("-", "");
+        String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
+        UserEntity userEntity1 = UserEntity.builder()
+                .userGuid(randomGuid1)
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .userRole(UserRole.USER)
+                .mannerDegree(50.0)
+                .blocked(false)
+                .deleted(false)
+                .introduction(TEST_INTRO_1)
+                .lastLoginDate(LocalDateTime.now().minusDays(1))
+                .build();
+
+        UserEntity userEntity2 = UserEntity.builder()
+                .userGuid(randomGuid2)
+                .email(TEST_EMAIL_2)
+                .password(TEST_PASSWORD_2)
+                .username(TEST_USERNAME_2)
+                .userRole(UserRole.USER)
+                .mannerDegree(50.0)
+                .blocked(true)
+                .deleted(false)
+                .introduction(TEST_INTRO_2)
+                .lastLoginDate(LocalDateTime.now().minusDays(1))
+                .build();
+
+        entityManager.persist(userEntity1);
+        entityManager.persist(userEntity2);
+        entityManager.flush();
+
         SearchUserCommand searchUserCommand = new SearchUserCommand(null, null, null, null);
         Pageable pageable = PageRequest.of(0, 10);
 

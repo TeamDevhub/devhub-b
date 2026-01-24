@@ -126,12 +126,16 @@ public class OauthControllerTest {
         when(userSignupFacade.signupWithOauth(any())).thenReturn(oauthAuthResponseDto);
 
         // when
-        ResponseEntity<DataApiResponseDto<OauthAuthResponseDto>> response = oauthController.signup(requestDto);
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.signup(requestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.SIGNUP_SUCCESS.getCode());
-        assertThat(response.getBody().getData()).isEqualTo(oauthAuthResponseDto);
+        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
+        assertThat(response.getBody().getData().getAccessToken()).isEqualTo("access-token");
+
+        HttpHeaders headers = response.getHeaders();
+        List<String> cookies = headers.get(HttpHeaders.SET_COOKIE);
+        assertThat(cookies).isNotNull();
 
         verify(userSignupFacade).signupWithOauth(any());
     }

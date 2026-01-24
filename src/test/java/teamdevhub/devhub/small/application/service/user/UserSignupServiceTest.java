@@ -104,11 +104,11 @@ public class UserSignupServiceTest {
         SignupUserCommand signupUserCommand = new SignupUserCommand(null, TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_1);
 
         // when
-        User savedUser = userSignupService.signup(signupUserCommand);
+        userSignupService.signup(signupUserCommand);
 
         // then
-        assertThat(userRepository.save(savedUser).getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(userRepository.save(savedUser).getPassword()).isEqualTo(encodedPasswordProvider.encode(TEST_PASSWORD_1));
+        assertThat(userRepository.wasCalled("save")).isTrue();
+        assertThat(userRepository.findByUserGuid(TEST_USER_GUID_1).getPassword()).isEqualTo(encodedPasswordProvider.encode(TEST_PASSWORD_1));
     }
 
     @Test

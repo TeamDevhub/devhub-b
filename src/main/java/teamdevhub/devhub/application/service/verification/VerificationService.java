@@ -3,15 +3,15 @@ package teamdevhub.devhub.application.service.verification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamdevhub.devhub.application.selector.notification.NotificationSenderSelector;
 import teamdevhub.devhub.application.selector.verification.VerificationIssuerSelector;
-import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.domain.verification.Verification;
 import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
 import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
 import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
-import teamdevhub.devhub.application.selector.notification.NotificationSenderSelector;
+import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
+import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.port.out.verification.VerificationRepository;
 
 @Service

@@ -7,17 +7,14 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.user.controller.UserSignupController;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
-import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.user.facade.UserSignupFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserSignupControllerTest {
@@ -45,23 +42,14 @@ public class UserSignupControllerTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        User user = User.builder()
-                .email(signupRequestDto.getEmail())
-                .password(TEST_PASSWORD_1)
-                .username(signupRequestDto.getUsername())
-                .userRole(UserRole.USER)
-                .build();
-
-        when(userSignupFacade.signup(any())).thenReturn(user);
+        doNothing().when(userSignupFacade).signup(any());
 
         // when
-        ResponseEntity<DataApiResponseDto<SignupResponseDto>> response = userSignupController.signup(signupRequestDto);
+        ResponseEntity<DataApiResponseDto<Void>> response = userSignupController.signup(signupRequestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.SIGNUP_SUCCESS.getCode());
-        assertThat(response.getBody().getData().getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(response.getBody().getData().getUsername()).isEqualTo(TEST_USERNAME_1);
 
         verify(userSignupFacade).signup(any());
     }
