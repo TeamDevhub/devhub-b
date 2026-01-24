@@ -1,7 +1,8 @@
-package teamdevhub.devhub.domain.verification.vo;
+package teamdevhub.devhub.application.service.verification.vo;
 
 import lombok.Builder;
 import teamdevhub.devhub.domain.verification.Verification;
+import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 
 import java.util.Optional;
 

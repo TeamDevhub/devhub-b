@@ -3,11 +3,11 @@ package teamdevhub.devhub.small.port.in.oauth.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
+import teamdevhub.devhub.application.service.oauth.vo.OauthAuthResult;
 import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
@@ -56,11 +56,11 @@ public class OauthAuthFacadeTest {
         oauthResolveUseCase.setOauthUserResult(OauthUserResult.success(signupCompletedUser));
 
         // when
-        OauthAuthResponseDto oauthAuthResponseDto = oauthAuthFacade.handleOAuthCallback("google", "code123");
+        OauthAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback("google", "code123");
 
         // then
-        assertThat(oauthAuthResponseDto.getAccessToken()).isNotNull();
-        assertThat(oauthAuthResponseDto.getSignupStatus()).isEqualTo(SignupStatus.COMPLETED);
+        assertThat(oauthAuthResult.accessToken()).isNotNull();
+        assertThat(oauthAuthResult.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
         assertThat(authenticationUseCase.getLastLoginUser()).isNotNull();
     }
 
@@ -71,10 +71,10 @@ public class OauthAuthFacadeTest {
         oauthResolveUseCase.setOauthUserResult(OauthUserResult.requiresSignup());
 
         // when
-        OauthAuthResponseDto oauthAuthResponseDto = oauthAuthFacade.handleOAuthCallback("google", "code456");
+        OauthAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback("google", "code456");
 
         // then
-        assertThat(oauthAuthResponseDto.getAccessToken()).isNull();
-        assertThat(oauthAuthResponseDto.getSignupStatus()).isEqualTo(SignupStatus.PENDING);
+        assertThat(oauthAuthResult.accessToken()).isNull();
+        assertThat(oauthAuthResult.signupStatus()).isEqualTo(SignupStatus.PENDING);
     }
 }

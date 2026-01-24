@@ -3,8 +3,7 @@ package teamdevhub.devhub.application.service.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
+import teamdevhub.devhub.application.service.auth.vo.AuthResult;
 import teamdevhub.devhub.domain.auth.RefreshToken;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.usecase.AuthenticationUseCase;
@@ -20,27 +19,7 @@ public class AuthenticationService implements AuthenticationUseCase {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
-    public LoginResponseDto login(AuthenticatedUser authenticatedUser) {
-        IssuedToken issuedToken = issueLoginToken(authenticatedUser);
-        return LoginResponseDto.of(issuedToken.accessToken(), issuedToken.refreshToken());
-    }
-
-    @Override
-    public TokenResponseDto reissueAccessToken(AuthenticatedUser authenticatedUser) {
-        String newAccessToken = tokenIssueProvider.createAccessToken(
-                authenticatedUser.userGuid(),
-                authenticatedUser.email(),
-                authenticatedUser.userRole()
-        );
-        return TokenResponseDto.issueAccessToken(newAccessToken);
-    }
-
-    @Override
-    public void revoke(String userGuid) {
-        refreshTokenRepository.deleteByUserGuid(userGuid);
-    }
-
-    private IssuedToken issueLoginToken(AuthenticatedUser authenticatedUser) {
+    public AuthResult login(AuthenticatedUser authenticatedUser) {
         String accessToken = tokenIssueProvider.createAccessToken(
                 authenticatedUser.userGuid(),
                 authenticatedUser.email(),
@@ -48,7 +27,22 @@ public class AuthenticationService implements AuthenticationUseCase {
         );
         String refreshToken = tokenIssueProvider.createRefreshToken(authenticatedUser.userGuid());
         issueRefreshToken(authenticatedUser.userGuid(), refreshToken);
-        return new IssuedToken(accessToken, refreshToken);
+        return AuthResult.of(accessToken, refreshToken);
+    }
+
+    @Override
+    public AuthResult reissueAccessToken(AuthenticatedUser authenticatedUser) {
+        String newAccessToken = tokenIssueProvider.createAccessToken(
+                authenticatedUser.userGuid(),
+                authenticatedUser.email(),
+                authenticatedUser.userRole()
+        );
+        return AuthResult.ofReissue(newAccessToken);
+    }
+
+    @Override
+    public void revoke(String userGuid) {
+        refreshTokenRepository.deleteByUserGuid(userGuid);
     }
 
     private void issueRefreshToken(String userGuid, String token) {

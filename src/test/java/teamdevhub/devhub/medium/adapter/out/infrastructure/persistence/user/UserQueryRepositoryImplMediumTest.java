@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.UserQueryRepository;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 
 import java.time.LocalDateTime;

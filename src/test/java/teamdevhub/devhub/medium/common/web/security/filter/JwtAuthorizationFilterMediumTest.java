@@ -15,7 +15,7 @@ import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.web.security.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.fake.pure.handler.FakeCustomFilterExceptionHandler;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
 

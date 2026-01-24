@@ -1,4 +1,4 @@
-package teamdevhub.devhub.domain.user;
+package teamdevhub.devhub.domain.user.vo;
 
 public enum UserRole {
 

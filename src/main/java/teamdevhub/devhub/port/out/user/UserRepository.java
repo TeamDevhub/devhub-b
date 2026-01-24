@@ -3,7 +3,7 @@ package teamdevhub.devhub.port.out.user;
 import teamdevhub.devhub.adapter.in.common.vo.PageResult;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
 

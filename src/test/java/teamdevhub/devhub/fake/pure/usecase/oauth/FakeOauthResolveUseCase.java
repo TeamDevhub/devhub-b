@@ -5,7 +5,7 @@ import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 import teamdevhub.devhub.port.in.oauth.usecase.OauthResolveUseCase;
 

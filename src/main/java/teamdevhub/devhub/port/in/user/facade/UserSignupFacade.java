@@ -3,8 +3,8 @@ package teamdevhub.devhub.port.in.user.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
+import teamdevhub.devhub.application.service.auth.vo.AuthResult;
+import teamdevhub.devhub.application.service.oauth.vo.OauthAuthResult;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.domain.user.User;
@@ -31,7 +31,7 @@ public class UserSignupFacade {
         verificationUseCase.consume(signupUserCommand.verificationTarget());
     }
 
-    public OauthAuthResponseDto signupWithOauth(SignupOauthUserCommand signupOauthUserCommand) {
+    public OauthAuthResult signupWithOauth(SignupOauthUserCommand signupOauthUserCommand) {
         OauthUser oauthUser = oauthResolveUseCase.extractOauthUser(signupOauthUserCommand);
         User savedUser = userSignupUseCase.signupWithOauth(signupOauthUserCommand, oauthUser);
 
@@ -42,7 +42,7 @@ public class UserSignupFacade {
                 .userRole(savedUser.getUserRole())
                 .build();
 
-        LoginResponseDto loginResponseDto = authenticationUseCase.login(authenticatedUser);
-        return OauthAuthResponseDto.loggedIn(loginResponseDto);
+        AuthResult authResult = authenticationUseCase.login(authenticatedUser);
+        return OauthAuthResult.loggedIn(authResult);
     }
 }

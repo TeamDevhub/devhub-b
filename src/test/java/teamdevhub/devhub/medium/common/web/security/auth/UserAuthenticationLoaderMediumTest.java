@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.common.web.security.auth.UserAuthenticationLoader;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.port.out.user.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

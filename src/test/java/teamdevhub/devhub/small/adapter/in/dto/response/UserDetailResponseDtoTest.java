@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserDetailResponseDto;
 import teamdevhub.devhub.constant.UserTestConstant;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.domain.common.vo.AuditInfo;
 
 import java.time.LocalDateTime;

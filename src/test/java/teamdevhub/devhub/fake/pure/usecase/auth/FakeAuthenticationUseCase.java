@@ -1,7 +1,6 @@
 package teamdevhub.devhub.fake.pure.usecase.auth;
 
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
+import teamdevhub.devhub.application.service.auth.vo.AuthResult;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.port.in.auth.usecase.AuthenticationUseCase;
 
@@ -11,17 +10,14 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
     private AuthenticatedUser lastLoginUser;
 
     @Override
-    public LoginResponseDto login(AuthenticatedUser authenticatedUser) {
+    public AuthResult login(AuthenticatedUser authenticatedUser) {
         this.lastLoginUser = authenticatedUser;
-        return LoginResponseDto.builder()
-                .accessToken("access-token")
-                .refreshToken("refresh-token")
-                .build();
+        return AuthResult.of("access-token", "refresh-token");
     }
 
     @Override
-    public TokenResponseDto reissueAccessToken(AuthenticatedUser authenticatedUser) {
-        return TokenResponseDto.issueAccessToken("new-access-token");
+    public AuthResult reissueAccessToken(AuthenticatedUser authenticatedUser) {
+        return AuthResult.ofReissue("new-access-token");
     }
 
     @Override

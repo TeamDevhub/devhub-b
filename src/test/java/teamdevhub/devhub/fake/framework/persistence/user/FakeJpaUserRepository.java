@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.FluentQuery;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepository;
 import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 
 import java.time.LocalDateTime;
 import java.util.*;

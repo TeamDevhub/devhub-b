@@ -6,6 +6,7 @@ import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.common.vo.AuditInfo;
 import teamdevhub.devhub.domain.exception.DomainRuleException;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.domain.user.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;

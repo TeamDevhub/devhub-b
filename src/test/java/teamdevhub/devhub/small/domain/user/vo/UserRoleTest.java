@@ -1,8 +1,8 @@
-package teamdevhub.devhub.small.domain.user;
+package teamdevhub.devhub.small.domain.user.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

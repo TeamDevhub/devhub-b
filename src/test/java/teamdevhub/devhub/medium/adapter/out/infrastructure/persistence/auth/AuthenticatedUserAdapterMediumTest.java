@@ -11,7 +11,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import teamdevhub.devhub.adapter.out.auth.AuthenticatedUserAdapter;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

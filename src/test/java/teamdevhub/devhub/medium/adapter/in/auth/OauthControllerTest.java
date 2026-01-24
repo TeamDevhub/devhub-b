@@ -8,8 +8,8 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.auth.controller.OauthController;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
+import teamdevhub.devhub.application.service.auth.vo.AuthResult;
+import teamdevhub.devhub.application.service.oauth.vo.OauthAuthResult;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupOauthRequestDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
@@ -64,16 +64,16 @@ public class OauthControllerTest {
     @DisplayName("OAuth_콜백_처리_성공시_응답에_쿠키와_LOGIN_SUCCESS_코드를_포함한다")
     void handleOauthCallbackReturnsCallbackResponse() {
         // given
-        LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+        AuthResult authResult = AuthResult.builder()
                 .accessToken("access-token")
                 .refreshToken("refresh-token")
                 .build();
 
         String provider = "github";
         String code = "authorization-code";
-        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.loggedIn(loginResponseDto);
+        OauthAuthResult oauthAuthResult = OauthAuthResult.loggedIn(authResult);
 
-        Mockito.when(oauthAuthFacade.handleOAuthCallback(provider, code)).thenReturn(oauthAuthResponseDto);
+        Mockito.when(oauthAuthFacade.handleOAuthCallback(provider, code)).thenReturn(oauthAuthResult);
 
         // when
         ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.handleOauthCallback(provider, code);
@@ -96,10 +96,10 @@ public class OauthControllerTest {
         // given
         String provider = "github";
         String code = "authorization-code";
-        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.requiresSignup(TEMP_TOKEN);
+        OauthAuthResult oauthAuthResult = OauthAuthResult.requiresSignup(TEMP_TOKEN);
 
         Mockito.when(oauthAuthFacade.handleOAuthCallback(provider, code))
-                .thenReturn(oauthAuthResponseDto);
+                .thenReturn(oauthAuthResult);
 
         // when
         ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.handleOauthCallback(provider, code);
@@ -118,12 +118,12 @@ public class OauthControllerTest {
         // given
         SignupOauthRequestDto requestDto = Mockito.mock(SignupOauthRequestDto.class);
 
-        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.builder()
+        OauthAuthResult oauthAuthResult = OauthAuthResult.builder()
                 .accessToken("access-token")
                 .refreshToken("refresh-token")
                 .build();
 
-        when(userSignupFacade.signupWithOauth(any())).thenReturn(oauthAuthResponseDto);
+        when(userSignupFacade.signupWithOauth(any())).thenReturn(oauthAuthResult);
 
         // when
         ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.signup(requestDto);

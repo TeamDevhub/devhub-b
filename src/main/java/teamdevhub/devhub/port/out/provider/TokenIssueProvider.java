@@ -1,7 +1,7 @@
 package teamdevhub.devhub.port.out.provider;
 
 import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 
 public interface TokenIssueProvider {
 

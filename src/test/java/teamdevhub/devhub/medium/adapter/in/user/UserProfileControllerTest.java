@@ -12,7 +12,7 @@ import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.port.in.user.facade.UserWithdrawFacade;
 import teamdevhub.devhub.port.in.user.usecase.UserProfileUseCase;
 

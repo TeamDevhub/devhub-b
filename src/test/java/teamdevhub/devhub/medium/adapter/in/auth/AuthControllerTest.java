@@ -8,12 +8,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.auth.controller.AuthController;
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
+import teamdevhub.devhub.application.service.auth.vo.AuthResult;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.port.in.auth.facade.AuthFacade;
 
 import java.util.List;
@@ -44,12 +44,12 @@ class AuthControllerTest {
                 .password(TEST_PASSWORD_1)
                 .build();
 
-        LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+        AuthResult authResult = AuthResult.builder()
                 .accessToken("access-token")
                 .refreshToken("refresh-token")
                 .build();
 
-        when(authFacade.login(any())).thenReturn(loginResponseDto);
+        when(authFacade.login(any())).thenReturn(authResult);
 
         // when
         ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = authController.login(loginRequestDto);
@@ -69,11 +69,9 @@ class AuthControllerTest {
     @DisplayName("토큰_재발급에_성공하면_CREATE_SUCCESS_코드를_확인할_수_있다")
     void canVerifyCodeWhenRefreshingToken() {
         // given
-        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-                .accessToken("new-access-token")
-                .build();
+        AuthResult authResult = AuthResult.ofReissue("new-access-token");
         String refreshToken = "refresh-token";
-        when(authFacade.reissueAccessToken(refreshToken)).thenReturn(tokenResponseDto);
+        when(authFacade.reissueAccessToken(refreshToken)).thenReturn(authResult);
 
         // when
         ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = authController.refresh(refreshToken);

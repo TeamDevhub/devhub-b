@@ -3,13 +3,12 @@ package teamdevhub.devhub.small.port.in.auth.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
+import teamdevhub.devhub.application.service.auth.vo.AuthResult;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticatedUserUseCase;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.user.FakeUserLoginUseCase;
-import teamdevhub.devhub.port.in.auth.facade.AuthFacade;
 import teamdevhub.devhub.port.in.auth.command.LoginCommand;
+import teamdevhub.devhub.port.in.auth.facade.AuthFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -42,10 +41,10 @@ public class AuthFacadeTest {
         LoginCommand loginCommand = new LoginCommand(TEST_EMAIL_1, TEST_PASSWORD_1);
 
         // when
-        LoginResponseDto loginResponseDto = authFacade.login(loginCommand);
+        AuthResult authResult = authFacade.login(loginCommand);
 
         // then
-        assertThat(loginResponseDto.getAccessToken()).isEqualTo("access-token");
+        assertThat(authResult.accessToken()).isEqualTo("access-token");
     }
 
     @Test
@@ -55,10 +54,10 @@ public class AuthFacadeTest {
         String oldToken = "old-token";
 
         // when
-        TokenResponseDto tokenResponseDto = authFacade.reissueAccessToken(oldToken);
+        AuthResult authResult = authFacade.reissueAccessToken(oldToken);
 
         // then
-        assertThat(tokenResponseDto.getAccessToken()).isEqualTo("new-access-token");
+        assertThat(authResult.accessToken()).isEqualTo("new-access-token");
     }
 
     @Test

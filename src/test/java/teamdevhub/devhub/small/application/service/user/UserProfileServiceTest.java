@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.service.user.UserProfileService;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;

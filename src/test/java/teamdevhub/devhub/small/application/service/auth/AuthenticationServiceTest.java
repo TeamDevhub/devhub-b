@@ -3,12 +3,11 @@ package teamdevhub.devhub.small.application.service.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.application.service.auth.AuthenticationService;
+import teamdevhub.devhub.application.service.auth.vo.AuthResult;
 import teamdevhub.devhub.domain.auth.RefreshToken;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.repository.auth.FakeRefreshTokenRepository;
 
@@ -44,12 +43,12 @@ class AuthenticationServiceTest {
         );
 
         // when
-        LoginResponseDto loginResponseDto = authenticationService.login(authenticatedUser);
+        AuthResult authResult = authenticationService.login(authenticatedUser);
 
         // then
-        assertThat(loginResponseDto).isNotNull();
-        assertThat(loginResponseDto.getAccessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
-        assertThat(loginResponseDto.getRefreshToken()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
+        assertThat(authResult).isNotNull();
+        assertThat(authResult.accessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
+        assertThat(authResult.refreshToken()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
     }
 
     @Test
@@ -85,12 +84,12 @@ class AuthenticationServiceTest {
         );
 
         // when
-        LoginResponseDto loginResponseDto = authenticationService.login(authenticatedUser);
+        AuthResult authResult = authenticationService.login(authenticatedUser);
 
         // then
-        assertThat(loginResponseDto).isNotNull();
-        assertThat(loginResponseDto.getAccessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
-        assertThat(loginResponseDto.getRefreshToken()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
+        assertThat(authResult).isNotNull();
+        assertThat(authResult.accessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
+        assertThat(authResult.refreshToken()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
     }
 
     @Test
@@ -105,11 +104,11 @@ class AuthenticationServiceTest {
         );
 
         // when
-        TokenResponseDto tokenResponseDto = authenticationService.reissueAccessToken(authenticatedUser);
+        AuthResult authResult = authenticationService.reissueAccessToken(authenticatedUser);
 
         // then
-        assertThat(tokenResponseDto).isNotNull();
-        assertThat(tokenResponseDto.getAccessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
+        assertThat(authResult).isNotNull();
+        assertThat(authResult.accessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
     }
 
     @Test

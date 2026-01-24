@@ -6,7 +6,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
-import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
+import teamdevhub.devhub.application.service.auth.vo.AuthResult;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
@@ -23,23 +23,24 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
-        LoginResponseDto loginResponseDto = authFacade.login(loginRequestDto.toCommand());
-        ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(loginResponseDto.getRefreshToken());
+        AuthResult authResult = authFacade.login(loginRequestDto.toCommand());
+        ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(authResult.refreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, loginResponseDto.toAuthorizationHeader())
+                .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(DataApiResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,
-                        TokenResponseDto.issueAccessToken(loginResponseDto.getAccessToken()))
+                        TokenResponseDto.issueAccessToken(authResult.accessToken()))
                 );
     }
 
     @PostMapping("/reissue")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
+        AuthResult authResult = authFacade.reissueAccessToken(refreshToken);
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(
                         SuccessCode.CREATE_SUCCESS,
-                        authFacade.reissueAccessToken(refreshToken)
+                        TokenResponseDto.issueAccessToken(authResult.accessToken())
                 )
         );
     }

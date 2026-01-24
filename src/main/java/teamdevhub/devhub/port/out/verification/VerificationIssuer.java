@@ -1,7 +1,7 @@
 package teamdevhub.devhub.port.out.verification;
 
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
+import teamdevhub.devhub.application.service.verification.vo.IssuedVerification;
 
 public interface VerificationIssuer {
 

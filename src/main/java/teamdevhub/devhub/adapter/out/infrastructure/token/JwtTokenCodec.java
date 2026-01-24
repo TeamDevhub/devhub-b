@@ -12,7 +12,7 @@ import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.port.out.provider.TimeProvider;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
 import teamdevhub.devhub.port.out.provider.TokenParseProvider;

@@ -1,7 +1,7 @@
 package teamdevhub.devhub.domain.auth.vo.user;
 
 import lombok.Builder;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 
 @Builder
 public record AuthenticatedUser(String userGuid, String email, String password, UserRole userRole) {

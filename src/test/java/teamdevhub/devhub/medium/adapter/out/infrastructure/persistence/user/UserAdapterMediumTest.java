@@ -15,7 +15,7 @@ import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepo
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;

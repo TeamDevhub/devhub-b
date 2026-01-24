@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.application.selector.notification.NotificationSenderSelector;
 import teamdevhub.devhub.application.selector.verification.VerificationIssuerSelector;
 import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
+import teamdevhub.devhub.application.service.verification.vo.IssuedVerification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
 import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;

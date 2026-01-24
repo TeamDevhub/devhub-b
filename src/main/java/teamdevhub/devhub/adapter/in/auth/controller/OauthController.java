@@ -6,7 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
+import teamdevhub.devhub.application.service.oauth.vo.OauthAuthResult;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupOauthRequestDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
@@ -33,38 +33,38 @@ public class OauthController {
 
     @GetMapping("/{provider}/callback")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> handleOauthCallback(@PathVariable String provider, @RequestParam String code) {
-        OauthAuthResponseDto oauthAuthResponseDto = oauthAuthFacade.handleOAuthCallback(provider, code);
+        OauthAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback(provider, code);
 
-        if (oauthAuthResponseDto.getSignupStatus().equals(SignupStatus.COMPLETED)) {
-            ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResponseDto.getRefreshToken());
+        if (oauthAuthResult.signupStatus().equals(SignupStatus.COMPLETED)) {
+            ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
 
             return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, oauthAuthResponseDto.toAuthorizationHeader())
+                    .header(HttpHeaders.AUTHORIZATION, oauthAuthResult.toAuthorizationHeader())
                     .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                     .body(DataApiResponseDto.successWithData(
                             SuccessCode.LOGIN_SUCCESS,
-                            TokenResponseDto.issueAccessToken(oauthAuthResponseDto.getAccessToken()))
+                            TokenResponseDto.issueAccessToken(oauthAuthResult.accessToken()))
                     );
         }
 
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(
                         SuccessCode.SIGNUP_REQUIRED,
-                        TokenResponseDto.issueTempToken(oauthAuthResponseDto.getTempToken())
+                        TokenResponseDto.issueTempToken(oauthAuthResult.tempToken())
                 )
         );
     }
 
     @PostMapping("/signup")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> signup(@RequestBody SignupOauthRequestDto signupOauthRequestDto) {
-        OauthAuthResponseDto oauthAuthResponseDto = userSignupFacade.signupWithOauth(signupOauthRequestDto.toCommand());
-        ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResponseDto.getRefreshToken());
+        OauthAuthResult oauthAuthResult = userSignupFacade.signupWithOauth(signupOauthRequestDto.toCommand());
+        ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, oauthAuthResponseDto.toAuthorizationHeader())
+                .header(HttpHeaders.AUTHORIZATION, oauthAuthResult.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(DataApiResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,
-                        TokenResponseDto.issueAccessToken(oauthAuthResponseDto.getAccessToken()))
+                        TokenResponseDto.issueAccessToken(oauthAuthResult.accessToken()))
                 );
     }
 }

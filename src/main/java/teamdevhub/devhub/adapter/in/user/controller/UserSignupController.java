@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
-import teamdevhub.devhub.adapter.in.user.dto.response.SignupResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.port.in.user.facade.UserSignupFacade;

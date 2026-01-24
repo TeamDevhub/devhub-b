@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.selector.verification.issuer.EmailVerificationIssuer;
-import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
+import teamdevhub.devhub.application.service.verification.vo.IssuedVerification;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
 import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;

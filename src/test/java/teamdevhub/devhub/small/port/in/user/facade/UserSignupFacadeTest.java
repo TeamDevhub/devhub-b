@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.port.in.user.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
+import teamdevhub.devhub.application.service.oauth.vo.OauthAuthResult;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
@@ -69,11 +69,11 @@ public class UserSignupFacadeTest {
         SignupOauthUserCommand signupCommand = new SignupOauthUserCommand(TEMP_TOKEN, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
         // when
-        OauthAuthResponseDto oauthAuthResponseDto = userSignupFacade.signupWithOauth(signupCommand);
+        OauthAuthResult oauthAuthResult = userSignupFacade.signupWithOauth(signupCommand);
 
         // then
-        assertThat(oauthAuthResponseDto.getAccessToken()).isEqualTo("access-token");
-        assertThat(oauthAuthResponseDto.getSignupStatus()).isEqualTo(SignupStatus.COMPLETED);
-        assertThat(oauthAuthResponseDto.getTempToken()).isNull();
+        assertThat(oauthAuthResult.accessToken()).isEqualTo("access-token");
+        assertThat(oauthAuthResult.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
+        assertThat(oauthAuthResult.tempToken()).isNull();
     }
 }

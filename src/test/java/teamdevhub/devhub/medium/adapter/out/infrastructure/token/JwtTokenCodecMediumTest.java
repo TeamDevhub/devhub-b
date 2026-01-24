@@ -20,7 +20,7 @@ import static teamdevhub.devhub.common.enums.ErrorCode.TOKEN_EXPIRED;
 import static teamdevhub.devhub.common.enums.ErrorCode.TOKEN_INVALID;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
-import static teamdevhub.devhub.domain.user.UserRole.USER;
+import static teamdevhub.devhub.domain.user.vo.UserRole.USER;
 
 class JwtTokenCodecMediumTest {
 

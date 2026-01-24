@@ -8,7 +8,7 @@ import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.domain.user.vo.position.UserPosition;
 import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
 import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;

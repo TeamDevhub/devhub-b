@@ -6,7 +6,7 @@ import teamdevhub.devhub.application.exception.BusinessRuleException;
 import teamdevhub.devhub.port.out.verification.VerificationIssuer;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.IssuedVerification;
+import teamdevhub.devhub.application.service.verification.vo.IssuedVerification;
 
 import java.util.List;
 

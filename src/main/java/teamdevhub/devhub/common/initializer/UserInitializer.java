@@ -10,7 +10,7 @@ import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserPositionRepository;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepository;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserSkillRepository;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.port.out.provider.IdentifierProvider;
 import teamdevhub.devhub.port.out.provider.EncodedPasswordProvider;
 

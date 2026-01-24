@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
 import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
 import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 
 import java.time.LocalDateTime;
 

@@ -12,7 +12,7 @@ import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.domain.user.vo.UserRole;
 import teamdevhub.devhub.fake.framework.infrastructure.FakeAuthentication;
 
 import java.lang.reflect.Method;
