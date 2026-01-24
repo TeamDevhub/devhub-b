@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.auth.controller.AuthController;
 import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
@@ -14,6 +15,8 @@ import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.in.auth.facade.AuthFacade;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -54,7 +57,10 @@ class AuthControllerTest {
         // then
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
-        assertThat(response.getBody().getData()).isNotNull();
+
+        HttpHeaders headers = response.getHeaders();
+        List<String> cookies = headers.get(HttpHeaders.SET_COOKIE);
+        assertThat(cookies).isNotNull();
 
         verify(authFacade).login(any());
     }

@@ -5,8 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.auth.controller.OauthController;
+import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
+import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupOauthRequestDto;
@@ -15,11 +18,13 @@ import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.port.in.oauth.facade.OauthAuthFacade;
 import teamdevhub.devhub.port.in.user.facade.UserSignupFacade;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static teamdevhub.devhub.constant.UserTestConstant.TEMP_TOKEN;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class OauthControllerTest {
 
@@ -57,8 +62,38 @@ public class OauthControllerTest {
     }
 
     @Test
-    @DisplayName("OAuth_콜백_처리_성공시_응답에_OauthCallbackResponseDto_를_포함한다")
-    void handleOauthCallback_returnsCallbackResponse() {
+    @DisplayName("OAuth_콜백_처리_성공시_응답에_쿠키와_LOGIN_SUCCESS_코드를_포함한다")
+    void handleOauthCallbackReturnsCallbackResponse() {
+        // given
+        LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+                .accessToken("access-token")
+                .refreshToken("refresh-token")
+                .build();
+
+        String provider = "github";
+        String code = "authorization-code";
+        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.loggedIn(loginResponseDto);
+
+        Mockito.when(oauthAuthFacade.handleOAuthCallback(provider, code)).thenReturn(oauthAuthResponseDto);
+
+        // when
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.handleOauthCallback(provider, code);
+
+        // then
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
+        assertThat(response.getBody().getData().getAccessToken()).isEqualTo("access-token");
+
+        HttpHeaders headers = response.getHeaders();
+        List<String> cookies = headers.get(HttpHeaders.SET_COOKIE);
+        assertThat(cookies).isNotNull();
+
+        verify(oauthAuthFacade).handleOAuthCallback(provider, code);
+    }
+
+    @Test
+    @DisplayName("OAuth_콜백_처리_성공_후_회원가입이_필요하면_응답에_TEMPTOKE_과_SIGNUP_REQUIRED_코드를_포함한다")
+    void handleOauthCallbackReturnsCallbackResponseWithTempToken() {
         // given
         String provider = "github";
         String code = "authorization-code";
@@ -72,7 +107,7 @@ public class OauthControllerTest {
 
         // then
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.CREATE_SUCCESS.getCode());
+        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.SIGNUP_REQUIRED.getCode());
         assertThat(response.getBody().getData().getTempToken()).isEqualTo(TEMP_TOKEN);
 
         verify(oauthAuthFacade).handleOAuthCallback(provider, code);

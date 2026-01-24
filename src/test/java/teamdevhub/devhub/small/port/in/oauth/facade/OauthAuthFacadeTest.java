@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.port.in.auth.facade;
+package teamdevhub.devhub.small.port.in.oauth.facade;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

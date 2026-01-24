@@ -49,7 +49,7 @@ public class OauthController {
 
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(
-                        SuccessCode.CREATE_SUCCESS,
+                        SuccessCode.SIGNUP_REQUIRED,
                         TokenResponseDto.issueTempToken(oauthAuthResponseDto.getTempToken())
                 )
         );

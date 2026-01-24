@@ -17,7 +17,7 @@ public class VerificationTest {
 
     @Test
     @DisplayName("인증을_발급하면_미인증_상태이다")
-    void issueVerification_isUnverified() {
+    void issueVerificationIsUnverified() {
         // given
         LocalDateTime expiredAt = LocalDateTime.now().plusMinutes(5);
         VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, TEST_EMAIL_1);
