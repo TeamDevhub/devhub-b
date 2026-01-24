@@ -1,6 +1,5 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.port.out.provider.TokenIssueProvider;

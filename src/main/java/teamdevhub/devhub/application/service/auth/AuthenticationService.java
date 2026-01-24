@@ -26,19 +26,13 @@ public class AuthenticationService implements AuthenticationUseCase {
     }
 
     @Override
-    public LoginResponseDto loginWithOauth(AuthenticatedUser authenticatedUser) {
-        IssuedToken issuedToken = issueLoginToken(authenticatedUser);
-        return LoginResponseDto.of(issuedToken.accessToken(), issuedToken.refreshToken());
-    }
-
-    @Override
     public TokenResponseDto reissueAccessToken(AuthenticatedUser authenticatedUser) {
         String newAccessToken = tokenIssueProvider.createAccessToken(
                 authenticatedUser.userGuid(),
                 authenticatedUser.email(),
                 authenticatedUser.userRole()
         );
-        return TokenResponseDto.issue(newAccessToken);
+        return TokenResponseDto.issueAccessToken(newAccessToken);
     }
 
     @Override

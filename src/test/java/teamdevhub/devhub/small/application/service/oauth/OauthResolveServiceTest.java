@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.application.service.oauth.OauthResolveService;
 import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
@@ -14,7 +13,6 @@ import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
-import teamdevhub.devhub.port.in.oauth.command.ResolveOauthUserCommand;
 import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +37,7 @@ class OauthResolveServiceTest {
     @DisplayName("OAuth_유저가_존재하면_반환된_OauthUserResult_의_loginAvailable_값은_true_이다")
     void returnOauthResultSuccessWhenUserExists() {
         // given
-        TempTokenInfo tokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, TokenType.TEMP, SignupStatus.COMPLETED, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        TempTokenInfo tokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, TokenType.TEMP, VerificationProvider.GOOGLE, TEST_EMAIL_1);
         tokenParseProvider.givenTempToken(TEMP_TOKEN, tokenInfo);
 
         OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
@@ -54,13 +52,10 @@ class OauthResolveServiceTest {
 
         CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
-        createdOauthUser.completeSignup();
         userRepository.save(createdOauthUser);
 
-        ResolveOauthUserCommand resolveOauthUserCommand = new ResolveOauthUserCommand(TEMP_TOKEN);
-
         // when
-        OauthUserResult oauthUserResult = oauthResolveService.findOrRequireSignup(resolveOauthUserCommand);
+        OauthUserResult oauthUserResult = oauthResolveService.findOrRequireSignup(oauthUser);
 
         // then
         assertThat(oauthUserResult.loginAvailable()).isTrue();
@@ -68,16 +63,13 @@ class OauthResolveServiceTest {
     }
 
     @Test
-    @DisplayName("OAuth_유저가_존재하면_반환된_OauthUserResult_의_loginAvailable_값은_false_이다")
+    @DisplayName("OAuth_유저가_존재하지_않으면_반환된_OauthUserResult_의_loginAvailable_값은_false_이다")
     void returnOauthResultRequiresSignupWhenUserNotExists() {
         // given
-        TempTokenInfo tokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, TokenType.TEMP, SignupStatus.COMPLETED, VerificationProvider.GOOGLE, TEST_EMAIL_1);
-        tokenParseProvider.givenTempToken(TEMP_TOKEN, tokenInfo);
-
-        ResolveOauthUserCommand resolveOauthUserCommand = new ResolveOauthUserCommand(TEMP_TOKEN);
+        OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
 
         // when
-        OauthUserResult oauthUserResult = oauthResolveService.findOrRequireSignup(resolveOauthUserCommand);
+        OauthUserResult oauthUserResult = oauthResolveService.findOrRequireSignup(oauthUser);
 
         // then
         assertThat(oauthUserResult.loginAvailable()).isFalse();
@@ -88,7 +80,7 @@ class OauthResolveServiceTest {
     @DisplayName("Oauth_회원가입_성공하면_tempToken_을_반환한다")
     void signup_with_oauth_success_returns_tempToken() {
         // given
-        TempTokenInfo tempTokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, TokenType.TEMP, SignupStatus.PENDING, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        TempTokenInfo tempTokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, TokenType.TEMP, VerificationProvider.GOOGLE, TEST_EMAIL_1);
         tokenParseProvider.givenTempToken(TEMP_TOKEN, tempTokenInfo);
 
         SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()

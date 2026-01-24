@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.application.service.auth.AuthenticationService;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.auth.RefreshToken;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -39,7 +38,6 @@ class AuthenticationServiceTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
@@ -60,7 +58,6 @@ class AuthenticationServiceTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
@@ -82,14 +79,13 @@ class AuthenticationServiceTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
         );
 
         // when
-        LoginResponseDto loginResponseDto = authenticationService.loginWithOauth(authenticatedUser);
+        LoginResponseDto loginResponseDto = authenticationService.login(authenticatedUser);
 
         // then
         assertThat(loginResponseDto).isNotNull();
@@ -103,7 +99,6 @@ class AuthenticationServiceTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER

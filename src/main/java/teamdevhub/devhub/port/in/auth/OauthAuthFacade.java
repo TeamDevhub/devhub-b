@@ -6,6 +6,7 @@ import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
 import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
 import teamdevhub.devhub.common.enums.VerificationProvider;
+import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.port.in.auth.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.port.in.oauth.usecase.OauthAuthenticationUseCase;
 import teamdevhub.devhub.port.in.oauth.usecase.OauthResolveUseCase;
@@ -23,14 +24,15 @@ public class OauthAuthFacade {
     }
 
     public OauthAuthResponseDto handleOAuthCallback(String provider, String code) {
-        String tempToken = oauthAuthenticationUseCase.handleOAuthCallback(VerificationProvider.from(provider), code);
-        OauthUserResult oauthUserResult = oauthResolveUseCase.findOrRequireSignup(tempToken);
+        OauthUser oauthUser = oauthAuthenticationUseCase.handleOAuthCallback(VerificationProvider.from(provider), code);
+        OauthUserResult oauthUserResult = oauthResolveUseCase.findOrRequireSignup(oauthUser);
 
         if (oauthUserResult.loginAvailable()) {
-            LoginResponseDto loginResponseDto = authenticationUseCase.loginWithOauth(oauthUserResult.authenticatedUser());
+            LoginResponseDto loginResponseDto = authenticationUseCase.login(oauthUserResult.authenticatedUser());
             return OauthAuthResponseDto.loggedIn(loginResponseDto);
         }
 
+        String tempToken = oauthAuthenticationUseCase.issueTempToken(oauthUser);
         return OauthAuthResponseDto.requiresSignup(tempToken);
     }
 }

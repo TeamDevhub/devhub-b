@@ -6,7 +6,6 @@ import teamdevhub.devhub.common.enums.VerificationProvider;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
 import teamdevhub.devhub.domain.user.UserRole;
-import teamdevhub.devhub.port.in.oauth.command.ResolveOauthUserCommand;
 import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 import teamdevhub.devhub.port.in.oauth.usecase.OauthResolveUseCase;
 
@@ -15,28 +14,24 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 @Setter
 public class FakeOauthResolveUseCase implements OauthResolveUseCase {
 
-    private String lastTempToken;
+    private OauthUser lastOauthUser;
     private OauthUserResult oauthUserResult;
-    private boolean loginAvailableScenario = true;
 
     @Override
-    public OauthUserResult findOrRequireSignup(String tempToken) {
-        this.lastTempToken = tempToken;
+    public OauthUserResult findOrRequireSignup(OauthUser oauthUser) {
+        this.lastOauthUser = oauthUser;
 
-        if (oauthUserResult != null) {
-            return oauthUserResult;
-        }
-
-        if (loginAvailableScenario) {
+        if (oauthUserResult.loginAvailable()) {
             AuthenticatedUser authenticatedUser = AuthenticatedUser.builder()
                     .userGuid(TEST_USER_GUID_1)
                     .email(TEST_EMAIL_1)
                     .userRole(UserRole.USER)
                     .build();
+
             return OauthUserResult.success(authenticatedUser);
-        } else {
-            return OauthUserResult.requiresSignup(tempToken);
         }
+
+        return OauthUserResult.requiresSignup();
     }
 
     @Override
@@ -44,7 +39,7 @@ public class FakeOauthResolveUseCase implements OauthResolveUseCase {
         return new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
     }
 
-    public String getLastTempToken() {
-        return lastTempToken;
+    public OauthUser getLastOauthUser() {
+        return lastOauthUser;
     }
 }

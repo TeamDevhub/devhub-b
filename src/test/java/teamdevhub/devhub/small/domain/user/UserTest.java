@@ -94,7 +94,7 @@ class UserTest {
         // given
         OauthUser oauthUser = new OauthUser("testOauthId", VerificationProvider.GOOGLE, TEST_EMAIL_1);
         SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()
-                .tempToken("tempToken")
+                .tempToken("lastOauthUser")
                 .username(TEST_USERNAME_1)
                 .password(TEST_PASSWORD_1)
                 .introduction(TEST_INTRO_1)

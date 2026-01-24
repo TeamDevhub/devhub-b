@@ -5,11 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
+import teamdevhub.devhub.adapter.in.user.controller.UserProfileController;
 import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserDetailResponseDto;
-import teamdevhub.devhub.adapter.in.user.controller.UserProfileController;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
@@ -40,7 +39,7 @@ class UserProfileControllerTest {
     @DisplayName("유저_프로필_정보_조회에_성공하면_READ_SUCCESS_의_코드를_확인할_수_있다")
     void canVerifyCodeWhenFetchingUserProfile() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, SignupStatus.COMPLETED, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
         User user = User.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
@@ -66,7 +65,7 @@ class UserProfileControllerTest {
     @DisplayName("유저_프로필_정보_수정에_성공하면_UPDATE_SUCCESS_의_코드를_확인할_수_있다")
     void canVerifyCodeWhenUpdatingUserProfile() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, SignupStatus.COMPLETED, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
         UpdateProfileRequestDto updateProfileRequestDto = UpdateProfileRequestDto.builder()
                 .username(NEW_USERNAME)
                 .introduction(NEW_INTRO)
@@ -88,7 +87,7 @@ class UserProfileControllerTest {
     @DisplayName("회원탈퇴에_성공하면_USER_DELETE_SUCCESS_의_코드를_확인할_수_있다")
     void canVerifyCodeWhenDeletingUserAccount() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, SignupStatus.COMPLETED, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
         doNothing().when(userWithdrawFacade).withdraw(authenticatedUser.userGuid());
 
         // when

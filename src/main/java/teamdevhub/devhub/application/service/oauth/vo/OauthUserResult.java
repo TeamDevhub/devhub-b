@@ -4,13 +4,13 @@ import lombok.Builder;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 
 @Builder
-public record OauthUserResult(boolean loginAvailable, AuthenticatedUser authenticatedUser, String tempToken) {
+public record OauthUserResult(boolean loginAvailable, AuthenticatedUser authenticatedUser) {
 
     public static OauthUserResult success(AuthenticatedUser authenticatedUser) {
-        return new OauthUserResult(true, authenticatedUser, null);
+        return new OauthUserResult(true, authenticatedUser);
     }
 
-    public static OauthUserResult requiresSignup(String tempToken) {
-        return new OauthUserResult(false, null, tempToken);
+    public static OauthUserResult requiresSignup() {
+        return new OauthUserResult(false, null);
     }
 }

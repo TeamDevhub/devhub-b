@@ -24,9 +24,13 @@ public class OauthAuthenticationService implements OauthAuthenticationUseCase {
     }
 
     @Override
-    public String handleOAuthCallback(VerificationProvider verificationProvider, String authorizationCode) {
+    public OauthUser handleOAuthCallback(VerificationProvider verificationProvider, String authorizationCode) {
         OauthClient oauthClient = oauthClientSelector.select(verificationProvider);
-        OauthUser oauthUser = oauthClient.fetchUser(authorizationCode);
-        return tokenIssueProvider.createTempToken(oauthUser.oauthId(), verificationProvider, oauthUser.email());
+        return oauthClient.fetchUser(authorizationCode);
+    }
+
+    @Override
+    public String issueTempToken(OauthUser oauthUser) {
+        return tokenIssueProvider.createTempToken(oauthUser.oauthId(), oauthUser.verificationProvider(), oauthUser.email());
     }
 }

@@ -15,7 +15,7 @@ class TokenResponseDtoTest {
         String accessToken = "access-token-random";
 
         // when
-        TokenResponseDto tokenResponseDto = TokenResponseDto.issue(accessToken);
+        TokenResponseDto tokenResponseDto = TokenResponseDto.issueAccessToken(accessToken);
 
         // then
         assertThat(tokenResponseDto).isNotNull();

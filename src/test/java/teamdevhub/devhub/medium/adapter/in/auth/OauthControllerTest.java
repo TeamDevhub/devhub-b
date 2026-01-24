@@ -1,39 +1,81 @@
 package teamdevhub.devhub.medium.adapter.in.auth;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.adapter.in.auth.controller.OauthController;
-import teamdevhub.devhub.adapter.in.auth.dto.request.OauthLoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.user.dto.request.SignupOauthRequestDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.port.in.auth.AuthFacade;
+import teamdevhub.devhub.port.in.auth.OauthAuthFacade;
 import teamdevhub.devhub.port.in.user.UserSignupFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static teamdevhub.devhub.constant.UserTestConstant.TEMP_TOKEN;
 
 public class OauthControllerTest {
 
     private OauthController oauthController;
 
     private UserSignupFacade userSignupFacade;
-    private AuthFacade authFacade;
+    private OauthAuthFacade oauthAuthFacade;
 
     @BeforeEach
     void init() {
         userSignupFacade = Mockito.mock(UserSignupFacade.class);
-        authFacade = Mockito.mock(AuthFacade.class);
+        oauthAuthFacade = Mockito.mock(OauthAuthFacade.class);
 
-        oauthController = new OauthController(userSignupFacade, authFacade);
+        oauthController = new OauthController(userSignupFacade, oauthAuthFacade);
+    }
+
+
+    @Test
+    @DisplayName("OAuth_로그인_요청시_Provider_인증_URL_로_리다이렉트된다")
+    void redirectToProvider_redirectsToAuthorizationUrl() throws Exception {
+        // given
+        String provider = "google";
+        String authorizationUrl = "https://google.com/oauth/authorize";
+
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        Mockito.when(oauthAuthFacade.createOAuthAuthorizationUrl(provider))
+                .thenReturn(authorizationUrl);
+
+        // when
+        oauthController.redirectToProvider(provider, response);
+
+        // then
+        verify(oauthAuthFacade).createOAuthAuthorizationUrl(provider);
+        verify(response).sendRedirect(authorizationUrl);
+    }
+
+    @Test
+    @DisplayName("OAuth_콜백_처리_성공시_응답에_OauthCallbackResponseDto_를_포함한다")
+    void handleOauthCallback_returnsCallbackResponse() {
+        // given
+        String provider = "github";
+        String code = "authorization-code";
+        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.requiresSignup(TEMP_TOKEN);
+
+        Mockito.when(oauthAuthFacade.handleOAuthCallback(provider, code))
+                .thenReturn(oauthAuthResponseDto);
+
+        // when
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.handleOauthCallback(provider, code);
+
+        // then
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.CREATE_SUCCESS.getCode());
+        assertThat(response.getBody().getData().getTempToken()).isEqualTo(TEMP_TOKEN);
+
+        verify(oauthAuthFacade).handleOAuthCallback(provider, code);
     }
 
     @Test
@@ -58,32 +100,5 @@ public class OauthControllerTest {
         assertThat(response.getBody().getData()).isEqualTo(oauthAuthResponseDto);
 
         verify(userSignupFacade).signupWithOauth(any());
-    }
-
-    @Test
-    @DisplayName("OAuth_로그인에_성공하면_토큰과_헤더를_반환한다")
-    void loginWithOauth_setsAuthorizationAndCookieHeaders() {
-        // given
-        OauthLoginRequestDto oauthLoginRequestDto = Mockito.mock(OauthLoginRequestDto.class);
-
-        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.builder()
-                .accessToken("access-token")
-                .refreshToken("refresh-token")
-                .build();
-
-        when(authFacade.loginWithOauth(any())).thenReturn(oauthAuthResponseDto);
-
-        // when
-        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.login(oauthLoginRequestDto);
-
-        // then
-        assertThat(response.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)).isTrue();
-        assertThat(response.getHeaders().containsKey(HttpHeaders.SET_COOKIE)).isTrue();
-
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.LOGIN_SUCCESS.getCode());
-        assertThat(response.getBody().getData().getAccessToken()).isEqualTo("access-token");
-
-        verify(authFacade).loginWithOauth(any());
     }
 }

@@ -12,6 +12,7 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     @Override
     public LoginResponseDto login(AuthenticatedUser authenticatedUser) {
+        this.lastLoginUser = authenticatedUser;
         return LoginResponseDto.builder()
                 .accessToken("access-token")
                 .refreshToken("refresh-token")
@@ -19,17 +20,8 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
     }
 
     @Override
-    public LoginResponseDto loginWithOauth(AuthenticatedUser authenticatedUser) {
-        this.lastLoginUser = authenticatedUser;
-        return LoginResponseDto.builder()
-                .accessToken("oauth-access-token")
-                .refreshToken("oauth-refresh-token")
-                .build();
-    }
-
-    @Override
     public TokenResponseDto reissueAccessToken(AuthenticatedUser authenticatedUser) {
-        return TokenResponseDto.issue("new-access-token");
+        return TokenResponseDto.issueAccessToken("new-access-token");
     }
 
     @Override

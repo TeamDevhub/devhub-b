@@ -69,7 +69,7 @@ public class UserSignupFacadeTest {
 
     @Test
     @DisplayName("signupWithOauth_는_signup_후_oauth-access-token_을_포함한_로그인_성공으로_이어진다")
-    void signupWithOauth_callsSignupThenLogin() {
+    void signupWithOauthCallsSignupThenLogin() {
         // given
         SignupOauthUserCommand signupCommand = new SignupOauthUserCommand(TEMP_TOKEN, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST);
 
@@ -77,7 +77,7 @@ public class UserSignupFacadeTest {
         OauthAuthResponseDto oauthAuthResponseDto = userSignupFacade.signupWithOauth(signupCommand);
 
         // then
-        assertThat(oauthAuthResponseDto.getAccessToken()).isEqualTo("oauth-access-token");
+        assertThat(oauthAuthResponseDto.getAccessToken()).isEqualTo("access-token");
         assertThat(oauthAuthResponseDto.getSignupStatus()).isEqualTo(SignupStatus.COMPLETED);
         assertThat(oauthAuthResponseDto.getTempToken()).isNull();
     }

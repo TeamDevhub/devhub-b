@@ -7,7 +7,6 @@ import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 public interface AuthenticationUseCase {
 
     LoginResponseDto login(AuthenticatedUser authenticatedUser);
-    LoginResponseDto loginWithOauth(AuthenticatedUser authenticatedUser);
     TokenResponseDto reissueAccessToken(AuthenticatedUser authenticatedUser);
     void revoke(String userGuid);
 }

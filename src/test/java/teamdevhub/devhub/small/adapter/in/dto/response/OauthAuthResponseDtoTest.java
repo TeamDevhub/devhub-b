@@ -4,29 +4,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
-import teamdevhub.devhub.application.service.oauth.vo.OauthCallbackResult;
 import teamdevhub.devhub.common.enums.SignupStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class OauthAuthResponseDtoTest {
-
-    @Test
-    @DisplayName("fromCallback_팩토리_메서드로_OauthAuthResponseDto_를_생성할_수_있다")
-    void canCreateDtoFromCallback() {
-        // given
-        OauthCallbackResult callbackResult = new OauthCallbackResult(SignupStatus.PENDING, TEMP_TOKEN);
-
-        // when
-        OauthAuthResponseDto oauthAuthResponseDto = OauthAuthResponseDto.fromCallback(callbackResult);
-
-        // then
-        assertThat(oauthAuthResponseDto.getSignupStatus()).isEqualTo(SignupStatus.PENDING);
-        assertThat(oauthAuthResponseDto.getTempToken()).isEqualTo(TEMP_TOKEN);
-        assertThat(oauthAuthResponseDto.getAccessToken()).isNull();
-        assertThat(oauthAuthResponseDto.getRefreshToken()).isNull();
-    }
 
     @Test
     @DisplayName("loggedIn_팩토리_메서드로_로그인_완료_OauthAuthResponseDto_를_생성할_수_있다")

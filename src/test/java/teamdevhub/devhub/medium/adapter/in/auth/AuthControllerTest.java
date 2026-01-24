@@ -10,7 +10,6 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.LoginRequestDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.LoginResponseDto;
 import teamdevhub.devhub.adapter.in.auth.dto.response.TokenResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.SuccessCode;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.UserRole;
@@ -86,7 +85,6 @@ class AuthControllerTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER

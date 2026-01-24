@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.enums.TokenType;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.web.security.filter.JwtAuthorizationFilter;
@@ -21,7 +20,8 @@ import teamdevhub.devhub.fake.pure.handler.FakeCustomFilterExceptionHandler;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.UserTestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 class JwtAuthorizationFilterMediumTest {
 
@@ -51,7 +51,6 @@ class JwtAuthorizationFilterMediumTest {
         return new AccessTokenInfo(
                 TEST_USER_GUID_1,
                 TokenType.ACCESS,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 UserRole.USER
         );
@@ -102,7 +101,6 @@ class JwtAuthorizationFilterMediumTest {
         AccessTokenInfo tokenInfo = new AccessTokenInfo(
                 TEST_USER_GUID_1,
                 TokenType.REFRESH,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 UserRole.USER
         );

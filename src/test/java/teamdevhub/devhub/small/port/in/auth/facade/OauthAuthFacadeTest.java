@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.in.auth.dto.response.OauthAuthResponseDto;
-import teamdevhub.devhub.application.service.oauth.vo.OauthCallbackResult;
 import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
 import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
@@ -50,12 +49,10 @@ public class OauthAuthFacadeTest {
         // given
         AuthenticatedUser signupCompletedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
         );
-        oauthAuthenticationUseCase.setCallbackResult(new OauthCallbackResult(SignupStatus.COMPLETED, TEMP_TOKEN));
         oauthResolveUseCase.setOauthUserResult(OauthUserResult.success(signupCompletedUser));
 
         // when
@@ -69,10 +66,9 @@ public class OauthAuthFacadeTest {
 
     @Test
     @DisplayName("가입되지_않은_유저면_로그인_처리_후_OauthAuthResponseDto.fromCallback_을_반환한다")
-    void handleOAuthCallback_RequiresSignup() {
+    void handleOAuthCallbackRequiresSignup() {
         // given
-        oauthAuthenticationUseCase.setCallbackResult(new OauthCallbackResult(SignupStatus.PENDING, TEMP_TOKEN));
-        oauthResolveUseCase.setOauthUserResult(null);
+        oauthResolveUseCase.setOauthUserResult(OauthUserResult.requiresSignup());
 
         // when
         OauthAuthResponseDto oauthAuthResponseDto = oauthAuthFacade.handleOAuthCallback("google", "code456");

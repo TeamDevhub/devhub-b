@@ -30,7 +30,7 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(DataApiResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,
-                        TokenResponseDto.issue(loginResponseDto.getAccessToken()))
+                        TokenResponseDto.issueAccessToken(loginResponseDto.getAccessToken()))
                 );
     }
 

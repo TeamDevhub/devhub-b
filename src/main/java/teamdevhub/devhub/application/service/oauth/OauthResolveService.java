@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import teamdevhub.devhub.application.service.oauth.vo.OauthUserResult;
 import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
-import teamdevhub.devhub.port.in.oauth.command.ResolveOauthUserCommand;
 import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 import teamdevhub.devhub.port.in.oauth.usecase.OauthResolveUseCase;
 import teamdevhub.devhub.port.out.provider.TokenParseProvider;
@@ -19,12 +18,11 @@ public class OauthResolveService implements OauthResolveUseCase {
     private final UserRepository userRepository;
 
     @Override
-    public OauthUserResult findOrRequireSignup(String tempToken) {
-        TempTokenInfo tempTokenInfo = tokenParseProvider.getTempTokenInfo(tempToken);
+    public OauthUserResult findOrRequireSignup(OauthUser oauthUser) {
         return userRepository
-                .findByOAuth(tempTokenInfo.verificationProvider(), tempTokenInfo.oauthId())
+                .findByOAuth(oauthUser.verificationProvider(), oauthUser.oauthId())
                 .map(OauthUserResult::success)
-                .orElseGet(() -> OauthUserResult.requiresSignup(tempToken));
+                .orElseGet(OauthUserResult::requiresSignup);
     }
 
     @Override

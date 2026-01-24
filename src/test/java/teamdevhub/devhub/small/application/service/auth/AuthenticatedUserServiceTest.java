@@ -11,6 +11,7 @@ import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.fake.pure.provider.FakeAuthenticatedUserResolver;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
 import teamdevhub.devhub.fake.pure.repository.auth.FakeRefreshTokenRepository;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
@@ -25,44 +26,18 @@ public class AuthenticatedUserServiceTest {
     private AuthenticatedUserService authenticatedUserService;
 
     private FakeTokenParseProvider tokenParseProvider;
+    private FakeAuthenticatedUserResolver authenticatedUserResolver;
     private FakeUserRepository userRepository;
     private FakeRefreshTokenRepository refreshTokenRepository;
 
     @BeforeEach
     void init() {
         tokenParseProvider = new FakeTokenParseProvider();
+        authenticatedUserResolver = new FakeAuthenticatedUserResolver();
         userRepository = new FakeUserRepository();
         refreshTokenRepository = new FakeRefreshTokenRepository();
 
-        authenticatedUserService = new AuthenticatedUserService(tokenParseProvider, userRepository, refreshTokenRepository);
-    }
-
-    @Test
-    @DisplayName("인증_인가_관련_사용자_정보를_조회한다")
-    void fetchUserInfoForAuthentication() {
-        // given
-        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
-                .username(TEST_USERNAME_1)
-                .introduction(TEST_INTRO_1)
-                .positionList(TEST_POSITION_LIST)
-                .skillList(TEST_SKILL_LIST)
-                .verificationTarget(VERIFICATION_TARGET_1)
-                .build();
-
-        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalCreateUserCommand);
-
-        userRepository.save(testUser);
-
-        // when
-        authenticatedUserService.getUserForLogin(testUser.getEmail());
-
-        // then
-        assertThat(userRepository.findAuthenticatedUserByEmail(testUser.getEmail()).userGuid()).isEqualTo(testUser.getUserGuid());
-        assertThat(userRepository.findAuthenticatedUserByEmail(testUser.getEmail()).userRole()).isEqualTo(testUser.getUserRole());
+        authenticatedUserService = new AuthenticatedUserService(tokenParseProvider, authenticatedUserResolver, userRepository, refreshTokenRepository);
     }
 
     @Test

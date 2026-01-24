@@ -6,6 +6,6 @@ import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
 
 public interface OauthResolveUseCase {
 
-    OauthUserResult findOrRequireSignup(String tempToken);
+    OauthUserResult findOrRequireSignup(OauthUser oauthUser);
     OauthUser extractOauthUser(SignupOauthUserCommand signupOauthUserCommand);
 }

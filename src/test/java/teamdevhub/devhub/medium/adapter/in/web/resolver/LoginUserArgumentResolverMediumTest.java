@@ -9,11 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUser;
 import teamdevhub.devhub.adapter.in.web.resolver.LoginUserArgumentResolver;
 import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.exception.AuthRuleException;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
-import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.fake.framework.infrastructure.FakeAuthentication;
 
 import java.lang.reflect.Method;
@@ -89,7 +88,7 @@ class LoginUserArgumentResolverMediumTest {
     @DisplayName("UserAuthentication_principal_이면_AuthenticatedUser_를_반환한다")
     void returnAuthenticatedUserIfUserAuthenticationPrincipal() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, SignupStatus.COMPLETED, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
         UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(userAuthentication));
 
@@ -106,7 +105,7 @@ class LoginUserArgumentResolverMediumTest {
     @DisplayName("AuthenticatedUser_principal_이면_그대로_반환한다")
     void returnAuthenticatedUserIfPrincipalIsAlreadyAuthenticatedUser() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, SignupStatus.COMPLETED, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(authenticatedUser));
 
         // when

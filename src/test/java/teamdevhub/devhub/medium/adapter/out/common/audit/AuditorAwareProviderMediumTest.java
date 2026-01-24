@@ -8,10 +8,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.adapter.out.provider.audit.AuditorAwareProvider;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
-import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.domain.user.UserRole;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -72,7 +71,6 @@ class AuditorAwareProviderMediumTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
@@ -97,7 +95,6 @@ class AuditorAwareProviderMediumTest {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER

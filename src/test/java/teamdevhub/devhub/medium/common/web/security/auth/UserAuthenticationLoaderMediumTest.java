@@ -5,12 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import teamdevhub.devhub.common.enums.SignupStatus;
 import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
 import teamdevhub.devhub.common.web.security.auth.UserAuthenticationLoader;
-import teamdevhub.devhub.domain.user.UserRole;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.port.in.auth.usecase.AuthenticatedUserUseCase;
+import teamdevhub.devhub.domain.user.UserRole;
+import teamdevhub.devhub.port.out.user.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,13 +20,13 @@ public class UserAuthenticationLoaderMediumTest {
 
     private UserAuthenticationLoader userAuthenticationLoader;
 
-    private AuthenticatedUserUseCase authenticatedUserUseCase;
+    private UserRepository userRepository;
 
     @BeforeEach
     public void init() {
-        authenticatedUserUseCase = mock(AuthenticatedUserUseCase.class);
+        userRepository = mock(UserRepository.class);
 
-        userAuthenticationLoader = new UserAuthenticationLoader(authenticatedUserUseCase);
+        userAuthenticationLoader = new UserAuthenticationLoader(userRepository);
     }
 
     @Test
@@ -36,12 +35,11 @@ public class UserAuthenticationLoaderMediumTest {
         // given
         AuthenticatedUser user = new AuthenticatedUser(
                 TEST_USER_GUID_1,
-                SignupStatus.COMPLETED,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
         );
-        when(authenticatedUserUseCase.getUserForLogin(TEST_EMAIL_1)).thenReturn(user);
+        when(userRepository.findAuthenticatedUserByEmail(TEST_EMAIL_1)).thenReturn(user);
 
         // when
         UserDetails details = userAuthenticationLoader.loadUserByUsername(TEST_EMAIL_1);
@@ -60,12 +58,12 @@ public class UserAuthenticationLoaderMediumTest {
         // given
 
         // when
-        when(authenticatedUserUseCase.getUserForLogin("notfound@example.com"))
+        when(userRepository.findAuthenticatedUserByEmail("notfound@example.com"))
                 .thenThrow(new UsernameNotFoundException("User not found"));
 
 
         // then
         assertThrows(UsernameNotFoundException.class, () -> userAuthenticationLoader.loadUserByUsername("notfound@example.com"));
-        verify(authenticatedUserUseCase).getUserForLogin("notfound@example.com");
+        verify(userRepository).findAuthenticatedUserByEmail("notfound@example.com");
     }
 }

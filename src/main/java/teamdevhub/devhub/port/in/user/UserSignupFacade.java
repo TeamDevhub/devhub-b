@@ -41,7 +41,7 @@ public class UserSignupFacade {
                 .userRole(savedUser.getUserRole())
                 .build();
 
-        LoginResponseDto loginResponseDto = authenticationUseCase.loginWithOauth(authenticatedUser);
+        LoginResponseDto loginResponseDto = authenticationUseCase.login(authenticatedUser);
         return OauthAuthResponseDto.loggedIn(loginResponseDto);
     }
 }

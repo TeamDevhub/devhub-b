@@ -3,6 +3,7 @@ package teamdevhub.devhub.fake.pure.usecase.auth;
 import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.domain.user.User;
 import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.port.in.auth.command.LoginCommand;
 import teamdevhub.devhub.port.in.auth.usecase.AuthenticatedUserUseCase;
 import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
 
@@ -33,20 +34,20 @@ public class FakeAuthenticatedUserUseCase implements AuthenticatedUserUseCase {
     }
 
     @Override
-    public AuthenticatedUser getUserForLogin(String email) {
-        return store.values().stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getSignupStatus(), user.getEmail(), user.getPassword(), user.getUserRole()))
-                .orElse(null);
-    }
-
-    @Override
     public AuthenticatedUser getUserForReissue(String userGuid) {
         return store.values().stream()
                 .filter(user -> user.getUserGuid().equals(userGuid))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getSignupStatus(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .orElse(null);
+    }
+
+    @Override
+    public AuthenticatedUser authenticate(LoginCommand loginCommand) {
+        return store.values().stream()
+                .filter(user -> user.getEmail().equals(loginCommand.email()))
+                .findFirst()
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
                 .orElse(null);
     }
 }
