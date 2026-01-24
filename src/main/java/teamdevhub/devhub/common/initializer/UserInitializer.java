@@ -17,7 +17,7 @@ import teamdevhub.devhub.port.out.provider.EncodedPasswordProvider;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DataInitializer {
+public class UserInitializer {
 
     private final JpaUserRepository jpaUserRepository;
     private final JpaUserPositionRepository jpaUserPositionRepository;
