@@ -10,7 +10,6 @@ import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmVerificationRequestD
 import teamdevhub.devhub.adapter.in.auth.dto.request.IssueVerificationRequestDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;

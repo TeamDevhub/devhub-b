@@ -16,7 +16,6 @@ import teamdevhub.devhub.adapter.in.user.dto.request.SignupRequestDto;
 import teamdevhub.devhub.adapter.in.user.dto.response.UserDetailResponseDto;
 import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
 import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
 import teamdevhub.devhub.large.TestConfig;
 
 import java.util.List;
