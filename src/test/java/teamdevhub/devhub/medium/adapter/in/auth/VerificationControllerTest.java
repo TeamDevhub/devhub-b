@@ -37,7 +37,7 @@ public class VerificationControllerTest {
     @DisplayName("이메일_인증_메일_전송에_성공하면_VERIFICATION_SENT_코드를_확인할_수_있다")
     void canVerifyCodeWhenSendingEmailVerification() {
         // given
-        IssueVerificationRequestDto issueVerificationRequestDto = new IssueVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1);
+        IssueVerificationRequestDto issueVerificationRequestDto = new IssueVerificationRequestDto("email", TEST_EMAIL_1);
         doNothing().when(verificationUseCase).issueVerification(any());
 
         // when
@@ -55,7 +55,7 @@ public class VerificationControllerTest {
     void canVerifyCodeWhenConfirmingEmailVerification() {
         // given
         ConfirmVerificationRequestDto confirmVerificationRequestDto = new ConfirmVerificationRequestDto(
-                VerificationType.EMAIL,
+                "email",
                 TEST_EMAIL_1,
                 TEST_EMAIL_CODE
         );

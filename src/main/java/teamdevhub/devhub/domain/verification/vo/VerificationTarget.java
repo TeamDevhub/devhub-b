@@ -23,7 +23,7 @@ public record VerificationTarget(VerificationType verificationType, String value
 
     private static void validateRequired(VerificationType verificationType, String value) {
         if (verificationType == null) {
-            throw DomainRuleException.of(ErrorCode.VERIFICATION_TYPE_REQUIRED);
+            throw DomainRuleException.of(ErrorCode.VERIFICATION_TYPE_INVALID);
         }
         if (value == null) {
             throw DomainRuleException.of(ErrorCode.VERIFICATION_VALUE_REQUIRED);

@@ -31,7 +31,7 @@ public class IssueVerificationRequestDtoTest {
     void convertIssueVerificationRequestDtoToCommand() {
         // given
         IssueVerificationRequestDto issueVerificationRequestDto = IssueVerificationRequestDto.builder()
-                .verificationType(VerificationType.EMAIL)
+                .verificationType("email")
                 .value(TEST_EMAIL_1)
                 .build();
 

@@ -73,7 +73,7 @@ public class VerificationTargetTest {
         assertThatThrownBy(() ->
                 VerificationTarget.of(null, "test@test.com"))
                 .isInstanceOf(DomainRuleException.class)
-                .hasMessageContaining(ErrorCode.VERIFICATION_TYPE_REQUIRED.getMessage());
+                .hasMessageContaining(ErrorCode.VERIFICATION_TYPE_INVALID.getMessage());
     }
 
     @Test

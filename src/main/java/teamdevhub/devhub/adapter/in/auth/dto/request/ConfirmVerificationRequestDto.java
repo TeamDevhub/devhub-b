@@ -17,7 +17,7 @@ import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand
 public class ConfirmVerificationRequestDto {
 
     @NotNull
-    private VerificationType verificationType;
+    private String verificationType;
 
     @NotBlank
     private String value;
@@ -26,6 +26,7 @@ public class ConfirmVerificationRequestDto {
     private String code;
 
     public ConfirmVerificationCommand toConfirmVerificationCommand() {
+        VerificationType verificationType = VerificationType.from(this.verificationType);
         return new ConfirmVerificationCommand(VerificationTarget.of(verificationType, value), code);
     }
 }

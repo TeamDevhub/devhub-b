@@ -31,4 +31,12 @@ public enum VerificationType {
     };
 
     abstract void validate(String value);
+
+    public static VerificationType from(String value) {
+        try {
+            return VerificationType.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw DomainRuleException.of(ErrorCode.VERIFICATION_TYPE_INVALID);
+        }
+    }
 }

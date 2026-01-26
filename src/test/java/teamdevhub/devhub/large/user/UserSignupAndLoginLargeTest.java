@@ -36,13 +36,13 @@ public class UserSignupAndLoginLargeTest {
     void fromVerificationToGetProfile() {
         testRestTemplate.postForEntity(
                 "/auth/verification/email",
-                new IssueVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1),
+                new IssueVerificationRequestDto("email", TEST_EMAIL_1),
                 Void.class
         );
 
         testRestTemplate.postForEntity(
                 "/auth/verification/email/confirm",
-                new ConfirmVerificationRequestDto(VerificationType.EMAIL, TEST_EMAIL_1, "123456"),
+                new ConfirmVerificationRequestDto("email", TEST_EMAIL_1, "123456"),
                 Void.class
         );
 

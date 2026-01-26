@@ -32,7 +32,7 @@ public class ConfirmVerificationRequestDtoTest {
     void convertConfirmVerificationRequestDtoToCommand() {
         // given
         ConfirmVerificationRequestDto dto = ConfirmVerificationRequestDto.builder()
-                .verificationType(VerificationType.EMAIL)
+                .verificationType("email")
                 .value(TEST_EMAIL_1)
                 .code(TEST_EMAIL_CODE)
                 .build();

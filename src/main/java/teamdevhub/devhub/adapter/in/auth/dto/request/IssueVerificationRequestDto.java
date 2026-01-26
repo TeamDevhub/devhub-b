@@ -17,12 +17,13 @@ import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
 public class IssueVerificationRequestDto {
 
     @NotNull
-    private VerificationType verificationType;
+    private String verificationType;
 
     @NotBlank
     private String value;
 
     public IssueVerificationCommand toIssueVerificationCommand() {
+        VerificationType verificationType = VerificationType.from(this.verificationType);
         return new IssueVerificationCommand(VerificationTarget.of(verificationType, value));
     }
 }
