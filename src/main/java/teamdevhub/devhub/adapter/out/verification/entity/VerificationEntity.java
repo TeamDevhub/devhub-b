@@ -12,12 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-        name = "verifications",
-        uniqueConstraints = @UniqueConstraint(
-                columnNames = {"verification_type", "target_value"}
-        )
-)
+@Table(name = "verifications")
 public class VerificationEntity {
 
     @Id
