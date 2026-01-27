@@ -31,7 +31,7 @@ import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
                 )
         }
 )
-public class ProjectEntity extends BaseEntity{
+public class ProjectEntity extends BaseEntity {
 	
 	@Id
 	@Column(length = 32, nullable = false, unique = true)
@@ -73,11 +73,11 @@ public class ProjectEntity extends BaseEntity{
     @Column(name = "progress_end_date", nullable = false)
     private LocalDateTime progressEndDate;
     
-    @Column(nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(nullable = false)
     private boolean deleted;
     
-    @Column( nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column( nullable = false)
     private boolean capacityClosed;
 }

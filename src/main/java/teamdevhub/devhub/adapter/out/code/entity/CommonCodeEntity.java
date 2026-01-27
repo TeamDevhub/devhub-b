@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
+import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
 
 @Entity
 @Getter
@@ -18,7 +19,7 @@ import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "common_code")
-public class CommonCodeEntity {
+public class CommonCodeEntity extends BaseEntity {
 	
 	@Id
     @Column(name = "code_id", nullable = false)	
@@ -33,22 +34,10 @@ public class CommonCodeEntity {
     @Column(name = "sort_order", nullable = false)	
 	private String sortOrder;
 	
-    @Column(name = "use_yn", nullable = false)	
 	@Convert(converter = BooleanToYNConverter.class)
+    @Column(name = "use_yn", nullable = false)
 	private String isUsed;
 	
     @Column(name = "remarks")	
 	private String remarks;
-	
-    @Column(name = "registrant_guid", nullable = false)	
-	private String registrantGuid;
-	
-    @Column(name = "registered_date", nullable = false)	
-	private String registeredDate;
-	
-    @Column(name = "modifier_guid", nullable = false)	
-	private String modifierGuid;
-	
-    @Column(name = "modified_date", nullable = false)	
-	private String modifiedDate;
 }

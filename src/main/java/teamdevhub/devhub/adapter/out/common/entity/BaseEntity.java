@@ -24,6 +24,7 @@ public abstract class BaseEntity {
     private LocalDateTime registeredDate;
 
     @LastModifiedBy
+    @Column
     private String modifierGuid;
 
     @LastModifiedDate

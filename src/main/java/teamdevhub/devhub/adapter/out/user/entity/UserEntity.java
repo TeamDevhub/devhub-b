@@ -30,7 +30,8 @@ import static lombok.AccessLevel.PROTECTED;
 )
 public class UserEntity extends BaseEntity {
 
-    @Id @Column(length = 32, nullable = false, unique = true)
+    @Id
+    @Column(length = 32, nullable = false, unique = true)
     private String userGuid;
 
     @Enumerated(EnumType.STRING)
@@ -49,8 +50,8 @@ public class UserEntity extends BaseEntity {
     @Column
     private String username;
 
-    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private UserRole userRole;
 
     @Column(length = 500)
@@ -59,15 +60,15 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private double mannerDegree;
 
-    @Column(nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(nullable = false)
     private boolean blocked;
 
     @Column
     private LocalDateTime blockEndDate;
 
-    @Column(nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(nullable = false)
     private boolean deleted;
 
     @Column

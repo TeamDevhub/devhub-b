@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.adapter.out.common.converter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
-import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
+import teamdevhub.devhub.adapter.out.common.exception.AdapterDataException;
 import teamdevhub.devhub.common.enums.ErrorCode;
 
 import static org.assertj.core.api.Assertions.assertThat;

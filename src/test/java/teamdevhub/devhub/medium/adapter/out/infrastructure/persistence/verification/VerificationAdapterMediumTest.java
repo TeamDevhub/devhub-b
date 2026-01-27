@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
+import teamdevhub.devhub.adapter.out.common.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.verification.JpaVerificationRepository;
 import teamdevhub.devhub.adapter.out.verification.VerificationAdapter;
 import teamdevhub.devhub.adapter.out.verification.mapper.VerificationMapper;

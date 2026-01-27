@@ -42,5 +42,5 @@ public class UserReviewEntity extends BaseEntity {
     private String reviewee;
 	
 	@Column(name = "score", nullable = false)
-    private Integer score;
+    private int score;
 }

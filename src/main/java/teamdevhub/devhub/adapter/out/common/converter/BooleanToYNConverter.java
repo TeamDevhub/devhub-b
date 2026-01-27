@@ -2,7 +2,7 @@ package teamdevhub.devhub.adapter.out.common.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
+import teamdevhub.devhub.adapter.out.common.exception.AdapterDataException;
 import teamdevhub.devhub.common.enums.ErrorCode;
 
 @Converter

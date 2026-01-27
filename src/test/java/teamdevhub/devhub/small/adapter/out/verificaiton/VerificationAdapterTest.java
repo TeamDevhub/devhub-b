@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.adapter.out.verificaiton;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
+import teamdevhub.devhub.adapter.out.common.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.verification.VerificationAdapter;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.verification.Verification;

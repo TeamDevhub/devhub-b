@@ -39,12 +39,12 @@ public class BannerEntity extends BaseEntity {
     @Column(name = "image_guid", length = 32, nullable = false)
     private String imageGuid;
     
-    @Column( nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(nullable = false)
     private boolean used;
     
-    @Column( nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(nullable = false)
     private boolean idMainBanner;
     
     @Column(name = "title", nullable = false)

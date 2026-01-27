@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.adapter.out.auth.entity;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.auth.token.RefreshTokenEntity;
+import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.application.selector.notification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.exception.ExternalServiceException;
+import teamdevhub.devhub.adapter.out.common.exception.ExternalServiceException;
 import teamdevhub.devhub.application.selector.notification.CompositeMessageSenderSelector;
 import teamdevhub.devhub.port.out.sender.MessageSender;
 import teamdevhub.devhub.domain.verification.vo.VerificationMessage;

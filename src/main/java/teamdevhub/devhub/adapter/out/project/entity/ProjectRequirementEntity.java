@@ -42,5 +42,5 @@ public class ProjectRequirementEntity {
     private String levelCd;
 	
 	@Column(name = "capacity", nullable = false)
-    private Integer capacity;
+    private int capacity;
 }

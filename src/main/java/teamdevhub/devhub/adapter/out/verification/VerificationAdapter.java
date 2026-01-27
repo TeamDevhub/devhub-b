@@ -2,7 +2,7 @@ package teamdevhub.devhub.adapter.out.verification;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.adapter.out.exception.AdapterDataException;
+import teamdevhub.devhub.adapter.out.common.exception.AdapterDataException;
 import teamdevhub.devhub.adapter.out.verification.mapper.VerificationMapper;
 import teamdevhub.devhub.adapter.out.infrastructure.persistence.verification.JpaVerificationRepository;
 import teamdevhub.devhub.common.enums.ErrorCode;

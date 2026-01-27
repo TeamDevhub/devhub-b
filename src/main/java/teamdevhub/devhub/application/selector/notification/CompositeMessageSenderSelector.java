@@ -2,7 +2,7 @@ package teamdevhub.devhub.application.selector.notification;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.adapter.out.exception.ExternalServiceException;
+import teamdevhub.devhub.adapter.out.common.exception.ExternalServiceException;
 import teamdevhub.devhub.common.enums.ErrorCode;
 import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
 import teamdevhub.devhub.domain.verification.vo.VerificationTarget;

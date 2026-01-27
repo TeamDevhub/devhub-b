@@ -14,21 +14,20 @@ import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-        name = "terms_agreement"
-)
+@Table(name = "terms_agreement")
 public class TermsAgreementEntity extends BaseEntity {
 
-    @Id @Column(length = 32)
-    private String trmsAgreementGuid;
+    @Id
+    @Column(length = 32)
+    private String termsAgreementGuid;
     
-    @Column(name = "trms_guid", nullable = false)
-    private String trmsGuid;
+    @Column(name = "terms_guid", nullable = false)
+    private String termsGuid;
     
     @Column(name = "user_guid", nullable = false)
     private String userGuid;
     
-    @Column(name = "agreement_yn", nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(name = "agreement_yn", nullable = false)
     private boolean isAgreed;
 }

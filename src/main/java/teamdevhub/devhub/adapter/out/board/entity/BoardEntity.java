@@ -14,12 +14,11 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@Table(
-        name = "board"
-)
+@Table(name = "board")
 public class BoardEntity extends BaseEntity {
 
-    @Id @Column(length = 32)
+    @Id
+    @Column(length = 32)
     private String boardGuid;
     
     @Column(name = "user_guid", nullable = false)

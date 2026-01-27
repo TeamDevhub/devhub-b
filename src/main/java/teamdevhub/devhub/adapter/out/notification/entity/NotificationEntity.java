@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
+import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
 
 @Entity
 @Getter
@@ -33,7 +34,7 @@ import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
                 )
         }
 )
-public class NotificationEntity {
+public class NotificationEntity extends BaseEntity {
 	
 	@Id
 	@Column(length = 32, nullable = false, unique = true)
@@ -48,15 +49,7 @@ public class NotificationEntity {
     @Column(name = "content", nullable = false)
     private String content;
     
-    @Column( nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(nullable = false)
     private boolean checked;
-    
-    @CreatedBy
-    @Column(updatable = false)
-    private String registrantGuid;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime registeredDate;
 }

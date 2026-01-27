@@ -29,9 +29,10 @@ public class VerificationEntity {
     @Column
     private String code;
 
+    @Column
     private LocalDateTime expiredAt;
 
-    @Column(nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(nullable = false)
     private boolean verified;
 }

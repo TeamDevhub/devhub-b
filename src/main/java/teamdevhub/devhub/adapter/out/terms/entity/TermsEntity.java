@@ -14,13 +14,12 @@ import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-        name = "terms"
-)
+@Table(name = "terms")
 public class TermsEntity extends BaseEntity {
 
-    @Id @Column(length = 32)
-    private String trmsGuid;
+    @Id
+    @Column(length = 32)
+    private String termsGuid;
     
     @Column(name = "name", nullable = false)
     private String name;
@@ -28,15 +27,15 @@ public class TermsEntity extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
     
-    @Column(name = "required_yn", nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(name = "required_yn", nullable = false)
     private boolean isRequired;
     
-    @Column(name = "use_yn", nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(name = "use_yn", nullable = false)
     private boolean isUsed;
     
-    @Column(name = "delete_yn", nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
+    @Column(name = "delete_yn", nullable = false)
     private boolean isDeleted;
 }
