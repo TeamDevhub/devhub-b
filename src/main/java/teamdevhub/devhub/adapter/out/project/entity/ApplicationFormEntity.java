@@ -38,15 +38,15 @@ public class ApplicationFormEntity {
 
 	@Column(name = "vert_yn", nullable = false)
 	@Convert(converter = BooleanToYNConverter.class)
-	private boolean vertYn;
+	private boolean isVertical;
 
 	@Column(name = "custom_yn", nullable = false)
 	@Convert(converter = BooleanToYNConverter.class)
-	private boolean customYn;
+	private boolean isCustomized;
 
 	@Column(name = "use_yn", nullable = false)
 	@Convert(converter = BooleanToYNConverter.class)
-	private boolean useYn;
+	private boolean isUsed;
 
 	@Column(name = "registrant_guid", nullable = false)
 	private String registrantGuid;

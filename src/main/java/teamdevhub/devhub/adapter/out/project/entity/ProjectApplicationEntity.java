@@ -41,7 +41,7 @@ public class ProjectApplicationEntity {
 
 	@Column(name = "cancel_yn", nullable = false)	
 	 @Convert(converter = BooleanToYNConverter.class)
-	private boolean cancelYn;
+	private boolean isCanceled;
 
 	@Column(name = "registrant_guid", nullable = false)	
 	private String registrantGuid;
