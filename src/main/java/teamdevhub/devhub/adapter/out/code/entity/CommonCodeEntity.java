@@ -28,8 +28,8 @@ public class CommonCodeEntity {
     @Column(name = "name", nullable = false)	
 	private String name;
 	
-    @Column(name = "order", nullable = false)	
-	private String order;
+    @Column(name = "sort_order", nullable = false)	
+	private String sortOrder;
 	
     @Column(name = "use_yn", nullable = false)	
 	private String useYn;
