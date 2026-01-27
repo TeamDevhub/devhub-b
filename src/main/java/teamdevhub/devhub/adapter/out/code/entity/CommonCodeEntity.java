@@ -2,6 +2,7 @@ package teamdevhub.devhub.adapter.out.code.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "common_code")
 public class CommonCodeEntity {
+	
+	@Id
     @Column(name = "code_id", nullable = false)	
 	private String codeId;
 	
