@@ -40,7 +40,7 @@ public class ReportEntity extends BaseEntity {
     @Column(name = "reason", nullable = false)
     private String reason;
     
-    @Column(nullable = false)
+    @Column(name = "process_yn", nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
-    private boolean processYn;
+    private boolean isProcessed;
 }

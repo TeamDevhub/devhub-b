@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.trms.entity;
+package teamdevhub.devhub.adapter.out.terms.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,9 +15,9 @@ import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-        name = "trms"
+        name = "terms"
 )
-public class TrmsEntity extends BaseEntity {
+public class TermsEntity extends BaseEntity {
 
     @Id @Column(length = 32)
     private String trmsGuid;
@@ -28,15 +28,15 @@ public class TrmsEntity extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
     
-    @Column(nullable = false)
+    @Column(name = "required_yn", nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
-    private boolean requiredYn;
+    private boolean isRequired;
     
-    @Column(nullable = false)
+    @Column(name = "use_yn", nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
-    private boolean useYn;
+    private boolean isUsed;
     
-    @Column(nullable = false)
+    @Column(name = "delete_yn", nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
-    private boolean deleteYn;
+    private boolean isDeleted;
 }

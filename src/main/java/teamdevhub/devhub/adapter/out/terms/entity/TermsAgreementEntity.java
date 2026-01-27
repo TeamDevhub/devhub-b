@@ -1,4 +1,4 @@
-package teamdevhub.devhub.adapter.out.trms.entity;
+package teamdevhub.devhub.adapter.out.terms.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,9 +15,9 @@ import teamdevhub.devhub.adapter.out.common.entity.BaseEntity;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-        name = "trms_agreement"
+        name = "terms_agreement"
 )
-public class TrmsAgreementEntity extends BaseEntity {
+public class TermsAgreementEntity extends BaseEntity {
 
     @Id @Column(length = 32)
     private String trmsAgreementGuid;
@@ -28,7 +28,7 @@ public class TrmsAgreementEntity extends BaseEntity {
     @Column(name = "user_guid", nullable = false)
     private String userGuid;
     
-    @Column(nullable = false)
+    @Column(name = "agreement_yn", nullable = false)
     @Convert(converter = BooleanToYNConverter.class)
-    private boolean agreementYn;
+    private boolean isAgreed;
 }
