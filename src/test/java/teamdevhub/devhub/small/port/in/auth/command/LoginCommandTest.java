@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.port.in.auth.command;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.port.in.auth.command.LoginCommand;
+import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;

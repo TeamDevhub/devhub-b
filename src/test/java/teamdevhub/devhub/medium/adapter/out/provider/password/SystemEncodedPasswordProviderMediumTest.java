@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import teamdevhub.devhub.adapter.out.common.provider.password.SystemEncodedPasswordProvider;
+import teamdevhub.devhub.shared.provider.SystemEncodedPasswordProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_PASSWORD_1;

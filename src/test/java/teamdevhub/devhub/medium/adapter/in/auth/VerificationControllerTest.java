@@ -5,12 +5,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.adapter.in.auth.controller.VerificationController;
-import teamdevhub.devhub.adapter.in.auth.dto.request.ConfirmVerificationRequestDto;
-import teamdevhub.devhub.adapter.in.auth.dto.request.IssueVerificationRequestDto;
-import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
-import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
+import teamdevhub.devhub.infrastructure.auth.adapter.in.controller.VerificationController;
+import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.ConfirmVerificationRequestDto;
+import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.IssueVerificationRequestDto;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
+import teamdevhub.devhub.shared.enums.SuccessCode;
+import teamdevhub.devhub.core.auth.port.in.usecase.VerificationUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,7 +40,7 @@ public class VerificationControllerTest {
         doNothing().when(verificationUseCase).issueVerification(any());
 
         // when
-        ResponseEntity<DataApiResponseDto<Void>> response = verificationController.sendEmailVerification(issueVerificationRequestDto);
+        ResponseEntity<DataApiResponse<Void>> response = verificationController.sendEmailVerification(issueVerificationRequestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -61,7 +61,7 @@ public class VerificationControllerTest {
         doNothing().when(verificationUseCase).confirmVerification(any());
 
         // when
-        ResponseEntity<DataApiResponseDto<Void>> response = verificationController.confirmEmailVerification(confirmVerificationRequestDto);
+        ResponseEntity<DataApiResponse<Void>> response = verificationController.confirmEmailVerification(confirmVerificationRequestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();

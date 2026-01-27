@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.port.in.common.command;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.port.in.common.command.PageCommand;
+import teamdevhub.devhub.core.common.page.PageCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

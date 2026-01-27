@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserSkillRepository;
+import teamdevhub.devhub.infrastructure.user.adapter.out.entity.UserSkillEntity;
+import teamdevhub.devhub.infrastructure.user.adapter.out.persistence.JpaUserSkillRepository;
 
 import java.util.*;
 import java.util.function.Function;

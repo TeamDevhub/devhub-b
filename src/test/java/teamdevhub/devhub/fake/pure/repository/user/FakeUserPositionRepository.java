@@ -1,7 +1,7 @@
 package teamdevhub.devhub.fake.pure.repository.user;
 
-import teamdevhub.devhub.domain.user.vo.position.UserPosition;
-import teamdevhub.devhub.port.out.user.UserPositionRepository;
+import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
+import teamdevhub.devhub.core.user.port.out.UserPositionRepository;
 
 import java.util.HashMap;
 import java.util.HashSet;

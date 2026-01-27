@@ -3,12 +3,12 @@ package teamdevhub.devhub.small.application.selector.oauth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.application.exception.BusinessRuleException;
-import teamdevhub.devhub.application.selector.oauth.CompositeOauthClientSelector;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.enums.VerificationProvider;
+import teamdevhub.devhub.shared.exception.BusinessRuleException;
+import teamdevhub.devhub.infrastructure.auth.selector.oauth.CompositeOauthClientSelector;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.fake.pure.oauth.StubOauthClient;
-import teamdevhub.devhub.port.out.oauth.OauthClient;
+import teamdevhub.devhub.core.auth.port.out.OauthClient;
 
 import java.util.List;
 

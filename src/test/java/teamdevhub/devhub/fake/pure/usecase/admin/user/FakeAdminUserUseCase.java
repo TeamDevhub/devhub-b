@@ -1,10 +1,10 @@
 package teamdevhub.devhub.fake.pure.usecase.admin.user;
 
-import teamdevhub.devhub.adapter.in.common.vo.PageResult;
-import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
-import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
-import teamdevhub.devhub.port.in.common.command.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
+import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
+import teamdevhub.devhub.core.user.port.in.usecase.AdminUserUseCase;
+import teamdevhub.devhub.core.common.page.PageCommand;
 
 import java.util.ArrayList;
 import java.util.List;

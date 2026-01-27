@@ -6,7 +6,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import teamdevhub.devhub.common.logging.LoggingAspect;
+import teamdevhub.devhub.shared.logging.LoggingAspect;
 
 import java.util.Collection;
 import java.util.List;

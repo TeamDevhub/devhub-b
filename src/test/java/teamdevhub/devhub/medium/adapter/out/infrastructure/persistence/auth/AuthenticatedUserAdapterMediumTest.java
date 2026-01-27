@@ -8,10 +8,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import teamdevhub.devhub.adapter.out.auth.AuthenticatedUserAdapter;
-import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.vo.UserRole;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.AuthenticatedUserAdapter;
+import teamdevhub.devhub.infrastructure.security.auth.UserAuthentication;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

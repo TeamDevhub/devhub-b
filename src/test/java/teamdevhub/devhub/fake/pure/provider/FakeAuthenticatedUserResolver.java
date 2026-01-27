@@ -1,8 +1,8 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.vo.UserRole;
-import teamdevhub.devhub.port.out.auth.AuthenticatedUserResolver;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.auth.port.out.AuthenticatedUserResolver;
 
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 

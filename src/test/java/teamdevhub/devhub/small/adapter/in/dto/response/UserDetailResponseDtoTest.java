@@ -2,11 +2,11 @@ package teamdevhub.devhub.small.adapter.in.dto.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.user.dto.response.UserDetailResponseDto;
+import teamdevhub.devhub.infrastructure.user.adapter.in.dto.response.UserDetailResponseDto;
 import teamdevhub.devhub.constant.UserTestConstant;
-import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.UserRole;
-import teamdevhub.devhub.domain.common.vo.AuditInfo;
+import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.common.audit.AuditInfo;
 
 import java.time.LocalDateTime;
 

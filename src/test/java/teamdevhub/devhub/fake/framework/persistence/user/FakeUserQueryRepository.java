@@ -3,13 +3,13 @@ package teamdevhub.devhub.fake.framework.persistence.user;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.UserQueryRepository;
-import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
-import teamdevhub.devhub.adapter.out.user.mapper.UserMapper;
-import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
-import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
-import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
+import teamdevhub.devhub.infrastructure.user.adapter.out.persistence.UserQueryRepository;
+import teamdevhub.devhub.infrastructure.user.adapter.out.entity.UserEntity;
+import teamdevhub.devhub.infrastructure.user.adapter.out.mapper.UserMapper;
+import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
+import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
+import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
 import java.util.*;
 

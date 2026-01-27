@@ -3,9 +3,9 @@ package teamdevhub.devhub.medium.common.web.security.auth;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.vo.UserRole;
+import teamdevhub.devhub.infrastructure.security.auth.UserAuthentication;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
 import java.util.Collection;
 

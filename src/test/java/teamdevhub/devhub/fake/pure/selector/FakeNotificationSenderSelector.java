@@ -1,8 +1,8 @@
 package teamdevhub.devhub.fake.pure.selector;
 
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.application.selector.notification.NotificationSenderSelector;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.notification.application.selector.NotificationSenderSelector;
 
 public class FakeNotificationSenderSelector implements NotificationSenderSelector {
 

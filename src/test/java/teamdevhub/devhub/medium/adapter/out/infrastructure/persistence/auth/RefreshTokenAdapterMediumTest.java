@@ -6,12 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import teamdevhub.devhub.adapter.out.auth.RefreshTokenAdapter;
-import teamdevhub.devhub.adapter.out.auth.entity.RefreshTokenEntity;
-import teamdevhub.devhub.adapter.out.common.exception.AdapterDataException;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.auth.JpaRefreshTokenRepository;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.auth.RefreshToken;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.RefreshTokenAdapter;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.entity.RefreshTokenEntity;
+import teamdevhub.devhub.shared.exception.AdapterDataException;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.persistence.JpaRefreshTokenRepository;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.core.auth.domain.RefreshToken;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

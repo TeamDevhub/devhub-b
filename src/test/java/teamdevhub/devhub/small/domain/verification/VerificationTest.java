@@ -2,11 +2,11 @@ package teamdevhub.devhub.small.domain.verification;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.domain.exception.DomainRuleException;
-import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.shared.exception.DomainRuleException;
+import teamdevhub.devhub.core.auth.domain.Verification;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import java.time.LocalDateTime;
 

@@ -10,10 +10,10 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.exception.GlobalExceptionHandler;
-import teamdevhub.devhub.domain.exception.DomainRuleException;
-import teamdevhub.devhub.application.exception.BusinessRuleException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.shared.exception.GlobalExceptionHandler;
+import teamdevhub.devhub.shared.exception.DomainRuleException;
+import teamdevhub.devhub.shared.exception.BusinessRuleException;
 
 import java.lang.reflect.Method;
 

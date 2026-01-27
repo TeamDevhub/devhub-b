@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
-import teamdevhub.devhub.adapter.in.web.resolver.LoginUserArgumentResolver;
+import teamdevhub.devhub.shared.web.resolver.LoginUserArgumentResolver;
 
 import java.util.List;
 

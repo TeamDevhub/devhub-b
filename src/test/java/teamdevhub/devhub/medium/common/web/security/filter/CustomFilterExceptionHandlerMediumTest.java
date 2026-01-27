@@ -7,9 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
-import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.web.security.filter.CustomFilterExceptionHandler;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.infrastructure.security.filter.CustomFilterExceptionHandler;
 
 import java.io.PrintWriter;
 
@@ -45,7 +45,7 @@ public class CustomFilterExceptionHandlerMediumTest {
         assertThat(mockHttpServletResponse.getContentType()).isEqualTo("application/json;charset=UTF-8");
         assertThat(mockHttpServletResponse.getCharacterEncoding()).isEqualTo("UTF-8");
         String body = mockHttpServletResponse.getContentAsString();
-        DataApiResponseDto<?> result = objectMapper.readValue(body, DataApiResponseDto.class);
+        DataApiResponse<?> result = objectMapper.readValue(body, DataApiResponse.class);
         assertThat(result.isSuccess()).isFalse();
         assertThat(result.getError().getMessage()).isEqualTo(errorCode.getMessage());
     }

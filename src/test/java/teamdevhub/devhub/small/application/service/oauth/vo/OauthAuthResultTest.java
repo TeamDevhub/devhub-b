@@ -2,9 +2,9 @@ package teamdevhub.devhub.small.application.service.oauth.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.application.service.auth.vo.AuthResult;
-import teamdevhub.devhub.application.service.oauth.vo.OauthAuthResult;
-import teamdevhub.devhub.common.enums.SignupStatus;
+import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
+import teamdevhub.devhub.core.auth.application.service.vo.OauthAuthResult;
+import teamdevhub.devhub.shared.enums.SignupStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

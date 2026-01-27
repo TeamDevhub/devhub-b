@@ -3,9 +3,9 @@ package teamdevhub.devhub.small.adapter.out.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.auth.AuthenticatedUserAdapter;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.vo.UserRole;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.AuthenticatedUserAdapter;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.framework.infrastructure.FakeAuthenticationManager;
 
 import static org.assertj.core.api.Assertions.assertThat;

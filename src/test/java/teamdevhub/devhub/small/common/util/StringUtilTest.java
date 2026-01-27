@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.common.util;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.common.util.StringUtil;
+import teamdevhub.devhub.shared.util.StringUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

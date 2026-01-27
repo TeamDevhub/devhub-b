@@ -2,8 +2,8 @@ package teamdevhub.devhub.small.port.in.verification.command;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.port.in.command.ConfirmVerificationCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

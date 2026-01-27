@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.domain.verification.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
 
 import java.time.LocalDateTime;
 

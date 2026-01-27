@@ -3,10 +3,10 @@ package teamdevhub.devhub.small.application.selector.verification.issuer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.application.selector.verification.issuer.EmailVerificationIssuer;
-import teamdevhub.devhub.application.service.verification.vo.IssuedVerification;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.infrastructure.auth.issuer.EmailVerificationIssuer;
+import teamdevhub.devhub.core.auth.application.service.vo.IssuedVerification;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
 import teamdevhub.devhub.fake.pure.provider.FakeVerificationCodeProvider;
 

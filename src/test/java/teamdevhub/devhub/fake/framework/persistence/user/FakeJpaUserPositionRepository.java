@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserPositionRepository;
+import teamdevhub.devhub.infrastructure.user.adapter.out.entity.UserPositionEntity;
+import teamdevhub.devhub.infrastructure.user.adapter.out.persistence.JpaUserPositionRepository;
 
 import java.util.*;
 import java.util.function.Function;

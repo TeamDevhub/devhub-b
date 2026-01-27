@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.adapter.out.common.exception.AdapterDataException;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.verification.JpaVerificationRepository;
-import teamdevhub.devhub.adapter.out.verification.VerificationAdapter;
-import teamdevhub.devhub.adapter.out.verification.mapper.VerificationMapper;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.shared.exception.AdapterDataException;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.persistence.JpaVerificationRepository;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.VerificationAdapter;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.mapper.VerificationMapper;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.core.auth.domain.Verification;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import java.time.LocalDateTime;
 

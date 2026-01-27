@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.common.util;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.common.util.RelationChangeUtil;
+import teamdevhub.devhub.shared.util.RelationChangeUtil;
 
 import java.util.Set;
 

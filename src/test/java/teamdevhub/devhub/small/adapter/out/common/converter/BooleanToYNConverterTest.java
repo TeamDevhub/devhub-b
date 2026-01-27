@@ -2,9 +2,9 @@ package teamdevhub.devhub.small.adapter.out.common.converter;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.common.converter.BooleanToYNConverter;
-import teamdevhub.devhub.adapter.out.common.exception.AdapterDataException;
-import teamdevhub.devhub.common.enums.ErrorCode;
+import teamdevhub.devhub.shared.persistence.jpa.converter.BooleanToYNConverter;
+import teamdevhub.devhub.shared.exception.AdapterDataException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

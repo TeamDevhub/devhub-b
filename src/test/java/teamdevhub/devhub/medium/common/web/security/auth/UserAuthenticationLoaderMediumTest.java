@@ -5,11 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
-import teamdevhub.devhub.common.web.security.auth.UserAuthenticationLoader;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.vo.UserRole;
-import teamdevhub.devhub.port.out.user.UserRepository;
+import teamdevhub.devhub.infrastructure.security.auth.UserAuthentication;
+import teamdevhub.devhub.infrastructure.security.auth.UserAuthenticationLoader;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.user.port.out.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

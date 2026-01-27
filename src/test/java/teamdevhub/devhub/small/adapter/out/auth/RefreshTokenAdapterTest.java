@@ -3,10 +3,10 @@ package teamdevhub.devhub.small.adapter.out.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.auth.RefreshTokenAdapter;
-import teamdevhub.devhub.adapter.out.common.exception.AdapterDataException;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.auth.RefreshToken;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.RefreshTokenAdapter;
+import teamdevhub.devhub.shared.exception.AdapterDataException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.core.auth.domain.RefreshToken;
 import teamdevhub.devhub.fake.framework.persistence.auth.FakeJpaRefreshTokenRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

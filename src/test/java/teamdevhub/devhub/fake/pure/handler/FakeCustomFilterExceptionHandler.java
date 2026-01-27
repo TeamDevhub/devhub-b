@@ -1,8 +1,8 @@
 package teamdevhub.devhub.fake.pure.handler;
 
 import jakarta.servlet.http.HttpServletResponse;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.web.security.filter.CustomFilterExceptionHandler;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.infrastructure.security.filter.CustomFilterExceptionHandler;
 
 public class FakeCustomFilterExceptionHandler extends CustomFilterExceptionHandler {
 

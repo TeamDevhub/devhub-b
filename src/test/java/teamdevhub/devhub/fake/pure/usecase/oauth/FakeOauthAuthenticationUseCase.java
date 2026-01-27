@@ -1,9 +1,9 @@
 package teamdevhub.devhub.fake.pure.usecase.oauth;
 
 import lombok.Setter;
-import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.domain.auth.vo.user.OauthUser;
-import teamdevhub.devhub.port.in.oauth.usecase.OauthAuthenticationUseCase;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
+import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
+import teamdevhub.devhub.core.auth.port.in.usecase.OauthAuthenticationUseCase;
 
 import java.util.Objects;
 

@@ -6,11 +6,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import teamdevhub.devhub.adapter.out.common.exception.ExternalServiceException;
-import teamdevhub.devhub.adapter.out.infrastructure.sender.EmailMessageSendAdapter;
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.shared.exception.ExternalServiceException;
+import teamdevhub.devhub.infrastructure.notification.adapter.EmailMessageSendAdapter;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

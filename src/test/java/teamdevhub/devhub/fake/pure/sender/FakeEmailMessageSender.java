@@ -1,9 +1,9 @@
 package teamdevhub.devhub.fake.pure.sender;
 
-import teamdevhub.devhub.port.out.sender.MessageSender;
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.core.notification.port.out.MessageSender;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import java.util.ArrayList;
 import java.util.List;

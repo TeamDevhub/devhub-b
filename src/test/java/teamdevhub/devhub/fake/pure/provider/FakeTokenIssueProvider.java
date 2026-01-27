@@ -1,8 +1,8 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.domain.user.vo.UserRole;
-import teamdevhub.devhub.port.out.provider.TokenIssueProvider;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.common.provider.TokenIssueProvider;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -7,8 +7,8 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.user.dto.request.SignupOauthRequestDto;
-import teamdevhub.devhub.port.in.oauth.command.SignupOauthUserCommand;
+import teamdevhub.devhub.infrastructure.user.adapter.in.dto.request.SignupOauthRequestDto;
+import teamdevhub.devhub.core.auth.port.in.command.SignupOauthUserCommand;
 
 import java.util.List;
 import java.util.Set;

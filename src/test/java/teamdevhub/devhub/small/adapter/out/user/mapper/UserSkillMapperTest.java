@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserSkillEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserSkillMapper;
-import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
+import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

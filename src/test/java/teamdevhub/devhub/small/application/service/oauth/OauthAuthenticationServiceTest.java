@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.application.service.oauth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.application.service.oauth.OauthAuthenticationService;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthenticationService;
 import teamdevhub.devhub.fake.pure.oauth.FakeOauthClient;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.selector.FakeOauthClientSelector;

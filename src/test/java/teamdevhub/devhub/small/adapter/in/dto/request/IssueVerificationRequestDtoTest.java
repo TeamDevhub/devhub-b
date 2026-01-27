@@ -7,9 +7,9 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.in.auth.dto.request.IssueVerificationRequestDto;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
-import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
+import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.IssueVerificationRequestDto;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.auth.port.in.command.IssueVerificationCommand;
 
 import java.util.Set;
 

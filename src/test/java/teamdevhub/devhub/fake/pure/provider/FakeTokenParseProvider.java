@@ -1,9 +1,9 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.domain.auth.vo.token.AccessTokenInfo;
-import teamdevhub.devhub.domain.auth.vo.token.RefreshTokenInfo;
-import teamdevhub.devhub.domain.auth.vo.token.TempTokenInfo;
-import teamdevhub.devhub.port.out.provider.TokenParseProvider;
+import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
+import teamdevhub.devhub.core.auth.domain.vo.token.RefreshTokenInfo;
+import teamdevhub.devhub.core.auth.domain.vo.token.TempTokenInfo;
+import teamdevhub.devhub.core.common.provider.TokenParseProvider;
 
 import java.util.HashMap;
 import java.util.Map;

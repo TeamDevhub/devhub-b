@@ -1,11 +1,11 @@
 package teamdevhub.devhub.fake.pure.usecase.auth;
 
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
-import teamdevhub.devhub.port.in.auth.command.LoginCommand;
-import teamdevhub.devhub.port.in.auth.usecase.AuthenticatedUserUseCase;
-import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
+import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
+import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticatedUserUseCase;
+import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
 import java.util.HashMap;
 import java.util.Map;

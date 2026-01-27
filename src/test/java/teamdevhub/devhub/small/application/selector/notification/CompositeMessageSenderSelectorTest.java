@@ -3,12 +3,12 @@ package teamdevhub.devhub.small.application.selector.notification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.common.exception.ExternalServiceException;
-import teamdevhub.devhub.application.selector.notification.CompositeMessageSenderSelector;
-import teamdevhub.devhub.port.out.sender.MessageSender;
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.shared.exception.ExternalServiceException;
+import teamdevhub.devhub.infrastructure.notification.selector.CompositeMessageSenderSelector;
+import teamdevhub.devhub.core.notification.port.out.MessageSender;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import java.util.List;
 

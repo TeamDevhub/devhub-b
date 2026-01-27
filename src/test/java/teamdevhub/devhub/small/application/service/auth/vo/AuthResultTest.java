@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.application.service.auth.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.application.service.auth.vo.AuthResult;
+import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

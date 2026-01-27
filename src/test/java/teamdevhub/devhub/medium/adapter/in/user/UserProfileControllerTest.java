@@ -5,16 +5,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.adapter.in.user.controller.UserProfileController;
-import teamdevhub.devhub.adapter.in.user.dto.request.UpdateProfileRequestDto;
-import teamdevhub.devhub.adapter.in.user.dto.response.UserDetailResponseDto;
-import teamdevhub.devhub.adapter.in.web.dto.response.DataApiResponseDto;
-import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.UserRole;
-import teamdevhub.devhub.port.in.user.facade.UserWithdrawFacade;
-import teamdevhub.devhub.port.in.user.usecase.UserProfileUseCase;
+import teamdevhub.devhub.infrastructure.user.adapter.in.controller.UserProfileController;
+import teamdevhub.devhub.infrastructure.user.adapter.in.dto.request.UpdateProfileRequestDto;
+import teamdevhub.devhub.infrastructure.user.adapter.in.dto.response.UserDetailResponseDto;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
+import teamdevhub.devhub.shared.enums.SuccessCode;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
+import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -50,7 +50,7 @@ class UserProfileControllerTest {
         when(userProfileUseCase.getCurrentUserProfile(authenticatedUser.userGuid())).thenReturn(user);
 
         // when
-        ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> response = userProfileController.getProfile(authenticatedUser);
+        ResponseEntity<DataApiResponse<UserDetailResponseDto>> response = userProfileController.getProfile(authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -76,7 +76,7 @@ class UserProfileControllerTest {
         doNothing().when(userProfileUseCase).updateProfile(any());
 
         // when
-        ResponseEntity<DataApiResponseDto<Void>> response = userProfileController.updateProfile(updateProfileRequestDto, authenticatedUser);
+        ResponseEntity<DataApiResponse<Void>> response = userProfileController.updateProfile(updateProfileRequestDto, authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -91,7 +91,7 @@ class UserProfileControllerTest {
         doNothing().when(userWithdrawFacade).withdraw(authenticatedUser.userGuid());
 
         // when
-        ResponseEntity<DataApiResponseDto<Void>> response = userProfileController.withdraw(authenticatedUser);
+        ResponseEntity<DataApiResponse<Void>> response = userProfileController.withdraw(authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();

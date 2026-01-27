@@ -3,12 +3,12 @@ package teamdevhub.devhub.small.port.in.auth.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.application.service.auth.vo.AuthResult;
+import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticatedUserUseCase;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.user.FakeUserLoginUseCase;
-import teamdevhub.devhub.port.in.auth.command.LoginCommand;
-import teamdevhub.devhub.port.in.auth.facade.AuthFacade;
+import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
+import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

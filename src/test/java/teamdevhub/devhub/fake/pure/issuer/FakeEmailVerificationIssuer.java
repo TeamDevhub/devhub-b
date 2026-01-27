@@ -1,12 +1,12 @@
 package teamdevhub.devhub.fake.pure.issuer;
 
-import teamdevhub.devhub.port.out.verification.VerificationIssuer;
-import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.application.service.verification.vo.IssuedVerification;
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
-import teamdevhub.devhub.port.out.provider.TimeProvider;
+import teamdevhub.devhub.core.auth.port.out.VerificationIssuer;
+import teamdevhub.devhub.core.auth.domain.Verification;
+import teamdevhub.devhub.core.auth.application.service.vo.IssuedVerification;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.common.provider.TimeProvider;
 
 public class FakeEmailVerificationIssuer implements VerificationIssuer {
 

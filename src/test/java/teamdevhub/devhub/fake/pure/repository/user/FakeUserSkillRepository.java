@@ -1,7 +1,7 @@
 package teamdevhub.devhub.fake.pure.repository.user;
 
-import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
-import teamdevhub.devhub.port.out.user.UserSkillRepository;
+import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
+import teamdevhub.devhub.core.user.port.out.UserSkillRepository;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -10,10 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.UserQueryRepository;
+import teamdevhub.devhub.infrastructure.user.adapter.out.persistence.UserQueryRepository;
 import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
-import teamdevhub.devhub.domain.user.vo.UserRole;
-import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

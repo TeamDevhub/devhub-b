@@ -2,10 +2,10 @@ package teamdevhub.devhub.small.domain.verification.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.exception.DomainRuleException;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.shared.exception.DomainRuleException;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

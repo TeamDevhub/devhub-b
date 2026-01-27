@@ -3,11 +3,11 @@ package teamdevhub.devhub.small.application.service.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.application.service.auth.AuthenticationService;
-import teamdevhub.devhub.application.service.auth.vo.AuthResult;
-import teamdevhub.devhub.domain.auth.RefreshToken;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.vo.UserRole;
+import teamdevhub.devhub.core.auth.application.service.auth.AuthenticationService;
+import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
+import teamdevhub.devhub.core.auth.domain.RefreshToken;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.repository.auth.FakeRefreshTokenRepository;
 

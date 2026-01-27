@@ -3,11 +3,11 @@ package teamdevhub.devhub.small.application.service.user;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.application.service.user.UserWithdrawService;
-import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
+import teamdevhub.devhub.core.user.application.UserWithdrawService;
+import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
-import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
+import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

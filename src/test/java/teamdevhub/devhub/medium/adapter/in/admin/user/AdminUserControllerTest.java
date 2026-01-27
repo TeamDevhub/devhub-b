@@ -5,19 +5,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.adapter.in.admin.dto.request.SearchUserRequestDto;
-import teamdevhub.devhub.adapter.in.admin.user.AdminUserController;
-import teamdevhub.devhub.adapter.in.common.vo.PageResult;
-import teamdevhub.devhub.adapter.in.common.vo.PageVo;
-import teamdevhub.devhub.adapter.in.user.dto.response.UserBasicResponseDto;
-import teamdevhub.devhub.adapter.in.web.dto.response.DataListApiResponseDto;
-import teamdevhub.devhub.common.enums.SuccessCode;
-import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.user.CreateUserCommand;
-import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
-import teamdevhub.devhub.port.in.admin.user.AdminUserUseCase;
-import teamdevhub.devhub.port.in.common.command.PageCommand;
-import teamdevhub.devhub.port.in.user.command.SignupUserCommand;
+import teamdevhub.devhub.infrastructure.user.adapter.in.dto.request.SearchUserRequestDto;
+import teamdevhub.devhub.infrastructure.user.adapter.in.controller.AdminUserController;
+import teamdevhub.devhub.core.common.page.PageResult;
+import teamdevhub.devhub.shared.web.model.response.PageResponse;
+import teamdevhub.devhub.infrastructure.user.adapter.in.dto.response.UserBasicResponseDto;
+import teamdevhub.devhub.shared.web.model.response.DataListApiResponse;
+import teamdevhub.devhub.shared.enums.SuccessCode;
+import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
+import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
+import teamdevhub.devhub.core.user.port.in.usecase.AdminUserUseCase;
+import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
 import java.util.List;
 
@@ -90,10 +90,10 @@ public class AdminUserControllerTest {
                 .build();
 
         // when
-        ResponseEntity<DataListApiResponseDto<UserBasicResponseDto>> response = adminUserController.list(requestDto, 0, 10);
+        ResponseEntity<DataListApiResponse<UserBasicResponseDto>> response = adminUserController.list(requestDto, 0, 10);
 
         // then
-        DataListApiResponseDto<UserBasicResponseDto> body = response.getBody();
+        DataListApiResponse<UserBasicResponseDto> body = response.getBody();
 
         assertThat(body).isNotNull();
         assertThat(body.isSuccess()).isTrue();
@@ -103,11 +103,11 @@ public class AdminUserControllerTest {
         assertThat(body.getDataList().get(0).getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(body.getDataList().get(1).getEmail()).isEqualTo(TEST_EMAIL_2);
 
-        PageVo pageVo = body.getPagination();
-        assertThat(pageVo.getPage()).isEqualTo(0);
-        assertThat(pageVo.getSize()).isEqualTo(10);
-        assertThat(pageVo.getTotalElements()).isEqualTo(2);
-        assertThat(pageVo.getTotalPages()).isEqualTo(1);
+        PageResponse pageResponse = body.getPagination();
+        assertThat(pageResponse.getPage()).isEqualTo(0);
+        assertThat(pageResponse.getSize()).isEqualTo(10);
+        assertThat(pageResponse.getTotalElements()).isEqualTo(2);
+        assertThat(pageResponse.getTotalPages()).isEqualTo(1);
 
         Mockito.verify(adminUserUseCase).listUser(any(SearchUserCommand.class), any(PageCommand.class));
     }

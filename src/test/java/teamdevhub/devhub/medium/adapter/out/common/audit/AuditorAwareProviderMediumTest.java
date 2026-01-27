@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import teamdevhub.devhub.adapter.out.common.provider.audit.AuditorAwareProvider;
-import teamdevhub.devhub.common.web.security.auth.UserAuthentication;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.vo.UserRole;
+import teamdevhub.devhub.shared.persistence.jpa.audit.AuditorAwareProvider;
+import teamdevhub.devhub.infrastructure.security.auth.UserAuthentication;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
 import java.util.Collections;
 import java.util.Optional;

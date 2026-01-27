@@ -1,11 +1,11 @@
 package teamdevhub.devhub.fake.pure.selector;
 
-import teamdevhub.devhub.application.exception.BusinessRuleException;
-import teamdevhub.devhub.application.selector.verification.VerificationIssuerSelector;
-import teamdevhub.devhub.port.out.verification.VerificationIssuer;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.application.service.verification.vo.IssuedVerification;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.shared.exception.BusinessRuleException;
+import teamdevhub.devhub.core.auth.application.selector.VerificationIssuerSelector;
+import teamdevhub.devhub.core.auth.port.out.VerificationIssuer;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.core.auth.application.service.vo.IssuedVerification;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 
 import java.util.List;
 

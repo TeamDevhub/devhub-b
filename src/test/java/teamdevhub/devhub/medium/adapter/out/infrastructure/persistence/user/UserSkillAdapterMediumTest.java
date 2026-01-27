@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.adapter.out.user.UserSkillAdapter;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserSkillRepository;
-import teamdevhub.devhub.domain.user.vo.skill.UserSkill;
+import teamdevhub.devhub.infrastructure.user.adapter.out.persistence.JpaUserSkillRepository;
+import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 
 import java.util.HashSet;
 import java.util.Set;

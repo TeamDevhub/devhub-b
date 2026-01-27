@@ -2,12 +2,12 @@ package teamdevhub.devhub.small.adapter.out.verificaiton.mapper;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.verification.entity.VerificationEntity;
-import teamdevhub.devhub.adapter.out.verification.mapper.VerificationMapper;
-import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.entity.VerificationEntity;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.mapper.VerificationMapper;
+import teamdevhub.devhub.core.auth.domain.Verification;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import java.time.LocalDateTime;
 

@@ -5,9 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.verification.JpaVerificationRepository;
-import teamdevhub.devhub.adapter.out.verification.entity.VerificationEntity;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.persistence.JpaVerificationRepository;
+import teamdevhub.devhub.infrastructure.auth.adapter.out.entity.VerificationEntity;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import java.util.HashMap;
 import java.util.List;

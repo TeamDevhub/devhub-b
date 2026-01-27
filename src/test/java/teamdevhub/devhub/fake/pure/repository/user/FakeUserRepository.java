@@ -1,13 +1,13 @@
 package teamdevhub.devhub.fake.pure.repository.user;
 
-import teamdevhub.devhub.adapter.in.common.vo.PageResult;
-import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.domain.auth.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.domain.user.User;
-import teamdevhub.devhub.domain.user.vo.UserRole;
-import teamdevhub.devhub.domain.user.vo.user.UpdateUserCommand;
-import teamdevhub.devhub.port.in.admin.command.SearchUserCommand;
-import teamdevhub.devhub.port.out.user.UserRepository;
+import teamdevhub.devhub.core.common.page.PageResult;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.user.domain.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
+import teamdevhub.devhub.core.user.port.out.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.*;

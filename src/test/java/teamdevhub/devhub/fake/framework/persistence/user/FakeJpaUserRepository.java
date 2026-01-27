@@ -5,10 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import teamdevhub.devhub.adapter.out.user.entity.UserEntity;
-import teamdevhub.devhub.adapter.out.infrastructure.persistence.user.JpaUserRepository;
-import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.domain.user.vo.UserRole;
+import teamdevhub.devhub.infrastructure.user.adapter.out.entity.UserEntity;
+import teamdevhub.devhub.infrastructure.user.adapter.out.persistence.JpaUserRepository;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
 import java.time.LocalDateTime;
 import java.util.*;

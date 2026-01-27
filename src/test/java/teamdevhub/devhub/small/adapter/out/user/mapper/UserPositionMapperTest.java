@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
 import teamdevhub.devhub.adapter.out.user.mapper.UserPositionMapper;
-import teamdevhub.devhub.domain.user.vo.position.UserPosition;
+import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

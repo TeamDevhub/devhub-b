@@ -1,8 +1,8 @@
 package teamdevhub.devhub.fake.pure.selector;
 
-import teamdevhub.devhub.application.selector.oauth.OauthClientSelector;
-import teamdevhub.devhub.common.enums.VerificationProvider;
-import teamdevhub.devhub.port.out.oauth.OauthClient;
+import teamdevhub.devhub.core.auth.application.selector.OauthClientSelector;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
+import teamdevhub.devhub.core.auth.port.out.OauthClient;
 
 public class FakeOauthClientSelector implements OauthClientSelector {
 

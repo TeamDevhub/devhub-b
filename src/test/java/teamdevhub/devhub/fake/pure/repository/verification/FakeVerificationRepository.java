@@ -1,10 +1,10 @@
 package teamdevhub.devhub.fake.pure.repository.verification;
 
-import teamdevhub.devhub.application.exception.BusinessRuleException;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
-import teamdevhub.devhub.port.out.verification.VerificationRepository;
+import teamdevhub.devhub.shared.exception.BusinessRuleException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.core.auth.domain.Verification;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.port.out.VerificationRepository;
 
 import java.util.HashMap;
 import java.util.Map;

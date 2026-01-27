@@ -1,14 +1,14 @@
 package teamdevhub.devhub.fake.pure.usecase.verification;
 
-import teamdevhub.devhub.domain.verification.vo.VerificationMessage;
-import teamdevhub.devhub.domain.verification.vo.VerificationType;
-import teamdevhub.devhub.port.out.provider.TimeProvider;
-import teamdevhub.devhub.domain.verification.Verification;
-import teamdevhub.devhub.domain.verification.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.common.provider.TimeProvider;
+import teamdevhub.devhub.core.auth.domain.Verification;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
-import teamdevhub.devhub.port.in.verification.usecase.VerificationUseCase;
-import teamdevhub.devhub.port.in.verification.command.ConfirmVerificationCommand;
-import teamdevhub.devhub.port.in.verification.command.IssueVerificationCommand;
+import teamdevhub.devhub.core.auth.port.in.usecase.VerificationUseCase;
+import teamdevhub.devhub.core.auth.port.in.command.ConfirmVerificationCommand;
+import teamdevhub.devhub.core.auth.port.in.command.IssueVerificationCommand;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

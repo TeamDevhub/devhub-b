@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
-import teamdevhub.devhub.common.enums.ErrorCode;
-import teamdevhub.devhub.common.web.security.handler.CustomAuthenticationEntryPoint;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.infrastructure.security.handler.CustomAuthenticationEntryPoint;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import teamdevhub.devhub.common.web.filter.TraceIdMDCFilter;
+import teamdevhub.devhub.shared.logging.TraceIdMDCFilter;
 import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
 
 import java.io.IOException;
