@@ -8,9 +8,9 @@ import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
 import teamdevhub.devhub.shared.enums.SignupStatus;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
-import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
-import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthAuthenticationUseCase;
-import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOauthAuthenticationUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOauthResolveUseCase;
 import teamdevhub.devhub.core.auth.port.in.facade.OauthAuthFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;

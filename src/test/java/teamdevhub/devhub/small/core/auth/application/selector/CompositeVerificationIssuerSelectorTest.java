@@ -11,8 +11,8 @@ import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerification;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
-import teamdevhub.devhub.fake.pure.issuer.FakeEmailVerificationIssuer;
-import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
+import teamdevhub.devhub.fake.pure.application.issuer.FakeEmailVerificationIssuer;
+import teamdevhub.devhub.fake.pure.application.provider.FakeTimeProvider;
 
 import java.time.LocalDateTime;
 import java.util.List;

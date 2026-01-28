@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.user.domain.User;
-import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
-import teamdevhub.devhub.fake.pure.usecase.user.FakeUserWithdrawUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeUserWithdrawUseCase;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
 
 import static org.assertj.core.api.Assertions.assertThat;

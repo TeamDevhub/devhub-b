@@ -9,9 +9,9 @@ import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
-import teamdevhub.devhub.fake.pure.repository.user.FakeUserPositionRepository;
-import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
-import teamdevhub.devhub.fake.pure.repository.user.FakeUserSkillRepository;
+import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserPositionRepository;
+import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserSkillRepository;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
 

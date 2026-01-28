@@ -10,8 +10,8 @@ import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
-import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
-import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.application.provider.FakeTokenParseProvider;
+import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;

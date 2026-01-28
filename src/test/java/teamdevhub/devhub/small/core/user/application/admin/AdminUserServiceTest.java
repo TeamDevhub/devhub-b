@@ -9,7 +9,7 @@ import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.user.application.admin.AdminUserService;
-import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;

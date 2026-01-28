@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthenticationService;
-import teamdevhub.devhub.fake.pure.oauth.FakeOauthClient;
-import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
-import teamdevhub.devhub.fake.pure.selector.FakeOauthClientSelector;
+import teamdevhub.devhub.fake.pure.application.port.out.auth.oauth.FakeOauthClient;
+import teamdevhub.devhub.fake.pure.application.provider.FakeTokenIssueProvider;
+import teamdevhub.devhub.fake.pure.application.selector.FakeOauthClientSelector;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

@@ -8,7 +8,7 @@ import org.slf4j.MDC;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import teamdevhub.devhub.shared.logging.TraceIdMDCFilter;
-import teamdevhub.devhub.fake.pure.provider.FakeUuidIdentifierProvider;
+import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 
 import java.io.IOException;
 

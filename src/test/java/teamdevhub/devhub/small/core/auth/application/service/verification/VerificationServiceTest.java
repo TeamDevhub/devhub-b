@@ -12,10 +12,10 @@ import teamdevhub.devhub.core.auth.port.in.command.verification.ConfirmVerificat
 import teamdevhub.devhub.core.auth.port.in.command.verification.IssueVerificationCommand;
 import teamdevhub.devhub.core.auth.port.out.verification.VerificationIssuer;
 import teamdevhub.devhub.core.common.provider.TimeProvider;
-import teamdevhub.devhub.fake.pure.issuer.FakeEmailVerificationIssuer;
-import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
-import teamdevhub.devhub.fake.pure.repository.verification.FakeVerificationRepository;
-import teamdevhub.devhub.fake.pure.selector.FakeVerificationIssuerSelector;
+import teamdevhub.devhub.fake.pure.application.issuer.FakeEmailVerificationIssuer;
+import teamdevhub.devhub.fake.pure.application.provider.FakeTimeProvider;
+import teamdevhub.devhub.fake.pure.application.port.out.auth.verification.FakeVerificationRepository;
+import teamdevhub.devhub.fake.pure.application.selector.FakeVerificationIssuerSelector;
 import teamdevhub.devhub.shared.exception.BusinessRuleException;
 import teamdevhub.devhub.shared.exception.DomainRuleException;
 

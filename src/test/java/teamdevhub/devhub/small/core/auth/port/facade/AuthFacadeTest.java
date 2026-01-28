@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
-import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticatedUserUseCase;
-import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
-import teamdevhub.devhub.fake.pure.usecase.user.FakeUserLoginUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticatedUserUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeUserLoginUseCase;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
 

@@ -8,7 +8,7 @@ import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.shared.exception.AuthRuleException;
 import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.token.TempTokenInfo;
-import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
+import teamdevhub.devhub.fake.pure.application.provider.FakeTimeProvider;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;

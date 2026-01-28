@@ -13,7 +13,7 @@ import teamdevhub.devhub.shared.exception.AuthRuleException;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
-import teamdevhub.devhub.fake.framework.infrastructure.FakeAuthentication;
+import teamdevhub.devhub.fake.framework.FakeAuthentication;
 
 import java.lang.reflect.Method;
 

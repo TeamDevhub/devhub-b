@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.user.application.service.UserWithdrawService;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
-import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
+import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;

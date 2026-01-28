@@ -8,8 +8,8 @@ import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.domain.RefreshToken;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
-import teamdevhub.devhub.fake.pure.provider.FakeTokenIssueProvider;
-import teamdevhub.devhub.fake.pure.repository.auth.FakeRefreshTokenRepository;
+import teamdevhub.devhub.fake.pure.application.provider.FakeTokenIssueProvider;
+import teamdevhub.devhub.fake.pure.application.port.out.auth.FakeRefreshTokenRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
