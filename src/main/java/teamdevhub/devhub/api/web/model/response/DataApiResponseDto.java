@@ -1,6 +1,5 @@
 package teamdevhub.devhub.api.web.model.response;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +14,7 @@ import teamdevhub.devhub.shared.enums.SuccessCode;
 @NoArgsConstructor
 public class DataApiResponseDto<T> {
 
-    @JsonProperty("isSuccess")
-    @JsonAlias("success")
+    @JsonProperty("success")
     private boolean isSuccess;
     private String code;
     private T data;
