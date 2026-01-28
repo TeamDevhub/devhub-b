@@ -8,7 +8,7 @@ import teamdevhub.devhub.outbound.auth.persistence.JpaVerificationRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.domain.Verification;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
-import teamdevhub.devhub.core.auth.port.out.VerificationRepository;
+import teamdevhub.devhub.core.auth.port.out.verification.VerificationRepository;
 
 @Component
 @RequiredArgsConstructor

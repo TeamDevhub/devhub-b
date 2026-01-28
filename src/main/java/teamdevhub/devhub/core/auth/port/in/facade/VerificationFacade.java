@@ -3,10 +3,10 @@ package teamdevhub.devhub.core.auth.port.in.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.core.auth.application.service.vo.IssuedVerification;
-import teamdevhub.devhub.core.auth.port.in.command.ConfirmVerificationCommand;
-import teamdevhub.devhub.core.auth.port.in.command.IssueVerificationCommand;
-import teamdevhub.devhub.core.auth.port.in.usecase.VerificationUseCase;
+import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerification;
+import teamdevhub.devhub.core.auth.port.in.command.verification.ConfirmVerificationCommand;
+import teamdevhub.devhub.core.auth.port.in.command.verification.IssueVerificationCommand;
+import teamdevhub.devhub.core.auth.port.in.usecase.verification.VerificationUseCase;
 import teamdevhub.devhub.core.notification.port.in.NotificationUseCase;
 
 @Service

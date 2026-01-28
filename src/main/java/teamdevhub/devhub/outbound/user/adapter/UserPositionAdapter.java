@@ -7,7 +7,7 @@ import teamdevhub.devhub.outbound.user.adapter.mapper.UserPositionMapper;
 import teamdevhub.devhub.outbound.user.persistence.JpaUserPositionRepository;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.port.out.UserPositionRepository;
-import teamdevhub.devhub.core.provider.IdentifierProvider;
+import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.shared.util.RelationChangeUtil;
 
 import java.util.List;

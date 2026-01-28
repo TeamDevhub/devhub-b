@@ -1,4 +1,6 @@
 package teamdevhub.devhub.core.board.application;
 
-public class BoardService {
+import teamdevhub.devhub.core.board.port.in.usecase.BoardUseCase;
+
+public class BoardService implements BoardUseCase {
 }

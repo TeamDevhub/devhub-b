@@ -2,7 +2,7 @@ package teamdevhub.devhub.outbound.provider;
 
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.shared.util.StringUtil;
-import teamdevhub.devhub.core.provider.TimeProvider;
+import teamdevhub.devhub.core.common.provider.TimeProvider;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

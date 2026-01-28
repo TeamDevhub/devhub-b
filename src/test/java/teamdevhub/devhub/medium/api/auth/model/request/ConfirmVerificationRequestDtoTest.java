@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import teamdevhub.devhub.api.auth.model.request.ConfirmVerificationRequestDto;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
-import teamdevhub.devhub.core.auth.port.in.command.ConfirmVerificationCommand;
+import teamdevhub.devhub.core.auth.port.in.command.verification.ConfirmVerificationCommand;
 
 import java.util.Set;
 

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.shared.exception.BusinessRuleException;
-import teamdevhub.devhub.core.auth.application.service.auth.AuthenticatedUserService;
+import teamdevhub.devhub.core.auth.application.service.AuthenticatedUserService;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.domain.RefreshToken;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;

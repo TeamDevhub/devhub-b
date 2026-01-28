@@ -1,13 +1,13 @@
 package teamdevhub.devhub.fake.pure.usecase.oauth;
 
 import lombok.Setter;
-import teamdevhub.devhub.core.auth.application.service.vo.OauthUserResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
-import teamdevhub.devhub.core.auth.port.in.command.SignupOauthUserCommand;
-import teamdevhub.devhub.core.auth.port.in.usecase.OauthResolveUseCase;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
+import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthResolveUseCase;
 
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 

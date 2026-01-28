@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.usecase.auth;
 
-import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
+import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
 

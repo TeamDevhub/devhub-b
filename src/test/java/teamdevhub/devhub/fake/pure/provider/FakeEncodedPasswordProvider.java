@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.provider;
 
-import teamdevhub.devhub.core.provider.EncodedPasswordProvider;
+import teamdevhub.devhub.core.auth.port.out.password.EncodedPasswordProvider;
 
 public class FakeEncodedPasswordProvider implements EncodedPasswordProvider {
 

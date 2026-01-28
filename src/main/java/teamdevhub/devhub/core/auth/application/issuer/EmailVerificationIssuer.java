@@ -2,10 +2,10 @@ package teamdevhub.devhub.core.auth.application.issuer;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.core.auth.port.out.VerificationIssuer;
-import teamdevhub.devhub.core.auth.application.service.vo.IssuedVerification;
-import teamdevhub.devhub.core.provider.TimeProvider;
-import teamdevhub.devhub.core.provider.VerificationCodeProvider;
+import teamdevhub.devhub.core.auth.port.out.verification.VerificationIssuer;
+import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerification;
+import teamdevhub.devhub.core.common.provider.TimeProvider;
+import teamdevhub.devhub.core.auth.port.out.verification.VerificationCodeProvider;
 import teamdevhub.devhub.core.auth.domain.Verification;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;

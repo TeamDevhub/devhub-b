@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
-import teamdevhub.devhub.core.provider.TokenParseProvider;
+import teamdevhub.devhub.core.auth.port.out.token.TokenParseProvider;
 import teamdevhub.devhub.shared.exception.AuthRuleException;
 
 import java.io.IOException;

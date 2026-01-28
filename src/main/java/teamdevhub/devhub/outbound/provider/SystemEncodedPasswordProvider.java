@@ -2,7 +2,7 @@ package teamdevhub.devhub.outbound.provider;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.core.provider.EncodedPasswordProvider;
+import teamdevhub.devhub.core.auth.port.out.password.EncodedPasswordProvider;
 
 @Component
 public class SystemEncodedPasswordProvider implements EncodedPasswordProvider {

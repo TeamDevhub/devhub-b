@@ -3,13 +3,13 @@ package teamdevhub.devhub.small.core.user.port.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.core.auth.application.service.vo.OauthAuthResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.shared.enums.SignupStatus;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.oauth.FakeOauthResolveUseCase;
 import teamdevhub.devhub.fake.pure.usecase.user.FakeUserSignupUseCase;
 import teamdevhub.devhub.fake.pure.usecase.verification.FakeVerificationUseCase;
-import teamdevhub.devhub.core.auth.port.in.command.SignupOauthUserCommand;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
 

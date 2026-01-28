@@ -13,7 +13,7 @@ import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.user.UpdateUserCommand;
-import teamdevhub.devhub.core.auth.port.in.command.SignupOauthUserCommand;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 

@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
-import teamdevhub.devhub.core.auth.port.in.command.ConfirmVerificationCommand;
+import teamdevhub.devhub.core.auth.port.in.command.verification.ConfirmVerificationCommand;
 
 @Getter
 @Builder

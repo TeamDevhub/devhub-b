@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import teamdevhub.devhub.api.auth.model.request.LoginRequestDto;
-import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
+import teamdevhub.devhub.core.auth.application.service.AuthResult;
 
 import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;

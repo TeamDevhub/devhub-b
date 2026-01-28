@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import teamdevhub.devhub.shared.exception.ExternalServiceException;
-import teamdevhub.devhub.outbound.notification.adapter.EmailMessageSendAdapter;
+import teamdevhub.devhub.outbound.notification.adapter.EmailNotificationSendAdapter;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
@@ -20,7 +20,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_CODE;
 
 public class EmailMessageSendAdapterTest {
 
-    private EmailMessageSendAdapter emailMessageSendAdapter;
+    private EmailNotificationSendAdapter emailMessageSendAdapter;
 
     private JavaMailSender mailSender;
     private SpringTemplateEngine templateEngine;
@@ -30,7 +30,7 @@ public class EmailMessageSendAdapterTest {
         mailSender = mock(JavaMailSender.class);
         templateEngine = mock(SpringTemplateEngine.class);
 
-        emailMessageSendAdapter = new EmailMessageSendAdapter(mailSender, templateEngine);
+        emailMessageSendAdapter = new EmailNotificationSendAdapter(mailSender, templateEngine);
     }
 
     @Test

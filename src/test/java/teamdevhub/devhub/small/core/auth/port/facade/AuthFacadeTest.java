@@ -3,7 +3,7 @@ package teamdevhub.devhub.small.core.auth.port.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
+import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticatedUserUseCase;
 import teamdevhub.devhub.fake.pure.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.usecase.user.FakeUserLoginUseCase;

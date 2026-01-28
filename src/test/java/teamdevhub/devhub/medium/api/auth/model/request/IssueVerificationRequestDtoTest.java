@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import teamdevhub.devhub.api.auth.model.request.IssueVerificationRequestDto;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
-import teamdevhub.devhub.core.auth.port.in.command.IssueVerificationCommand;
+import teamdevhub.devhub.core.auth.port.in.command.verification.IssueVerificationCommand;
 
 import java.util.Set;
 

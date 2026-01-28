@@ -1,7 +1,7 @@
 package teamdevhub.devhub.outbound.provider;
 
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.core.provider.IdentifierProvider;
+import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 
 import java.util.UUID;
 

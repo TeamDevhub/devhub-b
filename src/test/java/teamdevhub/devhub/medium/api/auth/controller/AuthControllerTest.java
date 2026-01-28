@@ -11,7 +11,7 @@ import teamdevhub.devhub.api.auth.controller.AuthController;
 import teamdevhub.devhub.api.auth.model.request.LoginRequestDto;
 import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
-import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
+import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;

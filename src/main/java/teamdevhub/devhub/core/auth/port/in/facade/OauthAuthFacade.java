@@ -3,14 +3,14 @@ package teamdevhub.devhub.core.auth.port.in.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
-import teamdevhub.devhub.core.auth.application.service.vo.OauthAuthResult;
-import teamdevhub.devhub.core.auth.application.service.vo.OauthUserResult;
+import teamdevhub.devhub.core.auth.application.service.AuthResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
-import teamdevhub.devhub.core.auth.port.in.usecase.OauthAuthenticationUseCase;
-import teamdevhub.devhub.core.auth.port.in.usecase.OauthResolveUseCase;
+import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthAuthenticationUseCase;
+import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthResolveUseCase;
 
 @Service
 @Transactional

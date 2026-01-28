@@ -7,7 +7,7 @@ import teamdevhub.devhub.shared.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.auth.persistence.JpaRefreshTokenRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.domain.RefreshToken;
-import teamdevhub.devhub.core.auth.port.out.RefreshTokenRepository;
+import teamdevhub.devhub.core.auth.port.out.token.RefreshTokenRepository;
 
 @Component
 @RequiredArgsConstructor

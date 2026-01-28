@@ -1,7 +1,7 @@
 package teamdevhub.devhub.outbound.provider;
 
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.core.provider.VerificationCodeProvider;
+import teamdevhub.devhub.core.auth.port.out.verification.VerificationCodeProvider;
 
 import java.security.SecureRandom;
 

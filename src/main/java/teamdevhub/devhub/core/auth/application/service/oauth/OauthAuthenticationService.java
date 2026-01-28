@@ -3,12 +3,12 @@ package teamdevhub.devhub.core.auth.application.service.oauth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.core.auth.application.selector.OauthClientSelector;
+import teamdevhub.devhub.core.auth.application.selector.oauth.OauthClientSelector;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
-import teamdevhub.devhub.core.auth.port.in.usecase.OauthAuthenticationUseCase;
-import teamdevhub.devhub.core.auth.port.out.OauthClient;
-import teamdevhub.devhub.core.provider.TokenIssueProvider;
+import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthAuthenticationUseCase;
+import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
+import teamdevhub.devhub.core.auth.port.out.token.TokenIssueProvider;
 
 @Service
 @Transactional

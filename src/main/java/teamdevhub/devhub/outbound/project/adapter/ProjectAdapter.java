@@ -1,4 +1,6 @@
 package teamdevhub.devhub.outbound.project.adapter;
 
-public class ProjectAdapter {
+import teamdevhub.devhub.core.project.port.out.ProjectRepository;
+
+public class ProjectAdapter implements ProjectRepository {
 }
