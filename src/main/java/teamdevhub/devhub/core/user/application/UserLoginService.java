@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.user.port.in.usecase.UserLoginUseCase;
-import teamdevhub.devhub.core.common.provider.TimeProvider;
+import teamdevhub.devhub.core.provider.TimeProvider;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
 
 @Service

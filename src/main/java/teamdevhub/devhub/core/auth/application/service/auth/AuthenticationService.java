@@ -8,7 +8,7 @@ import teamdevhub.devhub.core.auth.domain.RefreshToken;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.core.auth.port.out.RefreshTokenRepository;
-import teamdevhub.devhub.core.common.provider.TokenIssueProvider;
+import teamdevhub.devhub.core.provider.TokenIssueProvider;
 
 @Service
 @Transactional

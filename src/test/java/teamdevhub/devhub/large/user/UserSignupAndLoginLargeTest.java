@@ -9,13 +9,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
-import teamdevhub.devhub.api.auth.adapter.in.model.request.ConfirmVerificationRequestDto;
-import teamdevhub.devhub.api.auth.adapter.in.model.request.IssueVerificationRequestDto;
-import teamdevhub.devhub.api.auth.adapter.in.model.request.LoginRequestDto;
-import teamdevhub.devhub.api.auth.adapter.in.model.response.TokenResponseDto;
-import teamdevhub.devhub.api.user.adapter.in.model.request.SignupRequestDto;
-import teamdevhub.devhub.api.user.adapter.in.model.response.UserDetailResponseDto;
-import teamdevhub.devhub.shared.web.model.response.DataApiResponseDto;
+import teamdevhub.devhub.api.auth.model.request.ConfirmVerificationRequestDto;
+import teamdevhub.devhub.api.auth.model.request.IssueVerificationRequestDto;
+import teamdevhub.devhub.api.auth.model.request.LoginRequestDto;
+import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
+import teamdevhub.devhub.api.user.model.request.SignupRequestDto;
+import teamdevhub.devhub.api.user.model.response.UserDetailResponseDto;
+import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.large.TestConfig;
 

@@ -2,7 +2,7 @@ package teamdevhub.devhub.fake.pure.provider;
 
 import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.token.TempTokenInfo;
-import teamdevhub.devhub.core.common.provider.TokenParseProvider;
+import teamdevhub.devhub.core.provider.TokenParseProvider;
 
 import java.util.HashMap;
 import java.util.Map;

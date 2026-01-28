@@ -1,6 +1,6 @@
 package teamdevhub.devhub.shared.exception;
 
-import teamdevhub.devhub.shared.web.model.response.DataApiResponseDto;
+import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

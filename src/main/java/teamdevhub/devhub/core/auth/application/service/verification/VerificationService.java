@@ -11,7 +11,7 @@ import teamdevhub.devhub.core.auth.port.in.command.ConfirmVerificationCommand;
 import teamdevhub.devhub.core.auth.port.in.command.IssueVerificationCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.VerificationUseCase;
 import teamdevhub.devhub.core.auth.port.out.VerificationRepository;
-import teamdevhub.devhub.core.common.provider.TimeProvider;
+import teamdevhub.devhub.core.provider.TimeProvider;
 
 @Service
 @Transactional

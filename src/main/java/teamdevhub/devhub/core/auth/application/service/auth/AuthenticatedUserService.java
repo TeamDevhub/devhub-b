@@ -11,7 +11,7 @@ import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticatedUserUseCase;
 import teamdevhub.devhub.core.auth.port.out.AuthenticatedUserResolver;
 import teamdevhub.devhub.core.auth.port.out.RefreshTokenRepository;
-import teamdevhub.devhub.core.common.provider.TokenParseProvider;
+import teamdevhub.devhub.core.provider.TokenParseProvider;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
 
 @Service

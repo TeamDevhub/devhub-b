@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import teamdevhub.devhub.shared.web.resolver.LoginUserArgumentResolver;
+import teamdevhub.devhub.api.web.resolver.LoginUserArgumentResolver;
 
 import java.util.List;
 

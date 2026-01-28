@@ -8,7 +8,7 @@ import teamdevhub.devhub.core.auth.domain.vo.token.TempTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.SignupOauthUserCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.OauthResolveUseCase;
-import teamdevhub.devhub.core.common.provider.TokenParseProvider;
+import teamdevhub.devhub.core.provider.TokenParseProvider;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
 
 @Service

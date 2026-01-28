@@ -5,7 +5,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.infrastructure.security.auth.UserAuthentication;
+import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 
 import java.util.Optional;

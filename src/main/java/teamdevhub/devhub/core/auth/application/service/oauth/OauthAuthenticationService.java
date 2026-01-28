@@ -8,7 +8,7 @@ import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.OauthAuthenticationUseCase;
 import teamdevhub.devhub.core.auth.port.out.OauthClient;
-import teamdevhub.devhub.core.common.provider.TokenIssueProvider;
+import teamdevhub.devhub.core.provider.TokenIssueProvider;
 
 @Service
 @Transactional

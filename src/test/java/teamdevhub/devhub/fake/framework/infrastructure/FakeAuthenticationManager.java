@@ -3,7 +3,7 @@ package teamdevhub.devhub.fake.framework.infrastructure;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import teamdevhub.devhub.infrastructure.security.auth.UserAuthentication;
+import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 
 import java.util.Collections;

@@ -6,7 +6,7 @@ import teamdevhub.devhub.core.auth.application.service.vo.IssuedVerification;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
-import teamdevhub.devhub.core.common.provider.TimeProvider;
+import teamdevhub.devhub.core.provider.TimeProvider;
 
 public class FakeEmailVerificationIssuer implements VerificationIssuer {
 
