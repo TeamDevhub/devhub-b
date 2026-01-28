@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException authenticationException) throws IOException {
-        DataApiResponse<?> result = DataApiResponse.failureWithoutData(ErrorCode.AUTH_INVALID);
+        DataApiResponseDto<?> result = DataApiResponseDto.failureWithoutData(ErrorCode.AUTH_INVALID);
 
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.setContentType("application/json;charset=UTF-8");

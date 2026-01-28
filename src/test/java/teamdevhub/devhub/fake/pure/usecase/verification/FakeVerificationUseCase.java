@@ -1,5 +1,6 @@
 package teamdevhub.devhub.fake.pure.usecase.verification;
 
+import teamdevhub.devhub.core.auth.application.service.vo.IssuedVerification;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 import teamdevhub.devhub.core.common.provider.TimeProvider;
@@ -31,11 +32,12 @@ public class FakeVerificationUseCase implements VerificationUseCase {
     }
 
     @Override
-    public void issueVerification(IssueVerificationCommand issueVerificationCommand) {
+    public IssuedVerification issueVerification(IssueVerificationCommand issueVerificationCommand) {
         VerificationTarget verificationTarget = issueVerificationCommand.verificationTarget();
         VerificationMessage verificationMessage = new VerificationMessage(TEST_EMAIL_CODE, timeProvider.now().plusMinutes(5));
         Verification verification = Verification.issue(verificationTarget, verificationMessage);
         store.put(verificationTarget.value(), verification);
+        return new IssuedVerification(verification, verificationMessage);
     }
 
     @Override

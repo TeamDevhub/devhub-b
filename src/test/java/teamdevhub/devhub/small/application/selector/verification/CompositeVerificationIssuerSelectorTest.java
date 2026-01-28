@@ -3,8 +3,9 @@ package teamdevhub.devhub.small.application.selector.verification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.core.auth.application.selector.CompositeVerificationIssuerSelector;
 import teamdevhub.devhub.shared.exception.BusinessRuleException;
-import teamdevhub.devhub.infrastructure.auth.selector.veirifcation.CompositeVerificationIssuerSelector;
+
 import teamdevhub.devhub.core.auth.port.out.VerificationIssuer;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.application.service.vo.IssuedVerification;

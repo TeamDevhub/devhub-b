@@ -3,7 +3,8 @@ package teamdevhub.devhub.medium.adapter.in.auth;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseCookie;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.controller.CookieFactory;
+
+import teamdevhub.devhub.api.auth.adapter.in.controller.CookieFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

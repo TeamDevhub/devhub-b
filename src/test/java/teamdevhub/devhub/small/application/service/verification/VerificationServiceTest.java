@@ -3,34 +3,33 @@ package teamdevhub.devhub.small.application.service.verification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.shared.exception.BusinessRuleException;
-import teamdevhub.devhub.core.auth.application.service.verification.VerificationService;
 import teamdevhub.devhub.core.auth.application.selector.VerificationIssuerSelector;
-import teamdevhub.devhub.core.auth.port.out.VerificationIssuer;
-import teamdevhub.devhub.shared.exception.DomainRuleException;
+import teamdevhub.devhub.core.auth.application.service.verification.VerificationService;
 import teamdevhub.devhub.core.auth.domain.Verification;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
-import teamdevhub.devhub.fake.pure.issuer.FakeEmailVerificationIssuer;
-import teamdevhub.devhub.fake.pure.selector.FakeVerificationIssuerSelector;
-import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
-import teamdevhub.devhub.fake.pure.repository.verification.FakeVerificationRepository;
-import teamdevhub.devhub.fake.pure.selector.FakeNotificationSenderSelector;
 import teamdevhub.devhub.core.auth.port.in.command.ConfirmVerificationCommand;
 import teamdevhub.devhub.core.auth.port.in.command.IssueVerificationCommand;
+import teamdevhub.devhub.core.auth.port.out.VerificationIssuer;
 import teamdevhub.devhub.core.common.provider.TimeProvider;
+import teamdevhub.devhub.fake.pure.issuer.FakeEmailVerificationIssuer;
+import teamdevhub.devhub.fake.pure.provider.FakeTimeProvider;
+import teamdevhub.devhub.fake.pure.repository.verification.FakeVerificationRepository;
+import teamdevhub.devhub.fake.pure.selector.FakeVerificationIssuerSelector;
+import teamdevhub.devhub.shared.exception.BusinessRuleException;
+import teamdevhub.devhub.shared.exception.DomainRuleException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static teamdevhub.devhub.constant.UserTestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_CODE;
 
 public class VerificationServiceTest {
 
     private VerificationService verificationService;
 
-    private FakeNotificationSenderSelector notificationSender;
     private FakeVerificationRepository verificationRepository;
 
     @BeforeEach
@@ -39,18 +38,16 @@ public class VerificationServiceTest {
         VerificationIssuer verificationIssuer = new FakeEmailVerificationIssuer(VerificationType.EMAIL, TEST_EMAIL_CODE, timeProvider);
         VerificationIssuerSelector issuerSelector = new FakeVerificationIssuerSelector(List.of(verificationIssuer));
         verificationRepository = new FakeVerificationRepository();
-        notificationSender = new FakeNotificationSenderSelector();
 
         verificationService = new VerificationService(
                 timeProvider,
                 issuerSelector,
-                notificationSender,
                 verificationRepository
         );
     }
 
     @Test
-    @DisplayName("인증을_발급하면_저장되고_알림이_전송된다")
+    @DisplayName("인증을_발급하면_저장된다")
     void issueVerificationSuccess() {
         // given
         VerificationTarget verificationTarget = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
@@ -64,7 +61,6 @@ public class VerificationServiceTest {
         Verification verification = verificationRepository.findByVerificationTarget(verificationTarget);
 
         assertThat(verification).isNotNull();
-        assertThat(notificationSender.isSent()).isTrue();
     }
 
     @Test

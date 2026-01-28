@@ -7,7 +7,8 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.ConfirmVerificationRequestDto;
+
+import teamdevhub.devhub.api.auth.adapter.in.model.request.ConfirmVerificationRequestDto;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 import teamdevhub.devhub.core.auth.port.in.command.ConfirmVerificationCommand;
 

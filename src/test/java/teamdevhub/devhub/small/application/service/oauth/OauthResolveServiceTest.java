@@ -5,15 +5,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthResolveService;
 import teamdevhub.devhub.core.auth.application.service.vo.OauthUserResult;
-import teamdevhub.devhub.shared.enums.TokenType;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.domain.vo.token.TempTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
+import teamdevhub.devhub.core.auth.port.in.command.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
 import teamdevhub.devhub.fake.pure.repository.user.FakeUserRepository;
-import teamdevhub.devhub.core.auth.port.in.command.SignupOauthUserCommand;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -37,7 +36,7 @@ class OauthResolveServiceTest {
     @DisplayName("OAuth_유저가_존재하면_반환된_OauthUserResult_의_loginAvailable_값은_true_이다")
     void returnOauthResultSuccessWhenUserExists() {
         // given
-        TempTokenInfo tokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, TokenType.TEMP, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        TempTokenInfo tokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
         tokenParseProvider.givenTempToken(TEMP_TOKEN, tokenInfo);
 
         OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
@@ -80,7 +79,7 @@ class OauthResolveServiceTest {
     @DisplayName("Oauth_회원가입_성공하면_tempToken_을_반환한다")
     void signup_with_oauth_success_returns_tempToken() {
         // given
-        TempTokenInfo tempTokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, TokenType.TEMP, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        TempTokenInfo tempTokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
         tokenParseProvider.givenTempToken(TEMP_TOKEN, tempTokenInfo);
 
         SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()

@@ -7,7 +7,6 @@ import teamdevhub.devhub.shared.exception.BusinessRuleException;
 import teamdevhub.devhub.core.auth.application.service.auth.AuthenticatedUserService;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.domain.RefreshToken;
-import teamdevhub.devhub.core.auth.domain.vo.token.RefreshTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
@@ -60,7 +59,7 @@ public class AuthenticatedUserServiceTest {
         userRepository.save(testUser);
 
         RefreshToken refreshToken = new RefreshToken(testUser.getUserGuid(), REFRESH_TOKEN);
-        tokenParseProvider.givenRefreshToken(REFRESH_TOKEN, new RefreshTokenInfo(testUser.getUserGuid()));
+        tokenParseProvider.givenRefreshToken(REFRESH_TOKEN,testUser.getUserGuid());
         refreshTokenRepository.givenRefreshToken(refreshToken);
 
         // when
@@ -91,7 +90,7 @@ public class AuthenticatedUserServiceTest {
         User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         String invalidToken = "invalid-refresh-token";
-        tokenParseProvider.givenRefreshToken(invalidToken, new RefreshTokenInfo(TEST_USER_GUID_1));
+        tokenParseProvider.givenRefreshToken(invalidToken,TEST_USER_GUID_1);
 
         // when, then
         assertThatThrownBy(() -> authenticatedUserService.getUserForReissue(invalidToken))

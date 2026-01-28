@@ -1,7 +1,6 @@
 package teamdevhub.devhub.fake.pure.provider;
 
 import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
-import teamdevhub.devhub.core.auth.domain.vo.token.RefreshTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.token.TempTokenInfo;
 import teamdevhub.devhub.core.common.provider.TokenParseProvider;
 
@@ -12,7 +11,7 @@ public class FakeTokenParseProvider implements TokenParseProvider {
 
     private final Map<String, AccessTokenInfo> accessTokenStore = new HashMap<>();
     private final Map<String, TempTokenInfo> tempTokenStore = new HashMap<>();
-    private final Map<String, RefreshTokenInfo> refreshTokenStore = new HashMap<>();
+    private final Map<String, String> refreshTokenStore = new HashMap<>();
 
     public void givenAccessToken(String accessToken, AccessTokenInfo tokenInfo) {
         accessTokenStore.put(accessToken, tokenInfo);
@@ -22,8 +21,8 @@ public class FakeTokenParseProvider implements TokenParseProvider {
         tempTokenStore.put(tempToken, tokenInfo);
     }
 
-    public void givenRefreshToken(String refreshToken, RefreshTokenInfo tokenInfo) {
-        refreshTokenStore.put(refreshToken, tokenInfo);
+    public void givenRefreshToken(String refreshToken, String userGuid) {
+        refreshTokenStore.put(refreshToken, userGuid);
     }
 
     @Override
@@ -45,12 +44,12 @@ public class FakeTokenParseProvider implements TokenParseProvider {
     }
 
     @Override
-    public RefreshTokenInfo getRefreshTokenInfo(String refreshToken) {
-        RefreshTokenInfo info = refreshTokenStore.get(refreshToken);
-        if (info == null) {
+    public String getRefreshTokenInfo(String refreshToken) {
+        String userGuid = refreshTokenStore.get(refreshToken);
+        if (userGuid == null) {
             throw new IllegalArgumentException("등록되지 않은 refresh token: " + refreshToken);
         }
-        return info;
+        return userGuid;
     }
 
     @Override

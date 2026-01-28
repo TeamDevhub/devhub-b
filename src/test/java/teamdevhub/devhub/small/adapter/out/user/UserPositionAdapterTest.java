@@ -3,7 +3,8 @@ package teamdevhub.devhub.small.adapter.out.user;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.user.UserPositionAdapter;
+
+import teamdevhub.devhub.infrastructure.user.adapter.out.UserPositionAdapter;
 import teamdevhub.devhub.infrastructure.user.adapter.out.persistence.JpaUserPositionRepository;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;

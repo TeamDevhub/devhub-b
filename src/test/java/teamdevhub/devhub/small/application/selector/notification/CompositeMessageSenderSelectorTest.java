@@ -3,8 +3,9 @@ package teamdevhub.devhub.small.application.selector.notification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import teamdevhub.devhub.core.notification.application.selector.CompositeMessageSenderSelector;
 import teamdevhub.devhub.shared.exception.ExternalServiceException;
-import teamdevhub.devhub.infrastructure.notification.selector.CompositeMessageSenderSelector;
 import teamdevhub.devhub.core.notification.port.out.MessageSender;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
 import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;

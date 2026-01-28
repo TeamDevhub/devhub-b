@@ -7,7 +7,7 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.request.SignupRequestDto;
+import teamdevhub.devhub.api.user.adapter.in.model.request.SignupRequestDto;
 
 import java.util.List;
 import java.util.Set;

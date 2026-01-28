@@ -8,13 +8,14 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.ConfirmVerificationRequestDto;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.IssueVerificationRequestDto;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.LoginRequestDto;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.response.TokenResponseDto;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.request.SignupRequestDto;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.response.UserDetailResponseDto;
-import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
+
+import teamdevhub.devhub.api.auth.adapter.in.model.request.ConfirmVerificationRequestDto;
+import teamdevhub.devhub.api.auth.adapter.in.model.request.IssueVerificationRequestDto;
+import teamdevhub.devhub.api.auth.adapter.in.model.request.LoginRequestDto;
+import teamdevhub.devhub.api.auth.adapter.in.model.response.TokenResponseDto;
+import teamdevhub.devhub.api.user.adapter.in.model.request.SignupRequestDto;
+import teamdevhub.devhub.api.user.adapter.in.model.response.UserDetailResponseDto;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.large.TestConfig;
 
@@ -53,7 +54,7 @@ public class UserSignupAndLoginLargeTest {
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .build();
-        ResponseEntity<DataApiResponse<Void>> signupResponse = testRestTemplate.exchange(
+        ResponseEntity<DataApiResponseDto<Void>> signupResponse = testRestTemplate.exchange(
                 "/user/signup",
                 HttpMethod.POST,
                 new HttpEntity<>(signupRequestDto),
@@ -61,7 +62,7 @@ public class UserSignupAndLoginLargeTest {
         );
         assertThat(signupResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        ResponseEntity<DataApiResponse<TokenResponseDto>> loginResponse = testRestTemplate.exchange(
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> loginResponse = testRestTemplate.exchange(
                 "/auth/login",
                 HttpMethod.POST,
                 new HttpEntity<>(new LoginRequestDto(TEST_EMAIL_1, TEST_PASSWORD_1)),
@@ -73,7 +74,7 @@ public class UserSignupAndLoginLargeTest {
         List<String> setCookies = loginResponse.getHeaders().get(HttpHeaders.SET_COOKIE);
         assertThat(setCookies).anyMatch(cookie -> cookie.contains("refreshToken"));
 
-        ResponseEntity<DataApiResponse<UserDetailResponseDto>> updateProfileResponse = testRestTemplate.exchange(
+        ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> updateProfileResponse = testRestTemplate.exchange(
                 "/user/profile",
                 HttpMethod.GET,
                 new HttpEntity<>(headers),

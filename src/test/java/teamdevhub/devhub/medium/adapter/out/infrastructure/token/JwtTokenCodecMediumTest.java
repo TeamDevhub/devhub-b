@@ -82,7 +82,7 @@ class JwtTokenCodecMediumTest {
 
         // when
         String refreshToken = jwtTokenCodec.createRefreshToken(userGuid);
-        String extracted = jwtTokenCodec.getRefreshTokenInfo(refreshToken).userGuid();
+        String extracted = jwtTokenCodec.getRefreshTokenInfo(refreshToken);
 
         // then
         assertThat(extracted).isEqualTo(userGuid);

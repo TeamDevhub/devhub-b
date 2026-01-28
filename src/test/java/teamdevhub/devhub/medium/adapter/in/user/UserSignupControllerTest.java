@@ -5,9 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.infrastructure.user.adapter.in.controller.UserSignupController;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.request.SignupRequestDto;
-import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
+
+import teamdevhub.devhub.api.user.adapter.in.controller.UserSignupController;
+import teamdevhub.devhub.api.user.adapter.in.model.request.SignupRequestDto;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
 
@@ -45,7 +46,7 @@ public class UserSignupControllerTest {
         doNothing().when(userSignupFacade).signup(any());
 
         // when
-        ResponseEntity<DataApiResponse<Void>> response = userSignupController.signup(signupRequestDto);
+        ResponseEntity<DataApiResponseDto<Void>> response = userSignupController.signup(signupRequestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();

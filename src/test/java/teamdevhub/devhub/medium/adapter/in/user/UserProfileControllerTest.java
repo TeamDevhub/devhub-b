@@ -5,10 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.infrastructure.user.adapter.in.controller.UserProfileController;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.request.UpdateProfileRequestDto;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.response.UserDetailResponseDto;
-import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
+
+import teamdevhub.devhub.api.user.adapter.in.controller.UserProfileController;
+import teamdevhub.devhub.api.user.adapter.in.model.request.UpdateProfileRequestDto;
+import teamdevhub.devhub.api.user.adapter.in.model.response.UserDetailResponseDto;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.User;
@@ -50,7 +51,7 @@ class UserProfileControllerTest {
         when(userProfileUseCase.getCurrentUserProfile(authenticatedUser.userGuid())).thenReturn(user);
 
         // when
-        ResponseEntity<DataApiResponse<UserDetailResponseDto>> response = userProfileController.getProfile(authenticatedUser);
+        ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> response = userProfileController.getProfile(authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -76,7 +77,7 @@ class UserProfileControllerTest {
         doNothing().when(userProfileUseCase).updateProfile(any());
 
         // when
-        ResponseEntity<DataApiResponse<Void>> response = userProfileController.updateProfile(updateProfileRequestDto, authenticatedUser);
+        ResponseEntity<DataApiResponseDto<Void>> response = userProfileController.updateProfile(updateProfileRequestDto, authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -91,7 +92,7 @@ class UserProfileControllerTest {
         doNothing().when(userWithdrawFacade).withdraw(authenticatedUser.userGuid());
 
         // when
-        ResponseEntity<DataApiResponse<Void>> response = userProfileController.withdraw(authenticatedUser);
+        ResponseEntity<DataApiResponseDto<Void>> response = userProfileController.withdraw(authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();

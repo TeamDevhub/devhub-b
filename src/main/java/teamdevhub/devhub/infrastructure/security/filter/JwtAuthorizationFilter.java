@@ -12,12 +12,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.shared.enums.TokenType;
-import teamdevhub.devhub.shared.exception.AuthRuleException;
 import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.common.provider.TokenParseProvider;
+import teamdevhub.devhub.shared.exception.AuthRuleException;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -43,18 +41,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             String pureToken = tokenParseProvider.removeBearer(token);
             AccessTokenInfo accessTokenInfo = tokenParseProvider.getAccessTokenInfo(pureToken);
-            validateAccessToken(accessTokenInfo);
             setAuthentication(accessTokenInfo);
 
             filterChain.doFilter(httpServletRequest, httpServletResponse);
         } catch (AuthRuleException authRuleException) {
             customFilterExceptionHandler.handle(httpServletResponse, authRuleException.getErrorCode());
-        }
-    }
-
-    private void validateAccessToken(AccessTokenInfo accessTokenInfo) {
-        if (accessTokenInfo.tokentype() != TokenType.ACCESS) {
-            throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
     }
 

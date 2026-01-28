@@ -5,12 +5,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.controller.VerificationController;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.ConfirmVerificationRequestDto;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.IssueVerificationRequestDto;
-import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
+import teamdevhub.devhub.api.auth.adapter.in.controller.VerificationController;
+import teamdevhub.devhub.api.auth.adapter.in.model.request.ConfirmVerificationRequestDto;
+import teamdevhub.devhub.api.auth.adapter.in.model.request.IssueVerificationRequestDto;
+import teamdevhub.devhub.core.auth.port.in.facade.VerificationFacade;
 import teamdevhub.devhub.shared.enums.SuccessCode;
-import teamdevhub.devhub.core.auth.port.in.usecase.VerificationUseCase;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponseDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,13 +23,13 @@ public class VerificationControllerTest {
 
     private VerificationController verificationController;
 
-    private VerificationUseCase verificationUseCase;
+    private VerificationFacade verificationFacade;
 
     @BeforeEach
     void init() {
-        verificationUseCase = Mockito.mock(VerificationUseCase.class);
+        verificationFacade = Mockito.mock(VerificationFacade.class);
 
-        verificationController = new VerificationController(verificationUseCase);
+        verificationController = new VerificationController(verificationFacade);
     }
 
     @Test
@@ -37,16 +37,16 @@ public class VerificationControllerTest {
     void canVerifyCodeWhenSendingEmailVerification() {
         // given
         IssueVerificationRequestDto issueVerificationRequestDto = new IssueVerificationRequestDto("email", TEST_EMAIL_1);
-        doNothing().when(verificationUseCase).issueVerification(any());
+        doNothing().when(verificationFacade).issueVerification(any());
 
         // when
-        ResponseEntity<DataApiResponse<Void>> response = verificationController.sendEmailVerification(issueVerificationRequestDto);
+        ResponseEntity<DataApiResponseDto<Void>> response = verificationController.sendEmailVerification(issueVerificationRequestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.VERIFICATION_SENT.getCode());
 
-        verify(verificationUseCase).issueVerification(any());
+        verify(verificationFacade).issueVerification(any());
     }
 
     @Test
@@ -58,15 +58,15 @@ public class VerificationControllerTest {
                 TEST_EMAIL_1,
                 TEST_EMAIL_CODE
         );
-        doNothing().when(verificationUseCase).confirmVerification(any());
+        doNothing().when(verificationFacade).confirmVerification(any());
 
         // when
-        ResponseEntity<DataApiResponse<Void>> response = verificationController.confirmEmailVerification(confirmVerificationRequestDto);
+        ResponseEntity<DataApiResponseDto<Void>> response = verificationController.confirmEmailVerification(confirmVerificationRequestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.VERIFICATION_SUCCESS.getCode());
 
-        verify(verificationUseCase).confirmVerification(any());
+        verify(verificationFacade).confirmVerification(any());
     }
 }

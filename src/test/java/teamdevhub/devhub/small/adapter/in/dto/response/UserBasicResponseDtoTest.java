@@ -2,7 +2,8 @@ package teamdevhub.devhub.small.adapter.in.dto.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.response.UserBasicResponseDto;
+
+import teamdevhub.devhub.api.user.adapter.in.model.response.UserBasicResponseDto;
 import teamdevhub.devhub.core.user.domain.User;
 
 import java.time.LocalDateTime;

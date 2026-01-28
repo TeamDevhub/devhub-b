@@ -2,7 +2,8 @@ package teamdevhub.devhub.small.adapter.in.dto.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.response.TokenResponseDto;
+
+import teamdevhub.devhub.api.auth.adapter.in.model.response.TokenResponseDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

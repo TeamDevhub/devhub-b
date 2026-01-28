@@ -6,16 +6,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
+
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.controller.OauthController;
+import teamdevhub.devhub.api.auth.adapter.in.controller.OauthController;
+import teamdevhub.devhub.api.auth.adapter.in.model.response.TokenResponseDto;
+import teamdevhub.devhub.api.user.adapter.in.model.request.SignupOauthRequestDto;
 import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.vo.OauthAuthResult;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.response.TokenResponseDto;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.request.SignupOauthRequestDto;
-import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.auth.port.in.facade.OauthAuthFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponseDto;
 
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class OauthControllerTest {
         Mockito.when(oauthAuthFacade.handleOAuthCallback(provider, code)).thenReturn(oauthAuthResult);
 
         // when
-        ResponseEntity<DataApiResponse<TokenResponseDto>> response = oauthController.handleOauthCallback(provider, code);
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.handleOauthCallback(provider, code);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -102,7 +103,7 @@ public class OauthControllerTest {
                 .thenReturn(oauthAuthResult);
 
         // when
-        ResponseEntity<DataApiResponse<TokenResponseDto>> response = oauthController.handleOauthCallback(provider, code);
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.handleOauthCallback(provider, code);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -126,7 +127,7 @@ public class OauthControllerTest {
         when(userSignupFacade.signupWithOauth(any())).thenReturn(oauthAuthResult);
 
         // when
-        ResponseEntity<DataApiResponse<TokenResponseDto>> response = oauthController.signup(requestDto);
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = oauthController.signup(requestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.adapter.out.user.UserSkillAdapter;
+import teamdevhub.devhub.infrastructure.user.adapter.out.UserSkillAdapter;
 import teamdevhub.devhub.infrastructure.user.adapter.out.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 

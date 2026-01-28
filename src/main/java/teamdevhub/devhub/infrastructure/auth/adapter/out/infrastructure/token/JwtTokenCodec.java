@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import teamdevhub.devhub.shared.exception.AuthRuleException;
 import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
-import teamdevhub.devhub.core.auth.domain.vo.token.RefreshTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.token.TempTokenInfo;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.common.provider.TimeProvider;
@@ -49,9 +48,9 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         LocalDateTime expireAt = now.plusMinutes(30);
         return Jwts.builder()
                 .setSubject(userGuid)
-                .claim(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
-                .claim(JwtClaims.EMAIL, email)
-                .claim(JwtClaims.USER_ROLE, userRole.name())
+                .claim(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
+                .claim(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.EMAIL, email)
+                .claim(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.USER_ROLE, userRole.name())
                 .setIssuedAt(toDate(now))
                 .setExpiration(toDate(expireAt))
                 .signWith(key, signatureAlgorithm)
@@ -64,7 +63,7 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         LocalDateTime expireAt = now.plusDays(7);
         return Jwts.builder()
                         .setSubject(userGuid)
-                        .claim(JwtClaims.TOKEN_TYPE, TokenType.REFRESH.name())
+                        .claim(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.TOKEN_TYPE, TokenType.REFRESH.name())
                         .setIssuedAt(toDate(now))
                         .setExpiration(toDate(expireAt))
                         .signWith(key, signatureAlgorithm)
@@ -77,9 +76,9 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         LocalDateTime expireAt = now.plusMinutes(3);
         return Jwts.builder()
                 .setSubject(oauthId)
-                .claim(JwtClaims.TOKEN_TYPE, TokenType.TEMP.name())
-                .claim(JwtClaims.OAUTH_PROVIDER, verificationProvider.name())
-                .claim(JwtClaims.EMAIL, email)
+                .claim(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.TOKEN_TYPE, TokenType.TEMP.name())
+                .claim(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.OAUTH_PROVIDER, verificationProvider.name())
+                .claim(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.EMAIL, email)
                 .setIssuedAt(toDate(now))
                 .setExpiration(toDate(expireAt))
                 .signWith(key, signatureAlgorithm)
@@ -105,9 +104,8 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
 
         return new AccessTokenInfo(
                 claims.getSubject(),
-                TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class)),
                 claims.get(JwtClaims.EMAIL, String.class),
-                UserRole.valueOf(claims.get(JwtClaims.USER_ROLE, String.class))
+                UserRole.valueOf(claims.get(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.USER_ROLE, String.class))
         );
     }
 
@@ -122,20 +120,19 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
 
         return new TempTokenInfo(
                 claims.getSubject(),
-                TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class)),
                 VerificationProvider.valueOf(claims.get(JwtClaims.OAUTH_PROVIDER, String.class)),
-                claims.get(JwtClaims.EMAIL, String.class)
+                claims.get(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.EMAIL, String.class)
         );
     }
 
     @Override
-    public RefreshTokenInfo getRefreshTokenInfo(String refreshToken) {
+    public String getRefreshTokenInfo(String refreshToken) {
         Claims claims = parseClaims(refreshToken);
-        TokenType tokenType = TokenType.valueOf(claims.get(JwtClaims.TOKEN_TYPE, String.class));
+        TokenType tokenType = TokenType.valueOf(claims.get(teamdevhub.devhub.infrastructure.auth.adapter.out.infrastructure.token.JwtClaims.TOKEN_TYPE, String.class));
         if (tokenType != TokenType.REFRESH) {
             throw AuthRuleException.of(ErrorCode.TOKEN_INVALID);
         }
-        return new RefreshTokenInfo(claims.getSubject());
+        return claims.getSubject();
     }
 
     private TokenType extractTokenType(Claims claims) {

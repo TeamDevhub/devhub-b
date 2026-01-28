@@ -2,9 +2,10 @@ package teamdevhub.devhub.small.adapter.out.user.mapper;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.adapter.out.user.entity.UserPositionEntity;
-import teamdevhub.devhub.adapter.out.user.mapper.UserPositionMapper;
+
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
+import teamdevhub.devhub.infrastructure.user.adapter.out.entity.UserPositionEntity;
+import teamdevhub.devhub.infrastructure.user.adapter.out.mapper.UserPositionMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;

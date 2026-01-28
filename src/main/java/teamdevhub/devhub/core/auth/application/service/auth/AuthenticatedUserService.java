@@ -26,7 +26,7 @@ public class AuthenticatedUserService implements AuthenticatedUserUseCase {
 
     @Override
     public AuthenticatedUser getUserForReissue(String refreshToken) {
-        String userGuid = tokenParseProvider.getRefreshTokenInfo(refreshToken).userGuid();
+        String userGuid = tokenParseProvider.getRefreshTokenInfo(refreshToken);
         RefreshToken savedRefreshToken = refreshTokenRepository.findByUserGuid(userGuid);
 
         if (savedRefreshToken == null || !savedRefreshToken.token().equals(refreshToken)) {

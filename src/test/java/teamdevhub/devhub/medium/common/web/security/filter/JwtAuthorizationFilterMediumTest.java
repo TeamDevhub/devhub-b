@@ -9,15 +9,14 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.shared.enums.TokenType;
-import teamdevhub.devhub.shared.exception.AuthRuleException;
-import teamdevhub.devhub.infrastructure.security.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.pure.handler.FakeCustomFilterExceptionHandler;
 import teamdevhub.devhub.fake.pure.provider.FakeTokenParseProvider;
+import teamdevhub.devhub.infrastructure.security.filter.JwtAuthorizationFilter;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.shared.exception.AuthRuleException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
@@ -50,7 +49,6 @@ class JwtAuthorizationFilterMediumTest {
     private AccessTokenInfo makeAccessTokenInfo() {
         return new AccessTokenInfo(
                 TEST_USER_GUID_1,
-                TokenType.ACCESS,
                 TEST_EMAIL_1,
                 UserRole.USER
         );
@@ -82,29 +80,6 @@ class JwtAuthorizationFilterMediumTest {
             }
         };
         jwtAuthorizationFilter = new JwtAuthorizationFilter(tokenParseProvider, customFilterExceptionHandler);
-
-        // when
-        jwtAuthorizationFilter.doFilter(httpServletRequest, httpServletResponse, filterChain);
-
-        // then
-        assertThat(customFilterExceptionHandler.isHandled()).isTrue();
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
-    }
-
-    @Test
-    @DisplayName("액세스_토큰이_아닌_경우_TOKEN_INVALID_예외를_처리한다")
-    void reject_if_token_type_is_not_access() throws Exception {
-        // given
-        String token = "Bearer refresh-token";
-        httpServletRequest.addHeader("Authorization", token);
-
-        AccessTokenInfo tokenInfo = new AccessTokenInfo(
-                TEST_USER_GUID_1,
-                TokenType.REFRESH,
-                TEST_EMAIL_1,
-                UserRole.USER
-        );
-        tokenParseProvider.givenAccessToken("refresh-token", tokenInfo);
 
         // when
         jwtAuthorizationFilter.doFilter(httpServletRequest, httpServletResponse, filterChain);

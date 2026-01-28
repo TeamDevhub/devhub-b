@@ -6,10 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.controller.AuthController;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.request.LoginRequestDto;
-import teamdevhub.devhub.infrastructure.auth.adapter.in.dto.response.TokenResponseDto;
-import teamdevhub.devhub.shared.web.model.response.DataApiResponse;
+
+import teamdevhub.devhub.api.auth.adapter.in.controller.AuthController;
+import teamdevhub.devhub.api.auth.adapter.in.model.request.LoginRequestDto;
+import teamdevhub.devhub.api.auth.adapter.in.model.response.TokenResponseDto;
+import teamdevhub.devhub.shared.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.auth.application.service.vo.AuthResult;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
@@ -52,7 +53,7 @@ class AuthControllerTest {
         when(authFacade.login(any())).thenReturn(authResult);
 
         // when
-        ResponseEntity<DataApiResponse<TokenResponseDto>> response = authController.login(loginRequestDto);
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = authController.login(loginRequestDto);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -74,7 +75,7 @@ class AuthControllerTest {
         when(authFacade.reissueAccessToken(refreshToken)).thenReturn(authResult);
 
         // when
-        ResponseEntity<DataApiResponse<TokenResponseDto>> response = authController.refresh(refreshToken);
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = authController.refresh(refreshToken);
 
         // then
         assertThat(response.getBody()).isNotNull();
@@ -97,7 +98,7 @@ class AuthControllerTest {
         doNothing().when(authFacade).logout(TEST_USER_GUID_1);
 
         // when
-        ResponseEntity<DataApiResponse<Void>> response = authController.logout(authenticatedUser);
+        ResponseEntity<DataApiResponseDto<Void>> response = authController.logout(authenticatedUser);
 
         // then
         assertThat(response.getBody()).isNotNull();

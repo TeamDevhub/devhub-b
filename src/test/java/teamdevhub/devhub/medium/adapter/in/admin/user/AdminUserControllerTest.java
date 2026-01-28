@@ -4,13 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
 import org.springframework.http.ResponseEntity;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.request.SearchUserRequestDto;
-import teamdevhub.devhub.infrastructure.user.adapter.in.controller.AdminUserController;
+import teamdevhub.devhub.api.user.adapter.in.controller.AdminUserController;
+import teamdevhub.devhub.api.user.adapter.in.model.request.SearchUserRequestDto;
+import teamdevhub.devhub.api.user.adapter.in.model.response.UserBasicResponseDto;
 import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.shared.web.model.response.PageResponse;
-import teamdevhub.devhub.infrastructure.user.adapter.in.dto.response.UserBasicResponseDto;
-import teamdevhub.devhub.shared.web.model.response.DataListApiResponse;
+import teamdevhub.devhub.shared.web.model.response.DataListApiResponseDto;
+import teamdevhub.devhub.shared.web.model.response.PageResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
@@ -90,10 +91,10 @@ public class AdminUserControllerTest {
                 .build();
 
         // when
-        ResponseEntity<DataListApiResponse<UserBasicResponseDto>> response = adminUserController.list(requestDto, 0, 10);
+        ResponseEntity<DataListApiResponseDto<UserBasicResponseDto>> response = adminUserController.list(requestDto, 0, 10);
 
         // then
-        DataListApiResponse<UserBasicResponseDto> body = response.getBody();
+        DataListApiResponseDto<UserBasicResponseDto> body = response.getBody();
 
         assertThat(body).isNotNull();
         assertThat(body.isSuccess()).isTrue();
@@ -103,11 +104,11 @@ public class AdminUserControllerTest {
         assertThat(body.getDataList().get(0).getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(body.getDataList().get(1).getEmail()).isEqualTo(TEST_EMAIL_2);
 
-        PageResponse pageResponse = body.getPagination();
-        assertThat(pageResponse.getPage()).isEqualTo(0);
-        assertThat(pageResponse.getSize()).isEqualTo(10);
-        assertThat(pageResponse.getTotalElements()).isEqualTo(2);
-        assertThat(pageResponse.getTotalPages()).isEqualTo(1);
+        PageResponseDto pageResponseDto = body.getPagination();
+        assertThat(pageResponseDto.getPage()).isEqualTo(0);
+        assertThat(pageResponseDto.getSize()).isEqualTo(10);
+        assertThat(pageResponseDto.getTotalElements()).isEqualTo(2);
+        assertThat(pageResponseDto.getTotalPages()).isEqualTo(1);
 
         Mockito.verify(adminUserUseCase).listUser(any(SearchUserCommand.class), any(PageCommand.class));
     }
