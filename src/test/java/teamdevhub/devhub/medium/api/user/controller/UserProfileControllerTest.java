@@ -10,6 +10,7 @@ import teamdevhub.devhub.api.user.controller.UserProfileController;
 import teamdevhub.devhub.api.user.model.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.api.user.model.response.UserDetailResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
+import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.User;
@@ -25,15 +26,15 @@ class UserProfileControllerTest {
 
     private UserProfileController userProfileController;
 
-    private UserProfileUseCase userProfileUseCase;
+    private UserProfileFacade userProfileFacade;
     private UserWithdrawFacade userWithdrawFacade;
 
     @BeforeEach
     void init() {
-        userProfileUseCase = Mockito.mock(UserProfileUseCase.class);
+        userProfileFacade = Mockito.mock(UserProfileFacade.class);
         userWithdrawFacade = Mockito.mock(UserWithdrawFacade.class);
 
-        userProfileController = new UserProfileController(userProfileUseCase, userWithdrawFacade);
+        userProfileController = new UserProfileController(userProfileFacade, userWithdrawFacade);
     }
 
     @Test
@@ -48,7 +49,7 @@ class UserProfileControllerTest {
                 .userRole(UserRole.USER)
                 .build();
 
-        when(userProfileUseCase.getCurrentUserProfile(authenticatedUser.userGuid())).thenReturn(user);
+        when(userProfileFacade.getCurrentUserProfile(authenticatedUser.userGuid())).thenReturn(user);
 
         // when
         ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> response = userProfileController.getProfile(authenticatedUser);
@@ -59,7 +60,7 @@ class UserProfileControllerTest {
         assertThat(response.getBody().getData().getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(response.getBody().getData().getUsername()).isEqualTo(TEST_USERNAME_1);
 
-        verify(userProfileUseCase).getCurrentUserProfile(authenticatedUser.userGuid());
+        verify(userProfileFacade).getCurrentUserProfile(authenticatedUser.userGuid());
     }
 
     @Test
@@ -74,7 +75,7 @@ class UserProfileControllerTest {
                 .skillList(NEW_SKILL_LIST)
                 .build();
 
-        doNothing().when(userProfileUseCase).updateProfile(any());
+        doNothing().when(userProfileFacade).updateProfile(any());
 
         // when
         ResponseEntity<DataApiResponseDto<Void>> response = userProfileController.updateProfile(updateProfileRequestDto, authenticatedUser);
