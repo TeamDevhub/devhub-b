@@ -1,6 +1,8 @@
 package teamdevhub.devhub.shared.exception;
 
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

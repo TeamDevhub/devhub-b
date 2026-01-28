@@ -2,7 +2,7 @@ package teamdevhub.devhub.outbound.auth.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import teamdevhub.devhub.outbound.auth.adapter.entity.VerificationEntity;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
 
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.application.provider;
 
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.auth.port.out.AuthenticatedUserResolver;
 

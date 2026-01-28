@@ -1,6 +1,6 @@
 package teamdevhub.devhub.core.auth.port.out.verification;
 
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerification;
 
 public interface VerificationIssuer {

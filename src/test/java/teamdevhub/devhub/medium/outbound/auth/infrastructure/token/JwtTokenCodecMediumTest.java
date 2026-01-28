@@ -5,9 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.JwtTokenCodec;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.shared.exception.AuthRuleException;
-import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
-import teamdevhub.devhub.core.auth.domain.vo.token.TempTokenInfo;
+import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
+import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.AccessTokenInfo;
+import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTimeProvider;
 
 import java.lang.reflect.Field;

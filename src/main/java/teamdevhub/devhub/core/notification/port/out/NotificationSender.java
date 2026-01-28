@@ -1,7 +1,7 @@
 package teamdevhub.devhub.core.notification.port.out;
 
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 
 public interface NotificationSender {
 

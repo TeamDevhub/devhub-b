@@ -1,8 +1,8 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.auth;
 
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.User;
-import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
+import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticatedUserUseCase;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;

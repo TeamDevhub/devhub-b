@@ -7,7 +7,7 @@ import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthAuthenticationUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthResolveUseCase;

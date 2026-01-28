@@ -9,14 +9,14 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.AccessTokenInfo;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.framework.FakeCustomFilterExceptionHandler;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTokenParseProvider;
 import teamdevhub.devhub.outbound.security.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.shared.exception.AuthRuleException;
+import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;

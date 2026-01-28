@@ -2,7 +2,7 @@ package teamdevhub.devhub.core.auth.application.selector.oauth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.shared.exception.BusinessRuleException;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;

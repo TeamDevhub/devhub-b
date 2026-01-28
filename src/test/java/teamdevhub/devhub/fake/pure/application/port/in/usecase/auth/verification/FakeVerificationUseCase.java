@@ -1,11 +1,11 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.verification;
 
 import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerification;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
 import teamdevhub.devhub.core.common.provider.TimeProvider;
 import teamdevhub.devhub.core.auth.domain.Verification;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTimeProvider;
 import teamdevhub.devhub.core.auth.port.in.usecase.verification.VerificationUseCase;
 import teamdevhub.devhub.core.auth.port.in.command.verification.ConfirmVerificationCommand;

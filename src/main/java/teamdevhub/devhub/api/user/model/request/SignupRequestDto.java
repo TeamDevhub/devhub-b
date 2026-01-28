@@ -7,10 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.shared.enums.RegexPattern;
+import teamdevhub.devhub.api.web.validator.RegexPattern;
 import teamdevhub.devhub.api.web.validator.RegexMatch;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
 import java.util.List;

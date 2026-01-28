@@ -1,7 +1,7 @@
 package teamdevhub.devhub.core.auth.application.service.oauth;
 
 import lombok.Builder;
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 
 @Builder
 public record OauthUserResult(boolean loginAvailable, AuthenticatedUser authenticatedUser) {

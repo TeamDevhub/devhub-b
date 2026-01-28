@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.shared.enums.RegexPattern;
+import teamdevhub.devhub.api.web.validator.RegexPattern;
 import teamdevhub.devhub.api.web.validator.RegexMatch;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 

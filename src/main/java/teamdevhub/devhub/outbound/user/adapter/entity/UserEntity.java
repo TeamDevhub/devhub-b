@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.shared.persistence.jpa.converter.BooleanToYNConverter;
-import teamdevhub.devhub.shared.persistence.jpa.audit.BaseEntity;
+import teamdevhub.devhub.outbound.common.persistence.jpa.converter.BooleanToYNConverter;
+import teamdevhub.devhub.outbound.common.persistence.jpa.audit.BaseEntity;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 

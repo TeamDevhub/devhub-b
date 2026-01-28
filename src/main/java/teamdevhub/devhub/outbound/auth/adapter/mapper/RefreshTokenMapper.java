@@ -1,7 +1,7 @@
 package teamdevhub.devhub.outbound.auth.adapter.mapper;
 
 import teamdevhub.devhub.outbound.auth.adapter.entity.RefreshTokenEntity;
-import teamdevhub.devhub.core.auth.domain.RefreshToken;
+import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
 
 public class RefreshTokenMapper {
 

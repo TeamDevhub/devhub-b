@@ -2,12 +2,12 @@ package teamdevhub.devhub.outbound.auth.adapter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.shared.exception.AdapterDataException;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.auth.adapter.mapper.VerificationMapper;
 import teamdevhub.devhub.outbound.auth.persistence.JpaVerificationRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.domain.Verification;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 import teamdevhub.devhub.core.auth.port.out.verification.VerificationRepository;
 
 @Component

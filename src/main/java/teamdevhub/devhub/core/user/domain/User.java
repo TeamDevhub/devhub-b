@@ -5,14 +5,14 @@ import lombok.Getter;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
-import teamdevhub.devhub.shared.exception.DomainRuleException;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
-import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
-import teamdevhub.devhub.core.user.domain.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
+import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

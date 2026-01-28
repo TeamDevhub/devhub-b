@@ -8,7 +8,7 @@ import teamdevhub.devhub.outbound.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.port.out.UserSkillRepository;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
-import teamdevhub.devhub.shared.util.RelationChangeUtil;
+import teamdevhub.devhub.outbound.common.util.RelationChangeUtil;
 
 import java.util.List;
 import java.util.Set;

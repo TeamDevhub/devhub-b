@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.user.domain.User;
-import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
+import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.user.application.admin.AdminUserService;

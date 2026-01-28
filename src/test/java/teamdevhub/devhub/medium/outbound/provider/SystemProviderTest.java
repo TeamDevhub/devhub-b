@@ -2,9 +2,9 @@ package teamdevhub.devhub.medium.outbound.provider;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.outbound.provider.SystemTimeProvider;
-import teamdevhub.devhub.outbound.provider.SystemIdentifierProvider;
-import teamdevhub.devhub.outbound.provider.SystemVerificationCodeProvider;
+import teamdevhub.devhub.outbound.common.provider.SystemTimeProvider;
+import teamdevhub.devhub.outbound.common.provider.SystemIdentifierProvider;
+import teamdevhub.devhub.outbound.auth.infrastructure.verification.SystemVerificationCodeProvider;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

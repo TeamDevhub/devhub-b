@@ -1,7 +1,7 @@
 package teamdevhub.devhub.core.auth.port.in.usecase.oauth;
 
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
 
 public interface OauthAuthenticationUseCase {
 

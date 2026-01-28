@@ -5,11 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import teamdevhub.devhub.core.notification.application.selector.CompositeMessageSenderSelector;
-import teamdevhub.devhub.shared.exception.ExternalServiceException;
+import teamdevhub.devhub.outbound.common.exception.ExternalServiceException;
 import teamdevhub.devhub.core.notification.port.out.NotificationSender;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
 
 import java.util.List;
 

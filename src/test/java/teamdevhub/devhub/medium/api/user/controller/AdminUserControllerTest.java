@@ -14,7 +14,7 @@ import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.domain.User;
-import teamdevhub.devhub.core.user.domain.vo.user.CreateUserCommand;
+import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.AdminUserUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;

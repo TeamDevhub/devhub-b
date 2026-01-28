@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.core.auth.domain.vo.user.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 

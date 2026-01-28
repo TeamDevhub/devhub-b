@@ -11,7 +11,7 @@ import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 
 @RestController

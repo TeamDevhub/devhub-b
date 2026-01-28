@@ -3,10 +3,10 @@ package teamdevhub.devhub.outbound.auth.adapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.outbound.auth.adapter.mapper.RefreshTokenMapper;
-import teamdevhub.devhub.shared.exception.AdapterDataException;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.auth.persistence.JpaRefreshTokenRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.core.auth.domain.RefreshToken;
+import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
 import teamdevhub.devhub.core.auth.port.out.token.RefreshTokenRepository;
 
 @Component

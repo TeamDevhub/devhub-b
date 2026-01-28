@@ -11,7 +11,7 @@ import teamdevhub.devhub.api.user.model.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.api.user.model.response.UserDetailResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;

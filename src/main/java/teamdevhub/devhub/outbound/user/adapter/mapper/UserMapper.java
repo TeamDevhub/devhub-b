@@ -3,7 +3,7 @@ package teamdevhub.devhub.outbound.user.adapter.mapper;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 
 public class UserMapper {
 

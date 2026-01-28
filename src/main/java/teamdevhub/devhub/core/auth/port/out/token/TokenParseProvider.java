@@ -1,7 +1,7 @@
 package teamdevhub.devhub.core.auth.port.out.token;
 
-import teamdevhub.devhub.core.auth.domain.vo.token.AccessTokenInfo;
-import teamdevhub.devhub.core.auth.domain.vo.token.TempTokenInfo;
+import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.AccessTokenInfo;
+import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo;
 
 public interface TokenParseProvider {
 

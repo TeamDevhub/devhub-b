@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.core.auth.port.command;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 import teamdevhub.devhub.core.auth.port.in.command.verification.IssueVerificationCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;

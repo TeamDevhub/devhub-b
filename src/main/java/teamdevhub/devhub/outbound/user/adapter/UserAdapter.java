@@ -10,7 +10,7 @@ import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.outbound.user.persistence.UserQueryRepository;
 import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.shared.exception.AdapterDataException;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.user.adapter.mapper.UserMapper;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
@@ -18,7 +18,7 @@ import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 
 import java.time.LocalDateTime;
 import java.util.List;

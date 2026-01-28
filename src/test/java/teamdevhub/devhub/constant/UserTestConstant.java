@@ -2,8 +2,8 @@ package teamdevhub.devhub.constant;
 
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
 
 import java.time.LocalDateTime;
 import java.util.List;

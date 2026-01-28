@@ -1,7 +1,7 @@
 package teamdevhub.devhub.core.user.port.in.command;
 
 import lombok.Builder;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 
 import java.util.List;
 

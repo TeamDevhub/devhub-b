@@ -2,7 +2,7 @@ package teamdevhub.devhub.outbound.auth.adapter.mapper;
 
 import teamdevhub.devhub.outbound.auth.adapter.entity.VerificationEntity;
 import teamdevhub.devhub.core.auth.domain.Verification;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 
 public class VerificationMapper {
 

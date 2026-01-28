@@ -8,7 +8,7 @@ import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
-import teamdevhub.devhub.core.user.domain.vo.user.UpdateUserCommand;
+import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 import teamdevhub.devhub.core.user.port.out.UserPositionRepository;

@@ -11,7 +11,7 @@ import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.user.model.request.SignupOauthRequestDto;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
-import teamdevhub.devhub.shared.enums.SignupStatus;
+import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.auth.port.in.facade.OauthAuthFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;

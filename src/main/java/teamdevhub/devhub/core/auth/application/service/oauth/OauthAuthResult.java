@@ -2,8 +2,7 @@ package teamdevhub.devhub.core.auth.application.service.oauth;
 
 import lombok.Builder;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
-import teamdevhub.devhub.shared.enums.SignupStatus;
-import teamdevhub.devhub.shared.enums.TokenPrefix;
+import teamdevhub.devhub.outbound.auth.infrastructure.token.TokenPrefix;
 
 import java.util.Optional;
 

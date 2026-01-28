@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import teamdevhub.devhub.core.auth.application.issuer.EmailVerificationIssuer;
 import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerification;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTimeProvider;
 import teamdevhub.devhub.fake.pure.application.provider.FakeVerificationCodeProvider;
 

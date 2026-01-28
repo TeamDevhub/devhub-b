@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.selector.verification.VerificationIssuerSelector;
 import teamdevhub.devhub.core.auth.application.service.verification.VerificationService;
 import teamdevhub.devhub.core.auth.domain.Verification;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
 import teamdevhub.devhub.core.auth.port.in.command.verification.ConfirmVerificationCommand;
 import teamdevhub.devhub.core.auth.port.in.command.verification.IssueVerificationCommand;
 import teamdevhub.devhub.core.auth.port.out.verification.VerificationIssuer;
@@ -16,8 +16,8 @@ import teamdevhub.devhub.fake.pure.application.issuer.FakeEmailVerificationIssue
 import teamdevhub.devhub.fake.pure.application.provider.FakeTimeProvider;
 import teamdevhub.devhub.fake.pure.application.port.out.auth.verification.FakeVerificationRepository;
 import teamdevhub.devhub.fake.pure.application.selector.FakeVerificationIssuerSelector;
-import teamdevhub.devhub.shared.exception.BusinessRuleException;
-import teamdevhub.devhub.shared.exception.DomainRuleException;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
 
 import java.time.LocalDateTime;
 import java.util.List;

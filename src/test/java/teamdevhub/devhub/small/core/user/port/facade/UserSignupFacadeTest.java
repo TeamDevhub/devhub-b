@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
-import teamdevhub.devhub.shared.enums.SignupStatus;
+import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOauthResolveUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeUserSignupUseCase;

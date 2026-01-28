@@ -7,12 +7,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import teamdevhub.devhub.shared.exception.ExternalServiceException;
-import teamdevhub.devhub.shared.enums.EmailTemplateType;
+import teamdevhub.devhub.outbound.common.exception.ExternalServiceException;
 import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
-import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
 import teamdevhub.devhub.core.notification.port.out.NotificationSender;
 
 import java.util.HashMap;

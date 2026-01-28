@@ -1,6 +1,5 @@
 package teamdevhub.devhub.api.web.validator;
 
-import teamdevhub.devhub.shared.enums.RegexPattern;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
