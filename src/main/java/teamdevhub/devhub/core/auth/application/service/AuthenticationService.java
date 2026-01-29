@@ -19,11 +19,7 @@ public class AuthenticationService implements AuthenticationUseCase {
 
     @Override
     public AuthResult login(AuthenticatedUser authenticatedUser) {
-        String accessToken = tokenIssueProvider.createAccessToken(
-                authenticatedUser.userGuid(),
-                authenticatedUser.email(),
-                authenticatedUser.userRole()
-        );
+        String accessToken = tokenIssueProvider.createAccessToken(authenticatedUser);
         String refreshToken = tokenIssueProvider.createRefreshToken(authenticatedUser.userGuid());
         issueRefreshToken(authenticatedUser.userGuid(), refreshToken);
         return AuthResult.of(accessToken, refreshToken);
@@ -31,11 +27,7 @@ public class AuthenticationService implements AuthenticationUseCase {
 
     @Override
     public AuthResult reissueAccessToken(AuthenticatedUser authenticatedUser) {
-        String newAccessToken = tokenIssueProvider.createAccessToken(
-                authenticatedUser.userGuid(),
-                authenticatedUser.email(),
-                authenticatedUser.userRole()
-        );
+        String newAccessToken = tokenIssueProvider.createAccessToken(authenticatedUser);
         return AuthResult.ofReissue(newAccessToken);
     }
 
