@@ -49,8 +49,11 @@ public class ProjectEntity extends BaseEntity {
     @Column(name = "progress_type_cd", length = 10, nullable = false)
     private String progressTypeCd;
     
-    @Column(name = "nickname", nullable = false)
-    private String nickname;
+    @Column(name = "progress_region_cd", length = 10)
+    private String progressRegionCd;
+    
+    @Column(name = "username", nullable = false)
+    private String username;
     
     @Column(name = "category", nullable = false)
     private String category;
