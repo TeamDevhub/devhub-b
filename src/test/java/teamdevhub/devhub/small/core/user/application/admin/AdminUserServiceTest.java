@@ -33,7 +33,6 @@ class AdminUserServiceTest {
     void canFetchUserList() {
         // given
         SignupUserCommand signupUserCommand1 = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -46,7 +45,6 @@ class AdminUserServiceTest {
         User testUser1 = User.createGeneralUser(generalCreateUserCommand1);
 
         SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_2)
                 .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)

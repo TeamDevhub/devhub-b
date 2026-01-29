@@ -76,7 +76,6 @@ class UserAdapterMediumTest {
     void getAuthenticatedUserByLoginId() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -103,7 +102,6 @@ class UserAdapterMediumTest {
     void findAuthenticatedUserByUserGuid() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -142,7 +140,6 @@ class UserAdapterMediumTest {
     void findOptionalByEmail_exists() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -218,7 +215,6 @@ class UserAdapterMediumTest {
     void saveUser() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -244,7 +240,6 @@ class UserAdapterMediumTest {
     void getUserByIdentifier() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -271,7 +266,6 @@ class UserAdapterMediumTest {
     void updateUserProfile() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -304,7 +298,6 @@ class UserAdapterMediumTest {
     void isDeletedUser() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -361,7 +354,6 @@ class UserAdapterMediumTest {
     void getUserListAsAdminSummary() {
         // given
         SignupUserCommand signupUserCommand1 = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -374,7 +366,6 @@ class UserAdapterMediumTest {
         User testUser1 = User.createGeneralUser(generalCreateUserCommand1);
 
         SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_2)
                 .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
