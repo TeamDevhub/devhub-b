@@ -41,7 +41,6 @@ class UserMapperTest {
     void convertDomainToEntity() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)

@@ -3,6 +3,8 @@ package teamdevhub.devhub.medium.outbound.auth.infrastructure.token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.JwtTokenCodec;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
@@ -16,10 +18,9 @@ import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 import static teamdevhub.devhub.shared.enums.ErrorCode.TOKEN_EXPIRED;
 import static teamdevhub.devhub.shared.enums.ErrorCode.TOKEN_INVALID;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 import static teamdevhub.devhub.core.user.domain.vo.UserRole.USER;
 
 class JwtTokenCodecMediumTest {
@@ -45,18 +46,14 @@ class JwtTokenCodecMediumTest {
     @DisplayName("accessToken_생성_후_토큰_정보를_정상적으로_추출한다")
     void createAccessTokenAndExtractInfo() {
         // given
-        String userGuid = TEST_USER_GUID_1;
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_USERNAME_1, TEST_PASSWORD_1, UserRole.USER);
 
         // when
-        String accessToken = jwtTokenCodec.createAccessToken(
-                userGuid,
-                TEST_EMAIL_1,
-                USER
-        );
+        String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
         AccessTokenInfo accessTokenInfo = jwtTokenCodec.getAccessTokenInfo(accessToken);
 
         // then
-        assertThat(accessTokenInfo.userGuid()).isEqualTo(userGuid);
+        assertThat(accessTokenInfo.userGuid()).isEqualTo(authenticatedUser.userGuid());
         assertThat(accessTokenInfo.email()).isEqualTo(TEST_EMAIL_1);
         assertThat(accessTokenInfo.userRole()).isEqualTo(USER);
     }
@@ -92,11 +89,8 @@ class JwtTokenCodecMediumTest {
     @DisplayName("accessToken_을_refreshToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다")
     void extractRefreshTokenInfoWithAccessTokenThrows() {
         // given
-        String accessToken = jwtTokenCodec.createAccessToken(
-                TEST_USER_GUID_1,
-                TEST_EMAIL_1,
-                USER
-        );
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_USERNAME_1, TEST_PASSWORD_1, UserRole.USER);
+        String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
 
         // when, then
         assertThatThrownBy(() ->
@@ -129,11 +123,9 @@ class JwtTokenCodecMediumTest {
     @DisplayName("accessToken_을_tempToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다")
     void extractTempTokenInfoWithAccessTokenThrows() {
         // given
-        String accessToken = jwtTokenCodec.createAccessToken(
-                TEST_USER_GUID_1,
-                TEST_EMAIL_1,
-                USER
-        );
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_USERNAME_1, TEST_PASSWORD_1, UserRole.USER);
+        String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
+
 
         // when, then
         assertThatThrownBy(() ->
@@ -190,15 +182,12 @@ class JwtTokenCodecMediumTest {
 
         jwtTokenCodec.init();
 
-        String token = jwtTokenCodec.createAccessToken(
-                TEST_USER_GUID_1,
-                TEST_EMAIL_1,
-                USER
-        );
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_USERNAME_1, TEST_PASSWORD_1, UserRole.USER);
+        String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
 
         // when, then
         assertThatThrownBy(() ->
-                jwtTokenCodec.getAccessTokenInfo(token))
+                jwtTokenCodec.getAccessTokenInfo(accessToken))
                 .isInstanceOf(AuthRuleException.class)
                 .hasMessageContaining(TOKEN_EXPIRED.getMessage());
     }

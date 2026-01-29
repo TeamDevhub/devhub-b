@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.JwtClaims;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.AccessTokenInfo;
@@ -42,14 +43,15 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
     }
 
     @Override
-    public String createAccessToken(String userGuid, String email, UserRole userRole) {
+    public String createAccessToken(AuthenticatedUser authenticatedUser) {
         LocalDateTime now = timeProvider.now();
         LocalDateTime expireAt = now.plusMinutes(30);
         return Jwts.builder()
-                .setSubject(userGuid)
+                .setSubject(authenticatedUser.userGuid())
                 .claim(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
-                .claim(JwtClaims.EMAIL, email)
-                .claim(JwtClaims.USER_ROLE, userRole.name())
+                .claim(JwtClaims.EMAIL, authenticatedUser.email())
+                .claim(JwtClaims.USERNAME, authenticatedUser.username())
+                .claim(JwtClaims.USER_ROLE, authenticatedUser.userRole().name())
                 .setIssuedAt(toDate(now))
                 .setExpiration(toDate(expireAt))
                 .signWith(key, signatureAlgorithm)
@@ -104,6 +106,7 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         return new AccessTokenInfo(
                 claims.getSubject(),
                 claims.get(JwtClaims.EMAIL, String.class),
+                claims.get(JwtClaims.USERNAME, String.class),
                 UserRole.valueOf(claims.get(JwtClaims.USER_ROLE, String.class))
         );
     }

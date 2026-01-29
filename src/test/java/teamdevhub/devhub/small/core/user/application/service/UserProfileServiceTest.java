@@ -47,7 +47,6 @@ class UserProfileServiceTest {
     void fetchAllUserInformation() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -82,7 +81,6 @@ class UserProfileServiceTest {
     void nullOrEmptyUsernameAndIntroductionKeepsExistingValues() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -109,7 +107,6 @@ class UserProfileServiceTest {
     void updateUsernameAndIntroductionCorrectly() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -136,7 +133,6 @@ class UserProfileServiceTest {
     void nullOrEmptyUserPositionsKeepsExistingValues() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -168,7 +164,6 @@ class UserProfileServiceTest {
     void nullPositionCodeWithUserPositionsKeepsExistingValues() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -198,7 +193,6 @@ class UserProfileServiceTest {
     void emptyPositionCodeWithUserPositionsKeepsExistingValues() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -228,7 +222,6 @@ class UserProfileServiceTest {
     void sameUserPositionsKeepsExistingValues() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -257,7 +250,6 @@ class UserProfileServiceTest {
     void updateNewUserPositionCorrectly() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -286,7 +278,6 @@ class UserProfileServiceTest {
     void updateUserPositionWithExistAndNewCorrectly() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -322,7 +313,6 @@ class UserProfileServiceTest {
     void nullOrEmptyUserSkillsKeepsExistingValues() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -351,7 +341,6 @@ class UserProfileServiceTest {
     void nullSkillCodeWithUserSkillsKeepsExistingValues() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -381,7 +370,6 @@ class UserProfileServiceTest {
     void emptySkillCodeWithUserSkillsKeepsExistingValues() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -411,7 +399,6 @@ class UserProfileServiceTest {
     void sameUserSkillsKeepsExistingValues() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -440,7 +427,6 @@ class UserProfileServiceTest {
     void updateNewUserSkillCorrectly() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -469,7 +455,6 @@ class UserProfileServiceTest {
     void updateUserSkillWithExistAndNewCorrectly() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -507,7 +492,6 @@ class UserProfileServiceTest {
     void haveUserRoleForGeneralUser() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
