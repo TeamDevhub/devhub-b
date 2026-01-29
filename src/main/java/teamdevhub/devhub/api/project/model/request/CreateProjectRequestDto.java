@@ -55,8 +55,9 @@ public class CreateProjectRequestDto {
     @Size(min = 1, message = "모집인원은 최소 1개 이상 선택해야 합니다")
     private List<CreateProjectRequirementRequestDto> positionList;
     
-    public CreateProjectCommand toCommand() {
+    public CreateProjectCommand toCommand(String userGuid) {
     	return CreateProjectCommand.builder()
+    			.userGuid(userGuid)
     			.title(this.title)
     			.category(this.category)
     			.content(this.content)
