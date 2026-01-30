@@ -14,7 +14,6 @@ public class ProjectDetail {
 	private List<String> projectSkill;
 	private List<Requirement> projectRequirement;
 	private String likeCount;
-   
 
 	@Builder
     @QueryProjection

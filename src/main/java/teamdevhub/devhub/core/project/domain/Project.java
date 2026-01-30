@@ -24,9 +24,6 @@ public class Project {
     private String progressPeriod;
     private LocalDateTime progressStartDate;
     private LocalDateTime progressEndDate;
-    private Long viewCount;
     private AuditInfo auditInfo;
-    
-   
     
 }

@@ -30,8 +30,6 @@ public class ProjectBasicResponseDto {
     private LocalDateTime progressStartDate;
     private LocalDateTime progressEndDate;
     
-    private Long viewCount;
-    
     private String registrantGuid;
     private LocalDateTime registeredDate;
     private String modifierGuid;
@@ -59,7 +57,6 @@ public class ProjectBasicResponseDto {
 	        .progressPeriod(project.getProgressPeriod())
 	        .progressStartDate(project.getProgressStartDate())
 	        .progressEndDate(project.getProgressEndDate())
-	        .viewCount(project.getViewCount())
 	        .registrantGuid(project.getAuditInfo().registrantGuid())
 	        .registeredDate(project.getAuditInfo().registeredDate())
 	        .modifierGuid(project.getAuditInfo().modifierGuid())

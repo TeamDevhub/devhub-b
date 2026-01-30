@@ -10,6 +10,7 @@ import static teamdevhub.devhub.outbound.project.adapter.entity.QProjectSkillEnt
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,12 +27,22 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.project.domain.ProjectDetail;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
+import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectMapper;
 
 @Repository
 @RequiredArgsConstructor
 public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
 
     private final JPAQueryFactory queryFactory;
+    
+    public record ProjectDetailFlatDto(
+	    ProjectEntity projectEntity,
+	    List<String> skillCds,
+	    List<ProjectRequirementEntity> requirementEntities,
+	    String likeCount
+	) {}
 
 	@Override
 	public Page<ProjectDetail> listProject(SearchProjectListCommand searchProjectListCommand, Pageable pageable) {
@@ -42,7 +53,7 @@ public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
 
 	    // 2. 배열들 합치기
 	    BooleanExpression[] allConditions = combine(projectCond, skillCond, positionCond);
-		
+	    		
 		JPAQuery<?> commonQuery = queryFactory
 				.from(projectEntity)
                 .leftJoin(projectSkillEntity).on(projectEntity.projectGuid.eq(projectSkillEntity.projectGuid))
@@ -54,7 +65,7 @@ public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
                 .limit(pageable.getPageSize())
                 .transform(
                 	groupBy(projectEntity.projectGuid).list(
-	        			Projections.constructor(ProjectDetail.class,
+	        			Projections.constructor(ProjectDetailFlatDto.class,
 	        					projectEntity,
 	        	                list(projectSkillEntity.skillCd),
 	        	                list(projectRequirementEntity),
@@ -64,11 +75,16 @@ public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
 		                            .where(projectLikeEntity.projectGuid.eq(projectEntity.projectGuid))
 	                    )
                     )
-                );
+                )
+                .stream()
+                .map(ProjectMapper::toProjectDetail)
+                .toList()
+                ;
 		
-        Long total = commonQuery
+        Long total = Optional.ofNullable(commonQuery
         		.select(projectEntity.projectGuid.countDistinct())
-        	    .fetchOne();
+        	    .fetchOne()
+	    ).orElse(0L);        
 		
 		return new PageImpl<>(content, pageable, total);
 	}
