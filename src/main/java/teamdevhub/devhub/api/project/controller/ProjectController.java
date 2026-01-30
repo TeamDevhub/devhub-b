@@ -25,7 +25,7 @@ public class ProjectController {
 	@PostMapping("/projects")
 	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestPart("request") CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser,
 			@RequestPart(value = "attachment", required = false) MultipartFile attachment, @RequestPart(value = "image", required = false) MultipartFile image) {
-		projectCreateFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid()), attachment, image);
+		projectCreateFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid(), authenticatedUser.username()), attachment, image);
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS

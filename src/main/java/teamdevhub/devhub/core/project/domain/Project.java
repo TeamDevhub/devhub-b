@@ -7,9 +7,9 @@ import java.util.Set;
 
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.core.project.domain.projectRequirement.ProjectRequirement;
-import teamdevhub.devhub.core.project.domain.skill.ProjectSkill;
-import teamdevhub.devhub.core.project.port.in.command.CreateProjectCommand;
+import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
+import teamdevhub.devhub.core.project.domain.vo.requirement.ProjectRequirement;
+import teamdevhub.devhub.core.project.domain.vo.skill.ProjectSkill;
 
 @Getter
 public class Project {
@@ -77,14 +77,16 @@ public class Project {
 		this.capacityClosed = capacityClosed;
 	}
 	
-	public static Project createProject(CreateProjectCommand createProjectCommand, String projectGuid, String username) {
+	public static Project createProject(CreateProjectCommand createProjectCommand, String projectGuid) {
 		return Project.builder()
 				.projectGuid(projectGuid)
+				.attachmentFileGuid(createProjectCommand.attachmentFileGuid())
+				.imageFileGuid(createProjectCommand.imageFileGuid())
 				.userGuid(createProjectCommand.userGuid())
 				.recruitmentTypeCd(createProjectCommand.recuritmentTypeCd())
 				.progressTypeCd(createProjectCommand.progressTypeCd())
 				.progressRegionCd(createProjectCommand.progressRegionCd())
-				.username(username)
+				.username(createProjectCommand.username())
 				.category(createProjectCommand.category())
 				.title(createProjectCommand.title())
 				.content(createProjectCommand.content())

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.api.project.model.request;
+package teamdevhub.devhub.core.project.domain.vo.command;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementCo
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateProjectRequirementRequestDto {
+public class CreateProjectRequirementRequestCommand {
 
 	@NotBlank(message = "모집포지션은 필수입니다")
 	private String position;

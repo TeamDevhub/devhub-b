@@ -37,14 +37,17 @@ public class ProjectEntity extends BaseEntity {
 	@Column(length = 32, nullable = false, unique = true)
     private String projectGuid;
 
-    @Column(name = "file_guid", length = 32)
-    private String fileGuid;
+    @Column(name = "attachment_file_guid", length = 32)
+    private String attachmentFileGuid;
+    
+    @Column(name = "image_file_guid", length = 32)
+    private String imageFileGuid;
 
     @Column( name = "user_guid", length = 32, nullable = false)
     private String userGuid;
     
     @Column(name = "recuritment_type_cd", length = 10, nullable = false)
-    private String recuritmentTypeCd;
+    private String recruitmentTypeCd;
     
     @Column(name = "progress_type_cd", length = 10, nullable = false)
     private String progressTypeCd;
@@ -77,10 +80,10 @@ public class ProjectEntity extends BaseEntity {
     private LocalDateTime progressEndDate;
     
     @Convert(converter = BooleanToYNConverter.class)
-    @Column(nullable = false)
+    @Column(name = "delete_yn", nullable = false)
     private boolean deleted;
     
     @Convert(converter = BooleanToYNConverter.class)
-    @Column( nullable = false)
+    @Column(name = "capacity_closed_yn", nullable = false)
     private boolean capacityClosed;
 }

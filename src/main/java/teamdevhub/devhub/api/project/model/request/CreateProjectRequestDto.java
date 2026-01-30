@@ -10,7 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.core.project.port.in.command.CreateProjectCommand;
+import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementRequestCommand;
+import teamdevhub.devhub.core.project.port.in.command.CreateProjectWithoutFilesGuidCommand;
 
 @Getter
 @Builder
@@ -53,11 +54,12 @@ public class CreateProjectRequestDto {
     
     @NotNull(message = "모집인원은 필수입니다")
     @Size(min = 1, message = "모집인원은 최소 1개 이상 선택해야 합니다")
-    private List<CreateProjectRequirementRequestDto> positionList;
+    private List<CreateProjectRequirementRequestCommand> positionList;
     
-    public CreateProjectCommand toCommand(String userGuid) {
-    	return CreateProjectCommand.builder()
+    public CreateProjectWithoutFilesGuidCommand toCommand(String userGuid, String userName) {
+    	return CreateProjectWithoutFilesGuidCommand.builder()
     			.userGuid(userGuid)
+    			.username(userName)
     			.title(this.title)
     			.category(this.category)
     			.content(this.content)
