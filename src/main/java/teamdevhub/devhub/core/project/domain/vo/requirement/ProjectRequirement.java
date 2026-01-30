@@ -1,4 +1,4 @@
-package teamdevhub.devhub.core.project.domain.projectRequirement;
+package teamdevhub.devhub.core.project.domain.vo.requirement;
 
 import lombok.Builder;
 
