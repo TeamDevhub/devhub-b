@@ -2,9 +2,9 @@ package teamdevhub.devhub.api.project.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,9 @@ public class ProjectController {
 	private final ProjectCreateFacade projectCreateFacade;
 	
 	@PostMapping("/projects")
-	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestPart("request") CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-		projectCreateFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid()));
+	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestPart("request") CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser,
+			@RequestPart(value = "attachment", required = false) MultipartFile attachment, @RequestPart(value = "image", required = false) MultipartFile image) {
+		projectCreateFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid()), attachment, image);
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS

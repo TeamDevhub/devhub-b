@@ -3,6 +3,7 @@ package teamdevhub.devhub.core.project.application;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,9 @@ public class ProjectService implements ProjectUseCase {
 	private final UserRepository userRepository;
 	
 	@Override
-	public void createProject(CreateProjectCommand createProjectCommand) {
+	public void createProject(CreateProjectCommand createProjectCommand, MultipartFile attachment, MultipartFile image) {
+		String attachmentFileGuid = saveAttachmentFile(attachment);
+		String imageFileGuid = saveImageFile(image);
 		Project project = createGeneralProject(createProjectCommand);
 		saveProjectSkills(project.getProjectGuid(), createProjectCommand.skillList());
 	}
@@ -33,6 +36,16 @@ public class ProjectService implements ProjectUseCase {
 		
 	}
 
+	private String saveImageFile(MultipartFile image) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String saveAttachmentFile(MultipartFile attachment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	private void saveProjectSkills(String projectGuid, List<String> skillList) {
 	}
 }

@@ -15,7 +15,8 @@ import teamdevhub.devhub.core.project.port.in.command.CreateProjectCommand;
 public class Project {
 	
 	private final String projectGuid;
-	private String fileGuid;
+	private String attachmentFileGuid;
+	private String imageFileGuid;
 	private final String userGuid;
 	private String recruitmentTypeCd;
 	private String progressTypeCd;
@@ -36,7 +37,8 @@ public class Project {
 	@Builder
 	private Project(
 			String projectGuid,
-			String fileGuid,
+			String attachmentFileGuid,
+			String imageFileGuid,
 			String userGuid,
 			String recruitmentTypeCd,
 			String progressTypeCd,
@@ -55,7 +57,8 @@ public class Project {
 			boolean capacityClosed
 	) {
 		this.projectGuid = projectGuid;
-		this.fileGuid = fileGuid;
+		this.attachmentFileGuid = attachmentFileGuid;
+		this.imageFileGuid = imageFileGuid;
 		this.userGuid = userGuid;
 		this.recruitmentTypeCd =recruitmentTypeCd;
 		this.progressTypeCd = progressTypeCd;
