@@ -61,7 +61,6 @@ class UserTest {
     void createGeneralUser() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -137,7 +136,6 @@ class UserTest {
     void isDeletedUser() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -162,7 +160,6 @@ class UserTest {
     void throwIfAlreadyDeleted() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -187,7 +184,6 @@ class UserTest {
     void updateUserProfile() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -214,7 +210,6 @@ class UserTest {
     void keepUserProfileIfNotBlankOrChanged() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -240,7 +235,6 @@ class UserTest {
     void changedIsTrueWhenPositionsChange() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -272,7 +266,6 @@ class UserTest {
     void changedIsFalseWhenPositionsCodeIsNull() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -304,7 +297,6 @@ class UserTest {
     void changedIsFalseWhenPositionsCodeIsSameValue() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -336,7 +328,6 @@ class UserTest {
     void changedIsFalseWhenUserPositionsIsNullOrEmpty() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -362,7 +353,6 @@ class UserTest {
     void changedIsTrueWhenSkillsChange() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -396,7 +386,6 @@ class UserTest {
     void changedIsFalseWhenSkillsCodeIsNull() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -429,7 +418,6 @@ class UserTest {
     void changedIsFalseWhenSkillsCodeIsSameValue() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -462,7 +450,6 @@ class UserTest {
     void changedIsFalseWhenUserSkillsIsNullOrEmpty() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -488,7 +475,6 @@ class UserTest {
     void loadPositionsAndSkills_initializesPositionsAndSkills() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
