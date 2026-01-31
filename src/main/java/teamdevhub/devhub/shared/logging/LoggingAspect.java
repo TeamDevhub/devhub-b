@@ -24,7 +24,7 @@ public class LoggingAspect {
     private final ObjectMapper objectMapper;
     private static final String EMPTY_JSON = "[]";
     private static final String NULL_JSON = "null";
-    private static final int SAMPLE_LIMIT = 5;
+    private static final int SAMPLE_LIMIT = 4;
 
     @Around("execution(* teamdevhub.devhub.api..*(..)) || " +
             "execution(* teamdevhub.devhub.core..*(..)) || " +
