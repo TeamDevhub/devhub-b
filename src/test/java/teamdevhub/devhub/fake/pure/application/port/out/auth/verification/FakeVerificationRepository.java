@@ -6,6 +6,7 @@ import teamdevhub.devhub.core.auth.domain.Verification;
 import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 import teamdevhub.devhub.core.auth.port.out.verification.VerificationRepository;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,11 @@ public class FakeVerificationRepository implements VerificationRepository {
 
     private final Map<String, Verification> store = new HashMap<>();
     private long sequence = 1L;
+
+    @Override
+    public boolean existsUnverifiedAndNotExpired(VerificationTarget verificationTarget, LocalDateTime now) {
+        return false;
+    }
 
     @Override
     public void save(Verification verification) {

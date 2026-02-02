@@ -50,7 +50,7 @@ class VerificationAdapterMediumTest {
         // then
         assertThat(
                 jpaVerificationRepository
-                        .findByVerificationTypeAndTargetValue(
+                        .findTopByVerificationTypeAndTargetValueOrderByExpiredAtDesc(
                                 VerificationType.EMAIL,
                                 "test@email.com"
                         )
@@ -103,6 +103,6 @@ class VerificationAdapterMediumTest {
         verificationAdapter.deleteByVerificationTarget(verificationTarget);
 
         // then
-        assertThat(jpaVerificationRepository.findByVerificationTypeAndTargetValue(VerificationType.EMAIL, "delete@email.com")).isEmpty();
+        assertThat(jpaVerificationRepository.findTopByVerificationTypeAndTargetValueOrderByExpiredAtDesc(VerificationType.EMAIL, "delete@email.com")).isEmpty();
     }
 }
