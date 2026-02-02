@@ -6,25 +6,29 @@ import teamdevhub.devhub.core.common.audit.AuditInfo;
 
 
 @Getter
-public class Board {
+public class BoardSummary {
 	
 	private final String boardGuid;
 	private final String userGuid;
-	private String categoryCd;
-	private String title;
-	private String content;
-	private String viewCount;
+	private final String categoryCd;
+	private final String title;
+	private final String content;
+	private final String viewCount;
+	private final String likeCount;
+	private final String commentCount;
 	
 	private final AuditInfo auditInfo;
 	
 	@Builder
-	private Board(
+	private BoardSummary (
 			String boardGuid,
 			String userGuid,
 			String categoryCd,
 			String title,
 			String content,
 			String viewCount,
+			String likeCount,
+			String commentCount,
 			AuditInfo auditInfo
 	) {
 		this.boardGuid = boardGuid;
@@ -33,6 +37,8 @@ public class Board {
 		this.title = title;
 		this.content = content;
 		this.viewCount = viewCount;
+		this.likeCount = likeCount;
+		this.commentCount = commentCount;
 		
 		if (auditInfo == null) {
             this.auditInfo = AuditInfo.empty();
@@ -41,23 +47,4 @@ public class Board {
         }
 	}
 
-	public static Board of(
-			String boardGuid, 
-			String userGuid, 
-			String categoryCd, 
-			String title,
-			String content,
-			String viewCount, 
-			AuditInfo auditInfo
-	) {
-		return Board.builder()
-				.boardGuid(boardGuid)
-				.userGuid(userGuid)
-				.categoryCd(categoryCd)
-				.title(title)
-				.content(content)
-				.viewCount(viewCount)
-				.auditInfo(auditInfo)
-                .build();
-	}
 }
