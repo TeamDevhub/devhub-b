@@ -4,6 +4,7 @@ import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedU
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.auth.port.out.AuthenticatedUserResolver;
 
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USERNAME_1;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 public class FakeAuthenticatedUserResolver implements AuthenticatedUserResolver {
@@ -13,6 +14,7 @@ public class FakeAuthenticatedUserResolver implements AuthenticatedUserResolver 
         return new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 email,
+                TEST_USERNAME_1,
                 password,
                 UserRole.USER
         );

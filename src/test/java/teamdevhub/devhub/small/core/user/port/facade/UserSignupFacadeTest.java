@@ -45,7 +45,6 @@ public class UserSignupFacadeTest {
     void signupReturnsUser() {
         // given
         SignupUserCommand signupUserCommand = new SignupUserCommand(
-                null,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 TEST_USERNAME_1,

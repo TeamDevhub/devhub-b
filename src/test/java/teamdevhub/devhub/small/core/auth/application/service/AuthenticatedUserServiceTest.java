@@ -44,7 +44,6 @@ public class AuthenticatedUserServiceTest {
     void fetchUserForReissue() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -76,7 +75,6 @@ public class AuthenticatedUserServiceTest {
     void fetchUserForReissueWithInvalidTokenThrows() {
         // given
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .userGuid(null)
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)

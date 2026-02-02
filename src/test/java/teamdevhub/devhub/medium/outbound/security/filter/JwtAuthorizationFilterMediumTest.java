@@ -19,8 +19,7 @@ import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_EMAIL_1;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class JwtAuthorizationFilterMediumTest {
 
@@ -50,6 +49,7 @@ class JwtAuthorizationFilterMediumTest {
         return new AccessTokenInfo(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
+                TEST_USERNAME_1,
                 UserRole.USER
         );
     }

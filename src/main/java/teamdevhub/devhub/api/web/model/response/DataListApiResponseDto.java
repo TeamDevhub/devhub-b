@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class DataListApiResponseDto<T> {
 
-    @JsonProperty("isSuccess")
+    @JsonProperty("success")
     private boolean isSuccess;
     private String code;
     private List<T> dataList;

@@ -7,19 +7,19 @@ import org.springframework.web.bind.annotation.*;
 
 import teamdevhub.devhub.api.user.model.request.UpdateProfileRequestDto;
 import teamdevhub.devhub.api.user.model.response.UserDetailResponseDto;
+import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
-import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserProfileController {
 
-    private final UserProfileUseCase userProfileUseCase;
+    private final UserProfileFacade userProfileFacade;
     private final UserWithdrawFacade userWithdrawFacade;
 
     @GetMapping("/profile")
@@ -27,14 +27,14 @@ public class UserProfileController {
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(
                         SuccessCode.READ_SUCCESS,
-                        UserDetailResponseDto.fromDomain(userProfileUseCase.getCurrentUserProfile(authenticatedUser.userGuid()))
+                        UserDetailResponseDto.fromDomain(userProfileFacade.getCurrentUserProfile(authenticatedUser.userGuid()))
                 )
         );
     }
 
     @PutMapping("/profile")
     public ResponseEntity<DataApiResponseDto<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-        userProfileUseCase.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
+        userProfileFacade.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS
