@@ -1,4 +1,4 @@
-package teamdevhub.devhub.api.user.model.request;
+package teamdevhub.devhub.api.user.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
