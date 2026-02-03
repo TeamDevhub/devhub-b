@@ -15,6 +15,9 @@ public class Board {
 	private String content;
 	private String viewCount;
 	
+	private String likeCount;
+	private String commentCount;
+	
 	private final AuditInfo auditInfo;
 	
 	@Builder
@@ -25,6 +28,8 @@ public class Board {
 			String title,
 			String content,
 			String viewCount,
+			String likeCount,
+			String commentCount,
 			AuditInfo auditInfo
 	) {
 		this.boardGuid = boardGuid;
@@ -33,6 +38,8 @@ public class Board {
 		this.title = title;
 		this.content = content;
 		this.viewCount = viewCount;
+		this.likeCount = likeCount;
+		this.commentCount = commentCount;
 		
 		if (auditInfo == null) {
             this.auditInfo = AuditInfo.empty();
@@ -59,5 +66,10 @@ public class Board {
 				.viewCount(viewCount)
 				.auditInfo(auditInfo)
                 .build();
+	}
+	
+	public void summary(String likeCount, String commentCount) {
+		this.likeCount = likeCount;
+		this.commentCount = commentCount;
 	}
 }

@@ -14,7 +14,7 @@ import teamdevhub.devhub.api.board.model.response.BoardSummaryResponseDto;
 import teamdevhub.devhub.api.web.model.request.PageRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
-import teamdevhub.devhub.core.board.domain.BoardSummary;
+import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
@@ -31,7 +31,7 @@ public class BoardController {
 	public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> boardList(
 			@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, @ModelAttribute PageRequestDto pageRequestDto) {
 		
-		PageResult<BoardSummary> pagedBoardList = boardFacde.boardList(
+		PageResult<Board> pagedBoardList = boardFacde.boardList(
 				searchBoardRequestDto.toCommand(), PageCommand.of(pageRequestDto.getPage(), pageRequestDto.getSize()));
 		
 		List<BoardSummaryResponseDto> boardSummaryResponseDtoList = pagedBoardList.content().stream()

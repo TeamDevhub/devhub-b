@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import teamdevhub.devhub.core.board.domain.BoardSummary;
+import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
@@ -17,7 +17,7 @@ public class BoardFacade {
 
     private final BoardUseCase boardUseCase;
 
-	public PageResult<BoardSummary> boardList(SearchBoardCommand searchBoardCommand, PageCommand pageCommand) {
+	public PageResult<Board> boardList(SearchBoardCommand searchBoardCommand, PageCommand pageCommand) {
 		
 		return boardUseCase.boardList(searchBoardCommand, pageCommand);
 	}
