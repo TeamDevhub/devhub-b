@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import teamdevhub.devhub.api.user.model.request.UpdateProfileRequestDto;
-import teamdevhub.devhub.api.user.model.response.UserDetailResponseDto;
+import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
+import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
 import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
@@ -27,7 +27,7 @@ public class UserProfileController {
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(
                         SuccessCode.READ_SUCCESS,
-                        UserDetailResponseDto.fromDomain(userProfileFacade.getCurrentUserProfile(authenticatedUser.userGuid()))
+                        userProfileFacade.getCurrentUserProfile(authenticatedUser.userGuid())
                 )
         );
     }
