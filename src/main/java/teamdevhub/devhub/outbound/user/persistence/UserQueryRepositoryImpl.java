@@ -8,11 +8,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
-import teamdevhub.devhub.outbound.user.adapter.entity.QUserEntity;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static teamdevhub.devhub.outbound.user.adapter.entity.QUserEntity.userEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,8 +23,6 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
 
     @Override
     public Page<UserEntity> listUser(SearchUserCommand searchUserCommand, Pageable pageable) {
-        QUserEntity userEntity = QUserEntity.userEntity;
-
         List<UserEntity> content = queryFactory
                 .selectFrom(userEntity)
                 .where(
@@ -57,27 +56,27 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
         if (blocked == null) {
             return null;
         }
-        return QUserEntity.userEntity.blocked.eq(blocked);
+        return userEntity.blocked.eq(blocked);
     }
 
     private BooleanExpression joinedFromCondition(LocalDateTime joinedFrom) {
         if (joinedFrom == null) {
             return null;
         }
-        return QUserEntity.userEntity.registeredDate.goe(joinedFrom);
+        return userEntity.registeredDate.goe(joinedFrom);
     }
 
     private BooleanExpression joinedToCondition(LocalDateTime joinedTo) {
         if (joinedTo == null) {
             return null;
         }
-        return QUserEntity.userEntity.registeredDate.loe(joinedTo);
+        return userEntity.registeredDate.loe(joinedTo);
     }
 
     private BooleanExpression keywordCondition(String keyword) {
         if (keyword == null) {
             return null;
         }
-        return QUserEntity.userEntity.username.containsIgnoreCase(keyword);
+        return userEntity.username.containsIgnoreCase(keyword);
     }
 }
