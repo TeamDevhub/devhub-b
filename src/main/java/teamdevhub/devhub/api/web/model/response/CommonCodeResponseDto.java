@@ -1,0 +1,35 @@
+package teamdevhub.devhub.api.web.model.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import teamdevhub.devhub.core.admin.code.domain.CommonCode;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class CommonCodeResponseDto {
+
+	private String code;
+    private String parentCode;
+    private String name;
+    private boolean isUsed;
+    private List<CommonCodeResponseDto> children;
+
+    public static CommonCodeResponseDto fromDomain(CommonCode commonCode) {
+        return builder()
+                .code(commonCode.getCode())
+                .parentCode(commonCode.getParentCode())
+                .name(commonCode.getName())
+                .isUsed(commonCode.isUsed())
+                .children(Optional.ofNullable(commonCode.getChildren())
+                        .orElseGet(Collections::emptyList).stream().map(CommonCodeResponseDto::fromDomain).toList())
+                .build();
+    }
+}
