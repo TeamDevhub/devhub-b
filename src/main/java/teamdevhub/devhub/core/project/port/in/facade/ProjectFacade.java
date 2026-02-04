@@ -21,4 +21,10 @@ public class ProjectFacade {
 		return result;
 	}
 
+	public ProjectDetail getProjectDetail(String projectGuid) {
+		ProjectDetail result = projectUseCase.getProjectDetail(projectGuid);
+		
+		return result;
+	}
+
 }

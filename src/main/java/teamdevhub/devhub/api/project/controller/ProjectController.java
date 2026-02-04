@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.project.model.request.ProjectListSearchRequestDto;
 import teamdevhub.devhub.api.project.model.response.ProjectDetailResponseDto;
+import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.common.page.PageCommand;
@@ -44,5 +46,17 @@ public class ProjectController {
                 );
     }
 	
-	
+	  @GetMapping("/{projectGuid}")
+	    public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable String projectGuid) {
+	        ProjectDetail projectDetail = projectFacade.getProjectDetail(projectGuid);
+	        ProjectDetailResponseDto responseDto = ProjectDetailResponseDto.fromDomain(projectDetail);
+
+	        return ResponseEntity.ok(
+	                DataApiResponseDto.successWithData(
+	                        SuccessCode.READ_SUCCESS,
+	                        responseDto
+	                )
+	        );
+
+	  }
 }

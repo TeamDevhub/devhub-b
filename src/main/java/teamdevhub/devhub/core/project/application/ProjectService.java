@@ -22,4 +22,10 @@ public class ProjectService implements ProjectUseCase {
 	public PageResult<ProjectDetail> getProjectList(SearchProjectListCommand searchProjectListCommand, PageCommand pageCommand) {
 		return projectRepository.getProjectList(searchProjectListCommand, pageCommand);
 	}
+	
+	@Override
+	public ProjectDetail getProjectDetail(String projectGuid) {
+		return projectRepository.getProjectDetail(projectGuid);
+	}
+
 }

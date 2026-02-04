@@ -36,4 +36,12 @@ public class ProjectAdapter implements ProjectRepository {
         		pagedProjectEntityList.getSize(),
         		pagedProjectEntityList.getTotalElements());
 	}
+	
+	@Override
+	public ProjectDetail getProjectDetail(String projectGuid) {
+		ProjectDetail projectEntity = projectQueryRepository.findProjectDetailByGuid(projectGuid);
+		
+		return projectEntity;
+	}
+
 }

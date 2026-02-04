@@ -9,4 +9,6 @@ import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 public interface ProjectQueryRepository {
 
     Page<ProjectDetail> listProject(SearchProjectListCommand searchProjectListCommand, Pageable pageable);
+    ProjectDetail findProjectDetailByGuid(String projectGuid);
+
 }
