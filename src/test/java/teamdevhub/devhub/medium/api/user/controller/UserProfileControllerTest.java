@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.api.user.controller.UserProfileController;
-import teamdevhub.devhub.api.user.model.request.UpdateProfileRequestDto;
-import teamdevhub.devhub.api.user.model.response.UserDetailResponseDto;
+import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
+import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
@@ -47,7 +47,7 @@ class UserProfileControllerTest {
                 .userRole(UserRole.USER)
                 .build();
 
-        when(userProfileFacade.getCurrentUserProfile(authenticatedUser.userGuid())).thenReturn(user);
+        when(userProfileFacade.getCurrentUserProfile(authenticatedUser.userGuid())).thenReturn(UserDetailResponseDto.fromDomain(user));
 
         // when
         ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> response = userProfileController.getProfile(authenticatedUser);
@@ -55,8 +55,8 @@ class UserProfileControllerTest {
         // then
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
-        assertThat(response.getBody().getData().getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(response.getBody().getData().getUsername()).isEqualTo(TEST_USERNAME_1);
+        assertThat(response.getBody().getData().getUser().getEmail()).isEqualTo(TEST_EMAIL_1);
+        assertThat(response.getBody().getData().getUser().getUsername()).isEqualTo(TEST_USERNAME_1);
 
         verify(userProfileFacade).getCurrentUserProfile(authenticatedUser.userGuid());
     }

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.api.user.model.response;
+package teamdevhub.devhub.core.user.port.in.facade.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

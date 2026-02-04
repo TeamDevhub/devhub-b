@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.ProjectDetail;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementRequestCommand;
 import teamdevhub.devhub.core.project.domain.vo.requirement.ProjectRequirement;
 import teamdevhub.devhub.core.project.domain.vo.skill.ProjectSkill;
+import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectRequirementRepository;
@@ -57,4 +61,9 @@ public class ProjectService implements ProjectUseCase {
 		projectRequirementRepository.saveAll(positions);
 	}
 
+
+	@Override
+	public PageResult<ProjectDetail> getProjectList(SearchProjectListCommand searchProjectListCommand, PageCommand pageCommand) {
+		return projectRepository.getProjectList(searchProjectListCommand, pageCommand);
+	}
 }

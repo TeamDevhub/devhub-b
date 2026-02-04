@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
 import teamdevhub.devhub.api.user.controller.UserSignupController;
-import teamdevhub.devhub.api.user.model.request.SignupRequestDto;
+import teamdevhub.devhub.api.user.model.SignupRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
