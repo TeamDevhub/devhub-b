@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import teamdevhub.devhub.core.project.domain.ProjectDetail;
+import teamdevhub.devhub.core.project.domain.Project;
 
 @Getter
 @SuperBuilder
@@ -16,11 +16,11 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 	private List<String> positionList;
 	private String likeCount;
 	
-	public static ProjectDetailResponseDto fromDomain(ProjectDetail projectDetail) {
+	public static ProjectDetailResponseDto fromDomain(Project project) {
 		ProjectDetailResponseDtoBuilder<?, ?> builder = ProjectDetailResponseDto.builder();
-		fillBase(builder, projectDetail.getProject());
+		fillBase(builder, project);
 		return builder
-				.build();
+			.build();
 	}
 
 }

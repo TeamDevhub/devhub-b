@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.application.ProjectService;
-import teamdevhub.devhub.core.project.domain.ProjectDetail;
+import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 
@@ -36,13 +36,13 @@ public class ProjectServiceTest {
         SearchProjectListCommand searchCommand = Mockito.mock(SearchProjectListCommand.class);
         PageCommand pageCommand = PageCommand.of(0, 5);
 
-        ProjectDetail project1 = Mockito.mock(ProjectDetail.class);
-        ProjectDetail project2 = Mockito.mock(ProjectDetail.class);
-        PageResult<ProjectDetail> pageResult = PageResult.of(List.of(project1, project2), 0, 5, 2);
+        Project project1 = Mockito.mock(Project.class);
+        Project project2 = Mockito.mock(Project.class);
+        PageResult<Project> pageResult = PageResult.of(List.of(project1, project2), 0, 5, 2);
         when(projectRepository.getProjectList(any(), any())).thenReturn(pageResult);
 
         // when
-        PageResult<ProjectDetail> result = projectService.getProjectList(searchCommand, pageCommand);
+        PageResult<Project> result = projectService.getProjectList(searchCommand, pageCommand);
 
         // then
         assertThat(result).isNotNull();

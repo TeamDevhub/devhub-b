@@ -1,6 +1,7 @@
 package teamdevhub.devhub.core.project.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +25,11 @@ public class Project {
     private String progressPeriod;
     private LocalDateTime progressStartDate;
     private LocalDateTime progressEndDate;
+    
     private AuditInfo auditInfo;
+    
+	private List<String> projectSkill;
+	private List<Requirement> projectRequirement;
+	private String likeCount;
     
 }
