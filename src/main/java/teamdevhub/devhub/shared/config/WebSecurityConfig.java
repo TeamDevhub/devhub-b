@@ -93,6 +93,7 @@ public class WebSecurityConfig {
                                         "/webjars/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/user/signup").permitAll()
+                                .requestMatchers("/common/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/projects/**").permitAll()
                                 .requestMatchers("/boards/**").permitAll()
