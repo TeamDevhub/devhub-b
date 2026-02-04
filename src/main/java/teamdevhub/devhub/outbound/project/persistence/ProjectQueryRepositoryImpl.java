@@ -27,6 +27,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.project.domain.ProjectDetail;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
+import teamdevhub.devhub.outbound.common.persistence.jpa.converter.BooleanToYNConverter;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectMapper;
@@ -116,6 +117,42 @@ public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
 	
 	private BooleanExpression conditionIn(StringPath path, List<String> values) {
 	    return (values == null || values.isEmpty()) ? null : path.in(values);
+	}
+	
+	@Override
+	public ProjectDetail findProjectDetailByGuid(String projectGuid) {
+
+	    List<ProjectDetail> result = queryFactory
+	        .from(projectEntity)
+	        .leftJoin(projectSkillEntity)
+	            .on(projectEntity.projectGuid.eq(projectSkillEntity.projectGuid))
+	        .leftJoin(projectRequirementEntity)
+	            .on(projectEntity.projectGuid.eq(projectRequirementEntity.projectGuid))
+	        .where(
+	            projectEntity.projectGuid.eq(projectGuid),
+	            projectEntity.deleted.eq("N")
+	        )
+	        .transform(
+	            groupBy(projectEntity.projectGuid).list(
+	                Projections.constructor(
+	                    ProjectDetailFlatDto.class,
+	                    projectEntity,
+	                    list(projectSkillEntity.skillCd),
+	                    list(projectRequirementEntity),
+	                    JPAExpressions
+	                        .select(projectLikeEntity.count().stringValue())
+	                        .from(projectLikeEntity)
+	                        .where(projectLikeEntity.projectGuid.eq(projectEntity.projectGuid))
+	                )
+	            )
+	        )
+	        .stream()
+	        .map(ProjectMapper::toProjectDetail)
+	        .toList();
+
+	    return result.stream()
+	        .findFirst()
+	        .orElseThrow(() -> new IllegalArgumentException("프로젝트가 존재하지 않습니다. projectGuid=" + projectGuid));
 	}
 
 }
