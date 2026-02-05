@@ -3,7 +3,7 @@ package teamdevhub.devhub.api.board.model.response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import teamdevhub.devhub.core.board.domain.BoardSummary;
+import teamdevhub.devhub.core.board.domain.Board;
 
 @Getter
 @SuperBuilder
@@ -12,21 +12,23 @@ public class BoardSummaryResponseDto extends BoardBasicResponseDto{
 
 	private String likeCount;
 	private String commentCount;
+	private String userName;
     
-    public static BoardSummaryResponseDto fromDomain(BoardSummary boardSummary) {
+    public static BoardSummaryResponseDto fromDomain(Board board) {
     	return BoardSummaryResponseDto.builder()
-    			.boardGuid(boardSummary.getBoardGuid())
-    			.userGuid(boardSummary.getUserGuid())
-    			.categoryCd(boardSummary.getCategoryCd())
-    			.title(boardSummary.getTitle())
-    			.content(boardSummary.getContent())
-    			.viewCount(boardSummary.getViewCount())
-    			.likeCount(boardSummary.getLikeCount())
-    			.commentCount(boardSummary.getCommentCount())
-    			.registrantGuid(boardSummary.getAuditInfo().registrantGuid())
-                .registeredDate(boardSummary.getAuditInfo().registeredDate())
-                .modifierGuid(boardSummary.getAuditInfo().modifierGuid())
-                .modifiedDate(boardSummary.getAuditInfo().modifiedDate())
+    			.boardGuid(board.getBoardGuid())
+    			.userGuid(board.getUserGuid())
+    			.userName(board.getUserName())
+    			.categoryCd(board.getCategoryCd())
+    			.title(board.getTitle())
+    			.content(board.getContent())
+    			.viewCount(board.getViewCount())
+    			.likeCount(board.getLikeCount())
+    			.commentCount(board.getCommentCount())
+    			.registrantGuid(board.getAuditInfo().registrantGuid())
+                .registeredDate(board.getAuditInfo().registeredDate())
+                .modifierGuid(board.getAuditInfo().modifierGuid())
+                .modifiedDate(board.getAuditInfo().modifiedDate())
                 .build();
     		
     }

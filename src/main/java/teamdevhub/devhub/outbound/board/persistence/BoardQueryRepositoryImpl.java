@@ -3,8 +3,10 @@ package teamdevhub.devhub.outbound.board.persistence;
 import static teamdevhub.devhub.outbound.board.adapter.entity.QBoardEntity.boardEntity;
 import static teamdevhub.devhub.outbound.board.adapter.entity.QBoardLikeEntity.boardLikeEntity;
 import static teamdevhub.devhub.outbound.board.adapter.entity.QCommentEntity.commentEntity;
+import static teamdevhub.devhub.outbound.user.adapter.entity.QUserEntity.userEntity;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -12,8 +14,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -28,55 +32,64 @@ import teamdevhub.devhub.outbound.board.adapter.mapper.BoardMapper;
 public class BoardQueryRepositoryImpl implements BoardQueryRepository {
 
     private final JPAQueryFactory queryFactory;
-    
-	//정의
-	public record BoardSummaryFlatDto(
-			BoardEntity boardEntity,
-			String likeCount,
-			String commentCount
-	) {}
 
     @Override
     public Page<Board> boardList(SearchBoardCommand SearchboardCommand, Pageable pageable) {	
-    	//공통 베이스
+    	
     	JPAQuery<?> commonQuery = queryFactory
     			.from(boardEntity)
-    			.leftJoin(boardLikeEntity).on(boardEntity.boardGuid.eq(boardLikeEntity.boardGuid))
-    			.leftJoin(commentEntity).on(boardEntity.boardGuid.eq(commentEntity.boardGuid))
     			.where(
     					titleCondition(SearchboardCommand.title()),
     					categoryCdCondition(SearchboardCommand.categoryCd())
     					);
-
-    	//content
-    	//map(board::toboardsummary)를 안하는 이유가 있음
-    	List<BoardSummaryFlatDto> flatList = commonQuery
-    			.select(Projections.constructor(
-	    					BoardSummaryFlatDto.class,
-	    					boardEntity,
-	    					boardLikeEntity.boardGuid.countDistinct().stringValue(),
-	    					commentEntity.boardGuid.countDistinct().stringValue()
-    					))
-    			.groupBy(boardEntity.boardGuid)
+    	
+    	List<String> boardGuidList = commonQuery
+                .select(boardEntity.boardGuid)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .distinct()
                 .fetch();
     	
-    	List<Board> content = flatList
-    			.stream()
-    			.map(flat -> {
-    				Board board = BoardMapper.toDomain(flat.boardEntity());
-    				board.summary(flat.likeCount(), flat.commentCount());
-    				return board;
-    			})
-                .toList();
+    	JPQLQuery<Long> likeCountSubQuery = JPAExpressions
+    			.select(boardLikeEntity.count())
+				.from(boardLikeEntity)
+				.where(boardLikeEntity.boardGuid.eq(boardEntity.boardGuid));
     	
-    	//total
+    	JPQLQuery<Long> commentCountSubQuery = JPAExpressions
+    			.select(commentEntity.count())
+				.from(commentEntity)
+				.where(commentEntity.boardGuid.eq(boardEntity.boardGuid));
+    	
+    	JPQLQuery<String> userNameSubQuery = JPAExpressions
+    			.select(userEntity.username)
+				.from(userEntity)
+				.where(userEntity.userGuid.eq(boardEntity.userGuid));
+    	
+    	List<Tuple> boards = queryFactory
+                .select(boardEntity,
+                        likeCountSubQuery,
+                        commentCountSubQuery,
+                        userNameSubQuery
+                        )
+                .from(boardEntity)
+                .where(boardEntity.boardGuid.in(boardGuidList))
+                .fetch();
+    	
     	Long total = Optional.ofNullable(commonQuery
-    		       .select(boardEntity.boardGuid.countDistinct())
-    		       .fetchOne()
-    			).orElse(0L);    
-    	 
+ 		       .select(boardEntity.countDistinct())
+ 		       .fetchOne()
+ 			).orElse(0L);    
+    	
+    	List<Board> content = boards.stream().map(tuple -> {
+    		BoardEntity board = tuple.get(boardEntity);
+    		return BoardMapper.toBoard(
+    				Objects.requireNonNull(board),
+    				Objects.requireNonNull(tuple.get(likeCountSubQuery)).toString(),
+    				Objects.requireNonNull(tuple.get(commentCountSubQuery)).toString(),
+    				Objects.requireNonNull(tuple.get(userNameSubQuery)).toString()
+    				);
+    	}).toList();
+
     	return new PageImpl<>(content, pageable, total);
     }
 

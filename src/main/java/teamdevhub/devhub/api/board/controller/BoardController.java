@@ -27,17 +27,15 @@ public class BoardController {
 	
 	private final BoardFacade boardFacde;
 	
-	@GetMapping()
+	@GetMapping
 	public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> boardList(
-			@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, @ModelAttribute PageRequestDto pageRequestDto) {
-		
+			@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto) {
 		PageResult<Board> pagedBoardList = boardFacde.boardList(
 				searchBoardRequestDto.toCommand(), PageCommand.of(pageRequestDto.getPage(), pageRequestDto.getSize()));
 		
 		List<BoardSummaryResponseDto> boardSummaryResponseDtoList = pagedBoardList.content().stream()
 				.map(BoardSummaryResponseDto::fromDomain)
 				.toList();
-		
 		return ResponseEntity.ok(
 				DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,

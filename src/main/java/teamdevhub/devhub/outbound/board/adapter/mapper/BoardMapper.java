@@ -36,5 +36,19 @@ public class BoardMapper {
 				  boardEntity.getModifiedDate()
 	        );
 	}
+	
+	public static Board toBoard(BoardEntity boardEntity, String likeCount, String commentCount, String username) {
+		return Board.builder()
+				.boardGuid(boardEntity.getBoardGuid())
+				.userGuid(boardEntity.getUserGuid())
+				.categoryCd(boardEntity.getCategoryCd())
+				.title(boardEntity.getTitle())
+				.content(boardEntity.getContent())
+				.viewCount(boardEntity.getViewCount())
+				.likeCount(likeCount)
+				.userName(username)
+				.commentCount(commentCount)
+				.build();
+	}
 
 }

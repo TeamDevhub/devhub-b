@@ -15,6 +15,7 @@ public class Board {
 	private String content;
 	private String viewCount;
 	
+	private final String userName;
 	private String likeCount;
 	private String commentCount;
 	
@@ -30,6 +31,7 @@ public class Board {
 			String viewCount,
 			String likeCount,
 			String commentCount,
+			String userName,
 			AuditInfo auditInfo
 	) {
 		this.boardGuid = boardGuid;
@@ -40,6 +42,7 @@ public class Board {
 		this.viewCount = viewCount;
 		this.likeCount = likeCount;
 		this.commentCount = commentCount;
+		this.userName = userName;
 		
 		if (auditInfo == null) {
             this.auditInfo = AuditInfo.empty();
@@ -66,10 +69,5 @@ public class Board {
 				.viewCount(viewCount)
 				.auditInfo(auditInfo)
                 .build();
-	}
-	
-	public void summary(String likeCount, String commentCount) {
-		this.likeCount = likeCount;
-		this.commentCount = commentCount;
 	}
 }
