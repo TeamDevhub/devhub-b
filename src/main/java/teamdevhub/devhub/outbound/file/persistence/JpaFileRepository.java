@@ -1,4 +1,4 @@
 package teamdevhub.devhub.outbound.file.persistence;
 
-public interface JpaAttatchmentFileRepository {
+public interface JpaFileRepository {
 }
