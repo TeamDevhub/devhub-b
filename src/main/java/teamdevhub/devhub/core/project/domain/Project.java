@@ -1,6 +1,7 @@
 package teamdevhub.devhub.core.project.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,8 @@ public class Project {
     private String progressRegionCd;
     private String progressPeriod;
     private LocalDateTime progressStartDate;
+    private LocalDateTime progressEndDate;
+    
     private LocalDateTime  progressEndDate;
     private AuditInfo auditInfo;
     private boolean deleted;
@@ -51,5 +54,9 @@ public class Project {
 				.capacityClosed(false)
 				.build();
 	}
+    
+	private List<String> projectSkill;
+	private List<Requirement> projectRequirement;
+	private String likeCount;
     
 }

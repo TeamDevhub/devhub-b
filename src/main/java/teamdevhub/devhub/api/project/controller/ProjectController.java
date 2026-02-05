@@ -1,4 +1,9 @@
 package teamdevhub.devhub.api.project.controller;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -20,8 +25,6 @@ import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.core.project.domain.ProjectDetail;
 import teamdevhub.devhub.core.project.port.in.facade.ProjectFacade;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
@@ -33,6 +36,7 @@ public class ProjectController {
 	
 	private final ProjectFacade projectFacade;
 	
+	@GetMapping
 	@PostMapping
 	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
 		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid(), authenticatedUser.username()));
@@ -45,17 +49,6 @@ public class ProjectController {
 	
 	@GetMapping("/list")
     public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute ProjectListSearchRequestDto projectListSearchRequestDto, @RequestParam("page") int page, @RequestParam("size") int size) {
-		
-		PageResult<ProjectDetail> pagedProjectList = projectFacade.getProjectList(projectListSearchRequestDto.toSearchProjectListCommaond(), PageCommand.of(page, size)); 
-        List<ProjectDetailResponseDto> projectDetailResponseDtoList = pagedProjectList.content().stream()
-                .map(ProjectDetailResponseDto::fromDomain)
-                .toList();
-        
-        return ResponseEntity.ok(
-                DataListApiResponseDto.successWithDataList(
-                        SuccessCode.READ_SUCCESS,
-                        projectDetailResponseDtoList,
-                        PageResponseDto.from(pagedProjectList))
-                );
+        return ResponseEntity.ok(projectFacade.getProjectList(projectListSearchRequestDto.toSearchProjectListCommaond(), PageCommand.of(page, size)));
     }
 }

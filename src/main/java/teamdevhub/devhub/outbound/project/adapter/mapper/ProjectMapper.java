@@ -6,9 +6,14 @@ import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.project.domain.ProjectDetail;
 import teamdevhub.devhub.core.project.domain.Requirement;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
-import teamdevhub.devhub.outbound.project.persistence.ProjectQueryRepositoryImpl.ProjectDetailFlatDto;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ProjectMapper {
+
 	
 	public static ProjectEntity toEntity(Project project) {
 		return ProjectEntity.builder()
@@ -61,23 +66,61 @@ public class ProjectMapper {
                 .build();
     }
 
+    public static Project toProject(ProjectEntity projectEntity, List<String> projectSkills, List<ProjectRequirementEntity> projectRequirementEntityList, String likeCount) {
+        return Project.builder()
+                .projectGuid(projectEntity.getProjectGuid())
+                .userGuid(projectEntity.getUserGuid())
+                .username(projectEntity.getNickname())
+                .category(projectEntity.getCategory())
+                .title(projectEntity.getTitle())
+                .content(projectEntity.getContent())
+                .recruitmentTypeCd(projectEntity.getRecuritmentTypeCd())
+                .recruitmentStartDate(projectEntity.getProgressStartDate())
+                .recruitmentEndDate(projectEntity.getRecuritmentEndDate())
+                .progressTypeCd(projectEntity.getProgressTypeCd())
+//                .progressRegionCd(projectEntity.getpro)
+//                .progressPeriod(projectEntity.getpro)
+                .progressStartDate(projectEntity.getProgressStartDate())
+                .progressEndDate(projectEntity.getProgressEndDate())
+                .likeCount(likeCount)
+                .projectSkill(projectSkills)
+                .projectRequirement(projectRequirementEntityList.stream().map(ProjectMapper::toRequirement).toList())
+                .auditInfo(toAuditInfo(projectEntity))
+                .build();
+    }
+
+    private static AuditInfo toAuditInfo(ProjectEntity entity) {
+        return AuditInfo.of(
+                entity.getRegistrantGuid(),
+                entity.getRegisteredDate(),
+                entity.getModifierGuid(),
+                entity.getModifiedDate()
+        );
+    }
+
     public static Requirement toRequirement(ProjectRequirementEntity entity) {
         if (entity == null) return null;
         return Requirement.builder()
-        		.projectRequirementGuid(entity.getProjectRequirementGuid())
-		        .projectGuid(entity.getProjectGuid())
-		        .positionCd(entity.getPositionCd())
-		        .levelCd(entity.getLevelCd())
-		        .capacity(entity.getCapacity())
+                .projectRequirementGuid(entity.getProjectRequirementGuid())
+                .projectGuid(entity.getProjectGuid())
+                .positionCd(entity.getPositionCd())
+                .levelCd(entity.getLevelCd())
+                .capacity(entity.getCapacity())
                 .build();
     }
-    
-    public static ProjectDetail toProjectDetail(ProjectDetailFlatDto dto) {
-    	return ProjectDetail.builder()
-    			.project(toProject(dto.projectEntity()))
-    			.projectSkill(dto.skillCds())
-    			.projectRequirement(dto.requirementEntities().stream().map(ProjectMapper::toRequirement).toList())
-    			.likeCount(dto.likeCount())
-    			.build();
+
+    public static Map<String, List<String>> toMapSkill(List<ProjectSkillEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .collect(Collectors.groupingBy(
+                        ProjectSkillEntity::getProjectGuid,
+                        Collectors.mapping(ProjectSkillEntity::getSkillCd, Collectors.toList())
+                ));
+    }
+
+    public static Map<String, List<ProjectRequirementEntity>> toMapRequirement(List<ProjectRequirementEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .collect(Collectors.groupingBy(ProjectRequirementEntity::getProjectGuid));
     }
 }
