@@ -27,7 +27,7 @@ import teamdevhub.devhub.outbound.common.persistence.jpa.audit.BaseEntity;
                 )
         }
 )
-public class AttachmentFileEntity extends BaseEntity {
+public class FileEntity extends BaseEntity {
 	
 	@Id
 	@Column(length = 32, nullable = false, unique = true)
