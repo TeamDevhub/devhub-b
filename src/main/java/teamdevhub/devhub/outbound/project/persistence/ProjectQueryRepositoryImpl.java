@@ -91,7 +91,7 @@ public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
 	
 	private BooleanExpression[] projectIn(SearchProjectListCommand searchProjectListCommand) {
 		return new BooleanExpression[] {
-		        conditionIn(projectEntity.recuritmentTypeCd, searchProjectListCommand.projectRecruitTypeList()),
+		        conditionIn(projectEntity.recruitmentTypeCd, searchProjectListCommand.projectRecruitTypeList()),
 		    };
 	}
 

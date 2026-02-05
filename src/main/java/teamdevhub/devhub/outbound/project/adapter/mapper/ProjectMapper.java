@@ -1,15 +1,36 @@
 package teamdevhub.devhub.outbound.project.adapter.mapper;
 
-import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
+import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.project.domain.ProjectDetail;
 import teamdevhub.devhub.core.project.domain.Requirement;
-import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 import teamdevhub.devhub.outbound.project.persistence.ProjectQueryRepositoryImpl.ProjectDetailFlatDto;
 
 public class ProjectMapper {
 	
+	public static ProjectEntity toEntity(Project project) {
+		return ProjectEntity.builder()
+				.projectGuid(project.getProjectGuid())
+				.attachmentFileGuid(project.getAttachmentFileGuid())
+				.imageFileGuid(project.getImageFileGuid())
+				.userGuid(project.getUserGuid())
+				.recruitmentTypeCd(project.getRecruitmentTypeCd())
+				.progressTypeCd(project.getProgressTypeCd())
+				.progressRegionCd(project.getProgressRegionCd())
+				.username(project.getUsername())
+				.category(project.getCategory())
+				.title(project.getTitle())
+				.content(project.getContent())
+				.recuritmentStartDate(project.getRecruitmentStartDate())
+				.recuritmentEndDate(project.getRecruitmentEndDate())
+				.progressStartDate(project.getProgressStartDate())
+				.progressEndDate(project.getProgressEndDate())
+				.deleted(project.isDeleted())
+				.capacityClosed(project.isCapacityClosed())
+				.build();
+	}
     private static AuditInfo toAuditInfo(ProjectEntity entity) {
         return AuditInfo.of(
         		entity.getRegistrantGuid(),
@@ -28,7 +49,7 @@ public class ProjectMapper {
                 .category(entity.getCategory())
                 .title(entity.getTitle())
                 .content(entity.getContent())
-                .recruitmentTypeCd(entity.getRecuritmentTypeCd())
+                .recruitmentTypeCd(entity.getRecruitmentTypeCd())
                 .recruitmentStartDate(entity.getProgressStartDate())
                 .recruitmentEndDate(entity.getRecuritmentEndDate())
                 .progressTypeCd(entity.getProgressTypeCd())
