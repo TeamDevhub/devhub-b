@@ -46,7 +46,7 @@ public class ProjectEntity extends BaseEntity {
     @Column( name = "user_guid", length = 32, nullable = false)
     private String userGuid;
     
-    @Column(name = "recuritment_type_cd", length = 10, nullable = false)
+    @Column(name = "recruitment_type_cd", length = 10, nullable = false)
     private String recruitmentTypeCd;
     
     @Column(name = "progress_type_cd", length = 10, nullable = false)
@@ -67,11 +67,11 @@ public class ProjectEntity extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
     
-    @Column(name = "recuritment_start_date", nullable = false)
-    private LocalDateTime recuritmentStartDate;
+    @Column(name = "recruitment_start_date", nullable = false)
+    private LocalDateTime recruitmentStartDate;
     
-    @Column(name = "recuritment_end_date", nullable = false)
-    private LocalDateTime recuritmentEndDate;
+    @Column(name = "recruitment_end_date", nullable = false)
+    private LocalDateTime recruitmentEndDate;
     
     @Column(name = "progress_start_date", nullable = false)
     private LocalDateTime progressStartDate;

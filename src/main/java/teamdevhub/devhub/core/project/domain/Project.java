@@ -11,7 +11,9 @@ import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 @Getter
 @Builder
 public class Project {
+
 	private final String projectGuid;
+
     private final String userGuid;
     private String username;
     private String category;
@@ -19,19 +21,25 @@ public class Project {
     private String content;
     private String attachmentFileGuid;
 	private String imageFileGuid;
+
     private String recruitmentTypeCd;
     private LocalDateTime recruitmentStartDate;
     private LocalDateTime recruitmentEndDate;
+
     private String progressTypeCd;
     private String progressRegionCd;
     private String progressPeriod;
     private LocalDateTime progressStartDate;
     private LocalDateTime progressEndDate;
-    
-    private LocalDateTime  progressEndDate;
-    private AuditInfo auditInfo;
+
     private boolean deleted;
     private boolean capacityClosed;
+
+	private List<String> projectSkill;
+	private List<Requirement> projectRequirement;
+	private String likeCount;
+
+	private AuditInfo auditInfo;
 	
 	public static Project createProject(CreateProjectCommand createProjectCommand, String projectGuid) {
 		return Project.builder()
@@ -54,9 +62,4 @@ public class Project {
 				.capacityClosed(false)
 				.build();
 	}
-    
-	private List<String> projectSkill;
-	private List<Requirement> projectRequirement;
-	private String likeCount;
-    
 }

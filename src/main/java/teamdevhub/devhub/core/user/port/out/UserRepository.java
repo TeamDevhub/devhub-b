@@ -1,11 +1,9 @@
 package teamdevhub.devhub.core.user.port.out;
 
-import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
-import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -23,6 +21,4 @@ public interface UserRepository {
     void updateUserProfile(User user);
     void delete(User user);
     boolean existsByUserRole(UserRole userRole);
-
-    PageResult<User> listUser(SearchUserCommand searchUserCommand, int page, int size);
 }

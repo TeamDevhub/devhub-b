@@ -1,19 +1,17 @@
 package teamdevhub.devhub.core.web.port.in.facade;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.web.model.response.CommonCodeResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
-import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.core.admin.code.domain.CommonCode;
 import teamdevhub.devhub.core.admin.code.port.in.usecase.CommonCodeUseCase;
 import teamdevhub.devhub.shared.enums.SuccessCode;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,8 +26,8 @@ public class CommonFacade {
 		Map<String, CommonCodeResponseDto> result = commonCodeList.stream()
 				.map(CommonCodeResponseDto::fromDomain)
 				.collect(Collectors.toMap(
-						CommonCodeResponseDto::getCode, // Key 추출
-						dto -> dto                        // Value 추출 (객체 자신)
+						CommonCodeResponseDto::getCode,
+						dto -> dto
 				));
 
 		return DataApiResponseDto.successWithData(

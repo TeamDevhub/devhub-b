@@ -1,27 +1,19 @@
 package teamdevhub.devhub.outbound.user.adapter;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
-import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
-import teamdevhub.devhub.outbound.user.persistence.UserQueryRepository;
-import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
-import teamdevhub.devhub.outbound.user.adapter.mapper.UserMapper;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
-import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
+import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
+import teamdevhub.devhub.outbound.user.adapter.mapper.UserMapper;
+import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -29,7 +21,6 @@ import java.util.Optional;
 public class UserAdapter implements UserRepository {
 
     private final JpaUserRepository jpaUserRepository;
-    private final UserQueryRepository userQueryRepository;
 
     @Override
     public void saveAdminUser(User adminUser) {
@@ -91,21 +82,5 @@ public class UserAdapter implements UserRepository {
     @Override
     public boolean existsByUserRole(UserRole userRole) {
         return jpaUserRepository.existsByUserRole(userRole);
-    }
-
-    @Override
-    public PageResult<User> listUser(SearchUserCommand searchUserCommand, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("registeredDate").descending());
-        Page<UserEntity> pagedUserEntityList = userQueryRepository.listUser(searchUserCommand, pageable);
-
-        List<User> userList = pagedUserEntityList.getContent().stream()
-                .map(UserMapper::toDomain)
-                .toList();
-
-        return PageResult.of(
-                userList,
-                pagedUserEntityList.getNumber(),
-                pagedUserEntityList.getSize(),
-                pagedUserEntityList.getTotalElements());
     }
 }

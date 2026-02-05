@@ -1,10 +1,9 @@
 package teamdevhub.devhub.outbound.project.adapter.mapper;
 
-import teamdevhub.devhub.core.project.domain.Project;
-import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
-import teamdevhub.devhub.core.project.domain.ProjectDetail;
+import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.Requirement;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
 
@@ -28,55 +27,26 @@ public class ProjectMapper {
 				.category(project.getCategory())
 				.title(project.getTitle())
 				.content(project.getContent())
-				.recuritmentStartDate(project.getRecruitmentStartDate())
-				.recuritmentEndDate(project.getRecruitmentEndDate())
+				.recruitmentStartDate(project.getRecruitmentStartDate())
+				.recruitmentEndDate(project.getRecruitmentEndDate())
 				.progressStartDate(project.getProgressStartDate())
 				.progressEndDate(project.getProgressEndDate())
 				.deleted(project.isDeleted())
 				.capacityClosed(project.isCapacityClosed())
 				.build();
 	}
-    private static AuditInfo toAuditInfo(ProjectEntity entity) {
-        return AuditInfo.of(
-        		entity.getRegistrantGuid(),
-        		entity.getRegisteredDate(),
-        		entity.getModifierGuid(),
-        		entity.getModifiedDate()
-        );
-    }
-	
-    public static Project toProject(ProjectEntity entity) {
-        if (entity == null) return null;
-        return Project.builder()
-                .projectGuid(entity.getProjectGuid())
-                .userGuid(entity.getUserGuid())
-//                .username(entity.get)
-                .category(entity.getCategory())
-                .title(entity.getTitle())
-                .content(entity.getContent())
-                .recruitmentTypeCd(entity.getRecruitmentTypeCd())
-                .recruitmentStartDate(entity.getProgressStartDate())
-                .recruitmentEndDate(entity.getRecuritmentEndDate())
-                .progressTypeCd(entity.getProgressTypeCd())
-//                .progressRegionCd(entity.getpro)
-//                .progressPeriod(entity.getpro)
-                .progressStartDate(entity.getProgressStartDate())
-                .progressEndDate(entity.getProgressEndDate())
-                .auditInfo(toAuditInfo(entity))
-                .build();
-    }
 
     public static Project toProject(ProjectEntity projectEntity, List<String> projectSkills, List<ProjectRequirementEntity> projectRequirementEntityList, String likeCount) {
         return Project.builder()
                 .projectGuid(projectEntity.getProjectGuid())
                 .userGuid(projectEntity.getUserGuid())
-                .username(projectEntity.getNickname())
+                .username(projectEntity.getUsername())
                 .category(projectEntity.getCategory())
                 .title(projectEntity.getTitle())
                 .content(projectEntity.getContent())
-                .recruitmentTypeCd(projectEntity.getRecuritmentTypeCd())
-                .recruitmentStartDate(projectEntity.getProgressStartDate())
-                .recruitmentEndDate(projectEntity.getRecuritmentEndDate())
+                .recruitmentTypeCd(projectEntity.getRecruitmentTypeCd())
+                .recruitmentStartDate(projectEntity.getRecruitmentStartDate())
+                .recruitmentEndDate(projectEntity.getRecruitmentEndDate())
                 .progressTypeCd(projectEntity.getProgressTypeCd())
 //                .progressRegionCd(projectEntity.getpro)
 //                .progressPeriod(projectEntity.getpro)
