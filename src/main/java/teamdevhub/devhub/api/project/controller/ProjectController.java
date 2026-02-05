@@ -3,10 +3,7 @@ package teamdevhub.devhub.api.project.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,14 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import teamdevhub.devhub.api.project.model.request.CreateProjectRequestDto;
-import teamdevhub.devhub.api.project.model.request.ProjectListSearchRequestDto;
-import teamdevhub.devhub.api.project.model.response.ProjectDetailResponseDto;
+import teamdevhub.devhub.api.project.model.CreateProjectRequestDto;
+import teamdevhub.devhub.api.project.model.SearchProjectRequestDto;
+import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
-import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.project.port.in.facade.ProjectFacade;
@@ -42,13 +36,13 @@ public class ProjectController {
 		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid(), authenticatedUser.username()));
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
-                        SuccessCode.UPDATE_SUCCESS
+                        SuccessCode.CREATE_SUCCESS
                 )
         );
     }
-	
+
 	@GetMapping("/list")
-    public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute ProjectListSearchRequestDto projectListSearchRequestDto, @RequestParam("page") int page, @RequestParam("size") int size) {
-        return ResponseEntity.ok(projectFacade.getProjectList(projectListSearchRequestDto.toSearchProjectListCommaond(), PageCommand.of(page, size)));
+    public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto, @RequestParam("page") int page, @RequestParam("size") int size) {
+        return ResponseEntity.ok(projectFacade.getProjectList(searchProjectRequestDto.toSearchProjectListCommand(), PageCommand.of(page, size)));
     }
 }

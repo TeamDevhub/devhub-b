@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.api.project.controller.ProjectController;
-import teamdevhub.devhub.api.project.model.request.ProjectListSearchRequestDto;
-import teamdevhub.devhub.api.project.model.response.ProjectDetailResponseDto;
+import teamdevhub.devhub.api.project.model.SearchProjectRequestDto;
+import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.common.page.PageResult;
@@ -36,7 +36,7 @@ public class ProjectControllerTest {
     @DisplayName("프로젝트_목록_조회시_ProjectDetailResponseDto_리스트와_페이지정보_READ_SUCCESS_코드를_반환한다")
     void returnProjectListWhenFetchingProjectList() {
         // given
-        ProjectListSearchRequestDto searchRequestDto = ProjectListSearchRequestDto.builder()
+        SearchProjectRequestDto searchRequestDto = SearchProjectRequestDto.builder()
                 // 필요 시 검색 파라미터 세팅
                 .build();
 
@@ -62,7 +62,6 @@ public class ProjectControllerTest {
 
         // then
         DataListApiResponseDto<ProjectDetailResponseDto> body = response.getBody();
-        assertThat(body).isNotNull();
         assertThat(body.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
         assertThat(body.getDataList()).hasSize(2);
         // 필요하면 내용 값 더 체크

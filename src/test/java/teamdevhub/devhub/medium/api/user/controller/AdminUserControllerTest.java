@@ -16,7 +16,7 @@ import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
-import teamdevhub.devhub.core.user.port.in.usecase.AdminUserUseCase;
+import teamdevhub.devhub.core.user.port.in.usecase.UserQueryUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
@@ -30,13 +30,13 @@ public class AdminUserControllerTest {
 
     private AdminUserController adminUserController;
 
-    private AdminUserUseCase adminUserUseCase;
+    private UserQueryUseCase userQueryUseCase;
 
     @BeforeEach
     void init() {
-        adminUserUseCase = Mockito.mock(AdminUserUseCase.class);
+        userQueryUseCase = Mockito.mock(UserQueryUseCase.class);
 
-        adminUserController = new AdminUserController(adminUserUseCase);
+        adminUserController = new AdminUserController(userQueryUseCase);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class AdminUserControllerTest {
                 2
         );
 
-        Mockito.when(adminUserUseCase.listUser(any(SearchUserCommand.class), any(PageCommand.class)))
+        Mockito.when(userQueryUseCase.listUser(any(SearchUserCommand.class), any(PageCommand.class)))
                 .thenReturn(pageResult);
 
         SearchUserRequestDto requestDto = SearchUserRequestDto.builder()
@@ -110,6 +110,6 @@ public class AdminUserControllerTest {
         assertThat(pageResponseDto.getTotalElements()).isEqualTo(2);
         assertThat(pageResponseDto.getTotalPages()).isEqualTo(1);
 
-        Mockito.verify(adminUserUseCase).listUser(any(SearchUserCommand.class), any(PageCommand.class));
+        Mockito.verify(userQueryUseCase).listUser(any(SearchUserCommand.class), any(PageCommand.class));
     }
 }

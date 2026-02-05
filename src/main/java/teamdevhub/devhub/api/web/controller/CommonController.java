@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import teamdevhub.devhub.api.web.model.response.CommonCodeResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
-import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.core.web.port.in.facade.CommonFacade;
 
 import java.util.Map;
