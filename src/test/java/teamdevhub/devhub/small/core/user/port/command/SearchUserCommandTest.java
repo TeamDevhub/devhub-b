@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.core.user.port.command;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.api.user.model.request.SearchUserRequestDto;
+import teamdevhub.devhub.api.user.model.SearchUserRequestDto;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 
 import java.time.LocalDateTime;

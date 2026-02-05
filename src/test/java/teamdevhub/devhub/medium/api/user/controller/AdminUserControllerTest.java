@@ -7,8 +7,8 @@ import org.mockito.Mockito;
 
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.api.user.controller.AdminUserController;
-import teamdevhub.devhub.api.user.model.request.SearchUserRequestDto;
-import teamdevhub.devhub.api.user.model.response.UserBasicResponseDto;
+import teamdevhub.devhub.api.user.model.SearchUserRequestDto;
+import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;

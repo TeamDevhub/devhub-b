@@ -118,5 +118,40 @@ public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
                 .filter(Objects::nonNull)
                 .toArray(BooleanExpression[]::new);
     }
+        		.select(projectEntity.projectGuid.countDistinct())
+        	    .fetchOne()
+	    ).orElse(0L);        
+		
+		return new PageImpl<>(content, pageable, total);
+	}
+	
+	private BooleanExpression[] projectIn(SearchProjectListCommand searchProjectListCommand) {
+		return new BooleanExpression[] {
+		        conditionIn(projectEntity.recruitmentTypeCd, searchProjectListCommand.projectRecruitTypeList()),
+		    };
+	}
+
+	private BooleanExpression[] skillIn(SearchProjectListCommand searchProjectListCommand) {
+	    return new BooleanExpression[] {
+		        conditionIn(projectSkillEntity.skillCd, searchProjectListCommand.skillCodeList()),
+		    };
+	}
+
+	private BooleanExpression[] positionIn(SearchProjectListCommand searchProjectListCommand) {
+	    return new BooleanExpression[] {
+		        conditionIn(projectRequirementEntity.positionCd, searchProjectListCommand.positionCodeList()),
+		    };
+	}
+	
+	private BooleanExpression[] combine(BooleanExpression[]... arrays) {
+	    return Arrays.stream(arrays)
+	            .flatMap(Arrays::stream)
+	            .filter(Objects::nonNull)
+	            .toArray(BooleanExpression[]::new);
+	}
+	
+	private BooleanExpression conditionIn(StringPath path, List<String> values) {
+	    return (values == null || values.isEmpty()) ? null : path.in(values);
+	}
 
 }

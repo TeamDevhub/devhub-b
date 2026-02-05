@@ -10,7 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.api.auth.controller.OauthController;
 import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
-import teamdevhub.devhub.api.user.model.request.SignupOauthRequestDto;
+import teamdevhub.devhub.api.user.model.SignupOauthRequestDto;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.shared.enums.SuccessCode;

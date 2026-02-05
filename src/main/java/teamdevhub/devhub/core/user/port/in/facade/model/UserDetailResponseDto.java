@@ -1,8 +1,9 @@
-package teamdevhub.devhub.api.user.model.response;
+package teamdevhub.devhub.core.user.port.in.facade.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
@@ -11,30 +12,20 @@ import java.util.List;
 import java.util.Set;
 
 @Getter
-@SuperBuilder
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
-public class UserDetailResponseDto extends UserBasicResponseDto {
+public class UserDetailResponseDto {
 
+    private UserBasicResponseDto user;
     private List<String> positionList;
     private List<String> skillList;
 
     public static UserDetailResponseDto fromDomain(User user) {
         return UserDetailResponseDto.builder()
-                .userGuid(user.getUserGuid())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .introduction(user.getIntroduction())
+                .user(UserBasicResponseDto.fromDomain(user))
                 .positionList(positionList(user.getPositions()))
                 .skillList(skillList(user.getSkills()))
-                .mannerDegree(user.getMannerDegree())
-                .blocked(user.isBlocked())
-                .blockEndDate(user.getBlockEndDate())
-                .deleted(user.isDeleted())
-                .lastLoginDateTime(user.getLastLoginDate())
-                .registrantGuid(user.getAuditInfo().registrantGuid())
-                .registeredDate(user.getAuditInfo().registeredDate())
-                .modifierGuid(user.getAuditInfo().modifierGuid())
-                .modifiedDate(user.getAuditInfo().modifiedDate())
                 .build();
     }
 

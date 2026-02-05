@@ -1,4 +1,4 @@
-package teamdevhub.devhub.api.user.model.request;
+package teamdevhub.devhub.api.user.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,9 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.api.web.validator.RegexMatch;
 import teamdevhub.devhub.api.web.validator.RegexPattern;
-import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
+import teamdevhub.devhub.api.web.validator.RegexMatch;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
+import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
 import java.util.List;
 
@@ -17,15 +19,17 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignupOauthRequestDto {
+public class SignupRequestDto {
 
-    @NotBlank(message = "TEMP 토큰은 필수입니다")
-    private String tempToken;
+    @NotBlank(message = "이메일은 필수입니다")
+    @RegexMatch(RegexPattern.AUTH_EMAIL)
+    private String email;
 
     @NotBlank(message = "비밀번호는 필수입니다")
     @RegexMatch(RegexPattern.AUTH_PASSWORD)
     private String password;
 
+    @NotBlank(message = "사용자명은 필수입니다")
     @RegexMatch(RegexPattern.USERNAME)
     private String username;
 
@@ -39,14 +43,15 @@ public class SignupOauthRequestDto {
     @Size(min = 1, message = "보유 스킬은 최소 1개 이상 선택해야 합니다")
     private List<@NotBlank String> skillList;
 
-    public SignupOauthUserCommand toCommand() {
-        return SignupOauthUserCommand.builder()
-                .tempToken(this.tempToken)
+    public SignupUserCommand toSignupCommand() {
+        return SignupUserCommand.builder()
+                .email(this.email)
                 .password(this.password)
                 .username(this.username)
                 .introduction(this.introduction)
                 .positionList(this.positionList)
                 .skillList(this.skillList)
+                .verificationTarget(VerificationTarget.of(VerificationType.EMAIL, this.email))
                 .build();
     }
 }

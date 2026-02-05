@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
-import teamdevhub.devhub.api.user.model.request.SignupOauthRequestDto;
+import teamdevhub.devhub.api.user.model.SignupOauthRequestDto;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
