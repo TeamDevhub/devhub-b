@@ -25,7 +25,7 @@ public class Project {
     private String progressRegionCd;
     private String progressPeriod;
     private LocalDateTime progressStartDate;
-    private LocalDateTime progressEndDate;
+    private LocalDateTime  progressEndDate;
     private AuditInfo auditInfo;
     private boolean deleted;
     private boolean capacityClosed;
@@ -36,15 +36,15 @@ public class Project {
 				.attachmentFileGuid(createProjectCommand.attachmentFileGuid())
 				.imageFileGuid(createProjectCommand.imageFileGuid())
 				.userGuid(createProjectCommand.userGuid())
-				.recruitmentTypeCd(createProjectCommand.recuritmentTypeCd())
+				.recruitmentTypeCd(createProjectCommand.recruitmentTypeCd())
 				.progressTypeCd(createProjectCommand.progressTypeCd())
 				.progressRegionCd(createProjectCommand.progressRegionCd())
 				.username(createProjectCommand.username())
 				.category(createProjectCommand.category())
 				.title(createProjectCommand.title())
 				.content(createProjectCommand.content())
-				.recruitmentStartDate(createProjectCommand.recuritmentStartDate())
-				.recruitmentEndDate(createProjectCommand.recuritmentEndDate())
+				.recruitmentStartDate(createProjectCommand.recruitmentStartDate())
+				.recruitmentEndDate(createProjectCommand.recruitmentEndDate())
 				.progressStartDate(createProjectCommand.progressStartDate())
 				.progressEndDate(createProjectCommand.progressEndDate())
 				.deleted(false)

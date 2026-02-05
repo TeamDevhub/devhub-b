@@ -5,11 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +34,8 @@ public class ProjectController {
 	private final ProjectFacade projectFacade;
 	
 	@PostMapping
-	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestPart("request") CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser,
-			@RequestPart(value = "attachment", required = false) MultipartFile attachment, @RequestPart(value = "image", required = false) MultipartFile image) {
-		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid(), authenticatedUser.username()), attachment, image);
+	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid(), authenticatedUser.username()));
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS

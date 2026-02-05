@@ -3,6 +3,8 @@ package teamdevhub.devhub.api.project.model.request;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,8 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementRequestCommand;
-import teamdevhub.devhub.core.project.port.in.command.CreateProjectWithoutFilesGuidCommand;
 
 @Getter
 @Builder
@@ -27,9 +29,12 @@ public class CreateProjectRequestDto {
     
 	@NotBlank(message = "상세내용은 필수입니다")
     private String content;
+	
+	private String attachmentFileGuid;
+	private String imageFileGuid;
     
 	@NotBlank(message = "모집방식은 필수입니다")
-    private String recuritmentTypeCd;
+    private String recruitmentTypeCd;
     
 	@NotBlank(message = "진행방식은 필수입니다")
     private String progressTypeCd;
@@ -37,15 +42,19 @@ public class CreateProjectRequestDto {
     private String progressRegionCd;
     
     @NotBlank(message = "모집시작일은 필수입니다")
-    private LocalDateTime recuritmentStartDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime recruitmentStartDate;
     
     @NotBlank(message = "모집종료일은 필수입니다")
-    private LocalDateTime recuritmentEndDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime recruitmentEndDate;
     
     @NotBlank(message = "진행시작일은 필수입니다")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime progressStartDate;
     
     @NotBlank(message = "진행종료일은 필수입니다")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime progressEndDate;
     
     @NotNull(message = "기술스택은 필수입니다")
@@ -56,18 +65,18 @@ public class CreateProjectRequestDto {
     @Size(min = 1, message = "모집인원은 최소 1개 이상 선택해야 합니다")
     private List<CreateProjectRequirementRequestCommand> positionList;
     
-    public CreateProjectWithoutFilesGuidCommand toCommand(String userGuid, String userName) {
-    	return CreateProjectWithoutFilesGuidCommand.builder()
+    public CreateProjectCommand toCommand(String userGuid, String userName) {
+    	return CreateProjectCommand.builder()
     			.userGuid(userGuid)
     			.username(userName)
     			.title(this.title)
     			.category(this.category)
     			.content(this.content)
-    			.recuritmentTypeCd(this.recuritmentTypeCd)
+    			.recruitmentTypeCd(this.recruitmentTypeCd)
     			.progressTypeCd(this.progressTypeCd)
     			.progressRegionCd(this.progressRegionCd)
-    			.recuritmentStartDate(this.recuritmentStartDate)
-    			.recuritmentEndDate(this.recuritmentEndDate)
+    			.recruitmentStartDate(this.recruitmentStartDate)
+    			.recruitmentEndDate(this.recruitmentEndDate)
     			.progressStartDate(this.progressStartDate)
     			.progressEndDate(this.progressEndDate)
     			.skillList(this.skillList)
