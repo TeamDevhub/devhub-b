@@ -6,10 +6,14 @@ import teamdevhub.devhub.core.project.domain.ProjectDetail;
 import teamdevhub.devhub.core.project.domain.Requirement;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
-import teamdevhub.devhub.outbound.project.persistence.ProjectQueryRepositoryImpl.ProjectDetailFlatDto;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ProjectMapper {
-	
+
     private static AuditInfo toAuditInfo(ProjectEntity entity) {
         return AuditInfo.of(
         		entity.getRegistrantGuid(),
@@ -18,7 +22,7 @@ public class ProjectMapper {
         		entity.getModifiedDate()
         );
     }
-	
+
     public static Project toProject(ProjectEntity entity) {
         if (entity == null) return null;
         return Project.builder()
@@ -50,13 +54,28 @@ public class ProjectMapper {
 		        .capacity(entity.getCapacity())
                 .build();
     }
-    
-    public static ProjectDetail toProjectDetail(ProjectDetailFlatDto dto) {
-    	return ProjectDetail.builder()
-    			.project(toProject(dto.projectEntity()))
-    			.projectSkill(dto.skillCds())
-    			.projectRequirement(dto.requirementEntities().stream().map(ProjectMapper::toRequirement).toList())
-    			.likeCount(dto.likeCount())
-    			.build();
+
+    public static ProjectDetail toProjectDetail(
+            ProjectEntity projectEntity,
+            List<ProjectSkillEntity> skillEntities,
+            List<ProjectRequirementEntity> requirementEntities,
+            Long likeCount
+    ) {
+        return ProjectDetail.builder()
+                .project(toProject(projectEntity))
+                .skillList(
+                        skillEntities.stream()
+                                .map(ProjectSkillEntity::getSkillCd)
+                                .filter(Objects::nonNull)
+                                .distinct()
+                                .toList()
+                )
+                .positionList(
+                        requirementEntities.stream()
+                                .map(ProjectMapper::toRequirement)
+                                .toList()
+                )
+                .likeCount(likeCount)
+                .build();
     }
 }

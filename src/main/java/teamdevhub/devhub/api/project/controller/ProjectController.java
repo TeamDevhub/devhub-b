@@ -46,17 +46,16 @@ public class ProjectController {
                 );
     }
 	
-	  @GetMapping("/{projectGuid}")
-	    public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable String projectGuid) {
-	        ProjectDetail projectDetail = projectFacade.getProjectDetail(projectGuid);
-	        ProjectDetailResponseDto responseDto = ProjectDetailResponseDto.fromDomain(projectDetail);
-
-	        return ResponseEntity.ok(
-	                DataApiResponseDto.successWithData(
-	                        SuccessCode.READ_SUCCESS,
-	                        responseDto
-	                )
-	        );
-
-	  }
+	@GetMapping("/{projectGuid}")
+	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail( @PathVariable("projectGuid") String projectGuid) {
+		ProjectDetail projectDetail = projectFacade.getProjectDetail(projectGuid);
+		ProjectDetailResponseDto responseDto = ProjectDetailResponseDto.fromDomain(projectDetail);
+		
+		return ResponseEntity.ok(
+			DataApiResponseDto.successWithData(
+				SuccessCode.READ_SUCCESS,
+				responseDto)
+		);
+	
+	}
 }
