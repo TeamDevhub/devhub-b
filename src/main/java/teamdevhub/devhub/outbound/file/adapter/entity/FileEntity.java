@@ -44,5 +44,4 @@ public class FileEntity extends BaseEntity {
     
     @Column(name = "path", nullable = false)
     private String path;
-    
 }
