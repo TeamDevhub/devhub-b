@@ -93,7 +93,7 @@ class VerificationAdapterMediumTest {
     @DisplayName("인증대상으로_인증정보를_삭제한다")
     void deleteByVerificationTarget() {
         // given
-        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, "delete@email.com");
+        VerificationTarget verificationTarget = new VerificationTarget(VerificationType.EMAIL, "deleteByFileGuid@email.com");
         VerificationMessage verificationMessage = new VerificationMessage("000000",LocalDateTime.now().plusMinutes(5));
         Verification verification = Verification.issue(verificationTarget, verificationMessage);
 
@@ -103,6 +103,6 @@ class VerificationAdapterMediumTest {
         verificationAdapter.deleteByVerificationTarget(verificationTarget);
 
         // then
-        assertThat(jpaVerificationRepository.findTopByVerificationTypeAndTargetValueOrderByExpiredAtDesc(VerificationType.EMAIL, "delete@email.com")).isEmpty();
+        assertThat(jpaVerificationRepository.findTopByVerificationTypeAndTargetValueOrderByExpiredAtDesc(VerificationType.EMAIL, "deleteByFileGuid@email.com")).isEmpty();
     }
 }
