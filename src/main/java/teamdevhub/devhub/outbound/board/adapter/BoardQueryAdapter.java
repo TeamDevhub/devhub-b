@@ -9,19 +9,19 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
-import teamdevhub.devhub.core.board.port.out.BoardRepository;
+import teamdevhub.devhub.core.board.port.out.BoardQueryRepository;
 import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.outbound.board.persistence.BoardQueryRepository;
+import teamdevhub.devhub.outbound.board.persistence.BoardQueryDao;
 
 @Component
 @RequiredArgsConstructor
-public class BoardAdapter implements BoardRepository {
-	private final BoardQueryRepository boardQueryRepository;
+public class BoardQueryAdapter implements BoardQueryRepository {
+	private final BoardQueryDao boardQueryDao;
 	
 	@Override
-	public PageResult<Board> boardList(SearchBoardCommand searchBoardCommand, int page, int size) {
+	public PageResult<Board> listBoard(SearchBoardCommand searchBoardCommand, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by("registeredDate").descending());
-		Page<Board> pageBoardList = boardQueryRepository.boardList(searchBoardCommand, pageable);
+		Page<Board> pageBoardList = boardQueryDao.listBoard(searchBoardCommand, pageable);
 		
 		return PageResult.of(
 				pageBoardList.getContent(), 

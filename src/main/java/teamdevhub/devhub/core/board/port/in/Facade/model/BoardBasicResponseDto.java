@@ -1,4 +1,7 @@
-package teamdevhub.devhub.api.board.model.response;
+package teamdevhub.devhub.core.board.port.in.Facade.model;
+
+
+import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,14 +11,23 @@ import teamdevhub.devhub.core.board.domain.Board;
 @Getter
 @SuperBuilder
 @NoArgsConstructor
-public class BoardSummaryResponseDto extends BoardBasicResponseDto{
-
-	private String likeCount;
-	private String commentCount;
+public class BoardBasicResponseDto {
+	
+	private String boardGuid;
+	private String userGuid;
 	private String userName;
+	private String categoryCd;
+	private String title;
+	private String content;
+	private String viewCount;
+	
+    private String registrantGuid;
+    private LocalDateTime registeredDate;
+    private String modifierGuid;
+    private LocalDateTime modifiedDate;
     
-    public static BoardSummaryResponseDto fromDomain(Board board) {
-    	return BoardSummaryResponseDto.builder()
+    public static BoardBasicResponseDto fromDomain(Board board) {
+    	return BoardBasicResponseDto.builder()
     			.boardGuid(board.getBoardGuid())
     			.userGuid(board.getUserGuid())
     			.userName(board.getUserName())
@@ -23,8 +35,6 @@ public class BoardSummaryResponseDto extends BoardBasicResponseDto{
     			.title(board.getTitle())
     			.content(board.getContent())
     			.viewCount(board.getViewCount())
-    			.likeCount(board.getLikeCount())
-    			.commentCount(board.getCommentCount())
     			.registrantGuid(board.getAuditInfo().registrantGuid())
                 .registeredDate(board.getAuditInfo().registeredDate())
                 .modifierGuid(board.getAuditInfo().modifierGuid())

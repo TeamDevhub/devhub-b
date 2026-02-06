@@ -1,11 +1,10 @@
-package teamdevhub.devhub.api.board.model.request;
+package teamdevhub.devhub.api.board.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
 
 @Getter

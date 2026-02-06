@@ -29,12 +29,12 @@ import teamdevhub.devhub.outbound.board.adapter.mapper.BoardMapper;
 
 @Repository
 @RequiredArgsConstructor
-public class BoardQueryRepositoryImpl implements BoardQueryRepository {
+public class BoardQueryDaoImpl implements BoardQueryDao {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Board> boardList(SearchBoardCommand SearchboardCommand, Pageable pageable) {	
+    public Page<Board> listBoard(SearchBoardCommand SearchboardCommand, Pageable pageable) {	
     	
     	JPAQuery<?> commonQuery = queryFactory
     			.from(boardEntity)

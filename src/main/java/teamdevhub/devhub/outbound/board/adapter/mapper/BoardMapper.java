@@ -48,6 +48,7 @@ public class BoardMapper {
 				.likeCount(likeCount)
 				.userName(username)
 				.commentCount(commentCount)
+				.auditInfo(toAuditInfo(boardEntity))
 				.build();
 	}
 

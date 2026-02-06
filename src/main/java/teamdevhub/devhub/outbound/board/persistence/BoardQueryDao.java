@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
 
-public interface BoardQueryRepository {
+public interface BoardQueryDao {
 
-	Page<Board> boardList(SearchBoardCommand searchBoardCommand, Pageable pageable);
+	Page<Board> listBoard(SearchBoardCommand searchBoardCommand, Pageable pageable);
 }
