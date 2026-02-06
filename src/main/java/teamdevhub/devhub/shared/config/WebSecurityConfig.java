@@ -2,6 +2,7 @@ package teamdevhub.devhub.shared.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,6 +48,13 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public FilterRegistrationBean<JwtAuthorizationFilter> jwtAuthorizationFilterRegistration(JwtAuthorizationFilter jwtAuthorizationFilter) {
+        FilterRegistrationBean<JwtAuthorizationFilter> registration = new FilterRegistrationBean<>(jwtAuthorizationFilter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
+    @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
@@ -85,6 +93,7 @@ public class WebSecurityConfig {
                                         "/webjars/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/user/signup").permitAll()
+                                .requestMatchers("/common/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/projects/**").permitAll()
                                 .requestMatchers("/boards/**").permitAll()
@@ -92,7 +101,7 @@ public class WebSecurityConfig {
                                 .anyRequest().authenticated())
 
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-                .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

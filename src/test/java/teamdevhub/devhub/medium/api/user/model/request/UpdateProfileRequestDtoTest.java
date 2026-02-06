@@ -3,7 +3,7 @@ package teamdevhub.devhub.medium.api.user.model.request;
 import org.junit.jupiter.api.DisplayName;
 
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.api.user.model.request.UpdateProfileRequestDto;
+import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;

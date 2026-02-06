@@ -10,11 +10,22 @@ import teamdevhub.devhub.core.auth.domain.Verification;
 import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 import teamdevhub.devhub.core.auth.port.out.verification.VerificationRepository;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class VerificationAdapter implements VerificationRepository {
 
     private final JpaVerificationRepository jpaVerificationRepository;
+
+    @Override
+    public boolean existsUnverifiedAndNotExpired(VerificationTarget verificationTarget, LocalDateTime now) {
+        return jpaVerificationRepository.existsByVerificationTypeAndTargetValueAndExpiredAtAfterAndVerifiedFalse(
+                        verificationTarget.verificationType(),
+                        verificationTarget.value(),
+                        now
+        );
+    }
 
     @Override
     public void save(Verification verification) {
@@ -23,7 +34,7 @@ public class VerificationAdapter implements VerificationRepository {
 
     @Override
     public Verification findByVerificationTarget(VerificationTarget verificationTarget) {
-        return jpaVerificationRepository.findByVerificationTypeAndTargetValue(verificationTarget.verificationType(), verificationTarget.value())
+        return jpaVerificationRepository.findTopByVerificationTypeAndTargetValueOrderByExpiredAtDesc(verificationTarget.verificationType(), verificationTarget.value())
                 .map(VerificationMapper::toDomain)
                 .orElseThrow(() -> AdapterDataException.of(ErrorCode.VERIFICATION_NOT_EXISTED));
     }

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import teamdevhub.devhub.api.user.model.request.SignupOauthRequestDto;
+import teamdevhub.devhub.api.user.model.SignupOauthRequestDto;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 
 import java.util.List;
