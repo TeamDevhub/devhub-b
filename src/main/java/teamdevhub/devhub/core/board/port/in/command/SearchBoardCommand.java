@@ -1,4 +1,6 @@
 package teamdevhub.devhub.core.board.port.in.command;
 
-public record SearchBoardCommand() {
-}
+import lombok.Builder;
+
+@Builder
+public record SearchBoardCommand(String title, String categoryCd) {}
