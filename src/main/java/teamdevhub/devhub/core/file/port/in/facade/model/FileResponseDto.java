@@ -5,13 +5,15 @@ import teamdevhub.devhub.core.file.application.StoredFile;
 public record FileResponseDto(
         String fileGuid,
         String filename,
-        long size
+        long size,
+        String downloadUrl
 ) {
     public static FileResponseDto from(StoredFile storedFile) {
         return new FileResponseDto(
                 storedFile.fileGuid(),
                 storedFile.originalName(),
-                storedFile.size()
+                storedFile.size(),
+                "/files/" + storedFile.fileGuid()
         );
     }
 }

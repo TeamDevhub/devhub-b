@@ -64,7 +64,6 @@ public class ProjectControllerTest {
         DataListApiResponseDto<ProjectDetailResponseDto> body = response.getBody();
         assertThat(body.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
         assertThat(body.getDataList()).hasSize(2);
-        // 필요하면 내용 값 더 체크
 
         PageResponseDto pageResponseDto = body.getPagination();
         assertThat(pageResponseDto.getPage()).isEqualTo(page);
