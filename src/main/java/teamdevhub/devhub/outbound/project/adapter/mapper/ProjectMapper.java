@@ -4,12 +4,14 @@ import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.ProjectDetail;
 import teamdevhub.devhub.core.project.domain.Requirement;
+
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ProjectMapper {
@@ -59,18 +61,18 @@ public class ProjectMapper {
             ProjectEntity projectEntity,
             List<ProjectSkillEntity> skillEntities,
             List<ProjectRequirementEntity> requirementEntities,
-            Long likeCount
+            String likeCount
     ) {
         return ProjectDetail.builder()
                 .project(toProject(projectEntity))
-                .skillList(
+                .projectSkill(
                         skillEntities.stream()
                                 .map(ProjectSkillEntity::getSkillCd)
                                 .filter(Objects::nonNull)
                                 .distinct()
                                 .toList()
                 )
-                .positionList(
+                .projectRequirement(
                         requirementEntities.stream()
                                 .map(ProjectMapper::toRequirement)
                                 .toList()
@@ -78,4 +80,5 @@ public class ProjectMapper {
                 .likeCount(likeCount)
                 .build();
     }
+
 }

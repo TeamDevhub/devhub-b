@@ -23,13 +23,14 @@ import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.project.domain.ProjectDetail;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.outbound.common.persistence.jpa.converter.BooleanToYNConverter;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
 import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectMapper;
 
 @Repository
@@ -45,51 +46,51 @@ public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
 	    String likeCount
 	) {}
 
-	@Override
-	public Page<ProjectDetail> listProject(SearchProjectListCommand searchProjectListCommand, Pageable pageable) {
-		
-		BooleanExpression[] projectCond = projectIn(searchProjectListCommand);
-	    BooleanExpression[] skillCond = skillIn(searchProjectListCommand);
-	    BooleanExpression[] positionCond = positionIn(searchProjectListCommand);
-
-	    // 2. 배열들 합치기
-	    BooleanExpression[] allConditions = combine(projectCond, skillCond, positionCond);
-	    		
-		JPAQuery<?> commonQuery = queryFactory
-				.from(projectEntity)
-                .leftJoin(projectSkillEntity).on(projectEntity.projectGuid.eq(projectSkillEntity.projectGuid))
-                .leftJoin(projectRequirementEntity).on(projectEntity.projectGuid.eq(projectRequirementEntity.projectGuid))
-                .where(allConditions);
-		
-		List<ProjectDetail> content = commonQuery
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .transform(
-                	groupBy(projectEntity.projectGuid).list(
-	        			Projections.constructor(ProjectDetailFlatDto.class,
-	        					projectEntity,
-	        	                list(projectSkillEntity.skillCd),
-	        	                list(projectRequirementEntity),
-	                            JPAExpressions
-		                            .select(projectLikeEntity.count().stringValue())
-		                            .from(projectLikeEntity)
-		                            .where(projectLikeEntity.projectGuid.eq(projectEntity.projectGuid))
-	                    )
-                    )
-                )
-                .stream()
-                .map(ProjectMapper::toProjectDetail)
-                .toList()
-                ;
-		
-        Long total = Optional.ofNullable(commonQuery
-        		.select(projectEntity.projectGuid.countDistinct())
-        	    .fetchOne()
-	    ).orElse(0L);        
-		
-		return new PageImpl<>(content, pageable, total);
-	}
-	
+//	@Override
+//	public Page<ProjectDetail> listProject(SearchProjectListCommand searchProjectListCommand, Pageable pageable) {
+//
+//		BooleanExpression[] projectCond = projectIn(searchProjectListCommand);
+//	    BooleanExpression[] skillCond = skillIn(searchProjectListCommand);
+//	    BooleanExpression[] positionCond = positionIn(searchProjectListCommand);
+//
+//	    // 2. 배열들 합치기
+//	    BooleanExpression[] allConditions = combine(projectCond, skillCond, positionCond);
+//
+//		JPAQuery<?> commonQuery = queryFactory
+//				.from(projectEntity)
+//                .leftJoin(projectSkillEntity).on(projectEntity.projectGuid.eq(projectSkillEntity.projectGuid))
+//                .leftJoin(projectRequirementEntity).on(projectEntity.projectGuid.eq(projectRequirementEntity.projectGuid))
+//                .where(allConditions);
+//
+//		List<ProjectDetail> content = commonQuery
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .transform(
+//                	groupBy(projectEntity.projectGuid).list(
+//	        			Projections.constructor(ProjectDetailFlatDto.class,
+//	        					projectEntity,
+//	        	                list(projectSkillEntity.skillCd),
+//	        	                list(projectRequirementEntity),
+//	                            JPAExpressions
+//		                            .select(projectLikeEntity.count().stringValue())
+//		                            .from(projectLikeEntity)
+//		                            .where(projectLikeEntity.projectGuid.eq(projectEntity.projectGuid))
+//	                    )
+//                    )
+//                )
+//                .stream()
+//                .map(ProjectMapper::toProjectDetail)
+//                .toList()
+//                ;
+//
+//        Long total = Optional.ofNullable(commonQuery
+//        		.select(projectEntity.projectGuid.countDistinct())
+//        	    .fetchOne()
+//	    ).orElse(0L);
+//
+//		return new PageImpl<>(content, pageable, total);
+//	}
+//
 	private BooleanExpression[] projectIn(SearchProjectListCommand searchProjectListCommand) {
 		return new BooleanExpression[] {
 		        conditionIn(projectEntity.recuritmentTypeCd, searchProjectListCommand.projectRecruitTypeList()),
@@ -119,37 +120,62 @@ public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
 	    return (values == null || values.isEmpty()) ? null : path.in(values);
 	}
 
-    @Override
-    public ProjectDetail findProjectDetailByGuid(String projectGuid) {
+	@Override
+	public Page<ProjectDetail> listProject(SearchProjectListCommand searchProjectListCommand, Pageable pageable) {
+		return null;
+	}
 
-        List<Tuple> rows = queryFactory
-                .select(
-                        projectEntity,
-                        projectSkillEntity.skillCd,
-                        projectRequirementEntity,
-                        JPAExpressions
-                                .select(projectLikeEntity.count())
-                                .from(projectLikeEntity)
-                                .where(projectLikeEntity.projectGuid.eq(projectEntity.projectGuid))
-                )
-                .from(projectEntity)
-                .leftJoin(projectSkillEntity)
-                .on(projectEntity.projectGuid.eq(projectSkillEntity.projectGuid))
-                .leftJoin(projectRequirementEntity)
-                .on(projectEntity.projectGuid.eq(projectRequirementEntity.projectGuid))
-                .where(
-                        projectEntity.projectGuid.eq(projectGuid),
-                        projectEntity.deleted.eq(false)
-                )
-                .fetch();
+	@Override
+	public ProjectDetail findProjectDetailByGuid(String projectGuid) {
 
-        if (rows.isEmpty()) {
-            throw new IllegalArgumentException("프로젝트가 존재하지 않습니다. projectGuid=" + projectGuid);
-        }
+		List<Tuple> rows = queryFactory
+				.select(
+						projectEntity,
+						projectSkillEntity,
+						projectRequirementEntity,
+						JPAExpressions
+								.select(projectLikeEntity.count().stringValue())
+								.from(projectLikeEntity)
+								.where(projectLikeEntity.projectGuid.eq(projectEntity.projectGuid))
+				)
+				.from(projectEntity)
+				.leftJoin(projectSkillEntity)
+				.on(projectEntity.projectGuid.eq(projectSkillEntity.projectGuid))
+				.leftJoin(projectRequirementEntity)
+				.on(projectEntity.projectGuid.eq(projectRequirementEntity.projectGuid))
+				.where(
+						projectEntity.projectGuid.eq(projectGuid),
+						projectEntity.deleted.eq(false)
+				)
+				.fetch();
 
-        return ProjectMapper.toProjectDetail(rows);
-    }
+		if (rows.isEmpty()) {
+			throw new IllegalArgumentException("프로젝트가 존재하지 않습니다. projectGuid=" + projectGuid);
+		}
 
+		ProjectEntity project = rows.get(0).get(projectEntity);
+
+		List<ProjectSkillEntity> skillEntities = rows.stream()
+				.map(row -> row.get(projectSkillEntity))
+				.filter(Objects::nonNull)
+				.distinct()
+				.toList();
+
+		List<ProjectRequirementEntity> requirementEntities = rows.stream()
+				.map(row -> row.get(projectRequirementEntity))
+				.filter(Objects::nonNull)
+				.distinct()
+				.toList();
+
+		String likeCount = rows.get(0).get(3, String.class);
+
+		return ProjectMapper.toProjectDetail(
+				project,
+				skillEntities,
+				requirementEntities,
+				likeCount
+		);
+	}
 
 
 }
