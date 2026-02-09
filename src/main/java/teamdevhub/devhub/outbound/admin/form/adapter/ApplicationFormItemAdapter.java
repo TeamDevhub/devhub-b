@@ -1,0 +1,29 @@
+package teamdevhub.devhub.outbound.admin.form.adapter;
+
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.admin.form.domain.ApplicationFormItem;
+import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormItemRepository;
+import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormItemEntity;
+import teamdevhub.devhub.outbound.admin.form.adapter.mapper.ApplicationFormItemMapper;
+import teamdevhub.devhub.outbound.admin.form.persistence.JpaApplicationFormItemRepository;
+
+@Component
+@RequiredArgsConstructor
+public class ApplicationFormItemAdapter implements ApplicationFormItemRepository{
+	
+	private JpaApplicationFormItemRepository jpaApplicationFormItemRepository;
+
+	@Override
+	public void saveAll(Set<ApplicationFormItem> items) {
+		List<ApplicationFormItemEntity> entityList = items.stream()
+				.map(item -> ApplicationFormItemMapper.toEntity(item))
+				.toList();
+		jpaApplicationFormItemRepository.saveAll(entityList);
+	}
+	
+}
