@@ -30,7 +30,6 @@ public class ProjectController {
 	
 	private final ProjectFacade projectFacade;
 	
-	@GetMapping
 	@PostMapping
 	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
 		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid(), authenticatedUser.username()));

@@ -34,13 +34,6 @@ public class ApplicationFormEntity extends BaseEntity {
 	@Column(name = "help_text", nullable = false)
 	private String helpText;
 
-	@Column(name = "max_length", nullable = false)
-	private String maxLength;
-
-	@Convert(converter = BooleanToYNConverter.class)
-	@Column(name = "vert_yn", nullable = false)
-	private boolean isVertical;
-
 	@Convert(converter = BooleanToYNConverter.class)
 	@Column(name = "custom_yn", nullable = false)
 	private boolean isCustomized;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
+import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
 import teamdevhub.devhub.core.project.domain.vo.skill.ProjectSkill;
 import teamdevhub.devhub.core.project.port.out.ProjectSkillRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
@@ -21,15 +22,16 @@ public class ProjectSkillAdapter implements ProjectSkillRepository {
 	private final JpaProjectSkillRepository jpaProjectSkillRepository;
 	
 	@Override
-	public void saveAll(Set<ProjectSkill> skills) {
+	public void saveAll(Set<CreateProjectSkillCommand> skills) {
 		if(skills.isEmpty()) {
 			return;
 		}
 
 		List<ProjectSkillEntity> projectSkillEntityList = skills.stream()
-				.map(projectSkill -> {
+				.map(projectSkillCommand -> {
 					String projectSkillGuid = identifierProvider.generateIdentifier();
-					return ProjectSkillMapper.toEntity(projectSkillGuid, projectSkill);
+					ProjectSkill projectSkill =  new ProjectSkill(projectSkillGuid, projectSkillCommand.projectGuid(), projectSkillCommand.skillCd());
+					return ProjectSkillMapper.toEntity(projectSkill);
 				})
 				.toList();
 		jpaProjectSkillRepository.saveAll(projectSkillEntityList);

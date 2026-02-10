@@ -12,8 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
-import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementRequestCommand;
+import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
 
 @Getter
 @Builder
@@ -65,6 +66,12 @@ public class CreateProjectRequestDto {
     @Size(min = 1, message = "모집인원은 최소 1개 이상 선택해야 합니다")
     private List<CreateProjectRequirementRequestCommand> positionList;
     
+    @NotNull(message = "신청양식은 필수입니다")
+    @Size(min = 1, message = "신청양식은 최소 1개 이상 선택해야 합니다")
+    private List<String> applicationFormList;
+    
+    private List<CreateApplicationFormCommand> additionalFormList;
+    
     public CreateProjectCommand toCommand(String userGuid, String userName) {
     	return CreateProjectCommand.builder()
     			.userGuid(userGuid)
@@ -81,6 +88,8 @@ public class CreateProjectRequestDto {
     			.progressEndDate(this.progressEndDate)
     			.skillList(this.skillList)
     			.positionList(this.positionList)
+    			.applicationFormList(this.applicationFormList)
+    			.additionalFormList(this.additionalFormList)
     			.build();
     }
 

@@ -5,13 +5,24 @@ import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntit
 
 public class ProjectRequirementMapper {
 	
-	public static ProjectRequirementEntity toEntity(String projectRequirementGuid, ProjectRequirement projectRequirement) {
+	public static ProjectRequirementEntity toEntity(ProjectRequirement projectRequirement) {
 		return ProjectRequirementEntity.builder()
-				.projectRequirementGuid(projectRequirementGuid)
+				.projectRequirementGuid(projectRequirement.projectRequirementGuid())
 				.projectGuid(projectRequirement.projectGuid())
-				.positionCd(projectRequirement.position())
-				.levelCd(projectRequirement.level())
+				.positionCd(projectRequirement.positionCd())
+				.levelCd(projectRequirement.levelCd())
 				.capacity(projectRequirement.capacity())
 				.build();
+	}
+	
+	public static ProjectRequirement toProjectRequirement(ProjectRequirementEntity projectRequirementEntity) {
+		return ProjectRequirement.builder()
+				.projectRequirementGuid(projectRequirementEntity.getProjectRequirementGuid())
+				.projectGuid(projectRequirementEntity.getProjectGuid())
+				.positionCd(projectRequirementEntity.getPositionCd())
+				.levelCd(projectRequirementEntity.getLevelCd())
+				.capacity(projectRequirementEntity.getCapacity())
+				.build();
+				
 	}
 }
