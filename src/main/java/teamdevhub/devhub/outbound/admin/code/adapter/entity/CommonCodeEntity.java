@@ -36,7 +36,7 @@ public class CommonCodeEntity extends BaseEntity {
 	
 	@Convert(converter = BooleanToYNConverter.class)
     @Column(name = "use_yn", nullable = false)
-	private String isUsed;
+	private boolean isUsed;
 	
     @Column(name = "remarks")	
 	private String remarks;

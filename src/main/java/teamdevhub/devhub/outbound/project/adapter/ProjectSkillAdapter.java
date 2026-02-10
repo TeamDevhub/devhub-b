@@ -1,0 +1,41 @@
+package teamdevhub.devhub.outbound.project.adapter;
+
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.common.provider.IdentifierProvider;
+import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
+import teamdevhub.devhub.core.project.domain.vo.skill.ProjectSkill;
+import teamdevhub.devhub.core.project.port.out.ProjectSkillRepository;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
+import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectSkillMapper;
+import teamdevhub.devhub.outbound.project.persistence.JpaProjectSkillRepository;
+
+@Component
+@RequiredArgsConstructor
+public class ProjectSkillAdapter implements ProjectSkillRepository {
+	
+	private final IdentifierProvider identifierProvider;
+	private final JpaProjectSkillRepository jpaProjectSkillRepository;
+	
+	@Override
+	public void saveAll(Set<CreateProjectSkillCommand> skills) {
+		if(skills.isEmpty()) {
+			return;
+		}
+
+		List<ProjectSkillEntity> projectSkillEntityList = skills.stream()
+				.map(projectSkillCommand -> {
+					String projectSkillGuid = identifierProvider.generateIdentifier();
+					ProjectSkill projectSkill =  new ProjectSkill(projectSkillGuid, projectSkillCommand.projectGuid(), projectSkillCommand.skillCd());
+					return ProjectSkillMapper.toEntity(projectSkill);
+				})
+				.toList();
+		jpaProjectSkillRepository.saveAll(projectSkillEntityList);
+		
+	}
+
+}

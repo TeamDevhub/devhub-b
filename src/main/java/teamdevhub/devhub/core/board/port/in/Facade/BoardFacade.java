@@ -1,0 +1,45 @@
+package teamdevhub.devhub.core.board.port.in.Facade;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
+import teamdevhub.devhub.api.web.model.response.PageResponseDto;
+import teamdevhub.devhub.core.board.domain.Board;
+import teamdevhub.devhub.core.board.port.in.Facade.model.BoardBasicResponseDto;
+import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
+import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
+import teamdevhub.devhub.core.board.port.in.usecase.BoardQueryUseCase;
+import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
+import teamdevhub.devhub.shared.enums.SuccessCode;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class BoardFacade {
+
+    private final BoardQueryUseCase boardQueryUseCase;
+
+	public DataListApiResponseDto<BoardSummaryResponseDto> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand) {
+		
+		PageResult<Board> pagedBoardList = boardQueryUseCase.listBoard(searchBoardCommand, pageCommand);
+		
+		List<BoardSummaryResponseDto> boardSummaryResponseDtoList = pagedBoardList.content().stream()
+				.map(board -> BoardSummaryResponseDto.builder()
+						.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))
+						.likeCount(board.getLikeCount())
+						.commentCount(board.getCommentCount())
+		                .build())
+				.toList();
+		
+		return DataListApiResponseDto.successWithDataList(
+                        SuccessCode.READ_SUCCESS,
+                        boardSummaryResponseDtoList,
+                        PageResponseDto.from(pagedBoardList));
+	}
+
+}

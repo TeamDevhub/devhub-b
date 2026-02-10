@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.api.user.model.SearchUserRequestDto;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
 import teamdevhub.devhub.core.user.domain.User;
-import teamdevhub.devhub.core.user.port.in.usecase.AdminUserUseCase;
+import teamdevhub.devhub.core.user.port.in.usecase.UserQueryUseCase;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
@@ -21,11 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminUserController {
 
-    private final AdminUserUseCase adminUserUseCase;
+    private final UserQueryUseCase userQueryUseCase;
 
     @GetMapping()
     public ResponseEntity<DataListApiResponseDto<UserBasicResponseDto>> list(@ModelAttribute SearchUserRequestDto searchUserRequestDto, @RequestParam int page, @RequestParam int size) {
-        PageResult<User> pagedUserList = adminUserUseCase.listUser(searchUserRequestDto.toSearchUserCommand(), PageCommand.of(page, size));
+        PageResult<User> pagedUserList = userQueryUseCase.listUser(searchUserRequestDto.toSearchUserCommand(), PageCommand.of(page, size));
         List<UserBasicResponseDto> userBasicResponseDtoList = pagedUserList.content().stream()
                         .map(UserBasicResponseDto::fromDomain)
                         .toList();

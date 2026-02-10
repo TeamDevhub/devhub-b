@@ -1,13 +1,11 @@
 package teamdevhub.devhub.fake.pure.application.port.out.user;
 
-import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
-import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -109,23 +107,6 @@ public class FakeUserRepository implements UserRepository {
     @Override
     public boolean existsByUserRole(UserRole userRole) {
         return store.values().stream().anyMatch(user -> user.getUserRole().equals(userRole));
-    }
-
-    @Override
-    public PageResult<User> listUser(SearchUserCommand searchUserCommand, int page, int size) {
-        List<User> userList = new ArrayList<>(store.values());
-
-        long totalElements = userList.size();
-        int start = page * size;
-        int end = Math.min(start + size, userList.size());
-        List<User> pageContent = start >= end ? Collections.emptyList() : userList.subList(start, end);
-
-        return PageResult.of(
-                pageContent,
-                page,
-                size,
-                totalElements
-        );
     }
 
     public boolean wasCalled(String methodName) {
