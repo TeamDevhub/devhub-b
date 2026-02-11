@@ -1,9 +1,8 @@
 package teamdevhub.devhub.core.file.port.out;
 
-import java.io.InputStream;
-
 public interface FileStorage {
 
-    String save(String fileGuid, InputStream content);
+    String save(String fileGuid, byte[] content);
+    byte[] read(String fileGuid);
     void delete(String fileGuid);
 }
