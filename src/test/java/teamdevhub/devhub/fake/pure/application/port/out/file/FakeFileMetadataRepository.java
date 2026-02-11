@@ -18,6 +18,11 @@ public class FakeFileMetadataRepository implements FileMetadataRepository {
     }
 
     @Override
+    public StoredFile find(String fileGuid) {
+        return null;
+    }
+
+    @Override
     public void deleteByFileGuid(String fileGuid) {
         store.remove(fileGuid);
     }

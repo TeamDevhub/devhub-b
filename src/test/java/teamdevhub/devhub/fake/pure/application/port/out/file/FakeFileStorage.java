@@ -15,6 +15,11 @@ public class FakeFileStorage implements FileStorage {
     }
 
     @Override
+    public byte[] read(String fileGuid) {
+        return new byte[0];
+    }
+
+    @Override
     public void delete(String fileGuid) {
         storage.remove(fileGuid);
     }

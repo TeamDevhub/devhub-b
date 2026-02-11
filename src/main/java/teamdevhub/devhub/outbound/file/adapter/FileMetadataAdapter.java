@@ -21,6 +21,13 @@ public class FileMetadataAdapter implements FileMetadataRepository {
     }
 
     @Override
+    public StoredFile find(String fileGuid) {
+        return jpaFileRepository.findByFileGuid(fileGuid)
+                .map(FileMetaDataMapper::toStoredFile)
+                .orElseThrow(() -> new IllegalArgumentException("File not found"));
+    }
+
+    @Override
     public void deleteByFileGuid(String fileGuid) {
         jpaFileRepository.deleteByFileGuid(fileGuid);
     }

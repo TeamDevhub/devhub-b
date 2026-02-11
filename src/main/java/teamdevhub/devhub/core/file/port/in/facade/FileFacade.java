@@ -3,6 +3,7 @@ package teamdevhub.devhub.core.file.port.in.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.api.file.model.UploadFileRequestDto;
+import teamdevhub.devhub.core.file.application.FileResource;
 import teamdevhub.devhub.core.file.application.StoredFile;
 import teamdevhub.devhub.core.file.port.in.command.UploadFileCommand;
 import teamdevhub.devhub.core.file.port.in.facade.model.FileResponseDto;
@@ -28,6 +29,10 @@ public class FileFacade {
         });
 
         return UploadFileResponseDto.from(result);
+    }
+
+    public FileResource find(String fileGuid) {
+        return fileUseCase.find(fileGuid);
     }
 
     public void delete(String fileGuid) {

@@ -27,6 +27,13 @@ public class FileService implements FileUseCase {
     }
 
     @Override
+    public FileResource find(String fileGuid) {
+        StoredFile storedFile = fileMetadataRepository.find(fileGuid);
+        byte[] content = fileStorage.read(fileGuid);
+        return FileResource.of(storedFile, content);
+    }
+
+    @Override
     public void delete(String fileGuid) {
         fileStorage.delete(fileGuid);
         fileMetadataRepository.deleteByFileGuid(fileGuid);
