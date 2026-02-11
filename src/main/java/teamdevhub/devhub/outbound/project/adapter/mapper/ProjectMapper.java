@@ -79,9 +79,9 @@ public class ProjectMapper {
                 .category(entity.getCategory())
                 .title(entity.getTitle())
                 .content(entity.getContent())
-                .recruitmentTypeCd(entity.getRecuritmentTypeCd())
+                .recruitmentTypeCd(entity.getRecruitmentTypeCd())
                 .recruitmentStartDate(entity.getProgressStartDate())
-                .recruitmentEndDate(entity.getRecuritmentEndDate())
+                .recruitmentEndDate(entity.getRecruitmentEndDate())
                 .progressTypeCd(entity.getProgressTypeCd())
 //                .progressRegionCd(entity.getpro)
 //                .progressPeriod(entity.getpro)
@@ -115,28 +115,45 @@ public class ProjectMapper {
         if (entityList == null) return null;
         return entityList.stream()
                 .collect(Collectors.groupingBy(ProjectRequirementEntity::getProjectGuid));
+    }
 
-    public static ProjectDetail toProjectDetail(
+    public static Project toProjectDetail(
             ProjectEntity projectEntity,
             List<ProjectSkillEntity> skillEntities,
             List<ProjectRequirementEntity> requirementEntities,
             String likeCount
     ) {
-        return ProjectDetail.builder()
-                .project(toProject(projectEntity))
+            if (projectEntity == null) return null;
+        return Project.builder()
+                .projectGuid(projectEntity.getProjectGuid())
+                .userGuid(projectEntity.getUserGuid())
+                .username(projectEntity.getUsername())
+                .category(projectEntity.getCategory())
+                .title(projectEntity.getTitle())
+                .content(projectEntity.getContent())
+                .recruitmentTypeCd(projectEntity.getRecruitmentTypeCd())
+                .recruitmentStartDate(projectEntity.getRecruitmentStartDate())
+                .recruitmentEndDate(projectEntity.getRecruitmentEndDate())
+                .progressTypeCd(projectEntity.getProgressTypeCd())
+                .progressRegionCd(projectEntity.getProgressRegionCd())
+                .progressStartDate(projectEntity.getProgressStartDate())
+                .progressEndDate(projectEntity.getProgressEndDate())
+                .likeCount(likeCount)
                 .projectSkill(
-                        skillEntities.stream()
-                                .map(ProjectSkillEntity::getSkillCd)
-                                .filter(Objects::nonNull)
-                                .distinct()
-                                .toList()
+                        skillEntities == null ? List.of() :
+                                skillEntities.stream()
+                                        .map(ProjectSkillEntity::getSkillCd)
+                                        .filter(Objects::nonNull)
+                                        .distinct()
+                                        .toList()
                 )
                 .projectRequirement(
-                        requirementEntities.stream()
-                                .map(ProjectMapper::toRequirement)
-                                .toList()
+                        requirementEntities == null ? List.of() :
+                                requirementEntities.stream()
+                                        .map(ProjectMapper::toRequirement)
+                                        .toList()
                 )
-                .likeCount(likeCount)
+                .auditInfo(toAuditInfo(projectEntity))
                 .build();
     }
 

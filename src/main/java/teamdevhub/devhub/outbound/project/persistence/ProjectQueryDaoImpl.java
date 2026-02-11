@@ -120,7 +120,7 @@ public class ProjectQueryDaoImpl implements ProjectQueryDao {
 	}
 
         @Override
-	public ProjectDetail findProjectDetailByGuid(String projectGuid) {
+	public Project findProjectDetailByGuid(String projectGuid) {
 
 		List<Tuple> rows = queryFactory
 				.select(
