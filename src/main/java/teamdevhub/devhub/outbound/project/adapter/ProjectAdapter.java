@@ -6,12 +6,14 @@ import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectMapper;
 import teamdevhub.devhub.outbound.project.persistence.JpaProjectRepository;
+import teamdevhub.devhub.outbound.project.persistence.ProjectQueryDao;
 
 @Component
 @RequiredArgsConstructor
 public class ProjectAdapter implements ProjectRepository {
 	
 	private final JpaProjectRepository jpaProjectRepository;
+    private final ProjectQueryDao projectQueryDao;
 
 	@Override
 	public void save(Project project) {
@@ -19,8 +21,8 @@ public class ProjectAdapter implements ProjectRepository {
 	}
 	
 	@Override
-	public ProjectDetail getProjectDetail(String projectGuid) {
-		ProjectDetail projectEntity = projectQueryRepository.findProjectDetailByGuid(projectGuid);
+	public Project getProjectDetail(String projectGuid) {
+        Project projectEntity = projectQueryDao.findProjectDetailByGuid(projectGuid);
 		
 		return projectEntity;
 	}

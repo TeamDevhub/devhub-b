@@ -71,7 +71,7 @@ public class ProjectService implements ProjectUseCase {
 	}
 	
 	@Override
-	public ProjectDetail getProjectDetail(String projectGuid) {
+	public Project getProjectDetail(String projectGuid) {
 		return projectRepository.getProjectDetail(projectGuid);
 	}
 
