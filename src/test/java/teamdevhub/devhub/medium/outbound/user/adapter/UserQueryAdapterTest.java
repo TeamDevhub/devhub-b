@@ -17,7 +17,6 @@ import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
-import static teamdevhub.devhub.constant.UserTestConstant.TEST_PASSWORD_2;
 
 @SpringBootTest
 @Transactional

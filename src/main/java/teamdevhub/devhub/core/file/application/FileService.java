@@ -19,11 +19,26 @@ public class FileService implements FileUseCase {
     private final FileMetadataRepository fileMetadataRepository;
 
     @Override
-    public StoredFile upload(UploadFileCommand uploadFileCommand) {
+    @Transactional
+    public FileMetadata upload(UploadFileCommand uploadFileCommand) {
         String fileGuid = identifierProvider.generateIdentifier();
-        String savedPath = fileStorage.save(fileGuid, uploadFileCommand.content());
-        StoredFile storedFile = StoredFile.from(fileGuid, uploadFileCommand, savedPath);
-        return fileMetadataRepository.save(storedFile);
+        fileStorage.save(fileGuid, uploadFileCommand.content());
+        FileMetadata fileMetadata = FileMetadata.create(
+                fileGuid,
+                uploadFileCommand.originalName(),
+                uploadFileCommand.extension(),
+                uploadFileCommand.size()
+        );
+
+        return fileMetadataRepository.save(fileMetadata);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FileResource find(String fileGuid) {
+        FileMetadata metadata = fileMetadataRepository.find(fileGuid);
+        byte[] content = fileStorage.read(fileGuid);
+        return FileResource.of(metadata, content);
     }
 
     @Override

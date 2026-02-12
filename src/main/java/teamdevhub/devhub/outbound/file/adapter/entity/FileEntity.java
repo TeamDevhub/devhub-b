@@ -40,7 +40,7 @@ public class FileEntity extends BaseEntity {
     private String extensionName;
     
     @Column(name = "size", nullable = false)
-    private int size;
+    private long size;
     
     @Column(name = "path", nullable = false)
     private String path;

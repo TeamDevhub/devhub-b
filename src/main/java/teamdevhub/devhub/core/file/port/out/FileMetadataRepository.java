@@ -1,9 +1,10 @@
 package teamdevhub.devhub.core.file.port.out;
 
-import teamdevhub.devhub.core.file.application.StoredFile;
+import teamdevhub.devhub.core.file.application.FileMetadata;
 
 public interface FileMetadataRepository {
 
-    StoredFile save(StoredFile storedFile);
+    FileMetadata save(FileMetadata fileMetadata);
+    FileMetadata find(String fileGuid);
     void deleteByFileGuid(String fileGuid);
 }

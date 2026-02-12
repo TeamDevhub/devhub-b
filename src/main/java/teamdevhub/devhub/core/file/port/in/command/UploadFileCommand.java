@@ -3,19 +3,18 @@ package teamdevhub.devhub.core.file.port.in.command;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 public record UploadFileCommand(
         String originalName,
         String extension,
         long size,
-        InputStream content
+        byte[] content
 ) {
 
     public static UploadFileCommand from(MultipartFile multipartFile) {
         try {
 
-            if (multipartFile.isEmpty()) {
+            if (multipartFile == null || multipartFile.isEmpty()) {
                 throw new IllegalArgumentException("Empty file");
             }
 
@@ -26,8 +25,9 @@ public record UploadFileCommand(
                     originalName,
                     extension,
                     multipartFile.getSize(),
-                    multipartFile.getInputStream()
+                    multipartFile.getBytes()
             );
+
         } catch (IOException e) {
             throw new RuntimeException("Failed to read multipart file", e);
         }
