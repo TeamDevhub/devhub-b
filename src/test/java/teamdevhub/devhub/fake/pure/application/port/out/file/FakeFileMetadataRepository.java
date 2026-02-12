@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.application.port.out.file;
 
-import teamdevhub.devhub.core.file.application.StoredFile;
+import teamdevhub.devhub.core.file.application.FileMetadata;
 import teamdevhub.devhub.core.file.port.out.FileMetadataRepository;
 
 import java.util.HashMap;
@@ -9,16 +9,16 @@ import java.util.Optional;
 
 public class FakeFileMetadataRepository implements FileMetadataRepository {
 
-    private final Map<String, StoredFile> store = new HashMap<>();
+    private final Map<String, FileMetadata> store = new HashMap<>();
 
     @Override
-    public StoredFile save(StoredFile storedFile) {
-        store.put(storedFile.fileGuid(), storedFile);
-        return storedFile;
+    public FileMetadata save(FileMetadata fileMetadata) {
+        store.put(fileMetadata.fileGuid(), fileMetadata);
+        return fileMetadata;
     }
 
     @Override
-    public StoredFile find(String fileGuid) {
+    public FileMetadata find(String fileGuid) {
         return null;
     }
 
@@ -27,7 +27,7 @@ public class FakeFileMetadataRepository implements FileMetadataRepository {
         store.remove(fileGuid);
     }
 
-    public Optional<StoredFile> findByFileGuid(String fileGuid) {
+    public Optional<FileMetadata> findByFileGuid(String fileGuid) {
         return Optional.ofNullable(store.get(fileGuid));
     }
 }
