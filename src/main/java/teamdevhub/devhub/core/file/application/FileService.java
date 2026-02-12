@@ -20,17 +20,17 @@ public class FileService implements FileUseCase {
 
     @Override
     @Transactional
-    public FileMetadata upload(UploadFileCommand command) {
+    public FileMetadata upload(UploadFileCommand uploadFileCommand) {
         String fileGuid = identifierProvider.generateIdentifier();
-        fileStorage.save(fileGuid, command.content());
-        FileMetadata metadata = FileMetadata.create(
+        fileStorage.save(fileGuid, uploadFileCommand.content());
+        FileMetadata fileMetadata = FileMetadata.create(
                 fileGuid,
-                command.originalName(),
-                command.extension(),
-                command.size()
+                uploadFileCommand.originalName(),
+                uploadFileCommand.extension(),
+                uploadFileCommand.size()
         );
 
-        return fileMetadataRepository.save(metadata);
+        return fileMetadataRepository.save(fileMetadata);
     }
 
     @Override
