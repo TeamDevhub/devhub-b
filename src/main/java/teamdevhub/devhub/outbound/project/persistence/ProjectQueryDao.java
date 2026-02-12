@@ -8,4 +8,6 @@ import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 public interface ProjectQueryDao {
 
     Page<Project> listProject(SearchProjectListCommand searchProjectListCommand, Pageable pageable);
+    Project findProjectDetailByGuid(String projectGuid);
+
 }

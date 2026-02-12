@@ -69,4 +69,10 @@ public class ProjectService implements ProjectUseCase {
 		projectApplicationFormRepository.saveAll(forms);
 		
 	}
+	
+	@Override
+	public Project getProjectDetail(String projectGuid) {
+		return projectRepository.getProjectDetail(projectGuid);
+	}
+
 }

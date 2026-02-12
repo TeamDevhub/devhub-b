@@ -50,4 +50,10 @@ public class ProjectFacade {
 		projectUseCase.createProject(createProjectCommand);
 	}
 
+	public Project getProjectDetail(String projectGuid) {
+		Project result = projectUseCase.getProjectDetail(projectGuid);
+		
+		return result;
+	}
+
 }

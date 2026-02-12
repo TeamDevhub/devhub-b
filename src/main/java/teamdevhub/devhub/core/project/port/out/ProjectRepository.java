@@ -5,4 +5,6 @@ import teamdevhub.devhub.core.project.domain.Project;
 public interface ProjectRepository {
 
 	void save(Project project);
+    Project getProjectDetail(String projectGuid);
+
 }

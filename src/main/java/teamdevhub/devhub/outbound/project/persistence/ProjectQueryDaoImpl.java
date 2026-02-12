@@ -118,4 +118,56 @@ public class ProjectQueryDaoImpl implements ProjectQueryDao {
 				.filter(Objects::nonNull)
 				.toArray(BooleanExpression[]::new);
 	}
+
+        @Override
+	public Project findProjectDetailByGuid(String projectGuid) {
+
+		List<Tuple> rows = queryFactory
+				.select(
+						projectEntity,
+						projectSkillEntity,
+						projectRequirementEntity,
+						JPAExpressions
+								.select(projectLikeEntity.count().stringValue())
+								.from(projectLikeEntity)
+								.where(projectLikeEntity.projectGuid.eq(projectEntity.projectGuid))
+				)
+				.from(projectEntity)
+				.leftJoin(projectSkillEntity)
+				.on(projectEntity.projectGuid.eq(projectSkillEntity.projectGuid))
+				.leftJoin(projectRequirementEntity)
+				.on(projectEntity.projectGuid.eq(projectRequirementEntity.projectGuid))
+				.where(
+						projectEntity.projectGuid.eq(projectGuid),
+						projectEntity.deleted.eq(false)
+				)
+				.fetch();
+
+		if (rows.isEmpty()) {
+			throw new IllegalArgumentException("프로젝트가 존재하지 않습니다. projectGuid=" + projectGuid);
+		}
+
+		ProjectEntity project = rows.get(0).get(projectEntity);
+
+		List<ProjectSkillEntity> skillEntities = rows.stream()
+				.map(row -> row.get(projectSkillEntity))
+				.filter(Objects::nonNull)
+				.distinct()
+				.toList();
+
+		List<ProjectRequirementEntity> requirementEntities = rows.stream()
+				.map(row -> row.get(projectRequirementEntity))
+				.filter(Objects::nonNull)
+				.distinct()
+				.toList();
+
+		String likeCount = rows.get(0).get(3, String.class);
+
+		return ProjectMapper.toProjectDetail(
+				project,
+				skillEntities,
+				requirementEntities,
+				likeCount
+		);
+	}
 }
