@@ -43,10 +43,10 @@ public class ProjectFacade {
 	
 	public void createProject(CreateProjectCommand createProjectCommand) {
 		List<ApplicationFormEntity> additionalFormEntityList = applicationFormUseCase.saveApplicationForms(createProjectCommand.additionalFormList());
-		List<String> additionalFormGuidList = additionalFormEntityList.stream()
+		List<String> applitionalFormGuidList = additionalFormEntityList.stream()
 				.map(additionalFormEntity -> additionalFormEntity.getApplicationFormGuid())
 				.toList();
-		createProjectCommand.applicationFormList().addAll(additionalFormGuidList);
+		createProjectCommand.applicationFormList().addAll(applitionalFormGuidList);
 		projectUseCase.createProject(createProjectCommand);
 	}
 
