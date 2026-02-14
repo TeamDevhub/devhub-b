@@ -1,10 +1,5 @@
 package teamdevhub.devhub.api.project.model;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -12,9 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
-import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -64,15 +63,23 @@ public class CreateProjectRequestDto {
     
     @NotNull(message = "모집인원은 필수입니다")
     @Size(min = 1, message = "모집인원은 최소 1개 이상 선택해야 합니다")
-    private List<CreateProjectRequirementRequestCommand> positionList;
+    private List<CreateProjectRequirementRequestDto> positionList;
     
     @NotNull(message = "신청양식은 필수입니다")
     @Size(min = 1, message = "신청양식은 최소 1개 이상 선택해야 합니다")
     private List<String> applicationFormList;
     
-    private List<CreateApplicationFormCommand> additionalFormList;
+    private List<CreateApplicationFormRequestDto> additionalFormList;
     
     public CreateProjectCommand toCommand(String userGuid, String userName) {
+        List<CreateApplicationFormCommand> additionalFormCommands = null;
+
+        if (this.additionalFormList != null) {
+            additionalFormCommands = this.additionalFormList.stream()
+                    .map(CreateApplicationFormRequestDto::toCommand)
+                    .toList();
+        }
+
     	return CreateProjectCommand.builder()
     			.userGuid(userGuid)
     			.username(userName)
@@ -87,9 +94,13 @@ public class CreateProjectRequestDto {
     			.progressStartDate(this.progressStartDate)
     			.progressEndDate(this.progressEndDate)
     			.skillList(this.skillList)
-    			.positionList(this.positionList)
+                .positionList(
+                        this.positionList.stream()
+                                .map(CreateProjectRequirementRequestDto::toCommand)
+                                .collect(Collectors.toList())
+                )
     			.applicationFormList(this.applicationFormList)
-    			.additionalFormList(this.additionalFormList)
+                .additionalFormList(additionalFormCommands)
     			.build();
     }
 

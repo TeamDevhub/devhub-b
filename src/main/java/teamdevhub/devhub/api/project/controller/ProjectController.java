@@ -16,8 +16,6 @@ import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponse
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
-;
-
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor

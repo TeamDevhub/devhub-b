@@ -86,7 +86,7 @@ public class BoardQueryDaoImpl implements BoardQueryDao {
     				Objects.requireNonNull(board),
     				Objects.requireNonNull(tuple.get(likeCountSubQuery)).toString(),
     				Objects.requireNonNull(tuple.get(commentCountSubQuery)).toString(),
-    				Objects.requireNonNull(tuple.get(userNameSubQuery)).toString()
+                    Objects.requireNonNull(tuple.get(userNameSubQuery))
     				);
     	}).toList();
 
