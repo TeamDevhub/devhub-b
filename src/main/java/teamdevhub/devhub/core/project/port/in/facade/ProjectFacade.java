@@ -42,18 +42,19 @@ public class ProjectFacade {
 	}
 	
 	public void createProject(CreateProjectCommand createProjectCommand) {
+		/**
+		 * 아웃바운드 개체인 엔티티가 퍼사드 영역까지 들어온 케이스(계층 간 의존성 문제) -> 별도 VO 또는 List<String> 으로 UseCase 에서 리턴
+		 */
 		List<ApplicationFormEntity> additionalFormEntityList = applicationFormUseCase.saveApplicationForms(createProjectCommand.additionalFormList());
 		List<String> additionalFormGuidList = additionalFormEntityList.stream()
-				.map(additionalFormEntity -> additionalFormEntity.getApplicationFormGuid())
+				.map(ApplicationFormEntity::getApplicationFormGuid)
 				.toList();
 		createProjectCommand.applicationFormList().addAll(additionalFormGuidList);
 		projectUseCase.createProject(createProjectCommand);
 	}
 
 	public Project getProjectDetail(String projectGuid) {
-		Project result = projectUseCase.getProjectDetail(projectGuid);
-		
-		return result;
+        return projectUseCase.getProjectDetail(projectGuid);
 	}
 
 }

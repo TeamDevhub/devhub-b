@@ -21,9 +21,8 @@ public class ApplicationFormAdapter implements ApplicationFormRepository{
 	@Override
 	public List<ApplicationFormEntity> saveAll(Set<ApplicationForm> applicationForms) {
 		List<ApplicationFormEntity> entityList = applicationForms.stream()
-				.map(applicationForm -> 
-				ApplicationFormMapper.toEntity(applicationForm))
+				.map(ApplicationFormMapper::toEntity)
 				.toList();
 		return jpaApplicationFormRepository.saveAll(entityList);
 	}
-};
+}

@@ -22,9 +22,6 @@ public class ProjectAdapter implements ProjectRepository {
 	
 	@Override
 	public Project getProjectDetail(String projectGuid) {
-        Project projectEntity = projectQueryDao.findProjectDetailByGuid(projectGuid);
-		
-		return projectEntity;
+        return projectQueryDao.findProjectDetailByGuid(projectGuid);
 	}
-
 }
