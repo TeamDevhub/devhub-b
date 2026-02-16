@@ -32,6 +32,16 @@ public class UserProfileController {
         );
     }
 
+    @PostMapping("/profile/image")
+    public ResponseEntity<DataApiResponseDto<Void>> updateProfileImage(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+        userProfileFacade.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
+        return ResponseEntity.ok(
+                DataApiResponseDto.successWithoutData(
+                        SuccessCode.UPDATE_SUCCESS
+                )
+        );
+    }
+
     @PutMapping("/profile")
     public ResponseEntity<DataApiResponseDto<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
         userProfileFacade.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
