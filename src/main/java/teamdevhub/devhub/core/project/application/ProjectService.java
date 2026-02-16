@@ -13,9 +13,8 @@ import teamdevhub.devhub.core.application.port.out.ProjectApplicationFormReposit
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
-import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
-import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
+import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectRequirementRepository;
@@ -54,9 +53,9 @@ public class ProjectService implements ProjectUseCase {
 		projectSkillRepository.saveAll(skills);
 	}
 
-	private void saveProjectRequirement(String projectGuid, List<CreateProjectRequirementRequestCommand> positionList) {
-		Set<CreateProjectRequirementCommand> positions = positionList.stream()
-				.map(position -> new CreateProjectRequirementCommand(projectGuid, position.position(), position.level(), position.capacity()))
+	private void saveProjectRequirement(String projectGuid, List<CreateProjectRequirementCommand> positionList) {
+		Set<teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand> positions = positionList.stream()
+				.map(position -> new teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand(projectGuid, position.position(), position.level(), position.capacity()))
 				.collect(Collectors.toUnmodifiableSet());
 		projectRequirementRepository.saveAll(positions);
 	}
