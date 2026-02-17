@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import teamdevhub.devhub.api.user.model.UpdateProfileImageRequestDto;
 import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
 import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
@@ -33,8 +34,8 @@ public class UserProfileController {
     }
 
     @PostMapping("/profile/image")
-    public ResponseEntity<DataApiResponseDto<Void>> updateProfileImage(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-        userProfileFacade.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
+    public ResponseEntity<DataApiResponseDto<Void>> updateProfileImage(@Valid @RequestBody UpdateProfileImageRequestDto updateProfileImageRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+        userProfileFacade.updateProfileImage(updateProfileImageRequestDto.toUpdateProfileImageCommand(authenticatedUser.userGuid()));
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS

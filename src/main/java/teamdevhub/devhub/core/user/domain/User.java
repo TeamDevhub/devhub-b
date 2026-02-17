@@ -2,6 +2,7 @@ package teamdevhub.devhub.core.user.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
@@ -32,6 +33,7 @@ public class User {
 
     private String username;
     private String introduction;
+    private String fileGuid;
 
     private Set<UserPosition> positions;
     private Set<UserSkill> skills;
@@ -52,9 +54,10 @@ public class User {
             String oauthId,
             String email,
             String password,
-            String username,
             UserRole userRole,
+            String username,
             String introduction,
+            String fileGuid,
             Set<UserPosition> positions,
             Set<UserSkill> skills,
             double mannerDegree,
@@ -76,6 +79,7 @@ public class User {
 
         this.username = username;
         this.introduction = introduction;
+        this.fileGuid = fileGuid;
 
         this.positions = Objects.requireNonNullElseGet(positions, HashSet::new);
         this.skills = Objects.requireNonNullElseGet(skills, HashSet::new);
@@ -133,9 +137,9 @@ public class User {
                 .oauthId(oauthCreateUserCommand.oauthId())
                 .email(oauthCreateUserCommand.email())
                 .password(oauthCreateUserCommand.encodedPassword())
+                .userRole(UserRole.USER)
                 .username(oauthCreateUserCommand.username())
                 .introduction(oauthCreateUserCommand.introduction())
-                .userRole(UserRole.USER)
                 .mannerDegree(36.5)
                 .blocked(false)
                 .deleted(false)
@@ -149,9 +153,10 @@ public class User {
             String oauthId,
             String email,
             String password,
-            String username,
             UserRole userRole,
+            String username,
             String introduction,
+            String fileGuid,
             double mannerDegree,
             boolean blocked,
             LocalDateTime blockEndDate,
@@ -168,6 +173,7 @@ public class User {
                 .userRole(userRole)
                 .username(username)
                 .introduction(introduction)
+                .fileGuid(fileGuid)
                 .mannerDegree(mannerDegree)
                 .blocked(blocked)
                 .blockEndDate(blockEndDate)
@@ -183,6 +189,10 @@ public class User {
         }
         this.deleted = true;
         this.blocked = false;
+    }
+
+    public void updateProfileImage(UpdateProfileImageCommand updateProfileImageCommand) {
+        this.fileGuid = updateProfileImageCommand.fileGuid();
     }
 
     public void updateBasicProfile(UpdateUserCommand updateUserCommand) {
