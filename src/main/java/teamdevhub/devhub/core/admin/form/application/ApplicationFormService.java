@@ -14,9 +14,7 @@ import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCo
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormItemRepository;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormRepository;
-import teamdevhub.devhub.core.application.port.in.command.SearchApplicationFormCommand;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
-import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormEntity;
 
 @Service
 @Transactional
@@ -28,7 +26,7 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 	private final ApplicationFormItemRepository applicationFormItemRepository;
 	
 	@Override
-	public List<ApplicationFormEntity> saveApplicationForms(List<CreateApplicationFormCommand> applitionalFormCommandList) {
+	public List<String> saveApplicationForms(List<CreateApplicationFormCommand> applitionalFormCommandList) {
 		Set<ApplicationForm> applicationForms = applitionalFormCommandList.stream()
 				.map(applicationFormCommand -> {
 				ApplicationForm applicationForm = createApplicationForm(applicationFormCommand);
@@ -36,6 +34,7 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 				return applicationForm;
 				})
 				.collect(Collectors.toUnmodifiableSet());
+		
 		return applicationFormRepository.saveAll(applicationForms);
 	}
 	

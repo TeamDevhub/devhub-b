@@ -9,6 +9,6 @@ import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormEntit
 
 public interface ApplicationFormRepository {
 
-	List<ApplicationFormEntity> saveAll(Set<ApplicationForm> applicationForms);
+	List<String> saveAll(Set<ApplicationForm> applicationForms);
 
 }
