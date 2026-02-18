@@ -8,4 +8,5 @@ import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormEntit
 public interface ApplicationFormUseCase {
 
 	List<ApplicationFormEntity> saveApplicationForms(List<CreateApplicationFormCommand> additionalFormList);
+
 }
