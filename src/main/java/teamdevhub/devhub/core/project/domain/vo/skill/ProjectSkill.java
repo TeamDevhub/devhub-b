@@ -1,8 +1,21 @@
 package teamdevhub.devhub.core.project.domain.vo.skill;
 
 import lombok.Builder;
+import lombok.Getter;
+import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
 
 @Builder
-public record ProjectSkill(String projectSkillGuid, String projectGuid, String skillCd) {
-
+@Getter
+public class ProjectSkill {
+	private String projectSkillGuid;
+	private String projectGuid;
+	private String skillCd;
+	
+	public static ProjectSkill createProjectSkill(String projectSkillGuid, CreateProjectSkillCommand createProjectSkillCommand) {
+		return ProjectSkill.builder()
+				.projectSkillGuid(projectSkillGuid)
+				.projectGuid(createProjectSkillCommand.projectGuid())
+				.skillCd(createProjectSkillCommand.skillCd())
+				.build();
+	}
 }

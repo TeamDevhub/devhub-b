@@ -29,8 +29,7 @@ public class ProjectRecruitementAdapter implements ProjectRequirementRepository 
 		List<ProjectRequirementEntity> projectRequirementEntityList = positions.stream()
 				.map(projectRequirementCommand -> {
 					String projectRequirementGuid = identifierProvider.generateIdentifier();
-					ProjectRequirement projectRequirement = new ProjectRequirement(projectRequirementGuid, projectRequirementCommand.projectGuid(), projectRequirementCommand.position(),
-							projectRequirementCommand.level(), projectRequirementCommand.capacity());
+					ProjectRequirement projectRequirement = ProjectRequirement.createProjectRequirement(projectRequirementGuid, projectRequirementCommand);
 					return ProjectRequirementMapper.toEntity(projectRequirement);
 				})
 				.toList();
