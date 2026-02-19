@@ -1,8 +1,5 @@
 package teamdevhub.devhub.outbound.admin.form.adapter;
 
-import java.util.List;
-import java.util.Set;
-
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -19,14 +16,15 @@ public class ApplicationFormAdapter implements ApplicationFormRepository{
 	private JpaApplicationFormRepository jpaApplicationFormRepository;
 
 	@Override
-	public List<String> saveAll(Set<ApplicationForm> applicationForms) {
-		List<ApplicationFormEntity> entityList = applicationForms.stream()
-				.map(ApplicationFormMapper::toEntity)
-				.toList();
-		List<ApplicationFormEntity> savedEntityList = jpaApplicationFormRepository.saveAll(entityList);
-		return savedEntityList.stream()
-				.map(entity -> entity.getApplicationFormGuid())
-				.toList();
+	public void save(ApplicationForm applicationForm) {
+		ApplicationFormEntity applicationFormEntity = ApplicationFormMapper.toEntity(applicationForm);
+		jpaApplicationFormRepository.save(applicationFormEntity);
+	}
+
+	@Override
+	public ApplicationForm findByApplicationFormGuid(String applicationFormGuid) {
+		ApplicationFormEntity applicationFormEntity = jpaApplicationFormRepository.findByApplicationFormGuid(applicationFormGuid);
+		return ApplicationFormMapper.toApplicationForm(applicationFormEntity);
 	}
 
 }

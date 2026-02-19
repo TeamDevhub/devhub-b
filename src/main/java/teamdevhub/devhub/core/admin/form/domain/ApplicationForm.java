@@ -1,6 +1,5 @@
 package teamdevhub.devhub.core.admin.form.domain;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
@@ -20,8 +19,6 @@ public class ApplicationForm {
 	private boolean isCustomized;
 	
 	private boolean isUsed;
-	
-	private List<ApplicationFormItem> applicationFormItem;
 	
 	public static ApplicationForm createCustomApplicationForm(CreateApplicationFormCommand createApplicationFormCommand, String applicationFormGuid) {
 		return ApplicationForm.builder()
