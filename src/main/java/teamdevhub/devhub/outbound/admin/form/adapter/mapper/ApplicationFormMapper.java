@@ -11,8 +11,8 @@ public class ApplicationFormMapper {
 				.typeCd(applicationForm.getTypeCd())
 				.title(applicationForm.getTitle())
 				.helpText(applicationForm.getHelpText())
-				.isCustomized(applicationForm.isCustomYn())
-				.isUsed(applicationForm.isUseYn())
+				.isCustomized(applicationForm.isCustomized())
+				.isUsed(applicationForm.isUsed())
 				.build();
 	}
 	
@@ -22,8 +22,8 @@ public class ApplicationFormMapper {
 				.typeCd(applicationFormEntity.getTypeCd())
 				.title(applicationFormEntity.getTitle())
 				.helpText(applicationFormEntity.getHelpText())
-				.customYn(applicationFormEntity.isCustomized())
-				.useYn(applicationFormEntity.isUsed())
+				.isCustomized(applicationFormEntity.isCustomized())
+				.isUsed(applicationFormEntity.isUsed())
 				.build();
 	}
 

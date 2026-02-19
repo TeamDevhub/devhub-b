@@ -1,5 +1,6 @@
 package teamdevhub.devhub.core.admin.form.application;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +16,6 @@ import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormItemRepository;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormRepository;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
-import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormEntity;
 
 @Service
 @Transactional
@@ -27,20 +27,25 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 	private final ApplicationFormItemRepository applicationFormItemRepository;
 	
 	@Override
-	public List<ApplicationFormEntity> saveApplicationForms(List<CreateApplicationFormCommand> applitionalFormCommandList) {
-		Set<ApplicationForm> applicationForms = applitionalFormCommandList.stream()
-				.map(applicationFormCommand -> {
+	public List<String> saveApplicationForms(List<CreateApplicationFormCommand> applitionalFormCommandList) {
+		List<String> applicationFormGuids = new ArrayList<>();
+		applitionalFormCommandList.stream()
+				.forEach(applicationFormCommand -> {
 				ApplicationForm applicationForm = createApplicationForm(applicationFormCommand);
+				saveApplicationForm(applicationForm);
 				saveApplcationFormItems(applicationForm.getApplicationFormGuid(), applicationFormCommand.getItemList());
-				return applicationForm;
-				})
-				.collect(Collectors.toUnmodifiableSet());
-		return applicationFormRepository.saveAll(applicationForms);
+				applicationFormGuids.add(applicationForm.getApplicationFormGuid());
+				});
+		return applicationFormGuids;
 	}
 	
 	private ApplicationForm createApplicationForm(CreateApplicationFormCommand createApplicationFormCommand) {
 		String applicationFormGuid = identifierProvider.generateIdentifier();
 		return ApplicationForm.createCustomApplicationForm(createApplicationFormCommand, applicationFormGuid);
+	}
+	
+	private void saveApplicationForm(ApplicationForm applicationForm) {
+		applicationFormRepository.save(applicationForm);
 	}
 
 	private void saveApplcationFormItems(String applicationFormGuid, List<String> itemList) {
