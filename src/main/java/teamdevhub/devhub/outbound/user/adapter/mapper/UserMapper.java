@@ -24,9 +24,10 @@ public class UserMapper {
                 .oauthId(user.getOauthId())
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .username(user.getUsername())
                 .userRole(user.getUserRole())
+                .username(user.getUsername())
                 .introduction(user.getIntroduction())
+                .fileGuid(user.getFileGuid())
                 .mannerDegree(user.getMannerDegree())
                 .blocked(user.isBlocked())
                 .blockEndDate(user.getBlockEndDate())
@@ -42,9 +43,10 @@ public class UserMapper {
                 userEntity.getOauthId(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
-                userEntity.getUsername(),
                 userEntity.getUserRole(),
+                userEntity.getUsername(),
                 userEntity.getIntroduction(),
+                userEntity.getFileGuid(),
                 userEntity.getMannerDegree(),
                 userEntity.isBlocked(),
                 userEntity.getBlockEndDate(),

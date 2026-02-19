@@ -10,6 +10,7 @@ import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
+import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 import teamdevhub.devhub.core.user.port.out.UserPositionRepository;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
@@ -29,6 +30,13 @@ public class UserProfileService implements UserProfileUseCase {
     @Override
     public User getCurrentUserProfile(String userGuid) {
         return getUserWithPositionsAndSkills(userGuid);
+    }
+
+    @Override
+    public void updateProfileImage(UpdateProfileImageCommand updateProfileImageCommand) {
+        User user = userRepository.findByUserGuid(updateProfileImageCommand.userGuid());
+        user.updateProfileImage(updateProfileImageCommand);
+        userRepository.save(user);
     }
 
     @Override

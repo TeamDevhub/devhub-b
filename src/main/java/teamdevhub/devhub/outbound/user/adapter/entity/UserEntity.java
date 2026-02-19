@@ -47,15 +47,18 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column
-    private String username;
-
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private UserRole userRole;
 
+    @Column
+    private String username;
+
     @Column(length = 500)
     private String introduction;
+
+    @Column
+    private String fileGuid;
 
     @Column(nullable = false)
     private double mannerDegree;

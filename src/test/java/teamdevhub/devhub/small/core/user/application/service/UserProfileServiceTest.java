@@ -9,6 +9,7 @@ import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
+import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserSkillRepository;
@@ -19,6 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 class UserProfileServiceTest {
@@ -74,6 +76,87 @@ class UserProfileServiceTest {
         assertThat(userProfileService.getCurrentUserProfile(testUser.getUserGuid()).getIntroduction()).isEqualTo(testUser.getIntroduction());
         assertThat(userProfileService.getCurrentUserProfile(testUser.getUserGuid()).getPositions()).isEqualTo(userPositions);
         assertThat(userProfileService.getCurrentUserProfile(testUser.getUserGuid()).getSkills()).isEqualTo(testUser.getSkills());
+    }
+
+    @Test
+    @DisplayName("사용자_프로필_이미지를_수정하면_해당_이미지로_변경된다")
+    void updateProfileImageCorrectly() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+
+        CreateUserCommand generalCreateUserCommand =
+                CreateUserCommand.generalUserCreateCommand(
+                        signupUserCommand,
+                        TEST_USER_GUID_1,
+                        TEST_PASSWORD_1
+                );
+
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
+        userRepository.save(testUser);
+
+        String NEW_PROFILE_IMAGE_GUID = "NEW_PROFILE_IMAGE_GUID";
+
+        UpdateProfileImageCommand command = new UpdateProfileImageCommand(TEST_USER_GUID_1, NEW_PROFILE_IMAGE_GUID);
+
+        // when
+        userProfileService.updateProfileImage(command);
+
+        // then
+        User updatedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
+        assertThat(updatedUser.getFileGuid()).isEqualTo(NEW_PROFILE_IMAGE_GUID);
+    }
+
+    @Test
+    @DisplayName("기존_프로필_이미지가_있을_때_새로운_이미지로_덮어쓴다")
+    void overwriteProfileImage() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+
+        CreateUserCommand generalCreateUserCommand =
+                CreateUserCommand.generalUserCreateCommand(
+                        signupUserCommand,
+                        TEST_USER_GUID_1,
+                        TEST_PASSWORD_1
+                );
+
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
+        testUser.updateProfileImage(new UpdateProfileImageCommand(TEST_USER_GUID_1, "OLD_IMAGE_GUID"));
+
+        userRepository.save(testUser);
+        UpdateProfileImageCommand command = new UpdateProfileImageCommand(TEST_USER_GUID_1, "NEW_IMAGE_GUID");
+
+        // when
+        userProfileService.updateProfileImage(command);
+
+        // then
+        User updatedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
+        assertThat(updatedUser.getFileGuid()).isEqualTo("NEW_IMAGE_GUID");
+    }
+
+    @Test
+    @DisplayName("존재하지_않는_사용자의_프로필_이미지를_수정하면_예외가_발생한다")
+    void updateProfileImageWithInvalidUser() {
+        UpdateProfileImageCommand command = new UpdateProfileImageCommand("NOT_EXIST_GUID", "IMAGE_GUID");
+
+        assertThatThrownBy(() ->
+                userProfileService.updateProfileImage(command)
+        ).isInstanceOf(NullPointerException.class);
     }
 
     @Test
