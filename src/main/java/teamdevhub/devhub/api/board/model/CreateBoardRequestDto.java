@@ -24,11 +24,12 @@ public class CreateBoardRequestDto {
 	@NotBlank(message = "내용은 필수입니다")
 	private String content;
 	
-	public CreateBoardCommand toCommand() {
+	public CreateBoardCommand toCommand(String userGuid) {
 		return CreateBoardCommand.builder()
-				.title(title)
-				.categoryCd(categoryCd)
-				.content(content)
+				.title(this.title)
+				.categoryCd(this.categoryCd)
+				.content(this.content)
+				.userGuid(userGuid)
 				.build();
 	}
 	
