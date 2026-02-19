@@ -1,7 +1,6 @@
 package teamdevhub.devhub.small.core.project.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.List;
