@@ -8,21 +8,23 @@ public final class FileMetadataMapper {
     private FileMetadataMapper() {
     }
 
-    public static FileEntity toEntity(FileMetadata metadata) {
+    public static FileEntity toEntity(FileMetadata fileMetadata) {
         return FileEntity.builder()
-                .fileGuid(metadata.fileGuid())
-                .originalName(metadata.originalName())
-                .extensionName(metadata.extensionName())
-                .size(metadata.size())
+                .fileGuid(fileMetadata.fileGuid())
+                .originalName(fileMetadata.originalName())
+                .extensionName(fileMetadata.extensionName())
+                .path(fileMetadata.path())
+                .size(fileMetadata.size())
                 .build();
     }
 
-    public static FileMetadata toDomain(FileEntity entity) {
+    public static FileMetadata toDomain(FileEntity fileEntity) {
         return FileMetadata.create(
-                entity.getFileGuid(),
-                entity.getOriginalName(),
-                entity.getExtensionName(),
-                entity.getSize()
+                fileEntity.getFileGuid(),
+                fileEntity.getOriginalName(),
+                fileEntity.getExtensionName(),
+                fileEntity.getPath(),
+                fileEntity.getSize()
         );
     }
 }

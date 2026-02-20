@@ -4,6 +4,7 @@ public record FileMetadata(
         String fileGuid,
         String originalName,
         String extensionName,
+        String path,
         long size
 ) {
 
@@ -11,10 +12,11 @@ public record FileMetadata(
             String fileGuid,
             String originalName,
             String extensionName,
+            String path,
             long size
     ) {
         validate(originalName, extensionName, size);
-        return new FileMetadata(fileGuid, originalName, extensionName, size);
+        return new FileMetadata(fileGuid, originalName, extensionName, path, size);
     }
 
     private static void validate(
