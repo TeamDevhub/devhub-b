@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.core.project.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -55,10 +55,10 @@ public class ProjectServiceTest {
 				.recruitmentTypeCd("002")
 				.progressTypeCd("003")
 				.progressRegionCd("004")
-				.recruitmentStartDate(LocalDateTime.of(2025, 1, 1, 12, 0))
-				.recruitmentEndDate(LocalDateTime.of(2025, 2, 1, 12, 0))
-				.progressStartDate(LocalDateTime.of(2025, 3, 1, 12, 0))
-				.progressEndDate(LocalDateTime.of(2025, 4, 1, 12, 0))
+				.recruitmentStartDate(LocalDate.of(2025, 1, 1))
+				.recruitmentEndDate(LocalDate.of(2025, 2, 1))
+				.progressStartDate(LocalDate.of(2025, 3, 1))
+				.progressEndDate(LocalDate.of(2025, 4, 1))
 				.skillList(List.of("001", "002"))
 				.positionList(List.of(new CreateProjectRequirementCommand("001", "002", 2)))
 				.applicationFormList(List.of("002"))

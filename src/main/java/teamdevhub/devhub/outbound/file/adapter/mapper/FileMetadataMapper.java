@@ -13,6 +13,7 @@ public final class FileMetadataMapper {
                 .fileGuid(metadata.fileGuid())
                 .originalName(metadata.originalName())
                 .extensionName(metadata.extensionName())
+                .path(metadata.path())
                 .size(metadata.size())
                 .build();
     }
@@ -22,6 +23,7 @@ public final class FileMetadataMapper {
                 entity.getFileGuid(),
                 entity.getOriginalName(),
                 entity.getExtensionName(),
+                entity.getPath(),
                 entity.getSize()
         );
     }

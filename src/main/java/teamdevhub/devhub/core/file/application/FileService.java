@@ -22,9 +22,10 @@ public class FileService implements FileUseCase {
     @Transactional
     public FileMetadata upload(UploadFileCommand uploadFileCommand) {
         String fileGuid = identifierProvider.generateIdentifier();
-        fileStorage.save(fileGuid, uploadFileCommand.content());
+        String path = fileStorage.save(fileGuid, uploadFileCommand.content());
         FileMetadata fileMetadata = FileMetadata.create(
                 fileGuid,
+                path,
                 uploadFileCommand.originalName(),
                 uploadFileCommand.extension(),
                 uploadFileCommand.size()
