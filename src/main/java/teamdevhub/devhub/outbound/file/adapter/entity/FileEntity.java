@@ -38,10 +38,10 @@ public class FileEntity extends BaseEntity {
     
     @Column(name = "extension_name", nullable = false)
     private String extensionName;
-    
-    @Column(name = "size", nullable = false)
-    private long size;
-    
-    @Column(name = "path", nullable = false)
+
+    @Column(nullable = false)
     private String path;
+
+    @Column(nullable = false)
+    private long size;
 }
