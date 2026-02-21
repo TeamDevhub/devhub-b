@@ -7,9 +7,9 @@ public class ProjectApplicationFormMapper {
 	
 	public static ProjectApplicationFormEntity toEntity(ProjectApplicationForm projectApplicationForm) {
 		return ProjectApplicationFormEntity.builder()
-				.projectApplicationFormGuid(projectApplicationForm.projectApplicationFormGuid())
-				.projectGuid(projectApplicationForm.projectGuid())
-				.applicationFormGuid(projectApplicationForm.applicationFormGuid())
+				.projectApplicationFormGuid(projectApplicationForm.getProjectApplicationFormGuid())
+				.projectGuid(projectApplicationForm.getProjectGuid())
+				.applicationFormGuid(projectApplicationForm.getApplicationFormGuid())
 				.build();
 	}
 	
