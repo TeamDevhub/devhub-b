@@ -16,7 +16,7 @@ import teamdevhub.devhub.outbound.admin.form.persistence.JpaApplicationFormItemR
 @RequiredArgsConstructor
 public class ApplicationFormItemAdapter implements ApplicationFormItemRepository{
 	
-	private JpaApplicationFormItemRepository jpaApplicationFormItemRepository;
+	private final JpaApplicationFormItemRepository jpaApplicationFormItemRepository;
 
 	@Override
 	public void saveAll(Set<ApplicationFormItem> items) {
