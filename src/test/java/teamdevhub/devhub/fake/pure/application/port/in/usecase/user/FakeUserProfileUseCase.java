@@ -5,6 +5,7 @@ import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
+import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 
 import java.util.HashMap;
@@ -35,6 +36,11 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
     @Override
     public User getCurrentUserProfile(String userGuid) {
         return store.get(userGuid);
+    }
+
+    @Override
+    public void updateProfileImage(UpdateProfileImageCommand updateProfileImageCommand) {
+
     }
 
     @Override

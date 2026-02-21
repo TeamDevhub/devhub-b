@@ -20,7 +20,7 @@ public class FileController {
     private final FileFacade fileFacade;
 
     @PostMapping
-    public ResponseEntity<DataApiResponseDto<UploadFileResponseDto>> upload(@RequestPart Map<String, MultipartFile> uploadFiles) {
+    public ResponseEntity<DataApiResponseDto<UploadFileResponseDto>> upload(@ModelAttribute Map<String, MultipartFile> uploadFiles) {
         UploadFileRequestDto uploadFileRequestDto = UploadFileRequestDto.from(uploadFiles);
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(

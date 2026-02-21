@@ -75,7 +75,7 @@ public class ProjectMapper {
         return Project.builder()
                 .projectGuid(entity.getProjectGuid())
                 .userGuid(entity.getUserGuid())
-//                .username(entity.get)
+//                .fileGuid(entity.get)
                 .category(entity.getCategory())
                 .title(entity.getTitle())
                 .content(entity.getContent())
