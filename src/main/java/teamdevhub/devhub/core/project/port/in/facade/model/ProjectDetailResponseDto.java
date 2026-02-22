@@ -6,21 +6,53 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.Requirement;
 
 @Getter
 @SuperBuilder
 @NoArgsConstructor
 public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
-	
+
+	private String nickName;
+	private String mannerDegree;
 	private List<String> skillList;
-	private List<String> positionList;
+	private List<PositionDto> positionList;
 	private String likeCount;
-	
+
 	public static ProjectDetailResponseDto fromDomain(Project project) {
 		ProjectDetailResponseDtoBuilder<?, ?> builder = ProjectDetailResponseDto.builder();
 		fillBase(builder, project);
+
+		List<PositionDto> positionDtoList = null;
+		if (project.getProjectRequirement() != null) {
+			positionDtoList = project.getProjectRequirement().stream()
+				.map(PositionDto::fromDomain)
+				.toList();
+		}
+
 		return builder
+			.skillList(project.getProjectSkill())
+			.positionList(positionDtoList)
+			.likeCount(project.getLikeCount())
 			.build();
 	}
 
+	@Getter
+	@SuperBuilder
+	@NoArgsConstructor
+	public static class PositionDto {
+		private String positionCd;
+		private int capacity;
+		private String level;
+		private boolean full;
+
+		public static PositionDto fromDomain(Requirement requirement) {
+			return PositionDto.builder()
+				.positionCd(requirement.getPositionCd())
+				.capacity(requirement.getCapacity())
+				.level(requirement.getLevelCd())
+				.full(false)
+				.build();
+		}
+	}
 }
