@@ -29,7 +29,7 @@ public class SearchProjectRequestDto {
     private List<String> projectRecruitTypeList;
     private List<String> projectProgressTypeList;
     private List<String> projectRecruitStatusList;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+0    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate recruitmentStartDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate recruitmentEndDate;
