@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static teamdevhub.devhub.outbound.application.adapter.entity.QProjectApplicationEntity.projectApplicationEntity;
+import static teamdevhub.devhub.outbound.project.adapter.entity.QProjectEntity.projectEntity;
 import static teamdevhub.devhub.outbound.project.adapter.entity.QProjectRequirementEntity.projectRequirementEntity;
 import static teamdevhub.devhub.outbound.user.adapter.entity.QUserEntity.userEntity;
 import static teamdevhub.devhub.outbound.user.adapter.entity.QUserSkillEntity.userSkillEntity;
@@ -33,36 +34,34 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 	@Override
 	public Page<ProjectApplication> findApplicationsByProjectGuid(String projectGuid, Pageable pageable) {
 
-		// projectGuid → requirementGuid 목록 조회
-		List<String> requirementGuidList = queryFactory
-			.select(projectRequirementEntity.projectRequirementGuid)
-			.from(projectRequirementEntity)
-			.where(projectRequirementEntity.projectGuid.eq(projectGuid))
-			.fetch();
-
-		if (requirementGuidList.isEmpty()) {
-			return new PageImpl<>(List.of(), pageable, 0);
-		}
-
-		// 전체 count
+		/*
+		 * SELECT *
+		 * FROM PROJECT_APPLICATION T1
+		 * LEFT JOIN (SELECT PROJECT_GUID, PROJECT_REQUIREMENT_GUID FROM PROJECT_REQUIREMENT) T2
+		 *        ON T1.REQUIREMENT_GUID = T2.PROJECT_REQUIREMENT_GUID
+		 * INNER JOIN (SELECT PROJECT_GUID FROM PROJECT) T3
+		 *         ON T2.PROJECT_GUID = T3.PROJECT_GUID
+		 *        AND T3.PROJECT_GUID = #{projectGuid}
+		 */
 		Long total = Optional.ofNullable(
 			queryFactory
 				.select(projectApplicationEntity.count())
 				.from(projectApplicationEntity)
-				.where(
-					projectApplicationEntity.requirementGuid.in(requirementGuidList),
-					projectApplicationEntity.isCanceled.eq(false)
-				)
+				.leftJoin(projectRequirementEntity)
+					.on(projectApplicationEntity.requirementGuid.eq(projectRequirementEntity.projectRequirementGuid))
+				.join(projectEntity)
+					.on(projectRequirementEntity.projectGuid.eq(projectEntity.projectGuid)
+						.and(projectEntity.projectGuid.eq(projectGuid)))
 				.fetchOne()
 		).orElse(0L);
 
-		// 페이징 적용하여 application 목록 조회
 		List<ProjectApplicationEntity> applicationEntities = queryFactory
 			.selectFrom(projectApplicationEntity)
-			.where(
-				projectApplicationEntity.requirementGuid.in(requirementGuidList),
-				projectApplicationEntity.isCanceled.eq(false)
-			)
+			.leftJoin(projectRequirementEntity)
+				.on(projectApplicationEntity.requirementGuid.eq(projectRequirementEntity.projectRequirementGuid))
+			.join(projectEntity)
+				.on(projectRequirementEntity.projectGuid.eq(projectEntity.projectGuid)
+					.and(projectEntity.projectGuid.eq(projectGuid)))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();

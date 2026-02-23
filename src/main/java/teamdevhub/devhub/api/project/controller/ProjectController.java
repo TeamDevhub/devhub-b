@@ -43,7 +43,7 @@ public class ProjectController {
 		Project projectDetail = projectFacade.getProjectDetail(projectGuid);
 		ProjectDetailResponseDto responseDto = ProjectDetailResponseDto.fromDomain(projectDetail);
 		
-		return ResponseEntity.ok(0
+		return ResponseEntity.ok(
 			DataApiResponseDto.successWithData(
 				SuccessCode.READ_SUCCESS,
 				responseDto)

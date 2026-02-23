@@ -55,7 +55,7 @@ public class ProjectEntity extends BaseEntity {
     @Column(name = "progress_region_cd", length = 10)
     private String progressRegionCd;
     
-    @Column(name = "fileGuid", nullable = false)
+    @Column(name = "username", nullable = false)
     private String username;
     
     @Column(name = "category", nullable = false)
