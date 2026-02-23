@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
 import teamdevhub.devhub.core.project.application.ProjectService;
+import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.fake.pure.application.port.out.application.FakeProjectApplicationFormRepository;
@@ -75,6 +76,39 @@ public class ProjectServiceTest {
 		assertThat(projectSkillRepository.findByProjectGuid("PROJECT_UUID").size()).isEqualTo(2);
 		
 		assertThat(projectApplicationFormRepository.findByProjectGuid("PROJECT_UUID").size()).isEqualTo(1);
+	}
+	
+	@Test
+	@DisplayName("프로젝트 상세를 조회할 수 있다")
+	void getProjectDetail() {
+		//given
+		CreateProjectCommand createProjectCommand = CreateProjectCommand.builder()
+				.userGuid("1")
+				.username("홍길동")
+				.attachmentFileGuid("2")
+				.imageFileGuid("3")
+				.title("프로젝트 생성 테스트 제목입니다")
+				.category("001")
+				.content("프로젝트 생성 테스트 내용입니다")
+				.recruitmentTypeCd("002")
+				.progressTypeCd("003")
+				.progressRegionCd("004")
+				.recruitmentStartDate(LocalDate.of(2025, 1, 1))
+				.recruitmentEndDate(LocalDate.of(2025, 2, 1))
+				.progressStartDate(LocalDate.of(2025, 3, 1))
+				.progressEndDate(LocalDate.of(2025, 4, 1))
+				.skillList(List.of("001", "002"))
+				.positionList(List.of(new CreateProjectRequirementCommand("001", "002", 2)))
+				.applicationFormList(List.of("002"))
+				.additionalFormList(List.of(new CreateApplicationFormCommand("001", "자격증 유무", "헬프테스트", List.of("Y", "N"))))
+				.build();
+		
+		//when
+		projectService.createProject(createProjectCommand);
+		Project result = projectService.getProjectDetail("PROJECT_UUID");
+		
+		//then
+		assertThat(result.getUsername()).isEqualTo("홍길동");
 	}
 	
 
