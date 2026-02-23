@@ -2,8 +2,10 @@ package teamdevhub.devhub.core.notification.port.in.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.core.notification.port.in.NotificationQueryUseCase;
+import teamdevhub.devhub.core.notification.port.in.NotificationUseCase;
 import teamdevhub.devhub.core.notification.port.in.facade.model.NotificationResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
@@ -14,6 +16,7 @@ import java.util.List;
 public class NotificationFacade {
 
     private final NotificationQueryUseCase notificationQueryUseCase;
+    private final NotificationUseCase notificationUseCase;
 
     public DataListApiResponseDto<NotificationResponseDto> getNotificationList(String userGuid) {
 
@@ -25,6 +28,15 @@ public class NotificationFacade {
                 SuccessCode.READ_SUCCESS,
                 notificationList,
                 null
+        );
+    }
+
+    public DataApiResponseDto<Void> checkedNotification(String userGuid) {
+
+        notificationUseCase.checkedNotification(userGuid);
+
+        return DataApiResponseDto.successWithoutData(
+                SuccessCode.UPDATE_SUCCESS
         );
     }
 }

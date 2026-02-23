@@ -5,4 +5,6 @@ import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerifi
 public interface NotificationUseCase {
 
     void sendVerification(IssuedVerification issuedVerification);
+
+    void checkedNotification(String userGuid);
 }

@@ -8,4 +8,6 @@ import java.util.List;
 public interface JpaNotificationRepository extends JpaRepository<NotificationEntity, String> {
 
     List<NotificationEntity> findAllByReceiverAndCheckedFalse(String userGuid);
+
+    NotificationEntity findAllByNotificationGuid(String notificationGuid);
 }

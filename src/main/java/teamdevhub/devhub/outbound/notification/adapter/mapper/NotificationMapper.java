@@ -1,24 +1,38 @@
 package teamdevhub.devhub.outbound.notification.adapter.mapper;
 
+import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.notification.domain.Notification;
 import teamdevhub.devhub.outbound.notification.adapter.entity.NotificationEntity;
 
-import java.time.format.DateTimeFormatter;
-
 public class NotificationMapper {
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    public static Notification toNotification(NotificationEntity notificationEntity) {
+    public static Notification toDomain(NotificationEntity notificationEntity) {
         return Notification.builder()
                 .notificationGuid(notificationEntity.getNotificationGuid())
                 .content(notificationEntity.getContent())
                 .isChecked(notificationEntity.isChecked())
                 .typeCd(notificationEntity.getTypeCd())
                 .receiver(notificationEntity.getReceiver())
-                .registrantGuid(notificationEntity.getRegistrantGuid())
-                .registrationDate(notificationEntity.getRegisteredDate().format(formatter))
+                .auditInfo(toAuditInfo(notificationEntity))
                 .build();
     }
 
+    private static AuditInfo toAuditInfo(NotificationEntity notificationEntity) {
+        return AuditInfo.of(
+                notificationEntity.getRegistrantGuid(),
+                notificationEntity.getRegisteredDate(),
+                notificationEntity.getModifierGuid(),
+                notificationEntity.getModifiedDate()
+        );
+    }
+
+    public static NotificationEntity toEntity(Notification notification) {
+        return NotificationEntity.builder()
+                .notificationGuid(notification.getNotificationGuid())
+                .content(notification.getContent())
+                .checked(notification.isChecked())
+                .typeCd(notification.getTypeCd())
+                .receiver(notification.getReceiver())
+                .build();
+    }
 }
