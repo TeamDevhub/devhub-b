@@ -12,7 +12,6 @@ public class BoardMapper {
 				.categoryCd(board.getCategoryCd())
 				.title(board.getTitle())
 				.content(board.getContent())
-				.viewCount(board.getViewCount())
 				.build();
 	}
 	
@@ -23,7 +22,7 @@ public class BoardMapper {
 				boardEntity.getCategoryCd(),
 				boardEntity.getTitle(),
 				boardEntity.getContent(),
-				boardEntity.getViewCount(),
+				String.valueOf(boardEntity.getViewCount()),
 				toAuditInfo(boardEntity)
 		);
 	}
@@ -44,7 +43,7 @@ public class BoardMapper {
 				.categoryCd(boardEntity.getCategoryCd())
 				.title(boardEntity.getTitle())
 				.content(boardEntity.getContent())
-				.viewCount(boardEntity.getViewCount())
+				.viewCount(String.valueOf(boardEntity.getViewCount()))
 				.likeCount(likeCount)
 				.userName(username)
 				.commentCount(commentCount)
