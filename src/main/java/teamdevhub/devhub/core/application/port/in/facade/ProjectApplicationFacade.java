@@ -5,11 +5,15 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.api.application.model.response.ProjectApplicationAnswerDetailResponseDto;
+import teamdevhub.devhub.api.application.model.response.ProjectApplicationBasicResponseDto;
 import teamdevhub.devhub.api.application.model.response.ProjectApplicationDetailResponseDto;
+import teamdevhub.devhub.api.application.model.response.ProjectApplicationDetailWrapperResponseDto;
 import teamdevhub.devhub.api.application.model.response.ProjectApplicationListResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
@@ -43,6 +47,27 @@ public class ProjectApplicationFacade {
 			.projectDetailDto(projectDetailDto)
 			.applicationList(applicationList)
 			.pagination(PageResponseDto.from(pagedApplications))
+			.build();
+
+		return DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, responseDto);
+	}
+
+	public DataApiResponseDto<ProjectApplicationDetailWrapperResponseDto> getApplicationDetail(
+		String applicationGuid
+	) {
+		ProjectApplication application =
+			projectApplicationQueryUseCase.getApplicationByGuid(applicationGuid);
+
+		List<ProjectApplicationAnswer> answers =
+			projectApplicationQueryUseCase.getAnswersByApplicationGuid(applicationGuid);
+
+		List<ProjectApplicationAnswerDetailResponseDto> answerDtoList = answers.stream()
+			.map(ProjectApplicationAnswerDetailResponseDto::fromDomain)
+			.toList();
+
+		ProjectApplicationDetailWrapperResponseDto responseDto = ProjectApplicationDetailWrapperResponseDto.builder()
+			.projectApplicationBasicDto(ProjectApplicationBasicResponseDto.fromDomain(application))
+			.projectApplicationAnswerList(answerDtoList)
 			.build();
 
 		return DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, responseDto);

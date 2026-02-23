@@ -5,10 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
 import teamdevhub.devhub.core.application.port.out.ApplicationRepository;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.outbound.application.persistence.ProjectApplicationQueryDao;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -29,5 +32,15 @@ public class ProjectApplicationAdapter implements ApplicationRepository {
 			page.getSize(),
 			page.getTotalElements()
 		);
+	}
+
+	@Override
+	public ProjectApplication findApplicationByGuid(String applicationGuid) {
+		return projectApplicationQueryDao.findApplicationByGuid(applicationGuid);
+	}
+
+	@Override
+	public List<ProjectApplicationAnswer> findAnswersByApplicationGuid(String applicationGuid) {
+		return projectApplicationQueryDao.findAnswersByApplicationGuid(applicationGuid);
 	}
 }

@@ -1,4 +1,26 @@
 package teamdevhub.devhub.api.application.model.response;
 
+import lombok.Builder;
+import lombok.Getter;
+import teamdevhub.devhub.core.application.domain.ProjectApplication;
+
+@Getter
+@Builder
 public class ProjectApplicationBasicResponseDto {
+
+	private String applicationGuid;
+	private String requirementGuid;
+	private String applicantGuid;
+	private String approverGuid;
+	private String decisionDate;
+
+	public static ProjectApplicationBasicResponseDto fromDomain(ProjectApplication application) {
+		return ProjectApplicationBasicResponseDto.builder()
+			.applicationGuid(application.getApplicationGuid())
+			.requirementGuid(application.getRequirementGuid())
+			.applicantGuid(application.getApplicantGuid())
+			.approverGuid(application.getApproverGuid())
+			.decisionDate(application.getDecisionDate())
+			.build();
+	}
 }

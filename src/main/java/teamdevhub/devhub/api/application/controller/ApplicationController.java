@@ -3,6 +3,7 @@ package teamdevhub.devhub.api.application.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import teamdevhub.devhub.api.application.model.response.ProjectApplicationDetailWrapperResponseDto;
 import teamdevhub.devhub.api.application.model.response.ProjectApplicationListResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.application.port.in.facade.ProjectApplicationFacade;
@@ -23,6 +24,16 @@ public class ApplicationController {
 	) {
 		return ResponseEntity.ok(
 			projectApplicationFacade.getApplicationsByProjectGuid(projectGuid, PageCommand.of(page, size))
+		);
+	}
+
+	@GetMapping("/{projectGuid}/applications/{applicationGuid}")
+	public ResponseEntity<DataApiResponseDto<ProjectApplicationDetailWrapperResponseDto>> getApplicationDetail(
+		@PathVariable("projectGuid") String projectGuid,
+		@PathVariable("applicationGuid") String applicationGuid
+	) {
+		return ResponseEntity.ok(
+			projectApplicationFacade.getApplicationDetail(applicationGuid)
 		);
 	}
 }
