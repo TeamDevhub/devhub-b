@@ -21,8 +21,8 @@ public class NotificationService implements NotificationUseCase {
     }
 
     @Override
-    public void checkedNotification(String userGuid) {
-        Notification notification = notificationRepository.getNotification(userGuid);
+    public void checkedNotification(String notificationGuid) {
+        Notification notification = notificationRepository.getNotification(notificationGuid);
         notification.checked();
         notificationRepository.save(notification);
     }

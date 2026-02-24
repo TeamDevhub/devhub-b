@@ -31,9 +31,9 @@ public class NotificationFacade {
         );
     }
 
-    public DataApiResponseDto<Void> checkedNotification(String userGuid) {
+    public DataApiResponseDto<Void> checkedNotification(String notificationGuid) {
 
-        notificationUseCase.checkedNotification(userGuid);
+        notificationUseCase.checkedNotification(notificationGuid);
 
         return DataApiResponseDto.successWithoutData(
                 SuccessCode.UPDATE_SUCCESS

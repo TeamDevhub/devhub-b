@@ -6,5 +6,5 @@ public interface NotificationUseCase {
 
     void sendVerification(IssuedVerification issuedVerification);
 
-    void checkedNotification(String userGuid);
+    void checkedNotification(String notificationGuid);
 }

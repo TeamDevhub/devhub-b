@@ -20,7 +20,7 @@ public class NotificationResponseDto {
                 .notificationGuid(notification.getNotificationGuid())
                 .typeCd(notification.getTypeCd())
                 .content(notification.getContent())
-                .registrationDate(notification.getRegistrationDate())
+                .registrationDate(notification.getAuditInfo().registrantGuid())
                 .build();
     }
 

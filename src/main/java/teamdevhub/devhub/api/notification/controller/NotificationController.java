@@ -22,8 +22,8 @@ public class NotificationController {
         return ResponseEntity.ok(notificationFacade.getNotificationList(authenticatedUser.userGuid()));
     }
 
-    @PutMapping("/checked")
-    public ResponseEntity<DataApiResponseDto<Void>> checkedNotification(@LoginUser AuthenticatedUser authenticatedUser) {
-        return ResponseEntity.ok(notificationFacade.checkedNotification(authenticatedUser.userGuid()));
+    @PutMapping("/checked/{notificationGuid}")
+    public ResponseEntity<DataApiResponseDto<Void>> checkedNotification(@LoginUser AuthenticatedUser authenticatedUser, @PathVariable String notificationGuid) {
+        return ResponseEntity.ok(notificationFacade.checkedNotification(notificationGuid));
     }
 }
