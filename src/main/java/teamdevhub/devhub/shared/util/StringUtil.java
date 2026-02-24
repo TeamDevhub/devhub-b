@@ -1,5 +1,8 @@
 package teamdevhub.devhub.shared.util;
 
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+
 public final class StringUtil {
 
     private StringUtil() {}
@@ -30,7 +33,7 @@ public final class StringUtil {
         }
 
         if (maxLength < 0) {
-            throw new IllegalArgumentException("maxLength must be positive");
+            throw BusinessRuleException.of(ErrorCode.STRING_LENGTH_INVALID);
         }
 
         if (string.length() <= maxLength) {
