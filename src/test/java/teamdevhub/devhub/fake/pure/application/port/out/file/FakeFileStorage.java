@@ -11,12 +11,17 @@ public class FakeFileStorage implements FileStorage {
 
     @Override
     public String save(String fileGuid, byte[] content) {
-        return "";
+        storage.put(fileGuid, content);
+        return "/fake/path/" + fileGuid;
     }
 
     @Override
     public byte[] read(String fileGuid) {
-        return new byte[0];
+        byte[] content = storage.get(fileGuid);
+        if (content == null) {
+            throw new RuntimeException(fileGuid);
+        }
+        return content;
     }
 
     @Override
