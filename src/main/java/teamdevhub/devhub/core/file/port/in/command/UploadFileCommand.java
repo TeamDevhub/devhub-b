@@ -1,6 +1,8 @@
 package teamdevhub.devhub.core.file.port.in.command;
 
 import org.springframework.web.multipart.MultipartFile;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.io.IOException;
 
@@ -15,7 +17,7 @@ public record UploadFileCommand(
         try {
 
             if (multipartFile == null || multipartFile.isEmpty()) {
-                throw new IllegalArgumentException("Empty file");
+                throw BusinessRuleException.of(ErrorCode.FILE_EMPTY);
             }
 
             String originalName = multipartFile.getOriginalFilename();
@@ -29,7 +31,7 @@ public record UploadFileCommand(
             );
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read multipart file", e);
+            throw BusinessRuleException.of(ErrorCode.FILE_READ_FAIL);
         }
     }
 

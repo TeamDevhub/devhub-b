@@ -11,8 +11,6 @@ import teamdevhub.devhub.fake.pure.application.port.out.file.FakeFileMetadataRep
 import teamdevhub.devhub.fake.pure.application.port.out.file.FakeFileStorage;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 
-import java.io.FileNotFoundException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

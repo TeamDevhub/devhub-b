@@ -1,7 +1,9 @@
 package teamdevhub.devhub.api.file.model;
 
 import org.springframework.web.multipart.MultipartFile;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.file.port.in.command.UploadFileCommand;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.io.IOException;
 import java.util.Map;
@@ -13,7 +15,7 @@ public record UploadFileRequestDto(
 
     public static UploadFileRequestDto from(Map<String, MultipartFile> files) {
         if (files == null || files.isEmpty()) {
-            throw new IllegalArgumentException("No files provided");
+            throw BusinessRuleException.of(ErrorCode.FILE_EMPTY);
         }
         return new UploadFileRequestDto(files);
     }
@@ -40,7 +42,7 @@ public record UploadFileRequestDto(
             );
 
         } catch (IOException e) {
-            throw new RuntimeException("파일 변환 실패", e);
+            throw BusinessRuleException.of(ErrorCode.FILE_READ_FAIL);
         }
     }
 
