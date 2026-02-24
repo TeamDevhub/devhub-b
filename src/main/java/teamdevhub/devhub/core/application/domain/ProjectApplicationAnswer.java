@@ -23,5 +23,4 @@ public class ProjectApplicationAnswer {
 	private String positionCd;
 	private String introduction;
 
-	private String aplyDate;
 }

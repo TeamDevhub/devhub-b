@@ -20,7 +20,6 @@ public class ProjectApplicationAnswerDetailResponseDto {
 	private List<String> userSkillList;
 	private String positionCd;
 	private String introduction;
-	private String aplyDate;
 
 	public static ProjectApplicationAnswerDetailResponseDto fromDomain(ProjectApplicationAnswer answer) {
 		return ProjectApplicationAnswerDetailResponseDto.builder()
@@ -34,7 +33,6 @@ public class ProjectApplicationAnswerDetailResponseDto {
 			.userSkillList(answer.getUserSkillList())
 			.positionCd(answer.getPositionCd())
 			.introduction(answer.getIntroduction())
-			.aplyDate(answer.getAplyDate())
 			.build();
 	}
 }
