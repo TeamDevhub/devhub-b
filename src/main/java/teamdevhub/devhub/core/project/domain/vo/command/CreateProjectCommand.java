@@ -5,9 +5,9 @@ import java.util.List;
 
 import lombok.Builder;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
-import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementCommand;
+import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
 
 @Builder
 public record CreateProjectCommand(String userGuid, String username, String attachmentFileGuid, String imageFileGuid, String title, String category, String content, String recruitmentTypeCd, String progressTypeCd,
                                    String progressRegionCd, LocalDate recruitmentStartDate, LocalDate recruitmentEndDate, LocalDate progressStartDate, LocalDate progressEndDate,
-                                   List<String> skillList, List<CreateProjectRequirementCommand> positionList, List<String> applicationFormList, List<CreateApplicationFormCommand> additionalFormList) {}
+                                   List<String> skillList, List<CreateProjectRequirementRequestCommand> positionList, List<String> applicationFormList, List<CreateApplicationFormCommand> additionalFormList) {}
