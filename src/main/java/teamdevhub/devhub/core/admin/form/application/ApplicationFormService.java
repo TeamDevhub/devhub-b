@@ -33,7 +33,9 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 				.forEach(applicationFormCommand -> {
 				ApplicationForm applicationForm = createApplicationForm(applicationFormCommand);
 				saveApplicationForm(applicationForm);
-				saveApplcationFormItems(applicationForm.getApplicationFormGuid(), applicationFormCommand.getItemList());
+				if(applicationFormCommand.getItemList() != null && applicationFormCommand.getItemList().size() > 0) {
+					saveApplcationFormItems(applicationForm.getApplicationFormGuid(), applicationFormCommand.getItemList());
+				}
 				applicationFormGuids.add(applicationForm.getApplicationFormGuid());
 				});
 		return applicationFormGuids;

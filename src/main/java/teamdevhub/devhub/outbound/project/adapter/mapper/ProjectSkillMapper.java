@@ -7,9 +7,9 @@ public class ProjectSkillMapper {
 
 	public static ProjectSkillEntity toEntity(ProjectSkill projectSkill) {
 		return ProjectSkillEntity.builder()
-				.projectSkillGuid(projectSkill.projectSkillGuid())
-				.projectGuid(projectSkill.projectGuid())
-				.skillCd(projectSkill.skillCd())
+				.projectSkillGuid(projectSkill.getProjectSkillGuid())
+				.projectGuid(projectSkill.getProjectGuid())
+				.skillCd(projectSkill.getSkillCd())
 				.build();
 	}
 	

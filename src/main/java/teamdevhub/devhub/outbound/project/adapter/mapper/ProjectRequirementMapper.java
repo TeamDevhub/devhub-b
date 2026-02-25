@@ -7,11 +7,11 @@ public class ProjectRequirementMapper {
 	
 	public static ProjectRequirementEntity toEntity(ProjectRequirement projectRequirement) {
 		return ProjectRequirementEntity.builder()
-				.projectRequirementGuid(projectRequirement.projectRequirementGuid())
-				.projectGuid(projectRequirement.projectGuid())
-				.positionCd(projectRequirement.positionCd())
-				.levelCd(projectRequirement.levelCd())
-				.capacity(projectRequirement.capacity())
+				.projectRequirementGuid(projectRequirement.getProjectRequirementGuid())
+				.projectGuid(projectRequirement.getProjectGuid())
+				.positionCd(projectRequirement.getPositionCd())
+				.levelCd(projectRequirement.getLevelCd())
+				.capacity(projectRequirement.getCapacity())
 				.build();
 	}
 	

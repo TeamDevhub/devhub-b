@@ -26,7 +26,7 @@ public class ProjectApplicationFormAdapter implements ProjectApplicationFormRepo
 		List<ProjectApplicationFormEntity> entityList = formCommands.stream()
 				.map(formCommand -> {
 					String projectApplicationFormGuid = identifierProvider.generateIdentifier();
-					ProjectApplicationForm projectApplicationForm = new ProjectApplicationForm(projectApplicationFormGuid, formCommand.projectGuid(), formCommand.applicationFormGuid());
+					ProjectApplicationForm projectApplicationForm = ProjectApplicationForm.createProjectApplicationForm(projectApplicationFormGuid, formCommand);
 					return ProjectApplicationFormMapper.toEntity(projectApplicationForm);
 				})
 				.toList();
