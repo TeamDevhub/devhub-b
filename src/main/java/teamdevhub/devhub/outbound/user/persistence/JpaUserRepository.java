@@ -9,6 +9,7 @@ import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface JpaUserRepository extends JpaRepository<UserEntity, String> {
@@ -22,4 +23,7 @@ public interface JpaUserRepository extends JpaRepository<UserEntity, String> {
     int updateLastLoginDateTime(@Param("userGuid") String userGuid, @Param("lastLoginDate") LocalDateTime lastLoginDate);
 
     boolean existsByUserRole(UserRole userRole);
+    
+    @Query("select u.userGuid, u.username from UserEntity u where u.userGuid IN (:userGuids)")
+    List<Object[]> findNamesByUserGuid(@Param("userGuids") List<String> userGuids);
 }
