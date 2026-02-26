@@ -34,5 +34,5 @@ public class BoardEntity extends BaseEntity {
     private String content;
     
     @Column(name = "view_count")
-    private String viewCount;
+    private int viewCount;
 }

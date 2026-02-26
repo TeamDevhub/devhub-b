@@ -1,12 +1,14 @@
 package teamdevhub.devhub.core.user.port.out;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 public interface UserRepository {
 
@@ -21,4 +23,5 @@ public interface UserRepository {
     void updateUserProfile(User user);
     void delete(User user);
     boolean existsByUserRole(UserRole userRole);
+    Map<String, String> findNamesByUserGuid(List<String> userGuids);
 }

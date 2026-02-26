@@ -1,7 +1,14 @@
 package teamdevhub.devhub.outbound.user.adapter;
 
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
@@ -12,9 +19,6 @@ import teamdevhub.devhub.outbound.user.adapter.mapper.UserMapper;
 import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -83,4 +87,14 @@ public class UserAdapter implements UserRepository {
     public boolean existsByUserRole(UserRole userRole) {
         return jpaUserRepository.existsByUserRole(userRole);
     }
-}
+    
+    @Override
+    public Map<String, String> findNamesByUserGuid(List<String> userGuids) {
+    	List<Object[]> results = jpaUserRepository.findNamesByUserGuid(userGuids);
+    	
+    	return results.stream().collect(Collectors.toMap(
+    			row -> (String) row[0],
+    			row -> (String) row[1]
+    			));
+    }
+} 

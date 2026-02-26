@@ -2,6 +2,7 @@ package teamdevhub.devhub.core.board.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 
 
@@ -15,7 +16,7 @@ public class Board {
 	private String content;
 	private String viewCount;
 	
-	private final String userName;
+	private String userName;
 	private String likeCount;
 	private String commentCount;
 	
@@ -69,5 +70,21 @@ public class Board {
 				.viewCount(viewCount)
 				.auditInfo(auditInfo)
                 .build();
+	}
+
+	public static Board createBoard(CreateBoardCommand createBoardCommand, String boardGuid) {
+		return Board.builder()
+				.boardGuid(boardGuid)
+				.userGuid(createBoardCommand.userGuid())
+				.categoryCd(createBoardCommand.categoryCd())
+				.title(createBoardCommand.title())
+				.content(createBoardCommand.content())
+				.build();
+	}
+	
+	public void fillSubquery(String likeCount, String commentCount, String userName) {
+		 this.likeCount = likeCount;
+		 this.commentCount = commentCount;
+		 this.userName = userName;
 	}
 }
