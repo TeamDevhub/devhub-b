@@ -1,6 +1,6 @@
 package teamdevhub.devhub.core.project.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Builder;
@@ -23,14 +23,14 @@ public class Project {
 	private String imageFileGuid;
 
     private String recruitmentTypeCd;
-    private LocalDateTime recruitmentStartDate;
-    private LocalDateTime recruitmentEndDate;
+    private LocalDate recruitmentStartDate;
+    private LocalDate recruitmentEndDate;
 
     private String progressTypeCd;
     private String progressRegionCd;
     private String progressPeriod;
-    private LocalDateTime progressStartDate;
-    private LocalDateTime progressEndDate;
+    private LocalDate progressStartDate;
+    private LocalDate progressEndDate;
 
     private boolean deleted;
     private boolean capacityClosed;

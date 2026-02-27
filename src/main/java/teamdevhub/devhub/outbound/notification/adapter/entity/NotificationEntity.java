@@ -35,8 +35,8 @@ public class NotificationEntity extends BaseEntity {
 	@Column(length = 32, nullable = false, unique = true)
     private String notificationGuid;
 
-    @Column(name = "image_guid", length = 32, nullable = false)
-    private String imageGuid;
+    @Column(length = 32, nullable = false)
+    private String receiver;
     
     @Column(name="type_cd", length = 10, nullable = false)
     private String typeCd;

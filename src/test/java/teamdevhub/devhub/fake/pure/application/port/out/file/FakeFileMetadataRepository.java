@@ -19,7 +19,11 @@ public class FakeFileMetadataRepository implements FileMetadataRepository {
 
     @Override
     public FileMetadata find(String fileGuid) {
-        return null;
+        FileMetadata metadata = store.get(fileGuid);
+        if (metadata == null) {
+            throw new RuntimeException(fileGuid);
+        }
+        return metadata;
     }
 
     @Override

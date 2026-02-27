@@ -30,7 +30,7 @@ public class ProjectSkillAdapter implements ProjectSkillRepository {
 		List<ProjectSkillEntity> projectSkillEntityList = skills.stream()
 				.map(projectSkillCommand -> {
 					String projectSkillGuid = identifierProvider.generateIdentifier();
-					ProjectSkill projectSkill =  new ProjectSkill(projectSkillGuid, projectSkillCommand.projectGuid(), projectSkillCommand.skillCd());
+					ProjectSkill projectSkill =  ProjectSkill.createProjectSkill(projectSkillGuid, projectSkillCommand);
 					return ProjectSkillMapper.toEntity(projectSkill);
 				})
 				.toList();

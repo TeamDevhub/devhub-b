@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "project_application_answer")
+@Table(name = "project_application_form")
 public class ProjectApplicationFormEntity {
 	
 	@Id

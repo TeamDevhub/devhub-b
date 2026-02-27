@@ -13,7 +13,7 @@ import teamdevhub.devhub.outbound.admin.form.persistence.JpaApplicationFormRepos
 @RequiredArgsConstructor
 public class ApplicationFormAdapter implements ApplicationFormRepository{
 	
-	private JpaApplicationFormRepository jpaApplicationFormRepository;
+	private final JpaApplicationFormRepository jpaApplicationFormRepository;
 
 	@Override
 	public void save(ApplicationForm applicationForm) {

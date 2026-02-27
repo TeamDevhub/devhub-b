@@ -1,5 +1,8 @@
 package teamdevhub.devhub.core.file.application;
 
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+
 public record FileMetadata(
         String fileGuid,
         String originalName,
@@ -25,15 +28,15 @@ public record FileMetadata(
             long size
     ) {
         if (originalName == null || originalName.isBlank()) {
-            throw new IllegalArgumentException("파일명은 필수입니다.");
+            throw BusinessRuleException.of(ErrorCode.FILE_NAME_REQUIRED);
         }
 
         if (extensionName == null || extensionName.isBlank()) {
-            throw new IllegalArgumentException("확장자는 필수입니다.");
+            throw BusinessRuleException.of(ErrorCode.FILE_EXTENSION_REQUIRED);
         }
 
         if (size <= 0) {
-            throw new IllegalArgumentException("파일 크기는 0보다 커야 합니다.");
+            throw BusinessRuleException.of(ErrorCode.FILE_SIZE_INVALID);
         }
     }
 }

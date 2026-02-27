@@ -1,5 +1,6 @@
 package teamdevhub.devhub.core.project.port.in.facade.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.Getter;
@@ -21,14 +22,14 @@ public class ProjectBasicResponseDto {
     private String content;
     
     private String recruitmentTypeCd;
-    private LocalDateTime recruitmentStartDate;
-    private LocalDateTime recruitmentEndDate;
+    private LocalDate recruitmentStartDate;
+    private LocalDate recruitmentEndDate;
     
     private String progressTypeCd;
     private String progressRegionCd;
     private String progressPeriod;
-    private LocalDateTime progressStartDate;
-    private LocalDateTime progressEndDate;
+    private LocalDate progressStartDate;
+    private LocalDate progressEndDate;
     
     private String registrantGuid;
     private LocalDateTime registeredDate;

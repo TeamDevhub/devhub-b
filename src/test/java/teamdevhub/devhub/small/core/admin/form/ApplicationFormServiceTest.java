@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import teamdevhub.devhub.core.admin.form.application.ApplicationFormService;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
-import teamdevhub.devhub.fake.pure.application.port.out.admin.FakeApplicationFormItemRepository;
-import teamdevhub.devhub.fake.pure.application.port.out.admin.FakeApplicationFormRepository;
+import teamdevhub.devhub.fake.pure.application.port.out.admin.form.FakeApplicationFormItemRepository;
+import teamdevhub.devhub.fake.pure.application.port.out.admin.form.FakeApplicationFormRepository;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 
 public class ApplicationFormServiceTest {
