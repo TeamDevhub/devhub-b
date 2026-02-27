@@ -11,6 +11,7 @@ import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardBasicResponseDto;
+import teamdevhub.devhub.core.board.port.in.Facade.model.BoardDetailResponseDto;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
@@ -52,6 +53,16 @@ public class BoardFacade {
 		return DataApiResponseDto.successWithoutData(
                         SuccessCode.CREATE_SUCCESS);
 		
+	}
+
+	public DataApiResponseDto<BoardDetailResponseDto> detailBoard(String boardGuid) {
+		Board boardDetail = boardUseCase.detailBoard(boardGuid);
+		BoardDetailResponseDto responseDto = BoardDetailResponseDto.fromDomain(boardDetail);
+		
+		return DataApiResponseDto.successWithData(
+				SuccessCode.READ_SUCCESS,
+				responseDto
+				);
 	}
 
 }

@@ -1,5 +1,7 @@
 package teamdevhub.devhub.core.board.domain;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
@@ -19,6 +21,8 @@ public class Board {
 	private String userName;
 	private String likeCount;
 	private String commentCount;
+	
+	private List<String> commentList;
 	
 	private final AuditInfo auditInfo;
 	
