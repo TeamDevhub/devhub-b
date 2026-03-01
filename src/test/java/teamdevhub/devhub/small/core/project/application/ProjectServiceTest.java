@@ -13,7 +13,7 @@ import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCo
 import teamdevhub.devhub.core.project.application.ProjectService;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
-import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementCommand;
+import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
 import teamdevhub.devhub.fake.pure.application.port.out.application.FakeProjectApplicationFormRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.project.FakeProjectRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.project.FakeProjectRequirementRepository;
@@ -61,7 +61,7 @@ public class ProjectServiceTest {
 				.progressStartDate(LocalDate.of(2025, 3, 1))
 				.progressEndDate(LocalDate.of(2025, 4, 1))
 				.skillList(List.of("001", "002"))
-				.positionList(List.of(new CreateProjectRequirementCommand("001", "002", 2)))
+				.positionList(List.of(new CreateProjectRequirementRequestCommand("001", "002", 2)))
 				.applicationFormList(List.of("002"))
 				.additionalFormList(List.of(new CreateApplicationFormCommand("001", "자격증 유무", "헬프테스트", List.of("Y", "N"))))
 				.build();
@@ -98,7 +98,7 @@ public class ProjectServiceTest {
 				.progressStartDate(LocalDate.of(2025, 3, 1))
 				.progressEndDate(LocalDate.of(2025, 4, 1))
 				.skillList(List.of("001", "002"))
-				.positionList(List.of(new CreateProjectRequirementCommand("001", "002", 2)))
+				.positionList(List.of(new CreateProjectRequirementRequestCommand("001", "002", 2)))
 				.applicationFormList(List.of("002"))
 				.additionalFormList(List.of(new CreateApplicationFormCommand("001", "자격증 유무", "헬프테스트", List.of("Y", "N"))))
 				.build();
