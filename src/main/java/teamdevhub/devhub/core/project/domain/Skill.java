@@ -1,4 +1,4 @@
-package teamdevhub.devhub.core.project.domain.vo.skill;
+package teamdevhub.devhub.core.project.domain;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,13 +6,13 @@ import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillComman
 
 @Builder
 @Getter
-public class ProjectSkill {
+public class Skill {
 	private String projectSkillGuid;
 	private String projectGuid;
 	private String skillCd;
 	
-	public static ProjectSkill createProjectSkill(String projectSkillGuid, CreateProjectSkillCommand createProjectSkillCommand) {
-		return ProjectSkill.builder()
+	public static Skill createProjectSkill(String projectSkillGuid, CreateProjectSkillCommand createProjectSkillCommand) {
+		return Skill.builder()
 				.projectSkillGuid(projectSkillGuid)
 				.projectGuid(createProjectSkillCommand.projectGuid())
 				.skillCd(createProjectSkillCommand.skillCd())

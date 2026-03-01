@@ -12,10 +12,12 @@ public record SearchProjectListCommand(
 			List<String> skillCodeList,
 			List<String> regionCodeList,
 			List<String> positionCodeList,
+			// 추가예정
 			List<String> progressPeriodList,
 			List<String> positionLevelCodeList,
 			List<String> projectRecruitTypeList,
 			List<String> projectProgressTypeList,
+			// 추가예정
 			List<String> projectRecruitStatusList,
 			LocalDate recruitmentStartDate,
 			LocalDate recruitmentEndDate,

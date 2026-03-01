@@ -1,6 +1,7 @@
 package teamdevhub.devhub.core.project.application;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,15 +15,18 @@ import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.Requirement;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
 import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
+import teamdevhub.devhub.core.project.port.out.ProjectQueryRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectRequirementRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectSkillRepository;
+import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectMapper;
 
 @Service
 @Transactional
@@ -34,6 +38,7 @@ public class ProjectService implements ProjectUseCase {
 	private final ProjectSkillRepository projectSkillRepository;
 	private final ProjectRequirementRepository projectRequirementRepository;
 	private final ProjectApplicationFormRepository projectApplicationFormRepository;
+	private final ProjectQueryRepository projectQueryRepository;
 	
 	@Override
 	public void createProject(CreateProjectCommand createProjectCommand) {
@@ -72,15 +77,34 @@ public class ProjectService implements ProjectUseCase {
 		projectApplicationFormRepository.saveAll(forms);
 		
 	}
-	
 
 	@Override
 	public PageResult<Project> getProjectList(SearchProjectListCommand searchProjectListCommand,
 			PageCommand pageCommand) {
-		// TODO Auto-generated method stub
-		return null;
+		PageResult<Project> pagedProjectList = projectQueryRepository.getProjectList(searchProjectListCommand, pageCommand);
+		Set<String> projectGuids = pagedProjectList.content().stream()
+		        .map(Project::getProjectGuid)
+		        .collect(Collectors.toSet());
+		Map<String, List<String>> mapSKill = ProjectMapper.toMapSkill(projectSkillRepository.findByProjectGuid(projectGuids));
+		Map<String, List<Requirement>> mapRequirement = ProjectMapper.toMapRequirement(projectRequirementRepository.findByProjectGuid(projectGuids));
+		
+		return pagedProjectList.content().stream()
+				.map(project -> ProjectMapper.toProjectDetail(project, mapSKill.getOrDefault(project.getProjectGuid(), List.of()), mapRequirement.getOrDefault(project.getProjectGuid(), List.of())))
+				.collect(null);
+	}
+
+	private List<String> selectProjectGuidBySkillCd(List<String> skillCodeList) {
+		List<String> filterdProjectGuidBySKillCode = projectSkillRepository.selectProjectGuidBySkillCd(skillCodeList);
+		return filterdProjectGuidBySKillCode;
 	}
 	
+	
+	private List<String> selectProjectGuidByPositionCdAndPositionLevelCd(List<String> positionCodeList,
+			List<String> positionLevelCodeList) {
+		List<String> filterdProjectGuidByPosicionCdAndPositionLevelCd = projectRequirementRepository.selectProjectGuidByPositionCodeAndPositionLevel(positionCodeList, positionLevelCodeList);
+		return filterdProjectGuidByPosicionCdAndPositionLevelCd;
+	}
+
 	@Override
 	public Project getProjectDetail(String projectGuid) {
 		return projectRepository.getProjectDetail(projectGuid);

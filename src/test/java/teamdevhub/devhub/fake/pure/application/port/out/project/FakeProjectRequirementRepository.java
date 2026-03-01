@@ -5,27 +5,27 @@ import java.util.List;
 import java.util.Set;
 
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.Requirement;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
-import teamdevhub.devhub.core.project.domain.vo.requirement.ProjectRequirement;
 import teamdevhub.devhub.core.project.port.out.ProjectRequirementRepository;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 
 public class FakeProjectRequirementRepository implements ProjectRequirementRepository {
 	
 	private final FakeUuidIdentifierProvider identifierProvider = new FakeUuidIdentifierProvider("PROJECT_REQUIREMENT_UUID");
-	private final List<ProjectRequirement> store = new ArrayList<>();
+	private final List<Requirement> store = new ArrayList<>();
 
 	@Override
 	public void saveAll(Set<CreateProjectRequirementCommand> positions) {
-		List<ProjectRequirement> projectRequirementList = positions.stream()
+		List<Requirement> projectRequirementList = positions.stream()
 				.map(item -> {
 					String uuid = identifierProvider.generateIdentifier();
-					return ProjectRequirement.createProjectRequirement(uuid, item);
+					return Requirement.createProjectRequirement(uuid, item);
 				}).toList();
 		store.addAll(projectRequirementList);
 	}
 	
-	public List<ProjectRequirement> findByProjectGuid(String projectGuid) {
+	public List<Requirement> findByProjectGuid(String projectGuid) {
 		return store.stream()
 				.filter(item -> projectGuid.equals(item.getProjectGuid()))
 				.toList();
