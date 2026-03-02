@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
+import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 
@@ -15,6 +16,11 @@ import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 public class UserProfileFacade {
 
     private final UserProfileUseCase userProfileUseCase;
+
+    public UserBasicResponseDto getUserInfo(String userGuid) {
+        User user = userProfileUseCase.getUserInfo(userGuid);
+        return UserBasicResponseDto.fromDomain(user);
+    }
 
     public UserDetailResponseDto getCurrentUserProfile(String userGuid) {
         User user = userProfileUseCase.getCurrentUserProfile(userGuid);
