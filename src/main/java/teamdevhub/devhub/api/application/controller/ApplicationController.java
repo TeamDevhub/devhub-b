@@ -20,6 +20,18 @@ public class ApplicationController {
 
 	private final ProjectApplicationFacade projectApplicationFacade;
 
+	@PatchMapping("/{projectGuid}/applications/{applicationGuid}/approve")
+	public ResponseEntity<DataApiResponseDto<Void>> approveApplication(
+		@PathVariable("projectGuid") String projectGuid,
+		@PathVariable("applicationGuid") String applicationGuid,
+		@RequestParam("approved") boolean approved,
+		@LoginUser AuthenticatedUser authenticatedUser
+	) {
+		return ResponseEntity.ok(
+			projectApplicationFacade.approveApplication(applicationGuid, authenticatedUser.userGuid(), approved)
+		);
+	}
+
 	@PostMapping("/{projectGuid}/applications")
 	public ResponseEntity<DataApiResponseDto<Void>> createApplication(
 		@PathVariable("projectGuid") String projectGuid,

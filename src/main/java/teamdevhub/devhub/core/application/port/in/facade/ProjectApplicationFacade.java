@@ -15,6 +15,7 @@ import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
+import teamdevhub.devhub.core.application.port.in.command.ApproveApplicationCommand;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
@@ -31,6 +32,21 @@ public class ProjectApplicationFacade {
 	private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
 	private final ProjectApplicationUseCase projectApplicationUseCase;
 	private final ProjectUseCase projectUseCase;
+
+	public DataApiResponseDto<Void> approveApplication(
+		String applicationGuid,
+		String approverGuid,
+		boolean approved
+	) {
+		projectApplicationUseCase.approveApplication(
+			ApproveApplicationCommand.builder()
+				.applicationGuid(applicationGuid)
+				.approverGuid(approverGuid)
+				.approved(approved)
+				.build()
+		);
+		return DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS);
+	}
 
 	public DataApiResponseDto<Void> createApplication(
 		String projectGuid,

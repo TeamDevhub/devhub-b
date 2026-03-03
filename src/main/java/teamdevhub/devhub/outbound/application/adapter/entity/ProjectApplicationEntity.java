@@ -43,4 +43,10 @@ public class ProjectApplicationEntity extends BaseEntity {
 	@Convert(converter = BooleanToYNConverter.class)
 	@Column(name = "cancel_yn", nullable = false)
 	private boolean isCanceled;
+
+	public void updateStatus(String statusCd, String approverGuid, String decisionDate) {
+		this.statusCd = statusCd;
+		this.approverGuid = approverGuid;
+		this.decisionDate = decisionDate;
+	}
 }

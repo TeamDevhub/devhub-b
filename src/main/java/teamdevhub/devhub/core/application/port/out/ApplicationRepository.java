@@ -13,6 +13,8 @@ public interface ApplicationRepository {
 
 	void saveAnswers(List<ProjectApplicationAnswer> answers);
 
+	void updateApplicationStatus(String applicationGuid, String statusCd, String approverGuid, String decisionDate);
+
 	PageResult<ProjectApplication> findApplicationsByProjectGuid(String projectGuid, PageCommand pageCommand);
 
 	ProjectApplication findApplicationByGuid(String applicationGuid);

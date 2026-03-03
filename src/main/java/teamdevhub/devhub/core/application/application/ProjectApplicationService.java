@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
+import teamdevhub.devhub.core.application.port.in.command.ApproveApplicationCommand;
 import teamdevhub.devhub.core.application.port.in.command.CreateApplicationCommand;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
@@ -13,6 +14,7 @@ import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -32,7 +34,7 @@ public class ProjectApplicationService implements ProjectApplicationQueryUseCase
 			.applicationGuid(applicationGuid)
 			.requirementGuid(command.requirementGuid())
 			.applicantGuid(command.applicantGuid())
-			.statusCd("001") // 대기
+			.statusCd("001")
 			.isCanceled(false)
 			.build();
 
@@ -52,6 +54,18 @@ public class ProjectApplicationService implements ProjectApplicationQueryUseCase
 			.toList();
 
 		applicationRepository.saveAnswers(answers);
+	}
+
+	@Override
+	@Transactional
+	public void approveApplication(ApproveApplicationCommand command) {
+		String decisionDate = LocalDate.now().toString();
+		applicationRepository.updateApplicationStatus(
+			command.applicationGuid(),
+			command.resolveStatusCd(),
+			command.approverGuid(),
+			decisionDate
+		);
 	}
 
 	@Override

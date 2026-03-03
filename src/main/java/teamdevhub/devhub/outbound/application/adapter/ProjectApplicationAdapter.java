@@ -28,8 +28,7 @@ public class ProjectApplicationAdapter implements ApplicationRepository {
 
 	@Override
 	public void saveApplication(ProjectApplication application) {
-		ProjectApplicationEntity entity = ApplicationMapper.toApplicationEntity(application);
-		jpaProjectApplicationRepository.save(entity);
+		jpaProjectApplicationRepository.save(ApplicationMapper.toApplicationEntity(application));
 	}
 
 	@Override
@@ -41,18 +40,21 @@ public class ProjectApplicationAdapter implements ApplicationRepository {
 	}
 
 	@Override
+	public void updateApplicationStatus(String applicationGuid, String statusCd, String approverGuid, String decisionDate) {
+		ProjectApplicationEntity entity = jpaProjectApplicationRepository
+			.findByApplicationGuid(applicationGuid)
+			.orElseThrow(() -> new IllegalArgumentException("지원 정보를 찾을 수 없습니다."));
+		entity.updateStatus(statusCd, approverGuid, decisionDate);
+		jpaProjectApplicationRepository.save(entity);
+	}
+
+	@Override
 	public PageResult<ProjectApplication> findApplicationsByProjectGuid(String projectGuid, PageCommand pageCommand) {
 		Page<ProjectApplication> page = projectApplicationQueryDao.findApplicationsByProjectGuid(
 			projectGuid,
 			PageRequest.of(pageCommand.page(), pageCommand.size())
 		);
-
-		return PageResult.of(
-			page.getContent(),
-			page.getNumber(),
-			page.getSize(),
-			page.getTotalElements()
-		);
+		return PageResult.of(page.getContent(), page.getNumber(), page.getSize(), page.getTotalElements());
 	}
 
 	@Override
