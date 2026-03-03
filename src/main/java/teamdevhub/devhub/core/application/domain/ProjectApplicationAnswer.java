@@ -9,9 +9,11 @@ import java.util.List;
 @Builder
 public class ProjectApplicationAnswer {
 
+	private String projectApplicationFormGuid;
 	private String applicationAnswerGuid;
 	private String applicationGuid;
-	private String projectApplicationFormGuid;
+	private String applicationFormGuid;
+	private String projectGuid;
 	private String fileGuid;
 	private String content;
 
@@ -23,4 +25,5 @@ public class ProjectApplicationAnswer {
 	private String positionCd;
 	private String introduction;
 
+	private String aplyDate;
 }

@@ -5,19 +5,54 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
+import teamdevhub.devhub.core.application.port.in.command.CreateApplicationCommand;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
+import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
 import teamdevhub.devhub.core.application.port.out.ApplicationRepository;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
+import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ProjectApplicationService implements ProjectApplicationQueryUseCase {
+public class ProjectApplicationService implements ProjectApplicationQueryUseCase, ProjectApplicationUseCase {
 
 	private final ApplicationRepository applicationRepository;
+	private final IdentifierProvider identifierProvider;
+
+	@Override
+	@Transactional
+	public void createApplication(CreateApplicationCommand command) {
+		String applicationGuid = identifierProvider.generateIdentifier();
+
+		ProjectApplication application = ProjectApplication.builder()
+			.applicationGuid(applicationGuid)
+			.requirementGuid(command.requirementGuid())
+			.applicantGuid(command.applicantGuid())
+			.statusCd("001") // 대기
+			.isCanceled(false)
+			.build();
+
+		applicationRepository.saveApplication(application);
+
+		List<ProjectApplicationAnswer> answers = command.answers().stream()
+			.map(answer -> ProjectApplicationAnswer.builder()
+				.projectApplicationFormGuid(answer.projectApplicationFormGuid())
+				.applicationAnswerGuid(identifierProvider.generateIdentifier())
+				.applicationGuid(applicationGuid)
+				.applicationFormGuid(answer.applicationFormGuid())
+				.projectGuid(command.projectGuid())
+				.content(answer.content())
+				.fileGuid(answer.fileGuid())
+				.build()
+			)
+			.toList();
+
+		applicationRepository.saveAnswers(answers);
+	}
 
 	@Override
 	public PageResult<ProjectApplication> getApplicationsByProjectGuid(String projectGuid, PageCommand pageCommand) {

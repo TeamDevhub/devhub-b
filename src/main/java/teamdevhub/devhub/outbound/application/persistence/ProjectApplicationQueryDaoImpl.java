@@ -1,6 +1,5 @@
 package teamdevhub.devhub.outbound.application.persistence;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -8,61 +7,53 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
-import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.outbound.application.adapter.entity.ProjectApplicationAnswerEntity;
 import teamdevhub.devhub.outbound.application.adapter.entity.ProjectApplicationEntity;
 import teamdevhub.devhub.outbound.application.adapter.mapper.ApplicationMapper;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
+import teamdevhub.devhub.outbound.project.persistence.JpaProjectRequirementRepository;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserSkillEntity;
+import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
+import teamdevhub.devhub.outbound.user.persistence.JpaUserSkillRepository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static teamdevhub.devhub.outbound.application.adapter.entity.QProjectApplicationAnswerEntity.projectApplicationAnswerEntity;
-import static teamdevhub.devhub.outbound.application.adapter.entity.QProjectApplicationEntity.projectApplicationEntity;
-import static teamdevhub.devhub.outbound.project.adapter.entity.QProjectEntity.projectEntity;
-import static teamdevhub.devhub.outbound.project.adapter.entity.QProjectRequirementEntity.projectRequirementEntity;
-import static teamdevhub.devhub.outbound.user.adapter.entity.QUserEntity.userEntity;
-import static teamdevhub.devhub.outbound.user.adapter.entity.QUserSkillEntity.userSkillEntity;
 
 @Repository
 @RequiredArgsConstructor
 public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDao {
 
-	private final JPAQueryFactory queryFactory;
+	private final JpaProjectApplicationRepository jpaProjectApplicationRepository;
+	private final JpaProjectApplicationAnswerRepository jpaProjectApplicationAnswerRepository;
+	private final JpaProjectRequirementRepository jpaProjectRequirementRepository;
+	private final JpaUserRepository jpaUserRepository;
+	private final JpaUserSkillRepository jpaUserSkillRepository;
 
 	@Override
 	public Page<ProjectApplication> findApplicationsByProjectGuid(String projectGuid, Pageable pageable) {
 
-		Long total = Optional.ofNullable(
-			queryFactory
-				.select(projectApplicationEntity.count())
-				.from(projectApplicationEntity)
-				.leftJoin(projectRequirementEntity)
-					.on(projectApplicationEntity.requirementGuid.eq(projectRequirementEntity.projectRequirementGuid))
-				.join(projectEntity)
-					.on(projectRequirementEntity.projectGuid.eq(projectEntity.projectGuid)
-						.and(projectEntity.projectGuid.eq(projectGuid)))
-				.fetchOne()
-		).orElse(0L);
+		// projectGuid → requirementGuid 목록 조회
+		List<String> requirementGuidList = jpaProjectRequirementRepository
+			.findByProjectGuid(projectGuid)
+			.stream()
+			.map(ProjectRequirementEntity::getProjectRequirementGuid)
+			.toList();
 
-		List<ProjectApplicationEntity> applicationEntities = queryFactory
-			.selectFrom(projectApplicationEntity)
-			.leftJoin(projectRequirementEntity)
-				.on(projectApplicationEntity.requirementGuid.eq(projectRequirementEntity.projectRequirementGuid))
-			.join(projectEntity)
-				.on(projectRequirementEntity.projectGuid.eq(projectEntity.projectGuid)
-					.and(projectEntity.projectGuid.eq(projectGuid)))
-			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
-			.fetch();
+		if (requirementGuidList.isEmpty()) {
+			return new PageImpl<>(List.of(), pageable, 0);
+		}
+
+		// requirementGuid 목록으로 application 페이징 조회
+		Page<ProjectApplicationEntity> applicationPage =
+			jpaProjectApplicationRepository.findByRequirementGuidIn(requirementGuidList, pageable);
+
+		List<ProjectApplicationEntity> applicationEntities = applicationPage.getContent();
 
 		if (applicationEntities.isEmpty()) {
-			return new PageImpl<>(List.of(), pageable, total);
+			return new PageImpl<>(List.of(), pageable, applicationPage.getTotalElements());
 		}
 
 		List<String> applicantGuidList = applicationEntities.stream()
@@ -75,29 +66,24 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 			.distinct()
 			.toList();
 
-		Map<String, UserEntity> userMap = queryFactory
-			.selectFrom(userEntity)
-			.where(userEntity.userGuid.in(applicantGuidList))
-			.fetch()
+		// 지원자 유저 정보 조회
+		Map<String, UserEntity> userMap = jpaUserRepository.findAllById(applicantGuidList)
 			.stream()
 			.collect(Collectors.toMap(UserEntity::getUserGuid, u -> u));
 
-		Map<String, List<String>> userSkillMap = queryFactory
-			.selectFrom(userSkillEntity)
-			.where(userSkillEntity.userGuid.in(applicantGuidList))
-			.fetch()
+		// 지원자 스킬 목록 조회
+		Map<String, List<String>> userSkillMap = jpaUserSkillRepository.findByUserGuidIn(applicantGuidList)
 			.stream()
 			.collect(Collectors.groupingBy(
 				UserSkillEntity::getUserGuid,
 				Collectors.mapping(UserSkillEntity::getSkillCd, Collectors.toList())
 			));
 
-		Map<String, ProjectRequirementEntity> requirementMap = queryFactory
-			.selectFrom(projectRequirementEntity)
-			.where(projectRequirementEntity.projectRequirementGuid.in(reqGuidList))
-			.fetch()
-			.stream()
-			.collect(Collectors.toMap(ProjectRequirementEntity::getProjectRequirementGuid, r -> r));
+		// 모집 요건 정보 조회
+		Map<String, ProjectRequirementEntity> requirementMap =
+			jpaProjectRequirementRepository.findAllById(reqGuidList)
+				.stream()
+				.collect(Collectors.toMap(ProjectRequirementEntity::getProjectRequirementGuid, r -> r));
 
 		List<ProjectApplication> content = applicationEntities.stream()
 			.map(app -> {
@@ -112,32 +98,24 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 			.filter(Objects::nonNull)
 			.toList();
 
-		return new PageImpl<>(content, pageable, total);
+		return new PageImpl<>(content, pageable, applicationPage.getTotalElements());
 	}
 
 	@Override
 	public ProjectApplication findApplicationByGuid(String applicationGuid) {
-		ProjectApplicationEntity app = queryFactory
-			.selectFrom(projectApplicationEntity)
-			.where(projectApplicationEntity.applicationGuid.eq(applicationGuid))
-			.fetchOne();
+		ProjectApplicationEntity app = jpaProjectApplicationRepository
+			.findByApplicationGuid(applicationGuid)
+			.orElse(null);
 
 		if (app == null) return null;
 
-		UserEntity user = queryFactory
-			.selectFrom(userEntity)
-			.where(userEntity.userGuid.eq(app.getApplicantGuid()))
-			.fetchOne();
+		UserEntity user = jpaUserRepository.findByUserGuid(app.getApplicantGuid()).orElse(null);
 
-		ProjectRequirementEntity requirement = queryFactory
-			.selectFrom(projectRequirementEntity)
-			.where(projectRequirementEntity.projectRequirementGuid.eq(app.getRequirementGuid()))
-			.fetchOne();
+		ProjectRequirementEntity requirement = jpaProjectRequirementRepository
+			.findByProjectRequirementGuid(app.getRequirementGuid())
+			.orElse(null);
 
-		List<String> skillList = queryFactory
-			.selectFrom(userSkillEntity)
-			.where(userSkillEntity.userGuid.eq(app.getApplicantGuid()))
-			.fetch()
+		List<String> skillList = jpaUserSkillRepository.findByUserGuid(app.getApplicantGuid())
 			.stream()
 			.map(UserSkillEntity::getSkillCd)
 			.toList();
@@ -149,35 +127,24 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 
 	@Override
 	public List<ProjectApplicationAnswer> findAnswersByApplicationGuid(String applicationGuid) {
-		List<ProjectApplicationAnswerEntity> answerEntities = queryFactory
-			.selectFrom(projectApplicationAnswerEntity)
-			.where(projectApplicationAnswerEntity.applicationGuid.eq(applicationGuid))
-			.fetch();
+		List<ProjectApplicationAnswerEntity> answerEntities =
+			jpaProjectApplicationAnswerRepository.findByApplicationGuid(applicationGuid);
 
 		if (answerEntities.isEmpty()) return List.of();
 
-		// 지원자 정보 조회 (applicationGuid로 application 찾아서 applicantGuid 획득)
-		ProjectApplicationEntity app = queryFactory
-			.selectFrom(projectApplicationEntity)
-			.where(projectApplicationEntity.applicationGuid.eq(applicationGuid))
-			.fetchOne();
+		ProjectApplicationEntity app = jpaProjectApplicationRepository
+			.findByApplicationGuid(applicationGuid)
+			.orElse(null);
 
 		if (app == null) return List.of();
 
-		UserEntity user = queryFactory
-			.selectFrom(userEntity)
-			.where(userEntity.userGuid.eq(app.getApplicantGuid()))
-			.fetchOne();
+		UserEntity user = jpaUserRepository.findByUserGuid(app.getApplicantGuid()).orElse(null);
 
-		ProjectRequirementEntity requirement = queryFactory
-			.selectFrom(projectRequirementEntity)
-			.where(projectRequirementEntity.projectRequirementGuid.eq(app.getRequirementGuid()))
-			.fetchOne();
+		ProjectRequirementEntity requirement = jpaProjectRequirementRepository
+			.findByProjectRequirementGuid(app.getRequirementGuid())
+			.orElse(null);
 
-		List<String> skillList = queryFactory
-			.selectFrom(userSkillEntity)
-			.where(userSkillEntity.userGuid.eq(app.getApplicantGuid()))
-			.fetch()
+		List<String> skillList = jpaUserSkillRepository.findByUserGuid(app.getApplicantGuid())
 			.stream()
 			.map(UserSkillEntity::getSkillCd)
 			.toList();
@@ -195,6 +162,8 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 				.userSkillList(skillList)
 				.positionCd(requirement != null ? requirement.getPositionCd() : null)
 				.introduction(user != null ? user.getIntroduction() : null)
+				.aplyDate(app.getRegisteredDate() != null
+					? app.getRegisteredDate().toLocalDate().toString() : null)
 				.build()
 			)
 			.toList();

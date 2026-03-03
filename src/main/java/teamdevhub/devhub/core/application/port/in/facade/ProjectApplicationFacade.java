@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.api.application.model.request.CreateApplicationRequestDto;
 import teamdevhub.devhub.api.application.model.response.ProjectApplicationAnswerDetailResponseDto;
 import teamdevhub.devhub.api.application.model.response.ProjectApplicationBasicResponseDto;
 import teamdevhub.devhub.api.application.model.response.ProjectApplicationDetailResponseDto;
@@ -15,6 +16,7 @@ import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
+import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.Project;
@@ -27,7 +29,17 @@ import teamdevhub.devhub.shared.enums.SuccessCode;
 public class ProjectApplicationFacade {
 
 	private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
+	private final ProjectApplicationUseCase projectApplicationUseCase;
 	private final ProjectUseCase projectUseCase;
+
+	public DataApiResponseDto<Void> createApplication(
+		String projectGuid,
+		String applicantGuid,
+		CreateApplicationRequestDto requestDto
+	) {
+		projectApplicationUseCase.createApplication(requestDto.toCommand(projectGuid, applicantGuid));
+		return DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS);
+	}
 
 	public DataApiResponseDto<ProjectApplicationListResponseDto> getApplicationsByProjectGuid(
 		String projectGuid,

@@ -1,7 +1,9 @@
 package teamdevhub.devhub.outbound.application.adapter.mapper;
 
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
+import teamdevhub.devhub.outbound.application.adapter.entity.ProjectApplicationAnswerEntity;
 import teamdevhub.devhub.outbound.application.adapter.entity.ProjectApplicationEntity;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
@@ -39,6 +41,30 @@ public class ApplicationMapper {
 				applicationEntity.getModifierGuid(),
 				applicationEntity.getModifiedDate()
 			))
+			.build();
+	}
+
+	public static ProjectApplicationEntity toApplicationEntity(ProjectApplication application) {
+		return ProjectApplicationEntity.builder()
+			.applicationGuid(application.getApplicationGuid())
+			.requirementGuid(application.getRequirementGuid())
+			.applicantGuid(application.getApplicantGuid())
+			.approverGuid(application.getApproverGuid())
+			.decisionDate(application.getDecisionDate())
+			.statusCd(application.getStatusCd())
+			.isCanceled(application.isCanceled())
+			.build();
+	}
+
+	public static ProjectApplicationAnswerEntity toAnswerEntity(ProjectApplicationAnswer answer) {
+		return ProjectApplicationAnswerEntity.builder()
+			.projectApplicationFormGuid(answer.getProjectApplicationFormGuid())
+			.applicationAnswerGuid(answer.getApplicationAnswerGuid())
+			.applicationGuid(answer.getApplicationGuid())
+			.applicationFormGuid(answer.getApplicationFormGuid())
+			.projectGuid(answer.getProjectGuid())
+			.content(answer.getContent())
+			.fileGuid(answer.getFileGuid())
 			.build();
 	}
 }

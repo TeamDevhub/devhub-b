@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface ApplicationRepository {
 
+	void saveApplication(ProjectApplication application);
+
+	void saveAnswers(List<ProjectApplicationAnswer> answers);
+
 	PageResult<ProjectApplication> findApplicationsByProjectGuid(String projectGuid, PageCommand pageCommand);
 
 	ProjectApplication findApplicationByGuid(String applicationGuid);
