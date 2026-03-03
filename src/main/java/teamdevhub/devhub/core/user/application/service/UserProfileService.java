@@ -28,6 +28,11 @@ public class UserProfileService implements UserProfileUseCase {
     private final UserSkillRepository userSkillRepository;
 
     @Override
+    public User getUserInfo(String userGuid) {
+        return userRepository.findByUserGuid(userGuid);
+    }
+
+    @Override
     public User getCurrentUserProfile(String userGuid) {
         return getUserWithPositionsAndSkills(userGuid);
     }

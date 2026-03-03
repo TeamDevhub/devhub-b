@@ -13,11 +13,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.user.model.UpdateProfileImageRequestDto;
 import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
-import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
-import teamdevhub.devhub.api.web.resolver.LoginUser;
+import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
+import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
 import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
-import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
+import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
+import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
@@ -28,6 +29,16 @@ public class UserProfileController {
 
     private final UserProfileFacade userProfileFacade;
     private final UserWithdrawFacade userWithdrawFacade;
+
+    @GetMapping()
+    public ResponseEntity<DataApiResponseDto<UserBasicResponseDto>> getUserInfo(@LoginUser AuthenticatedUser authenticatedUser) {
+        return ResponseEntity.ok(
+                DataApiResponseDto.successWithData(
+                        SuccessCode.READ_SUCCESS,
+                        userProfileFacade.getUserInfo(authenticatedUser.userGuid())
+                )
+        );
+    }
 
     @GetMapping("/profile")
     public ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> getProfile(@LoginUser AuthenticatedUser authenticatedUser) {
