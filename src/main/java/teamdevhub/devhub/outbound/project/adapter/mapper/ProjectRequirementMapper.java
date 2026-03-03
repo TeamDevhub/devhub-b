@@ -1,11 +1,11 @@
 package teamdevhub.devhub.outbound.project.adapter.mapper;
 
-import teamdevhub.devhub.core.project.domain.Requirement;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 
 public class ProjectRequirementMapper {
 	
-	public static ProjectRequirementEntity toEntity(Requirement projectRequirement) {
+	public static ProjectRequirementEntity toEntity(ProjectRequirement projectRequirement) {
 		return ProjectRequirementEntity.builder()
 				.projectRequirementGuid(projectRequirement.getProjectRequirementGuid())
 				.projectGuid(projectRequirement.getProjectGuid())
@@ -15,8 +15,8 @@ public class ProjectRequirementMapper {
 				.build();
 	}
 	
-	public static Requirement toProjectRequirement(ProjectRequirementEntity projectRequirementEntity) {
-		return Requirement.builder()
+	public static ProjectRequirement toProjectRequirement(ProjectRequirementEntity projectRequirementEntity) {
+		return ProjectRequirement.builder()
 				.projectRequirementGuid(projectRequirementEntity.getProjectRequirementGuid())
 				.projectGuid(projectRequirementEntity.getProjectGuid())
 				.positionCd(projectRequirementEntity.getPositionCd())

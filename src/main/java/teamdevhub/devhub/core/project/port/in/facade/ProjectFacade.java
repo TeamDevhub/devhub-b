@@ -24,9 +24,9 @@ public class ProjectFacade {
 	private final ProjectUseCase projectUseCase;
 	private final ApplicationFormUseCase applicationFormUseCase;
 
-	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestDto, PageCommand pageCommand) {
+	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand) {
 		
-		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestDto, pageCommand);
+		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
         List<ProjectDetailResponseDto> projectDetailResponseDtoList = pagedProjectList.content().stream()
                 .map(ProjectDetailResponseDto::fromDomain)
                 .toList();

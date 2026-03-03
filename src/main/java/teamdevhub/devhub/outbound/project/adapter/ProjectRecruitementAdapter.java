@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
-import teamdevhub.devhub.core.project.domain.Requirement;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectRequirementRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
@@ -30,7 +30,7 @@ public class ProjectRecruitementAdapter implements ProjectRequirementRepository 
 		List<ProjectRequirementEntity> projectRequirementEntityList = positions.stream()
 				.map(projectRequirementCommand -> {
 					String projectRequirementGuid = identifierProvider.generateIdentifier();
-					Requirement projectRequirement = Requirement.createProjectRequirement(projectRequirementGuid, projectRequirementCommand);
+					ProjectRequirement projectRequirement = ProjectRequirement.createProjectRequirement(projectRequirementGuid, projectRequirementCommand);
 					return ProjectRequirementMapper.toEntity(projectRequirement);
 				})
 				.toList();
@@ -47,7 +47,7 @@ public class ProjectRecruitementAdapter implements ProjectRequirementRepository 
 		return jpaProjectRequirementRepository.findByPositionCdAndLevelCd(positionCodeList, positionLevelCodeList);
 	}
 	@Override
-	public List<Requirement> findByProjectGuid(Set<String> projectGuids) {
+	public List<ProjectRequirement> findByProjectGuid(Set<String> projectGuids) {
 		List<ProjectRequirementEntity> entityList = jpaProjectRequirementRepository.findByProjectGuid(projectGuids);
 		return entityList.stream()
 				.map(ProjectRequirementMapper::toProjectRequirement)

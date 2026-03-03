@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import teamdevhub.devhub.core.project.domain.Skill;
+import teamdevhub.devhub.core.project.domain.ProjectSkill;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectSkillRepository;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
@@ -12,19 +12,19 @@ import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvid
 public class FakeProjectSkillRepository implements ProjectSkillRepository {
 	
 	private final FakeUuidIdentifierProvider identifierProvider = new FakeUuidIdentifierProvider("PROJECT_SKILL_UUID");
-	private final List<Skill> store = new ArrayList<>();
+	private final List<ProjectSkill> store = new ArrayList<>();
 
 	@Override
 	public void saveAll(Set<CreateProjectSkillCommand> skills) {
-		List<Skill> projectSkillList = skills.stream()
+		List<ProjectSkill> projectSkillList = skills.stream()
 				.map(item -> {
 					String uuid = identifierProvider.generateIdentifier();
-					return Skill.createProjectSkill(uuid, item);
+					return ProjectSkill.createProjectSkill(uuid, item);
 				}).toList();
 		store.addAll(projectSkillList);
 	}
 	
-	public List<Skill> findByProjectGuid(String projectGuid) {
+	public List<ProjectSkill> findByProjectGuid(String projectGuid) {
 		return store.stream()
 				.filter(item -> projectGuid.equals(item.getProjectGuid()))
 				.toList();

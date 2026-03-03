@@ -6,7 +6,7 @@ import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirement
 
 @Builder
 @Getter
-public class Requirement {
+public class ProjectRequirement {
 	
 	private String projectRequirementGuid;
 	
@@ -18,8 +18,8 @@ public class Requirement {
 	
 	private int capacity;
 	
-	public static Requirement createProjectRequirement(String projectRequirementGuid, CreateProjectRequirementCommand createProjectRequirementCommand) {
-		return Requirement.builder()
+	public static ProjectRequirement createProjectRequirement(String projectRequirementGuid, CreateProjectRequirementCommand createProjectRequirementCommand) {
+		return ProjectRequirement.builder()
 				.projectRequirementGuid(projectRequirementGuid)
 				.projectGuid(createProjectRequirementCommand.projectGuid())
 				.positionCd(createProjectRequirementCommand.position())

@@ -13,13 +13,15 @@ import teamdevhub.devhub.core.project.domain.Project;
 public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 	
 	private List<String> skillList;
-	private List<String> positionList;
+	private List<RequirementResponseDto> positionList;
 	private String likeCount;
 	
 	public static ProjectDetailResponseDto fromDomain(Project project) {
 		ProjectDetailResponseDtoBuilder<?, ?> builder = ProjectDetailResponseDto.builder();
 		fillBase(builder, project);
 		return builder
+			.skillList(project.getProjectSkill())
+			.positionList(project.getProjectRequirement().stream().map(RequirementResponseDto::fromDomain).toList())
 			.build();
 	}
 

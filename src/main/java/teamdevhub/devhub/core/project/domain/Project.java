@@ -36,7 +36,7 @@ public class Project {
     private boolean capacityClosed;
 
 	private List<String> projectSkill;
-	private List<Requirement> projectRequirement;
+	private List<ProjectRequirement> projectRequirement;
 	private String likeCount;
 
 	private AuditInfo auditInfo;

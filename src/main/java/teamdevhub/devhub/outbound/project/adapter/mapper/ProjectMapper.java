@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.project.domain.Project;
-import teamdevhub.devhub.core.project.domain.Requirement;
-import teamdevhub.devhub.core.project.domain.Skill;
+import teamdevhub.devhub.core.project.domain.ProjectLike;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
+import teamdevhub.devhub.core.project.domain.ProjectSkill;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectLikeEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
 
@@ -92,15 +94,24 @@ public class ProjectMapper {
                 .build();
     }
 
-    public static Requirement toRequirement(ProjectRequirementEntity entity) {
+    public static ProjectRequirement toRequirement(ProjectRequirementEntity entity) {
         if (entity == null) return null;
-        return Requirement.builder()
+        return ProjectRequirement.builder()
                 .projectRequirementGuid(entity.getProjectRequirementGuid())
                 .projectGuid(entity.getProjectGuid())
                 .positionCd(entity.getPositionCd())
                 .levelCd(entity.getLevelCd())
                 .capacity(entity.getCapacity())
                 .build();
+    }
+    
+    public static ProjectLike toProjectLike(ProjectLikeEntity entity) {
+    	if(entity == null) return null;
+    	return ProjectLike.builder()
+    			.projectLikeGuid(entity.getProjectLikeGuid())
+    			.projectGuid(entity.getProjectGuid())
+    			.userGuid(entity.getUserGuid())
+    			.build();
     }
     
     public static Map<String, List<String>> skillEntityToMapSkill(List<ProjectSkillEntity> entityList) {
@@ -118,20 +129,33 @@ public class ProjectMapper {
                 .collect(Collectors.groupingBy(ProjectRequirementEntity::getProjectGuid));
     }
 
-    public static Map<String, List<String>> toMapSkill(List<Skill> entityList) {
+    public static Map<String, List<String>> toMapSkill(List<ProjectSkill> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .collect(Collectors.groupingBy(
-                        Skill::getProjectGuid,
-                        Collectors.mapping(Skill::getSkillCd, Collectors.toList())
+                        ProjectSkill::getProjectGuid,
+                        Collectors.mapping(ProjectSkill::getSkillCd, Collectors.toList())
                 ));
     }
 
-    public static Map<String, List<Requirement>> toMapRequirement(List<Requirement> entityList) {
+    public static Map<String, List<ProjectRequirement>> toMapRequirement(List<ProjectRequirement> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
-                .collect(Collectors.groupingBy(Requirement::getProjectGuid));
+                .collect(Collectors.groupingBy(ProjectRequirement::getProjectGuid));
     }
+    
+
+	public static Map<String, String> toMapLikeCount(List<ProjectLike> entityList) {
+		if (entityList == null) return null;
+		return entityList.stream()
+		        .collect(Collectors.groupingBy(
+		                ProjectLike::getProjectGuid,
+		                Collectors.collectingAndThen(
+		                        Collectors.counting(),
+		                        count -> String.valueOf(count)
+		                )
+		        ));
+	}
 
     public static Project toProjectDetail(
             ProjectEntity projectEntity,
@@ -173,7 +197,7 @@ public class ProjectMapper {
                 .build();
     }
 
-	public static Project toProjectDetail(Project project, List<String> skills, List<Requirement> requirements) {
+	public static Project toProjectDetail(Project project, List<String> skills, List<ProjectRequirement> requirements, String likeCount) {
 		return Project.builder()
                 .projectGuid(project.getProjectGuid())
                 .userGuid(project.getUserGuid())

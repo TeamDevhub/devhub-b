@@ -1,11 +1,11 @@
 package teamdevhub.devhub.outbound.project.adapter.mapper;
 
-import teamdevhub.devhub.core.project.domain.Skill;
+import teamdevhub.devhub.core.project.domain.ProjectSkill;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
 
 public class ProjectSkillMapper {
 
-	public static ProjectSkillEntity toEntity(Skill projectSkill) {
+	public static ProjectSkillEntity toEntity(ProjectSkill projectSkill) {
 		return ProjectSkillEntity.builder()
 				.projectSkillGuid(projectSkill.getProjectSkillGuid())
 				.projectGuid(projectSkill.getProjectGuid())
@@ -13,8 +13,8 @@ public class ProjectSkillMapper {
 				.build();
 	}
 	
-	public static Skill toProjectSkill(ProjectSkillEntity projectSkillEntity) {
-		return Skill.builder()
+	public static ProjectSkill toProjectSkill(ProjectSkillEntity projectSkillEntity) {
+		return ProjectSkill.builder()
 				.projectSkillGuid(projectSkillEntity.getProjectSkillGuid())
 				.projectGuid(projectSkillEntity.getProjectGuid())
 				.skillCd(projectSkillEntity.getSkillCd())

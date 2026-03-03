@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
-import teamdevhub.devhub.core.project.domain.Skill;
+import teamdevhub.devhub.core.project.domain.ProjectSkill;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectSkillRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
@@ -31,7 +31,7 @@ public class ProjectSkillAdapter implements ProjectSkillRepository {
 		List<ProjectSkillEntity> projectSkillEntityList = skills.stream()
 				.map(projectSkillCommand -> {
 					String projectSkillGuid = identifierProvider.generateIdentifier();
-					Skill projectSkill =  Skill.createProjectSkill(projectSkillGuid, projectSkillCommand);
+					ProjectSkill projectSkill =  ProjectSkill.createProjectSkill(projectSkillGuid, projectSkillCommand);
 					return ProjectSkillMapper.toEntity(projectSkill);
 				})
 				.toList();
@@ -49,7 +49,7 @@ public class ProjectSkillAdapter implements ProjectSkillRepository {
 	}
 
 	@Override
-	public List<Skill> findByProjectGuid(Set<String> projectGuids) {
+	public List<ProjectSkill> findByProjectGuid(Set<String> projectGuids) {
 		List<ProjectSkillEntity> entityList = jpaProjectSkillRepository.findByProjectGuid(projectGuids);
 		return entityList.stream()
 				.map(ProjectSkillMapper::toProjectSkill)

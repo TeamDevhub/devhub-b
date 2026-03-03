@@ -15,13 +15,14 @@ import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.project.domain.Project;
-import teamdevhub.devhub.core.project.domain.Requirement;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
 import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
+import teamdevhub.devhub.core.project.port.out.ProjectLikeRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectQueryRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectRequirementRepository;
@@ -39,6 +40,7 @@ public class ProjectService implements ProjectUseCase {
 	private final ProjectRequirementRepository projectRequirementRepository;
 	private final ProjectApplicationFormRepository projectApplicationFormRepository;
 	private final ProjectQueryRepository projectQueryRepository;
+	private final ProjectLikeRepository projectLikeRepository;
 	
 	@Override
 	public void createProject(CreateProjectCommand createProjectCommand) {
@@ -86,13 +88,16 @@ public class ProjectService implements ProjectUseCase {
 		        .map(Project::getProjectGuid)
 		        .collect(Collectors.toSet());
 		Map<String, List<String>> mapSKill = ProjectMapper.toMapSkill(projectSkillRepository.findByProjectGuid(projectGuids));
-		Map<String, List<Requirement>> mapRequirement = ProjectMapper.toMapRequirement(projectRequirementRepository.findByProjectGuid(projectGuids));
+		Map<String, List<ProjectRequirement>> mapRequirement = ProjectMapper.toMapRequirement(projectRequirementRepository.findByProjectGuid(projectGuids));
+		Map<String, String> mapLikeCount = ProjectMapper.toMapLikeCount(projectLikeRepository.findByProjectGuid(projectGuids));
 		
 		List<Project> content = pagedProjectList.content().stream()
-				.map(project -> ProjectMapper.toProjectDetail(project, mapSKill.getOrDefault(project.getProjectGuid(), List.of()), mapRequirement.getOrDefault(project.getProjectGuid(), List.of())))
+				.map(project -> ProjectMapper.toProjectDetail(
+						project,
+						mapSKill.getOrDefault(project.getProjectGuid(), List.of()),
+						mapRequirement.getOrDefault(project.getProjectGuid(), List.of()),
+						 mapLikeCount.getOrDefault(mapLikeCount, String.valueOf("0"))))
 				.toList();
-		
-		
 		return PageResult.of(
 				content,
         		pagedProjectList.page(),

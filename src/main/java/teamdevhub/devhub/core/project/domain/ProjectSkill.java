@@ -6,13 +6,13 @@ import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillComman
 
 @Builder
 @Getter
-public class Skill {
+public class ProjectSkill {
 	private String projectSkillGuid;
 	private String projectGuid;
 	private String skillCd;
 	
-	public static Skill createProjectSkill(String projectSkillGuid, CreateProjectSkillCommand createProjectSkillCommand) {
-		return Skill.builder()
+	public static ProjectSkill createProjectSkill(String projectSkillGuid, CreateProjectSkillCommand createProjectSkillCommand) {
+		return ProjectSkill.builder()
 				.projectSkillGuid(projectSkillGuid)
 				.projectGuid(createProjectSkillCommand.projectGuid())
 				.skillCd(createProjectSkillCommand.skillCd())
