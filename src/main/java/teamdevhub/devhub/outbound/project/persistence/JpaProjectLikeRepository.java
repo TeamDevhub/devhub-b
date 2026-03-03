@@ -13,7 +13,7 @@ import teamdevhub.devhub.outbound.project.adapter.entity.ProjectLikeEntity;
 public interface JpaProjectLikeRepository extends JpaRepository<ProjectLikeEntity, String> {
 
 	@Query("""
-			select Pl
+			select pl
 			from ProjectLikeEntity pl
 			where (:projectGuids is null or pl.projectGuid in :projectGuids)
 			""")
