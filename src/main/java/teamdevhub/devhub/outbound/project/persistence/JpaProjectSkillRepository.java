@@ -23,6 +23,6 @@ public interface JpaProjectSkillRepository extends JpaRepository<ProjectSkillEnt
 			from ProjectSkillEntity ps
 			where (:projectGuids is null or ps.projectGuid in :projectGuids)
 			""")
-	List<ProjectSkillEntity> findByProjectGuid(Set<String> projectGuids);
+	List<ProjectSkillEntity> findByProjectGuid(@Param("projectGuids")Set<String> projectGuids);
 
 }

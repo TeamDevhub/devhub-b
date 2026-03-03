@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 
@@ -16,13 +17,13 @@ public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRe
 			where (:positionCodeList is null or pr.positionCd in :positionCodeList)
 			and	  (:positionLevelCodeList is null or pr.levelCd in :positionLevelCodeList)
 			""")
-	List<String> findByPositionCdAndLevelCd(List<String> positionCodeList, List<String> positionLevelCodeList);
+	List<String> findByPositionCdAndLevelCd(@Param("positionCodeList") List<String> positionCodeList, @Param("positionLevelCodeList") List<String> positionLevelCodeList);
 
 	@Query("""
 			select pr
 			from ProjectRequirementEntity pr
 			where (:projectGuids is null or pr.projectGuid in :projectGuids)
 			""")
-	List<ProjectRequirementEntity> findByProjectGuid(Set<String> projectGuids);
+	List<ProjectRequirementEntity> findByProjectGuid(@Param("projectGuids") Set<String> projectGuids);
 
 }

@@ -75,7 +75,8 @@ public class ProjectMapper {
         return Project.builder()
                 .projectGuid(entity.getProjectGuid())
                 .userGuid(entity.getUserGuid())
-//                .fileGuid(entity.get)
+                .attachmentFileGuid(entity.getAttachmentFileGuid())
+                .imageFileGuid(entity.getImageFileGuid())
                 .category(entity.getCategory())
                 .title(entity.getTitle())
                 .content(entity.getContent())
@@ -83,7 +84,7 @@ public class ProjectMapper {
                 .recruitmentStartDate(entity.getProgressStartDate().toLocalDate())
                 .recruitmentEndDate(entity.getRecruitmentEndDate().toLocalDate())
                 .progressTypeCd(entity.getProgressTypeCd())
-//                .progressRegionCd(entity.getpro)
+                .progressRegionCd(entity.getProgressRegionCd())
 //                .progressPeriod(entity.getpro)
                 .progressStartDate(entity.getProgressStartDate().toLocalDate())
                 .progressEndDate(entity.getProgressEndDate().toLocalDate())
@@ -172,7 +173,7 @@ public class ProjectMapper {
                 .build();
     }
 
-	public static Object toProjectDetail(Project project, List<String> skills, List<Requirement> requirements) {
+	public static Project toProjectDetail(Project project, List<String> skills, List<Requirement> requirements) {
 		return Project.builder()
                 .projectGuid(project.getProjectGuid())
                 .userGuid(project.getUserGuid())

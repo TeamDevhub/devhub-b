@@ -88,22 +88,17 @@ public class ProjectService implements ProjectUseCase {
 		Map<String, List<String>> mapSKill = ProjectMapper.toMapSkill(projectSkillRepository.findByProjectGuid(projectGuids));
 		Map<String, List<Requirement>> mapRequirement = ProjectMapper.toMapRequirement(projectRequirementRepository.findByProjectGuid(projectGuids));
 		
-		return pagedProjectList.content().stream()
+		List<Project> content = pagedProjectList.content().stream()
 				.map(project -> ProjectMapper.toProjectDetail(project, mapSKill.getOrDefault(project.getProjectGuid(), List.of()), mapRequirement.getOrDefault(project.getProjectGuid(), List.of())))
-				.collect(null);
-	}
-
-	private List<String> selectProjectGuidBySkillCd(List<String> skillCodeList) {
-		List<String> filterdProjectGuidBySKillCode = projectSkillRepository.selectProjectGuidBySkillCd(skillCodeList);
-		return filterdProjectGuidBySKillCode;
-	}
-	
-	
-	private List<String> selectProjectGuidByPositionCdAndPositionLevelCd(List<String> positionCodeList,
-			List<String> positionLevelCodeList) {
-		List<String> filterdProjectGuidByPosicionCdAndPositionLevelCd = projectRequirementRepository.selectProjectGuidByPositionCodeAndPositionLevel(positionCodeList, positionLevelCodeList);
-		return filterdProjectGuidByPosicionCdAndPositionLevelCd;
-	}
+				.toList();
+		
+		
+		return PageResult.of(
+				content,
+        		pagedProjectList.page(),
+        		pagedProjectList.size(),
+        		pagedProjectList.totalElements());
+    }
 
 	@Override
 	public Project getProjectDetail(String projectGuid) {
