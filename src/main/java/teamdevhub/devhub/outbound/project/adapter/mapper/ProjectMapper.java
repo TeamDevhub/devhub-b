@@ -101,6 +101,21 @@ public class ProjectMapper {
                 .capacity(entity.getCapacity())
                 .build();
     }
+    
+    public static Map<String, List<String>> skillEntityToMapSkill(List<ProjectSkillEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .collect(Collectors.groupingBy(
+                		ProjectSkillEntity::getProjectGuid,
+                        Collectors.mapping(ProjectSkillEntity::getSkillCd, Collectors.toList())
+                ));
+    }
+
+    public static Map<String, List<ProjectRequirementEntity>> requirementEntityToMapRequirement(List<ProjectRequirementEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .collect(Collectors.groupingBy(ProjectRequirementEntity::getProjectGuid));
+    }
 
     public static Map<String, List<String>> toMapSkill(List<Skill> entityList) {
         if (entityList == null) return null;

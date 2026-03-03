@@ -1,6 +1,6 @@
 package teamdevhub.devhub.outbound.project.persistence;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -15,17 +15,17 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 
 	@Query("""
 			select p
-			from Project p
+			from ProjectEntity p
 			where exists (
 				select 1
-				from ProjectRequirement pr
+				from ProjectRequirementEntity pr
 				where pr.projectGuid = p.projectGuid
 				and (:positionCodeList is null or pr.positionCd in :positionCodeList)
 				and (:positionLevelCodeList is null or pr.levelCd in :positionLevelCodeList)
 				)
 			and (:skillCodeList is null or exists (
 				select 1
-				from ProjectSkilㅣ ps
+				from ProjectSkillEntity ps
 				where ps.projectGuid = p.projectGuid
 				and ps.skillCd in :skillCodeList
 				))
@@ -43,6 +43,6 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 	Page<ProjectEntity> findBySearchCondition(@Param("order") String order, @Param("keyword") String keyword, @Param("skillCodeList") List<String> skillCodeList,
 			@Param("regionCodeList") List<String> regionCodeList, @Param("positionCodeList") List<String> positionCodeList, @Param("positionLevelCodeList") List<String> positionLevelCodeList,
 			@Param("projectRecruitTypeList") List<String> projectRecruitTypeList, @Param("projectRecruitStatusList") List<String> projectRecruitStatusList,
-			@Param("projectProgressTypeList") List<String> projectProgressTypeList, @Param("recruitmentStartDate") LocalDate recruitmentStartDate, @Param("recruitmentEndDate") LocalDate recruitmentEndDate,
-			@Param("progressStartDate") LocalDate progressStartDate, @Param("progressPeriodList") List<String> progressPeriodList, Pageable pageable);
+			@Param("projectProgressTypeList") List<String> projectProgressTypeList, @Param("recruitmentStartDate") LocalDateTime recruitmentStartDate, @Param("recruitmentEndDate") LocalDateTime recruitmentEndDate,
+			@Param("progressStartDate") LocalDateTime progressStartDate, @Param("progressPeriodList") List<String> progressPeriodList, Pageable pageable);
 }

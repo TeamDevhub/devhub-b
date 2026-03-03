@@ -12,7 +12,7 @@ public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRe
 
 	@Query("""
 			select pr.projectGuid
-			from projectRequirement pr
+			from ProjectRequirementEntity pr
 			where (:positionCodeList is null or pr.positionCd in :positionCodeList)
 			and	  (:positionLevelCodeList is null or pr.levelCd in :positionLevelCodeList)
 			""")
@@ -20,7 +20,7 @@ public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRe
 
 	@Query("""
 			select pr
-			from projectRequirement pr
+			from ProjectRequirementEntity pr
 			where (:projectGuids is null or pr.projectGuid in :projectGuids)
 			""")
 	List<ProjectRequirementEntity> findByProjectGuid(Set<String> projectGuids);
