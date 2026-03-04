@@ -15,6 +15,8 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 	private List<String> skillList;
 	private List<RequirementResponseDto> positionList;
 	private String likeCount;
+	private boolean capacityClosed;
+	private String recruitStatus;
 	
 	public static ProjectDetailResponseDto fromDomain(Project project) {
 		ProjectDetailResponseDtoBuilder<?, ?> builder = ProjectDetailResponseDto.builder();
@@ -22,7 +24,11 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 		return builder
 			.skillList(project.getProjectSkill())
 			.positionList(project.getProjectRequirement().stream().map(RequirementResponseDto::fromDomain).toList())
+			.likeCount(project.getLikeCount())
+			.capacityClosed(project.isCapacityClosed())
+			.recruitStatus(project.getRecruitStatus())
 			.build();
 	}
+
 
 }

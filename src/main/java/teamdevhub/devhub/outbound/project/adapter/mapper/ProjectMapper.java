@@ -215,6 +215,7 @@ public class ProjectMapper {
                 .projectSkill(skills)
                 .projectRequirement(requirements)
                 .auditInfo(project.getAuditInfo())
+                .likeCount(likeCount)
                 .build();
 	}
 

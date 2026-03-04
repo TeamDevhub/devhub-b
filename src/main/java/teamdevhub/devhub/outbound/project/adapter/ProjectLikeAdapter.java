@@ -16,7 +16,7 @@ import teamdevhub.devhub.outbound.project.persistence.JpaProjectLikeRepository;
 @RequiredArgsConstructor
 public class ProjectLikeAdapter implements ProjectLikeRepository {
 	
-	private static JpaProjectLikeRepository jpaProjectLikeRepository;
+	private final JpaProjectLikeRepository jpaProjectLikeRepository;
 
 	@Override
 	public List<ProjectLike> findByProjectGuid(Set<String> projectGuids) {

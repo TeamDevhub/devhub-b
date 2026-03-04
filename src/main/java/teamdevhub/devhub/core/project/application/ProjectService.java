@@ -96,7 +96,7 @@ public class ProjectService implements ProjectUseCase {
 						project,
 						mapSKill.getOrDefault(project.getProjectGuid(), List.of()),
 						mapRequirement.getOrDefault(project.getProjectGuid(), List.of()),
-						 mapLikeCount.getOrDefault(mapLikeCount, String.valueOf("0"))))
+						 mapLikeCount.getOrDefault(project.getProjectGuid(), String.valueOf(0))))
 				.toList();
 		return PageResult.of(
 				content,
