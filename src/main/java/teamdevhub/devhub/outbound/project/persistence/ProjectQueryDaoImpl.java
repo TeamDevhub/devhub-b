@@ -74,8 +74,8 @@ public class ProjectQueryDaoImpl implements ProjectQueryDao {
                 .select(projectEntity.countDistinct())
                 .fetchOne()).orElse(0L);
 
-        Map<String, List<String>> skillMap = ProjectMapper.toMapSkill(allSkills);
-        Map<String, List<ProjectRequirementEntity>> requirementsMap = ProjectMapper.toMapRequirement(allRequirements);
+        Map<String, List<String>> skillMap = ProjectMapper.skillEntityToMapSkill(allSkills);
+        Map<String, List<ProjectRequirementEntity>> requirementsMap = ProjectMapper.requirementEntityToMapRequirement(allRequirements);
 
         List<Project> content = projects.stream().map(tuple -> {
             ProjectEntity project = tuple.get(projectEntity);

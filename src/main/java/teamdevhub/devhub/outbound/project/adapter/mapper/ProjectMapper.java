@@ -1,17 +1,19 @@
 package teamdevhub.devhub.outbound.project.adapter.mapper;
 
-import teamdevhub.devhub.core.common.audit.AuditInfo;
-import teamdevhub.devhub.core.project.domain.Project;
-import teamdevhub.devhub.core.project.domain.Requirement;
-
-import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
-import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
-import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import teamdevhub.devhub.core.common.audit.AuditInfo;
+import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.ProjectLike;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
+import teamdevhub.devhub.core.project.domain.ProjectSkill;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectLikeEntity;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
 
 public class ProjectMapper {
 
@@ -75,7 +77,8 @@ public class ProjectMapper {
         return Project.builder()
                 .projectGuid(entity.getProjectGuid())
                 .userGuid(entity.getUserGuid())
-//                .fileGuid(entity.get)
+                .attachmentFileGuid(entity.getAttachmentFileGuid())
+                .imageFileGuid(entity.getImageFileGuid())
                 .category(entity.getCategory())
                 .title(entity.getTitle())
                 .content(entity.getContent())
@@ -83,7 +86,7 @@ public class ProjectMapper {
                 .recruitmentStartDate(entity.getProgressStartDate().toLocalDate())
                 .recruitmentEndDate(entity.getRecruitmentEndDate().toLocalDate())
                 .progressTypeCd(entity.getProgressTypeCd())
-//                .progressRegionCd(entity.getpro)
+                .progressRegionCd(entity.getProgressRegionCd())
 //                .progressPeriod(entity.getpro)
                 .progressStartDate(entity.getProgressStartDate().toLocalDate())
                 .progressEndDate(entity.getProgressEndDate().toLocalDate())
@@ -91,9 +94,9 @@ public class ProjectMapper {
                 .build();
     }
 
-    public static Requirement toRequirement(ProjectRequirementEntity entity) {
+    public static ProjectRequirement toRequirement(ProjectRequirementEntity entity) {
         if (entity == null) return null;
-        return Requirement.builder()
+        return ProjectRequirement.builder()
                 .projectRequirementGuid(entity.getProjectRequirementGuid())
                 .projectGuid(entity.getProjectGuid())
                 .positionCd(entity.getPositionCd())
@@ -101,21 +104,58 @@ public class ProjectMapper {
                 .capacity(entity.getCapacity())
                 .build();
     }
-
-    public static Map<String, List<String>> toMapSkill(List<ProjectSkillEntity> entityList) {
+    
+    public static ProjectLike toProjectLike(ProjectLikeEntity entity) {
+    	if(entity == null) return null;
+    	return ProjectLike.builder()
+    			.projectLikeGuid(entity.getProjectLikeGuid())
+    			.projectGuid(entity.getProjectGuid())
+    			.userGuid(entity.getUserGuid())
+    			.build();
+    }
+    
+    public static Map<String, List<String>> skillEntityToMapSkill(List<ProjectSkillEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .collect(Collectors.groupingBy(
-                        ProjectSkillEntity::getProjectGuid,
+                		ProjectSkillEntity::getProjectGuid,
                         Collectors.mapping(ProjectSkillEntity::getSkillCd, Collectors.toList())
                 ));
     }
 
-    public static Map<String, List<ProjectRequirementEntity>> toMapRequirement(List<ProjectRequirementEntity> entityList) {
+    public static Map<String, List<ProjectRequirementEntity>> requirementEntityToMapRequirement(List<ProjectRequirementEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .collect(Collectors.groupingBy(ProjectRequirementEntity::getProjectGuid));
     }
+
+    public static Map<String, List<String>> toMapSkill(List<ProjectSkill> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .collect(Collectors.groupingBy(
+                        ProjectSkill::getProjectGuid,
+                        Collectors.mapping(ProjectSkill::getSkillCd, Collectors.toList())
+                ));
+    }
+
+    public static Map<String, List<ProjectRequirement>> toMapRequirement(List<ProjectRequirement> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .collect(Collectors.groupingBy(ProjectRequirement::getProjectGuid));
+    }
+    
+
+	public static Map<String, String> toMapLikeCount(List<ProjectLike> entityList) {
+		if (entityList == null) return null;
+		return entityList.stream()
+		        .collect(Collectors.groupingBy(
+		                ProjectLike::getProjectGuid,
+		                Collectors.collectingAndThen(
+		                        Collectors.counting(),
+		                        count -> String.valueOf(count)
+		                )
+		        ));
+	}
 
     public static Project toProjectDetail(
             ProjectEntity projectEntity,
@@ -156,5 +196,27 @@ public class ProjectMapper {
                 .auditInfo(toAuditInfo(projectEntity))
                 .build();
     }
+
+	public static Project toProjectDetail(Project project, List<String> skills, List<ProjectRequirement> requirements, String likeCount) {
+		return Project.builder()
+                .projectGuid(project.getProjectGuid())
+                .userGuid(project.getUserGuid())
+                .username(project.getUsername())
+                .category(project.getCategory())
+                .title(project.getTitle())
+                .content(project.getContent())
+                .recruitmentTypeCd(project.getRecruitmentTypeCd())
+                .recruitmentStartDate(project.getRecruitmentStartDate())
+                .recruitmentEndDate(project.getRecruitmentEndDate())
+                .progressTypeCd(project.getProgressTypeCd())
+                .progressRegionCd(project.getProgressRegionCd())
+                .progressStartDate(project.getProgressStartDate())
+                .progressEndDate(project.getProgressEndDate())
+                .projectSkill(skills)
+                .projectRequirement(requirements)
+                .auditInfo(project.getAuditInfo())
+                .likeCount(likeCount)
+                .build();
+	}
 
 }

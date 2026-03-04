@@ -14,7 +14,6 @@ import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
-import teamdevhub.devhub.core.project.port.in.usecase.ProjectQueryUseCase;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
@@ -22,13 +21,12 @@ import teamdevhub.devhub.shared.enums.SuccessCode;
 @RequiredArgsConstructor
 public class ProjectFacade {
 	
-	private final ProjectQueryUseCase projectQueryUseCase;
 	private final ProjectUseCase projectUseCase;
 	private final ApplicationFormUseCase applicationFormUseCase;
 
-	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestDto, PageCommand pageCommand) {
+	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand) {
 		
-		PageResult<Project> pagedProjectList = projectQueryUseCase.getProjectList(projectListSearchRequestDto, pageCommand);
+		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
         List<ProjectDetailResponseDto> projectDetailResponseDtoList = pagedProjectList.content().stream()
                 .map(ProjectDetailResponseDto::fromDomain)
                 .toList();

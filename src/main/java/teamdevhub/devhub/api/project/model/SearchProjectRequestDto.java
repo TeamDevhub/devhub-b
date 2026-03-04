@@ -1,6 +1,7 @@
 package teamdevhub.devhub.api.project.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -37,6 +38,18 @@ public class SearchProjectRequestDto {
     private LocalDate progressStartDate;
 
 	public SearchProjectListCommand toSearchProjectListCommand() {
+		LocalDateTime formattedRecruitmentStartDate = null;
+		LocalDateTime formattedRecruitmentEndDate = null;
+		LocalDateTime formattedProgressStartDate = null;
+		if(recruitmentStartDate != null) {
+			formattedRecruitmentStartDate = recruitmentStartDate.atStartOfDay();
+		} 
+		if(recruitmentEndDate != null) {
+			formattedRecruitmentEndDate = recruitmentEndDate.atStartOfDay();
+		} 
+		if(progressStartDate != null) {
+			formattedProgressStartDate = progressStartDate.atStartOfDay();
+		} 
 		return SearchProjectListCommand.builder()
 				.order(order)
 				.keyword(keyword)
@@ -48,9 +61,9 @@ public class SearchProjectRequestDto {
 				.projectRecruitTypeList(projectRecruitTypeList)
 				.projectProgressTypeList(projectProgressTypeList)
 				.projectRecruitStatusList(projectRecruitStatusList)
-				.recruitmentStartDate(recruitmentStartDate)
-				.recruitmentEndDate(recruitmentEndDate)
-				.progressStartDate(progressStartDate)
+				.recruitmentStartDate(formattedRecruitmentStartDate)
+				.recruitmentEndDate(formattedRecruitmentEndDate)
+				.progressStartDate(formattedProgressStartDate)
 				.build();
 	}
 }

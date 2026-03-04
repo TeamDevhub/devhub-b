@@ -1,6 +1,6 @@
 package teamdevhub.devhub.outbound.project.adapter.mapper;
 
-import teamdevhub.devhub.core.project.domain.vo.skill.ProjectSkill;
+import teamdevhub.devhub.core.project.domain.ProjectSkill;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectSkillEntity;
 
 public class ProjectSkillMapper {

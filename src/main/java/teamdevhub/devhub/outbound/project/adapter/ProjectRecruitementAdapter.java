@@ -1,5 +1,6 @@
 package teamdevhub.devhub.outbound.project.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -7,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
-import teamdevhub.devhub.core.project.domain.vo.requirement.ProjectRequirement;
 import teamdevhub.devhub.core.project.port.out.ProjectRequirementRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectRequirementMapper;
@@ -35,6 +36,22 @@ public class ProjectRecruitementAdapter implements ProjectRequirementRepository 
 				.toList();
 		jpaProjectRequirementRepository.saveAll(projectRequirementEntityList);
 
+	}
+	@Override
+	public List<String> selectProjectGuidByPositionCodeAndPositionLevel(List<String> positionCodeList,
+			List<String> positionLevelCodeList) {
+		List<String> projectGuids = new ArrayList<>();
+		if(positionCodeList == null && positionLevelCodeList == null) {
+			return projectGuids;
+		}
+		return jpaProjectRequirementRepository.findByPositionCdAndLevelCd(positionCodeList, positionLevelCodeList);
+	}
+	@Override
+	public List<ProjectRequirement> findByProjectGuid(Set<String> projectGuids) {
+		List<ProjectRequirementEntity> entityList = jpaProjectRequirementRepository.findByProjectGuid(projectGuids);
+		return entityList.stream()
+				.map(ProjectRequirementMapper::toProjectRequirement)
+				.toList();
 	}
 
 }
