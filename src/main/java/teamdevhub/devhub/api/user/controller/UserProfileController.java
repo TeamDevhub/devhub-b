@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import teamdevhub.devhub.api.user.model.UpdatePasswordRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.api.user.model.UpdatePasswordRequestDto;
 import teamdevhub.devhub.api.user.model.UpdateProfileImageRequestDto;
 import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
