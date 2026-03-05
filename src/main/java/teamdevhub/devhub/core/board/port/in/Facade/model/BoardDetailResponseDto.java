@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.core.board.domain.Comment;
 
 @Getter
 @NoArgsConstructor
@@ -14,5 +15,6 @@ import lombok.NoArgsConstructor;
 public class BoardDetailResponseDto {
 	
 	private BoardSummaryResponseDto boardSummaryResponseDto;
-	private List<String> commentList;
+	private List<Comment> commentList;
+	private String userEmail;
 }

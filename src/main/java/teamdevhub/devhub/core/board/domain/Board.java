@@ -9,6 +9,7 @@ import teamdevhub.devhub.core.common.audit.AuditInfo;
 
 
 @Getter
+@Builder
 public class Board {
 	
 	private final String boardGuid;
@@ -22,39 +23,42 @@ public class Board {
 	private String likeCount;
 	private String commentCount;
 	
-	private List<String> commentList;
-	
+	private List<Comment> commentList;
+	private String userEmail;
+
 	private final AuditInfo auditInfo;
 	
-	@Builder
-	private Board(
-			String boardGuid,
-			String userGuid,
-			String categoryCd,
-			String title,
-			String content,
-			String viewCount,
-			String likeCount,
-			String commentCount,
-			String userName,
-			AuditInfo auditInfo
-	) {
-		this.boardGuid = boardGuid;
-		this.userGuid = userGuid;
-		this.categoryCd = categoryCd;
-		this.title = title;
-		this.content = content;
-		this.viewCount = viewCount;
-		this.likeCount = likeCount;
-		this.commentCount = commentCount;
-		this.userName = userName;
-		
-		if (auditInfo == null) {
-            this.auditInfo = AuditInfo.empty();
-        } else {
-            this.auditInfo = auditInfo;
-        }
-	}
+//	@Builder
+//	private Board(
+//			String boardGuid,
+//			String userGuid,
+//			String categoryCd,
+//			String title,
+//			String content,
+//			String viewCount,
+//			String likeCount,
+//			String commentCount,
+//			String userName,
+//			String userEmail,
+//			AuditInfo auditInfo
+//	) {
+//		this.boardGuid = boardGuid;
+//		this.userGuid = userGuid;
+//		this.categoryCd = categoryCd;
+//		this.title = title;
+//		this.content = content;
+//		this.viewCount = viewCount;
+//		this.likeCount = likeCount;
+//		this.commentCount = commentCount;
+//		this.userName = userName;
+//		this.userEmail = userEmail;
+//		
+//		if (auditInfo == null) {
+//            this.auditInfo = AuditInfo.empty();
+//        } else {
+//            this.auditInfo = auditInfo;
+//        }
+//	}
 
 	public static Board of(
 			String boardGuid, 
@@ -86,9 +90,18 @@ public class Board {
 				.build();
 	}
 	
-	public void fillSubquery(String likeCount, String commentCount, String userName) {
+	public void fillSummarySubquery(String likeCount, String commentCount, String userName) {
 		 this.likeCount = likeCount;
 		 this.commentCount = commentCount;
 		 this.userName = userName;
+
+	}
+	
+	public void fillDetailSubquery(String likeCount, String commentCount, String userName, String userEmail, List<Comment> commentList) {
+		 this.likeCount = likeCount;
+		 this.commentCount = commentCount;
+		 this.userName = userName;
+		 this.userEmail = userEmail;
+		 this.commentList = commentList;
 	}
 }

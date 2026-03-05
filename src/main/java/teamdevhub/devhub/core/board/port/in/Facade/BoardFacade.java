@@ -49,16 +49,27 @@ public class BoardFacade {
 	
 	public DataApiResponseDto<Void> createBoard(CreateBoardCommand createBoardCommand) {
 		boardUseCase.createBoard(createBoardCommand);
-		
+		 
 		return DataApiResponseDto.successWithoutData(
                         SuccessCode.CREATE_SUCCESS);
 		
 	}
 
 	public DataApiResponseDto<BoardDetailResponseDto> detailBoard(String boardGuid) {
-		Board boardDetail = boardUseCase.detailBoard(boardGuid);
-		BoardDetailResponseDto responseDto = BoardDetailResponseDto.fromDomain(boardDetail);
+		Board board = boardUseCase.detailBoard(boardGuid);
 		
+		BoardSummaryResponseDto summaryBoard = BoardSummaryResponseDto.builder()
+				.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))
+				.likeCount(board.getLikeCount())
+				.commentCount(board.getCommentCount())
+                .build();
+		
+		BoardDetailResponseDto responseDto = BoardDetailResponseDto.builder()
+				.boardSummaryResponseDto(summaryBoard)
+				.commentList(board.getCommentList())
+				.userEmail(board.getUserEmail())
+				.build();
+
 		return DataApiResponseDto.successWithData(
 				SuccessCode.READ_SUCCESS,
 				responseDto
