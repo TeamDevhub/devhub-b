@@ -2,18 +2,18 @@ package teamdevhub.devhub.core.user.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
-import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
+import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
-import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
-import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
+import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -252,6 +252,11 @@ public class User {
     public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
         this.positions = new HashSet<>(positions);
         this.skills = new HashSet<>(skills);
+    }
+
+
+    public void changePassword(String encryptedNewPassword) {
+        this.password = encryptedNewPassword;
     }
 
     private void validate(String email, String password) {
