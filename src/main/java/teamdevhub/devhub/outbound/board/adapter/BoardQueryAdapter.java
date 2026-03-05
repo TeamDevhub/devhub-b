@@ -11,22 +11,28 @@ import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
 import teamdevhub.devhub.core.board.port.out.BoardQueryRepository;
 import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.outbound.board.persistence.BoardQueryDao;
+import teamdevhub.devhub.outbound.board.adapter.entity.BoardEntity;
+import teamdevhub.devhub.outbound.board.adapter.mapper.BoardMapper;
+import teamdevhub.devhub.outbound.board.persistence.JpaBoardRepository;
 
 @Component
 @RequiredArgsConstructor
 public class BoardQueryAdapter implements BoardQueryRepository {
-	private final BoardQueryDao boardQueryDao;
+	private final JpaBoardRepository jpaBoardRepository;
 	
 	@Override
 	public PageResult<Board> listBoard(SearchBoardCommand searchBoardCommand, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size, Sort.by("registeredDate").descending());
-		Page<Board> pageBoardList = boardQueryDao.listBoard(searchBoardCommand, pageable);
-		
-		return PageResult.of(
-				pageBoardList.getContent(), 
+		Pageable pageable = PageRequest.of(page, size, Sort.by("registeredDate").descending().and(Sort.by("boardGuid")));
+		Page<BoardEntity> pageBoardList = jpaBoardRepository.findByConditions(				
+											searchBoardCommand.title(),
+											searchBoardCommand.categoryCd(),
+											pageable);
+
+		PageResult<Board> aa = PageResult.of(
+				pageBoardList.getContent().stream().map(BoardMapper::toBoard).toList(), 
 				pageBoardList.getNumber(),
 				pageBoardList.getSize(),
 				pageBoardList.getTotalElements());
-	}
+		 return aa;
+	} 
 }

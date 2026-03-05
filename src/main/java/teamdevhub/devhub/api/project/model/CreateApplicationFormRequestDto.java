@@ -23,14 +23,14 @@ public class CreateApplicationFormRequestDto {
 
     private String helpText;
 
-    private List<String> itemList;
+    private List<@NotBlank(message = "선택항목 내용은 필수입니다.") String> itemList;
 
     public CreateApplicationFormCommand toCommand() {
         return CreateApplicationFormCommand.builder()
                 .typeCd(this.typeCd)
                 .title(this.title)
                 .helpText(this.helpText)
-                .itemList(this.itemList)
+                .itemList(itemList)
                 .build();
     }
 }

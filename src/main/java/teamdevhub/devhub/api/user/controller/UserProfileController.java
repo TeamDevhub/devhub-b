@@ -1,11 +1,17 @@
 package teamdevhub.devhub.api.user.controller;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import teamdevhub.devhub.api.user.model.UpdatePasswordRequestDto;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.user.model.UpdateProfileImageRequestDto;
 import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
@@ -14,8 +20,8 @@ import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
-import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @RestController
 @RequestMapping("/user")

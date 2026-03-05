@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementCommand;
+import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
 
 @Getter
 @Builder
@@ -25,8 +25,8 @@ public class CreateProjectRequirementRequestDto {
     @Min(value = 1, message = "모집 인원은 1명 이상이어야 합니다")
     private int capacity;
 
-    public CreateProjectRequirementCommand toCommand() {
-        return CreateProjectRequirementCommand.builder()
+    public CreateProjectRequirementRequestCommand toCommand() {
+        return CreateProjectRequirementRequestCommand.builder()
                 .position(this.position)
                 .level(this.level)
                 .capacity(this.capacity)

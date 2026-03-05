@@ -1,12 +1,13 @@
 package teamdevhub.devhub.core.project.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
+import teamdevhub.devhub.shared.enums.ProjectRecruitStatus;
 
 @Getter
 @Builder
@@ -23,21 +24,22 @@ public class Project {
 	private String imageFileGuid;
 
     private String recruitmentTypeCd;
-    private LocalDateTime recruitmentStartDate;
-    private LocalDateTime recruitmentEndDate;
+    private LocalDate recruitmentStartDate;
+    private LocalDate recruitmentEndDate;
 
     private String progressTypeCd;
     private String progressRegionCd;
     private String progressPeriod;
-    private LocalDateTime progressStartDate;
-    private LocalDateTime progressEndDate;
+    private LocalDate progressStartDate;
+    private LocalDate progressEndDate;
 
     private boolean deleted;
     private boolean capacityClosed;
 
 	private List<String> projectSkill;
-	private List<Requirement> projectRequirement;
+	private List<ProjectRequirement> projectRequirement;
 	private String likeCount;
+	private String recruitStatus;
 
 	private AuditInfo auditInfo;
 	
@@ -61,5 +63,18 @@ public class Project {
 				.deleted(false)
 				.capacityClosed(false)
 				.build();
+	}
+	
+	
+	public String getRecruitStatus() {
+		LocalDate now = LocalDate.now();
+		
+		if (now.isBefore(this.recruitmentStartDate)) {
+	        return ProjectRecruitStatus.WAITING.getCode();
+	    }
+	    if (now.isAfter(this.recruitmentEndDate)) {
+	        return ProjectRecruitStatus.COMPLETED.getCode();
+	    }
+	    return ProjectRecruitStatus.RECRUITING.getCode();
 	}
 }

@@ -14,22 +14,19 @@ import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
-import teamdevhub.devhub.core.project.port.in.usecase.ProjectQueryUseCase;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
-import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormEntity;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectFacade {
 	
-	private final ProjectQueryUseCase projectQueryUseCase;
 	private final ProjectUseCase projectUseCase;
 	private final ApplicationFormUseCase applicationFormUseCase;
 
-	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestDto, PageCommand pageCommand) {
+	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand) {
 		
-		PageResult<Project> pagedProjectList = projectQueryUseCase.getProjectList(projectListSearchRequestDto, pageCommand);
+		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
         List<ProjectDetailResponseDto> projectDetailResponseDtoList = pagedProjectList.content().stream()
                 .map(ProjectDetailResponseDto::fromDomain)
                 .toList();
@@ -42,13 +39,7 @@ public class ProjectFacade {
 	}
 	
 	public void createProject(CreateProjectCommand createProjectCommand) {
-		/**
-		 * 아웃바운드 개체인 엔티티가 퍼사드 영역까지 들어온 케이스(계층 간 의존성 문제) -> 별도 VO 또는 List<String> 으로 UseCase 에서 리턴
-		 */
-		List<ApplicationFormEntity> additionalFormEntityList = applicationFormUseCase.saveApplicationForms(createProjectCommand.additionalFormList());
-		List<String> additionalFormGuidList = additionalFormEntityList.stream()
-				.map(ApplicationFormEntity::getApplicationFormGuid)
-				.toList();
+		List<String> additionalFormGuidList = applicationFormUseCase.saveApplicationForms(createProjectCommand.additionalFormList());
 		createProjectCommand.applicationFormList().addAll(additionalFormGuidList);
 		projectUseCase.createProject(createProjectCommand);
 	}

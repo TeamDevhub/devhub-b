@@ -31,7 +31,7 @@ public class ApplicationFormEntity extends BaseEntity {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "help_text", nullable = false)
+	@Column(name = "help_text")
 	private String helpText;
 
 	@Convert(converter = BooleanToYNConverter.class)

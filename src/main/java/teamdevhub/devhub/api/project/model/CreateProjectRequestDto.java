@@ -1,5 +1,11 @@
 package teamdevhub.devhub.api.project.model;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -7,13 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -41,21 +42,21 @@ public class CreateProjectRequestDto {
     
     private String progressRegionCd;
     
-    @NotBlank(message = "모집시작일은 필수입니다")
+    @NotNull(message = "모집시작일은 필수입니다")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime recruitmentStartDate;
+    private LocalDate recruitmentStartDate;
     
-    @NotBlank(message = "모집종료일은 필수입니다")
+    @NotNull(message = "모집종료일은 필수입니다")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime recruitmentEndDate;
+    private LocalDate recruitmentEndDate;
     
-    @NotBlank(message = "진행시작일은 필수입니다")
+    @NotNull(message = "진행시작일은 필수입니다")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime progressStartDate;
+    private LocalDate progressStartDate;
     
-    @NotBlank(message = "진행종료일은 필수입니다")
+    @NotNull(message = "진행종료일은 필수입니다")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime progressEndDate;
+    private LocalDate progressEndDate;
     
     @NotNull(message = "기술스택은 필수입니다")
     @Size(min = 1, message = "기술스택은 최소 1개 이상 선택해야 합니다")
