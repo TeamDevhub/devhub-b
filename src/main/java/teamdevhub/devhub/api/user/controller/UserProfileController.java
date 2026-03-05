@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import teamdevhub.devhub.api.user.model.UpdatePasswordRequestDto;
 import teamdevhub.devhub.api.user.model.UpdateProfileImageRequestDto;
 import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
@@ -57,6 +58,16 @@ public class UserProfileController {
     @PutMapping("/profile")
     public ResponseEntity<DataApiResponseDto<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
         userProfileFacade.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
+        return ResponseEntity.ok(
+                DataApiResponseDto.successWithoutData(
+                        SuccessCode.UPDATE_SUCCESS
+                )
+        );
+    }
+
+    @PutMapping("/profile/password")
+    public ResponseEntity<DataApiResponseDto<Void>> updatePassword(@Valid @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+        userProfileFacade.updatePassword(updatePasswordRequestDto.toUpdatePasswordCommand(authenticatedUser.userGuid()));
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS

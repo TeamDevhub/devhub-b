@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
@@ -33,5 +34,9 @@ public class UserProfileFacade {
 
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
         userProfileUseCase.updateProfile(updateProfileCommand);
+    }
+
+    public void updatePassword(UpdatePasswordCommand updatePasswordCommand) {
+        userProfileUseCase.updatePassword(updatePasswordCommand);
     }
 }

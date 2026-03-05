@@ -2,6 +2,7 @@ package teamdevhub.devhub.core.user.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
@@ -252,6 +253,11 @@ public class User {
     public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
         this.positions = new HashSet<>(positions);
         this.skills = new HashSet<>(skills);
+    }
+
+
+    public void changePassword(String encryptedNewPassword) {
+        this.password = encryptedNewPassword;
     }
 
     private void validate(String email, String password) {
