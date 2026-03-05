@@ -31,16 +31,21 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 				))
 			and (:keyword is null or (
 		        p.title like concat('%', :keyword, '%')
-		        or p.content like concat('%', :keyword, '%')
 		    ))
 			and (:regionCodeList is null or p.progressRegionCd in :regionCodeList)
 			and (:projectRecruitTypeList is null or p.recruitmentTypeCd in :projectRecruitTypeList)
+			and (:projectRecruitStatusList is null or (
+													   ('3201' in :projectRecruitStatusList and CURRENT_DATE between p.recruitmentStartDate and p.recruitmentEndDate)
+													    or
+													   ('3202' in :projectRecruitStatusList and CURRENT_DATE > p.recruitmentEndDate)
+													   	or
+													   ('3203' in :projectRecruitStatusList and CURRENT_DATE < p.recruitmentStartDate) ))
 			and (:projectProgressTypeList is null or p.progressTypeCd in :projectProgressTypeList)
 			and (:recruitmentStartDate is null or p.recruitmentStartDate >= :recruitmentStartDate)
 			and (:recruitmentEndDate is null or p.recruitmentEndDate <= :recruitmentEndDate)
 			and (:progressStartDate is null or p.progressStartDate >= :progressStartDate)
 			""")
-	Page<ProjectEntity> findBySearchCondition(@Param("order") String order, @Param("keyword") String keyword, @Param("skillCodeList") List<String> skillCodeList,
+	Page<ProjectEntity> findBySearchCondition(@Param("keyword") String keyword, @Param("skillCodeList") List<String> skillCodeList,
 			@Param("regionCodeList") List<String> regionCodeList, @Param("positionCodeList") List<String> positionCodeList, @Param("positionLevelCodeList") List<String> positionLevelCodeList,
 			@Param("projectRecruitTypeList") List<String> projectRecruitTypeList, @Param("projectRecruitStatusList") List<String> projectRecruitStatusList,
 			@Param("projectProgressTypeList") List<String> projectProgressTypeList, @Param("recruitmentStartDate") LocalDateTime recruitmentStartDate, @Param("recruitmentEndDate") LocalDateTime recruitmentEndDate,
