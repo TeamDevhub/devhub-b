@@ -35,6 +35,11 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
     }
 
     @Override
+    public User getUserInfo(String userGuid) {
+        return store.get(userGuid);
+    }
+
+    @Override
     public User getCurrentUserProfile(String userGuid) {
         return store.get(userGuid);
     }
