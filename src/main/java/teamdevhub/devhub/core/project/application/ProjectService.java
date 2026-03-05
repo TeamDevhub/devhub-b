@@ -16,6 +16,7 @@ import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.ProjectRequirement;
+import teamdevhub.devhub.core.project.domain.ProjectSkill;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
@@ -23,7 +24,6 @@ import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRe
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.core.project.port.out.ProjectLikeRepository;
-import teamdevhub.devhub.core.project.port.out.ProjectQueryRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectRequirementRepository;
 import teamdevhub.devhub.core.project.port.out.ProjectSkillRepository;
@@ -39,7 +39,6 @@ public class ProjectService implements ProjectUseCase {
 	private final ProjectSkillRepository projectSkillRepository;
 	private final ProjectRequirementRepository projectRequirementRepository;
 	private final ProjectApplicationFormRepository projectApplicationFormRepository;
-	private final ProjectQueryRepository projectQueryRepository;
 	private final ProjectLikeRepository projectLikeRepository;
 	
 	@Override
@@ -83,12 +82,12 @@ public class ProjectService implements ProjectUseCase {
 	@Override
 	public PageResult<Project> getProjectList(SearchProjectListCommand searchProjectListCommand,
 			PageCommand pageCommand) {
-		PageResult<Project> pagedProjectList = projectQueryRepository.getProjectList(searchProjectListCommand, pageCommand);
+		PageResult<Project> pagedProjectList = projectRepository.getProjectList(searchProjectListCommand, pageCommand);
 		Set<String> projectGuids = pagedProjectList.content().stream()
 		        .map(Project::getProjectGuid)
 		        .collect(Collectors.toSet());
-		Map<String, List<String>> mapSKill = ProjectMapper.toMapSkill(projectSkillRepository.findByProjectGuid(projectGuids));
-		Map<String, List<ProjectRequirement>> mapRequirement = ProjectMapper.toMapRequirement(projectRequirementRepository.findByProjectGuid(projectGuids));
+		Map<String, List<String>> mapSKill = ProjectMapper.toMapSkill(projectSkillRepository.findByProjectGuids(projectGuids));
+		Map<String, List<ProjectRequirement>> mapRequirement = ProjectMapper.toMapRequirement(projectRequirementRepository.findByProjectGuids(projectGuids));
 		Map<String, String> mapLikeCount = ProjectMapper.toMapLikeCount(projectLikeRepository.findByProjectGuid(projectGuids));
 		
 		List<Project> content = pagedProjectList.content().stream()
@@ -107,7 +106,13 @@ public class ProjectService implements ProjectUseCase {
 
 	@Override
 	public Project getProjectDetail(String projectGuid) {
-		return projectRepository.getProjectDetail(projectGuid);
+		Project project = projectRepository.getProjectDetail(projectGuid);
+		List<ProjectSkill> skillList = projectSkillRepository.findByProjectGuid(projectGuid);
+		List<ProjectRequirement> requirementList = projectRequirementRepository.findByProjectGuid(projectGuid);
+		int likeCount = projectLikeRepository.countByProjectGuid(projectGuid);
+		
+		
+		return null;
 	}
 
 }

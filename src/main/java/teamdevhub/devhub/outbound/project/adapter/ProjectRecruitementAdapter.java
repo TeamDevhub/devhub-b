@@ -47,8 +47,15 @@ public class ProjectRecruitementAdapter implements ProjectRequirementRepository 
 		return jpaProjectRequirementRepository.findByPositionCdAndLevelCd(positionCodeList, positionLevelCodeList);
 	}
 	@Override
-	public List<ProjectRequirement> findByProjectGuid(Set<String> projectGuids) {
-		List<ProjectRequirementEntity> entityList = jpaProjectRequirementRepository.findByProjectGuid(projectGuids);
+	public List<ProjectRequirement> findByProjectGuids(Set<String> projectGuids) {
+		List<ProjectRequirementEntity> entityList = jpaProjectRequirementRepository.findByProjectGuids(projectGuids);
+		return entityList.stream()
+				.map(ProjectRequirementMapper::toProjectRequirement)
+				.toList();
+	}
+	@Override
+	public List<ProjectRequirement> findByProjectGuid(String projectGuid) {
+		List<ProjectRequirementEntity> entityList = jpaProjectRequirementRepository.findByProjectGuid(projectGuid);
 		return entityList.stream()
 				.map(ProjectRequirementMapper::toProjectRequirement)
 				.toList();

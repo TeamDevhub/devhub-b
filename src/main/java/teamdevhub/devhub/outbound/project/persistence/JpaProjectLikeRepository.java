@@ -18,4 +18,11 @@ public interface JpaProjectLikeRepository extends JpaRepository<ProjectLikeEntit
 			where (:projectGuids is null or pl.projectGuid in :projectGuids)
 			""")
 	List<ProjectLikeEntity> findByProjectGuids(@Param("projectGuids")Set<String> projectGuids);
+
+	@Query("""
+			select count(pl)
+			from ProjectLikeEntity pl
+			where (:projectGuid is null or pl.projectGuid = :projectGuid)
+			""")
+	int countByProjectGuid(String projectGuid);
 }

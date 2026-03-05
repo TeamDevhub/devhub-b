@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 
 public interface JpaProjectRepository extends JpaRepository<ProjectEntity, String> {
