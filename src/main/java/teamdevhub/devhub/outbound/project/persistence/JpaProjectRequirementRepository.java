@@ -29,8 +29,8 @@ public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRe
 	@Query("""
 			select pr
 			from ProjectRequirementEntity pr
-			where (:projectGuids is null or pr.projectGuid = :projectGuid)
+			where (:projectGuid is null or pr.projectGuid = :projectGuid)
 			""")
-	List<ProjectRequirementEntity> findByProjectGuid(String projectGuid);
+	List<ProjectRequirementEntity> findByProjectGuid(@Param("projectGuid") String projectGuid);
 
 }

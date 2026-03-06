@@ -24,5 +24,5 @@ public interface JpaProjectLikeRepository extends JpaRepository<ProjectLikeEntit
 			from ProjectLikeEntity pl
 			where (:projectGuid is null or pl.projectGuid = :projectGuid)
 			""")
-	int countByProjectGuid(String projectGuid);
+	int countByProjectGuid(@Param("projectGuid") String projectGuid);
 }

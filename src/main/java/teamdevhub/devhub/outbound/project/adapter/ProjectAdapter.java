@@ -15,7 +15,6 @@ import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectMapper;
 import teamdevhub.devhub.outbound.project.persistence.JpaProjectRepository;
-import teamdevhub.devhub.outbound.project.persistence.ProjectQueryDao;
 
 @Component
 @RequiredArgsConstructor

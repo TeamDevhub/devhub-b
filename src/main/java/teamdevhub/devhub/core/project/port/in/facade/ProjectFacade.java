@@ -44,8 +44,20 @@ public class ProjectFacade {
 		projectUseCase.createProject(createProjectCommand);
 	}
 
-	public Project getProjectDetail(String projectGuid) {
-        return projectUseCase.getProjectDetail(projectGuid);
+	public ProjectDetailResponseDto getProjectDetail(String projectGuid) {
+        Project project = projectUseCase.getProjectDetail(projectGuid);
+        return ProjectDetailResponseDto.fromDomain(project);
+	}
+	
+	public void updateProject(String projectGuid) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteProjectDetail(String projectGuid) {
+		// 프로젝트 지원자 조회 후 지원자가 있으면 return, 지원자 없으면 continue
+		applicationFormUseCase.deleteApplicationForms(projectGuid);
+		
 	}
 
 }

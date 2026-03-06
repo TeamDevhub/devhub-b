@@ -40,26 +40,26 @@ public class ProjectMapper {
 				.build();
 	}
 
-    public static Project toProject(ProjectEntity projectEntity, List<String> projectSkills, List<ProjectRequirementEntity> projectRequirementEntityList, String likeCount) {
+    public static Project toProject(Project project, List<String> projectSkills, List<ProjectRequirement> projectRequirementList, String likeCount) {
         return Project.builder()
-                .projectGuid(projectEntity.getProjectGuid())
-                .userGuid(projectEntity.getUserGuid())
-                .username(projectEntity.getUsername())
-                .category(projectEntity.getCategory())
-                .title(projectEntity.getTitle())
-                .content(projectEntity.getContent())
-                .recruitmentTypeCd(projectEntity.getRecruitmentTypeCd())
-                .recruitmentStartDate(projectEntity.getRecruitmentStartDate())
-                .recruitmentEndDate(projectEntity.getRecruitmentEndDate())
-                .progressTypeCd(projectEntity.getProgressTypeCd())
-//                .progressRegionCd(projectEntity.getpro)
-//                .progressPeriod(projectEntity.getpro)
-                .progressStartDate(projectEntity.getProgressStartDate())
-                .progressEndDate(projectEntity.getProgressEndDate())
+                .projectGuid(project.getProjectGuid())
+                .userGuid(project.getUserGuid())
+                .username(project.getUsername())
+                .category(project.getCategory())
+                .title(project.getTitle())
+                .content(project.getContent())
+                .recruitmentTypeCd(project.getRecruitmentTypeCd())
+                .recruitmentStartDate(project.getRecruitmentStartDate())
+                .recruitmentEndDate(project.getRecruitmentEndDate())
+                .progressTypeCd(project.getProgressTypeCd())
+                .progressRegionCd(project.getProgressRegionCd())
+//                .progressPeriod(project.getpro)
+                .progressStartDate(project.getProgressStartDate())
+                .progressEndDate(project.getProgressEndDate())
                 .likeCount(likeCount)
                 .projectSkill(projectSkills)
-                .projectRequirement(projectRequirementEntityList.stream().map(ProjectMapper::toRequirement).toList())
-                .auditInfo(toAuditInfo(projectEntity))
+                .projectRequirement(projectRequirementList)
+                .auditInfo(project.getAuditInfo())
                 .build();
     }
 
@@ -83,7 +83,7 @@ public class ProjectMapper {
                 .title(entity.getTitle())
                 .content(entity.getContent())
                 .recruitmentTypeCd(entity.getRecruitmentTypeCd())
-                .recruitmentStartDate(entity.getProgressStartDate())
+                .recruitmentStartDate(entity.getRecruitmentStartDate())
                 .recruitmentEndDate(entity.getRecruitmentEndDate())
                 .progressTypeCd(entity.getProgressTypeCd())
                 .progressRegionCd(entity.getProgressRegionCd())

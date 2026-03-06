@@ -107,12 +107,13 @@ public class ProjectService implements ProjectUseCase {
 	@Override
 	public Project getProjectDetail(String projectGuid) {
 		Project project = projectRepository.getProjectDetail(projectGuid);
-		List<ProjectSkill> skillList = projectSkillRepository.findByProjectGuid(projectGuid);
+		List<String> skillList = projectSkillRepository.findByProjectGuid(projectGuid).stream()
+									.map(ProjectSkill::getSkillCd)
+									.toList();
 		List<ProjectRequirement> requirementList = projectRequirementRepository.findByProjectGuid(projectGuid);
 		int likeCount = projectLikeRepository.countByProjectGuid(projectGuid);
 		
-		
-		return null;
+		return ProjectMapper.toProject(project, skillList, requirementList, String.valueOf(likeCount));		
 	}
 
 }

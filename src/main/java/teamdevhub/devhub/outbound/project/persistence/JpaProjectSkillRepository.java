@@ -28,8 +28,8 @@ public interface JpaProjectSkillRepository extends JpaRepository<ProjectSkillEnt
 	@Query("""
 			select ps
 			from ProjectSkillEntity ps
-			where (:projectGuids is null or ps.projectGuid = :projectGuid)
+			where (:projectGuid is null or ps.projectGuid = :projectGuid)
 			""")
-	List<ProjectSkillEntity> findByProjectGuid(String projectGuid);
+	List<ProjectSkillEntity> findByProjectGuid(@Param("projectGuid") String projectGuid);
 
 }

@@ -15,7 +15,6 @@ import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCo
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormItemRepository;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormRepository;
-import teamdevhub.devhub.core.application.port.in.command.CreateProjectApplicationFormCommand;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 
 @Service
@@ -59,6 +58,13 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 				})
 				.collect(Collectors.toUnmodifiableSet());
 		applicationFormItemRepository.saveAll(items);
+		
+	}
+
+	@Override
+	public void deleteApplicationForms(String projectGuid) {
+		List<ApplicationForm> applicationFormList = applicationFormRepository.findByProjectGuidAndIsCustomized(projectGuid);
+		
 		
 	}
 
