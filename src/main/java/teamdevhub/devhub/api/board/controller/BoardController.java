@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.board.model.CreateBoardRequestDto;
 import teamdevhub.devhub.api.board.model.SearchBoardRequestDto;
+import teamdevhub.devhub.api.board.model.UpdateBoardRequestDto;
 import teamdevhub.devhub.api.web.model.request.PageRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
@@ -44,5 +46,11 @@ public class BoardController {
 	@GetMapping("/{boardGuid}")
 	public ResponseEntity<DataApiResponseDto<BoardDetailResponseDto>> detailBoard(@PathVariable("boardGuid") String boardGuid) {
 		return ResponseEntity.ok(boardFacade.detailBoard(boardGuid));
+	}
+	
+	@PutMapping("/{boardGuid}")
+	public ResponseEntity<DataApiResponseDto<Void>> updateBoard(@RequestBody UpdateBoardRequestDto updateBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser, 
+			@PathVariable("boardGuid") String boardGuid) {
+		return ResponseEntity.ok(boardFacade.updateBoard(updateBoardRequestDto.toCommand(authenticatedUser.userGuid(), boardGuid)));
 	}
 }

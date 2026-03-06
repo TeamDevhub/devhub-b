@@ -1,5 +1,6 @@
 package teamdevhub.devhub.outbound.board.adapter;
 
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,19 @@ public class BoardAdapter implements BoardRepository {
 	
 	@Override
 	public Board detailBoard(String boardGuid) {
+		BoardEntity boardEntity = jpaBoardRepository.findByBoardGuid(boardGuid)
+				.orElseThrow(() -> AdapterDataException.of(ErrorCode.READ_FAIL));
+		
+		return BoardMapper.toDomain(boardEntity);
+	}
+	
+	@Override
+	public void updateBoard(Board board) {
+		jpaBoardRepository.save(BoardMapper.toEntity(board));
+	}
+	
+	@Override
+	public Board findByBoardGuid(String boardGuid) {
 		BoardEntity boardEntity = jpaBoardRepository.findByBoardGuid(boardGuid)
 				.orElseThrow(() -> AdapterDataException.of(ErrorCode.READ_FAIL));
 		

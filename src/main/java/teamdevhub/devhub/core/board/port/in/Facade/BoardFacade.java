@@ -15,6 +15,7 @@ import teamdevhub.devhub.core.board.port.in.Facade.model.BoardDetailResponseDto;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
+import teamdevhub.devhub.core.board.port.in.command.UpdateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardQueryUseCase;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
@@ -74,6 +75,13 @@ public class BoardFacade {
 				SuccessCode.READ_SUCCESS,
 				responseDto
 				);
+	}
+
+	public DataApiResponseDto<Void> updateBoard(UpdateBoardCommand updateBoardCommand) {
+		boardUseCase.updateBoard(updateBoardCommand);
+		 
+		return DataApiResponseDto.successWithoutData(
+                        SuccessCode.UPDATE_SUCCESS);
 	}
 
 }

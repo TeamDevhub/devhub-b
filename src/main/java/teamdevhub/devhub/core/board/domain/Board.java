@@ -27,38 +27,6 @@ public class Board {
 	private String userEmail;
 
 	private final AuditInfo auditInfo;
-	
-//	@Builder
-//	private Board(
-//			String boardGuid,
-//			String userGuid,
-//			String categoryCd,
-//			String title,
-//			String content,
-//			String viewCount,
-//			String likeCount,
-//			String commentCount,
-//			String userName,
-//			String userEmail,
-//			AuditInfo auditInfo
-//	) {
-//		this.boardGuid = boardGuid;
-//		this.userGuid = userGuid;
-//		this.categoryCd = categoryCd;
-//		this.title = title;
-//		this.content = content;
-//		this.viewCount = viewCount;
-//		this.likeCount = likeCount;
-//		this.commentCount = commentCount;
-//		this.userName = userName;
-//		this.userEmail = userEmail;
-//		
-//		if (auditInfo == null) {
-//            this.auditInfo = AuditInfo.empty();
-//        } else {
-//            this.auditInfo = auditInfo;
-//        }
-//	}
 
 	public static Board of(
 			String boardGuid, 

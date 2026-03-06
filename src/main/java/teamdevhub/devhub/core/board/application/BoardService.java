@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.domain.Comment;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
+import teamdevhub.devhub.core.board.port.in.command.UpdateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardUseCase;
 import teamdevhub.devhub.core.board.port.out.BoardLikeRepository;
 import teamdevhub.devhub.core.board.port.out.BoardRepository;
@@ -55,5 +56,11 @@ public class BoardService implements BoardUseCase {
         		);
         
         return boardDetail;
+	}
+	
+	@Override
+	public void updateBoard(UpdateBoardCommand updateBoardCommand) {
+		Board board = boardRepository.findByBoardGuid(updateBoardCommand.boardGuid());
+		boardRepository.updateBoard(board);
 	}
 }
