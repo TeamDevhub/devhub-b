@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
@@ -56,8 +58,8 @@ public class BoardFacade {
 		
 	}
 
-	public DataApiResponseDto<BoardDetailResponseDto> detailBoard(String boardGuid) {
-		Board board = boardUseCase.detailBoard(boardGuid);
+	public DataApiResponseDto<BoardDetailResponseDto> detailBoard(String boardGuid, HttpServletRequest request, HttpServletResponse response) {
+		Board board = boardUseCase.detailBoard(boardGuid, request, response);
 		
 		BoardSummaryResponseDto summaryBoard = BoardSummaryResponseDto.builder()
 				.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))

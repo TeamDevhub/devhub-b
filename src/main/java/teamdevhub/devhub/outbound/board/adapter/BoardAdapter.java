@@ -43,5 +43,8 @@ public class BoardAdapter implements BoardRepository {
 		return BoardMapper.toDomain(boardEntity);
 	}
 	
-	
+	@Override
+	public void updateViewCount(String boardGuid) {
+		jpaBoardRepository.updateViewCount(boardGuid);
+	}
 }

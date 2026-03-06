@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.board.model.CreateBoardRequestDto;
 import teamdevhub.devhub.api.board.model.SearchBoardRequestDto;
@@ -44,8 +46,9 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{boardGuid}")
-	public ResponseEntity<DataApiResponseDto<BoardDetailResponseDto>> detailBoard(@PathVariable("boardGuid") String boardGuid) {
-		return ResponseEntity.ok(boardFacade.detailBoard(boardGuid));
+	public ResponseEntity<DataApiResponseDto<BoardDetailResponseDto>> detailBoard(@PathVariable("boardGuid") String boardGuid, 
+			HttpServletRequest request, HttpServletResponse response) {
+		return ResponseEntity.ok(boardFacade.detailBoard(boardGuid, request, response));
 	}
 	
 	@PutMapping("/{boardGuid}")

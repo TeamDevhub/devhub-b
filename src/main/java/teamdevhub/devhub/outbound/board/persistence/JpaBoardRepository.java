@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,5 +20,10 @@ public interface JpaBoardRepository extends JpaRepository<BoardEntity, String> {
 	Page<BoardEntity> findByConditions(@Param("title") String title,  @Param("categoryCd") String categoryCd, Pageable pageable);
 
 	Optional<BoardEntity> findByBoardGuid(String boardGuid);
+	
+	@Modifying
+	@Query(value = "update BoardEntity b set b.viewCount = b.viewCount + 1 " +
+			"where b.boardGuid = :boardGuid ")
+	int updateViewCount(@Param("boardGuid") String boardGuid);
 
 }

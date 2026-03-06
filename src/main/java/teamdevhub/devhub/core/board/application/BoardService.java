@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.domain.Comment;
@@ -39,7 +41,11 @@ public class BoardService implements BoardUseCase {
 	}
 	
 	@Override
-	public Board detailBoard(String boardGuid) {
+	public Board detailBoard(String boardGuid, HttpServletRequest request, HttpServletResponse response) {
+		//쿠키 메소드 불러 true면 guid가지고 ++
+		if(viewCountUp(boardGuid, request, response)) {
+			boardRepository.updateViewCount(boardGuid);
+		}
 		Board boardDetail = boardRepository.detailBoard(boardGuid);
 		
 		Map<String, Long> boardLikes = boardLikeRepository.countByLikeCount(List.of(boardDetail.getBoardGuid()));
@@ -58,9 +64,16 @@ public class BoardService implements BoardUseCase {
         return boardDetail;
 	}
 	
+	private boolean viewCountUp(String boardGuid, HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 	@Override
 	public void updateBoard(UpdateBoardCommand updateBoardCommand) {
 		Board board = boardRepository.findByBoardGuid(updateBoardCommand.boardGuid());
 		boardRepository.updateBoard(board);
 	}
+	
+	
 }
