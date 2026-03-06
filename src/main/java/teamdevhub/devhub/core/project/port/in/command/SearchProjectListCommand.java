@@ -1,6 +1,6 @@
 package teamdevhub.devhub.core.project.port.in.command;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Builder;
@@ -12,13 +12,15 @@ public record SearchProjectListCommand(
 			List<String> skillCodeList,
 			List<String> regionCodeList,
 			List<String> positionCodeList,
+			// 추가예정
 			List<String> progressPeriodList,
 			List<String> positionLevelCodeList,
 			List<String> projectRecruitTypeList,
 			List<String> projectProgressTypeList,
+			// 추가예정
 			List<String> projectRecruitStatusList,
-			LocalDate recruitmentStartDate,
-			LocalDate recruitmentEndDate,
-			LocalDate progressStartDate
+			LocalDateTime recruitmentStartDate,
+			LocalDateTime recruitmentEndDate,
+			LocalDateTime progressStartDate
 		) {
 }

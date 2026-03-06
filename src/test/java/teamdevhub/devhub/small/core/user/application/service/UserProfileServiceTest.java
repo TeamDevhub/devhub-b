@@ -3,18 +3,21 @@ package teamdevhub.devhub.small.core.user.application.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.user.application.service.UserProfileService;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
+import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserSkillRepository;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
+import teamdevhub.devhub.fake.pure.application.provider.FakeEncodedPasswordProvider;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,17 +30,21 @@ class UserProfileServiceTest {
 
     private UserProfileService userProfileService;
 
+    private FakeEncodedPasswordProvider encodedPasswordProvider;
     private FakeUserRepository userRepository;
     private FakeUserPositionRepository userPositionRepository;
     private FakeUserSkillRepository skillRepository;
 
     @BeforeEach
     void init() {
+
+        encodedPasswordProvider = new FakeEncodedPasswordProvider();
         userRepository = new FakeUserRepository();
         userPositionRepository = new FakeUserPositionRepository();
         skillRepository = new FakeUserSkillRepository();
 
         userProfileService = new UserProfileService(
+                encodedPasswordProvider,
                 userRepository,
                 userPositionRepository,
                 skillRepository
@@ -590,5 +597,82 @@ class UserProfileServiceTest {
 
         // when, then
         assertThat(userProfileService.getCurrentUserProfile(testUser.getUserGuid()).getUserRole()).isEqualTo(UserRole.USER);
+    }
+
+    @Test
+    @DisplayName("사용자가_올바른_현재_비밀번호를_입력하면_새로운_비밀번호로_변경된다")
+    void updatePasswordCorrectly() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+
+        CreateUserCommand generalCreateUserCommand =
+                CreateUserCommand.generalUserCreateCommand(
+                        signupUserCommand,
+                        TEST_USER_GUID_1,
+                        encodedPasswordProvider.encode(TEST_PASSWORD_1)
+                );
+
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
+        userRepository.save(testUser);
+
+        String NEW_PASSWORD = "NEW_PASSWORD";
+
+        UpdatePasswordCommand updatePasswordCommand = new UpdatePasswordCommand(TEST_USER_GUID_1, TEST_PASSWORD_1, NEW_PASSWORD);
+
+        // when
+        userProfileService.updatePassword(updatePasswordCommand);
+
+        // then
+        User updatedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
+
+        assertThat(encodedPasswordProvider.matches(NEW_PASSWORD, updatedUser.getPassword())).isTrue();
+    }
+
+    @Test
+    @DisplayName("현재_비밀번호가_틀리면_비밀번호_변경이_실패한다")
+    void updatePasswordFailWhenCurrentPasswordWrong() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+
+        CreateUserCommand generalCreateUserCommand =
+                CreateUserCommand.generalUserCreateCommand(
+                        signupUserCommand,
+                        TEST_USER_GUID_1,
+                        encodedPasswordProvider.encode(TEST_PASSWORD_1)
+                );
+
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
+        userRepository.save(testUser);
+
+        UpdatePasswordCommand updatePasswordCommand =
+                new UpdatePasswordCommand(TEST_USER_GUID_1, "WRONG_PASSWORD", "NEW_PASSWORD");
+
+        // when & then
+        assertThatThrownBy(() -> userProfileService.updatePassword(updatePasswordCommand)).isInstanceOf(BusinessRuleException.class);
+    }
+
+    @Test
+    @DisplayName("존재하지_않는_사용자의_비밀번호를_변경하면_예외가_발생한다")
+    void updatePasswordFailWhenUserNotExist() {
+
+        UpdatePasswordCommand updatePasswordCommand = new UpdatePasswordCommand("NOT_EXIST_USER", "1234", "NEW_PASSWORD");
+
+        assertThatThrownBy(() -> userProfileService.updatePassword(updatePasswordCommand)).isInstanceOf(NullPointerException.class);
     }
 }

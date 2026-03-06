@@ -1,4 +1,4 @@
-package teamdevhub.devhub.core.project.domain.vo.skill;
+package teamdevhub.devhub.core.project.domain;
 
 import lombok.Builder;
 import lombok.Getter;
