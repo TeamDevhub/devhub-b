@@ -49,7 +49,6 @@ class JwtAuthorizationFilterTest {
         return new AccessTokenInfo(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
-                TEST_USERNAME_1,
                 UserRole.USER
         );
     }

@@ -25,7 +25,7 @@ public class ProjectController {
 	
 	@PostMapping
 	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid(), authenticatedUser.username()));
+		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid(), ""));
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.CREATE_SUCCESS

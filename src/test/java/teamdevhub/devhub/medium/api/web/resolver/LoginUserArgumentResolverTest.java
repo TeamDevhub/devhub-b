@@ -88,7 +88,7 @@ class LoginUserArgumentResolverTest {
     @DisplayName("UserAuthentication_principal_이면_AuthenticatedUser_를_반환한다")
     void returnAuthenticatedUserIfUserAuthenticationPrincipal() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_USERNAME_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
         UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(userAuthentication));
 
@@ -105,7 +105,7 @@ class LoginUserArgumentResolverTest {
     @DisplayName("AuthenticatedUser_principal_이면_그대로_반환한다")
     void returnAuthenticatedUserIfPrincipalIsAlreadyAuthenticatedUser() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_USERNAME_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(authenticatedUser));
 
         // when
