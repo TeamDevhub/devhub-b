@@ -4,6 +4,7 @@ import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
+import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
@@ -34,6 +35,11 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
     }
 
     @Override
+    public User getUserInfo(String userGuid) {
+        return store.get(userGuid);
+    }
+
+    @Override
     public User getCurrentUserProfile(String userGuid) {
         return store.get(userGuid);
     }
@@ -50,5 +56,10 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
         user.updateBasicProfile(updateUserCommand);
         user.changePositions(updateProfileCommand.positions());
         user.changeSkills(updateProfileCommand.skills());
+    }
+
+    @Override
+    public void updatePassword(UpdatePasswordCommand updatePasswordCommand) {
+
     }
 }
