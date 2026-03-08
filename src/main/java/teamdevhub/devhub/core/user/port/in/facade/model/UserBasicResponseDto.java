@@ -17,6 +17,9 @@ public class UserBasicResponseDto {
 
     private String username;
     private String introduction;
+
+    private String fileGuid;
+
     private double mannerDegree;
 
     private boolean blocked;
@@ -32,11 +35,13 @@ public class UserBasicResponseDto {
     private LocalDateTime modifiedDate;
 
     public static UserBasicResponseDto fromDomain(User user) {
+
         return UserBasicResponseDto.builder()
                 .userGuid(user.getUserGuid())
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .introduction(user.getIntroduction())
+                .fileGuid(user.getFileGuid())
                 .mannerDegree(user.getMannerDegree())
                 .blocked(user.isBlocked())
                 .blockEndDate(user.getBlockEndDate())
