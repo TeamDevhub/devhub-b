@@ -16,4 +16,6 @@ public interface ProjectSkillRepository {
 
 	List<ProjectSkill> findByProjectGuid(String projectGuid);
 
+	void deleteByProjectGuid(String projectGuid);
+
 }

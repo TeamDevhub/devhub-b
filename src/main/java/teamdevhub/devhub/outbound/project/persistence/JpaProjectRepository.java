@@ -1,11 +1,13 @@
 package teamdevhub.devhub.outbound.project.persistence;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -50,4 +52,30 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 			@Param("projectRecruitTypeList") List<String> projectRecruitTypeList, @Param("projectRecruitStatusList") List<String> projectRecruitStatusList,
 			@Param("projectProgressTypeList") List<String> projectProgressTypeList, @Param("recruitmentStartDate") LocalDateTime recruitmentStartDate, @Param("recruitmentEndDate") LocalDateTime recruitmentEndDate,
 			@Param("progressStartDate") LocalDateTime progressStartDate, @Param("progressPeriodList") List<String> progressPeriodList, Pageable pageable);
+
+	@Modifying
+	@Query("""
+			update ProjectEntity p
+			set p.userGuid = COALESCE(:userGuid, p.userGuid),
+				p.username = COALESCE(:username, p.username),
+				p.attachmentFileGuid = COALESCE(:attachmentFileGuid, p.attachmentFileGuid),
+				p.imageFileGuid = COALESCE(:imageFileGuid, p.imageFileGuid),
+				p.title = COALESCE(:title, p.title),
+				p.content = COALESCE(:content, p.content),
+				p.recruitmentStartDate = COALESCE(:recruitmentStartDate, p.recruitmentStartDate),
+				p.recruitmentEndDate = COALESCE(:recruitmentEndDate, p.recruitmentEndDate),
+				p.progressStartDate = COALESCE(:progressStartDate, p.progressStartDate),
+				p.progressEndDate = COALESCE(:progressEndDate, p.progressEndDate),
+				p.recruitmentTypeCd = COALESCE(:recruitmentTypeCd, p.recruitmentTypeCd),
+				p.progressRegionCd = COALESCE(:progressRegionCd, p.progressRegionCd),
+				p.progressTypeCd = COALESCE(:progressTypeCd, p.progressTypeCd),
+				p.category = COALESCE(:category, p.category)
+			where p.projectGuid = :projectGuid
+			""")
+	void update(@Param("projectGuid") String projectGuid, @Param("userGuid") String userGuid, @Param("username") String username, @Param("attachmentFileGuid") String attachmentFileGuid, @Param("imageFileGuid") String imageFileGuid,
+			@Param("title") String title, @Param("content") String content, @Param("recruitmentStartDate") LocalDate recruitmentStartDate, @Param("recruitmentEndDate") LocalDate recruitmentEndDate,
+			@Param("progressStartDate") LocalDate progressStartDate, @Param("progressEndDate") LocalDate progressEndDate, @Param("recruitmentTypeCd") String recruitmentTypeCd, @Param("progressRegionCd") String progressRegionCd,
+			@Param("progressTypeCd") String progressTypeCd, @Param("category") String category);
+
+
 }

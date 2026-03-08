@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -25,4 +26,12 @@ public interface JpaProjectLikeRepository extends JpaRepository<ProjectLikeEntit
 			where (:projectGuid is null or pl.projectGuid = :projectGuid)
 			""")
 	int countByProjectGuid(@Param("projectGuid") String projectGuid);
+
+	
+	@Modifying
+	@Query("""
+			delete from ProjectLikeEntity pl
+			where pl.projectGuid = :projectGuid
+			""")
+	void deleteAllByProjectGuid(@Param("ProjectGuid")String projectGuid);
 }

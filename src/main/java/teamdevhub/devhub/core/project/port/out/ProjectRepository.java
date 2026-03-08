@@ -11,5 +11,6 @@ public interface ProjectRepository {
 	void save(Project project);
     Project getProjectDetail(String projectGuid);
 	PageResult<Project> getProjectList(SearchProjectListCommand searchProjectListCommand, PageCommand pageCommand);
-
+	void deleteById(String projectGuid);
+	void update(Project upateProject);
 }

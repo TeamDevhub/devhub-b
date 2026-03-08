@@ -30,10 +30,15 @@ public class ApplicationFormAdapter implements ApplicationFormRepository{
 	}
 
 	@Override
-	public List<ApplicationForm> findByProjectGuidAndIsCustomized(String projectGuid) {
-		List<ApplicationFormEntity> applicationFormEntityList = jpaApplicationFormRepository.findByProjectGuidAndIsCustomized(projectGuid);
-		return applicationFormEntityList.stream()
-				.map(ApplicationFormEntity -> ApplicationFormMapper.toApplicationForm(ApplicationFormEntity))
+	public void deleteByApplicationFormGuid(List<String> applicationFormGuids) {
+		jpaApplicationFormRepository.deleteAllById(applicationFormGuids);
+	}
+
+	@Override
+	public List<ApplicationForm> findByIdAndIsCustomized(List<String> deleteApplicationFormGuids) {
+		List<ApplicationFormEntity> entityList = jpaApplicationFormRepository.findByIdAndIsCustomized(deleteApplicationFormGuids);
+		return entityList.stream()
+				.map(ApplicationFormMapper::toApplicationForm)
 				.toList();
 	}
 

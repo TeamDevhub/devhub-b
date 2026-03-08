@@ -11,4 +11,6 @@ public interface ProjectLikeRepository {
 
 	int countByProjectGuid(String projectGuid);
 
+	void deleteByProjectGuid(String projectGuid);
+
 }

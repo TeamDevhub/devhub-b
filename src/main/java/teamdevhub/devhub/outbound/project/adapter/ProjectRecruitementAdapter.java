@@ -60,5 +60,9 @@ public class ProjectRecruitementAdapter implements ProjectRequirementRepository 
 				.map(ProjectRequirementMapper::toProjectRequirement)
 				.toList();
 	}
+	@Override
+	public void deleteByProjectGuid(String projectGuid) {
+		jpaProjectRequirementRepository.deleteAllByProjectGuid(projectGuid);
+	}
 
 }

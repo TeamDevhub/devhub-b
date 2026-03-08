@@ -8,6 +8,6 @@ public interface ApplicationFormUseCase {
 
 	List<String> saveApplicationForms(List<CreateApplicationFormCommand> additionalFormList);
 
-	void deleteApplicationForms(String projectGuid);
+	void deleteApplicationForms(List<String> deleteApplicationFormGuids);
 
 }

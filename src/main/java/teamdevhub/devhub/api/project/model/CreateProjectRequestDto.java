@@ -72,7 +72,7 @@ public class CreateProjectRequestDto {
     
     private List<CreateApplicationFormRequestDto> additionalFormList;
     
-    public CreateProjectCommand toCommand(String userGuid, String userName) {
+    public CreateProjectCommand toCommand(String userGuid) {
         List<CreateApplicationFormCommand> additionalFormCommands = null;
 
         if (this.additionalFormList != null) {
@@ -83,7 +83,6 @@ public class CreateProjectRequestDto {
 
     	return CreateProjectCommand.builder()
     			.userGuid(userGuid)
-    			.username(userName)
     			.title(this.title)
     			.category(this.category)
     			.content(this.content)

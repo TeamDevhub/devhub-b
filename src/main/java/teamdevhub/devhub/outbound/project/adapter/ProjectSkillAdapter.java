@@ -64,4 +64,9 @@ public class ProjectSkillAdapter implements ProjectSkillRepository {
 				.toList();
 	}
 
+	@Override
+	public void deleteByProjectGuid(String projectGuid) {
+		jpaProjectSkillRepository.deleteAllByProjectGuid(projectGuid);
+	}
+
 }

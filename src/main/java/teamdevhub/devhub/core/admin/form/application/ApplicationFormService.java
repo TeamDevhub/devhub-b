@@ -62,9 +62,13 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 	}
 
 	@Override
-	public void deleteApplicationForms(String projectGuid) {
-		List<ApplicationForm> applicationFormList = applicationFormRepository.findByProjectGuidAndIsCustomized(projectGuid);
-		
+	public void deleteApplicationForms(List<String> deleteApplicationFormGuids) {
+		List<ApplicationForm> applicationFormList = applicationFormRepository.findByIdAndIsCustomized(deleteApplicationFormGuids);
+		List<String> applicationFormGuids = applicationFormList.stream()
+												.map(ApplicationForm::getApplicationFormGuid)
+												.toList();
+		applicationFormItemRepository.deleteByApplicationFormGuid(applicationFormGuids);
+		applicationFormRepository.deleteByApplicationFormGuid(applicationFormGuids);
 		
 	}
 

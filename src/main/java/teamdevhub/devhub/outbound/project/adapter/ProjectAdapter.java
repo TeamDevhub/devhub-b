@@ -50,4 +50,18 @@ public class ProjectAdapter implements ProjectRepository {
         		pagedProjectList.getSize(),
         		pagedProjectList.getTotalElements());
     }
+
+	@Override
+	public void deleteById(String projectGuid) {
+		jpaProjectRepository.deleteById(projectGuid);
+	}
+
+	@Override
+	public void update(Project upateProject) {
+		jpaProjectRepository.update(upateProject.getProjectGuid(), upateProject.getUserGuid(), upateProject.getUsername(), upateProject.getAttachmentFileGuid(),
+			upateProject.getImageFileGuid(), upateProject.getTitle(), upateProject.getContent(), upateProject.getRecruitmentStartDate(), upateProject.getRecruitmentEndDate(),
+			upateProject.getProgressStartDate(), upateProject.getProgressEndDate(), upateProject.getRecruitmentTypeCd(), upateProject.getProgressRegionCd(), 
+			upateProject.getProgressTypeCd(), upateProject.getCategory());
+	}
+
 }

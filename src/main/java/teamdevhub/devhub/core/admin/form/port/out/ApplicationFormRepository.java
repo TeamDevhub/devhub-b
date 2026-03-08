@@ -11,6 +11,8 @@ public interface ApplicationFormRepository {
 	
 	ApplicationForm findByApplicationFormGuid(String applicationFormGuid);
 
-	List<ApplicationForm> findByProjectGuidAndIsCustomized(String projectGuid);
+	void deleteByApplicationFormGuid(List<String> applicationFormGuids);
+
+	List<ApplicationForm> findByIdAndIsCustomized(List<String> deleteApplicationFormGuids);
 
 }
