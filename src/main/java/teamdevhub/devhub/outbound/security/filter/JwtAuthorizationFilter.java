@@ -53,7 +53,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         AuthenticatedUser authenticatedUser = AuthenticatedUser.of(
                 accessTokenInfo.userGuid(),
                 accessTokenInfo.email(),
-                accessTokenInfo.username(),
                 null,
                 accessTokenInfo.userRole()
         );
