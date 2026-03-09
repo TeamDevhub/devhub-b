@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.api.web.model.response.CommonCodeResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.admin.code.domain.CommonCode;
+import teamdevhub.devhub.core.admin.code.domain.CommonCodeDetail;
+import teamdevhub.devhub.core.admin.code.port.in.command.CommonCodeCommand;
 import teamdevhub.devhub.core.admin.code.port.in.usecase.CommonCodeUseCase;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
@@ -22,9 +24,9 @@ public class CommonFacade {
 	
 	public DataApiResponseDto<Map<String, CommonCodeResponseDto>> getCommonCodeList() {
 
-		List<CommonCode> commonCodeList = commonCodeUseCase.getCommonCodeList();
+		List<CommonCodeDetail> commonCodeList = commonCodeUseCase.getCommonCodeDetailList();
 		Map<String, CommonCodeResponseDto> result = commonCodeList.stream()
-				.map(CommonCodeResponseDto::fromDomain)
+				.map(CommonCodeResponseDto::fromDetailDomain)
 				.collect(Collectors.toMap(
 						CommonCodeResponseDto::getCode,
 						dto -> dto
@@ -34,6 +36,14 @@ public class CommonFacade {
 				SuccessCode.READ_SUCCESS,
 				result
 		);
+	}
+
+	public void saveCommonCode(CommonCodeCommand commonCodeCommand) {
+		commonCodeUseCase.saveCommonCode(CommonCode.createCommonCode(commonCodeCommand));
+	}
+
+	public void saveCommonCodeList(List<CommonCodeCommand> commonCodeCommandList) {
+		commonCodeUseCase.saveCommonCodeList(commonCodeCommandList.stream().map(CommonCode::createCommonCode).toList());
 	}
 
 }
