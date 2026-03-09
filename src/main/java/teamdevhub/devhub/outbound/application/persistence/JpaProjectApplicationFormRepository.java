@@ -23,6 +23,6 @@ public interface JpaProjectApplicationFormRepository extends JpaRepository<Proje
 			from ProjectApplicationFormEntity paf
 			where paf.projectGuid = :projectGuid
 			""")
-	List<String> findAllByProjectGuid(@Param("projectGuid") String projectGuid);
+	List<String> findAllGuidByProjectGuid(@Param("projectGuid") String projectGuid);
 
 }

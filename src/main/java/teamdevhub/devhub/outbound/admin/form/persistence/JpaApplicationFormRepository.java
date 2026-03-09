@@ -16,15 +16,15 @@ public interface JpaApplicationFormRepository  extends JpaRepository<Application
 			select af
 			from ApplicationFormEntity af
 			where af.isCustomized = true
-			and (:projectGuid is null or af.projectGuid = :projectGuid)
+			and (:deleteApplicationFormGuids is null or af.applicationFormGuid in :deleteApplicationFormGuids)
 			""")
-	List<ApplicationFormEntity> findByProjectGuidAndIsCustomized(@Param("projectGuid") String projectGuid);
+	List<ApplicationFormEntity> findByIdAndIsCustomized(@Param("deleteApplicationFormGuids") List<String> deleteApplicationFormGuids);
 
 	@Query("""
 			select af
 			from ApplicationFormEntity af
-			where af.isCustomized = true
-			and (:deleteApplicationFormGuids is null or af.applicationFormGuid in :deleteApplicationFormGuids)
+			where af.isCustomized = false
+			and (:formList is null or af.applicationFormGuid in :formList)
 			""")
-	List<ApplicationFormEntity> findByIdAndIsCustomized(@Param("deleteApplicationFormGuids") List<String> deleteApplicationFormGuids);
+	List<ApplicationFormEntity> findByIdAndIsNotCustomized(@Param("formList")List<String> formList);
 }

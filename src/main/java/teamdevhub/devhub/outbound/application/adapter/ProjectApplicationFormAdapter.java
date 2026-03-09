@@ -40,8 +40,8 @@ public class ProjectApplicationFormAdapter implements ProjectApplicationFormRepo
 	}
 
 	@Override
-	public List<String> findAllByProjectGuid(String projectGuid) {
-		return jpaProjectApplicationFormRepository.findAllByProjectGuid(projectGuid);
+	public List<String> findAllGuidByProjectGuid(String projectGuid) {
+		return jpaProjectApplicationFormRepository.findAllGuidByProjectGuid(projectGuid);
 	}
 
 }

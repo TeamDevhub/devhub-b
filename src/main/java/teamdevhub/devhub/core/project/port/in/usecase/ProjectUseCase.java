@@ -8,7 +8,6 @@ import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
-import teamdevhub.devhub.core.user.domain.User;
 
 public interface ProjectUseCase {
 

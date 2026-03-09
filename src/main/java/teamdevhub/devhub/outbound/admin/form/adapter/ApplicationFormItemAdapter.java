@@ -31,4 +31,12 @@ public class ApplicationFormItemAdapter implements ApplicationFormItemRepository
 		jpaApplicationFormItemRepository.deleteAllByApplicationFormGuid(applicationFormGuids);
 	}
 
+	@Override
+	public List<ApplicationFormItem> findByFormGuid(String applicationFormGuid) {
+		List<ApplicationFormItemEntity> entityList = jpaApplicationFormItemRepository.findByFormGuid(applicationFormGuid);
+		return entityList.stream()
+				.map(ApplicationFormItemMapper::toApplicationFormItem)
+				.toList();
+	}
+
 }

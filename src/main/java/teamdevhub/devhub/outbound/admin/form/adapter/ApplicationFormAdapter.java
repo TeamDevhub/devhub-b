@@ -42,4 +42,12 @@ public class ApplicationFormAdapter implements ApplicationFormRepository{
 				.toList();
 	}
 
+	@Override
+	public List<ApplicationForm> findByIdAndIsNotCustomized(List<String> formList) {
+		List<ApplicationFormEntity> entityList = jpaApplicationFormRepository.findByIdAndIsNotCustomized(formList);
+		return entityList.stream()
+				.map(ApplicationFormMapper::toApplicationForm)
+				.toList();
+	}
+
 }

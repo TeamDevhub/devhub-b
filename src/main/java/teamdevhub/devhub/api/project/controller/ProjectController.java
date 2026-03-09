@@ -23,6 +23,7 @@ import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.project.port.in.facade.ProjectFacade;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
+import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailWithFormResponseDto;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
@@ -60,8 +61,8 @@ public class ProjectController {
 	}
 	
 	@GetMapping("/{projectGuid}/form")
-	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetailWithForm(@PathVariable("projectGuid") String projectGuid) {
-		ProjectDetailResponseDto responseDto = projectFacade.getProjectDetail(projectGuid);
+	public ResponseEntity<DataApiResponseDto<ProjectDetailWithFormResponseDto>> getProjectDetailWithForm(@PathVariable("projectGuid") String projectGuid) {
+		ProjectDetailWithFormResponseDto responseDto = projectFacade.getProjectDetailWithForm(projectGuid);
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithData(
 				SuccessCode.READ_SUCCESS,
@@ -83,7 +84,7 @@ public class ProjectController {
 	
 	@DeleteMapping("/{projectGuid}")
 	public ResponseEntity<DataApiResponseDto<Void>> deleteProject(@PathVariable("projectGuid") String projectGuid) {
-		projectFacade.deleteProjectDetail(projectGuid);
+		projectFacade.deleteProject(projectGuid);
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithoutData(
 				SuccessCode.DELETE_SUCCESS)

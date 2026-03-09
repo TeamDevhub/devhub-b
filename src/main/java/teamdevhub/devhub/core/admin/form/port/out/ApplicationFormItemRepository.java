@@ -11,4 +11,6 @@ public interface ApplicationFormItemRepository {
 
 	void deleteByApplicationFormGuid(List<String> applicationFormGuids);
 
+	List<ApplicationFormItem> findByFormGuid(String applicationFormGuid);
+
 }

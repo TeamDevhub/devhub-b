@@ -14,8 +14,15 @@ public interface JpaApplicationFormItemRepository extends JpaRepository<Applicat
 	@Modifying
 	@Query("""
 			delete from ApplicationFormItemEntity afi
-			where afi.applicationFormGuid in :applicationFormGuids
+			where afi.formGuid in :applicationFormGuids
 			""")
 	void deleteAllByApplicationFormGuid(@Param("applicationFormGuids") List<String> applicationFormGuids);
+
+	@Query("""
+			select afi
+			from ApplicationFormItemEntity afi
+			where afi.formGuid = :applicationFormGuid
+			""")
+	List<ApplicationFormItemEntity> findByFormGuid(@Param("applicationFormGuid") String applicationFormGuid);
 
 }

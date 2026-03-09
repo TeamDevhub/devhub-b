@@ -15,4 +15,6 @@ public interface ApplicationFormRepository {
 
 	List<ApplicationForm> findByIdAndIsCustomized(List<String> deleteApplicationFormGuids);
 
+	List<ApplicationForm> findByIdAndIsNotCustomized(List<String> formList);
+
 }

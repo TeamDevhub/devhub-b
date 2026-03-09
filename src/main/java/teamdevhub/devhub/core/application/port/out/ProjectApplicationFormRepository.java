@@ -11,6 +11,5 @@ public interface ProjectApplicationFormRepository {
 
 	void deleteByProjectGuid(String projectGuid);
 
-	List<String> findAllByProjectGuid(String projectGuid);
-
+	List<String> findAllGuidByProjectGuid(String projectGuid);
 }

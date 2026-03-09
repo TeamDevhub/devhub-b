@@ -3,13 +3,12 @@ package teamdevhub.devhub.core.project.port.in.facade.model;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import teamdevhub.devhub.core.admin.form.port.in.facade.model.ApplicationFormResponseDto;
 import teamdevhub.devhub.core.project.domain.Project;
 
 @Getter
 @SuperBuilder
-@NoArgsConstructor
 public class ProjectDetailWithFormResponseDto extends ProjectDetailResponseDto {
 	
 	private List<String> skillList;
@@ -17,9 +16,11 @@ public class ProjectDetailWithFormResponseDto extends ProjectDetailResponseDto {
 	private String likeCount;
 	private boolean capacityClosed;
 	private String recruitStatus;
+	private List<String> applicationFormList;
+	private List<ApplicationFormResponseDto> additionalFormList;
 	
-	public static ProjectDetailResponseDto fromDomain(Project project) {
-		ProjectDetailWithFormResponseDtoBuilder<?, ?> builder = ProjectDetailWithFormResponseDtoBuilder.builder();
+	public static ProjectDetailWithFormResponseDto fromDomain(Project project, List<String> applicationFormList, List<ApplicationFormResponseDto> additionalFormList) {
+		ProjectDetailWithFormResponseDtoBuilder<?, ?> builder = ProjectDetailWithFormResponseDto.builder();
 		fillBase(builder, project);
 		return builder
 			.skillList(project.getProjectSkill())
@@ -27,8 +28,8 @@ public class ProjectDetailWithFormResponseDto extends ProjectDetailResponseDto {
 			.likeCount(project.getLikeCount())
 			.capacityClosed(project.isCapacityClosed())
 			.recruitStatus(project.getRecruitStatus())
+			.applicationFormList(applicationFormList)
+			.additionalFormList(additionalFormList)
 			.build();
 	}
-
-
 }
