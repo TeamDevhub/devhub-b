@@ -7,7 +7,6 @@ import teamdevhub.devhub.core.admin.code.domain.CommonCodeDetail;
 import teamdevhub.devhub.core.admin.code.port.out.CommonCodeRepository;
 import teamdevhub.devhub.outbound.admin.code.adapter.entity.CommonCodeEntity;
 import teamdevhub.devhub.outbound.admin.code.adapter.mapper.CommonCodeMapper;
-import teamdevhub.devhub.outbound.admin.code.persistence.CommonCodeQueryRepository;
 import teamdevhub.devhub.outbound.admin.code.persistence.JpaCommonCodeRepository;
 
 import java.util.List;
