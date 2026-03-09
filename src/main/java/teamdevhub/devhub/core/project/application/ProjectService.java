@@ -36,6 +36,7 @@ import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectMapper;
 public class ProjectService implements ProjectUseCase {
 
 	private final IdentifierProvider identifierProvider;
+	
 	private final ProjectRepository projectRepository;
 	private final ProjectSkillRepository projectSkillRepository;
 	private final ProjectRequirementRepository projectRequirementRepository;
@@ -124,12 +125,12 @@ public class ProjectService implements ProjectUseCase {
 		projectApplicationFormRepository.deleteByProjectGuid(projectGuid);
 		projectLikeRepository.deleteByProjectGuid(projectGuid);
 		projectRepository.deleteById(projectGuid);
-		return projectApplicationFormRepository.findAllByProjectGuid(projectGuid);
+		return projectApplicationFormRepository.findAllGuidByProjectGuid(projectGuid);
 	}
 
 	@Override
 	public List<String> updateProject(String projectGuid, UpdateProjectCommand updateProjectCommand) {
-		List<String> deleteAppplicationFormGuids = projectApplicationFormRepository.findAllByProjectGuid(projectGuid);
+		List<String> deleteAppplicationFormGuids = projectApplicationFormRepository.findAllGuidByProjectGuid(projectGuid);
 		projectSkillRepository.deleteByProjectGuid(projectGuid);
 		projectRequirementRepository.deleteByProjectGuid(projectGuid);
 		projectApplicationFormRepository.deleteByProjectGuid(projectGuid);
