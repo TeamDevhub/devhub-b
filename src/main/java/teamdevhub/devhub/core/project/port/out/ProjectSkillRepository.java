@@ -12,6 +12,10 @@ public interface ProjectSkillRepository {
 
 	List<String> selectProjectGuidBySkillCd(List<String> skillCodeList);
 
-	List<ProjectSkill> findByProjectGuid(Set<String> projectGuids);
+	List<ProjectSkill> findByProjectGuids(Set<String> projectGuids);
+
+	List<ProjectSkill> findByProjectGuid(String projectGuid);
+
+	void deleteByProjectGuid(String projectGuid);
 
 }

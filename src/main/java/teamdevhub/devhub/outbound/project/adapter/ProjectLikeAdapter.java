@@ -26,4 +26,14 @@ public class ProjectLikeAdapter implements ProjectLikeRepository {
 				.toList();
 	}
 
+	@Override
+	public int countByProjectGuid(String projectGuid) {
+		return jpaProjectLikeRepository.countByProjectGuid(projectGuid);
+	}
+
+	@Override
+	public void deleteByProjectGuid(String projectGuid) {
+		jpaProjectLikeRepository.deleteAllByProjectGuid(projectGuid);
+	}
+
 }

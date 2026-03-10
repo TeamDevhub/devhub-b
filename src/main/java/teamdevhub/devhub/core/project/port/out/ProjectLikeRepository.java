@@ -9,4 +9,8 @@ public interface ProjectLikeRepository {
 
 	List<ProjectLike> findByProjectGuid(Set<String> projectGuids);
 
+	int countByProjectGuid(String projectGuid);
+
+	void deleteByProjectGuid(String projectGuid);
+
 }

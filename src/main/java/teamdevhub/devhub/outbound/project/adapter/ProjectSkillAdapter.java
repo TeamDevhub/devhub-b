@@ -49,11 +49,24 @@ public class ProjectSkillAdapter implements ProjectSkillRepository {
 	}
 
 	@Override
-	public List<ProjectSkill> findByProjectGuid(Set<String> projectGuids) {
-		List<ProjectSkillEntity> entityList = jpaProjectSkillRepository.findByProjectGuid(projectGuids);
+	public List<ProjectSkill> findByProjectGuids(Set<String> projectGuids) {
+		List<ProjectSkillEntity> entityList = jpaProjectSkillRepository.findByProjectGuids(projectGuids);
 		return entityList.stream()
 				.map(ProjectSkillMapper::toProjectSkill)
 				.toList();
+	}
+
+	@Override
+	public List<ProjectSkill> findByProjectGuid(String projectGuid) {
+		List<ProjectSkillEntity> entityList = jpaProjectSkillRepository.findByProjectGuid(projectGuid);
+		return entityList.stream()
+				.map(ProjectSkillMapper::toProjectSkill)
+				.toList();
+	}
+
+	@Override
+	public void deleteByProjectGuid(String projectGuid) {
+		jpaProjectSkillRepository.deleteAllByProjectGuid(projectGuid);
 	}
 
 }

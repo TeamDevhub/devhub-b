@@ -16,12 +16,19 @@ import lombok.NoArgsConstructor;
 import teamdevhub.devhub.api.admin.form.model.CreateApplicationFormRequestDto;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
+import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateProjectRequestDto {
+public class UpdateProjectRequestDto {
+	
+	@NotBlank(message = "사용자ID눈 필수입니다")
+	private String userGuid;
+	
+//	@NotBlank(message = "사용자이름은 필수입니다")
+	private String username;
     
 	@NotBlank(message = "제목은 필수입니다")
     private String title;
@@ -73,7 +80,7 @@ public class CreateProjectRequestDto {
     
     private List<CreateApplicationFormRequestDto> additionalFormList;
     
-    public CreateProjectCommand toCommand(String userGuid) {
+    public UpdateProjectCommand toCommand() {
         List<CreateApplicationFormCommand> additionalFormCommands = null;
 
         if (this.additionalFormList != null) {
@@ -82,8 +89,9 @@ public class CreateProjectRequestDto {
                     .toList();
         }
 
-    	return CreateProjectCommand.builder()
+    	return UpdateProjectCommand.builder()
     			.userGuid(userGuid)
+    			.username(username)
     			.title(this.title)
     			.category(this.category)
     			.content(this.content)

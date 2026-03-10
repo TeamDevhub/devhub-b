@@ -1,5 +1,6 @@
 package teamdevhub.devhub.outbound.project.adapter;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +27,7 @@ public class ProjectQueryAdapter implements ProjectQueryRepository {
     public PageResult<Project> getProjectList(SearchProjectListCommand searchProjectListCommand, PageCommand pageCommand) {
         Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size(), Sort.by("registeredDate").descending());
 
-        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findBySearchCondition(searchProjectListCommand.order(), searchProjectListCommand.keyword(),
+        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findBySearchCondition(searchProjectListCommand.keyword(),
 				searchProjectListCommand.skillCodeList(), searchProjectListCommand.regionCodeList(), searchProjectListCommand.positionCodeList(),
 				searchProjectListCommand.positionLevelCodeList(), searchProjectListCommand.projectRecruitTypeList(),
 				searchProjectListCommand.projectRecruitStatusList(), searchProjectListCommand.projectProgressTypeList(),

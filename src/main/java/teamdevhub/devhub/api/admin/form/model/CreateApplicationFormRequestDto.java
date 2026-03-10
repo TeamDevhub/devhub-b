@@ -1,4 +1,4 @@
-package teamdevhub.devhub.api.project.model;
+package teamdevhub.devhub.api.admin.form.model;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
