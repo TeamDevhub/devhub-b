@@ -50,7 +50,6 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
                 .setSubject(authenticatedUser.userGuid())
                 .claim(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
                 .claim(JwtClaims.EMAIL, authenticatedUser.email())
-                .claim(JwtClaims.USERNAME, authenticatedUser.username())
                 .claim(JwtClaims.USER_ROLE, authenticatedUser.userRole().name())
                 .setIssuedAt(toDate(now))
                 .setExpiration(toDate(expireAt))
@@ -106,7 +105,6 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         return new AccessTokenInfo(
                 claims.getSubject(),
                 claims.get(JwtClaims.EMAIL, String.class),
-                claims.get(JwtClaims.USERNAME, String.class),
                 UserRole.valueOf(claims.get(JwtClaims.USER_ROLE, String.class))
         );
     }

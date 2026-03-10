@@ -2,10 +2,8 @@ package teamdevhub.devhub.core.admin.code.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import teamdevhub.devhub.core.admin.code.port.in.command.CommonCodeCommand;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Builder
@@ -17,9 +15,18 @@ public class CommonCode {
     private String order;
     private boolean isUsed;
     private String remarks;
-
-    @Builder.Default
-    private List<CommonCode> children = new ArrayList<>();
-
     private AuditInfo auditInfo;
+
+    public static CommonCode createCommonCode(CommonCodeCommand commonCodeCommand) {
+        return builder()
+                .code(commonCodeCommand.code())
+                .parentCode(commonCodeCommand.parentCode())
+                .name(commonCodeCommand.name())
+                .order(commonCodeCommand.order())
+                .isUsed(commonCodeCommand.isUsed())
+                .remarks(commonCodeCommand.remarks())
+                .auditInfo(AuditInfo.empty())
+                .build();
+    }
+
 }

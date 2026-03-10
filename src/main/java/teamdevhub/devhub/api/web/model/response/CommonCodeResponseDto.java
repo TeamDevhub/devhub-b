@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.core.admin.code.domain.CommonCode;
+import teamdevhub.devhub.core.admin.code.domain.CommonCodeDetail;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,14 +22,14 @@ public class CommonCodeResponseDto {
     private boolean isUsed;
     private List<CommonCodeResponseDto> children;
 
-    public static CommonCodeResponseDto fromDomain(CommonCode commonCode) {
+    public static CommonCodeResponseDto fromDetailDomain(CommonCodeDetail commonCode) {
         return builder()
                 .code(commonCode.getCode())
                 .parentCode(commonCode.getParentCode())
                 .name(commonCode.getName())
                 .isUsed(commonCode.isUsed())
                 .children(Optional.ofNullable(commonCode.getChildren())
-                        .orElseGet(Collections::emptyList).stream().map(CommonCodeResponseDto::fromDomain).toList())
+                        .orElseGet(Collections::emptyList).stream().map(CommonCodeResponseDto::fromDetailDomain).toList())
                 .build();
     }
 }
