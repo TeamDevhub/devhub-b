@@ -11,11 +11,6 @@ import teamdevhub.devhub.core.project.domain.Project;
 @SuperBuilder
 public class ProjectDetailWithFormResponseDto extends ProjectDetailResponseDto {
 	
-	private List<String> skillList;
-	private List<RequirementResponseDto> positionList;
-	private String likeCount;
-	private boolean capacityClosed;
-	private String recruitStatus;
 	private List<String> applicationFormList;
 	private List<ApplicationFormResponseDto> additionalFormList;
 	
