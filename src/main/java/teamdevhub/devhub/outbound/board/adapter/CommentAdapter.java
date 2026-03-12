@@ -7,7 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.board.domain.Comment;
 import teamdevhub.devhub.core.board.port.out.CommentRepository;
+import teamdevhub.devhub.outbound.board.adapter.entity.CommentEntity;
+import teamdevhub.devhub.outbound.board.adapter.mapper.CommentMapper;
 import teamdevhub.devhub.outbound.board.persistence.JpaCommentRepository;
 
 @Component
@@ -24,5 +27,16 @@ public class CommentAdapter implements CommentRepository {
 						row -> (String) row[0],
 						row -> (Long) row[1]
 						));			
+	}
+	
+	@Override
+	public List<Comment> findByBoardGuid(String boardGuid) {
+		List<CommentEntity> commentList = jpaCommentRepository.findByBoardGuid(boardGuid);
+		return commentList.stream().map(CommentMapper::toComment).toList();
+	}
+	
+	@Override
+	public void save(Comment comment) {
+		jpaCommentRepository.save(CommentMapper.toEntity(comment));
 	}
 }
