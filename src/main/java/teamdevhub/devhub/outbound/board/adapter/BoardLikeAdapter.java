@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.board.domain.BoardLike;
 import teamdevhub.devhub.core.board.port.out.BoardLikeRepository;
+import teamdevhub.devhub.outbound.board.adapter.mapper.BoardLikeMapper;
 import teamdevhub.devhub.outbound.board.persistence.JpaBoardLikeRepository;
 
 @Component
@@ -24,5 +26,23 @@ public class BoardLikeAdapter implements BoardLikeRepository {
 						row -> (String) row[0],
 						row -> (Long) row[1]
 						));			
+	}
+	
+	@Override
+	public BoardLike likeBoard(String boardGuid, String userGuid) {
+		
+		return jpaBoardLikeRepository.findByBoardGuidAndUserGuid(boardGuid, userGuid)
+	            .map(BoardLikeMapper::toDomain)
+	            .orElse(null);
+	}
+	
+	@Override
+	public void deleteBoardLike(BoardLike boardLike) {
+		jpaBoardLikeRepository.delete(BoardLikeMapper.toEntity(boardLike));
+	}
+	
+	@Override
+	public void save(BoardLike boardLike) {
+		jpaBoardLikeRepository.save(BoardLikeMapper.toEntity(boardLike));
 	}
 }

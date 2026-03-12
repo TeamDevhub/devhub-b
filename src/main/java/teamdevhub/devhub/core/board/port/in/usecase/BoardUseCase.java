@@ -13,4 +13,6 @@ public interface BoardUseCase {
 	Board detailBoard(String boardGuid, HttpServletRequest request, HttpServletResponse response);
 
 	void updateBoard(UpdateBoardCommand updateBoardCommand);
+
+	void likeBoard(String userGuid, String boardGuid);
 }

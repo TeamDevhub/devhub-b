@@ -56,4 +56,9 @@ public class BoardController {
 			@PathVariable("boardGuid") String boardGuid) {
 		return ResponseEntity.ok(boardFacade.updateBoard(updateBoardRequestDto.toCommand(authenticatedUser.userGuid(), boardGuid)));
 	}
+		
+	@PostMapping("/{boardGuid}/likes")
+	public ResponseEntity<DataApiResponseDto<Void>> likeBoard(@PathVariable("boardGuid") String boardGuid, @LoginUser AuthenticatedUser authenticatedUser) {
+		return ResponseEntity.ok(boardFacade.likeBoard(boardGuid, authenticatedUser.userGuid()));
+	}
 }

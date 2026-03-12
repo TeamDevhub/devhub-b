@@ -86,4 +86,11 @@ public class BoardFacade {
                         SuccessCode.UPDATE_SUCCESS);
 	}
 
+	public  DataApiResponseDto<Void> likeBoard(String boardGuid, String userGuid) {
+		boardUseCase.likeBoard(boardGuid, userGuid);
+		 
+		return DataApiResponseDto.successWithoutData(
+                        SuccessCode.UPDATE_SUCCESS);
+	}
+
 }

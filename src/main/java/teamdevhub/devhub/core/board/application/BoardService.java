@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.board.domain.Board;
+import teamdevhub.devhub.core.board.domain.BoardLike;
 import teamdevhub.devhub.core.board.domain.Comment;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.UpdateBoardCommand;
@@ -94,5 +95,16 @@ public class BoardService implements BoardUseCase {
 		boardRepository.updateBoard(board);
 	}
 	
-	
+	@Override
+	public void likeBoard(String boardGuid, String userGuid) {
+		BoardLike boardLike = boardLikeRepository.likeBoard(boardGuid, userGuid);
+		
+		if(boardLike != null) {
+			boardLikeRepository.deleteBoardLike(boardLike);
+		} else {
+			String boardLikeGuid = identifierProvider.generateIdentifier();
+			boardLike = BoardLike.createBoardLike(boardGuid, userGuid, boardLikeGuid);
+			boardLikeRepository.save(boardLike);
+		}
+	}
 }
