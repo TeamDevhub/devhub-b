@@ -13,6 +13,7 @@ import teamdevhub.devhub.core.admin.form.port.in.facade.model.ApplicationFormRes
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
+import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
@@ -33,12 +34,13 @@ public class ProjectFacade {
 	private final ApplicationFormUseCase applicationFormUseCase;
 	private final UserProfileUseCase userProfileUseCase;
 	private final ProjectApplicationFormUseCase projectApplicationFormUseCase;
+	private final FileUseCase fileUseCase;
 
 	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand) {
 		
 		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
         List<ProjectDetailResponseDto> projectDetailResponseDtoList = pagedProjectList.content().stream()
-                .map(ProjectDetailResponseDto::fromDomain)
+                .map(project -> ProjectDetailResponseDto.fromDomain(project, null))
                 .toList();
 		
 		return DataListApiResponseDto.successWithDataList(
@@ -56,8 +58,12 @@ public class ProjectFacade {
 	}
 
 	public ProjectDetailResponseDto getProjectDetail(String projectGuid) {
+		String imageFileUrl = null;
         Project project = projectUseCase.getProjectDetail(projectGuid);
-        return ProjectDetailResponseDto.fromDomain(project);
+        if(project.getImageFileGuid() != null && !project.getImageFileGuid().isBlank()) {
+        	imageFileUrl = fileUseCase.find(project.getImageFileGuid()).metadata().path();
+        }
+        return ProjectDetailResponseDto.fromDomain(project, imageFileUrl);
 	}
 
 	public void deleteProject(String projectGuid) {

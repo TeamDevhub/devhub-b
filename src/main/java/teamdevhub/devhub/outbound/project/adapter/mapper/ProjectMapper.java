@@ -48,6 +48,8 @@ public class ProjectMapper {
                 .category(project.getCategory())
                 .title(project.getTitle())
                 .content(project.getContent())
+                .attachmentFileGuid(project.getAttachmentFileGuid())
+				.imageFileGuid(project.getImageFileGuid())
                 .recruitmentTypeCd(project.getRecruitmentTypeCd())
                 .recruitmentStartDate(project.getRecruitmentStartDate())
                 .recruitmentEndDate(project.getRecruitmentEndDate())

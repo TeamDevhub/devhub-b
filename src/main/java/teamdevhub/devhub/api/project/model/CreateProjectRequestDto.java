@@ -87,6 +87,8 @@ public class CreateProjectRequestDto {
     			.title(this.title)
     			.category(this.category)
     			.content(this.content)
+    			.attachmentFileGuid(this.attachmentFileGuid)
+    			.imageFileGuid(this.imageFileGuid)
     			.recruitmentTypeCd(this.recruitmentTypeCd)
     			.progressTypeCd(this.progressTypeCd)
     			.progressRegionCd(this.progressRegionCd)
