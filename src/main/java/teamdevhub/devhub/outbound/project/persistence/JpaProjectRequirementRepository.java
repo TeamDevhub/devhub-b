@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,6 +25,20 @@ public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRe
 			from ProjectRequirementEntity pr
 			where (:projectGuids is null or pr.projectGuid in :projectGuids)
 			""")
-	List<ProjectRequirementEntity> findByProjectGuid(@Param("projectGuids") Set<String> projectGuids);
+	List<ProjectRequirementEntity> findByProjectGuids(@Param("projectGuids") Set<String> projectGuids);
+
+	@Query("""
+			select pr
+			from ProjectRequirementEntity pr
+			where (:projectGuid is null or pr.projectGuid = :projectGuid)
+			""")
+	List<ProjectRequirementEntity> findByProjectGuid(@Param("projectGuid") String projectGuid);
+
+	@Modifying
+	@Query("""
+			delete from ProjectRequirementEntity pr
+			where pr.projectGuid = :projectGuid
+			""")
+	void deleteAllByProjectGuid(@Param("projectGuid") String projectGuid);
 
 }

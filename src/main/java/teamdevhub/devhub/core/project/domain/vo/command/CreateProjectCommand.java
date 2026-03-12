@@ -8,6 +8,6 @@ import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCo
 import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
 
 @Builder
-public record CreateProjectCommand(String userGuid, String username, String attachmentFileGuid, String imageFileGuid, String title, String category, String content, String recruitmentTypeCd, String progressTypeCd,
+public record CreateProjectCommand(String userGuid, String attachmentFileGuid, String imageFileGuid, String title, String category, String content, String recruitmentTypeCd, String progressTypeCd,
                                    String progressRegionCd, LocalDate recruitmentStartDate, LocalDate recruitmentEndDate, LocalDate progressStartDate, LocalDate progressEndDate,
                                    List<String> skillList, List<CreateProjectRequirementRequestCommand> positionList, List<String> applicationFormList, List<CreateApplicationFormCommand> additionalFormList) {}

@@ -1,6 +1,7 @@
 package teamdevhub.devhub.outbound.admin.code.adapter.mapper;
 
 import teamdevhub.devhub.core.admin.code.domain.CommonCode;
+import teamdevhub.devhub.core.admin.code.domain.CommonCodeDetail;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.outbound.admin.code.adapter.entity.CommonCodeEntity;
 
@@ -20,6 +21,19 @@ public class CommonCodeMapper {
         );
     }
 
+    public static CommonCodeDetail toDetailDomain(CommonCodeEntity entity) {
+        if (entity == null) return null;
+        return CommonCodeDetail.builder()
+                .isUsed(entity.isUsed())
+                .parentCode(entity.getSuperiorCodeId())
+                .remarks(entity.getRemarks())
+                .code(entity.getCodeId())
+                .name(entity.getName())
+                .order(entity.getSortOrder())
+                .auditInfo(toAuditInfo(entity))
+                .build();
+    }
+
     public static CommonCode toDomain(CommonCodeEntity entity) {
         if (entity == null) return null;
         return CommonCode.builder()
@@ -33,18 +47,18 @@ public class CommonCodeMapper {
                 .build();
     }
 
-    public static List<CommonCode> convertToTree(List<CommonCodeEntity> allCodes) {
-        Map<String, CommonCode> map = allCodes.stream()
-                .map(CommonCodeMapper::toDomain)
-                .collect(Collectors.toMap(CommonCode::getCode, domain -> domain));
+    public static List<CommonCodeDetail> convertToTree(List<CommonCodeEntity> allCodes) {
+        Map<String, CommonCodeDetail> map = allCodes.stream()
+                .map(CommonCodeMapper::toDetailDomain)
+                .collect(Collectors.toMap(CommonCodeDetail::getCode, domain -> domain));
 
-        List<CommonCode> result = new ArrayList<>();
+        List<CommonCodeDetail> result = new ArrayList<>();
         map.values().forEach(domain -> {
             String parentCode = domain.getParentCode();
             if ("0000".equals(parentCode) || parentCode == null || parentCode.isEmpty()) {
                 result.add(domain);
             } else {
-                CommonCode parent = map.get(parentCode);
+                CommonCodeDetail parent = map.get(parentCode);
                 if (parent != null) {
                     parent.getChildren().add(domain);
                 }
@@ -52,5 +66,16 @@ public class CommonCodeMapper {
         });
 
         return result;
+    }
+
+    public static CommonCodeEntity toEntity(CommonCode commonCode) {
+        return CommonCodeEntity.builder()
+                .isUsed(commonCode.isUsed())
+                .codeId(commonCode.getCode())
+                .superiorCodeId(commonCode.getParentCode())
+                .remarks(commonCode.getRemarks())
+                .sortOrder(commonCode.getOrder())
+                .name(commonCode.getName())
+                .build();
     }
 }

@@ -25,5 +25,18 @@ public class ApplicationFormItemAdapter implements ApplicationFormItemRepository
 				.toList();
 		jpaApplicationFormItemRepository.saveAll(entityList);
 	}
-	
+
+	@Override
+	public void deleteByApplicationFormGuid(List<String> applicationFormGuids) {
+		jpaApplicationFormItemRepository.deleteAllByApplicationFormGuid(applicationFormGuids);
+	}
+
+	@Override
+	public List<ApplicationFormItem> findByFormGuid(String applicationFormGuid) {
+		List<ApplicationFormItemEntity> entityList = jpaApplicationFormItemRepository.findByFormGuid(applicationFormGuid);
+		return entityList.stream()
+				.map(ApplicationFormItemMapper::toApplicationFormItem)
+				.toList();
+	}
+
 }

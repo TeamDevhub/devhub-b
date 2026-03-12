@@ -6,6 +6,7 @@ import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerifi
 import teamdevhub.devhub.core.notification.application.selector.NotificationSenderSelector;
 import teamdevhub.devhub.core.notification.domain.Notification;
 import teamdevhub.devhub.core.notification.port.in.NotificationUseCase;
+import teamdevhub.devhub.core.notification.port.in.command.CreateNotificationCommand;
 import teamdevhub.devhub.core.notification.port.out.NotificationRepository;
 
 @Service
@@ -25,5 +26,10 @@ public class NotificationService implements NotificationUseCase {
         Notification notification = notificationRepository.getNotification(notificationGuid);
         notification.checked();
         notificationRepository.save(notification);
+    }
+
+    @Override
+    public void createNotification(CreateNotificationCommand notificationCommand) {
+        notificationRepository.save(Notification.create(notificationCommand));
     }
 }

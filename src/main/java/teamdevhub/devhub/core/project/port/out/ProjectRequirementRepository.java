@@ -13,6 +13,10 @@ public interface ProjectRequirementRepository {
 	List<String> selectProjectGuidByPositionCodeAndPositionLevel(List<String> positionCodeList,
 			List<String> positionLevelCodeList);
 
-	List<ProjectRequirement> findByProjectGuid(Set<String> projectGuids);
+	List<ProjectRequirement> findByProjectGuids(Set<String> projectGuids);
+
+	List<ProjectRequirement> findByProjectGuid(String projectGuid);
+
+	void deleteByProjectGuid(String projectGuid);
 
 }
