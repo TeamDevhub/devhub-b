@@ -45,14 +45,18 @@ public class BannerEntity extends BaseEntity {
     
     @Convert(converter = BooleanToYNConverter.class)
     @Column(nullable = false)
-    private boolean idMainBanner;
+    private boolean isMainBanner;
     
     @Column(name = "title", nullable = false)
     private String title;
     
     @Column(name = "description", nullable = false)
     private String description;
-    
+
+    @Column(name = "link", nullable = false)
+    private String link;
+
+
     @Column(name = "publication_start_date", nullable = false)
     private LocalDateTime publicationStartDate;
     
