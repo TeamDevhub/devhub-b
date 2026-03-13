@@ -13,8 +13,11 @@ public class ProjectDetailWithFormResponseDto extends ProjectDetailResponseDto {
 	
 	private List<String> applicationFormList;
 	private List<ApplicationFormResponseDto> additionalFormList;
+	private String imageFileName;
+	private String attachmentFileName;
 	
-	public static ProjectDetailWithFormResponseDto fromDomain(Project project, List<String> applicationFormList, List<ApplicationFormResponseDto> additionalFormList) {
+	public static ProjectDetailWithFormResponseDto fromDomain(Project project, List<String> applicationFormList, List<ApplicationFormResponseDto> additionalFormList
+			, String imageFileName, String attachmentFilename) {
 		ProjectDetailWithFormResponseDtoBuilder<?, ?> builder = ProjectDetailWithFormResponseDto.builder();
 		fillBase(builder, project);
 		return builder
@@ -25,6 +28,8 @@ public class ProjectDetailWithFormResponseDto extends ProjectDetailResponseDto {
 			.recruitStatus(project.getRecruitStatus())
 			.applicationFormList(applicationFormList)
 			.additionalFormList(additionalFormList)
+			.imageFileName(imageFileName)
+			.attachmentFileName(attachmentFilename)
 			.build();
 	}
 }

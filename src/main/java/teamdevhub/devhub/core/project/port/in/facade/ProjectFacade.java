@@ -93,7 +93,8 @@ public class ProjectFacade {
 		List<ApplicationFormResponseDto> additionFormResponseDto = additionalFormList.stream()
 																	.map(ApplicationFormResponseDto::fromCommand)
 																	.toList();
-		return ProjectDetailWithFormResponseDto.fromDomain(project, applicationFormGuidList, additionFormResponseDto);
+		// 파일 이름 조회
+		return ProjectDetailWithFormResponseDto.fromDomain(project, applicationFormGuidList, additionFormResponseDto, "이미지 파일", "첨부파일");
 	}
 
 }
