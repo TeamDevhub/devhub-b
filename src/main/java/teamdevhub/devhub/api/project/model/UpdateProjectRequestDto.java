@@ -95,6 +95,8 @@ public class UpdateProjectRequestDto {
     			.title(this.title)
     			.category(this.category)
     			.content(this.content)
+    			.imageFileGuid(this.imageFileGuid)
+    			.attachmentFileGuid(this.attachmentFileGuid)
     			.recruitmentTypeCd(this.recruitmentTypeCd)
     			.progressTypeCd(this.progressTypeCd)
     			.progressRegionCd(this.progressRegionCd)

@@ -17,8 +17,9 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 	private String likeCount;
 	private boolean capacityClosed;
 	private String recruitStatus;
+	private String imageFileUrl;
 	
-	public static ProjectDetailResponseDto fromDomain(Project project) {
+	public static ProjectDetailResponseDto fromDomain(Project project, String imageFileUrl) {
 		ProjectDetailResponseDtoBuilder<?, ?> builder = ProjectDetailResponseDto.builder();
 		fillBase(builder, project);
 		return builder
@@ -27,6 +28,7 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 			.likeCount(project.getLikeCount())
 			.capacityClosed(project.isCapacityClosed())
 			.recruitStatus(project.getRecruitStatus())
+			.imageFileUrl(imageFileUrl)
 			.build();
 	}
 

@@ -16,7 +16,7 @@ public interface JpaProjectApplicationFormRepository extends JpaRepository<Proje
 			delete from ProjectApplicationFormEntity paf
 			where paf.projectGuid = :projectGuid
 			""")
-	void deleteAllByProjectGuid(@Param("ProjectGuid") String projectGuid);
+	void deleteAllByProjectGuid(@Param("projectGuid") String projectGuid);
 
 	@Query("""
 			select paf.applicationFormGuid
