@@ -5,15 +5,19 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardBasicResponseDto;
+import teamdevhub.devhub.core.board.port.in.Facade.model.BoardDetailResponseDto;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
+import teamdevhub.devhub.core.board.port.in.command.UpdateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardQueryUseCase;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
@@ -48,10 +52,45 @@ public class BoardFacade {
 	
 	public DataApiResponseDto<Void> createBoard(CreateBoardCommand createBoardCommand) {
 		boardUseCase.createBoard(createBoardCommand);
-		
+		 
 		return DataApiResponseDto.successWithoutData(
                         SuccessCode.CREATE_SUCCESS);
 		
+	}
+
+	public DataApiResponseDto<BoardDetailResponseDto> detailBoard(String boardGuid, HttpServletRequest request, HttpServletResponse response) {
+		Board board = boardUseCase.detailBoard(boardGuid, request, response);
+		
+		BoardSummaryResponseDto summaryBoard = BoardSummaryResponseDto.builder()
+				.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))
+				.likeCount(board.getLikeCount())
+				.commentCount(board.getCommentCount())
+                .build();
+		
+		BoardDetailResponseDto responseDto = BoardDetailResponseDto.builder()
+				.boardSummaryResponseDto(summaryBoard)
+				.commentList(board.getCommentList())
+				.userEmail(board.getUserEmail())
+				.build();
+
+		return DataApiResponseDto.successWithData(
+				SuccessCode.READ_SUCCESS,
+				responseDto
+				);
+	}
+
+	public DataApiResponseDto<Void> updateBoard(UpdateBoardCommand updateBoardCommand) {
+		boardUseCase.updateBoard(updateBoardCommand);
+		 
+		return DataApiResponseDto.successWithoutData(
+                        SuccessCode.UPDATE_SUCCESS);
+	}
+
+	public  DataApiResponseDto<Void> likeBoard(String boardGuid, String userGuid) {
+		boardUseCase.likeBoard(boardGuid, userGuid);
+		 
+		return DataApiResponseDto.successWithoutData(
+                        SuccessCode.UPDATE_SUCCESS);
 	}
 
 }

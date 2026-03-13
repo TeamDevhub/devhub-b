@@ -1,6 +1,7 @@
 package teamdevhub.devhub.outbound.board.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,6 @@ public interface JpaBoardLikeRepository extends JpaRepository<BoardLikeEntity, S
 					"where bl.boardGuid IN (:boardGuids) " +
 					"group by bl.boardGuid")
 	List<Object[]> countByLikeCount(@Param("boardGuids") List<String> boardGuids);
+	
+	Optional<BoardLikeEntity> findByBoardGuidAndUserGuid(String boardGuid, String userGuid);
 }
