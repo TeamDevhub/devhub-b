@@ -12,4 +12,6 @@ public interface CommentRepository {
 	List<Comment> findByBoardGuid(String boardGuid);
 
 	void save(Comment comment);
+
+	void deleteByBoardGuidAndCommentGuid(String boardGuid, String commentGuid);
 }
