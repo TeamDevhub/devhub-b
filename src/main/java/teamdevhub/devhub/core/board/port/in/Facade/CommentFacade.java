@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.board.port.in.command.CreateCommentCommand;
+import teamdevhub.devhub.core.board.port.in.command.UpdateCommentCommand;
 import teamdevhub.devhub.core.board.port.in.usecase.CommentUseCase;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
@@ -21,6 +22,20 @@ public class CommentFacade {
 		 
 		return DataApiResponseDto.successWithoutData(
                         SuccessCode.CREATE_SUCCESS);
+	}
+
+	public DataApiResponseDto<Void> deleteComment(String boardGuid, String commentGuid) {
+		commentUseCase.deleteComment(boardGuid, commentGuid);
+		
+		return DataApiResponseDto.successWithoutData(
+                SuccessCode.DELETE_SUCCESS);
+	}
+
+	public DataApiResponseDto<Void> updateComment(UpdateCommentCommand updateCommentCommand) {
+		commentUseCase.updateComment(updateCommentCommand);
+		 
+		return DataApiResponseDto.successWithoutData(
+                        SuccessCode.UPDATE_SUCCESS);
 	}
 
 }

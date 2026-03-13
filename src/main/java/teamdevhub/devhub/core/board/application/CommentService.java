@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.board.domain.Comment;
 import teamdevhub.devhub.core.board.port.in.command.CreateCommentCommand;
+import teamdevhub.devhub.core.board.port.in.command.UpdateCommentCommand;
 import teamdevhub.devhub.core.board.port.in.usecase.CommentUseCase;
 import teamdevhub.devhub.core.board.port.out.CommentRepository;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
@@ -38,5 +39,16 @@ public class CommentService implements CommentUseCase {
 		String commentGuid = identifierProvider.generateIdentifier();
 		Comment comment = Comment.createComment(createCommentCommand, commentGuid);
 		commentRepository.save(comment);
+	}
+	
+	@Override
+	public void deleteComment(String boardGuid, String commentGuid) {
+		commentRepository.deleteByBoardGuidAndCommentGuid(boardGuid, commentGuid);
+	}
+	
+	@Override
+	public void updateComment(UpdateCommentCommand updateCommentCommand) {
+		
+//		commentRepository.updateComment(updateCommentCommand);
 	}
 }

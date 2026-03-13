@@ -17,4 +17,6 @@ public interface JpaCommentRepository extends JpaRepository<CommentEntity, Strin
 	List<Object[]> countByCommentCount(@Param("boardGuids") List<String> boardGuids);
 
 	List<CommentEntity> findByBoardGuid(String boardGuid);
+
+	void deleteByBoardGuidAndCommentGuid(String boardGuid, String commentGuid);
 }
