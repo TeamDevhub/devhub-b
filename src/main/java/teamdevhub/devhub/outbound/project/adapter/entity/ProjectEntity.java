@@ -2,7 +2,7 @@ package teamdevhub.devhub.outbound.project.adapter.entity;
 
 import static lombok.AccessLevel.PROTECTED;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -14,8 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.outbound.common.persistence.jpa.converter.BooleanToYNConverter;
 import teamdevhub.devhub.outbound.common.persistence.jpa.audit.BaseEntity;
+import teamdevhub.devhub.outbound.common.persistence.jpa.converter.BooleanToYNConverter;
 
 @Entity
 @Getter
@@ -68,16 +68,16 @@ public class ProjectEntity extends BaseEntity {
     private String content;
     
     @Column(name = "recruitment_start_date", nullable = false)
-    private LocalDateTime recruitmentStartDate;
+    private LocalDate recruitmentStartDate;
     
     @Column(name = "recruitment_end_date", nullable = false)
-    private LocalDateTime recruitmentEndDate;
+    private LocalDate recruitmentEndDate;
     
     @Column(name = "progress_start_date", nullable = false)
-    private LocalDateTime progressStartDate;
+    private LocalDate progressStartDate;
     
     @Column(name = "progress_end_date", nullable = false)
-    private LocalDateTime progressEndDate;
+    private LocalDate progressEndDate;
     
     @Convert(converter = BooleanToYNConverter.class)
     @Column(name = "delete_yn", nullable = false)

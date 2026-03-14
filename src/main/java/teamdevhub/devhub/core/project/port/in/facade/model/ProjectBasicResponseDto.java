@@ -21,6 +21,9 @@ public class ProjectBasicResponseDto {
     private String title;
     private String content;
     
+    private String attachmentFileGuid;
+	private String imageFileGuid;
+    
     private String recruitmentTypeCd;
     private LocalDate recruitmentStartDate;
     private LocalDate recruitmentEndDate;
@@ -50,6 +53,8 @@ public class ProjectBasicResponseDto {
 	        .category(project.getCategory())
 	        .title(project.getTitle())
 	        .content(project.getContent())
+	        .attachmentFileGuid(project.getAttachmentFileGuid())
+	        .imageFileGuid(project.getImageFileGuid())
 	        .recruitmentTypeCd(project.getRecruitmentTypeCd())
 	        .recruitmentStartDate(project.getRecruitmentStartDate())
 	        .recruitmentEndDate(project.getRecruitmentEndDate())

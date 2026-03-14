@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationFormItem;
+import teamdevhub.devhub.core.admin.form.port.in.command.ApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormItemRepository;
@@ -60,4 +61,33 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 		applicationFormItemRepository.saveAll(items);
 		
 	}
+
+	@Override
+	public void deleteApplicationForms(List<String> deleteApplicationFormGuids) {
+		List<ApplicationForm> applicationFormList = applicationFormRepository.findByIdAndIsCustomized(deleteApplicationFormGuids);
+		List<String> applicationFormGuids = applicationFormList.stream()
+												.map(ApplicationForm::getApplicationFormGuid)
+												.toList();
+		applicationFormItemRepository.deleteByApplicationFormGuid(applicationFormGuids);
+		applicationFormRepository.deleteByApplicationFormGuid(applicationFormGuids);
+		
+	}
+
+	@Override
+	public List<ApplicationForm> getNoCustomizedFormById(List<String> formList) {
+		return applicationFormRepository.findByIdAndIsNotCustomized(formList);
+	}
+
+	@Override
+	public List<ApplicationFormCommand> getCustomizedFormById(List<String> formList) {
+		List<ApplicationForm> applicationFormList = applicationFormRepository.findByIdAndIsCustomized(formList);
+		List<ApplicationFormCommand> commandList = applicationFormList.stream()
+				.map(form -> {
+					List<ApplicationFormItem> itemList = applicationFormItemRepository.findByFormGuid(form.getApplicationFormGuid());
+					return ApplicationFormCommand.fromDomain(form, itemList);
+					})
+				.toList();
+		return commandList;
+	}
+
 }

@@ -1,6 +1,8 @@
 package teamdevhub.devhub.core.admin.form.port.out;
 
 
+import java.util.List;
+
 import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 
 public interface ApplicationFormRepository {
@@ -8,5 +10,11 @@ public interface ApplicationFormRepository {
 	void save(ApplicationForm applicationForm);
 	
 	ApplicationForm findByApplicationFormGuid(String applicationFormGuid);
+
+	void deleteByApplicationFormGuid(List<String> applicationFormGuids);
+
+	List<ApplicationForm> findByIdAndIsCustomized(List<String> deleteApplicationFormGuids);
+
+	List<ApplicationForm> findByIdAndIsNotCustomized(List<String> formList);
 
 }

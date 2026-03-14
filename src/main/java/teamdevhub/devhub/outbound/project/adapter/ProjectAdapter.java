@@ -1,19 +1,26 @@
 package teamdevhub.devhub.outbound.project.adapter;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
+import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
 import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectMapper;
 import teamdevhub.devhub.outbound.project.persistence.JpaProjectRepository;
-import teamdevhub.devhub.outbound.project.persistence.ProjectQueryDao;
 
 @Component
 @RequiredArgsConstructor
 public class ProjectAdapter implements ProjectRepository {
 	
 	private final JpaProjectRepository jpaProjectRepository;
-    private final ProjectQueryDao projectQueryDao;
 
 	@Override
 	public void save(Project project) {
@@ -22,6 +29,39 @@ public class ProjectAdapter implements ProjectRepository {
 	
 	@Override
 	public Project getProjectDetail(String projectGuid) {
-        return projectQueryDao.findProjectDetailByGuid(projectGuid);
+        ProjectEntity entity = jpaProjectRepository.findById(projectGuid).get();
+        return ProjectMapper.toProject(entity);
 	}
+	
+	@Override
+    public PageResult<Project> getProjectList(SearchProjectListCommand searchProjectListCommand, PageCommand pageCommand) {
+        Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size(), Sort.by("registeredDate").descending());
+
+        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findBySearchCondition(searchProjectListCommand.keyword(),
+				searchProjectListCommand.skillCodeList(), searchProjectListCommand.regionCodeList(), searchProjectListCommand.positionCodeList(),
+				searchProjectListCommand.positionLevelCodeList(), searchProjectListCommand.projectRecruitTypeList(),
+				searchProjectListCommand.projectRecruitStatusList(), searchProjectListCommand.projectProgressTypeList(),
+				searchProjectListCommand.recruitmentStartDate(), searchProjectListCommand.recruitmentEndDate(),
+				searchProjectListCommand.progressStartDate(), searchProjectListCommand.progressPeriodList(), pageable);
+        
+        return PageResult.of(
+        		pagedProjectList.getContent().stream().map(ProjectMapper::toProject).toList(),
+        		pagedProjectList.getNumber(),
+        		pagedProjectList.getSize(),
+        		pagedProjectList.getTotalElements());
+    }
+
+	@Override
+	public void deleteById(String projectGuid) {
+		jpaProjectRepository.deleteById(projectGuid);
+	}
+
+	@Override
+	public void update(Project upateProject) {
+		jpaProjectRepository.update(upateProject.getProjectGuid(), upateProject.getUserGuid(), upateProject.getUsername(), upateProject.getAttachmentFileGuid(),
+			upateProject.getImageFileGuid(), upateProject.getTitle(), upateProject.getContent(), upateProject.getRecruitmentStartDate(), upateProject.getRecruitmentEndDate(),
+			upateProject.getProgressStartDate(), upateProject.getProgressEndDate(), upateProject.getRecruitmentTypeCd(), upateProject.getProgressRegionCd(), 
+			upateProject.getProgressTypeCd(), upateProject.getCategory());
+	}
+
 }

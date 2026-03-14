@@ -1,6 +1,6 @@
 package teamdevhub.devhub.outbound.project.adapter.mapper;
 
-import teamdevhub.devhub.core.project.domain.vo.requirement.ProjectRequirement;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 
 public class ProjectRequirementMapper {

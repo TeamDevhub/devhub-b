@@ -15,4 +15,8 @@ public interface JpaCommentRepository extends JpaRepository<CommentEntity, Strin
 					"where c.boardGuid IN (:boardGuids) " +
 					"group by c.boardGuid")
 	List<Object[]> countByCommentCount(@Param("boardGuids") List<String> boardGuids);
+
+	List<CommentEntity> findByBoardGuid(String boardGuid);
+
+	void deleteByBoardGuidAndCommentGuid(String boardGuid, String commentGuid);
 }

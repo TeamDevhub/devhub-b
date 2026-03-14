@@ -26,7 +26,7 @@ public class FakeUserRepository implements UserRepository {
         return store.values().stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getUsername(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
                 .orElse(null);
     }
 
@@ -35,7 +35,7 @@ public class FakeUserRepository implements UserRepository {
         return store.values().stream()
                 .filter(user -> user.getUserGuid().equals(userGuid))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getUsername(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
                 .orElse(null);
     }
 
@@ -47,7 +47,6 @@ public class FakeUserRepository implements UserRepository {
                 .map(user -> new AuthenticatedUser(
                         user.getUserGuid(),
                         user.getEmail(),
-                        user.getUsername(),
                         user.getPassword(),
                         user.getUserRole()
                 ));
@@ -64,7 +63,6 @@ public class FakeUserRepository implements UserRepository {
                 .map(user -> new AuthenticatedUser(
                         user.getUserGuid(),
                         user.getEmail(),
-                        user.getUsername(),
                         user.getPassword(),
                         user.getUserRole()
                 ));
@@ -107,6 +105,11 @@ public class FakeUserRepository implements UserRepository {
     @Override
     public boolean existsByUserRole(UserRole userRole) {
         return store.values().stream().anyMatch(user -> user.getUserRole().equals(userRole));
+    }
+
+    @Override
+    public Map<String, String> findNamesByUserGuid(List<String> userGuids) {
+        return Map.of();
     }
 
     public boolean wasCalled(String methodName) {

@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.api.admin.form.model.CreateApplicationFormRequestDto;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 
@@ -72,7 +73,7 @@ public class CreateProjectRequestDto {
     
     private List<CreateApplicationFormRequestDto> additionalFormList;
     
-    public CreateProjectCommand toCommand(String userGuid, String userName) {
+    public CreateProjectCommand toCommand(String userGuid) {
         List<CreateApplicationFormCommand> additionalFormCommands = null;
 
         if (this.additionalFormList != null) {
@@ -83,10 +84,11 @@ public class CreateProjectRequestDto {
 
     	return CreateProjectCommand.builder()
     			.userGuid(userGuid)
-    			.username(userName)
     			.title(this.title)
     			.category(this.category)
     			.content(this.content)
+    			.attachmentFileGuid(this.attachmentFileGuid)
+    			.imageFileGuid(this.imageFileGuid)
     			.recruitmentTypeCd(this.recruitmentTypeCd)
     			.progressTypeCd(this.progressTypeCd)
     			.progressRegionCd(this.progressRegionCd)

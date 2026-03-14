@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import teamdevhub.devhub.core.project.domain.ProjectSkill;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
-import teamdevhub.devhub.core.project.domain.vo.skill.ProjectSkill;
 import teamdevhub.devhub.core.project.port.out.ProjectSkillRepository;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 

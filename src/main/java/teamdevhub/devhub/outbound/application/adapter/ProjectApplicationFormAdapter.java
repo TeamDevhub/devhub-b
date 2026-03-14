@@ -34,4 +34,14 @@ public class ProjectApplicationFormAdapter implements ProjectApplicationFormRepo
 
 	}
 
+	@Override
+	public void deleteByProjectGuid(String projectGuid) {
+		jpaProjectApplicationFormRepository.deleteAllByProjectGuid(projectGuid);
+	}
+
+	@Override
+	public List<String> findAllGuidByProjectGuid(String projectGuid) {
+		return jpaProjectApplicationFormRepository.findAllGuidByProjectGuid(projectGuid);
+	}
+
 }

@@ -11,7 +11,6 @@ public class UserMapper {
         return AuthenticatedUser.of(
                 userEntity.getUserGuid(),
                 userEntity.getEmail(),
-                userEntity.getUsername(),
                 userEntity.getPassword(),
                 userEntity.getUserRole()
         );
