@@ -22,7 +22,7 @@ public class ProjectDetailWithFormResponseDto extends ProjectDetailResponseDto {
 		fillBase(builder, project);
 		return builder
 			.skillList(project.getProjectSkill())
-			.positionList(project.getProjectRequirement().stream().map(RequirementResponseDto::fromDomain).toList())
+			.positionList(project.getProjectRequirement().stream().map(PositionDto::fromDomain).toList())
 			.likeCount(project.getLikeCount())
 			.capacityClosed(project.isCapacityClosed())
 			.recruitStatus(project.getRecruitStatus())

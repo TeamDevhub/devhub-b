@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRequirementEntity, String> {

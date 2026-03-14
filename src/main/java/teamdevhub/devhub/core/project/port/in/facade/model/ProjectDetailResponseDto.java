@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import teamdevhub.devhub.core.project.domain.Project;
-import teamdevhub.devhub.core.project.domain.Requirement;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 
 @Getter
 @SuperBuilder
@@ -18,11 +18,12 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 	private List<String> skillList;
 	private List<PositionDto> positionList;
 	private String likeCount;
+	private boolean capacityClosed;
+	private String recruitStatus;
 
-	public static ProjectDetailResponseDto fromDomain(Project project) {
+	public static ProjectDetailResponseDto fromDomain(Project project, String imageFileUrl) {
 		ProjectDetailResponseDtoBuilder<?, ?> builder = ProjectDetailResponseDto.builder();
 		fillBase(builder, project);
-
 		List<PositionDto> positionDtoList = null;
 		if (project.getProjectRequirement() != null) {
 			positionDtoList = project.getProjectRequirement().stream()
@@ -34,6 +35,8 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 			.skillList(project.getProjectSkill())
 			.positionList(positionDtoList)
 			.likeCount(project.getLikeCount())
+			.capacityClosed(project.isCapacityClosed())
+			.recruitStatus(project.getRecruitStatus())
 			.build();
 	}
 
@@ -46,7 +49,7 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 		private String level;
 		private boolean full;
 
-		public static PositionDto fromDomain(Requirement requirement) {
+		public static PositionDto fromDomain(ProjectRequirement requirement) {
 			return PositionDto.builder()
 				.positionCd(requirement.getPositionCd())
 				.capacity(requirement.getCapacity())
