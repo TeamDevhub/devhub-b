@@ -10,7 +10,7 @@ import teamdevhub.devhub.core.admin.banner.port.in.command.SearchBannerRequestCo
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchBannerRequstDto {
+public class SearchBannerRequestDto {
     private String publicationStartDate;
     private String publicationEndDate;
     private String alwaysPublication;

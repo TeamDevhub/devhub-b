@@ -25,7 +25,7 @@ public class ProjectServiceTest {
 	private ProjectService projectService;
 	
 	private FakeUuidIdentifierProvider identifierProvider;
-	private FakeProjectRepository projectRepositroy;
+	private FakeProjectRepository projectRepository;
 	private FakeProjectRequirementRepository projectRequirementRepository;
 	private FakeProjectSkillRepository projectSkillRepository;
 	private FakeProjectApplicationFormRepository projectApplicationFormRepository;
@@ -33,12 +33,16 @@ public class ProjectServiceTest {
 	@BeforeEach
 	void init() {
 		identifierProvider = new FakeUuidIdentifierProvider("PROJECT_UUID");
-		projectRepositroy = new FakeProjectRepository();
+		projectRepository = new FakeProjectRepository();
 		projectRequirementRepository = new FakeProjectRequirementRepository();
 		projectSkillRepository = new FakeProjectSkillRepository();
 		projectApplicationFormRepository = new FakeProjectApplicationFormRepository();
-		
-		projectService = new ProjectService(identifierProvider, projectRepositroy, projectSkillRepository, projectRequirementRepository, projectApplicationFormRepository);
+
+		/**
+		 * 리뷰
+		 * 프로젝트 서비스 내 의존성 클래스가 6개가 필요하지만, 현재 5개로 주입
+		 */
+		projectService = new ProjectService(identifierProvider, projectRepository, projectSkillRepository, projectRequirementRepository, projectApplicationFormRepository);
 	}
 	
 	@Test
@@ -47,6 +51,10 @@ public class ProjectServiceTest {
 		//given
 		CreateProjectCommand createProjectCommand = CreateProjectCommand.builder()
 				.userGuid("1")
+				/**
+				 * 리뷰
+				 * 프로젝트 생성 커맨드 수정 필요
+				 */
 				.username("홍길동")
 				.attachmentFileGuid("2")
 				.imageFileGuid("3")
@@ -68,8 +76,8 @@ public class ProjectServiceTest {
 		//when
 		projectService.createProject(createProjectCommand);
 		//then
-		assertThat(projectRepositroy.getProjectDetail("PROJECT_UUID").getUsername()).isEqualTo("홍길동");
-		assertThat(projectRepositroy.getProjectDetail("PROJECT_UUID").getTitle()).isEqualTo("프로젝트 생성 테스트 제목입니다");
+		assertThat(projectRepository.getProjectDetail("PROJECT_UUID").getUsername()).isEqualTo("홍길동");
+		assertThat(projectRepository.getProjectDetail("PROJECT_UUID").getTitle()).isEqualTo("프로젝트 생성 테스트 제목입니다");
 		
 		assertThat(projectRequirementRepository.findByProjectGuid("PROJECT_UUID").get(0).getCapacity()).isEqualTo(2);
 		
@@ -84,6 +92,10 @@ public class ProjectServiceTest {
 		//given
 		CreateProjectCommand createProjectCommand = CreateProjectCommand.builder()
 				.userGuid("1")
+				/**
+				 * 리뷰
+				 * 프로젝트 생성 커맨드 수정 필요
+				 */
 				.username("홍길동")
 				.attachmentFileGuid("2")
 				.imageFileGuid("3")

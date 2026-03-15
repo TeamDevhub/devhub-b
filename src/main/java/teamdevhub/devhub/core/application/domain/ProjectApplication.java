@@ -28,7 +28,11 @@ public class ProjectApplication {
 	private String positionCd;
 	private String levelCd;
 
-	private String aplyDate;
+	/**
+	 * 리뷰
+	 * 오탈자 수정했습니다.(aply-> apply)
+	 */
+	private String applyDate;
 
 	private AuditInfo auditInfo;
 }

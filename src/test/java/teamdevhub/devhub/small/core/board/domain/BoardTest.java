@@ -14,6 +14,7 @@ import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 
 class BoardTest {
+
 	@Test
     @DisplayName("게시글을_생성한다")
 	void createBoard() {

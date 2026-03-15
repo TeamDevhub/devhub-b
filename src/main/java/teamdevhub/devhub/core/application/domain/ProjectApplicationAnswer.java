@@ -25,5 +25,9 @@ public class ProjectApplicationAnswer {
 	private String positionCd;
 	private String introduction;
 
-	private String aplyDate;
+	/**
+	 * 리뷰
+	 * 오탈자 수정했습니다.(aply-> apply)
+	 */
+	private String applyDate;
 }
