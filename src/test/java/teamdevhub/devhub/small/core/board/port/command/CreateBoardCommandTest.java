@@ -12,11 +12,11 @@ import teamdevhub.devhub.constant.UserTestConstant;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 
 class CreateBoardCommandTest {
-	
-	
+
 	@Test
 	@DisplayName("게시글_생성_커맨드_검증")
 	void createRequestDtoToCommand() {
+
 		// given, when
 		CreateBoardCommand createBoardCommand = CreateBoardCommand.builder()
 				.userGuid(UserTestConstant.TEST_USER_GUID_1)

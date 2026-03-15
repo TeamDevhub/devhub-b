@@ -45,9 +45,15 @@ public class ApplicationFormServiceTest {
 				);
 		
 		//when
+		/**
+		 * 리뷰
+		 * result 값을 활용해서 값검증을 진행하면 더 좋을 것 같습니다
+		 * ex) assertThat(result).containsExactly("F", "M");
+		 */
 		List<String> result = applicationFormService.saveApplicationForms(input);
 		
 		//then
+
 		assertThat(applicationFormRepository.findByApplicationFormGuid("APPLICATION_UUID").getTypeCd()).isEqualTo("selectbox");
 		assertThat(applicationFormRepository.findByApplicationFormGuid("APPLICATION_UUID").getTitle()).isEqualTo("성별");
 		assertThat(applicationFormRepository.findByApplicationFormGuid("APPLICATION_UUID").getHelpText()).isEqualTo("성별을 선택하세요");

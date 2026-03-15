@@ -37,14 +37,18 @@ public class ProjectController {
 	@PostMapping
 	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
 		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid()));
-        return ResponseEntity.ok(
-                DataApiResponseDto.successWithoutData(
-                        SuccessCode.CREATE_SUCCESS
-                )
-        );
+        return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
     }
 
-	@GetMapping("/list")
+	/**
+	 * 리뷰
+	 * API 명세에 따라 목록조회는 list 없이 단순 GetMapping 만 명시하는 걸로 변경했습니다.
+	 * @param searchProjectRequestDto
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	@GetMapping
     public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto, @RequestParam("page") int page, @RequestParam("size") int size) {
         return ResponseEntity.ok(projectFacade.getProjectList(searchProjectRequestDto.toSearchProjectListCommand(), PageCommand.of(page, size)));
     }
@@ -53,9 +57,7 @@ public class ProjectController {
 	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable("projectGuid") String projectGuid) {
 		ProjectDetailResponseDto responseDto = projectFacade.getProjectDetail(projectGuid);
 		return ResponseEntity.ok(
-			DataApiResponseDto.successWithData(
-				SuccessCode.READ_SUCCESS,
-				responseDto)
+			DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, responseDto)
 		);
 	
 	}
@@ -64,9 +66,7 @@ public class ProjectController {
 	public ResponseEntity<DataApiResponseDto<ProjectDetailWithFormResponseDto>> getProjectDetailWithForm(@PathVariable("projectGuid") String projectGuid) {
 		ProjectDetailWithFormResponseDto responseDto = projectFacade.getProjectDetailWithForm(projectGuid);
 		return ResponseEntity.ok(
-			DataApiResponseDto.successWithData(
-				SuccessCode.READ_SUCCESS,
-				responseDto)
+			DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, responseDto)
 		);
 	
 	}
@@ -76,8 +76,7 @@ public class ProjectController {
 			@RequestBody UpdateProjectRequestDto updateProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
 		projectFacade.updateProject(projectGuid, updateProjectRequestDto.toCommand());
 		return ResponseEntity.ok(
-			DataApiResponseDto.successWithoutData(
-				SuccessCode.UPDATE_SUCCESS)
+			DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS)
 		);
 	
 	}
@@ -86,11 +85,8 @@ public class ProjectController {
 	public ResponseEntity<DataApiResponseDto<Void>> deleteProject(@PathVariable("projectGuid") String projectGuid) {
 		projectFacade.deleteProject(projectGuid);
 		return ResponseEntity.ok(
-			DataApiResponseDto.successWithoutData(
-				SuccessCode.DELETE_SUCCESS)
+				DataApiResponseDto.successWithoutData(SuccessCode.DELETE_SUCCESS)
 		);
 	
 	}
-	
-	
 }

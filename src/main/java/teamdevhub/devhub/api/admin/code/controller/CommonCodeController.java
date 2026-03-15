@@ -14,13 +14,10 @@ import teamdevhub.devhub.core.admin.code.port.in.facade.CommonCodeFacade;
 @RequiredArgsConstructor
 public class CommonCodeController {
 
-    private  final CommonCodeFacade commonCodeFacade;
+    private final CommonCodeFacade commonCodeFacade;
 
     @GetMapping("/list")
     public ResponseEntity<DataListApiResponseDto<CommonCodeResponseDto>> getCommonCodeList() {
         return ResponseEntity.ok(commonCodeFacade.getCommonCodeList());
     }
-
-
-
 }

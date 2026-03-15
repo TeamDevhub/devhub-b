@@ -20,6 +20,11 @@ public class ApplicationController {
 
 	private final ProjectApplicationFacade projectApplicationFacade;
 
+	/**
+	 * 리뷰
+	 * @PathVaribale 로 작성하신 projectGuid를 따로 사용하진 않는데, 혹시 사용하신 이유가 있을까요?
+	 * HTTP 메서드 PATCH 는 사용하지 않고 PutMapping 으로 사용하도록 컨벤션에 적어놓았습니다.
+	 */
 	@PatchMapping("/{projectGuid}/applications/{applicationGuid}/approve")
 	public ResponseEntity<DataApiResponseDto<Void>> approveApplication(
 		@PathVariable("projectGuid") String projectGuid,
@@ -54,6 +59,10 @@ public class ApplicationController {
 		);
 	}
 
+	/**
+	 * 리뷰
+	 * @PathVaribale 로 작성하신 projectGuid를 따로 사용하진 않는데, 혹시 사용하신 이유가 있을까요?
+	 */
 	@GetMapping("/{projectGuid}/applications/{applicationGuid}")
 	public ResponseEntity<DataApiResponseDto<ProjectApplicationDetailWrapperResponseDto>> getApplicationDetail(
 		@PathVariable("projectGuid") String projectGuid,

@@ -33,10 +33,16 @@ import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedU
 public class BoardController {
 	
 	private final BoardFacade boardFacade;
-	
+
+	/**
+	 * 리뷰
+	 * PageCommand.of((pageRequestDto.getPage()-1) 이 부분이 정확히 어떤 의미일까요? 페이지가 0부터 시작하기 때문에 해당 소스처럼 작성하신걸까요?
+	 * @param searchBoardRequestDto
+	 * @param pageRequestDto
+	 * @return
+	 */
 	@GetMapping
-	public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> listBoard(
-			@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto) {
+	public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> listBoard(@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto) {
 		return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(), PageCommand.of((pageRequestDto.getPage()-1), pageRequestDto.getSize())));
 	}
 	
@@ -44,7 +50,15 @@ public class BoardController {
 	public ResponseEntity<DataApiResponseDto<Void>> createBoard(@RequestBody CreateBoardRequestDto createBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
 		return ResponseEntity.ok(boardFacade.createBoard(createBoardRequestDto.toCommand(authenticatedUser.userGuid())));
 	}
-	
+
+	/**
+	 * 퍼사드로 진입하는 요청은 외부 통신 규경인 HttpServletRequest/Response 와는 무관하게 진행되어야하는 것으로 판단됩니다.
+	 * 조회 수 관련 로직해서 해당 request, response 객체가 필수적으로 필요한 사항일까요?
+	 * @param boardGuid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@GetMapping("/{boardGuid}")
 	public ResponseEntity<DataApiResponseDto<BoardDetailResponseDto>> detailBoard(@PathVariable("boardGuid") String boardGuid, 
 			HttpServletRequest request, HttpServletResponse response) {

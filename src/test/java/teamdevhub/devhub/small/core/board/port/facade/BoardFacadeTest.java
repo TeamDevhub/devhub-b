@@ -38,7 +38,7 @@ public class BoardFacadeTest {
 				BOARD_CONTENT,
 				BOARD_CATEGORY_CD,
 				UserTestConstant.TEST_USER_GUID_1
-				);
+		);
 		
 		// when
 		boardFacade.createBoard(createBoardCommand);
@@ -46,6 +46,4 @@ public class BoardFacadeTest {
 		// then
 		assertThat(boardUseCase.isCalled()).isTrue();
 	}
-	
-
 }
