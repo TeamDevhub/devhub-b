@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 
+import java.util.Optional;
+
 public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRequirementEntity, String> {
 
 	@Query("""
@@ -40,5 +42,6 @@ public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRe
 			where pr.projectGuid = :projectGuid
 			""")
 	void deleteAllByProjectGuid(@Param("projectGuid") String projectGuid);
+	Optional<ProjectRequirementEntity> findByProjectRequirementGuid(String projectRequirementGuid);
 
 }

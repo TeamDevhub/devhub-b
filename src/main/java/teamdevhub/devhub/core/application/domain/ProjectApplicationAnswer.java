@@ -2,33 +2,28 @@ package teamdevhub.devhub.core.application.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.core.common.audit.AuditInfo;
 
 import java.util.List;
 
 @Getter
 @Builder
-public class ProjectApplication {
+public class ProjectApplicationAnswer {
 
+	private String projectApplicationFormGuid;
+	private String applicationAnswerGuid;
 	private String applicationGuid;
-	private String requirementGuid;
-	private String applicantGuid;
-	private String approverGuid;
-	private String decisionDate;
-	private String statusCd;
-	private boolean isCanceled;
+	private String applicationFormGuid;
+	private String projectGuid;
+	private String fileGuid;
+	private String content;
 
 	// 지원자 유저 정보
 	private String nickName;
 	private String email;
 	private double mannerDegree;
 	private List<String> userSkillList;
-
-	// 모집 요건 정보
 	private String positionCd;
-	private String levelCd;
+	private String introduction;
 
 	private String aplyDate;
-
-	private AuditInfo auditInfo;
 }
