@@ -1,4 +1,4 @@
-package teamdevhub.devhub.outbound.admin.terms.adapter;
+package teamdevhub.devhub.outbound.terms.adapter.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

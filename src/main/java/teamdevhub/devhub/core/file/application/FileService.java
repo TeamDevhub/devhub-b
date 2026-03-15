@@ -37,9 +37,9 @@ public class FileService implements FileUseCase {
     @Override
     @Transactional(readOnly = true)
     public FileResource find(String fileGuid) {
-        FileMetadata metadata = fileMetadataRepository.find(fileGuid);
+        FileMetadata fileMetadata = fileMetadataRepository.find(fileGuid);
         byte[] content = fileStorage.read(fileGuid);
-        return FileResource.of(metadata, content);
+        return FileResource.of(fileMetadata, content);
     }
 
     @Override
