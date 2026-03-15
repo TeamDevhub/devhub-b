@@ -11,6 +11,8 @@ import teamdevhub.devhub.core.terms.port.in.usecase.TermsAgreementUseCase;
 import teamdevhub.devhub.core.terms.port.out.TermsAgreementRepository;
 import teamdevhub.devhub.core.terms.port.out.TermsRepository;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -21,17 +23,23 @@ public class TermsAgreementService implements TermsAgreementUseCase {
     private final IdentifierProvider identifierProvider;
 
     @Override
-    public void agreeTerms(TermsAgreementCommand command) {
+    public void agreeTerms(TermsAgreementCommand termsAgreementCommand) {
 
-        for (var agreement : command.termsAgreementList()) {
+        String userGuid = termsAgreementCommand.userGuid();
+        List<TermsAgreementCommand.TermsAgreement> agreements = termsAgreementCommand.termsAgreementList();
 
-            Terms terms = termsRepository.findByTermsGuid(agreement.termsGuid());
+        for (TermsAgreementCommand.TermsAgreement agreement : agreements) {
+
+            String termsGuid = agreement.termsGuid();
+            boolean agreed = agreement.isAgreed();
+
+            Terms terms = termsRepository.findByTermsGuid(termsGuid);
 
             TermsAgreement userTermsAgreement = TermsAgreement.create(
                     terms,
                     identifierProvider.generateIdentifier(),
-                    command.userGuid(),
-                    agreement.isAgreed()
+                    userGuid,
+                    agreed
             );
 
             termsAgreementRepository.save(userTermsAgreement);

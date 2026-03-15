@@ -16,6 +16,16 @@ public class TermsController {
 //    private final TermsFacade termsFacade;
 //
 //    @GetMapping
+//    public ResponseEntity<DataApiResponseDto<Void>> list(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+//        termsFacade.list(signupRequestDto.toSignupCommand());
+//        return ResponseEntity.ok(
+//                DataApiResponseDto.successWithoutData(
+//                        SuccessCode.SIGNUP_SUCCESS
+//                )
+//        );
+//    }
+//
+//    @PostMapping
 //    public ResponseEntity<DataApiResponseDto<Void>> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
 //        termsFacade.list(signupRequestDto.toSignupCommand());
 //        return ResponseEntity.ok(
