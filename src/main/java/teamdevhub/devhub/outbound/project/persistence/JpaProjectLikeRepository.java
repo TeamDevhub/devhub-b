@@ -33,5 +33,5 @@ public interface JpaProjectLikeRepository extends JpaRepository<ProjectLikeEntit
 			delete from ProjectLikeEntity pl
 			where pl.projectGuid = :projectGuid
 			""")
-	void deleteAllByProjectGuid(@Param("ProjectGuid")String projectGuid);
+	void deleteAllByProjectGuid(@Param("projectGuid")String projectGuid);
 }
