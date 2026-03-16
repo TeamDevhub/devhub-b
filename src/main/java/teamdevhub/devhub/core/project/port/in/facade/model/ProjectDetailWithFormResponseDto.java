@@ -10,17 +10,19 @@ import teamdevhub.devhub.core.project.domain.Project;
 @Getter
 @SuperBuilder
 public class ProjectDetailWithFormResponseDto extends ProjectDetailResponseDto {
-	
-	private List<String> applicationFormList;
+
+	private String email;
+	private List<ApplicationFormResponseDto> applicationFormList;
 	private List<ApplicationFormResponseDto> additionalFormList;
 	private String imageFileName;
 	private String attachmentFileName;
-	
-	public static ProjectDetailWithFormResponseDto fromDomain(Project project, List<String> applicationFormList, List<ApplicationFormResponseDto> additionalFormList
+
+	public static ProjectDetailWithFormResponseDto fromDomain(Project project, String email, List<ApplicationFormResponseDto> applicationFormList, List<ApplicationFormResponseDto> additionalFormList
 			, String imageFileName, String attachmentFilename) {
 		ProjectDetailWithFormResponseDtoBuilder<?, ?> builder = ProjectDetailWithFormResponseDto.builder();
 		fillBase(builder, project);
 		return builder
+			.email(email)
 			.skillList(project.getProjectSkill())
 			.positionList(project.getProjectRequirement().stream().map(PositionDto::fromDomain).toList())
 			.likeCount(project.getLikeCount())

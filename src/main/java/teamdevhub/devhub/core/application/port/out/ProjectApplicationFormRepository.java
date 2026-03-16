@@ -3,6 +3,7 @@ package teamdevhub.devhub.core.application.port.out;
 import java.util.List;
 import java.util.Set;
 
+import teamdevhub.devhub.core.application.domain.ProjectApplicationForm;
 import teamdevhub.devhub.core.application.port.in.command.CreateProjectApplicationFormCommand;
 
 public interface ProjectApplicationFormRepository {
@@ -12,4 +13,6 @@ public interface ProjectApplicationFormRepository {
 	void deleteByProjectGuid(String projectGuid);
 
 	List<String> findAllGuidByProjectGuid(String projectGuid);
+
+	List<ProjectApplicationForm> findByProjectGuid(String projectGuid);
 }

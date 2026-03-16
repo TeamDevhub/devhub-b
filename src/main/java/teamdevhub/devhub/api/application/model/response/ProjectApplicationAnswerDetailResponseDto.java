@@ -14,7 +14,7 @@ public class ProjectApplicationAnswerDetailResponseDto {
 	private String projectApplicationFormGuid;
 	private String fileGuid;
 	private String content;
-	private String nickname;
+	private String userName;
 	private String email;
 	private String mannerDegree;
 	private List<String> userSkillList;
@@ -27,7 +27,7 @@ public class ProjectApplicationAnswerDetailResponseDto {
 			.projectApplicationFormGuid(answer.getProjectApplicationFormGuid())
 			.fileGuid(answer.getFileGuid())
 			.content(answer.getContent())
-			.nickname(answer.getNickName())
+			.userName(answer.getUserName())
 			.email(answer.getEmail())
 			.mannerDegree(String.valueOf(answer.getMannerDegree()))
 			.userSkillList(answer.getUserSkillList())

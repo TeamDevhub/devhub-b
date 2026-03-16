@@ -26,7 +26,7 @@ public class ApplicationMapper {
 			.decisionDate(applicationEntity.getDecisionDate())
 			.statusCd(applicationEntity.getStatusCd())
 			.isCanceled(applicationEntity.isCanceled())
-			.nickName(applicantEntity.getUsername())
+			.userName(applicantEntity.getUsername())
 			.email(applicantEntity.getEmail())
 			.mannerDegree(applicantEntity.getMannerDegree())
 			.userSkillList(userSkillList)

@@ -18,7 +18,7 @@ public class ProjectApplicationAnswer {
 	private String content;
 
 	// 지원자 유저 정보
-	private String nickName;
+	private String userName;
 	private String email;
 	private double mannerDegree;
 	private List<String> userSkillList;

@@ -9,6 +9,7 @@ import teamdevhub.devhub.core.admin.form.port.in.command.ApplicationFormCommand;
 @Getter
 @Builder
 public class ApplicationFormResponseDto {
+	private String projectApplicationFormGuid;
 	private String applicationFormGuid;
 	private String typeCd;
 	private String title;
@@ -17,7 +18,7 @@ public class ApplicationFormResponseDto {
 	private boolean isCustomized;
 	private boolean isUsed;
 	private List<String> itemList;
-	
+
 	public static ApplicationFormResponseDto fromCommand(ApplicationFormCommand inputCommand) {
 		return ApplicationFormResponseDto.builder()
 				.applicationFormGuid(inputCommand.getApplicationFormGuid())
