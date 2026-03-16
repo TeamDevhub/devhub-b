@@ -126,9 +126,16 @@ public class ProjectFacade {
 						.itemList(cmd.getItemList())
 						.build())
 				.toList();
-
-		// 파일 이름 조회
-		return ProjectDetailWithFormResponseDto.fromDomain(project, email, applicationFormResponseList, additionalFormResponseList, "이미지 파일", "첨부파일");
+		
+		String imageFileName = null;
+		String attachmentFileName = null;
+		if(project.getImageFileGuid() != null && !project.getImageFileGuid().isBlank()) {
+			imageFileName = fileUseCase.find(project.getImageFileGuid()).metadata().originalName();
+        }
+		if(project.getAttachmentFileGuid() != null && !project.getAttachmentFileGuid().isBlank()) {
+			attachmentFileName = fileUseCase.find(project.getAttachmentFileGuid()).metadata().originalName();
+        }
+		return ProjectDetailWithFormResponseDto.fromDomain(project, email, applicationFormResponseList, additionalFormResponseList, imageFileName, attachmentFileName);
 	}
 
 }
