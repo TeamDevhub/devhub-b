@@ -13,7 +13,7 @@ public class ProjectApplicationBasicResponseDto {
 	private String applicantGuid;
 	private String approverGuid;
 	private String decisionDate;
-    private String aplyDate;
+	private String applyDate;
 
 	public static ProjectApplicationBasicResponseDto fromDomain(ProjectApplication application) {
 		return ProjectApplicationBasicResponseDto.builder()
@@ -22,7 +22,7 @@ public class ProjectApplicationBasicResponseDto {
 			.applicantGuid(application.getApplicantGuid())
 			.approverGuid(application.getApproverGuid())
 			.decisionDate(application.getDecisionDate())
-            .aplyDate(application.getAplyDate())
+			.applyDate(application.getApplyDate())
 			.build();
 	}
 }

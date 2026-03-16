@@ -13,6 +13,7 @@ import teamdevhub.devhub.core.application.port.out.ApplicationRepository;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
+import teamdevhub.devhub.shared.enums.ProjectApprovalStatus;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,7 +35,7 @@ public class ProjectApplicationService implements ProjectApplicationQueryUseCase
 			.applicationGuid(applicationGuid)
 			.requirementGuid(command.requirementGuid())
 			.applicantGuid(command.applicantGuid())
-			.statusCd("001")
+			.statusCd(ProjectApprovalStatus.PENDING.getCode())
 			.isCanceled(false)
 			.build();
 

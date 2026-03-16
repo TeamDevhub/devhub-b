@@ -22,7 +22,7 @@ public class ProjectApplicationDetailResponseDto {
 	private List<String> userSkillList;
 	private String positionCd;
 	private String levelCd;
-	private String aplyDate;
+	private String applyDate;
 
 	public static ProjectApplicationDetailResponseDto fromDomain(ProjectApplication application) {
 		return ProjectApplicationDetailResponseDto.builder()
@@ -38,7 +38,7 @@ public class ProjectApplicationDetailResponseDto {
 			.userSkillList(application.getUserSkillList())
 			.positionCd(application.getPositionCd())
 			.levelCd(application.getLevelCd())
-			.aplyDate(application.getAplyDate())
+			.applyDate(application.getApplyDate())
 			.build();
 	}
 }
