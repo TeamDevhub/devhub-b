@@ -30,6 +30,24 @@ public class Terms {
         this.isDeleted = isDeleted;
     }
 
+    public static Terms of(
+            String termsGuid,
+            String title,
+            String content,
+            boolean isRequired,
+            boolean isUsed,
+            boolean isDeleted
+    ) {
+        return Terms.builder()
+                .termsGuid(termsGuid)
+                .title(title)
+                .content(content)
+                .isRequired(isRequired)
+                .isUsed(isUsed)
+                .isDeleted(isDeleted)
+                .build();
+    }
+
     public void validateAgreement(boolean isAgreed) {
 
         if (isDeleted) {

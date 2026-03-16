@@ -10,7 +10,11 @@ public class TermsMapper {
     public static Terms toDomain(TermsEntity entity) {
         return Terms.of(
                 entity.getTermsGuid(),
-                entity.isRequired()
+                entity.getTitle(),
+                entity.getContent(),
+                entity.isRequired(),
+                entity.isUsed(),
+                entity.isDeleted()
         );
     }
 
