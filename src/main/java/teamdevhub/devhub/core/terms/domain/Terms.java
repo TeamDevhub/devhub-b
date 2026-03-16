@@ -2,6 +2,7 @@ package teamdevhub.devhub.core.terms.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import teamdevhub.devhub.core.terms.port.in.command.CreateTermsCommand;
 
 @Getter
 public class Terms {
@@ -61,5 +62,16 @@ public class Terms {
         if (isRequired && !isAgreed) {
             throw new IllegalStateException("필수 약관은 동의해야 합니다.");
         }
+    }
+
+    public static Terms createTerms(CreateTermsCommand createTermsCommand, String termsGuid) {
+        return Terms.builder()
+                .termsGuid(termsGuid)
+                .title(createTermsCommand.title())
+                .content(createTermsCommand.content())
+                .isRequired(createTermsCommand.isRequired())
+                .isUsed(createTermsCommand.isUsed())
+                .isDeleted(createTermsCommand.isDeleted())
+                .build();
     }
 }

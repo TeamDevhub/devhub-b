@@ -26,15 +26,15 @@ public class UserTermsAgreement {
             Terms terms,
             String agreementGuid,
             String userGuid,
-            boolean agreed
+            boolean isAgreed
     ) {
 
-        terms.validateAgreement(agreed);
+        terms.validateAgreement(isAgreed);
         return new UserTermsAgreement(
                 agreementGuid,
                 terms.getTermsGuid(),
                 userGuid,
-                agreed
+                isAgreed
         );
     }
 }

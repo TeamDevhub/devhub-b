@@ -7,7 +7,6 @@ import teamdevhub.devhub.core.terms.port.in.command.CreateTermsCommand;
 
 public interface TermsUseCase {
 
-
     PageResult<Terms> listTerms(PageCommand pageCommand);
     void registerTerms(CreateTermsCommand createTermsCommand);
 }
