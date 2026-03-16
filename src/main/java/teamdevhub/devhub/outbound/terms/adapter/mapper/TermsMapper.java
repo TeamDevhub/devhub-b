@@ -7,23 +7,23 @@ import teamdevhub.devhub.outbound.terms.adapter.entity.TermsEntity;
 
 public class TermsMapper {
 
-    public static Terms toDomain(TermsEntity entity) {
+    public static Terms toDomain(TermsEntity termsEntity) {
         return Terms.of(
-                entity.getTermsGuid(),
-                entity.getTitle(),
-                entity.getContent(),
-                entity.isRequired(),
-                entity.isUsed(),
-                entity.isDeleted()
+                termsEntity.getTermsGuid(),
+                termsEntity.getTitle(),
+                termsEntity.getContent(),
+                termsEntity.isRequired(),
+                termsEntity.isUsed(),
+                termsEntity.isDeleted()
         );
     }
 
-    public static TermsAgreementEntity toEntity(UserTermsAgreement domain) {
+    public static TermsAgreementEntity toEntity(UserTermsAgreement userTermsAgreement) {
         return TermsAgreementEntity.builder()
-                .termsAgreementGuid(domain.getTermsAgreementGuid())
-                .termsGuid(domain.getTermsGuid())
-                .userGuid(domain.getUserGuid())
-                .isAgreed(domain.isAgreed())
+                .termsAgreementGuid(userTermsAgreement.getTermsAgreementGuid())
+                .termsGuid(userTermsAgreement.getTermsGuid())
+                .userGuid(userTermsAgreement.getUserGuid())
+                .isAgreed(userTermsAgreement.isAgreed())
                 .build();
     }
 }

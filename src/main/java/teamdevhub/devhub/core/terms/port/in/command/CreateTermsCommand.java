@@ -1,4 +1,13 @@
 package teamdevhub.devhub.core.terms.port.in.command;
 
-public class CreateTermsCommand {
+import lombok.Builder;
+
+@Builder
+public record CreateTermsCommand(
+        String title,
+        String content,
+        boolean isRequired,
+        boolean isUsed,
+        boolean isDeleted
+) {
 }

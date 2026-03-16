@@ -1,8 +1,8 @@
-package teamdevhub.devhub.core.terms.port.in.facade;
+package teamdevhub.devhub.core.terms.application;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.terms.domain.Terms;
@@ -12,15 +12,15 @@ import teamdevhub.devhub.core.terms.port.in.usecase.TermsUseCase;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TermsFacade {
+public class TermsService implements TermsUseCase {
 
-    private final TermsUseCase termsUseCase;
-
+    @Override
     public PageResult<Terms> listTerms(PageCommand pageCommand) {
-        return termsUseCase.listTerms(pageCommand);
+        return null;
     }
 
+    @Override
     public void registerTerms(CreateTermsCommand createTermsCommand) {
-        termsUseCase.registerTerms(createTermsCommand);
+
     }
 }

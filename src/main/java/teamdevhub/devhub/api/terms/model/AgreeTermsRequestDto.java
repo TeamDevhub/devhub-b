@@ -12,7 +12,7 @@ import teamdevhub.devhub.core.terms.domain.TermsAgreementItem;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TermsAgreementRequestDto {
+public class AgreeTermsRequestDto {
 
     @NotBlank
     private String termsGuid;
