@@ -44,14 +44,14 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 	@SuperBuilder
 	@NoArgsConstructor
 	public static class PositionDto {
-		private String positionCd;
+		private String position;
 		private int capacity;
 		private String level;
 		private boolean full;
 
 		public static PositionDto fromDomain(ProjectRequirement requirement) {
 			return PositionDto.builder()
-				.positionCd(requirement.getPositionCd())
+				.position(requirement.getPositionCd())
 				.capacity(requirement.getCapacity())
 				.level(requirement.getLevelCd())
 				.full(false)

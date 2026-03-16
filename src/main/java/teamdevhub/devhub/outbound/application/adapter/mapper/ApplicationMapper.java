@@ -32,7 +32,7 @@ public class ApplicationMapper {
 			.userSkillList(userSkillList)
 			.positionCd(requirementEntity.getPositionCd())
 			.levelCd(requirementEntity.getLevelCd())
-			.aplyDate(applicationEntity.getRegisteredDate() != null
+			.applyDate(applicationEntity.getRegisteredDate() != null
 				? applicationEntity.getRegisteredDate().toLocalDate().toString()
 				: null)
 			.auditInfo(AuditInfo.of(

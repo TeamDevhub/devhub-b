@@ -38,7 +38,7 @@ public class ProjectApplicationDetailResponseDto {
 			.userSkillList(application.getUserSkillList())
 			.positionCd(application.getPositionCd())
 			.levelCd(application.getLevelCd())
-			.aplyDate(application.getAplyDate())
+			.aplyDate(application.getApplyDate())
 			.build();
 	}
 }

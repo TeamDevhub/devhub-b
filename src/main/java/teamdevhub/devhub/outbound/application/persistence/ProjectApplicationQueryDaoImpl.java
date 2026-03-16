@@ -162,7 +162,7 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 				.userSkillList(skillList)
 				.positionCd(requirement != null ? requirement.getPositionCd() : null)
 				.introduction(user != null ? user.getIntroduction() : null)
-				.aplyDate(app.getRegisteredDate() != null
+				.applyDate(app.getRegisteredDate() != null
 					? app.getRegisteredDate().toLocalDate().toString() : null)
 				.build()
 			)
