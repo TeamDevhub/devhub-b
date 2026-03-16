@@ -29,11 +29,12 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
     }
 
     @Override
-    public void signup(SignupUserCommand signupUserCommand) {
+    public String signup(SignupUserCommand signupUserCommand) {
         this.called = true;
         CreateUserCommand createUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User user = User.createGeneralUser(createUserCommand);
         store.put(user.getUserGuid(), user);
+        return user.getUserGuid();
     }
 
     @Override

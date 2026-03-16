@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.core.terms.domain.TermsAgreementItem;
 
 @Getter
 @Builder
@@ -19,4 +20,10 @@ public class TermsAgreementRequestDto {
     @NotNull(message = "약관 동의 여부는 필수입니다")
     private boolean isAgreed;
 
+    public TermsAgreementItem toTermsAgreementItem() {
+        return new TermsAgreementItem(
+                this.termsGuid,
+                this.isAgreed
+        );
+    }
 }

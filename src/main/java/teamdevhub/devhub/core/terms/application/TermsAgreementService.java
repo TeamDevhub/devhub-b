@@ -5,9 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.terms.domain.Terms;
-import teamdevhub.devhub.core.terms.domain.TermsAgreement;
-import teamdevhub.devhub.core.terms.port.in.command.TermsAgreementCommand;
-import teamdevhub.devhub.core.terms.port.in.usecase.TermsAgreementUseCase;
+import teamdevhub.devhub.core.terms.domain.TermsAgreementItem;
+import teamdevhub.devhub.core.terms.domain.UserTermsAgreement;
+import teamdevhub.devhub.core.terms.port.in.command.AgreeTermsCommand;
+import teamdevhub.devhub.core.terms.port.in.usecase.TermsAgreeUseCase;
 import teamdevhub.devhub.core.terms.port.out.TermsAgreementRepository;
 import teamdevhub.devhub.core.terms.port.out.TermsRepository;
 
@@ -16,26 +17,26 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TermsAgreementService implements TermsAgreementUseCase {
+public class TermsAgreementService implements TermsAgreeUseCase {
 
     private final TermsRepository termsRepository;
     private final TermsAgreementRepository termsAgreementRepository;
     private final IdentifierProvider identifierProvider;
 
     @Override
-    public void agreeTerms(TermsAgreementCommand termsAgreementCommand) {
+    public void agreeTerms(AgreeTermsCommand command) {
 
-        String userGuid = termsAgreementCommand.userGuid();
-        List<TermsAgreementCommand.TermsAgreement> agreements = termsAgreementCommand.termsAgreementList();
+        String userGuid = command.userGuid();
+        List<TermsAgreementItem> agreements = command.termsAgreementItemList();
 
-        for (TermsAgreementCommand.TermsAgreement agreement : agreements) {
+        for (TermsAgreementItem agreement : agreements) {
 
             String termsGuid = agreement.termsGuid();
-            boolean agreed = agreement.isAgreed();
+            boolean agreed = agreement.agreed();
 
             Terms terms = termsRepository.findByTermsGuid(termsGuid);
 
-            TermsAgreement userTermsAgreement = TermsAgreement.create(
+            UserTermsAgreement userTermsAgreement = UserTermsAgreement.create(
                     terms,
                     identifierProvider.generateIdentifier(),
                     userGuid,

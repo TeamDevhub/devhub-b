@@ -7,24 +7,41 @@ import lombok.Getter;
 public class Terms {
 
     private final String termsGuid;
-    private final boolean required;
+    private final String title;
+    private final String content;
+    private final boolean isRequired;
+    private final boolean isUsed;
+    private final boolean isDeleted;
 
     @Builder
-    private Terms(String termsGuid, boolean required) {
+    private Terms(
+            String termsGuid,
+            String title,
+            String content,
+            boolean isRequired,
+            boolean isUsed,
+            boolean isDeleted
+    ) {
         this.termsGuid = termsGuid;
-        this.required = required;
+        this.title = title;
+        this.content = content;
+        this.isRequired = isRequired;
+        this.isUsed = isUsed;
+        this.isDeleted = isDeleted;
     }
 
-    public void validateAgreement(boolean agreed) {
-        if (required && !agreed) {
+    public void validateAgreement(boolean isAgreed) {
+
+        if (isDeleted) {
+            throw new IllegalStateException("삭제된 약관입니다.");
+        }
+
+        if (!isUsed) {
+            throw new IllegalStateException("사용 중인 약관이 아닙니다.");
+        }
+
+        if (isRequired && !isAgreed) {
             throw new IllegalStateException("필수 약관은 동의해야 합니다.");
         }
-    }
-
-    public static Terms of(String termsGuid, boolean required) {
-        return Terms.builder()
-                .termsGuid(termsGuid)
-                .required(required)
-                .build();
     }
 }
