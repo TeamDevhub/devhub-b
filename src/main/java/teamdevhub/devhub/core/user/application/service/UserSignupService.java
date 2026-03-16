@@ -49,11 +49,11 @@ public class UserSignupService implements UserSignupUseCase {
     }
 
     @Override
-    public void signup(SignupUserCommand signupUserCommand) {
+    public String signup(SignupUserCommand signupUserCommand) {
         User user = createGeneralUser(signupUserCommand);
         saveUserPositions(user.getUserGuid(), signupUserCommand.positionList());
         saveUserSkills(user.getUserGuid(), signupUserCommand.skillList());
-        userRepository.save(user);
+        return userRepository.save(user).getUserGuid();
     }
 
     @Override

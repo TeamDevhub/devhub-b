@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.api.terms.model.AgreeTermsRequestDto;
 import teamdevhub.devhub.api.web.validator.RegexPattern;
 import teamdevhub.devhub.api.web.validator.RegexMatch;
 import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
@@ -43,6 +44,10 @@ public class SignupRequestDto {
     @Size(min = 1, message = "보유 스킬은 최소 1개 이상 선택해야 합니다")
     private List<@NotBlank String> skillList;
 
+    @NotNull(message = "약관 동의 정보는 필수입니다")
+    @Size(min = 1, message = "약관 동의는 최소 1개 이상 필요합니다")
+    private List<AgreeTermsRequestDto> termsAgreementList;
+
     public SignupUserCommand toSignupCommand() {
         return SignupUserCommand.builder()
                 .email(this.email)
@@ -51,6 +56,10 @@ public class SignupRequestDto {
                 .introduction(this.introduction)
                 .positionList(this.positionList)
                 .skillList(this.skillList)
+                .termsAgreementItemList(
+                        this.termsAgreementList.stream()
+                                .map(AgreeTermsRequestDto::toTermsAgreementItem)
+                                .toList())
                 .verificationTarget(VerificationTarget.of(VerificationType.EMAIL, this.email))
                 .build();
     }

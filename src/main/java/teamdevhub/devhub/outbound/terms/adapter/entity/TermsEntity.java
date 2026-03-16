@@ -22,7 +22,7 @@ public class TermsEntity extends BaseEntity {
     private String termsGuid;
     
     @Column(name = "name", nullable = false)
-    private String name;
+    private String title;
     
     @Column(name = "content", nullable = false)
     private String content;

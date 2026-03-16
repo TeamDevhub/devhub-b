@@ -3,39 +3,38 @@ package teamdevhub.devhub.core.terms.domain;
 import lombok.Getter;
 
 @Getter
-public class TermsAgreement {
+public class UserTermsAgreement {
 
     private String termsAgreementGuid;
     private String termsGuid;
     private String userGuid;
-    private boolean agreed;
+    private boolean isAgreed;
 
-    private TermsAgreement(
+    private UserTermsAgreement(
             String termsAgreementGuid,
             String termsGuid,
             String userGuid,
-            boolean agreed
+            boolean isAgreed
     ) {
         this.termsAgreementGuid = termsAgreementGuid;
         this.termsGuid = termsGuid;
         this.userGuid = userGuid;
-        this.agreed = agreed;
+        this.isAgreed = isAgreed;
     }
 
-    public static TermsAgreement create(
+    public static UserTermsAgreement create(
             Terms terms,
             String agreementGuid,
             String userGuid,
-            boolean agreed
+            boolean isAgreed
     ) {
 
-        terms.validateAgreement(agreed);
-
-        return new TermsAgreement(
+        terms.validateAgreement(isAgreed);
+        return new UserTermsAgreement(
                 agreementGuid,
                 terms.getTermsGuid(),
                 userGuid,
-                agreed
+                isAgreed
         );
     }
 }

@@ -9,6 +9,6 @@ import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 public interface UserSignupUseCase {
 
     void initializeAdminUser(SignupAdminCommand signupAdminCommand);
-    void signup(SignupUserCommand signupUserCommand);
+    String signup(SignupUserCommand signupUserCommand);
     User signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser);
 }
