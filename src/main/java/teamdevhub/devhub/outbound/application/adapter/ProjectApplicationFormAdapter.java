@@ -31,7 +31,6 @@ public class ProjectApplicationFormAdapter implements ProjectApplicationFormRepo
 				})
 				.toList();
 		jpaProjectApplicationFormRepository.saveAll(entityList);
-
 	}
 
 	@Override
@@ -44,4 +43,10 @@ public class ProjectApplicationFormAdapter implements ProjectApplicationFormRepo
 		return jpaProjectApplicationFormRepository.findAllGuidByProjectGuid(projectGuid);
 	}
 
+	@Override
+	public List<ProjectApplicationForm> findByProjectGuid(String projectGuid) {
+		return jpaProjectApplicationFormRepository.findByProjectGuid(projectGuid).stream()
+				.map(ProjectApplicationFormMapper::toProjectApplicationForm)
+				.toList();
+	}
 }

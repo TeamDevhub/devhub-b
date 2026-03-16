@@ -15,6 +15,7 @@ public class ProjectApplicationFormMapper {
 	
 	public static ProjectApplicationForm toProjectApplicationForm(ProjectApplicationFormEntity projectApplicationFormEntity) {
 		return ProjectApplicationForm.builder()
+				.projectApplicationFormGuid(projectApplicationFormEntity.getProjectApplicationFormGuid())
 				.projectGuid(projectApplicationFormEntity.getProjectGuid())
 				.applicationFormGuid(projectApplicationFormEntity.getApplicationFormGuid())
 				.build();

@@ -26,13 +26,13 @@ public class ApplicationMapper {
 			.decisionDate(applicationEntity.getDecisionDate())
 			.statusCd(applicationEntity.getStatusCd())
 			.isCanceled(applicationEntity.isCanceled())
-			.nickName(applicantEntity.getUsername())
+			.userName(applicantEntity.getUsername())
 			.email(applicantEntity.getEmail())
 			.mannerDegree(applicantEntity.getMannerDegree())
 			.userSkillList(userSkillList)
 			.positionCd(requirementEntity.getPositionCd())
 			.levelCd(requirementEntity.getLevelCd())
-			.aplyDate(applicationEntity.getRegisteredDate() != null
+			.applyDate(applicationEntity.getRegisteredDate() != null
 				? applicationEntity.getRegisteredDate().toLocalDate().toString()
 				: null)
 			.auditInfo(AuditInfo.of(

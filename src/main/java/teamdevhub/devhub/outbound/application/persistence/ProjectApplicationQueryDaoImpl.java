@@ -12,6 +12,8 @@ import teamdevhub.devhub.outbound.application.adapter.entity.ProjectApplicationE
 import teamdevhub.devhub.outbound.application.adapter.mapper.ApplicationMapper;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 import teamdevhub.devhub.outbound.project.persistence.JpaProjectRequirementRepository;
+import teamdevhub.devhub.outbound.admin.code.adapter.entity.CommonCodeEntity;
+import teamdevhub.devhub.outbound.admin.code.persistence.JpaCommonCodeRepository;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserSkillEntity;
 import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
@@ -31,6 +33,7 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 	private final JpaProjectRequirementRepository jpaProjectRequirementRepository;
 	private final JpaUserRepository jpaUserRepository;
 	private final JpaUserSkillRepository jpaUserSkillRepository;
+	private final JpaCommonCodeRepository jpaCommonCodeRepository;
 
 	@Override
 	public Page<ProjectApplication> findApplicationsByProjectGuid(String projectGuid, Pageable pageable) {
@@ -71,12 +74,14 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 			.stream()
 			.collect(Collectors.toMap(UserEntity::getUserGuid, u -> u));
 
-		// 지원자 스킬 목록 조회
-		Map<String, List<String>> userSkillMap = jpaUserSkillRepository.findByUserGuidIn(applicantGuidList)
-			.stream()
+		// 지원자 스킬 목록 조회 (코드 → 이름 변환)
+		List<UserSkillEntity> userSkillEntities = jpaUserSkillRepository.findByUserGuidIn(applicantGuidList);
+		Map<String, String> skillCodeToName = resolveSkillNames(userSkillEntities.stream()
+			.map(UserSkillEntity::getSkillCd).distinct().toList());
+		Map<String, List<String>> userSkillMap = userSkillEntities.stream()
 			.collect(Collectors.groupingBy(
 				UserSkillEntity::getUserGuid,
-				Collectors.mapping(UserSkillEntity::getSkillCd, Collectors.toList())
+				Collectors.mapping(s -> skillCodeToName.getOrDefault(s.getSkillCd(), s.getSkillCd()), Collectors.toList())
 			));
 
 		// 모집 요건 정보 조회
@@ -115,9 +120,11 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 			.findByProjectRequirementGuid(app.getRequirementGuid())
 			.orElse(null);
 
-		List<String> skillList = jpaUserSkillRepository.findByUserGuid(app.getApplicantGuid())
-			.stream()
-			.map(UserSkillEntity::getSkillCd)
+		List<UserSkillEntity> skillEntities = jpaUserSkillRepository.findByUserGuid(app.getApplicantGuid());
+		Map<String, String> skillCodeToName = resolveSkillNames(skillEntities.stream()
+			.map(UserSkillEntity::getSkillCd).toList());
+		List<String> skillList = skillEntities.stream()
+			.map(s -> skillCodeToName.getOrDefault(s.getSkillCd(), s.getSkillCd()))
 			.toList();
 
 		if (user == null || requirement == null) return null;
@@ -144,9 +151,11 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 			.findByProjectRequirementGuid(app.getRequirementGuid())
 			.orElse(null);
 
-		List<String> skillList = jpaUserSkillRepository.findByUserGuid(app.getApplicantGuid())
-			.stream()
-			.map(UserSkillEntity::getSkillCd)
+		List<UserSkillEntity> skillEntities = jpaUserSkillRepository.findByUserGuid(app.getApplicantGuid());
+		Map<String, String> skillCodeToName = resolveSkillNames(skillEntities.stream()
+			.map(UserSkillEntity::getSkillCd).toList());
+		List<String> skillList = skillEntities.stream()
+			.map(s -> skillCodeToName.getOrDefault(s.getSkillCd(), s.getSkillCd()))
 			.toList();
 
 		return answerEntities.stream()
@@ -156,16 +165,22 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 				.projectApplicationFormGuid(answer.getProjectApplicationFormGuid())
 				.fileGuid(answer.getFileGuid())
 				.content(answer.getContent())
-				.nickName(user != null ? user.getUsername() : null)
+				.userName(user != null ? user.getUsername() : null)
 				.email(user != null ? user.getEmail() : null)
 				.mannerDegree(user != null ? user.getMannerDegree() : 0)
 				.userSkillList(skillList)
 				.positionCd(requirement != null ? requirement.getPositionCd() : null)
 				.introduction(user != null ? user.getIntroduction() : null)
-				.aplyDate(app.getRegisteredDate() != null
+				.applyDate(app.getRegisteredDate() != null
 					? app.getRegisteredDate().toLocalDate().toString() : null)
 				.build()
 			)
 			.toList();
+	}
+
+	private Map<String, String> resolveSkillNames(List<String> skillCodes) {
+		return jpaCommonCodeRepository.findAllById(skillCodes)
+			.stream()
+			.collect(Collectors.toMap(CommonCodeEntity::getCodeId, CommonCodeEntity::getName));
 	}
 }
