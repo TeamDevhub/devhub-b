@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationForm;
 import teamdevhub.devhub.core.application.port.out.ProjectApplicationFormRepository;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectApplicationFormUseCase;
 
@@ -21,4 +22,8 @@ public class ProjectApplicationFormService implements ProjectApplicationFormUseC
 		return projectApplicationFormRepository.findAllGuidByProjectGuid(projectGuid);
 	}
 
+	@Override
+	public List<ProjectApplicationForm> findByProjectGuid(String projectGuid) {
+		return projectApplicationFormRepository.findByProjectGuid(projectGuid);
+	}
 }

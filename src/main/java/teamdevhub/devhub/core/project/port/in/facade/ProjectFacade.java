@@ -1,12 +1,15 @@
 package teamdevhub.devhub.core.project.port.in.facade;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationForm;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 import teamdevhub.devhub.core.admin.form.port.in.command.ApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.facade.model.ApplicationFormResponseDto;
@@ -83,18 +86,49 @@ public class ProjectFacade {
 
 	public ProjectDetailWithFormResponseDto getProjectDetailWithForm(String projectGuid) {
 		Project project = projectUseCase.getProjectDetail(projectGuid);
-		List<String> formList = projectApplicationFormUseCase.getByProjectGuid(projectGuid);
-		List<ApplicationForm> applicationFormList = applicationFormUseCase.getNoCustomizedFormById(formList);
-		List<ApplicationFormCommand> additionalFormList = applicationFormUseCase.getCustomizedFormById(formList);
-		
-		List<String> applicationFormGuidList = applicationFormList.stream()
-												.map(ApplicationForm::getApplicationFormGuid)
-												.toList();
-		List<ApplicationFormResponseDto> additionFormResponseDto = additionalFormList.stream()
-																	.map(ApplicationFormResponseDto::fromCommand)
-																	.toList();
+		String email = userProfileUseCase.getUserInfo(project.getUserGuid()).getEmail();
+
+		List<ProjectApplicationForm> projectForms = projectApplicationFormUseCase.findByProjectGuid(projectGuid);
+		List<String> applicationFormGuids = projectForms.stream()
+				.map(ProjectApplicationForm::getApplicationFormGuid)
+				.toList();
+
+		Map<String, String> applicationFormGuidToProjectFormGuid = projectForms.stream()
+				.collect(Collectors.toMap(
+						ProjectApplicationForm::getApplicationFormGuid,
+						ProjectApplicationForm::getProjectApplicationFormGuid
+				));
+
+		List<ApplicationForm> standardForms = applicationFormUseCase.getNoCustomizedFormById(applicationFormGuids);
+		List<ApplicationFormCommand> customForms = applicationFormUseCase.getCustomizedFormById(applicationFormGuids);
+
+		List<ApplicationFormResponseDto> applicationFormResponseList = standardForms.stream()
+				.map(form -> ApplicationFormResponseDto.builder()
+						.projectApplicationFormGuid(applicationFormGuidToProjectFormGuid.get(form.getApplicationFormGuid()))
+						.applicationFormGuid(form.getApplicationFormGuid())
+						.typeCd(form.getTypeCd())
+						.title(form.getTitle())
+						.helpText(form.getHelpText())
+						.isCustomized(false)
+						.isUsed(form.isUsed())
+						.build())
+				.toList();
+
+		List<ApplicationFormResponseDto> additionalFormResponseList = customForms.stream()
+				.map(cmd -> ApplicationFormResponseDto.builder()
+						.projectApplicationFormGuid(applicationFormGuidToProjectFormGuid.get(cmd.getApplicationFormGuid()))
+						.applicationFormGuid(cmd.getApplicationFormGuid())
+						.typeCd(cmd.getTypeCd())
+						.title(cmd.getTitle())
+						.helpText(cmd.getHelpText())
+						.isCustomized(true)
+						.isUsed(cmd.isUsed())
+						.itemList(cmd.getItemList())
+						.build())
+				.toList();
+
 		// 파일 이름 조회
-		return ProjectDetailWithFormResponseDto.fromDomain(project, applicationFormGuidList, additionFormResponseDto, "이미지 파일", "첨부파일");
+		return ProjectDetailWithFormResponseDto.fromDomain(project, email, applicationFormResponseList, additionalFormResponseList, "이미지 파일", "첨부파일");
 	}
 
 }

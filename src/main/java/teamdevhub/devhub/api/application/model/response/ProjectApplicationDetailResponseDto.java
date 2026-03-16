@@ -16,11 +16,11 @@ public class ProjectApplicationDetailResponseDto {
 	private String approverGuid;
 	private String decisionDate;
 	private String statusCd;
-	private String nickName;
+	private String userName;
 	private String email;
 	private String mannerDegree;
-	private List<String> userSkillList;
-	private String positionCd;
+	private List<String> skillList;
+	private String position;
 	private String levelCd;
 	private String applyDate;
 
@@ -32,11 +32,11 @@ public class ProjectApplicationDetailResponseDto {
 			.approverGuid(application.getApproverGuid())
 			.decisionDate(application.getDecisionDate())
 			.statusCd(application.getStatusCd())
-			.nickName(application.getNickName())
+			.userName(application.getUserName())
 			.email(application.getEmail())
 			.mannerDegree(String.valueOf(application.getMannerDegree()))
-			.userSkillList(application.getUserSkillList())
-			.positionCd(application.getPositionCd())
+			.skillList(application.getUserSkillList())
+			.position(application.getPositionCd())
 			.levelCd(application.getLevelCd())
 			.applyDate(application.getApplyDate())
 			.build();

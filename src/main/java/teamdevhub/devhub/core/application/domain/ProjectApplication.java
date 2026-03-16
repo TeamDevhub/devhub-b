@@ -19,7 +19,7 @@ public class ProjectApplication {
 	private boolean isCanceled;
 
 	// 지원자 유저 정보
-	private String nickName;
+	private String userName;
 	private String email;
 	private double mannerDegree;
 	private List<String> userSkillList;
@@ -28,10 +28,6 @@ public class ProjectApplication {
 	private String positionCd;
 	private String levelCd;
 
-	/**
-	 * 리뷰
-	 * 오탈자 수정했습니다.(aply-> apply)
-	 */
 	private String applyDate;
 
 	private AuditInfo auditInfo;
