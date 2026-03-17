@@ -107,7 +107,7 @@ public class UserSignupServiceTest {
         userSignupService.signup(signupUserCommand);
 
         // then
-        assertThat(userRepository.wasCalled("save")).isTrue();
+        assertThat(userRepository.wasCalled("saveTerms")).isTrue();
         assertThat(userRepository.findByUserGuid(TEST_USER_GUID_1).getPassword()).isEqualTo(encodedPasswordProvider.encode(TEST_PASSWORD_1));
     }
 

@@ -22,7 +22,7 @@ public class LocalFileStorage implements FileStorage {
             Files.write(destination, content);
             return destination.toString();
         } catch (IOException e) {
-            throw new RuntimeException("File save failed", e);
+            throw new RuntimeException("File saveTerms failed", e);
         }
     }
 

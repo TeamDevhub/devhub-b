@@ -43,7 +43,7 @@ public class TermsAgreementService implements TermsAgreeUseCase {
                     agreed
             );
 
-            termsAgreementRepository.save(userTermsAgreement);
+            termsAgreementRepository.saveUserTermsAgreement(userTermsAgreement);
         }
     }
 }

@@ -7,6 +7,6 @@ import teamdevhub.devhub.core.terms.domain.Terms;
 public interface TermsRepository {
 
     PageResult<Terms> listTerms(PageCommand pageCommand);
-    void save(Terms terms);
+    void saveTerms(Terms terms);
     Terms findByTermsGuid(String termsGuid);
 }
