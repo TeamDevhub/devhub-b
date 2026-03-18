@@ -75,7 +75,7 @@ public class FakeUserRepository implements UserRepository {
 
     @Override
     public User save(User user) {
-        calledMethods.add("save");
+        calledMethods.add("saveTerms");
         store.put(user.getUserGuid(), user);
         return user;
     }

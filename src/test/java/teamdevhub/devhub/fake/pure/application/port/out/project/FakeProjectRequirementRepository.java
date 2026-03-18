@@ -24,11 +24,26 @@ public class FakeProjectRequirementRepository implements ProjectRequirementRepos
 				}).toList();
 		store.addAll(projectRequirementList);
 	}
-	
+
+	@Override
+	public List<String> selectProjectGuidByPositionCodeAndPositionLevel(List<String> positionCodeList, List<String> positionLevelCodeList) {
+		return List.of();
+	}
+
+	@Override
+	public List<ProjectRequirement> findByProjectGuids(Set<String> projectGuids) {
+		return List.of();
+	}
+
 	public List<ProjectRequirement> findByProjectGuid(String projectGuid) {
 		return store.stream()
 				.filter(item -> projectGuid.equals(item.getProjectGuid()))
 				.toList();
+	}
+
+	@Override
+	public void deleteByProjectGuid(String projectGuid) {
+
 	}
 
 }

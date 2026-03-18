@@ -2,6 +2,7 @@ package teamdevhub.devhub.medium.shared.util;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.shared.util.StringUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -79,8 +80,8 @@ class StringUtilTest {
     void shouldThrowExceptionForTruncateWhenMaxLengthIsNegative() {
         // given, when, then
         assertThatThrownBy(() -> StringUtil.truncate("abc", -1))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("maxLength must be positive");
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessage("문자열 최대 길이는 0 이상이어야 합니다");
     }
 
     @Test

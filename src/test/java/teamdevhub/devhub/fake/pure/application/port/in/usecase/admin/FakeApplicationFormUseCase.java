@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
+import teamdevhub.devhub.core.admin.form.port.in.command.ApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 
@@ -16,6 +17,21 @@ public class FakeApplicationFormUseCase implements ApplicationFormUseCase {
 	public List<String> saveApplicationForms(List<CreateApplicationFormCommand> additionalFormList) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteApplicationForms(List<String> deleteApplicationFormGuids) {
+
+	}
+
+	@Override
+	public List<ApplicationForm> getNoCustomizedFormById(List<String> formList) {
+		return List.of();
+	}
+
+	@Override
+	public List<ApplicationFormCommand> getCustomizedFormById(List<String> formList) {
+		return List.of();
 	}
 
 }

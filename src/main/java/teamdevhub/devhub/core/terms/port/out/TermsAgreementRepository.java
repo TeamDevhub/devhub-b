@@ -4,5 +4,5 @@ import teamdevhub.devhub.core.terms.domain.UserTermsAgreement;
 
 public interface TermsAgreementRepository {
 
-    void save(UserTermsAgreement agreement);
+    void saveUserTermsAgreement(UserTermsAgreement agreement);
 }

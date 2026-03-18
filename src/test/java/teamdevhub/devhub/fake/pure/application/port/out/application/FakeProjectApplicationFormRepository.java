@@ -24,7 +24,17 @@ public class FakeProjectApplicationFormRepository implements ProjectApplicationF
 				.toList();
 		store.addAll(projectApplicationFormList);
 	}
-	
+
+	@Override
+	public void deleteByProjectGuid(String projectGuid) {
+
+	}
+
+	@Override
+	public List<String> findAllGuidByProjectGuid(String projectGuid) {
+		return List.of();
+	}
+
 	public List<ProjectApplicationForm> findByProjectGuid(String projectGuid) {
 		return store.stream()
 				.filter(item -> projectGuid.equals(item.getProjectGuid()))

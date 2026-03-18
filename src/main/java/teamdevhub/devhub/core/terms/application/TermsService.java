@@ -27,6 +27,6 @@ public class TermsService implements TermsUseCase {
     @Override
     public void registerTerms(CreateTermsCommand createTermsCommand) {
         Terms terms = Terms.createTerms(createTermsCommand, identifierProvider.generateIdentifier());
-        termsRepository.save(terms);
+        termsRepository.saveTerms(terms);
     }
 }

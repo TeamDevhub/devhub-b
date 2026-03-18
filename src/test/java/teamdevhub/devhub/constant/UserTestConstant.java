@@ -1,5 +1,6 @@
 package teamdevhub.devhub.constant;
 
+import teamdevhub.devhub.core.terms.domain.TermsAgreementItem;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
@@ -69,5 +70,9 @@ public final class UserTestConstant {
 
     public static final VerificationTarget VERIFICATION_TARGET_1 = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
     public static final VerificationTarget VERIFICATION_TARGET_2 = VerificationTarget.of(VerificationType.EMAIL, UNVERIFIED_EMAIL);
+
+    public static final String TEST_TERMS_GUID_1 = "TERMS1a1b2c3d4e5f6g7h8i9j10k11l12";
+
+    public static final List<TermsAgreementItem> TEST_TERMS_AGREEMENT_LIST = List.of(new TermsAgreementItem(TEST_TERMS_GUID_1, true));
 
 }

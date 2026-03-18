@@ -7,6 +7,7 @@ import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOauthResolveUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.terms.FakeTermsAgreeUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeUserSignupUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.verification.FakeVerificationUseCase;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
@@ -21,6 +22,7 @@ public class UserSignupFacadeTest {
     private UserSignupFacade userSignupFacade;
 
     private FakeUserSignupUseCase userSignupUseCase;
+    private FakeTermsAgreeUseCase termsAgreeUseCase;
     private FakeOauthResolveUseCase oauthResolveUseCase;
     private FakeAuthenticationUseCase authenticationUseCase;
     private FakeVerificationUseCase verificationUseCase;
@@ -29,11 +31,13 @@ public class UserSignupFacadeTest {
     void init() {
         userSignupUseCase = new FakeUserSignupUseCase();
         oauthResolveUseCase = new FakeOauthResolveUseCase();
+        termsAgreeUseCase = new FakeTermsAgreeUseCase();
         authenticationUseCase = new FakeAuthenticationUseCase();
         verificationUseCase = new FakeVerificationUseCase();
 
         userSignupFacade = new UserSignupFacade(
                 userSignupUseCase,
+                termsAgreeUseCase,
                 oauthResolveUseCase,
                 authenticationUseCase,
                 verificationUseCase
@@ -51,6 +55,7 @@ public class UserSignupFacadeTest {
                 TEST_INTRO_1,
                 TEST_POSITION_LIST,
                 TEST_SKILL_LIST,
+                TEST_TERMS_AGREEMENT_LIST,
                 VERIFICATION_TARGET_1
         );
 

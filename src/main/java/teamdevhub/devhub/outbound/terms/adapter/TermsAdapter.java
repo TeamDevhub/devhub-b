@@ -23,12 +23,12 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
 
     @Override
     public PageResult<Terms> listTerms(PageCommand pageCommand) {
-        return null;
+        return PageResult.of(null,0,0,0);
     }
 
     @Override
-    public void save(Terms terms) {
-
+    public void saveTerms(Terms terms) {
+        jpaTermsRepository.save(terms);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
     }
 
     @Override
-    public void save(UserTermsAgreement agreement) {
+    public void saveUserTermsAgreement(UserTermsAgreement agreement) {
         jpaTermsAgreementRepository.save(toEntity(agreement));
     }
 }
