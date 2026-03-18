@@ -18,6 +18,21 @@ public class FakeApplicationFormRepository implements ApplicationFormRepository 
 	}
 
 	@Override
+	public void deleteByApplicationFormGuid(List<String> applicationFormGuids) {
+
+	}
+
+	@Override
+	public List<ApplicationForm> findByIdAndIsCustomized(List<String> deleteApplicationFormGuids) {
+		return List.of();
+	}
+
+	@Override
+	public List<ApplicationForm> findByIdAndIsNotCustomized(List<String> formList) {
+		return List.of();
+	}
+
+	@Override
 	public void save(ApplicationForm applicationForm) {
 		store.add(applicationForm);
 	}

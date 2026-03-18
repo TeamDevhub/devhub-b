@@ -23,11 +23,26 @@ public class FakeProjectSkillRepository implements ProjectSkillRepository {
 				}).toList();
 		store.addAll(projectSkillList);
 	}
-	
+
+	@Override
+	public List<String> selectProjectGuidBySkillCd(List<String> skillCodeList) {
+		return List.of();
+	}
+
+	@Override
+	public List<ProjectSkill> findByProjectGuids(Set<String> projectGuids) {
+		return List.of();
+	}
+
 	public List<ProjectSkill> findByProjectGuid(String projectGuid) {
 		return store.stream()
 				.filter(item -> projectGuid.equals(item.getProjectGuid()))
 				.toList();
+	}
+
+	@Override
+	public void deleteByProjectGuid(String projectGuid) {
+
 	}
 
 }

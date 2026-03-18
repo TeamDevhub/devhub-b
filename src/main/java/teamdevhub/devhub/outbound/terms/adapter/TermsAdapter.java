@@ -23,7 +23,7 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
 
     @Override
     public PageResult<Terms> listTerms(PageCommand pageCommand) {
-        return jpaTermsRepository.list(pageCommand);
+        return PageResult.of(null,0,0,0);
     }
 
     @Override

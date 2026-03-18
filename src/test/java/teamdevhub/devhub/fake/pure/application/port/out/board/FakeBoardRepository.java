@@ -14,8 +14,23 @@ public class FakeBoardRepository implements BoardRepository {
 	public void save(Board board) {
 		store.put(board.getBoardGuid(), board);
 	}
-	
-    public Board findByBoardGuid(String boardGuid) {
+
+	@Override
+	public Board detailBoard(String boardGuid) {
+		return null;
+	}
+
+	@Override
+	public void updateBoard(Board board) {
+
+	}
+
+	public Board findByBoardGuid(String boardGuid) {
         return store.get(boardGuid);
     }
+
+	@Override
+	public void updateViewCount(String boardGuid) {
+
+	}
 }

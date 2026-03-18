@@ -7,6 +7,7 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.api.terms.model.AgreeTermsRequestDto;
 import teamdevhub.devhub.api.user.model.SignupRequestDto;
 
 import java.util.List;
@@ -36,6 +37,12 @@ class SignupRequestDtoTest {
                 .introduction(TEST_INTRO_1)
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
+                .termsAgreementList(List.of(
+                        AgreeTermsRequestDto.builder()
+                                .termsGuid("TERMS1")
+                                .isAgreed(true)
+                                .build()
+                ))
                 .build();
 
         // when

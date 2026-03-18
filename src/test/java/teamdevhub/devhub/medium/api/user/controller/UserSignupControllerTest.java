@@ -6,11 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
+import teamdevhub.devhub.api.terms.model.AgreeTermsRequestDto;
 import teamdevhub.devhub.api.user.controller.UserSignupController;
 import teamdevhub.devhub.api.user.model.SignupRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,6 +44,12 @@ public class UserSignupControllerTest {
                 .introduction(TEST_INTRO_1)
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
+                .termsAgreementList(List.of(
+                        AgreeTermsRequestDto.builder()
+                                .termsGuid("TERMS1")
+                                .isAgreed(true)
+                                .build()
+                ))
                 .build();
 
         doNothing().when(userSignupFacade).signup(any());

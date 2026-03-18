@@ -101,7 +101,7 @@ public class UserSignupServiceTest {
     @DisplayName("회원가입에_성공하면_인증_테이블에_해당_사용자의_인증내역이_삭제된다")
     void deleteEmailVerificationRecordWhenSuccessfulSignup() {
         // given
-        SignupUserCommand signupUserCommand = new SignupUserCommand(TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_1);
+        SignupUserCommand signupUserCommand = new SignupUserCommand(TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST, VERIFICATION_TARGET_1);
 
         // when
         userSignupService.signup(signupUserCommand);
@@ -122,6 +122,7 @@ public class UserSignupServiceTest {
                 TEST_INTRO_1,
                 TEST_POSITION_LIST,
                 TEST_SKILL_LIST,
+                TEST_TERMS_AGREEMENT_LIST,
                 VERIFICATION_TARGET_1
         );
 
@@ -169,7 +170,7 @@ public class UserSignupServiceTest {
     @DisplayName("회원가입_후_로그인_하지_않은_사용자의_최종_로그인_일시는_존재하지_않는다")
     void haveNoLastLoginDateForUserWhoHasNotLoggedInAfterSignup() {
         // given
-        SignupUserCommand signupUserCommand = new SignupUserCommand(UNVERIFIED_EMAIL, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, VERIFICATION_TARGET_1);
+        SignupUserCommand signupUserCommand = new SignupUserCommand(UNVERIFIED_EMAIL, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST, VERIFICATION_TARGET_1);
 
         // when
         userSignupService.signup(signupUserCommand);

@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface JpaTermsRepository extends JpaRepository<TermsEntity, String> {
 
-    PageResult<Terms> list(PageCommand pageCommand);
     Optional<TermsEntity> findByTermsGuid(String termsGuid);
     void save(Terms terms);
 }

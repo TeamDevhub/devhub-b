@@ -15,7 +15,12 @@ public class FakeApplicationFormItemRepository implements ApplicationFormItemRep
 	public void saveAll(Set<ApplicationFormItem> items) {
 		store.addAll(items);
 	}
-	
+
+	@Override
+	public void deleteByApplicationFormGuid(List<String> applicationFormGuids) {
+
+	}
+
 	public List<ApplicationFormItem> findByFormGuid(String formGuid) {
 		return store.stream()
 				.filter(item -> formGuid.equals(item.getFormGuid()))
