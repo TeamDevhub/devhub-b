@@ -46,8 +46,11 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 			and (:recruitmentStartDate is null or p.recruitmentStartDate >= :recruitmentStartDate)
 			and (:recruitmentEndDate is null or p.recruitmentEndDate <= :recruitmentEndDate)
 			and (:progressStartDate is null or p.progressStartDate >= :progressStartDate)
+			order by 
+				case when :order = '001' then p.registeredDate end desc,
+				case when :order = '002' then (p.recruitmentEndDate - CURRENT_TIMESTAMP) end asc
 			""")
-	Page<ProjectEntity> findBySearchCondition(@Param("keyword") String keyword, @Param("skillCodeList") List<String> skillCodeList,
+	Page<ProjectEntity> findBySearchCondition(@Param("keyword") String keyword, @Param("order") String order, @Param("skillCodeList") List<String> skillCodeList,
 			@Param("regionCodeList") List<String> regionCodeList, @Param("positionCodeList") List<String> positionCodeList, @Param("positionLevelCodeList") List<String> positionLevelCodeList,
 			@Param("projectRecruitTypeList") List<String> projectRecruitTypeList, @Param("projectRecruitStatusList") List<String> projectRecruitStatusList,
 			@Param("projectProgressTypeList") List<String> projectProgressTypeList, @Param("recruitmentStartDate") LocalDateTime recruitmentStartDate, @Param("recruitmentEndDate") LocalDateTime recruitmentEndDate,

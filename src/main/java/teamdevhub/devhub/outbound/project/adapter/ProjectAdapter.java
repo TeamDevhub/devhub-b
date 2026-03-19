@@ -35,9 +35,10 @@ public class ProjectAdapter implements ProjectRepository {
 	
 	@Override
     public PageResult<Project> getProjectList(SearchProjectListCommand searchProjectListCommand, PageCommand pageCommand) {
-        Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size(), Sort.by("registeredDate").descending());
+        Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
 
-        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findBySearchCondition(searchProjectListCommand.keyword(),
+        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findBySearchCondition(
+        		searchProjectListCommand.keyword(), searchProjectListCommand.order(),
 				searchProjectListCommand.skillCodeList(), searchProjectListCommand.regionCodeList(), searchProjectListCommand.positionCodeList(),
 				searchProjectListCommand.positionLevelCodeList(), searchProjectListCommand.projectRecruitTypeList(),
 				searchProjectListCommand.projectRecruitStatusList(), searchProjectListCommand.projectProgressTypeList(),
