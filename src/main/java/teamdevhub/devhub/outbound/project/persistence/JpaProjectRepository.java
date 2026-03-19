@@ -43,6 +43,13 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 													   ('3202' in :projectRecruitStatusList and CURRENT_DATE > p.recruitmentEndDate)
 													   	or
 													   ('3203' in :projectRecruitStatusList and CURRENT_DATE < p.recruitmentStartDate) ))
+            and (:progressPeriodList is null or (
+											    ('001' in :progressPeriodList and function('timestampdiff', DAY, p.progressStartDate, p.progressEndDate) between 1 and 31)
+											    or
+											    ('002' in :progressPeriodList and function('timestampdiff', DAY, p.progressStartDate, p.progressEndDate) between 90 and 100)
+											    or
+											    ('003' in :progressPeriodList and function('timestampdiff', DAY, p.progressStartDate, p.progressEndDate) between 170 and 185)
+											))
 			and (:projectProgressTypeList is null or p.progressTypeCd in :projectProgressTypeList)
 			and (:recruitmentStartDate is null or p.recruitmentStartDate >= :recruitmentStartDate)
 			and (:recruitmentEndDate is null or p.recruitmentEndDate <= :recruitmentEndDate)
