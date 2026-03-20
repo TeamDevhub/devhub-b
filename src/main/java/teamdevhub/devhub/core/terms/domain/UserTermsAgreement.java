@@ -22,17 +22,15 @@ public class UserTermsAgreement {
         this.isAgreed = isAgreed;
     }
 
-    public static UserTermsAgreement create(
-            Terms terms,
-            String agreementGuid,
+    static UserTermsAgreement of(
+            String termsAgreementGuid,
+            String termsGuid,
             String userGuid,
             boolean isAgreed
     ) {
-
-        terms.validateAgreement(isAgreed);
         return new UserTermsAgreement(
-                agreementGuid,
-                terms.getTermsGuid(),
+                termsAgreementGuid,
+                termsGuid,
                 userGuid,
                 isAgreed
         );

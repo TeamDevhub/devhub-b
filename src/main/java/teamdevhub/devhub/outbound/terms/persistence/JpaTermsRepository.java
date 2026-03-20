@@ -6,10 +6,13 @@ import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.outbound.terms.adapter.entity.TermsEntity;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface JpaTermsRepository extends JpaRepository<TermsEntity, String> {
 
     Optional<TermsEntity> findByTermsGuid(String termsGuid);
     void save(Terms terms);
+    List<TermsEntity> findAllByTermsGuidInAndDeletedFalseAndUsedTrue(Collection<String> termsGuids);
 }

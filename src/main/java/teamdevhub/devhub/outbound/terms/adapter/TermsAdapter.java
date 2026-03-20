@@ -12,6 +12,9 @@ import teamdevhub.devhub.outbound.terms.adapter.mapper.TermsMapper;
 import teamdevhub.devhub.outbound.terms.persistence.JpaTermsAgreementRepository;
 import teamdevhub.devhub.outbound.terms.persistence.JpaTermsRepository;
 
+import java.util.List;
+import java.util.Set;
+
 import static teamdevhub.devhub.outbound.terms.adapter.mapper.TermsMapper.toEntity;
 
 @Component
@@ -36,6 +39,15 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
         return jpaTermsRepository.findByTermsGuid(termsGuid)
                 .map(TermsMapper::toDomain)
                 .orElseThrow(() -> new IllegalArgumentException("약관을 찾을 수 없습니다."));
+    }
+
+    @Override
+    public List<Terms> findAllByTermsGuidIn(Set<String> termsGuids) {
+        return jpaTermsRepository
+                .findAllByTermsGuidInAndDeletedFalseAndUsedTrue(termsGuids)
+                .stream()
+                .map(TermsMapper::toDomain)
+                .toList();
     }
 
     @Override

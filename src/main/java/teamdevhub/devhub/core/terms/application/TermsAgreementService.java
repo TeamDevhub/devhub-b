@@ -13,6 +13,8 @@ import teamdevhub.devhub.core.terms.port.out.TermsAgreementRepository;
 import teamdevhub.devhub.core.terms.port.out.TermsRepository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -24,26 +26,33 @@ public class TermsAgreementService implements TermsAgreeUseCase {
     private final IdentifierProvider identifierProvider;
 
     @Override
-    public void agreeTerms(AgreeTermsCommand command) {
+    public void agreeTerms(AgreeTermsCommand agreeTermsCommand) {
 
-        String userGuid = command.userGuid();
-        List<TermsAgreementItem> agreements = command.termsAgreementItemList();
+        Map<String, Boolean> termsAgreementMap = agreeTermsCommand.termsAgreementItemList()
+                .stream()
+                .collect(Collectors.toMap(
+                        TermsAgreementItem::termsGuid,
+                        TermsAgreementItem::isAgreed
+                ));
 
-        for (TermsAgreementItem agreement : agreements) {
+        List<Terms> termsList = termsRepository.findAllByTermsGuidIn(termsAgreementMap.keySet());
+        validateAllTermsExist(termsList, termsAgreementMap);
 
-            String termsGuid = agreement.termsGuid();
-            boolean agreed = agreement.agreed();
+        List<UserTermsAgreement> userTermsAgreementList = termsList.stream()
+                .map(terms -> Terms.createAgreement(
+                        terms,
+                        identifierProvider.generateIdentifier(),
+                        agreeTermsCommand.userGuid(),
+                        termsAgreementMap.get(terms.getTermsGuid())
+                ))
+                .toList();
 
-            Terms terms = termsRepository.findByTermsGuid(termsGuid);
+        termsAgreementRepository.saveAll(userTermsAgreementList);
+    }
 
-            UserTermsAgreement userTermsAgreement = UserTermsAgreement.create(
-                    terms,
-                    identifierProvider.generateIdentifier(),
-                    userGuid,
-                    agreed
-            );
-
-            termsAgreementRepository.saveUserTermsAgreement(userTermsAgreement);
+    private void validateAllTermsExist(List<Terms> termsList, Map<String, Boolean> agreementMap) {
+        if (termsList.size() != agreementMap.size()) {
+            throw new IllegalArgumentException("존재하지 않는 약관이 포함되어 있습니다.");
         }
     }
 }
