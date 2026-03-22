@@ -3,14 +3,14 @@ package teamdevhub.devhub.core.terms.domain;
 import lombok.Getter;
 
 @Getter
-public class UserTermsAgreement {
+public class TermsAgreement {
 
     private String termsAgreementGuid;
     private String termsGuid;
     private String userGuid;
     private boolean isAgreed;
 
-    private UserTermsAgreement(
+    private TermsAgreement(
             String termsAgreementGuid,
             String termsGuid,
             String userGuid,
@@ -22,13 +22,13 @@ public class UserTermsAgreement {
         this.isAgreed = isAgreed;
     }
 
-    static UserTermsAgreement of(
+    public static TermsAgreement of(
             String termsAgreementGuid,
             String termsGuid,
             String userGuid,
             boolean isAgreed
     ) {
-        return new UserTermsAgreement(
+        return new TermsAgreement(
                 termsAgreementGuid,
                 termsGuid,
                 userGuid,

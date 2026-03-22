@@ -7,7 +7,7 @@ import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.domain.TermsAgreementItem;
-import teamdevhub.devhub.core.terms.domain.UserTermsAgreement;
+import teamdevhub.devhub.core.terms.domain.TermsAgreement;
 import teamdevhub.devhub.core.terms.port.in.command.AgreeTermsCommand;
 import teamdevhub.devhub.core.terms.port.in.usecase.TermsAgreeUseCase;
 import teamdevhub.devhub.core.terms.port.out.TermsAgreementRepository;
@@ -40,7 +40,7 @@ public class TermsAgreementService implements TermsAgreeUseCase {
         List<Terms> termsList = termsRepository.findAllByTermsGuidIn(termsAgreementMap.keySet());
         validateAllTermsExist(termsList, termsAgreementMap);
 
-        List<UserTermsAgreement> userTermsAgreementList = termsList.stream()
+        List<TermsAgreement> termsAgreementList = termsList.stream()
                 .map(terms -> Terms.createAgreement(
                         terms,
                         identifierProvider.generateIdentifier(),
@@ -49,7 +49,7 @@ public class TermsAgreementService implements TermsAgreeUseCase {
                 ))
                 .toList();
 
-        termsAgreementRepository.saveAll(userTermsAgreementList);
+        termsAgreementRepository.saveAll(termsAgreementList);
     }
 
     private void validateAllTermsExist(List<Terms> termsList, Map<String, Boolean> agreementMap) {

@@ -75,7 +75,7 @@ public class Terms {
                 .build();
     }
 
-    public static UserTermsAgreement createAgreement(
+    public static TermsAgreement createAgreement(
             Terms terms,
             String agreementGuid,
             String userGuid,
@@ -83,7 +83,7 @@ public class Terms {
     ) {
         terms.validateAgreement(isAgreed);
 
-        return UserTermsAgreement.of(
+        return TermsAgreement.of(
                 agreementGuid,
                 terms.getTermsGuid(),
                 userGuid,

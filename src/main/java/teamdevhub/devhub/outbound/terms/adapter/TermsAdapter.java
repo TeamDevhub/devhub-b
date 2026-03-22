@@ -5,17 +5,16 @@ import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.terms.domain.Terms;
-import teamdevhub.devhub.core.terms.domain.UserTermsAgreement;
+import teamdevhub.devhub.core.terms.domain.TermsAgreement;
 import teamdevhub.devhub.core.terms.port.out.TermsAgreementRepository;
 import teamdevhub.devhub.core.terms.port.out.TermsRepository;
+import teamdevhub.devhub.outbound.terms.adapter.entity.TermsAgreementEntity;
 import teamdevhub.devhub.outbound.terms.adapter.mapper.TermsMapper;
 import teamdevhub.devhub.outbound.terms.persistence.JpaTermsAgreementRepository;
 import teamdevhub.devhub.outbound.terms.persistence.JpaTermsRepository;
 
 import java.util.List;
 import java.util.Set;
-
-import static teamdevhub.devhub.outbound.terms.adapter.mapper.TermsMapper.toEntity;
 
 @Component
 @RequiredArgsConstructor
@@ -44,14 +43,18 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
     @Override
     public List<Terms> findAllByTermsGuidIn(Set<String> termsGuids) {
         return jpaTermsRepository
-                .findAllByTermsGuidInAndDeletedFalseAndUsedTrue(termsGuids)
+                .findAllByTermsGuidInAndIsDeletedFalseAndIsUsedTrue(termsGuids)
                 .stream()
                 .map(TermsMapper::toDomain)
                 .toList();
     }
 
     @Override
-    public void saveUserTermsAgreement(UserTermsAgreement agreement) {
-        jpaTermsAgreementRepository.save(toEntity(agreement));
+    public void saveAll(List<TermsAgreement> termsAgreementList) {
+        List<TermsAgreementEntity> termsAgreementEntityList = termsAgreementList.stream()
+                .map(TermsMapper::toEntity)
+                .toList();
+
+        jpaTermsAgreementRepository.saveAll(termsAgreementEntityList);
     }
 }

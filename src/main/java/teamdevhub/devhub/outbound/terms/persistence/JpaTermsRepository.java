@@ -1,8 +1,6 @@
 package teamdevhub.devhub.outbound.terms.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.outbound.terms.adapter.entity.TermsEntity;
 
@@ -14,5 +12,5 @@ public interface JpaTermsRepository extends JpaRepository<TermsEntity, String> {
 
     Optional<TermsEntity> findByTermsGuid(String termsGuid);
     void save(Terms terms);
-    List<TermsEntity> findAllByTermsGuidInAndDeletedFalseAndUsedTrue(Collection<String> termsGuids);
+    List<TermsEntity> findAllByTermsGuidInAndIsDeletedFalseAndIsUsedTrue(Collection<String> termsGuids);
 }
