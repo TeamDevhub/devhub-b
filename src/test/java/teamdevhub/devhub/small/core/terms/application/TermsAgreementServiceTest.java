@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
-import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.terms.application.TermsAgreementService;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.domain.TermsAgreement;
