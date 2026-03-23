@@ -16,6 +16,7 @@ import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,12 +31,7 @@ public class TermsAgreementService implements TermsAgreeUseCase {
     @Override
     public void agreeTerms(AgreeTermsCommand agreeTermsCommand) {
 
-        Map<String, Boolean> termsAgreementMap = agreeTermsCommand.termsAgreementItemList()
-                .stream()
-                .collect(Collectors.toMap(
-                        TermsAgreementItem::termsGuid,
-                        TermsAgreementItem::isAgreed
-                ));
+        Map<String, Boolean> termsAgreementMap = toAgreementMap(agreeTermsCommand);
 
         List<Terms> termsList = termsRepository.findAllByTermsGuidIn(termsAgreementMap.keySet());
         validateAllTermsExist(termsList, termsAgreementMap);
@@ -52,8 +48,21 @@ public class TermsAgreementService implements TermsAgreeUseCase {
         termsAgreementRepository.saveAll(termsAgreementList);
     }
 
+    private Map<String, Boolean> toAgreementMap(AgreeTermsCommand command) {
+        return command.termsAgreementItemList()
+                .stream()
+                .collect(Collectors.toMap(
+                        TermsAgreementItem::termsGuid,
+                        TermsAgreementItem::isAgreed
+                ));
+    }
+
     private void validateAllTermsExist(List<Terms> termsList, Map<String, Boolean> agreementMap) {
-        if (termsList.size() != agreementMap.size()) {
+        Set<String> foundTermsGuids = termsList.stream()
+                .map(Terms::getTermsGuid)
+                .collect(Collectors.toSet());
+
+        if (!foundTermsGuids.equals(agreementMap.keySet())) {
             throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }
     }

@@ -1,5 +1,6 @@
 package teamdevhub.devhub.fake.pure.application.port.out.user;
 
+import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
@@ -17,18 +18,18 @@ public class FakeUserQueryRepository implements UserQueryRepository {
     }
 
     @Override
-    public PageResult<User> listUser(SearchUserCommand searchUserCommand, int page, int size) {
+    public PageResult<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
         List<User> userList = new ArrayList<>(store.values());
 
         long totalElements = userList.size();
-        int start = page * size;
-        int end = Math.min(start + size, userList.size());
+        int start = pageCommand.page() * pageCommand.size();
+        int end = Math.min(start + pageCommand.size(), userList.size());
         List<User> pageContent = start >= end ? Collections.emptyList() : userList.subList(start, end);
 
         return PageResult.of(
                 pageContent,
-                page,
-                size,
+                pageCommand.page(),
+                pageCommand.size(),
                 totalElements
         );
     }

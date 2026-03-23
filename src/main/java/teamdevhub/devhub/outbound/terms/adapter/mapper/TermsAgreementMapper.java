@@ -5,7 +5,7 @@ import teamdevhub.devhub.outbound.terms.adapter.entity.TermsAgreementEntity;
 
 public class TermsAgreementMapper {
 
-    public TermsAgreementEntity termsAgreementEntity(TermsAgreement termsAgreement) {
+    public static TermsAgreementEntity toTermsAgreementEntity(TermsAgreement termsAgreement) {
         return TermsAgreementEntity.builder()
                 .termsAgreementGuid(termsAgreement.getTermsAgreementGuid())
                 .termsGuid(termsAgreement.getTermsGuid())
@@ -14,12 +14,12 @@ public class TermsAgreementMapper {
                 .build();
     }
 
-    public TermsAgreement toDomain(TermsAgreementEntity entity) {
+    public static TermsAgreement toTermsAgreement(TermsAgreementEntity termsAgreementEntity) {
         return TermsAgreement.of(
-                entity.getTermsAgreementGuid(),
-                entity.getTermsGuid(),
-                entity.getUserGuid(),
-                entity.isAgreed()
+                termsAgreementEntity.getTermsAgreementGuid(),
+                termsAgreementEntity.getTermsGuid(),
+                termsAgreementEntity.getUserGuid(),
+                termsAgreementEntity.isAgreed()
         );
     }
 }
