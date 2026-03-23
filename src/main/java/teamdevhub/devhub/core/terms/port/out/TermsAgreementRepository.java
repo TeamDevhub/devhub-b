@@ -1,8 +1,10 @@
 package teamdevhub.devhub.core.terms.port.out;
 
-import teamdevhub.devhub.core.terms.domain.UserTermsAgreement;
+import teamdevhub.devhub.core.terms.domain.TermsAgreement;
+
+import java.util.List;
 
 public interface TermsAgreementRepository {
 
-    void saveUserTermsAgreement(UserTermsAgreement agreement);
+    void saveAll(List<TermsAgreement> termsAgreementList);
 }

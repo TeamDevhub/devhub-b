@@ -19,6 +19,6 @@ public class UserQueryService implements UserQueryUseCase {
 
     @Override
     public PageResult<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
-        return userQueryRepository.listUser(searchUserCommand, pageCommand.page(), pageCommand.size());
+        return userQueryRepository.listUser(searchUserCommand, pageCommand);
     }
 }

@@ -17,7 +17,7 @@ public class AgreeTermsRequestDto {
     @NotBlank
     private String termsGuid;
 
-    @NotNull(message = "약관 동의 여부는 필수입니다")
+    @NotNull
     private boolean isAgreed;
 
     public TermsAgreementItem toTermsAgreementItem() {
