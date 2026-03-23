@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
-import teamdevhub.devhub.core.terms.port.in.usecase.TermsAgreeUseCase;
+import teamdevhub.devhub.core.terms.port.in.usecase.TermsUseCase;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
 import teamdevhub.devhub.core.user.domain.User;
@@ -22,7 +22,7 @@ import teamdevhub.devhub.core.auth.port.in.usecase.verification.VerificationUseC
 public class UserSignupFacade {
 
     private final UserSignupUseCase userSignupUseCase;
-    private final TermsAgreeUseCase termsAgreeUseCase;
+    private final TermsUseCase termsUseCase;
     private final OauthResolveUseCase oauthResolveUseCase;
     private final AuthenticationUseCase authenticationUseCase;
     private final VerificationUseCase verificationUseCase;
@@ -30,7 +30,7 @@ public class UserSignupFacade {
     public void signup(SignupUserCommand signupUserCommand) {
         verificationUseCase.assertAllowed(signupUserCommand.verificationTarget());
         String userGuid = userSignupUseCase.signup(signupUserCommand);
-        termsAgreeUseCase.agreeTerms(signupUserCommand.toAgreeTermsCommand(userGuid));
+        termsUseCase.saveTermsAgreement(signupUserCommand.toAgreeTermsCommand(userGuid));
         verificationUseCase.consume(signupUserCommand.verificationTarget());
     }
 

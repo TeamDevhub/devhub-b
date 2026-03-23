@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
-import teamdevhub.devhub.api.terms.model.TermsAgreementRequestDto;
+import teamdevhub.devhub.api.terms.model.AgreeTermsRequestDto;
 import teamdevhub.devhub.api.user.controller.UserSignupController;
 import teamdevhub.devhub.api.user.model.SignupRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
@@ -45,7 +45,7 @@ public class UserSignupControllerTest {
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .termsAgreementList(List.of(
-                        TermsAgreementRequestDto.builder()
+                        AgreeTermsRequestDto.builder()
                                 .termsGuid("TERMS1")
                                 .isAgreed(true)
                                 .build()

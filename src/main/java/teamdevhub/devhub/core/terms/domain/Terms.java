@@ -77,14 +77,14 @@ public class Terms {
 
     public static TermsAgreement createAgreement(
             Terms terms,
-            String agreementGuid,
+            String termsAgreementGuid,
             String userGuid,
             boolean isAgreed
     ) {
         terms.validateAgreement(isAgreed);
 
         return TermsAgreement.of(
-                agreementGuid,
+                termsAgreementGuid,
                 terms.getTermsGuid(),
                 userGuid,
                 isAgreed

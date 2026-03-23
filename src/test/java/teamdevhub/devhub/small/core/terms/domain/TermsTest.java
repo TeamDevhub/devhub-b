@@ -83,7 +83,7 @@ class TermsTest {
         Terms terms = createTerms(REQUIRED, USED, NOT_DELETED);
 
         // when
-        TermsAgreement agreement = Terms.createAgreement(
+        TermsAgreement termsAgreement = Terms.createAgreement(
                 terms,
                 AGREEMENT_GUID_1,
                 USER_GUID_1,
@@ -91,10 +91,10 @@ class TermsTest {
         );
 
         // then
-        assertThat(agreement.getTermsAgreementGuid()).isEqualTo(AGREEMENT_GUID_1);
-        assertThat(agreement.getTermsGuid()).isEqualTo(TERMS_GUID_1);
-        assertThat(agreement.getUserGuid()).isEqualTo(USER_GUID_1);
-        assertThat(agreement.isAgreed()).isTrue();
+        assertThat(termsAgreement.getTermsAgreementGuid()).isEqualTo(AGREEMENT_GUID_1);
+        assertThat(termsAgreement.getTermsGuid()).isEqualTo(TERMS_GUID_1);
+        assertThat(termsAgreement.getUserGuid()).isEqualTo(USER_GUID_1);
+        assertThat(termsAgreement.isAgreed()).isTrue();
     }
 
     private Terms createTerms(boolean isRequired, boolean isUsed, boolean isDeleted) {

@@ -9,6 +9,7 @@ import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.terms.application.TermsService;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.port.in.command.CreateTermsCommand;
+import teamdevhub.devhub.fake.pure.application.port.out.terms.FakeTermsAgreementRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.terms.FakeTermsRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,14 +17,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TermsServiceTest {
 
     private TermsService termsService;
+
     private FakeTermsRepository termsRepository;
+    private FakeTermsAgreementRepository termsAgreementRepository;
 
     @BeforeEach
     void setUp() {
         termsRepository = new FakeTermsRepository();
+        termsAgreementRepository = new FakeTermsAgreementRepository();
         IdentifierProvider identifierProvider = () -> java.util.UUID.randomUUID().toString();
 
-        termsService = new TermsService(termsRepository, identifierProvider);
+        termsService = new TermsService(termsRepository, termsAgreementRepository,  identifierProvider);
     }
 
     @Test
