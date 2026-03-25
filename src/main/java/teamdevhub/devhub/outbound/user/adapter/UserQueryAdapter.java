@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
@@ -23,8 +24,8 @@ public class UserQueryAdapter implements UserQueryRepository {
     private final UserQueryDao userQueryDao;
 
     @Override
-    public PageResult<User> listUser(SearchUserCommand searchUserCommand, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("registeredDate").descending());
+    public PageResult<User> listUser(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
+        Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size(), Sort.by("registeredDate").descending());
         Page<UserEntity> pagedUserEntityList = userQueryDao.listUser(searchUserCommand, pageable);
 
         List<User> userList = pagedUserEntityList.getContent().stream()

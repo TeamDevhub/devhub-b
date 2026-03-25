@@ -1,18 +1,28 @@
 package teamdevhub.devhub.outbound.terms.adapter;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.terms.domain.Terms;
-import teamdevhub.devhub.core.terms.domain.UserTermsAgreement;
+import teamdevhub.devhub.core.terms.domain.TermsAgreement;
 import teamdevhub.devhub.core.terms.port.out.TermsAgreementRepository;
 import teamdevhub.devhub.core.terms.port.out.TermsRepository;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
+import teamdevhub.devhub.outbound.terms.adapter.entity.TermsAgreementEntity;
+import teamdevhub.devhub.outbound.terms.adapter.entity.TermsEntity;
+import teamdevhub.devhub.outbound.terms.adapter.mapper.TermsAgreementMapper;
 import teamdevhub.devhub.outbound.terms.adapter.mapper.TermsMapper;
 import teamdevhub.devhub.outbound.terms.persistence.JpaTermsAgreementRepository;
 import teamdevhub.devhub.outbound.terms.persistence.JpaTermsRepository;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
-import static teamdevhub.devhub.outbound.terms.adapter.mapper.TermsMapper.toEntity;
+import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +33,23 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
 
     @Override
     public PageResult<Terms> listTerms(PageCommand pageCommand) {
-        return PageResult.of(null,0,0,0);
+        Pageable pageable = PageRequest.of(
+                pageCommand.page(),
+                pageCommand.size(),
+                Sort.by("registeredDate").descending()
+        );
+        Page<TermsEntity> page = jpaTermsRepository.findAll(pageable);
+
+        List<Terms> content = page.getContent().stream()
+                .map(TermsMapper::toDomain)
+                .toList();
+
+        return PageResult.of(
+                content,
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements()
+        );
     }
 
     @Override
@@ -35,11 +61,23 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
     public Terms findByTermsGuid(String termsGuid) {
         return jpaTermsRepository.findByTermsGuid(termsGuid)
                 .map(TermsMapper::toDomain)
-                .orElseThrow(() -> new IllegalArgumentException("약관을 찾을 수 없습니다."));
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.UNKNOWN_FAIL));
     }
 
     @Override
-    public void saveUserTermsAgreement(UserTermsAgreement agreement) {
-        jpaTermsAgreementRepository.save(toEntity(agreement));
+    public List<Terms> findAllByTermsGuidIn(Set<String> termsGuids) {
+        return jpaTermsRepository
+                .findAllByTermsGuidInAndIsDeletedFalseAndIsUsedTrue(termsGuids)
+                .stream()
+                .map(TermsMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public void saveAll(List<TermsAgreement> termsAgreementList) {
+        List<TermsAgreementEntity> termsAgreementEntityList = termsAgreementList.stream()
+                .map(TermsAgreementMapper::toTermsAgreementEntity)
+                .toList();
+        jpaTermsAgreementRepository.saveAll(termsAgreementEntityList);
     }
 }

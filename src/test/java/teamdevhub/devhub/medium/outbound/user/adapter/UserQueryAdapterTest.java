@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
@@ -67,7 +68,7 @@ public class UserQueryAdapterTest {
         SearchUserCommand searchCommand = new SearchUserCommand(null, null, null, null);
 
         // when
-        PageResult<User> page = userQueryAdapter.listUser(searchCommand, 0, 10);
+        PageResult<User> page = userQueryAdapter.listUser(searchCommand, PageCommand.of(0,10));
 
         // then
         assertThat(page.content()).hasSize(2);

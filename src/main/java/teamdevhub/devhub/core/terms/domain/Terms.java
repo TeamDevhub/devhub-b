@@ -64,14 +64,30 @@ public class Terms {
         }
     }
 
-    public static Terms createTerms(CreateTermsCommand createTermsCommand, String termsGuid) {
+    public static Terms createTerms(CreateTermsCommand command, String termsGuid) {
         return Terms.builder()
                 .termsGuid(termsGuid)
-                .title(createTermsCommand.title())
-                .content(createTermsCommand.content())
-                .isRequired(createTermsCommand.isRequired())
-                .isUsed(createTermsCommand.isUsed())
-                .isDeleted(createTermsCommand.isDeleted())
+                .title(command.title())
+                .content(command.content())
+                .isRequired(command.isRequired())
+                .isUsed(command.isUsed())
+                .isDeleted(command.isDeleted())
                 .build();
+    }
+
+    public static TermsAgreement createAgreement(
+            Terms terms,
+            String termsAgreementGuid,
+            String userGuid,
+            boolean isAgreed
+    ) {
+        terms.validateAgreement(isAgreed);
+
+        return TermsAgreement.of(
+                termsAgreementGuid,
+                terms.getTermsGuid(),
+                userGuid,
+                isAgreed
+        );
     }
 }
