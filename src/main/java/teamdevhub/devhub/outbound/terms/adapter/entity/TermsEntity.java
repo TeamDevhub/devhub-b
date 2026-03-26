@@ -23,7 +23,8 @@ public class TermsEntity extends BaseEntity {
     
     @Column(name = "name", nullable = false)
     private String title;
-    
+
+    @Lob
     @Column(name = "content", nullable = false)
     private String content;
     
