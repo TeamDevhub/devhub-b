@@ -27,6 +27,7 @@ public interface JpaProjectLikeRepository extends JpaRepository<ProjectLikeEntit
 			""")
 	int countByProjectGuid(@Param("projectGuid") String projectGuid);
 
+	ProjectLikeEntity findByProjectGuidAndUserGuid(String projectGuid, String userGuid);
 	
 	@Modifying
 	@Query("""

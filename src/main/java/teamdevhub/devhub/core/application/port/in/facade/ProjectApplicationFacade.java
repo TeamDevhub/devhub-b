@@ -62,7 +62,7 @@ public class ProjectApplicationFacade {
 		PageCommand pageCommand
 	) {
 		Project project = projectUseCase.getProjectDetail(projectGuid);
-		ProjectDetailResponseDto projectDetailDto = ProjectDetailResponseDto.fromDomain(project, null);
+		ProjectDetailResponseDto projectDetailDto = ProjectDetailResponseDto.fromDomain(project, null, null);
 
 		PageResult<ProjectApplication> pagedApplications =
 			projectApplicationQueryUseCase.getApplicationsByProjectGuid(projectGuid, pageCommand);

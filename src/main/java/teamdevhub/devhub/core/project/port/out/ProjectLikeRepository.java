@@ -13,4 +13,10 @@ public interface ProjectLikeRepository {
 
 	void deleteByProjectGuid(String projectGuid);
 
+	void save(ProjectLike projectLike);
+
+	ProjectLike findByProjectGuidAndUserGuid(String projectGuid, String userGuid);
+
+	void deleteById(String projectLikeGuid);
+
 }
