@@ -99,7 +99,8 @@ public class WebSecurityConfig {
                                 .requestMatchers("/projects/**").permitAll()
                                 .requestMatchers("/applicationForms/**").permitAll()
                                 .requestMatchers("/boards/**").permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
+//                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/**").permitAll()
                                 .anyRequest().authenticated())
 
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))

@@ -3,6 +3,7 @@ package teamdevhub.devhub.fake.pure.application.port.in.usecase.file;
 import teamdevhub.devhub.core.file.application.FileMetadata;
 import teamdevhub.devhub.core.file.application.FileResource;
 import teamdevhub.devhub.core.file.port.in.command.UploadFileCommand;
+import teamdevhub.devhub.core.file.port.in.facade.model.FileResponseDto;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
 
 import java.io.FileNotFoundException;
@@ -48,5 +49,10 @@ public class FakeFileUseCase implements FileUseCase {
     public void delete(String fileGuid) {
         metadataStore.remove(fileGuid);
         contentStore.remove(fileGuid);
+    }
+
+    @Override
+    public FileResponseDto selectFileObject(String fileGuid) {
+        return null;
     }
 }
