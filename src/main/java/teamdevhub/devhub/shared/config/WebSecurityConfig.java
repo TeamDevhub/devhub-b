@@ -96,6 +96,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/common/**").permitAll()
                                 .requestMatchers("/files/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/terms/**").permitAll()
                                 .requestMatchers("/projects/**").permitAll()
                                 .requestMatchers("/applicationForms/**").permitAll()
                                 .requestMatchers("/boards/**").permitAll()
