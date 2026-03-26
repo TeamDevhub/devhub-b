@@ -1,7 +1,5 @@
 package teamdevhub.devhub.fake.pure.application.port.out.terms;
 
-import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.port.out.TermsRepository;
 
@@ -14,20 +12,8 @@ public class FakeTermsRepository implements TermsRepository {
     private final Map<String, Terms> store = new ConcurrentHashMap<>();
 
     @Override
-    public PageResult<Terms> listTerms(PageCommand pageCommand) {
-        List<Terms> allTerms = new ArrayList<>(store.values());
-
-        int start = pageCommand.page() * pageCommand.size();
-        int end = Math.min(start + pageCommand.size(), allTerms.size());
-
-        List<Terms> content = allTerms.subList(start, end);
-
-        return PageResult.of(
-                content,
-                pageCommand.page(),
-                pageCommand.size(),
-                allTerms.size()
-        );
+    public List<Terms> listTerms() {
+        return new ArrayList<>(store.values());
     }
 
     @Override

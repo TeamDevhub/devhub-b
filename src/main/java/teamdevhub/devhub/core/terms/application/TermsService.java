@@ -32,8 +32,8 @@ public class TermsService implements TermsUseCase {
     private final IdentifierProvider identifierProvider;
 
     @Override
-    public PageResult<Terms> listTerms(PageCommand pageCommand) {
-        return termsRepository.listTerms(pageCommand);
+    public List<Terms> listTerms() {
+        return termsRepository.listTerms();
     }
 
     @Override

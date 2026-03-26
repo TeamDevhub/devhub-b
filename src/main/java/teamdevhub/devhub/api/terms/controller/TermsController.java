@@ -26,16 +26,15 @@ public class TermsController {
 
     @GetMapping()
     public ResponseEntity<DataListApiResponseDto<TermsResponseDto>> list(@RequestParam int page, @RequestParam int size) {
-        PageResult<Terms> pagedTermsList = termsFacade.listTerms(PageCommand.of(page, size));
-        List<TermsResponseDto> termsList = pagedTermsList.content().stream()
+        List<TermsResponseDto> termsList = termsFacade.listTerms().stream()
                 .map(TermsResponseDto::fromDomain)
                 .toList();
 
         return ResponseEntity.ok(
                 DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
-                        termsList,
-                        PageResponseDto.from(pagedTermsList))
+                        termsList
+                )
         );
     }
 
