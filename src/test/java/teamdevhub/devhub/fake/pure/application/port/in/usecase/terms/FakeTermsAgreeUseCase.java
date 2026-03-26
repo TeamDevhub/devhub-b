@@ -1,11 +1,11 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.terms;
 
-import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.port.in.command.AgreeTermsCommand;
 import teamdevhub.devhub.core.terms.port.in.command.CreateTermsCommand;
 import teamdevhub.devhub.core.terms.port.in.usecase.TermsUseCase;
+
+import java.util.List;
 
 public class FakeTermsAgreeUseCase implements TermsUseCase {
 
@@ -13,7 +13,7 @@ public class FakeTermsAgreeUseCase implements TermsUseCase {
     private AgreeTermsCommand agreeTermsCommand;
 
     @Override
-    public PageResult<Terms> listTerms(PageCommand pageCommand) {
+    public List<Terms> listTerms() {
         return null;
     }
 

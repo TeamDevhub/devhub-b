@@ -30,4 +30,13 @@ public class DataListApiResponseDto<T> {
                 .pagination(pageResponseDto)
                 .build();
     }
+
+    public static <T> DataListApiResponseDto<T> successWithDataList(SuccessCode successCode, List<T> dataList) {
+        return DataListApiResponseDto.<T>builder()
+                .isSuccess(true)
+                .code(successCode.getCode())
+                .dataList(dataList)
+                .pagination(null)
+                .build();
+    }
 }
