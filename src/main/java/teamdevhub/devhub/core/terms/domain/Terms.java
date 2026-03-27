@@ -2,7 +2,9 @@ package teamdevhub.devhub.core.terms.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.terms.port.in.command.CreateTermsCommand;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 @Getter
 public class Terms {
@@ -52,15 +54,15 @@ public class Terms {
     public void validateAgreement(boolean isAgreed) {
 
         if (isDeleted) {
-            throw new IllegalStateException("삭제된 약관입니다.");
+            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }
 
         if (!isUsed) {
-            throw new IllegalStateException("사용 중인 약관이 아닙니다.");
+            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }
 
         if (isRequired && !isAgreed) {
-            throw new IllegalStateException("필수 약관은 동의해야 합니다.");
+            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }
     }
 
