@@ -15,13 +15,17 @@ import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
 public class SearchBoardRequestDto {
 	
 	private String title;
-	
 	private String categoryCd;
 	
 	public SearchBoardCommand toCommand() {
+		return this.toCommand(null);
+	}
+	
+	public SearchBoardCommand toCommand(String userGuid) {
 		return SearchBoardCommand.builder()
-				.title(title)
-				.categoryCd(categoryCd)
+				.title(this.title)
+				.categoryCd(this.categoryCd)
+				.userGuid(userGuid)
 				.build();
 	}
 	
