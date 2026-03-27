@@ -1,7 +1,5 @@
 package teamdevhub.devhub.outbound.terms.persistence;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.outbound.terms.adapter.entity.TermsEntity;
@@ -15,5 +13,5 @@ public interface JpaTermsRepository extends JpaRepository<TermsEntity, String> {
     Optional<TermsEntity> findByTermsGuid(String termsGuid);
     void save(Terms terms);
     List<TermsEntity> findAllByTermsGuidInAndIsDeletedFalseAndIsUsedTrue(Collection<String> termsGuids);
-    Page<TermsEntity> findAll(Pageable pageable);
+    List<TermsEntity> findAll();
 }

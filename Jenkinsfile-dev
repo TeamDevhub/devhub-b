@@ -1,0 +1,100 @@
+pipeline {
+    agent any
+
+    environment {
+        PROJECT = "devhub-b"
+        DATE = sh(script: "date +%Y%m%d", returnStdout: true).trim()
+        DOCKERHUB_ID = "goonerd"
+        BUILD_TAG = "${PROJECT}-${DATE}-${BUILD_NUMBER}".toLowerCase()
+        TARGET_ENV   = "dev"
+        IMAGE_NAME   = "${DOCKERHUB_ID}/${PROJECT}-${TARGET_ENV}".toLowerCase()
+        INFRA_REPO = "https://github.com/Goonerd17/devhub-infra.git"
+    }
+
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                echo "Cleaning workspace..."
+                deleteDir()
+            }
+        }
+
+        stage('Checkout Repository') {
+            steps {
+                script {
+                    def targetBranch = "${TARGET_ENV}"
+                    echo "Checking out ${PROJECT} branch: ${targetBranch}..."
+                    git branch: targetBranch, url: "https://github.com/Goonerd17/${PROJECT}.git"
+                }
+            }
+        }
+
+        stage('Install & Build') {
+            steps {
+                echo "Building jar..."
+                sh "chmod +x gradlew"
+                sh "./gradlew clean build"
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    echo "Building Docker image: ${IMAGE_NAME}:${BUILD_TAG}..."
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                        sh """
+                            echo "$PASS" | docker login -u "$USER" --password-stdin
+                            docker build -t ${IMAGE_NAME}:${BUILD_TAG} .
+                            docker push ${IMAGE_NAME}:${BUILD_TAG}
+                            docker logout
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Update Infra Repo') {
+            steps {
+                script {
+                    def targetDir = "k8s/${TARGET_ENV}/devhub-b"
+                    echo "Cloning Infra repository..."
+                    withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                        sh 'git config --global user.name "Jenkins"'
+                        sh 'git config --global user.email "jenkins@devhub.local"'
+                        sh "git clone -b main https://${GIT_USER}:${GIT_TOKEN}@github.com/Goonerd17/devhub-infra.git"
+
+                        def infraPath = "devhub-infra/${targetDir}"
+                        echo "Checking deployment.yml in ${infraPath}..."
+                        sh "ls -l ${infraPath}"  // 파일 존재 확인
+                        sh """
+                            if [ ! -f ${infraPath}/deployment.yml ]; then
+                                echo "deployment.yml not found in ${infraPath}"
+                                exit 1
+                            fi
+                        """
+
+                        dir(infraPath) {
+                            echo "Updating deployment.yml image tag..."
+                            sh """
+                                sed -i "s#image: goonerd/.*:.*#image: ${IMAGE_NAME}:${BUILD_TAG}#" deployment.yml
+                                grep 'image:' deployment.yml
+                                git add deployment.yml
+                                git commit -m "[CI] Update frontend image to ${BUILD_TAG}"
+                                git push origin main
+                            """
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Build & Infra update complete!"
+        }
+        failure {
+            echo "❌ Pipeline failed!"
+        }
+    }
+}

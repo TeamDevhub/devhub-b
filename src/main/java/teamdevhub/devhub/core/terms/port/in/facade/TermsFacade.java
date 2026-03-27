@@ -9,6 +9,8 @@ import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.port.in.command.CreateTermsCommand;
 import teamdevhub.devhub.core.terms.port.in.usecase.TermsUseCase;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -16,8 +18,8 @@ public class TermsFacade {
 
     private final TermsUseCase termsUseCase;
 
-    public PageResult<Terms> listTerms(PageCommand pageCommand) {
-        return termsUseCase.listTerms(pageCommand);
+    public List<Terms> listTerms() {
+        return termsUseCase.listTerms();
     }
 
     public void registerTerms(CreateTermsCommand createTermsCommand) {

@@ -3,14 +3,14 @@ package teamdevhub.devhub.small.core.terms.application;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.terms.application.TermsService;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.port.in.command.CreateTermsCommand;
 import teamdevhub.devhub.fake.pure.application.port.out.terms.FakeTermsAgreementRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.terms.FakeTermsRepository;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,37 +44,8 @@ class TermsServiceTest {
         termsService.registerTerms(command);
 
         // then
-        PageResult<Terms> result = termsService.listTerms(new PageCommand(0, 10));
+        List<Terms> result = termsService.listTerms();
 
-        assertThat(result.content()).hasSize(1);
-        assertThat(result.totalElements()).isEqualTo(1);
-        assertThat(result.totalPages()).isEqualTo(1);
-        assertThat(result.first()).isTrue();
-        assertThat(result.last()).isTrue();
-    }
-
-    @Test
-    @DisplayName("약관 목록 조회 시 페이징이 정상적으로 동작한다")
-    void shouldReturnPagedTermsList() {
-        // given
-        for (int i = 0; i < 15; i++) {
-            CreateTermsCommand command = CreateTermsCommand.builder()
-                    .title("약관 " + i)
-                    .content("내용 " + i)
-                    .isRequired(i % 2 == 0)
-                    .build();
-
-            termsService.registerTerms(command);
-        }
-
-        // when
-        PageResult<Terms> result = termsService.listTerms(new PageCommand(0, 10));
-
-        // then
-        assertThat(result.content()).hasSize(10);
-        assertThat(result.totalElements()).isEqualTo(15);
-        assertThat(result.totalPages()).isEqualTo(2);
-        assertThat(result.first()).isTrue();
-        assertThat(result.last()).isFalse();
+        assertThat(result.size()).isEqualTo(1);
     }
 }

@@ -32,24 +32,11 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
     private final JpaTermsAgreementRepository jpaTermsAgreementRepository;
 
     @Override
-    public PageResult<Terms> listTerms(PageCommand pageCommand) {
-        Pageable pageable = PageRequest.of(
-                pageCommand.page(),
-                pageCommand.size(),
-                Sort.by("registeredDate").descending()
-        );
-        Page<TermsEntity> page = jpaTermsRepository.findAll(pageable);
-
-        List<Terms> content = page.getContent().stream()
+    public List<Terms> listTerms() {
+        return jpaTermsRepository.findAll()
+                .stream()
                 .map(TermsMapper::toDomain)
                 .toList();
-
-        return PageResult.of(
-                content,
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements()
-        );
     }
 
     @Override
