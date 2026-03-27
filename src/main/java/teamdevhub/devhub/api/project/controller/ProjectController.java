@@ -1,6 +1,7 @@
 package teamdevhub.devhub.api.project.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -51,8 +52,8 @@ public class ProjectController {
 	 */
 	@GetMapping
     public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto,
-    		@RequestParam("page") int page, @RequestParam("size") int size, @LoginUser AuthenticatedUser authenticatedUser) {
-        return ResponseEntity.ok(projectFacade.getProjectList(searchProjectRequestDto.toSearchProjectListCommand(), PageCommand.of(page, size), authenticatedUser.userGuid()));
+    		@RequestParam("page") int page, @RequestParam("size") int size,  @AuthenticationPrincipal AuthenticatedUser user) {
+        return ResponseEntity.ok(projectFacade.getProjectList(searchProjectRequestDto.toSearchProjectListCommand(), PageCommand.of(page, size), user));
     }
 	
 	@GetMapping("/{projectGuid}")

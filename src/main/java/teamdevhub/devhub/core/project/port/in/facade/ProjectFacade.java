@@ -1,5 +1,6 @@
 package teamdevhub.devhub.core.project.port.in.facade;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ import teamdevhub.devhub.core.project.port.in.usecase.ProjectLikeUseCase;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
+import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @Service
@@ -43,17 +45,25 @@ public class ProjectFacade {
 	private final FileUseCase fileUseCase;
 	private final ProjectLikeUseCase projectLikeUseCase;
 
-	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, String userGuid) {
-		
+	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, AuthenticatedUser user) {
 		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
-        List<ProjectDetailResponseDto> projectDetailResponseDtoList = pagedProjectList.content().stream()
-                .map(project -> {
-                	ProjectLike projectLike = projectLikeUseCase.findByProjectGuidAndUserGuid(project.getProjectGuid(), userGuid);
-                	boolean isProjectLiked = false;
-                	if(projectLike != null) isProjectLiked= true;
-                	return ProjectDetailResponseDto.fromDomain(project, null, isProjectLiked);
-                })
-                .toList();
+		List<ProjectDetailResponseDto> projectDetailResponseDtoList = new ArrayList<>();
+		if(user == null) {
+			projectDetailResponseDtoList = pagedProjectList.content().stream()
+            .map(project -> {
+            	return ProjectDetailResponseDto.fromDomain(project, null, false);
+            })
+            .toList();
+		} else {
+	        projectDetailResponseDtoList = pagedProjectList.content().stream()
+            .map(project -> {
+            	ProjectLike projectLike = projectLikeUseCase.findByProjectGuidAndUserGuid(project.getProjectGuid(), user.userGuid());
+            	boolean isProjectLiked = false;
+            	if(projectLike != null) isProjectLiked= true;
+            	return ProjectDetailResponseDto.fromDomain(project, null, isProjectLiked);
+            })
+            .toList();
+		}
 		
 		return DataListApiResponseDto.successWithDataList(
                 SuccessCode.READ_SUCCESS,
