@@ -7,4 +7,6 @@ import teamdevhub.devhub.core.common.page.PageResult;
 
 public interface BannerRepository {
     PageResult<Banner> getBannerList(SearchBannerRequestCommand searchBannerRequestCommand, PageCommand pageCommand);
+    void saveBanner(Banner command);
+    void deleteBanner(String bannerGuid);
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.file.port.in.command.UploadFileCommand;
+import teamdevhub.devhub.core.file.port.in.facade.model.FileResponseDto;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
 import teamdevhub.devhub.core.file.port.out.FileMetadataRepository;
 import teamdevhub.devhub.core.file.port.out.FileStorage;
@@ -46,5 +47,11 @@ public class FileService implements FileUseCase {
     public void delete(String fileGuid) {
         fileStorage.delete(fileGuid);
         fileMetadataRepository.deleteByFileGuid(fileGuid);
+    }
+
+    @Override
+    public FileResponseDto selectFileObject(String fileGuid) {
+        FileMetadata fileMetadata = fileMetadataRepository.find(fileGuid);
+        return FileResponseDto.from(fileMetadata);
     }
 }

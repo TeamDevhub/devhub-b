@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.core.admin.banner.domain.Banner;
+import teamdevhub.devhub.shared.enums.DateConstants;
 
 @Getter
 @Builder
@@ -34,7 +35,7 @@ public class BannerResponseDto {
                 .title(banner.getTitle())
                 .link(banner.getLink())
                 .used(banner.isUsed() ? "Y" : "N")
-                .alwaysPublication("".equalsIgnoreCase(banner.getPublicationEndDate()) ? "Y" : "N")
+                .alwaysPublication(DateConstants.MAX_DATE_STRING.equalsIgnoreCase(banner.getPublicationEndDate()) ? "Y" : "N")
                 .build();
     }
 }

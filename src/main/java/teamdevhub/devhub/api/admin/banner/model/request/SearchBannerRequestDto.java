@@ -1,12 +1,10 @@
 package teamdevhub.devhub.api.admin.banner.model.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import teamdevhub.devhub.core.admin.banner.port.in.command.SearchBannerRequestCommand;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,8 +20,8 @@ public class SearchBannerRequestDto {
         return SearchBannerRequestCommand.builder()
                 .publicationStartDate(publicationStartDate)
                 .publicationEndDate(publicationEndDate)
-                .isUsed("Y".equalsIgnoreCase(used) ? Boolean.TRUE : "N".equalsIgnoreCase(used) ? false : null)
-                .alwaysPublication("Y".equalsIgnoreCase(alwaysPublication) ? Boolean.TRUE : "N".equalsIgnoreCase(alwaysPublication) ? false : null)
+                .isUsed("Y".equalsIgnoreCase(used) ? Boolean.TRUE : "N".equalsIgnoreCase(used) ? Boolean.FALSE : null)
+                .alwaysPublication("Y".equalsIgnoreCase(alwaysPublication) ? Boolean.TRUE : "N".equalsIgnoreCase(alwaysPublication) ? Boolean.FALSE : null)
                 .keyword(keyword)
                 .isMainBanner("MAIN".equalsIgnoreCase(bannerType))
                 .build();
