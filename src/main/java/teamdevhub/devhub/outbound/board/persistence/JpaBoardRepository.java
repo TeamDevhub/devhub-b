@@ -16,8 +16,9 @@ public interface JpaBoardRepository extends JpaRepository<BoardEntity, String> {
 	@Query(value = "select b " +
 			"from BoardEntity b " +
 			"where (:title IS NULL OR b.title LIKE %:title%) " +
-			"AND (:categoryCd IS NULL OR b.categoryCd=:categoryCd)")
-	Page<BoardEntity> findByConditions(@Param("title") String title,  @Param("categoryCd") String categoryCd, Pageable pageable);
+			"AND (:categoryCd IS NULL OR b.categoryCd=:categoryCd) " +
+			"AND (:userGuid IS NULL OR b.userGuid=:userGuid)")
+	Page<BoardEntity> findByConditions(@Param("title") String title,  @Param("categoryCd") String categoryCd, @Param("userGuid") String userGuid, Pageable pageable);
 
 	Optional<BoardEntity> findByBoardGuid(String boardGuid);
 	

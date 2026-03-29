@@ -26,6 +26,7 @@ public class BoardQueryAdapter implements BoardQueryRepository {
 		Page<BoardEntity> pageBoardList = jpaBoardRepository.findByConditions(				
 											searchBoardCommand.title(),
 											searchBoardCommand.categoryCd(),
+											searchBoardCommand.userGuid(),
 											pageable);
 
 		PageResult<Board> aa = PageResult.of(
