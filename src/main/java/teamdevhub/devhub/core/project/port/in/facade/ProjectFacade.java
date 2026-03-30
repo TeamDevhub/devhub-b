@@ -79,16 +79,20 @@ public class ProjectFacade {
 		projectUseCase.createProject(createProjectCommand, user.getUsername());
 	}
 
-	public ProjectDetailResponseDto getProjectDetail(String projectGuid, String userGuid) {
+	public ProjectDetailResponseDto getProjectDetail(String projectGuid, AuthenticatedUser user) {
 		String imageFileUrl = null;
         Project project = projectUseCase.getProjectDetail(projectGuid);
         if(project.getImageFileGuid() != null && !project.getImageFileGuid().isBlank()) {
         	imageFileUrl = fileUseCase.find(project.getImageFileGuid()).metadata().path();
         }
-        ProjectLike projectLike = projectLikeUseCase.findByProjectGuidAndUserGuid(project.getProjectGuid(), userGuid);
-    	boolean isProjectLiked = false;
-    	if(projectLike != null) isProjectLiked= true;
-        return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, isProjectLiked);
+        if(user == null) {
+            	return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, false);
+		} else {
+			ProjectLike projectLike = projectLikeUseCase.findByProjectGuidAndUserGuid(project.getProjectGuid(), user.userGuid());
+	    	boolean isProjectLiked = false;
+	    	if(projectLike != null) isProjectLiked= true;
+	        return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, isProjectLiked);
+		}
 	}
 
 	public void deleteProject(String projectGuid) {
