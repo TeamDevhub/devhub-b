@@ -1,20 +1,11 @@
 package teamdevhub.devhub.outbound.admin.banner.adapter.entity;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import teamdevhub.devhub.outbound.common.persistence.jpa.converter.BooleanToYNConverter;
+import jakarta.persistence.*;
+import lombok.*;
 import teamdevhub.devhub.outbound.common.persistence.jpa.audit.BaseEntity;
+import teamdevhub.devhub.outbound.common.persistence.jpa.converter.NullableBooleanToYNConverter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -36,30 +27,30 @@ public class BannerEntity extends BaseEntity {
 	@Column(length = 32, nullable = false, unique = true)
     private String bannerGuid;
 
-    @Column(name = "image_guid", length = 32, nullable = false)
+    @Column(name = "image_guid", length = 32)
     private String imageGuid;
     
-    @Convert(converter = BooleanToYNConverter.class)
+    @Convert(converter = NullableBooleanToYNConverter.class)
     @Column(nullable = false)
     private boolean used;
     
-    @Convert(converter = BooleanToYNConverter.class)
+    @Convert(converter = NullableBooleanToYNConverter.class)
     @Column(nullable = false)
     private boolean isMainBanner;
     
     @Column(name = "title", nullable = false)
     private String title;
     
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "link", nullable = false)
+    @Column(name = "link")
     private String link;
 
 
-    @Column(name = "publication_start_date", nullable = false)
+    @Column(name = "publication_start_date")
     private LocalDateTime publicationStartDate;
     
-    @Column(name = "publication_end_date", nullable = false)
+    @Column(name = "publication_end_date")
     private LocalDateTime publicationEndDate;
 }

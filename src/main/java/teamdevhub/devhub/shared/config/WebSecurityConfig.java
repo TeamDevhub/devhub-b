@@ -96,10 +96,12 @@ public class WebSecurityConfig {
                                 .requestMatchers("/common/**").permitAll()
                                 .requestMatchers("/files/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/terms/**").permitAll()
                                 .requestMatchers("/projects/**").permitAll()
                                 .requestMatchers("/applicationForms/**").permitAll()
                                 .requestMatchers("/boards/**").permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
+//                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/**").permitAll()
                                 .anyRequest().authenticated())
 
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))

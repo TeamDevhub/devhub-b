@@ -4,6 +4,7 @@ import teamdevhub.devhub.core.admin.banner.domain.Banner;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.outbound.admin.banner.adapter.entity.BannerEntity;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class BannerMapper {
@@ -29,6 +30,20 @@ public class BannerMapper {
                 .isMainBanner(bannerEntity.isMainBanner())
                 .link(bannerEntity.getLink())
                 .auditInfo(toAuditInfo(bannerEntity))
+                .build();
+    }
+
+    public static BannerEntity toEntity(Banner banner) {
+        return BannerEntity.builder()
+                .bannerGuid(banner.getBannerGuid())
+                .link(banner.getLink())
+                .title(banner.getTitle())
+                .publicationStartDate(LocalDate.parse(banner.getPublicationStartDate()).atStartOfDay())
+                .publicationEndDate(LocalDate.parse(banner.getPublicationEndDate()).atStartOfDay())
+                .description(banner.getDescription())
+                .isMainBanner(banner.isMainBanner())
+                .used(banner.isUsed())
+                .imageGuid(banner.getImageGuid())
                 .build();
     }
 }

@@ -72,4 +72,10 @@ public class Board {
 		 this.userEmail = userEmail;
 		 this.commentList = commentList;
 	}
+
+	public void update(String title, String categoryCd, String content) {
+		this.title = title;		
+		this.categoryCd = categoryCd;	
+		this.content = content;	
+	}
 }

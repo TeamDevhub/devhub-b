@@ -3,6 +3,7 @@ package teamdevhub.devhub.api.user.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,15 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.api.board.model.SearchBoardRequestDto;
 import teamdevhub.devhub.api.user.model.UpdatePasswordRequestDto;
 import teamdevhub.devhub.api.user.model.UpdateProfileImageRequestDto;
 import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
-import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
-import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
+import teamdevhub.devhub.api.web.model.request.PageRequestDto;
+import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
+import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
+import teamdevhub.devhub.api.web.resolver.LoginUser;
+import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
+import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
+import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
-import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
-import teamdevhub.devhub.api.web.resolver.LoginUser;
+import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
+import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
@@ -30,6 +37,7 @@ public class UserProfileController {
 
     private final UserProfileFacade userProfileFacade;
     private final UserWithdrawFacade userWithdrawFacade;
+    private final BoardFacade boardFacade;
 
     @GetMapping()
     public ResponseEntity<DataApiResponseDto<UserBasicResponseDto>> getUserInfo(@LoginUser AuthenticatedUser authenticatedUser) {
@@ -89,5 +97,11 @@ public class UserProfileController {
                         SuccessCode.USER_DELETE_SUCCESS
                 )
         );
+    }
+    
+    @GetMapping("/profile/boards")
+    public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> getUserListBoard(@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto, 
+    		@LoginUser AuthenticatedUser authenticatedUser) {
+    	return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(authenticatedUser.userGuid()), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize())));
     }
 }

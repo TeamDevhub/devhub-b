@@ -25,7 +25,7 @@ public class TermsController {
     private final TermsFacade termsFacade;
 
     @GetMapping()
-    public ResponseEntity<DataListApiResponseDto<TermsResponseDto>> list(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<DataListApiResponseDto<TermsResponseDto>> list() {
         List<TermsResponseDto> termsList = termsFacade.listTerms().stream()
                 .map(TermsResponseDto::fromDomain)
                 .toList();

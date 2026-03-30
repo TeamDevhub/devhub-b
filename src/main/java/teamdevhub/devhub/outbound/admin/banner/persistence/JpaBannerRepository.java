@@ -11,25 +11,27 @@ import java.time.LocalDateTime;
 
 public interface JpaBannerRepository extends JpaRepository<BannerEntity, String> {
 
-    @Query("""
-            select B from BannerEntity B
-            where (:keyword IS NULL OR B.title LIKE %:keyword% OR B.description LIKE %:keyword%)
-            AND B.used = :isUsed
-            AND B.isMainBanner = :isMainBanner
-            AND(
-                (:alwaysPublication = true AND B.publicationEndDate = :maxDate)
-                OR
-                (:alwaysPublication = false AND B.publicationStartDate <= :publicationStartDate AND B.publicationEndDate >= :publicationEndDate)
-            )
-            """)
-    Page<BannerEntity> findByComplexCondition(
-            @Param("keyword") String keyword,
-            @Param("isUsed") String isUsed,
-            @Param("isMainBanner") String isMainBanner,
-            @Param("alwaysPublication") boolean alwaysPublication,
-            @Param("publicationStartDate") String publicationStartDate,
-            @Param("publicationEndDate") String publicationEndDate,
-            @Param("maxDate") LocalDateTime maxDate,
-            Pageable pageable
-    );
+        @Query("""
+                select B from BannerEntity B
+                where (:keyword IS NULL OR B.title LIKE %:keyword% OR B.description LIKE %:keyword%)
+                AND (:isUsed IS NULL OR B.used = :isUsed)
+                AND (:isMainBanner IS NULL OR B.isMainBanner = :isMainBanner)
+                AND (:alwaysPublication IS NULL OR (
+                        (:alwaysPublication = true AND B.publicationEndDate = :maxDate)
+                        OR 
+                        (:alwaysPublication = false AND (B.publicationEndDate IS NULL OR B.publicationEndDate <> :maxDate))
+                ))
+                AND (:publicationStartDate IS NULL OR B.publicationStartDate <= :publicationStartDate)
+                AND (:publicationEndDate IS NULL OR B.publicationEndDate >= :publicationEndDate)
+        """)
+        Page<BannerEntity> findByComplexCondition(
+                @Param("keyword") String keyword,
+                @Param("isUsed") Boolean isUsed,
+                @Param("isMainBanner") Boolean isMainBanner,
+                @Param("alwaysPublication") Boolean alwaysPublication,
+                @Param("publicationStartDate") LocalDateTime publicationStartDate,
+                @Param("publicationEndDate") LocalDateTime publicationEndDate,
+                @Param("maxDate") LocalDateTime maxDate,
+                Pageable pageable
+        );
 }

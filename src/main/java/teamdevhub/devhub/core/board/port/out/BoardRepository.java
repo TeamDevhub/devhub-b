@@ -13,4 +13,6 @@ public interface BoardRepository {
 	Board findByBoardGuid(String boardGuid);
 
 	void updateViewCount(String boardGuid);
+
+	void deleteBoard(String boardGuid);
 }

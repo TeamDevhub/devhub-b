@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.core.file.application.FileResource;
 import teamdevhub.devhub.core.file.port.in.command.UploadFileCommand;
+import teamdevhub.devhub.core.file.port.in.facade.model.FileResponseDto;
 import teamdevhub.devhub.core.file.port.in.facade.model.UploadFileResponseDto;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
 
@@ -33,5 +34,9 @@ public class FileFacade {
 
     public void delete(String fileGuid) {
         fileUseCase.delete(fileGuid);
+    }
+
+    public FileResponseDto selectFileObject(String fileGuid) {
+        return fileUseCase.selectFileObject(fileGuid);
     }
 }
