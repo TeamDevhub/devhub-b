@@ -47,4 +47,9 @@ public class BoardAdapter implements BoardRepository {
 	public void updateViewCount(String boardGuid) {
 		jpaBoardRepository.updateViewCount(boardGuid);
 	}
+
+	@Override
+	public void deleteBoard(String boardGuid) {
+		jpaBoardRepository.deleteById(boardGuid);
+	}
 }

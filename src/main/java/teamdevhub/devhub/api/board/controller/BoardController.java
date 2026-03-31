@@ -2,6 +2,7 @@ package teamdevhub.devhub.api.board.controller;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,16 +36,9 @@ public class BoardController {
 	
 	private final BoardFacade boardFacade;
 
-	/**
-	 * 리뷰
-	 * PageCommand.of((pageRequestDto.getPage()-1) 이 부분이 정확히 어떤 의미일까요? 페이지가 0부터 시작하기 때문에 해당 소스처럼 작성하신걸까요?
-	 * @param searchBoardRequestDto
-	 * @param pageRequestDto
-	 * @return
-	 */
 	@GetMapping
 	public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> listBoard(@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto) {
-		return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(), PageCommand.of((pageRequestDto.getPage()-1), pageRequestDto.getSize())));
+		return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize())));
 	}
 	
 	@PostMapping
@@ -51,18 +46,35 @@ public class BoardController {
 		return ResponseEntity.ok(boardFacade.createBoard(createBoardRequestDto.toCommand(authenticatedUser.userGuid())));
 	}
 
-	/**
-	 * 퍼사드로 진입하는 요청은 외부 통신 규경인 HttpServletRequest/Response 와는 무관하게 진행되어야하는 것으로 판단됩니다.
-	 * 조회 수 관련 로직해서 해당 request, response 객체가 필수적으로 필요한 사항일까요?
-	 * @param boardGuid
-	 * @param request
-	 * @param response
-	 * @return
-	 */
 	@GetMapping("/{boardGuid}")
 	public ResponseEntity<DataApiResponseDto<BoardDetailResponseDto>> detailBoard(@PathVariable("boardGuid") String boardGuid, 
 			HttpServletRequest request, HttpServletResponse response) {
-		return ResponseEntity.ok(boardFacade.detailBoard(boardGuid, request, response));
+		boolean cookieResult = isCookie(boardGuid, request, response);
+		return ResponseEntity.ok(boardFacade.detailBoard(boardGuid, cookieResult));
+	}
+	
+	private boolean isCookie(String boardGuid, HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("boardView")) {
+                	if(cookie.getValue().contains("[" + boardGuid + "]")) return false;
+                	
+                	cookie.setValue(cookie.getValue() + "_[" + boardGuid + "]");
+                	cookie.setPath("/");
+                	cookie.setMaxAge(60 * 60 * 24);
+                	response.addCookie(cookie);
+                	return true;
+                }
+            }
+        }
+        
+        Cookie newCookie = new Cookie("boardView","[" + boardGuid + "]");
+        newCookie.setPath("/");
+        newCookie.setMaxAge(60 * 60 * 24);
+        response.addCookie(newCookie);
+        return true;
 	}
 	
 	@PutMapping("/{boardGuid}")
@@ -74,5 +86,10 @@ public class BoardController {
 	@PostMapping("/{boardGuid}/likes")
 	public ResponseEntity<DataApiResponseDto<Void>> likeBoard(@PathVariable("boardGuid") String boardGuid, @LoginUser AuthenticatedUser authenticatedUser) {
 		return ResponseEntity.ok(boardFacade.likeBoard(boardGuid, authenticatedUser.userGuid()));
+	}
+	
+	@DeleteMapping("/{boardGuid}")
+	public ResponseEntity<DataApiResponseDto<Void>> deleteBoard(@PathVariable("boardGuid") String boardGuid) {
+		return ResponseEntity.ok(boardFacade.deleteBoard(boardGuid));
 	}
 }

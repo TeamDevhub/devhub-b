@@ -14,6 +14,8 @@ import teamdevhub.devhub.outbound.admin.banner.adapter.entity.BannerEntity;
 import teamdevhub.devhub.outbound.admin.banner.adapter.mapper.BannerMapper;
 import teamdevhub.devhub.outbound.admin.banner.persistence.JpaBannerRepository;
 
+import java.time.LocalDate;
+
 import static teamdevhub.devhub.shared.enums.DateConstants.MAX_LOCAL_DATE_TIME;
 
 @Component
@@ -27,11 +29,11 @@ public class BannerAdapter implements BannerRepository {
         Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
         Page<BannerEntity> resultList = jpaBannerRepository.findByComplexCondition(
                 searchBannerRequestCommand.keyword()
-                , searchBannerRequestCommand.isUsed() ? "Y" : "N"
-                , searchBannerRequestCommand.isMainBanner() ? "Y" : "N"
+                , searchBannerRequestCommand.isUsed()
+                , searchBannerRequestCommand.isMainBanner()
                 , searchBannerRequestCommand.alwaysPublication()
-                , searchBannerRequestCommand.publicationStartDate()
-                , searchBannerRequestCommand.publicationEndDate()
+                , (searchBannerRequestCommand.publicationStartDate() != null) ? LocalDate.parse(searchBannerRequestCommand.publicationStartDate()).atStartOfDay() : null
+                , (searchBannerRequestCommand.publicationEndDate() != null) ? LocalDate.parse(searchBannerRequestCommand.publicationEndDate()).atStartOfDay() : null
                 , MAX_LOCAL_DATE_TIME
                 , pageable
         );
@@ -41,5 +43,15 @@ public class BannerAdapter implements BannerRepository {
                 resultList.getSize(),
                 resultList.getTotalElements()
         );
+    }
+
+    @Override
+    public void saveBanner(Banner banner) {
+        jpaBannerRepository.save(BannerMapper.toEntity(banner));
+    }
+
+    @Override
+    public void deleteBanner(String bannerGuid) {
+        jpaBannerRepository.deleteById(bannerGuid);
     }
 }

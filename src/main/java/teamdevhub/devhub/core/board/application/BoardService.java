@@ -6,9 +6,6 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.domain.BoardLike;
@@ -43,10 +40,8 @@ public class BoardService implements BoardUseCase {
 	}
 	
 	@Override
-	public Board detailBoard(String boardGuid, HttpServletRequest request, HttpServletResponse response) {
-		if(viewCountUp(boardGuid, request, response)) {
-			boardRepository.updateViewCount(boardGuid);
-		}
+	public Board detailBoard(String boardGuid, Boolean cookieResult) {
+		if(cookieResult) { boardRepository.updateViewCount(boardGuid); }
 		Board boardDetail = boardRepository.detailBoard(boardGuid);
 		
 		Map<String, Long> boardLikes = boardLikeRepository.countByLikeCount(List.of(boardDetail.getBoardGuid()));
@@ -64,34 +59,15 @@ public class BoardService implements BoardUseCase {
         
         return boardDetail;
 	}
-	
-	private boolean viewCountUp(String boardGuid, HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
-        
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("boardView")) {
-                	if(cookie.getValue().contains("[" + boardGuid + "]")) return false;
-                	
-                	cookie.setValue(cookie.getValue() + "_[" + boardGuid + "]");
-                	cookie.setPath("/");
-                	cookie.setMaxAge(60 * 60 * 24);
-                	response.addCookie(cookie);
-                	return true;
-                }
-            }
-        }
-        
-        Cookie newCookie = new Cookie("boardView","[" + boardGuid + "]");
-        newCookie.setPath("/");
-        newCookie.setMaxAge(60 * 60 * 24);
-        response.addCookie(newCookie);
-        return true;
-	}
 
 	@Override
 	public void updateBoard(UpdateBoardCommand updateBoardCommand) {
 		Board board = boardRepository.findByBoardGuid(updateBoardCommand.boardGuid());
+		board.update(
+				updateBoardCommand.title(),
+				updateBoardCommand.categoryCd(),
+				updateBoardCommand.content()
+				);
 		boardRepository.updateBoard(board);
 	}
 	
@@ -106,5 +82,10 @@ public class BoardService implements BoardUseCase {
 			boardLike = BoardLike.createBoardLike(boardGuid, userGuid, boardLikeGuid);
 			boardLikeRepository.save(boardLike);
 		}
+	}
+	
+	@Override
+	public void deleteBoard(String boardGuid) {
+		boardRepository.deleteBoard(boardGuid);
 	}
 }
