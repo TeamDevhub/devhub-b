@@ -4,8 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
-import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.domain.TermsAgreement;
@@ -62,8 +60,8 @@ public class TermsService implements TermsUseCase {
         termsAgreementRepository.saveAll(termsAgreementList);
     }
 
-    private Map<String, Boolean> toAgreementMap(AgreeTermsCommand command) {
-        return command.termsAgreementItemList()
+    private Map<String, Boolean> toAgreementMap(AgreeTermsCommand agreeTermsCommand) {
+        return agreeTermsCommand.termsAgreementItemList()
                 .stream()
                 .collect(Collectors.toMap(
                         TermsAgreementItem::termsGuid,
