@@ -48,9 +48,9 @@ public class BoardController {
 
 	@GetMapping("/{boardGuid}")
 	public ResponseEntity<DataApiResponseDto<BoardDetailResponseDto>> detailBoard(@PathVariable("boardGuid") String boardGuid, 
-			HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, HttpServletResponse response, @LoginUser AuthenticatedUser authenticatedUser) {
 		boolean cookieResult = isCookie(boardGuid, request, response);
-		return ResponseEntity.ok(boardFacade.detailBoard(boardGuid, cookieResult));
+		return ResponseEntity.ok(boardFacade.detailBoard(boardGuid, cookieResult, authenticatedUser.userGuid()));
 	}
 	
 	private boolean isCookie(String boardGuid, HttpServletRequest request, HttpServletResponse response) {

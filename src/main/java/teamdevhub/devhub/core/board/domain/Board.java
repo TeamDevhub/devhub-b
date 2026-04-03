@@ -25,6 +25,7 @@ public class Board {
 	
 	private List<Comment> commentList;
 	private String userEmail;
+	private boolean isLiked;
 
 	private final AuditInfo auditInfo;
 
@@ -65,12 +66,13 @@ public class Board {
 
 	}
 	
-	public void fillDetailSubquery(String likeCount, String commentCount, String userName, String userEmail, List<Comment> commentList) {
+	public void fillDetailSubquery(String likeCount, String commentCount, String userName, String userEmail, List<Comment> commentList, boolean isLiked) {
 		 this.likeCount = likeCount;
 		 this.commentCount = commentCount;
 		 this.userName = userName;
 		 this.userEmail = userEmail;
 		 this.commentList = commentList;
+		 this.isLiked = isLiked;
 	}
 
 	public void update(String title, String categoryCd, String content) {

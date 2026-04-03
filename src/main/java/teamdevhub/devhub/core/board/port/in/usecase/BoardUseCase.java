@@ -8,7 +8,7 @@ public interface BoardUseCase {
 
 	void createBoard(CreateBoardCommand createBoardCommand);
 
-	Board detailBoard(String boardGuid, Boolean cookieResult);
+	Board detailBoard(String boardGuid, Boolean cookieResult, String userGuid);
 
 	void updateBoard(UpdateBoardCommand updateBoardCommand);
 

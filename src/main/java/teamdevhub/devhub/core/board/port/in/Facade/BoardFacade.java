@@ -56,8 +56,8 @@ public class BoardFacade {
 		
 	}
 
-	public DataApiResponseDto<BoardDetailResponseDto> detailBoard(String boardGuid, Boolean cookieResult) {
-		Board board = boardUseCase.detailBoard(boardGuid, cookieResult);
+	public DataApiResponseDto<BoardDetailResponseDto> detailBoard(String boardGuid, Boolean cookieResult, String userGuid) {
+		Board board = boardUseCase.detailBoard(boardGuid, cookieResult, userGuid);
 		
 		BoardSummaryResponseDto summaryBoard = BoardSummaryResponseDto.builder()
 				.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))
@@ -69,6 +69,7 @@ public class BoardFacade {
 				.boardSummaryResponseDto(summaryBoard)
 				.commentList(board.getCommentList())
 				.userEmail(board.getUserEmail())
+				.isLiked(board.isLiked())
 				.build();
 
 		return DataApiResponseDto.successWithData(
