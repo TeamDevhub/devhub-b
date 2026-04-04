@@ -54,7 +54,7 @@ public class Terms {
     public void validateAgreement(boolean isAgreed) {
 
         if (isDeleted) {
-            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw DomainRuleException.of(ErrorCode.EMAIL_DUPLICATED);
         }
 
         if (!isUsed) {
@@ -62,7 +62,7 @@ public class Terms {
         }
 
         if (isRequired && !isAgreed) {
-            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw DomainRuleException.of(ErrorCode.USER_ID_FAIL);
         }
     }
 
