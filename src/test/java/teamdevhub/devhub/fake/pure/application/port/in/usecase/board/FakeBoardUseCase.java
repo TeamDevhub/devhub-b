@@ -25,7 +25,7 @@ public class FakeBoardUseCase implements BoardUseCase{
     }
 
     @Override
-    public Board detailBoard(String boardGuid, HttpServletRequest request, HttpServletResponse response) {
+    public Board detailBoard(String boardGuid, Boolean cookieResult) {
         return null;
     }
 
@@ -36,6 +36,11 @@ public class FakeBoardUseCase implements BoardUseCase{
 
     @Override
     public void likeBoard(String userGuid, String boardGuid) {
+
+    }
+
+    @Override
+    public void deleteBoard(String boardGuid) {
 
     }
 

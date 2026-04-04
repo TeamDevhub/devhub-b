@@ -39,13 +39,13 @@ public class TermsAgreementTest {
             String termsAgreementGuid,
             String termsGuid,
             String userGuid,
-            boolean isAgreed
+            boolean agreed
     ) {
         return TermsAgreement.of(
                 termsAgreementGuid,
                 termsGuid,
                 userGuid,
-                isAgreed
+                agreed
         );
     }
 }

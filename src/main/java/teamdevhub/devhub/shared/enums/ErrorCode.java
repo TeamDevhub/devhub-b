@@ -56,12 +56,13 @@ public enum ErrorCode {
     FILE_EXTENSION_INVALID("ERR.DVH.0065", "지원하지 않는 파일 확장자입니다", BAD_REQUEST),
     FILE_NAME_TOO_LONG("ERR.DVH.0066", "파일명이 허용 길이를 초과했습니다", BAD_REQUEST),
 
+    INVALID_TERMS("ERR.DVH.0067", "유효하지 않은 약관입니다", INTERNAL_SERVER_ERROR),
+    INVALID_TERMS_AGREEMENT("ERR.DVH.0068", "유효하지 않은 약관 동의입니다", BAD_REQUEST),
+
     BOOLEAN_CONVERT_FAIL("ERR.DVH.0070", "Boolean 값 변환에 실패했습니다",INTERNAL_SERVER_ERROR),
     STRING_LENGTH_INVALID("ERR.DVH.0071", "문자열 최대 길이는 0 이상이어야 합니다", BAD_REQUEST),
 
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다",BAD_REQUEST);
-
-
 
     private final String code;
     private final String message;
