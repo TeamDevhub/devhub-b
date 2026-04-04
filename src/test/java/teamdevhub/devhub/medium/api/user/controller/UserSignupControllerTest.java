@@ -47,7 +47,7 @@ public class UserSignupControllerTest {
                 .termsAgreementList(List.of(
                         AgreeTermsRequestDto.builder()
                                 .termsGuid("TERMS1")
-                                .isAgreed(true)
+                                .agreed(true)
                                 .build()
                 ))
                 .build();

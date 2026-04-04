@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 import teamdevhub.devhub.api.user.controller.UserProfileController;
 import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
+import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.user.domain.User;
@@ -26,13 +27,15 @@ class UserProfileControllerTest {
 
     private UserProfileFacade userProfileFacade;
     private UserWithdrawFacade userWithdrawFacade;
+    private BoardFacade boardFacade;
 
     @BeforeEach
     void init() {
         userProfileFacade = Mockito.mock(UserProfileFacade.class);
         userWithdrawFacade = Mockito.mock(UserWithdrawFacade.class);
+        boardFacade = Mockito.mock(BoardFacade.class);
 
-        userProfileController = new UserProfileController(userProfileFacade, userWithdrawFacade);
+        userProfileController = new UserProfileController(userProfileFacade, userWithdrawFacade, boardFacade);
     }
 
     @Test

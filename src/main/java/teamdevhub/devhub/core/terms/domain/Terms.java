@@ -51,29 +51,29 @@ public class Terms {
                 .build();
     }
 
-    public void validateAgreement(boolean isAgreed) {
+    public void validateAgreement(boolean agreed) {
 
         if (isDeleted) {
-            throw DomainRuleException.of(ErrorCode.EMAIL_DUPLICATED);
+            throw DomainRuleException.of(ErrorCode.INVALID_TERMS);
         }
 
         if (!isUsed) {
-            throw DomainRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw DomainRuleException.of(ErrorCode.INVALID_TERMS);
         }
 
-        if (isRequired && !isAgreed) {
-            throw DomainRuleException.of(ErrorCode.USER_ID_FAIL);
+        if (isRequired && !agreed) {
+            throw DomainRuleException.of(ErrorCode.INVALID_TERMS_AGREEMENT);
         }
     }
 
-    public static Terms createTerms(CreateTermsCommand command, String termsGuid) {
+    public static Terms createTerms(CreateTermsCommand createTermsCommand, String termsGuid) {
         return Terms.builder()
                 .termsGuid(termsGuid)
-                .title(command.title())
-                .content(command.content())
-                .isRequired(command.isRequired())
-                .isUsed(command.isUsed())
-                .isDeleted(command.isDeleted())
+                .title(createTermsCommand.title())
+                .content(createTermsCommand.content())
+                .isRequired(createTermsCommand.isRequired())
+                .isUsed(createTermsCommand.isUsed())
+                .isDeleted(createTermsCommand.isDeleted())
                 .build();
     }
 
@@ -81,15 +81,15 @@ public class Terms {
             Terms terms,
             String termsAgreementGuid,
             String userGuid,
-            boolean isAgreed
+            boolean agreed
     ) {
-        terms.validateAgreement(isAgreed);
+        terms.validateAgreement(agreed);
 
         return TermsAgreement.of(
                 termsAgreementGuid,
                 terms.getTermsGuid(),
                 userGuid,
-                isAgreed
+                agreed
         );
     }
 }

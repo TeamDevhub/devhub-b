@@ -33,4 +33,9 @@ public class FakeBoardRepository implements BoardRepository {
 	public void updateViewCount(String boardGuid) {
 
 	}
+
+	@Override
+	public void deleteBoard(String boardGuid) {
+
+	}
 }

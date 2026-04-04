@@ -2,6 +2,7 @@ package teamdevhub.devhub.small.core.terms.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.domain.TermsAgreement;
 import teamdevhub.devhub.core.terms.port.in.command.CreateTermsCommand;
@@ -38,8 +39,8 @@ class TermsTest {
 
         // when & then
         assertThatThrownBy(() -> terms.validateAgreement(true))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("삭제된 약관입니다.");
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("유효하지 않은 약관입니다");
     }
 
     @Test
@@ -50,8 +51,8 @@ class TermsTest {
 
         // when & then
         assertThatThrownBy(() -> terms.validateAgreement(true))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("사용 중인 약관이 아닙니다.");
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("유효하지 않은 약관입니다");
     }
 
     @Test
@@ -62,8 +63,8 @@ class TermsTest {
 
         // when & then
         assertThatThrownBy(() -> terms.validateAgreement(false))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("필수 약관은 동의해야 합니다.");
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("유효하지 않은 약관 동의입니다");
     }
 
     @Test
@@ -77,7 +78,7 @@ class TermsTest {
     }
 
     @Test
-    @DisplayName("약관에_동의하면_TermsAgreement를_생성한다")
+    @DisplayName("약관에_동의하면_TermsAgreement_를_생성한다")
     void createAgreement() {
         // given
         Terms terms = createTerms(REQUIRED, USED, NOT_DELETED);
