@@ -65,7 +65,7 @@ public class TermsService implements TermsUseCase {
                 .stream()
                 .collect(Collectors.toMap(
                         TermsAgreementItem::termsGuid,
-                        TermsAgreementItem::isAgreed
+                        TermsAgreementItem::agreed
                 ));
     }
 
