@@ -90,5 +90,12 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 			@Param("progressStartDate") LocalDate progressStartDate, @Param("progressEndDate") LocalDate progressEndDate, @Param("recruitmentTypeCd") String recruitmentTypeCd, @Param("progressRegionCd") String progressRegionCd,
 			@Param("progressTypeCd") String progressTypeCd, @Param("category") String category);
 
+	@Query("""
+			select p
+			from ProjectEntity p
+			where p.userGuid = :userGuid
+			""")
+	Page<ProjectEntity> findByUserGuid(@Param("userGuid") String userGuid, Pageable pageable);
+
 
 }

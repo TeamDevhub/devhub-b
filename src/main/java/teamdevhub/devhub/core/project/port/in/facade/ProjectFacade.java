@@ -14,7 +14,10 @@ import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 import teamdevhub.devhub.core.admin.form.port.in.command.ApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.facade.model.ApplicationFormResponseDto;
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
+import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationForm;
+import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
+import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
@@ -26,6 +29,7 @@ import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailWithFormResponseDto;
+import teamdevhub.devhub.core.project.port.in.facade.model.UserProjectResponseDto;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectApplicationFormUseCase;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectLikeUseCase;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
@@ -44,6 +48,8 @@ public class ProjectFacade {
 	private final ProjectApplicationFormUseCase projectApplicationFormUseCase;
 	private final FileUseCase fileUseCase;
 	private final ProjectLikeUseCase projectLikeUseCase;
+	private final ProjectApplicationUseCase projectApplicationUseCase;
+	private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
 
 	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, AuthenticatedUser user) {
 		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
@@ -162,6 +168,44 @@ public class ProjectFacade {
 
 	public void toggleProjectLike(CreateProjectLikeCommand createProjectLikeCommand) {
 		projectLikeUseCase.toggleProjectLike(createProjectLikeCommand);
+	}
+
+	public List<UserProjectResponseDto> getUserProjects(String userGuid, PageCommand pageCommand) {
+		List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+		PageResult<Project> pagedProjectList = projectUseCase.getUserProjects(userGuid, pageCommand);
+		userProjectResponseDtoList = pagedProjectList.content().stream()
+	            .map(item -> {
+	            	PageResult<ProjectApplication> pagedApplicatgionList = projectApplicationQueryUseCase.getApplicationsByProjectGuid(item.getProjectGuid(), new PageCommand(0, Integer.MAX_VALUE));
+	            	Project project = projectUseCase.getProjectDetail(item.getProjectGuid());
+	            	return UserProjectResponseDto.fromDomain(project, pagedApplicatgionList.content());
+	            })
+	            .toList();
+		return userProjectResponseDtoList;
+	}
+
+	public List<UserProjectResponseDto> getUserLikeProjects(String userGuid, PageCommand pageCommand) {
+		List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+		PageResult<ProjectLike> pagedLikeProjectList = projectLikeUseCase.findByUserGuid(userGuid, pageCommand);
+		userProjectResponseDtoList = pagedLikeProjectList.content().stream()
+            .map(projectLike -> {
+            	Project project = projectUseCase.getProjectDetail(projectLike.getProjectGuid());
+            	return UserProjectResponseDto.fromDomain(project, null);
+            })
+            .toList();
+		return userProjectResponseDtoList;
+	}
+
+	public List<UserProjectResponseDto> getUserApplyProjects(String userGuid, PageCommand pageCommand) {
+		List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+		PageResult<ProjectApplication> pagedApplyProjectList = projectApplicationUseCase.findByApplicantGuid(userGuid, pageCommand);
+		// 작업 예정
+		userProjectResponseDtoList = pagedApplyProjectList.content().stream()
+            .map(projectApply -> {
+            	Project project = projectUseCase.getProjectDetail(projectApply.getRequirementGuid());
+            	return UserProjectResponseDto.fromDomain(project, null);
+            })
+            .toList();
+		return userProjectResponseDtoList;
 	}
 
 }

@@ -1,9 +1,12 @@
 package teamdevhub.devhub.outbound.application.adapter;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
 import teamdevhub.devhub.core.application.port.out.ApplicationRepository;
@@ -15,8 +18,6 @@ import teamdevhub.devhub.outbound.application.adapter.mapper.ApplicationMapper;
 import teamdevhub.devhub.outbound.application.persistence.JpaProjectApplicationAnswerRepository;
 import teamdevhub.devhub.outbound.application.persistence.JpaProjectApplicationRepository;
 import teamdevhub.devhub.outbound.application.persistence.ProjectApplicationQueryDao;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -65,5 +66,19 @@ public class ProjectApplicationAdapter implements ApplicationRepository {
 	@Override
 	public List<ProjectApplicationAnswer> findAnswersByApplicationGuid(String applicationGuid) {
 		return projectApplicationQueryDao.findAnswersByApplicationGuid(applicationGuid);
+	}
+
+	@Override
+	public PageResult<ProjectApplication> findByApplicantGuid(String userGuid, PageCommand pageCommand) {
+		Page<ProjectApplicationEntity> page = jpaProjectApplicationRepository.findByApplicantGuid(
+				userGuid,
+				PageRequest.of(pageCommand.page(), pageCommand.size())
+			);
+		
+		return PageResult.of(
+				page.getContent().stream().map(entity -> ApplicationMapper.toApplication(entity, null, null, null)).toList(),
+				page.getNumber(),
+				page.getSize(),
+				page.getTotalElements());
 	}
 }

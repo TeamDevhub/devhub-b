@@ -21,4 +21,6 @@ public interface ProjectUseCase {
 
 	List<String> updateProject(String projectGuid, UpdateProjectCommand updateProjectCommand);
 
+	PageResult<Project> getUserProjects(String userGuid, PageCommand pageCommand);
+
 }

@@ -143,4 +143,9 @@ public class ProjectService implements ProjectUseCase {
 		return deleteAppplicationFormGuids;
 	}
 
+	@Override
+	public PageResult<Project> getUserProjects(String userGuid, PageCommand pageCommand) {
+		return projectRepository.getUserProjects(userGuid, pageCommand);
+	}
+
 }

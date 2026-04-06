@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.project.domain.ProjectLike;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectLikeCommand;
@@ -38,6 +40,11 @@ public class ProjectLikeService implements ProjectLikeUseCase {
 	private ProjectLike createGeneralProjectSkill(CreateProjectLikeCommand createProjectLikeCommand) {
 		String projectLikeGuid = identifierProvider.generateIdentifier();
 		return ProjectLike.createProjectLike(createProjectLikeCommand, projectLikeGuid);
+	}
+
+	@Override
+	public PageResult<ProjectLike> findByUserGuid(String userGuid, PageCommand pageCommand) {
+		return projectLikeRepository.findByUserGuid(userGuid, pageCommand);
 	}
 	
 }

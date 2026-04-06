@@ -3,9 +3,14 @@ package teamdevhub.devhub.outbound.project.adapter;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.ProjectLike;
 import teamdevhub.devhub.core.project.port.out.ProjectLikeRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectLikeEntity;
@@ -52,6 +57,17 @@ public class ProjectLikeAdapter implements ProjectLikeRepository {
 	@Override
 	public void deleteById(String projectLikeGuid) {
 		jpaProjectLikeRepository.deleteById(projectLikeGuid);
+	}
+
+	@Override
+	public PageResult<ProjectLike> findByUserGuid(String userGuid, PageCommand pageCommand) {
+		Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
+		Page<ProjectLikeEntity> pagedProjectLike = jpaProjectLikeRepository.findByUserGuid(userGuid, pageable);
+		return PageResult.of(
+				pagedProjectLike.getContent().stream().map(ProjectLikeMapper::toProjectLike).toList(),
+				pagedProjectLike.getNumber(),
+				pagedProjectLike.getSize(),
+				pagedProjectLike.getTotalElements());
 	}
 
 }

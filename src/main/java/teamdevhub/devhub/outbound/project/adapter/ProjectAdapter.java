@@ -64,4 +64,16 @@ public class ProjectAdapter implements ProjectRepository {
 			upateProject.getProgressTypeCd(), upateProject.getCategory());
 	}
 
+	@Override
+	public PageResult<Project> getUserProjects(String userGuid, PageCommand pageCommand) {
+		Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
+
+        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findByUserGuid(userGuid, pageable);
+        return PageResult.of(
+        		pagedProjectList.getContent().stream().map(ProjectMapper::toProject).toList(),
+        		pagedProjectList.getNumber(),
+        		pagedProjectList.getSize(),
+        		pagedProjectList.getTotalElements());
+    }
+
 }
