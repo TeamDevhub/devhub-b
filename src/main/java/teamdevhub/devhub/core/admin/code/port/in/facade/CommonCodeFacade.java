@@ -1,9 +1,13 @@
 package teamdevhub.devhub.core.admin.code.port.in.facade;
 
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.api.admin.code.model.response.CommonCodeResponseDto;
+import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
+import teamdevhub.devhub.core.admin.code.domain.CommonCode;
+import teamdevhub.devhub.core.admin.code.port.in.command.CommonCodeCommand;
 import teamdevhub.devhub.core.admin.code.port.in.usecase.CommonCodeUseCase;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
@@ -23,6 +27,14 @@ public class CommonCodeFacade {
         return DataListApiResponseDto.successWithDataList(
                 SuccessCode.READ_SUCCESS,
                 returnData,
+                null
+        );
+    }
+
+    public DataApiResponseDto<?> saveCode(CommonCodeCommand code) {
+        commonCodeUseCase.saveCommonCode(CommonCode.createCommonCode(code));
+        return DataApiResponseDto.successWithData(
+                SuccessCode.READ_SUCCESS,
                 null
         );
     }

@@ -1,6 +1,7 @@
 package teamdevhub.devhub.core.admin.code.port.in.command;
 
 import lombok.Builder;
+import teamdevhub.devhub.api.admin.code.model.request.CommonCodeRequestDto;
 
 @Builder
 public record CommonCodeCommand(
