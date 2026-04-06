@@ -1,11 +1,16 @@
 package teamdevhub.devhub.core.application.port.in.usecase;
 
+import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.port.in.command.ApproveApplicationCommand;
 import teamdevhub.devhub.core.application.port.in.command.CreateApplicationCommand;
+import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
 
 public interface ProjectApplicationUseCase {
 
 	void createApplication(CreateApplicationCommand command);
 
 	void approveApplication(ApproveApplicationCommand command);
+
+	PageResult<ProjectApplication> findByApplicantGuid(String userGuid, PageCommand pageCommand);
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -23,6 +24,8 @@ import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
 import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.project.port.in.facade.ProjectFacade;
+import teamdevhub.devhub.core.project.port.in.facade.model.UserProjectResponseDto;
 import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
@@ -38,6 +41,7 @@ public class UserProfileController {
     private final UserProfileFacade userProfileFacade;
     private final UserWithdrawFacade userWithdrawFacade;
     private final BoardFacade boardFacade;
+    private final ProjectFacade projectFacade;
 
     @GetMapping()
     public ResponseEntity<DataApiResponseDto<UserBasicResponseDto>> getUserInfo(@LoginUser AuthenticatedUser authenticatedUser) {
@@ -103,5 +107,38 @@ public class UserProfileController {
     public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> getUserListBoard(@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto, 
     		@LoginUser AuthenticatedUser authenticatedUser) {
     	return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(authenticatedUser.userGuid()), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize())));
+    }
+    
+    @GetMapping("/projects")
+    public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserProjects(@RequestParam("page") int page, @RequestParam("size") int size, 
+    		@LoginUser AuthenticatedUser authenticatedUser) {
+        return ResponseEntity.ok(
+        		DataListApiResponseDto.successWithDataList(
+                        SuccessCode.READ_SUCCESS,
+                        projectFacade.getUserProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                )
+        );
+    }
+    
+    @GetMapping("/projects/likes")
+    public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserLikeProjects(@RequestParam("page") int page, @RequestParam("size") int size, 
+    		@LoginUser AuthenticatedUser authenticatedUser) {
+        return ResponseEntity.ok(
+        		DataListApiResponseDto.successWithDataList(
+                        SuccessCode.READ_SUCCESS,
+                        projectFacade.getUserLikeProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                )
+        );
+    }
+    
+    @GetMapping("/projects/applications")
+    public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserApplyProjects(@RequestParam("page") int page, @RequestParam("size") int size, 
+    		@LoginUser AuthenticatedUser authenticatedUser) {
+        return ResponseEntity.ok(
+        		DataListApiResponseDto.successWithDataList(
+                        SuccessCode.READ_SUCCESS,
+                        projectFacade.getUserApplyProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                )
+        );
     }
 }

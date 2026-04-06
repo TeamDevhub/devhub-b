@@ -83,4 +83,9 @@ public class ProjectApplicationService implements ProjectApplicationQueryUseCase
 	public List<ProjectApplicationAnswer> getAnswersByApplicationGuid(String applicationGuid) {
 		return applicationRepository.findAnswersByApplicationGuid(applicationGuid);
 	}
+
+	@Override
+	public PageResult<ProjectApplication> findByApplicantGuid(String userGuid, PageCommand pageCommand) {
+		return applicationRepository.findByApplicantGuid(userGuid, pageCommand);
+	}
 }

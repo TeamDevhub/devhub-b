@@ -1,6 +1,7 @@
 package teamdevhub.devhub.api.project.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +22,7 @@ import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectLikeCommand;
 import teamdevhub.devhub.core.project.port.in.facade.ProjectFacade;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailWithFormResponseDto;
@@ -49,13 +51,14 @@ public class ProjectController {
 	 * @return
 	 */
 	@GetMapping
-    public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto, @RequestParam("page") int page, @RequestParam("size") int size) {
-        return ResponseEntity.ok(projectFacade.getProjectList(searchProjectRequestDto.toSearchProjectListCommand(), PageCommand.of(page, size)));
+    public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto,
+    		@RequestParam("page") int page, @RequestParam("size") int size,  @AuthenticationPrincipal AuthenticatedUser user) {
+        return ResponseEntity.ok(projectFacade.getProjectList(searchProjectRequestDto.toSearchProjectListCommand(), PageCommand.of(page, size), user));
     }
 	
 	@GetMapping("/{projectGuid}")
-	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable("projectGuid") String projectGuid) {
-		ProjectDetailResponseDto responseDto = projectFacade.getProjectDetail(projectGuid);
+	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable("projectGuid") String projectGuid, @AuthenticationPrincipal AuthenticatedUser user) {
+		ProjectDetailResponseDto responseDto = projectFacade.getProjectDetail(projectGuid, user);
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, responseDto)
 		);
@@ -87,6 +90,11 @@ public class ProjectController {
 		return ResponseEntity.ok(
 				DataApiResponseDto.successWithoutData(SuccessCode.DELETE_SUCCESS)
 		);
+	}
 	
+	@PostMapping("/{projectGuid}/likes")
+	public ResponseEntity<DataApiResponseDto<Void>> toggleProjectLike(@PathVariable("projectGuid") String projectGuid, @LoginUser AuthenticatedUser authenticatedUser) {
+		projectFacade.toggleProjectLike(CreateProjectLikeCommand.toCreateProjectLikeCommand(projectGuid, authenticatedUser.userGuid()));
+		return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
 	}
 }
