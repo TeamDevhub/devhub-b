@@ -58,7 +58,7 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 			order by 
 				case when :order = '001' then p.registeredDate end desc,
 				case when :order = '002' then (p.recruitmentEndDate - CURRENT_TIMESTAMP) end asc,
-				case when :order = '003' then count(pl) end desc
+				case when :order = '003' then count(pl.projectLikeGuid) end desc
 			""")
 	Page<ProjectEntity> findBySearchCondition(@Param("keyword") String keyword, @Param("order") String order, @Param("skillCodeList") List<String> skillCodeList,
 			@Param("regionCodeList") List<String> regionCodeList, @Param("positionCodeList") List<String> positionCodeList, @Param("positionLevelCodeList") List<String> positionLevelCodeList,

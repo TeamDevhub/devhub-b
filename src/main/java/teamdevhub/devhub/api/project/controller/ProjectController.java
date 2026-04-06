@@ -57,8 +57,8 @@ public class ProjectController {
     }
 	
 	@GetMapping("/{projectGuid}")
-	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable("projectGuid") String projectGuid, @LoginUser AuthenticatedUser authenticatedUser) {
-		ProjectDetailResponseDto responseDto = projectFacade.getProjectDetail(projectGuid, authenticatedUser.userGuid());
+	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable("projectGuid") String projectGuid, @AuthenticationPrincipal AuthenticatedUser user) {
+		ProjectDetailResponseDto responseDto = projectFacade.getProjectDetail(projectGuid, user);
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, responseDto)
 		);
