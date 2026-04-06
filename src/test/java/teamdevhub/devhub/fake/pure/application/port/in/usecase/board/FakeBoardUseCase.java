@@ -37,6 +37,11 @@ public class FakeBoardUseCase implements BoardUseCase{
 
     }
 
+    @Override
+    public void deleteBoard(String boardGuid) {
+
+    }
+
     public boolean isCalled() {
     	return called;
     }

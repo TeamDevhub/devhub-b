@@ -8,31 +8,31 @@ public class TermsAgreement {
     private String termsAgreementGuid;
     private String termsGuid;
     private String userGuid;
-    private boolean isAgreed;
+    private boolean agreed;
 
     private TermsAgreement(
             String termsAgreementGuid,
             String termsGuid,
             String userGuid,
-            boolean isAgreed
+            boolean agreed
     ) {
         this.termsAgreementGuid = termsAgreementGuid;
         this.termsGuid = termsGuid;
         this.userGuid = userGuid;
-        this.isAgreed = isAgreed;
+        this.agreed = agreed;
     }
 
     public static TermsAgreement of(
             String termsAgreementGuid,
             String termsGuid,
             String userGuid,
-            boolean isAgreed
+            boolean agreed
     ) {
         return new TermsAgreement(
                 termsAgreementGuid,
                 termsGuid,
                 userGuid,
-                isAgreed
+                agreed
         );
     }
 }

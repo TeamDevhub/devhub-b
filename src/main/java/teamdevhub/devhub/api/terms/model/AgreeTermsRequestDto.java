@@ -18,12 +18,12 @@ public class AgreeTermsRequestDto {
     private String termsGuid;
 
     @NotNull
-    private boolean isAgreed;
+    private boolean agreed;
 
     public TermsAgreementItem toTermsAgreementItem() {
         return new TermsAgreementItem(
                 this.termsGuid,
-                this.isAgreed
+                this.agreed
         );
     }
 }
