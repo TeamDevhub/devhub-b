@@ -33,6 +33,11 @@ public class OauthController {
     }
 
     @GetMapping("/{provider}/callback")
+    public void redirectCallback(@PathVariable String provider, @RequestParam String code, HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.sendRedirect("http://localhost:5173/oauth/callback?code=" + code + "&provider=" + provider);
+    }
+
+    @GetMapping("/{provider}/process")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> handleOauthCallback(@PathVariable String provider, @RequestParam String code) {
         OauthAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback(provider, code);
 

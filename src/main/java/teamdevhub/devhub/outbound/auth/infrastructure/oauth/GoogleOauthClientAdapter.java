@@ -20,9 +20,6 @@ public class GoogleOauthClientAdapter implements OauthClient {
     @Value("${oauth.google.client-id}")
     private String clientId;
 
-    @Value("${oauth.google.client-secret}")
-    private String clientSecret;
-
     @Value("${oauth.google.redirect-uri}")
     private String redirectUri;
 
@@ -54,7 +51,6 @@ public class GoogleOauthClientAdapter implements OauthClient {
      */
     @Override
     public OauthUser fetchUser(String code) {
-        String value = clientSecret;
         return new OauthUser("google-id", VerificationProvider.GOOGLE,  "test@gmail.com");
     }
 }
