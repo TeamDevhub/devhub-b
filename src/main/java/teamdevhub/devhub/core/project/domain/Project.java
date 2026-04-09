@@ -91,6 +91,9 @@ public class Project {
 	public String getRecruitStatus() {
 		LocalDate now = LocalDate.now();
 		
+	    if (this.capacityClosed) {
+	    	return ProjectRecruitStatus.COMPLETED.getCode();
+	    }
 		if (now.isBefore(this.recruitmentStartDate)) {
 	        return ProjectRecruitStatus.WAITING.getCode();
 	    }

@@ -97,4 +97,10 @@ public class ProjectController {
 		projectFacade.toggleProjectLike(CreateProjectLikeCommand.toCreateProjectLikeCommand(projectGuid, authenticatedUser.userGuid()));
 		return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
 	}
+	
+	@PostMapping("/{projectGuid}/close")
+	public ResponseEntity<DataApiResponseDto<Void>> closeProject(@PathVariable("projectGuid") String projectGuid, @LoginUser AuthenticatedUser authenticatedUser) {
+		projectFacade.toggleProjectLike(CreateProjectLikeCommand.toCreateProjectLikeCommand(projectGuid, authenticatedUser.userGuid()));
+		return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
+	}
 }
