@@ -32,33 +32,43 @@ public class OauthController {
         httpServletResponse.sendRedirect(authorizationUrl);
     }
 
-    @GetMapping("/{provider}/callback")
-    public void redirectCallback(@PathVariable String provider, @RequestParam String code, HttpServletResponse httpServletResponse) throws IOException {
-        httpServletResponse.sendRedirect("http://localhost:5173/oauth/callback?code=" + code + "&provider=" + provider);
-    }
+//    @GetMapping("/{provider}/callback")
+//    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> handleOauthCallback(@PathVariable String provider, @RequestParam String code) {
+//        OauthAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback(provider, code);
+//
+//        if (oauthAuthResult.signupStatus().equals(SignupStatus.COMPLETED)) {
+//            ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
+//
+//            return ResponseEntity.ok()
+//                    .header(HttpHeaders.AUTHORIZATION, oauthAuthResult.toAuthorizationHeader())
+//                    .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+//                    .body(DataApiResponseDto.successWithData(
+//                            SuccessCode.LOGIN_SUCCESS,
+//                            TokenResponseDto.issueAccessToken(oauthAuthResult.accessToken()))
+//                    );
+//        }
+//
+//        return ResponseEntity.ok(
+//                DataApiResponseDto.successWithData(
+//                        SuccessCode.SIGNUP_REQUIRED,
+//                        TokenResponseDto.issueTempToken(oauthAuthResult.tempToken())
+//                )
+//        );
+//    }
 
-    @GetMapping("/{provider}/process")
-    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> handleOauthCallback(@PathVariable String provider, @RequestParam String code) {
+    @GetMapping("/{provider}/callback")
+    public void handleOauthCallback(@PathVariable String provider, @RequestParam String code, HttpServletResponse response) throws IOException {
         OauthAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback(provider, code);
 
         if (oauthAuthResult.signupStatus().equals(SignupStatus.COMPLETED)) {
             ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, oauthAuthResult.toAuthorizationHeader())
-                    .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                    .body(DataApiResponseDto.successWithData(
-                            SuccessCode.LOGIN_SUCCESS,
-                            TokenResponseDto.issueAccessToken(oauthAuthResult.accessToken()))
-                    );
+            response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+            response.sendRedirect("http://localhost:5173/");
         }
 
-        return ResponseEntity.ok(
-                DataApiResponseDto.successWithData(
-                        SuccessCode.SIGNUP_REQUIRED,
-                        TokenResponseDto.issueTempToken(oauthAuthResult.tempToken())
-                )
-        );
+        ResponseCookie tempCookie = CookieFactory.createTempTokenCookie(oauthAuthResult.tempToken());
+        response.addHeader(HttpHeaders.SET_COOKIE, tempCookie.toString());
+        response.sendRedirect("http://localhost:5173/auth/signup");
     }
 
     @PostMapping("/signup")
