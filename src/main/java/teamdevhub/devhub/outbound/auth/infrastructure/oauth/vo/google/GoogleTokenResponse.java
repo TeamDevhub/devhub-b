@@ -1,4 +1,4 @@
-package teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo;
+package teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.google;
 
 public record GoogleTokenResponse(
         String access_token,
