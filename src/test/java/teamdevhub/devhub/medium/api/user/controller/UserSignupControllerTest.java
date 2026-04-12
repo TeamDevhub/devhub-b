@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-
 import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.terms.model.AgreeTermsRequestDto;
 import teamdevhub.devhub.api.user.controller.UserSignupController;
@@ -13,14 +12,15 @@ import teamdevhub.devhub.api.user.model.SignupRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
-import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
+import teamdevhub.devhub.shared.enums.SuccessCode;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserSignupControllerTest {
