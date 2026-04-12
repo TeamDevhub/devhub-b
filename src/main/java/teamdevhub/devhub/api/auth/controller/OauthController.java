@@ -33,32 +33,22 @@ public class OauthController {
     }
 
     @GetMapping("/{provider}/callback")
-    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> handleOauthCallback(@PathVariable String provider, @RequestParam String code) {
+    public void handleOauthCallback(@PathVariable String provider, @RequestParam String code, HttpServletResponse response) throws IOException {
         OauthAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback(provider, code);
 
         if (oauthAuthResult.signupStatus().equals(SignupStatus.COMPLETED)) {
             ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, oauthAuthResult.toAuthorizationHeader())
-                    .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                    .body(DataApiResponseDto.successWithData(
-                            SuccessCode.LOGIN_SUCCESS,
-                            TokenResponseDto.issueAccessToken(oauthAuthResult.accessToken()))
-                    );
+            response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+            response.sendRedirect("http://localhost:5173/");
+        } else {
+            String redirectUrl = "http://localhost:5173/auth/signup" + "?token=" + oauthAuthResult.tempToken();
+            response.sendRedirect(redirectUrl);
         }
-
-        return ResponseEntity.ok(
-                DataApiResponseDto.successWithData(
-                        SuccessCode.SIGNUP_REQUIRED,
-                        TokenResponseDto.issueTempToken(oauthAuthResult.tempToken())
-                )
-        );
     }
 
     @PostMapping("/signup")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> signup(@RequestBody SignupOauthRequestDto signupOauthRequestDto) {
-        OauthAuthResult oauthAuthResult = userSignupFacade.signupWithOauth(signupOauthRequestDto.toCommand());
+        OauthAuthResult oauthAuthResult = userSignupFacade.signupWithOauth(signupOauthRequestDto.toSignupOauthUserCommand());
         ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, oauthAuthResult.toAuthorizationHeader())

@@ -28,7 +28,7 @@ public class SignupOauthRequestDtoTest {
 
     @Test
     @DisplayName("모든_필드가_올바르면_OauthSignupCommand_로_변환된다")
-    void convertOauthSignupRequestDtoToCommand() {
+    void convertOauthSignupRequestDtoToSignupOauthUserCommand() {
         // given
         SignupOauthRequestDto signupOauthRequestDto = SignupOauthRequestDto.builder()
                 .tempToken("temp-token-123")
@@ -40,7 +40,7 @@ public class SignupOauthRequestDtoTest {
                 .build();
 
         // when
-        SignupOauthUserCommand signupOauthUserCommand = signupOauthRequestDto.toCommand();
+        SignupOauthUserCommand signupOauthUserCommand = signupOauthRequestDto.toSignupOauthUserCommand();
 
         // then
         assertThat(signupOauthUserCommand.tempToken()).isEqualTo("temp-token-123");

@@ -12,6 +12,7 @@ import teamdevhub.devhub.api.web.validator.RegexPattern;
 import teamdevhub.devhub.api.web.validator.RegexMatch;
 import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
 import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
+import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 
 import java.util.List;
@@ -61,6 +62,13 @@ public class SignupRequestDto {
                                 .map(AgreeTermsRequestDto::toTermsAgreementItem)
                                 .toList())
                 .verificationTarget(VerificationTarget.of(VerificationType.EMAIL, this.email))
+                .build();
+    }
+
+    public LoginCommand toLoginCommand() {
+        return LoginCommand.builder()
+                .email(this.email)
+                .password(this.password)
                 .build();
     }
 }
