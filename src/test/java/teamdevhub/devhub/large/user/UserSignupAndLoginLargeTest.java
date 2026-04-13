@@ -76,15 +76,15 @@
 //                new ParameterizedTypeReference<>() {}
 //        );
 //        String accessToken = loginResponse.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set(HttpHeaders.AUTHORIZATION, accessToken);
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.set(HttpHeaders.AUTHORIZATION, accessToken);
 //        List<String> setCookies = loginResponse.getHeaders().get(HttpHeaders.SET_COOKIE);
 //        assertThat(setCookies).anyMatch(cookie -> cookie.contains("refreshToken"));
 //
 //        ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> updateProfileResponse = testRestTemplate.exchange(
 //                "/user/profile",
 //                HttpMethod.GET,
-//                new HttpEntity<>(headers),
+//                new HttpEntity<>(httpHeaders),
 //                new ParameterizedTypeReference<>() {}
 //        );
 //        assertThat(updateProfileResponse.getBody().getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());

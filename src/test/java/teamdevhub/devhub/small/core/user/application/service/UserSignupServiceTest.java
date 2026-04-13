@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.user.application.service.UserSignupService;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;

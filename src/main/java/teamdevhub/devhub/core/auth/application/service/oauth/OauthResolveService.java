@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthResolveUseCase;
 import teamdevhub.devhub.core.auth.port.out.token.TokenParseProvider;

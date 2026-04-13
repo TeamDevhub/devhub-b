@@ -1,4 +1,4 @@
-package teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.kakao;
+package teamdevhub.devhub.outbound.auth.infrastructure.oauth.kakao.vo;
 
 public record KakaoTokenResponse(
         String access_token,
