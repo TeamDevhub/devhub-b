@@ -40,4 +40,9 @@ public class CommonCodeAdapter implements CommonCodeRepository {
     public void save(CommonCode commonCode) {
         jpaCommonCodeRepository.save(CommonCodeMapper.toEntity(commonCode));
     }
+
+    @Override
+    public boolean existsByCode(String code) {
+        return jpaCommonCodeRepository.existsById(code);
+    }
 }

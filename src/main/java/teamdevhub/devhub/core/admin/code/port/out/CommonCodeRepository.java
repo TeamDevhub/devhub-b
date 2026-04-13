@@ -10,4 +10,5 @@ public interface CommonCodeRepository {
     List<CommonCodeDetail> getCommonCodeDetailList();
     void saveAll(List<CommonCode> commonCodes);
     void save(CommonCode commonCode);
+    boolean existsByCode(String code);
 }
