@@ -25,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
-        AuthResult authResult = authFacade.login(loginRequestDto.toCommand());
+        AuthResult authResult = authFacade.login(loginRequestDto.toLoginCommand());
         ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(authResult.refreshToken());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())

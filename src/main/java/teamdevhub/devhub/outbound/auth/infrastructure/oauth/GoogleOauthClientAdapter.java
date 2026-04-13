@@ -3,7 +3,12 @@ package teamdevhub.devhub.outbound.auth.infrastructure.oauth;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.google.GoogleTokenResponse;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.google.GoogleUserResponse;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
@@ -26,20 +31,11 @@ public class GoogleOauthClientAdapter implements OauthClient {
     @Value("${oauth.google.redirect-uri}")
     private String redirectUri;
 
-    /**
-     * 해당 Oauth 로그인이 가능한지 응답해주는 OauthClient 공통 메서드
-     * @param verificationProvider 외부 인증 주체(ex 구글, 깃헙, 카카오)
-     * @return 사용가능 여부에 따라 true/false 반환
-     */
     @Override
     public boolean supports(VerificationProvider verificationProvider) {
         return verificationProvider == VerificationProvider.GOOGLE;
     }
 
-    /**
-     * 현재 작성된 소스 점검 필요
-     * @return 구글 로그인 페이지로 이동하는 리다이렉트 URL
-     */
     @Override
     public String getAuthorizationUrl() {
         return new GoogleAuthorizationCodeRequestUrl(clientId, redirectUri, List.of("profile", "email"))
@@ -47,14 +43,42 @@ public class GoogleOauthClientAdapter implements OauthClient {
                 .build();
     }
 
-    /**
-     * 인증된 사용자를 가져오는 함수, 추후 개발 필요
-     * @param code 인증 코드
-     * @return 외부 인증 주체가 제공하는 인증된 사용자
-     */
     @Override
     public OauthUser fetchUser(String code) {
-        String value = clientSecret;
-        return new OauthUser("google-id", VerificationProvider.GOOGLE,  "test@gmail.com");
+
+        GoogleTokenResponse tokenResponse = WebClient.create()
+                .post()
+                .uri("https://oauth2.googleapis.com/token")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(BodyInserters.fromFormData("code", code)
+                        .with("client_id", clientId)
+                        .with("client_secret", clientSecret)
+                        .with("redirect_uri", redirectUri)
+                        .with("grant_type", "authorization_code"))
+                .retrieve()
+                .bodyToMono(GoogleTokenResponse.class)
+                .block();
+
+        if (tokenResponse == null) {
+            throw new RuntimeException("구글 access token 요청 실패");
+        }
+
+        GoogleUserResponse userResponse = WebClient.create()
+                .get()
+                .uri("https://www.googleapis.com/oauth2/v2/userinfo")
+                .headers(headers -> headers.setBearerAuth(tokenResponse.access_token()))
+                .retrieve()
+                .bodyToMono(GoogleUserResponse.class)
+                .block();
+
+        if (userResponse == null) {
+            throw new RuntimeException("구글 사용자 정보 조회 실패");
+        }
+
+        return new OauthUser(
+                userResponse.id(),
+                VerificationProvider.GOOGLE,
+                userResponse.email()
+        );
     }
 }

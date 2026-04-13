@@ -39,7 +39,7 @@ public class SignupOauthRequestDto {
     @Size(min = 1, message = "보유 스킬은 최소 1개 이상 선택해야 합니다")
     private List<@NotBlank String> skillList;
 
-    public SignupOauthUserCommand toCommand() {
+    public SignupOauthUserCommand toSignupOauthUserCommand() {
         return SignupOauthUserCommand.builder()
                 .tempToken(this.tempToken)
                 .password(this.password)

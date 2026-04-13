@@ -41,4 +41,9 @@ public class FakeProjectRepository implements ProjectRepository {
 
 	}
 
+	@Override
+	public PageResult<Project> getUserProjects(String userGuid, PageCommand pageCommand) {
+		return null;
+	}
+
 }
