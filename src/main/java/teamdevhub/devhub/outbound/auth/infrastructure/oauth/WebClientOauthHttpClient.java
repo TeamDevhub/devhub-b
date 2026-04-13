@@ -46,7 +46,7 @@ public class WebClientOauthHttpClient implements OauthHttpClient {
 
         return oauthWebClient.get()
                 .uri(uri)
-                .headers(headers -> httpHeaders.addAll(httpHeaders))
+                .headers(headers -> headers.addAll(httpHeaders))
                 .exchangeToMono(response ->
                         response.bodyToMono(String.class)
                                 .defaultIfEmpty("")
