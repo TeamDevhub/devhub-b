@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
@@ -22,9 +23,10 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
                 .responseTimeout(Duration.ofSeconds(5))
-                .doOnConnected(conn ->
-                        conn.addHandlerLast(new ReadTimeoutHandler(5))
-                                .addHandlerLast(new WriteTimeoutHandler(5))
+                .doOnConnected(connection -> connection
+                        .addHandlerLast(new ReadTimeoutHandler(5))
+                        .addHandlerLast(new WriteTimeoutHandler(5)
+                        )
                 );
 
         return WebClient.builder()
@@ -36,17 +38,15 @@ public class WebClientConfig {
 
     private ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
-            log.info("[WebClient][Request] {} {}",
-                    clientRequest.method(), clientRequest.url());
-            return reactor.core.publisher.Mono.just(clientRequest);
+            log.info("[WebClient][Request] {} {}", clientRequest.method(), clientRequest.url());
+            return Mono.just(clientRequest);
         });
     }
 
     private ExchangeFilterFunction logResponse() {
         return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
-            log.info("[WebClient][Response] Status: {}",
-                    clientResponse.statusCode());
-            return reactor.core.publisher.Mono.just(clientResponse);
+            log.info("[WebClient][Response] Status: {}", clientResponse.statusCode());
+            return Mono.just(clientResponse);
         });
     }
 }

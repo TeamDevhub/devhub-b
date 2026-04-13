@@ -4,7 +4,8 @@ public enum VerificationProvider {
     EMAIL,
     GOOGLE,
     GITHUB,
-    KAKAO;
+    KAKAO,
+    NAVER;
 
     public static VerificationProvider from(String provider) {
         return VerificationProvider.valueOf(provider.toUpperCase());

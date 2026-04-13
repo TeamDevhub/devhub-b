@@ -1,4 +1,5 @@
-package teamdevhub.devhub.outbound.auth.infrastructure.oauth;
+package teamdevhub.devhub.outbound.auth.infrastructure.oauth.naver;
+
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,39 +10,39 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.kakao.KakaoTokenResponse;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.kakao.KakaoUserResponse;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.naver.vo.NaverTokenResponse;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.naver.vo.NaverUserResponse;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 @Component
 @RequiredArgsConstructor
-public class KakaoOauthClientAdapter implements OauthClient {
+public class NaverOauthClientAdapter implements OauthClient {
 
-    private final WebClient kakaoWebClient;
+    private final WebClient naverWebClient;
     private final IdentifierProvider identifierProvider;
 
-    @Value("${oauth.kakao.client-id}")
+    @Value("${oauth.naver.client-id}")
     private String clientId;
 
-    @Value("${oauth.kakao.client-secret}")
+    @Value("${oauth.naver.client-secret}")
     private String clientSecret;
 
-    @Value("${oauth.kakao.redirect-uri}")
+    @Value("${oauth.naver.redirect-uri}")
     private String redirectUri;
 
     @Override
     public boolean supports(VerificationProvider provider) {
-        return provider == VerificationProvider.KAKAO;
+        return provider == VerificationProvider.NAVER;
     }
 
     @Override
     public String getAuthorizationUrl() {
         return UriComponentsBuilder
-                .fromHttpUrl("https://kauth.kakao.com/oauth/authorize")
+                .fromHttpUrl("https://nid.naver.com/oauth2.0/authorize")
+                .queryParam("response_type", "code")
                 .queryParam("client_id", clientId)
                 .queryParam("redirect_uri", redirectUri)
-                .queryParam("response_type", "code")
                 .queryParam("state", identifierProvider.generateIdentifier())
                 .build()
                 .toUriString();
@@ -51,49 +52,49 @@ public class KakaoOauthClientAdapter implements OauthClient {
     public OauthUser fetchUser(String code) {
 
         String accessToken = fetchAccessToken(code);
-        KakaoUserResponse user = fetchKakaoUser(accessToken);
+        NaverUserResponse user = fetchNaverUser(accessToken);
 
         String email = extractEmail(user);
 
         return new OauthUser(
-                String.valueOf(user.id()),
-                VerificationProvider.KAKAO,
+                user.id(),
+                VerificationProvider.NAVER,
                 email
         );
     }
 
     private String fetchAccessToken(String code) {
 
-        KakaoTokenResponse response = kakaoWebClient.post()
-                .uri("https://kauth.kakao.com/oauth/token")
+        NaverTokenResponse response = naverWebClient.post()
+                .uri("https://nid.naver.com/oauth2.0/token")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters.fromFormData("grant_type", "authorization_code")
                         .with("client_id", clientId)
-                        .with("client_secret", clientSecret) // 콘솔 설정에 따라 필요
-                        .with("redirect_uri", redirectUri)
-                        .with("code", code))
+                        .with("client_secret", clientSecret)
+                        .with("code", code)
+                        .with("state", identifierProvider.generateIdentifier()))
                 .retrieve()
-                .bodyToMono(KakaoTokenResponse.class)
+                .bodyToMono(NaverTokenResponse.class)
                 .block();
 
         if (response == null || response.access_token() == null) {
-            throw new RuntimeException("Kakao token 발급 실패");
+            throw new RuntimeException("Naver token 발급 실패");
         }
 
         return response.access_token();
     }
 
-    private KakaoUserResponse fetchKakaoUser(String token) {
+    private NaverUserResponse fetchNaverUser(String token) {
 
-        return kakaoWebClient.get()
-                .uri("https://kapi.kakao.com/v2/user/me")
-                .header("Authorization", "Bearer " + token)
+        return naverWebClient.get()
+                .uri("https://openapi.naver.com/v1/nid/me")
+                .headers(headers -> headers.setBearerAuth(token))
                 .retrieve()
-                .bodyToMono(KakaoUserResponse.class)
+                .bodyToMono(NaverUserResponse.class)
                 .block();
     }
 
-    private String extractEmail(KakaoUserResponse user) {
+    private String extractEmail(NaverUserResponse user) {
 
         if (user == null) {
             return null;
@@ -103,6 +104,6 @@ public class KakaoOauthClientAdapter implements OauthClient {
             return user.email();
         }
 
-        return "kakao_" + user.id() + "@noemail.local";
+        return "naver_" + user.id() + "@noemail.local";
     }
 }
