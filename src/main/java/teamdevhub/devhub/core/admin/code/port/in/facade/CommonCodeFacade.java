@@ -1,7 +1,6 @@
 package teamdevhub.devhub.core.admin.code.port.in.facade;
 
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.api.admin.code.model.response.CommonCodeResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
@@ -9,6 +8,7 @@ import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.core.admin.code.domain.CommonCode;
 import teamdevhub.devhub.core.admin.code.port.in.command.CommonCodeCommand;
 import teamdevhub.devhub.core.admin.code.port.in.usecase.CommonCodeUseCase;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 import java.util.List;
@@ -31,7 +31,12 @@ public class CommonCodeFacade {
         );
     }
 
-    public DataApiResponseDto<?> saveCode(CommonCodeCommand code) {
+    public DataApiResponseDto<?> saveCode(CommonCodeCommand code, boolean isInsert) {
+        if (isInsert) {
+            if (commonCodeUseCase.isDuplicate(code.code())) {
+                return DataApiResponseDto.failureWithMessage(ErrorCode.CREATE_FAIL, "이미 존재하는 코드입니다: " + code.code());
+            }
+        }
         commonCodeUseCase.saveCommonCode(CommonCode.createCommonCode(code));
         return DataApiResponseDto.successWithData(
                 SuccessCode.READ_SUCCESS,

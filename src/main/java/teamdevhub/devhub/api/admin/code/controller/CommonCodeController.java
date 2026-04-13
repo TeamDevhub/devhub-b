@@ -23,6 +23,6 @@ public class CommonCodeController {
 
     @PutMapping
     public ResponseEntity<DataApiResponseDto<?>> saveCommonCode(@RequestBody CommonCodeRequestDto code) {
-        return ResponseEntity.ok(commonCodeFacade.saveCode(code.toCommonCodeCommand()));
+        return ResponseEntity.ok(commonCodeFacade.saveCode(code.toCommonCodeCommand(), code.isInsert()));
     }
 }

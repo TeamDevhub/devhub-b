@@ -18,6 +18,7 @@ public class CommonCodeRequestDto {
     private String name;
     private String order;
     private boolean used;
+    private boolean insert;
     private String remarks;
 
     public static CommonCodeRequestDto fromDomain(CommonCode commonCode) {
