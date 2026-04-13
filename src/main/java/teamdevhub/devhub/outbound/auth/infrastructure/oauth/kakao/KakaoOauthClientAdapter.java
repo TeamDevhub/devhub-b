@@ -5,13 +5,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthHttpClient;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.DefaultHeaderProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.kakao.config.KakaoOauthConfig;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.kakao.vo.*;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.kakao.vo.KakaoTokenResponse;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.kakao.vo.KakaoUserResponse;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.BearerAuthHeaderProvider;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HttpResponse;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.net.URI;
@@ -25,8 +28,8 @@ public class KakaoOauthClientAdapter implements OauthClient {
     private final IdentifierProvider identifierProvider;
 
     @Override
-    public boolean supports(VerificationProvider provider) {
-        return provider == VerificationProvider.KAKAO;
+    public boolean supports(VerificationProvider verificationProvider) {
+        return verificationProvider == VerificationProvider.KAKAO;
     }
 
     @Override
@@ -43,46 +46,39 @@ public class KakaoOauthClientAdapter implements OauthClient {
 
     @Override
     public OauthUser fetchUser(String code) {
+        String accessToken = getAccessToken(code);
 
-        String token = getAccessToken(code);
+        HttpResponse<KakaoUserResponse> response = oauthHttpClient.get(kakaoOauthConfig.getUserInfoUri(), new BearerAuthHeaderProvider(accessToken), KakaoUserResponse.class);
 
-        KakaoUserResponse user = oauthHttpClient.get(
-                kakaoOauthConfig.getUserInfoUri(),
-                h -> h.setBearerAuth(token),
-                KakaoUserResponse.class
-        );
-
-        String email = (user.kakao_account() != null)
-                ? user.kakao_account().email()
-                : null;
-
-        if (email == null) {
-            email = "kakao_" + user.id() + "@noemail.local";
+        if (!response.is2xx() || response.body() == null) {
+            throw new RuntimeException("Kakao 사용자 조회 실패: " + response.rawBody());
         }
 
-        return new OauthUser(
-                String.valueOf(user.id()),
-                VerificationProvider.KAKAO,
-                email
-        );
+        KakaoUserResponse kakaoUser = response.body();
+        String email = (kakaoUser.kakao_account() != null) ? kakaoUser.kakao_account().email() : null;
+
+        if (email == null || email.isBlank()) {
+            email = "kakao_" + kakaoUser.id() + "@local";
+        }
+
+        return new OauthUser(String.valueOf(kakaoUser.id()), VerificationProvider.KAKAO, email);
     }
 
     private String getAccessToken(String code) {
-
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+
         form.add("grant_type", "authorization_code");
         form.add("client_id", kakaoOauthConfig.getClientId());
         form.add("client_secret", kakaoOauthConfig.getClientSecret());
         form.add("redirect_uri", kakaoOauthConfig.getRedirectUri());
         form.add("code", code);
 
-        KakaoTokenResponse res = oauthHttpClient.postForm(
-                kakaoOauthConfig.getTokenUri(),
-                form,
-                h -> {},
-                KakaoTokenResponse.class
-        );
+        HttpResponse<KakaoTokenResponse> kakaoToken = oauthHttpClient.postFormUrlEncoded(kakaoOauthConfig.getTokenUri(), form, new DefaultHeaderProvider(), KakaoTokenResponse.class);
 
-        return res.access_token();
+        if (!kakaoToken.is2xx() || kakaoToken.body() == null || kakaoToken.body().access_token() == null) {
+            throw new RuntimeException("Kakao 토큰 요청 실패: " + kakaoToken.rawBody());
+        }
+
+        return kakaoToken.body().access_token();
     }
 }

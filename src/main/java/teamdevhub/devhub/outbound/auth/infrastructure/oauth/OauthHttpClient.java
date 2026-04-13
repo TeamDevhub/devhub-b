@@ -1,22 +1,11 @@
 package teamdevhub.devhub.outbound.auth.infrastructure.oauth;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
-
-import java.util.function.Consumer;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HeaderProvider;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HttpResponse;
 
 public interface OauthHttpClient {
 
-    <T> T postForm(
-            String uri,
-            MultiValueMap<String, String> formData,
-            Consumer<HttpHeaders> headers,
-            Class<T> responseType
-    );
-
-    <T> T get(
-            String uri,
-            Consumer<HttpHeaders> headers,
-            Class<T> responseType
-    );
+    <T> HttpResponse<T> postFormUrlEncoded(String uri, MultiValueMap<String, String> formData, HeaderProvider headerProvider, Class<T> responseType);
+    <T> HttpResponse<T> get(String uri, HeaderProvider headerProvider, Class<T> responseType);
 }

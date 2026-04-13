@@ -1,47 +1,76 @@
 package teamdevhub.devhub.outbound.auth.infrastructure.oauth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.function.Consumer;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HeaderProvider;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HttpResponse;
 
 @Component
 @RequiredArgsConstructor
 public class WebClientOauthHttpClient implements OauthHttpClient {
 
-    private final WebClient webClient;
+    private final WebClient oauthWebClient;
+    private final ObjectMapper objectMapper;
 
     @Override
-    public <T> T postForm(
-            String uri,
-            MultiValueMap<String, String> formData,
-            Consumer<org.springframework.http.HttpHeaders> headers,
-            Class<T> responseType
-    ) {
-        return webClient.post()
+    public <T> HttpResponse<T> postFormUrlEncoded(String uri, MultiValueMap<String, String> formData, HeaderProvider headerProvider, Class<T> responseType) {
+        HttpHeaders httpHeaders = headerProvider.get();
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        return oauthWebClient.post()
                 .uri(uri)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .headers(headers)
+                .headers(headers -> headers.addAll(httpHeaders))
                 .bodyValue(formData)
-                .retrieve()
-                .bodyToMono(responseType)
+                .exchangeToMono(response ->
+                        response.bodyToMono(String.class)
+                                .defaultIfEmpty("")
+                                .map(body -> buildResponse(
+                                        response.statusCode(),
+                                        response.headers().asHttpHeaders(),
+                                        body,
+                                        responseType
+                                ))
+                )
                 .block();
     }
 
     @Override
-    public <T> T get(
-            String uri,
-            Consumer<org.springframework.http.HttpHeaders> headers,
-            Class<T> responseType
-    ) {
-        return webClient.get()
+    public <T> HttpResponse<T> get(String uri, HeaderProvider headerProvider, Class<T> responseType) {
+        HttpHeaders httpHeaders = headerProvider.get();
+
+        return oauthWebClient.get()
                 .uri(uri)
-                .headers(headers)
-                .retrieve()
-                .bodyToMono(responseType)
+                .headers(headers -> httpHeaders.addAll(httpHeaders))
+                .exchangeToMono(response ->
+                        response.bodyToMono(String.class)
+                                .defaultIfEmpty("")
+                                .map(body -> buildResponse(
+                                        response.statusCode(),
+                                        response.headers().asHttpHeaders(),
+                                        body,
+                                        responseType
+                                ))
+                )
                 .block();
+    }
+
+    private <T> HttpResponse<T> buildResponse(HttpStatusCode httpStatusCode, HttpHeaders httpHeaders, String rawBody, Class<T> responseType) {
+        T body = null;
+
+        try {
+            if (!rawBody.isBlank()) {
+                body = objectMapper.readValue(rawBody, responseType);
+            }
+        } catch (Exception ignored) {
+
+        }
+
+        return new HttpResponse<>(httpStatusCode.value(), body, rawBody, httpHeaders);
     }
 }

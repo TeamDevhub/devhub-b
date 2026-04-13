@@ -1,16 +1,18 @@
 package teamdevhub.devhub.outbound.auth.infrastructure.oauth.naver;
 
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthHttpClient;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.BearerAuthHeaderProvider;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.DefaultHeaderProvider;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HttpResponse;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.naver.config.NaverOauthConfig;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.naver.vo.NaverTokenResponse;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.naver.vo.NaverUserResponse;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
@@ -19,30 +21,22 @@ import teamdevhub.devhub.shared.enums.VerificationProvider;
 @RequiredArgsConstructor
 public class NaverOauthClientAdapter implements OauthClient {
 
-    private final WebClient naverWebClient;
+    private final OauthHttpClient oauthHttpClient;
     private final IdentifierProvider identifierProvider;
-
-    @Value("${oauth.naver.client-id}")
-    private String clientId;
-
-    @Value("${oauth.naver.client-secret}")
-    private String clientSecret;
-
-    @Value("${oauth.naver.redirect-uri}")
-    private String redirectUri;
+    private final NaverOauthConfig naverOauthConfig;
 
     @Override
-    public boolean supports(VerificationProvider provider) {
-        return provider == VerificationProvider.NAVER;
+    public boolean supports(VerificationProvider verificationProvider) {
+        return verificationProvider == VerificationProvider.NAVER;
     }
 
     @Override
     public String getAuthorizationUrl() {
         return UriComponentsBuilder
-                .fromHttpUrl("https://nid.naver.com/oauth2.0/authorize")
+                .fromUriString(naverOauthConfig.getAuthorizationUri())
                 .queryParam("response_type", "code")
-                .queryParam("client_id", clientId)
-                .queryParam("redirect_uri", redirectUri)
+                .queryParam("client_id", naverOauthConfig.getClientId())
+                .queryParam("redirect_uri", naverOauthConfig.getRedirectUri())
                 .queryParam("state", identifierProvider.generateIdentifier())
                 .build()
                 .toUriString();
@@ -50,60 +44,43 @@ public class NaverOauthClientAdapter implements OauthClient {
 
     @Override
     public OauthUser fetchUser(String code) {
+        String accessToken = getAccessToken(code);
 
-        String accessToken = fetchAccessToken(code);
-        NaverUserResponse user = fetchNaverUser(accessToken);
+        HttpResponse<NaverUserResponse> response = oauthHttpClient.get(naverOauthConfig.getUserInfoUri(), new BearerAuthHeaderProvider(accessToken), NaverUserResponse.class);
 
-        String email = extractEmail(user);
-
-        return new OauthUser(
-                user.id(),
-                VerificationProvider.NAVER,
-                email
-        );
-    }
-
-    private String fetchAccessToken(String code) {
-
-        NaverTokenResponse response = naverWebClient.post()
-                .uri("https://nid.naver.com/oauth2.0/token")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(BodyInserters.fromFormData("grant_type", "authorization_code")
-                        .with("client_id", clientId)
-                        .with("client_secret", clientSecret)
-                        .with("code", code)
-                        .with("state", identifierProvider.generateIdentifier()))
-                .retrieve()
-                .bodyToMono(NaverTokenResponse.class)
-                .block();
-
-        if (response == null || response.access_token() == null) {
-            throw new RuntimeException("Naver token 발급 실패");
+        if (!response.is2xx() || response.body() == null) {
+            throw new RuntimeException("Naver 사용자 조회 실패: " + response.rawBody());
         }
 
-        return response.access_token();
+        NaverUserResponse naverUser = response.body();
+        String email = extractEmail(naverUser);
+        return new OauthUser(naverUser.id(), VerificationProvider.NAVER, email);
     }
 
-    private NaverUserResponse fetchNaverUser(String token) {
+    private String getAccessToken(String code) {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
 
-        return naverWebClient.get()
-                .uri("https://openapi.naver.com/v1/nid/me")
-                .headers(headers -> headers.setBearerAuth(token))
-                .retrieve()
-                .bodyToMono(NaverUserResponse.class)
-                .block();
+        form.add("grant_type", "authorization_code");
+        form.add("client_id", naverOauthConfig.getClientId());
+        form.add("client_secret", naverOauthConfig.getClientSecret());
+        form.add("code", code);
+        form.add("state", identifierProvider.generateIdentifier());
+
+        HttpResponse<NaverTokenResponse> naverToken = oauthHttpClient.postFormUrlEncoded(naverOauthConfig.getTokenUri(), form, new DefaultHeaderProvider(), NaverTokenResponse.class);
+
+        if (!naverToken.is2xx() || naverToken.body() == null || naverToken.body().access_token() == null) {
+            throw new RuntimeException("Naver 토큰 요청 실패: " + naverToken.rawBody());
+        }
+
+        return naverToken.body().access_token();
     }
 
     private String extractEmail(NaverUserResponse user) {
-
-        if (user == null) {
-            return null;
-        }
 
         if (user.email() != null && !user.email().isBlank()) {
             return user.email();
         }
 
-        return "naver_" + user.id() + "@noemail.local";
+        return "naver_" + user.id() + "@local";
     }
 }
