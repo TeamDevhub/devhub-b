@@ -20,16 +20,16 @@ public class NaverOauthConfig implements OauthProviderConfig {
 
     @Override
     public String getAuthorizationUri() {
-        return "https://kauth.naver.com/oauth/authorize";
+        return "https://nid.naver.com/oauth2.0/authorize";
     }
 
     @Override
     public String getTokenUri() {
-        return "https://kauth.naver.com/oauth/token";
+        return "https://nid.naver.com/oauth2.0/token";
     }
 
     @Override
     public String getUserInfoUri() {
-        return "https://kapi.naver.com/v2/user/me";
+        return "https://openapi.naver.com/v1/nid/me";
     }
 }
