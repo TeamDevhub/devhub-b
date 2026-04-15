@@ -14,4 +14,5 @@ public interface ProjectRepository {
 	void deleteById(String projectGuid);
 	void update(Project upateProject);
 	PageResult<Project> getUserProjects(String userGuid, PageCommand pageCommand);
+	void closeProject(String projectGuid);
 }

@@ -212,4 +212,8 @@ public class ProjectFacade {
 		return userProjectResponseDtoList;
 	}
 
+	public void closeProject(String projectGuid) {
+		projectUseCase.closeProject(projectGuid);
+	}
+
 }

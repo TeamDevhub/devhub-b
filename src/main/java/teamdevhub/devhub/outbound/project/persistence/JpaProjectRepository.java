@@ -97,5 +97,13 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 			""")
 	Page<ProjectEntity> findByUserGuid(@Param("userGuid") String userGuid, Pageable pageable);
 
+	@Modifying
+	@Query("""
+			update ProjectEntity p
+			set p.capacityClosed = true
+			where p.projectGuid = :projectGuid
+			""")
+	void closeProject(@Param("projectGuid")String projectGuid);
+
 
 }

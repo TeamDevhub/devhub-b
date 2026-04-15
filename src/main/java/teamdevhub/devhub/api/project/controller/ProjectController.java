@@ -42,14 +42,6 @@ public class ProjectController {
         return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
     }
 
-	/**
-	 * 리뷰
-	 * API 명세에 따라 목록조회는 list 없이 단순 GetMapping 만 명시하는 걸로 변경했습니다.
-	 * @param searchProjectRequestDto
-	 * @param page
-	 * @param size
-	 * @return
-	 */
 	@GetMapping
     public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto,
     		@RequestParam("page") int page, @RequestParam("size") int size,  @AuthenticationPrincipal AuthenticatedUser user) {
@@ -100,7 +92,7 @@ public class ProjectController {
 	
 	@PostMapping("/{projectGuid}/close")
 	public ResponseEntity<DataApiResponseDto<Void>> closeProject(@PathVariable("projectGuid") String projectGuid, @LoginUser AuthenticatedUser authenticatedUser) {
-		projectFacade.toggleProjectLike(CreateProjectLikeCommand.toCreateProjectLikeCommand(projectGuid, authenticatedUser.userGuid()));
+		projectFacade.closeProject(projectGuid);
 		return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
 	}
 }

@@ -23,4 +23,6 @@ public interface ProjectUseCase {
 
 	PageResult<Project> getUserProjects(String userGuid, PageCommand pageCommand);
 
+	void closeProject(String projectGuid);
+
 }

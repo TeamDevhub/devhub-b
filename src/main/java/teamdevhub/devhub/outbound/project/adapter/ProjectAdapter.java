@@ -76,4 +76,9 @@ public class ProjectAdapter implements ProjectRepository {
         		pagedProjectList.getTotalElements());
     }
 
+	@Override
+	public void closeProject(String projectGuid) {
+		jpaProjectRepository.closeProject(projectGuid);
+	}
+
 }
