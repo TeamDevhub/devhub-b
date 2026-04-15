@@ -19,13 +19,11 @@ import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchProjectRequestDto {
-	// 작업전
 	private String order;
     private String keyword;
     private List<String> skillCodeList;
     private List<String> regionCodeList;
     private List<String> positionCodeList;
-    // 작업전
     private List<String> progressPeriodList;
     private List<String> positionLevelCodeList;
     private List<String> projectRecruitTypeList;

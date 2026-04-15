@@ -19,6 +19,8 @@ public class CommonCodeResponseDto {
 	private String code;
     private String parentCode;
     private String name;
+    private String remarks;
+    private String order;
     private boolean isUsed;
     private List<CommonCodeResponseDto> children;
 
@@ -28,6 +30,8 @@ public class CommonCodeResponseDto {
                 .parentCode(commonCode.getParentCode())
                 .name(commonCode.getName())
                 .isUsed(commonCode.isUsed())
+                .remarks(commonCode.getRemarks())
+                .order(commonCode.getOrder())
                 .children(Optional.ofNullable(commonCode.getChildren())
                         .orElseGet(Collections::emptyList).stream().map(CommonCodeResponseDto::fromDetailDomain).toList())
                 .build();

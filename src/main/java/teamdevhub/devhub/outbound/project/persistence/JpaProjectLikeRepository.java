@@ -4,6 +4,8 @@ package teamdevhub.devhub.outbound.project.persistence;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,6 +29,7 @@ public interface JpaProjectLikeRepository extends JpaRepository<ProjectLikeEntit
 			""")
 	int countByProjectGuid(@Param("projectGuid") String projectGuid);
 
+	ProjectLikeEntity findByProjectGuidAndUserGuid(String projectGuid, String userGuid);
 	
 	@Modifying
 	@Query("""
@@ -34,4 +37,11 @@ public interface JpaProjectLikeRepository extends JpaRepository<ProjectLikeEntit
 			where pl.projectGuid = :projectGuid
 			""")
 	void deleteAllByProjectGuid(@Param("projectGuid")String projectGuid);
+
+	@Query("""
+			select pl
+			from ProjectLikeEntity pl
+			where pl.userGuid = :userGuid
+			""")
+	Page<ProjectLikeEntity> findByUserGuid(@Param("userGuid")String userGuid, Pageable pageable);
 }

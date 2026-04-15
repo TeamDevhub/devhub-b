@@ -18,6 +18,7 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 	@Query("""
 			select p
 			from ProjectEntity p
+			left join ProjectLikeEntity pl on pl.projectGuid = p.projectGuid
 			where exists (
 				select 1
 				from ProjectRequirementEntity pr
@@ -42,12 +43,24 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 													   ('3202' in :projectRecruitStatusList and CURRENT_DATE > p.recruitmentEndDate)
 													   	or
 													   ('3203' in :projectRecruitStatusList and CURRENT_DATE < p.recruitmentStartDate) ))
+            and (:progressPeriodList is null or (
+											    ('001' in :progressPeriodList and function('timestampdiff', DAY, p.progressStartDate, p.progressEndDate) between 1 and 31)
+											    or
+											    ('002' in :progressPeriodList and function('timestampdiff', DAY, p.progressStartDate, p.progressEndDate) between 90 and 100)
+											    or
+											    ('003' in :progressPeriodList and function('timestampdiff', DAY, p.progressStartDate, p.progressEndDate) between 170 and 185)
+											))
 			and (:projectProgressTypeList is null or p.progressTypeCd in :projectProgressTypeList)
 			and (:recruitmentStartDate is null or p.recruitmentStartDate >= :recruitmentStartDate)
 			and (:recruitmentEndDate is null or p.recruitmentEndDate <= :recruitmentEndDate)
 			and (:progressStartDate is null or p.progressStartDate >= :progressStartDate)
+			group by p
+			order by 
+				case when :order = '001' then p.registeredDate end desc,
+				case when :order = '002' then (p.recruitmentEndDate - CURRENT_TIMESTAMP) end asc,
+				case when :order = '003' then count(pl.projectLikeGuid) end desc
 			""")
-	Page<ProjectEntity> findBySearchCondition(@Param("keyword") String keyword, @Param("skillCodeList") List<String> skillCodeList,
+	Page<ProjectEntity> findBySearchCondition(@Param("keyword") String keyword, @Param("order") String order, @Param("skillCodeList") List<String> skillCodeList,
 			@Param("regionCodeList") List<String> regionCodeList, @Param("positionCodeList") List<String> positionCodeList, @Param("positionLevelCodeList") List<String> positionLevelCodeList,
 			@Param("projectRecruitTypeList") List<String> projectRecruitTypeList, @Param("projectRecruitStatusList") List<String> projectRecruitStatusList,
 			@Param("projectProgressTypeList") List<String> projectProgressTypeList, @Param("recruitmentStartDate") LocalDateTime recruitmentStartDate, @Param("recruitmentEndDate") LocalDateTime recruitmentEndDate,
@@ -76,6 +89,13 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 			@Param("title") String title, @Param("content") String content, @Param("recruitmentStartDate") LocalDate recruitmentStartDate, @Param("recruitmentEndDate") LocalDate recruitmentEndDate,
 			@Param("progressStartDate") LocalDate progressStartDate, @Param("progressEndDate") LocalDate progressEndDate, @Param("recruitmentTypeCd") String recruitmentTypeCd, @Param("progressRegionCd") String progressRegionCd,
 			@Param("progressTypeCd") String progressTypeCd, @Param("category") String category);
+
+	@Query("""
+			select p
+			from ProjectEntity p
+			where p.userGuid = :userGuid
+			""")
+	Page<ProjectEntity> findByUserGuid(@Param("userGuid") String userGuid, Pageable pageable);
 
 
 }

@@ -1,20 +1,13 @@
 package teamdevhub.devhub.outbound.terms.adapter;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.domain.TermsAgreement;
 import teamdevhub.devhub.core.terms.port.out.TermsAgreementRepository;
 import teamdevhub.devhub.core.terms.port.out.TermsRepository;
 import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.terms.adapter.entity.TermsAgreementEntity;
-import teamdevhub.devhub.outbound.terms.adapter.entity.TermsEntity;
 import teamdevhub.devhub.outbound.terms.adapter.mapper.TermsAgreementMapper;
 import teamdevhub.devhub.outbound.terms.adapter.mapper.TermsMapper;
 import teamdevhub.devhub.outbound.terms.persistence.JpaTermsAgreementRepository;

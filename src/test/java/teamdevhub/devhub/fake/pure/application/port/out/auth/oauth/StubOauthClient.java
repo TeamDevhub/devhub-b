@@ -1,7 +1,7 @@
 package teamdevhub.devhub.fake.pure.application.port.out.auth.oauth;
 
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
 
 public class StubOauthClient implements OauthClient {

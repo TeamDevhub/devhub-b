@@ -18,10 +18,11 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 	private List<String> skillList;
 	private List<PositionDto> positionList;
 	private String likeCount;
-	private boolean capacityClosed;
+	private Boolean capacityClosed;
+	private Boolean projectLiked;
 	private String recruitStatus;
 
-	public static ProjectDetailResponseDto fromDomain(Project project, String imageFileUrl) {
+	public static ProjectDetailResponseDto fromDomain(Project project, String imageFileUrl, Boolean projectLiked) {
 		ProjectDetailResponseDtoBuilder<?, ?> builder = ProjectDetailResponseDto.builder();
 		fillBase(builder, project);
 		List<PositionDto> positionDtoList = null;
@@ -36,6 +37,7 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 			.positionList(positionDtoList)
 			.likeCount(project.getLikeCount())
 			.capacityClosed(project.isCapacityClosed())
+			.projectLiked(projectLiked)
 			.recruitStatus(project.getRecruitStatus())
 			.build();
 	}

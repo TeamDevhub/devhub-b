@@ -36,4 +36,9 @@ public class CommonCodeService implements CommonCodeUseCase {
     public void saveCommonCodeList(List<CommonCode> commonCodeList) {
         commonCodeRepository.saveAll(commonCodeList);
     }
+
+    @Override
+    public boolean isDuplicate(String code) {
+        return commonCodeRepository.existsByCode(code);
+    }
 }

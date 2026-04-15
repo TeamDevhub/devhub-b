@@ -3,12 +3,18 @@ package teamdevhub.devhub.outbound.project.adapter;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.ProjectLike;
 import teamdevhub.devhub.core.project.port.out.ProjectLikeRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectLikeEntity;
+import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectLikeMapper;
 import teamdevhub.devhub.outbound.project.adapter.mapper.ProjectMapper;
 import teamdevhub.devhub.outbound.project.persistence.JpaProjectLikeRepository;
 
@@ -18,6 +24,18 @@ public class ProjectLikeAdapter implements ProjectLikeRepository {
 	
 	private final JpaProjectLikeRepository jpaProjectLikeRepository;
 
+	@Override
+	public void save(ProjectLike projectLike) {
+		ProjectLikeEntity entity = ProjectLikeMapper.toEntity(projectLike);
+		jpaProjectLikeRepository.save(entity);
+	}
+
+	@Override
+	public ProjectLike findByProjectGuidAndUserGuid(String projectGuid, String userGuid) {
+		ProjectLikeEntity entity = jpaProjectLikeRepository.findByProjectGuidAndUserGuid(projectGuid, userGuid);
+		return ProjectLikeMapper.toProjectLike(entity);
+	}
+	
 	@Override
 	public List<ProjectLike> findByProjectGuid(Set<String> projectGuids) {
 		List<ProjectLikeEntity> entityList = jpaProjectLikeRepository.findByProjectGuids(projectGuids);
@@ -34,6 +52,22 @@ public class ProjectLikeAdapter implements ProjectLikeRepository {
 	@Override
 	public void deleteByProjectGuid(String projectGuid) {
 		jpaProjectLikeRepository.deleteAllByProjectGuid(projectGuid);
+	}
+
+	@Override
+	public void deleteById(String projectLikeGuid) {
+		jpaProjectLikeRepository.deleteById(projectLikeGuid);
+	}
+
+	@Override
+	public PageResult<ProjectLike> findByUserGuid(String userGuid, PageCommand pageCommand) {
+		Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
+		Page<ProjectLikeEntity> pagedProjectLike = jpaProjectLikeRepository.findByUserGuid(userGuid, pageable);
+		return PageResult.of(
+				pagedProjectLike.getContent().stream().map(ProjectLikeMapper::toProjectLike).toList(),
+				pagedProjectLike.getNumber(),
+				pagedProjectLike.getSize(),
+				pagedProjectLike.getTotalElements());
 	}
 
 }

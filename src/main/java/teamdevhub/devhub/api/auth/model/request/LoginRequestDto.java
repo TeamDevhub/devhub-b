@@ -23,7 +23,7 @@ public class LoginRequestDto {
     @RegexMatch(RegexPattern.AUTH_PASSWORD)
     private String password;
 
-    public LoginCommand toCommand() {
+    public LoginCommand toLoginCommand() {
         return LoginCommand.builder()
                 .email(this.email)
                 .password(this.password)

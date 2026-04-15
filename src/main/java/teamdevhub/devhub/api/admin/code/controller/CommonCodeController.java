@@ -2,10 +2,10 @@ package teamdevhub.devhub.api.admin.code.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import teamdevhub.devhub.api.admin.code.model.request.CommonCodeRequestDto;
 import teamdevhub.devhub.api.admin.code.model.response.CommonCodeResponseDto;
+import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.core.admin.code.port.in.facade.CommonCodeFacade;
 
@@ -19,5 +19,10 @@ public class CommonCodeController {
     @GetMapping("/list")
     public ResponseEntity<DataListApiResponseDto<CommonCodeResponseDto>> getCommonCodeList() {
         return ResponseEntity.ok(commonCodeFacade.getCommonCodeList());
+    }
+
+    @PutMapping
+    public ResponseEntity<DataApiResponseDto<?>> saveCommonCode(@RequestBody CommonCodeRequestDto code) {
+        return ResponseEntity.ok(commonCodeFacade.saveCode(code.toCommonCodeCommand(), code.isInsert()));
     }
 }

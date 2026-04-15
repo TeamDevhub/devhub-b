@@ -3,7 +3,6 @@ package teamdevhub.devhub.outbound.project.adapter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -35,9 +34,10 @@ public class ProjectAdapter implements ProjectRepository {
 	
 	@Override
     public PageResult<Project> getProjectList(SearchProjectListCommand searchProjectListCommand, PageCommand pageCommand) {
-        Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size(), Sort.by("registeredDate").descending());
+        Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
 
-        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findBySearchCondition(searchProjectListCommand.keyword(),
+        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findBySearchCondition(
+        		searchProjectListCommand.keyword(), searchProjectListCommand.order(),
 				searchProjectListCommand.skillCodeList(), searchProjectListCommand.regionCodeList(), searchProjectListCommand.positionCodeList(),
 				searchProjectListCommand.positionLevelCodeList(), searchProjectListCommand.projectRecruitTypeList(),
 				searchProjectListCommand.projectRecruitStatusList(), searchProjectListCommand.projectProgressTypeList(),
@@ -63,5 +63,17 @@ public class ProjectAdapter implements ProjectRepository {
 			upateProject.getProgressStartDate(), upateProject.getProgressEndDate(), upateProject.getRecruitmentTypeCd(), upateProject.getProgressRegionCd(), 
 			upateProject.getProgressTypeCd(), upateProject.getCategory());
 	}
+
+	@Override
+	public PageResult<Project> getUserProjects(String userGuid, PageCommand pageCommand) {
+		Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
+
+        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findByUserGuid(userGuid, pageable);
+        return PageResult.of(
+        		pagedProjectList.getContent().stream().map(ProjectMapper::toProject).toList(),
+        		pagedProjectList.getNumber(),
+        		pagedProjectList.getSize(),
+        		pagedProjectList.getTotalElements());
+    }
 
 }

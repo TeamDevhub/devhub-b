@@ -1,4 +1,4 @@
-package teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo;
+package teamdevhub.devhub.outbound.auth.infrastructure.oauth;
 
 import lombok.Builder;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
