@@ -1,7 +1,7 @@
 package teamdevhub.devhub.core.auth.port.in.usecase.oauth;
 
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 
 public interface OauthResolveUseCase {
