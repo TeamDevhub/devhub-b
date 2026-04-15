@@ -26,6 +26,9 @@ public class Board {
 	private List<Comment> commentList;
 	private String userEmail;
 	private boolean isLiked;
+	
+	private String userStatus;
+	private String reportCount;
 
 	private final AuditInfo auditInfo;
 

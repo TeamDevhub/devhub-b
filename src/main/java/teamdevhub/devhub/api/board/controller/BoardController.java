@@ -2,7 +2,6 @@ package teamdevhub.devhub.api.board.controller;
 
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.board.model.CreateBoardRequestDto;
+import teamdevhub.devhub.api.board.model.DeleteBoardRequestDto;
 import teamdevhub.devhub.api.board.model.SearchBoardRequestDto;
 import teamdevhub.devhub.api.board.model.UpdateBoardRequestDto;
 import teamdevhub.devhub.api.web.model.request.PageRequestDto;
@@ -88,8 +88,8 @@ public class BoardController {
 		return ResponseEntity.ok(boardFacade.likeBoard(boardGuid, authenticatedUser.userGuid()));
 	}
 	
-	@DeleteMapping("/{boardGuid}")
-	public ResponseEntity<DataApiResponseDto<Void>> deleteBoard(@PathVariable("boardGuid") String boardGuid) {
-		return ResponseEntity.ok(boardFacade.deleteBoard(boardGuid));
+	@PostMapping("/delete")
+	public ResponseEntity<DataApiResponseDto<Void>> deleteBoard(@RequestBody DeleteBoardRequestDto deleteBoardRequestDto) {
+		return ResponseEntity.ok(boardFacade.deleteBoard(deleteBoardRequestDto.getBoardGuids()));
 	}
 }

@@ -10,10 +10,12 @@ import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.board.domain.Board;
+import teamdevhub.devhub.core.board.port.in.Facade.model.AdminBoardResponseDto;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardBasicResponseDto;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardDetailResponseDto;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
+import teamdevhub.devhub.core.board.port.in.command.SearchAdminBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.UpdateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardQueryUseCase;
@@ -92,10 +94,27 @@ public class BoardFacade {
                         SuccessCode.UPDATE_SUCCESS);
 	}
 
-	public DataApiResponseDto<Void> deleteBoard(String boardGuid) {
-		boardUseCase.deleteBoard(boardGuid);
+	public DataApiResponseDto<Void> deleteBoard(List<String> boardGuids) {
+		boardUseCase.deleteBoard(boardGuids);
 		return DataApiResponseDto.successWithoutData(
                 SuccessCode.DELETE_SUCCESS);
+	}
+
+	public DataListApiResponseDto<AdminBoardResponseDto> listAdminBoard(SearchAdminBoardCommand searchAdminBoardCommand, PageCommand pageCommand) {
+		PageResult<Board> pagedBoardList = boardQueryUseCase.listAdminBoard(searchAdminBoardCommand, pageCommand);
+		
+		List<AdminBoardResponseDto> adminBoardResponseDtoList = pagedBoardList.content().stream()
+				.map(board -> AdminBoardResponseDto.builder()
+						.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))
+						.userstatus(board.getUserStatus())
+						.reportCount(board.getReportCount())
+		                .build())
+				.toList();
+		
+		return DataListApiResponseDto.successWithDataList(
+                        SuccessCode.READ_SUCCESS,
+                        adminBoardResponseDtoList,
+                        PageResponseDto.from(pagedBoardList));
 	}
 
 }

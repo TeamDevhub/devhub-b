@@ -91,7 +91,7 @@ public class BoardService implements BoardUseCase {
 	}
 	
 	@Override
-	public void deleteBoard(String boardGuid) {
-		boardRepository.deleteBoard(boardGuid);
+	public void deleteBoard(List<String> boardGuids) {
+		boardRepository.deleteBoard(boardGuids);
 	}
 }
