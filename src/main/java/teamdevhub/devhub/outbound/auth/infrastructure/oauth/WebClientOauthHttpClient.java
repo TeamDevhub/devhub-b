@@ -1,7 +1,7 @@
 package teamdevhub.devhub.outbound.auth.infrastructure.oauth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -12,11 +12,15 @@ import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HeaderProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HttpResponse;
 
 @Component
-@RequiredArgsConstructor
 public class WebClientOauthHttpClient implements OauthHttpClient {
 
     private final WebClient oauthWebClient;
     private final ObjectMapper objectMapper;
+
+    public WebClientOauthHttpClient(@Qualifier("oauthWebClient") WebClient oauthWebClient, ObjectMapper objectMapper) {
+        this.oauthWebClient = oauthWebClient;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public <T> HttpResponse<T> postFormUrlEncoded(String uri, MultiValueMap<String, String> formData, HeaderProvider headerProvider, Class<T> responseType) {
