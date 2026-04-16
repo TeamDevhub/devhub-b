@@ -46,15 +46,29 @@ public class NaverOauthClientAdapter implements OauthClient {
     public OauthUser fetchUser(String code) {
         String accessToken = getAccessToken(code);
 
-        HttpResponse<NaverUserResponse> response = oauthHttpClient.get(naverOauthConfig.getUserInfoUri(), new BearerAuthHeaderProvider(accessToken), NaverUserResponse.class);
+        HttpResponse<NaverUserResponse> response = oauthHttpClient.get(
+                naverOauthConfig.getUserInfoUri(),
+                new BearerAuthHeaderProvider(accessToken),
+                NaverUserResponse.class
+        );
 
         if (!response.is2xx() || response.body() == null) {
             throw new RuntimeException("Naver 사용자 조회 실패: " + response.rawBody());
         }
 
         NaverUserResponse naverUser = response.body();
+
+        if (naverUser.response() == null || naverUser.response().id() == null) {
+            throw new RuntimeException("Naver 사용자 응답 이상: " + response.rawBody());
+        }
+
         String email = extractEmail(naverUser);
-        return new OauthUser(naverUser.id(), VerificationProvider.NAVER, email);
+
+        return new OauthUser(
+                naverUser.response().id(),
+                VerificationProvider.NAVER,
+                email
+        );
     }
 
     private String getAccessToken(String code) {
@@ -66,7 +80,12 @@ public class NaverOauthClientAdapter implements OauthClient {
         form.add("code", code);
         form.add("state", identifierProvider.generateIdentifier());
 
-        HttpResponse<NaverTokenResponse> naverToken = oauthHttpClient.postFormUrlEncoded(naverOauthConfig.getTokenUri(), form, new DefaultHeaderProvider(), NaverTokenResponse.class);
+        HttpResponse<NaverTokenResponse> naverToken = oauthHttpClient.postFormUrlEncoded(
+                naverOauthConfig.getTokenUri(),
+                form,
+                new DefaultHeaderProvider(),
+                NaverTokenResponse.class
+        );
 
         if (!naverToken.is2xx() || naverToken.body() == null || naverToken.body().access_token() == null) {
             throw new RuntimeException("Naver 토큰 요청 실패: " + naverToken.rawBody());
@@ -76,11 +95,10 @@ public class NaverOauthClientAdapter implements OauthClient {
     }
 
     private String extractEmail(NaverUserResponse user) {
-
-        if (user.email() != null && !user.email().isBlank()) {
-            return user.email();
+        if (user.response() != null && user.response().email() != null && !user.response().email().isBlank()) {
+            return user.response().email();
         }
 
-        return "naver_" + user.id() + "@local";
+        return "naver_" + user.response().id() + "@local";
     }
 }
