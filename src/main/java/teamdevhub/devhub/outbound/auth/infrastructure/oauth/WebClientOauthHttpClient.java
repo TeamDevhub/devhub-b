@@ -64,17 +64,18 @@ public class WebClientOauthHttpClient implements OauthHttpClient {
                 .block();
     }
 
-    private <T> HttpResponse<T> buildResponse(HttpStatusCode httpStatusCode, HttpHeaders httpHeaders, String rawBody, Class<T> responseType) {
-        T body = null;
-
+    private <T> HttpResponse<T> buildResponse(
+            HttpStatusCode status,
+            HttpHeaders headers,
+            String rawBody,
+            Class<T> responseType
+    ) {
         try {
-            if (!rawBody.isBlank()) {
-                body = objectMapper.readValue(rawBody, responseType);
-            }
-        } catch (Exception ignored) {
+            T body = rawBody.isBlank() ? null : objectMapper.readValue(rawBody, responseType);
+            return new HttpResponse<>(status.value(), body, rawBody, headers);
 
+        } catch (Exception e) {
+            return new HttpResponse<>(status.value(), null, rawBody, headers);
         }
-
-        return new HttpResponse<>(httpStatusCode.value(), body, rawBody, httpHeaders);
     }
 }
