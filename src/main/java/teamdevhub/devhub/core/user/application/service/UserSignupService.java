@@ -74,9 +74,7 @@ public class UserSignupService implements UserSignupUseCase {
 
     private User createOauthUserForSignup(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
         String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = encodedPasswordProvider.encode(signupOauthUserCommand.password());
-
-        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, userGuid, encodedPassword);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, userGuid);
         return User.createOauthUser(oauthCreateUserCommand);
     }
 

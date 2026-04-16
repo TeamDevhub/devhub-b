@@ -50,13 +50,13 @@ public record CreateUserCommand(
         );
     }
 
-    public static CreateUserCommand oauthUserCreateCommand(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser, String userGuid, String encodedPassword) {
+    public static CreateUserCommand oauthUserCreateCommand(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser, String userGuid) {
         return new CreateUserCommand(
                 userGuid,
                 oauthUser.verificationProvider(),
                 oauthUser.oauthId(),
                 oauthUser.email(),
-                encodedPassword,
+                null,
                 signupOauthUserCommand.username(),
                 signupOauthUserCommand.introduction(),
                 signupOauthUserCommand.positionList(),
