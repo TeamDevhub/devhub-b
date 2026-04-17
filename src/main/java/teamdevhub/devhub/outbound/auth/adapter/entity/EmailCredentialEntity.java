@@ -1,0 +1,39 @@
+package teamdevhub.devhub.outbound.auth.adapter.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PROTECTED;
+
+@Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
+@Table(
+        name = "user_email_credentials",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_email_credentials_email",
+                        columnNames = "email"
+                )
+        }
+)
+public class EmailCredentialEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String userGuid;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+}

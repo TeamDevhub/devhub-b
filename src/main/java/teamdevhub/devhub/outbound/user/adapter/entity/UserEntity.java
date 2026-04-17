@@ -34,16 +34,20 @@ public class UserEntity extends BaseEntity {
     @Column(length = 32, nullable = false, unique = true)
     private String userGuid;
 
+    @Deprecated
     @Enumerated(EnumType.STRING)
     @Column(name = "provider")
     private VerificationProvider provider;
 
+    @Deprecated
     @Column
     private String oauthId;
 
+    @Deprecated
     @Column
     private String email;
 
+    @Deprecated
     @Column
     private String password;
 
