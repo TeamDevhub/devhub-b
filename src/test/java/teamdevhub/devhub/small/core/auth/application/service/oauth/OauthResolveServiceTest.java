@@ -49,7 +49,7 @@ class OauthResolveServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1);
         User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
         userRepository.save(createdOauthUser);
 

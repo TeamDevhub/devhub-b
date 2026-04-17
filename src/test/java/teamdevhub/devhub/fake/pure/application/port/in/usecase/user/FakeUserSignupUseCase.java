@@ -42,7 +42,7 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
         this.called = true;
         this.lastSignupOauthUserCommand = signupOauthUserCommand;
         this.lastOauthUser = oauthUser;
-        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1);
         User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
         store.put(createdOauthUser.getUserGuid(), createdOauthUser);
         return createdOauthUser;
