@@ -15,9 +15,9 @@ public enum ErrorCode {
     UPDATE_FAIL("ERR.DVH.0003", "수정 오류가 발생했습니다",INTERNAL_SERVER_ERROR),
     DELETE_FAIL("ERR.DVH.0004", "삭제 오류가 발생했습니다",INTERNAL_SERVER_ERROR),
 
-    TOKEN_EXPIRED("ERR.DVH.0010", "토큰이 만료되었습니다", BAD_REQUEST),
-    TOKEN_INVALID("ERR.DVH.0011", "유효하지 않은 토큰입니다", BAD_REQUEST),
-    TOKEN_UNSUPPORTED("ERR.DVH.0012", "지원되지 않는 토큰 형식입니다", BAD_REQUEST),
+    TOKEN_EXPIRED("ERR.DVH.0010", "토큰이 만료되었습니다", UNAUTHORIZED),
+    TOKEN_INVALID("ERR.DVH.0011", "유효하지 않은 토큰입니다", UNAUTHORIZED),
+    TOKEN_UNSUPPORTED("ERR.DVH.0012", "지원되지 않는 토큰 형식입니다", UNAUTHORIZED),
     MISSING_AUTH_HEADER("ERR.DVH.0013", "Authorization Header 가 없습니다", BAD_REQUEST),
     USER_NOT_FOUND("ERR.DVH.0014", "로그인된 사용자가 존재하지 않습니다", UNAUTHORIZED),
     REFRESH_TOKEN_INVALID("ERR.DVH.0015", "유효하지 않은 토큰입니다", UNAUTHORIZED),
