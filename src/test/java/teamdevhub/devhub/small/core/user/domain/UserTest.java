@@ -100,7 +100,7 @@ class UserTest {
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .build();
-        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1);
 
         // when
         User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
@@ -109,7 +109,6 @@ class UserTest {
         assertThat(createdOauthUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(createdOauthUser.getVerificationProvider()).isEqualTo(oauthUser.verificationProvider());
         assertThat(createdOauthUser.getEmail()).isEqualTo(oauthUser.email());
-        assertThat(createdOauthUser.getPassword()).isEqualTo(signupOauthUserCommand.password());
         assertThat(createdOauthUser.getUsername()).isEqualTo(signupOauthUserCommand.username());
         assertThat(createdOauthUser.isDeleted()).isFalse();
         assertThat(createdOauthUser.isBlocked()).isFalse();
