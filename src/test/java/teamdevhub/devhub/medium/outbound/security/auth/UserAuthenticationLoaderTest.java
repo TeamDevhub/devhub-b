@@ -36,7 +36,6 @@ public class UserAuthenticationLoaderTest {
         AuthenticatedUser user = new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
-                TEST_PASSWORD_1,
                 UserRole.USER
         );
         when(userRepository.findAuthenticatedUserByEmail(TEST_EMAIL_1)).thenReturn(user);
@@ -49,7 +48,6 @@ public class UserAuthenticationLoaderTest {
         UserAuthentication userAuthentication = (UserAuthentication) details;
         assertThat(userAuthentication.getUser()).isEqualTo(user);
         assertThat(userAuthentication.getUsername()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(userAuthentication.getPassword()).isEqualTo(TEST_PASSWORD_1);
     }
 
     @Test

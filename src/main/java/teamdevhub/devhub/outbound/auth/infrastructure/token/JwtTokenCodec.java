@@ -49,7 +49,7 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         return Jwts.builder()
                 .setSubject(authenticatedUser.userGuid())
                 .claim(JwtClaims.TOKEN_TYPE, TokenType.ACCESS.name())
-                .claim(JwtClaims.EMAIL, authenticatedUser.email())
+                .claim(JwtClaims.EMAIL, authenticatedUser.loginId())
                 .claim(JwtClaims.USER_ROLE, authenticatedUser.userRole().name())
                 .setIssuedAt(toDate(now))
                 .setExpiration(toDate(expireAt))

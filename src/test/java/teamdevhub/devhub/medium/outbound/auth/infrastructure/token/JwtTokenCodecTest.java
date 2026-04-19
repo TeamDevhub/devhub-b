@@ -46,7 +46,7 @@ class JwtTokenCodecTest {
     @DisplayName("accessToken_생성_후_토큰_정보를_정상적으로_추출한다")
     void createAccessTokenAndExtractInfo() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
 
         // when
         String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
@@ -89,7 +89,7 @@ class JwtTokenCodecTest {
     @DisplayName("accessToken_을_refreshToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다")
     void extractRefreshTokenInfoWithAccessTokenThrows() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
         String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
 
         // when, then
@@ -123,7 +123,7 @@ class JwtTokenCodecTest {
     @DisplayName("accessToken_을_tempToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다")
     void extractTempTokenInfoWithAccessTokenThrows() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
         String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
 
 
@@ -182,7 +182,7 @@ class JwtTokenCodecTest {
 
         jwtTokenCodec.init();
 
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
         String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
 
         // when, then

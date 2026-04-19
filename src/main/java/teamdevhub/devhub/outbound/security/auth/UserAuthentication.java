@@ -22,7 +22,7 @@ public class UserAuthentication implements UserDetails {
 
     @Override
     public String getPassword() {
-        return authenticatedUser.password();
+        return null;
     }
 
     @Override

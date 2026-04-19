@@ -21,7 +21,6 @@ public class UserAuthenticationTest {
         AuthenticatedUser user = new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
-                TEST_PASSWORD_1,
                 UserRole.USER
         );
         UserAuthentication authentication = new UserAuthentication(user);
@@ -29,7 +28,6 @@ public class UserAuthenticationTest {
         // then
         assertThat(authentication.getUser()).isEqualTo(user);
         assertThat(authentication.getUsername()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(authentication.getPassword()).isEqualTo(TEST_PASSWORD_1);
 
         Collection<?> authorities = authentication.getAuthorities();
         assertThat(authorities).hasSize(1);

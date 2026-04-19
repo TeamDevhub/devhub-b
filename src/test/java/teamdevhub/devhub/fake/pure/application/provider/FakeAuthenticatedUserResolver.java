@@ -13,7 +13,6 @@ public class FakeAuthenticatedUserResolver implements AuthenticatedUserResolver 
         return new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 email,
-                password,
                 UserRole.USER
         );
     }

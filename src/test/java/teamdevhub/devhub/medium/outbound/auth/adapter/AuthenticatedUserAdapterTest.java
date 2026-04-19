@@ -35,7 +35,6 @@ public class AuthenticatedUserAdapterTest {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
-                TEST_PASSWORD_1,
                 UserRole.USER
         );
 

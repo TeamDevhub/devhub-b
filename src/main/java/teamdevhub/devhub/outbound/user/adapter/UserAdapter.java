@@ -37,6 +37,7 @@ public class UserAdapter implements UserRepository {
         return UserMapper.toDomain(userEntity);
     }
 
+    @Deprecated
     @Override
     public AuthenticatedUser findAuthenticatedUserByEmail(String email) {
         UserEntity userEntity = jpaUserRepository.findByEmail(email).
@@ -51,11 +52,13 @@ public class UserAdapter implements UserRepository {
         return UserMapper.toAuthenticatedUser(userEntity);
     }
 
+    @Deprecated
     @Override
     public Optional<AuthenticatedUser> findOptionalByEmail(String email) {
         return jpaUserRepository.findByEmail(email).map(UserMapper::toAuthenticatedUser);
     }
 
+    @Deprecated
     @Override
     public Optional<AuthenticatedUser> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
         return jpaUserRepository.findByProviderAndOauthId(verificationProvider, oauthId).map(UserMapper::toAuthenticatedUser);

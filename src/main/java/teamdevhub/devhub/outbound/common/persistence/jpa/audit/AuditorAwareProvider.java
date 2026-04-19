@@ -30,11 +30,11 @@ public class AuditorAwareProvider implements AuditorAware<String> {
         Object principal = authentication.getPrincipal();
 
         if (principal instanceof UserAuthentication userAuthentication) {
-            return Optional.of(userAuthentication.getUser().email());
+            return Optional.of(userAuthentication.getUser().loginId());
         }
 
         if (principal instanceof AuthenticatedUser authenticatedUser) {
-            return Optional.of(authenticatedUser.email());
+            return Optional.of(authenticatedUser.loginId());
         }
 
         return Optional.of(SYSTEM);

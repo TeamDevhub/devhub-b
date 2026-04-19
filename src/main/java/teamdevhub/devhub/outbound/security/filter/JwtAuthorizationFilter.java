@@ -31,13 +31,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
-        String uri = httpServletRequest.getRequestURI();
-
-        if (uri.equals("/auth/reissue")) {
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
-            return;
-        }
-
         try {
             String token = httpServletRequest.getHeader(AUTHORIZATION_HEADER);
 
@@ -60,7 +53,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         AuthenticatedUser authenticatedUser = AuthenticatedUser.of(
                 accessTokenInfo.userGuid(),
                 accessTokenInfo.email(),
-                null,
                 accessTokenInfo.userRole()
         );
         Collection<? extends GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(accessTokenInfo.userRole().getAuthority()));

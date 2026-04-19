@@ -37,7 +37,7 @@ public class FakeAuthenticatedUserUseCase implements AuthenticatedUserUseCase {
         return store.values().stream()
                 .filter(user -> user.getUserGuid().equals(userGuid))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getUserRole()))
                 .orElse(null);
     }
 
@@ -46,7 +46,7 @@ public class FakeAuthenticatedUserUseCase implements AuthenticatedUserUseCase {
         return store.values().stream()
                 .filter(user -> user.getEmail().equals(loginCommand.email()))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
+                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getUserRole()))
                 .orElse(null);
     }
 }
