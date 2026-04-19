@@ -52,7 +52,7 @@ public class AuthenticatedUserAdapterTest {
         // then
         assertThat(result).isNotNull();
         assertThat(result.userGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(result.email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(result.loginId()).isEqualTo(TEST_EMAIL_1);
         assertThat(result.userRole()).isEqualTo(UserRole.USER);
     }
 }

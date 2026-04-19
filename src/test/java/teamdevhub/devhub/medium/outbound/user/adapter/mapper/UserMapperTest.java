@@ -32,7 +32,7 @@ class UserMapperTest {
 
         // then
         assertThat(authenticatedUser.userGuid()).isEqualTo(userEntity.getUserGuid());
-        assertThat(authenticatedUser.email()).isEqualTo(userEntity.getEmail());
+        assertThat(authenticatedUser.loginId()).isEqualTo(userEntity.getEmail());
         assertThat(authenticatedUser.userRole()).isEqualTo(userEntity.getUserRole());
     }
 

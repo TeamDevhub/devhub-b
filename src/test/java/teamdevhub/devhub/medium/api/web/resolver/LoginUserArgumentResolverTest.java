@@ -98,7 +98,7 @@ class LoginUserArgumentResolverTest {
         // then
         assertThat(resolvedValue).isNotNull();
         assertThat(resolvedValue).isInstanceOf(AuthenticatedUser.class);
-        assertThat(((AuthenticatedUser) resolvedValue).email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(((AuthenticatedUser) resolvedValue).loginId()).isEqualTo(TEST_EMAIL_1);
     }
 
     @Test

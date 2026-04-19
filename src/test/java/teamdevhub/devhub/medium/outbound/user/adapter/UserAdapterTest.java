@@ -92,7 +92,7 @@ class UserAdapterTest {
 
         // then
         assertThat(authenticatedUser).isNotNull();
-        assertThat(authenticatedUser.email()).isEqualTo(testUser.getEmail());
+        assertThat(authenticatedUser.loginId()).isEqualTo(testUser.getEmail());
     }
 
     @Test
@@ -120,7 +120,7 @@ class UserAdapterTest {
         // then
         assertThat(authenticatedUser).isNotNull();
         assertThat(authenticatedUser.userGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(authenticatedUser.email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(authenticatedUser.loginId()).isEqualTo(TEST_EMAIL_1);
     }
 
     @Test
@@ -157,7 +157,7 @@ class UserAdapterTest {
 
         // then
         assertThat(result).isPresent();
-        assertThat(result.get().email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(result.get().loginId()).isEqualTo(TEST_EMAIL_1);
     }
 
     @Test
@@ -182,7 +182,7 @@ class UserAdapterTest {
 
         // then
         assertThat(result).isPresent();
-        assertThat(result.get().email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(result.get().loginId()).isEqualTo(TEST_EMAIL_1);
     }
 
     @Test

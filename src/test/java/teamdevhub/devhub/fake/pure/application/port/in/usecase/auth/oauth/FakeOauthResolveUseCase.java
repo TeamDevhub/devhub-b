@@ -24,7 +24,7 @@ public class FakeOauthResolveUseCase implements OauthResolveUseCase {
         if (oauthUserResult.loginAvailable()) {
             AuthenticatedUser authenticatedUser = AuthenticatedUser.builder()
                     .userGuid(TEST_USER_GUID_1)
-                    .email(TEST_EMAIL_1)
+                    .loginId(TEST_EMAIL_1)
                     .userRole(UserRole.USER)
                     .build();
 
