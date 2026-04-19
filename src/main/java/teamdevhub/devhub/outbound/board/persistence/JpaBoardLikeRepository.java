@@ -18,4 +18,6 @@ public interface JpaBoardLikeRepository extends JpaRepository<BoardLikeEntity, S
 	List<Object[]> countByLikeCount(@Param("boardGuids") List<String> boardGuids);
 	
 	Optional<BoardLikeEntity> findByBoardGuidAndUserGuid(String boardGuid, String userGuid);
+	
+	boolean existsByBoardGuidAndUserGuid(String boardGuid, String userGuid);
 }

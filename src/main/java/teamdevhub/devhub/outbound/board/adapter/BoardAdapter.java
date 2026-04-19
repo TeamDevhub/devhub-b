@@ -1,6 +1,8 @@
 package teamdevhub.devhub.outbound.board.adapter;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -49,7 +51,7 @@ public class BoardAdapter implements BoardRepository {
 	}
 
 	@Override
-	public void deleteBoard(String boardGuid) {
-		jpaBoardRepository.deleteById(boardGuid);
+	public void deleteBoard(List<String> boardGuids) {
+		jpaBoardRepository.deleteAllByBoardGuidIn(boardGuids);
 	}
 }
