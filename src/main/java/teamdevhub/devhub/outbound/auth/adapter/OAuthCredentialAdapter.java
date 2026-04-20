@@ -11,6 +11,8 @@ import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class OAuthCredentialAdapter implements OauthCredentialRepository {
@@ -18,14 +20,14 @@ public class OAuthCredentialAdapter implements OauthCredentialRepository {
     private final JpaOauthCredentialRepository jpaOauthCredentialRepository;
 
     @Override
-    public OAuthCredential findByProviderAndOauthId(VerificationProvider provider, String oauthId) {
+    public Optional<OAuthCredential> findByProviderAndOauthId(VerificationProvider provider, String oauthId) {
         OAuthCredentialEntity oAuthCredentialEntity = jpaOauthCredentialRepository.findByProviderAndOauthId(provider, oauthId).orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
-        return OAuthCredentialMapper.toDomain(oAuthCredentialEntity);
+        return Optional.of(OAuthCredentialMapper.toDomain(oAuthCredentialEntity));
     }
 
     @Override
-    public OAuthCredential findByUserGuid(String userGuid) {
+    public Optional<OAuthCredential> findByUserGuid(String userGuid) {
         OAuthCredentialEntity oAuthCredentialEntity = jpaOauthCredentialRepository.findByUserGuid(userGuid).orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
-        return OAuthCredentialMapper.toDomain(oAuthCredentialEntity);
+        return Optional.of(OAuthCredentialMapper.toDomain(oAuthCredentialEntity));
     }
 }

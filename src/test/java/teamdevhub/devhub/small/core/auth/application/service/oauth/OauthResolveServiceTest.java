@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthResolveService;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
+import teamdevhub.devhub.fake.pure.application.port.out.auth.FakeOauthCredentialRepository;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
@@ -22,14 +23,16 @@ class OauthResolveServiceTest {
     private OauthResolveService oauthResolveService;
 
     private FakeTokenParseProvider tokenParseProvider;
+    private FakeOauthCredentialRepository oauthCredentialRepository;
     private FakeUserRepository userRepository;
 
     @BeforeEach
     void init() {
         tokenParseProvider = new FakeTokenParseProvider();
+        oauthCredentialRepository = new FakeOauthCredentialRepository();
         userRepository = new FakeUserRepository();
 
-        oauthResolveService = new OauthResolveService(tokenParseProvider, userRepository);
+        oauthResolveService = new OauthResolveService(tokenParseProvider, oauthCredentialRepository, userRepository);
     }
 
     @Test

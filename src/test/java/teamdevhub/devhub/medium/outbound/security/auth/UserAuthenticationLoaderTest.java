@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import teamdevhub.devhub.core.auth.port.out.EmailCredentialRepository;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
 import teamdevhub.devhub.outbound.security.auth.UserAuthenticationLoader;
 import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
@@ -20,13 +21,15 @@ public class UserAuthenticationLoaderTest {
 
     private UserAuthenticationLoader userAuthenticationLoader;
 
+    private EmailCredentialRepository emailCredentialRepository;
     private UserRepository userRepository;
 
     @BeforeEach
     public void init() {
+        emailCredentialRepository = mock(EmailCredentialRepository.class);
         userRepository = mock(UserRepository.class);
 
-        userAuthenticationLoader = new UserAuthenticationLoader(userRepository);
+        userAuthenticationLoader = new UserAuthenticationLoader(emailCredentialRepository, userRepository);
     }
 
     @Test
