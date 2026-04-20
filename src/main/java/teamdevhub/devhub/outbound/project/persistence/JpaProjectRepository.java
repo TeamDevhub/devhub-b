@@ -136,5 +136,24 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 			""")
 	void closeProject(@Param("projectGuid")String projectGuid);
 
+	@Query("""
+			select p
+			from ProjectEntity p
+			where (
+			 	exists (
+		            select 1
+		            from ProjectApplicationEntity pa
+		            join ProjectRequirementEntity pr
+		                on pr.projectRequirementGuid = pa.requirementGuid
+		            where pa.applicantGuid = :userGuid
+		            and pa.statusCd = '3302'
+		            and pr.projectGuid = p.projectGuid
+		        )
+		        or p.userGuid = :userGuid
+	        )
+			and CURRENT_DATE > p.progressEndDate
+			""")
+	Page<ProjectEntity> findEndProjectsByApplicantGuid(@Param("userGuid")String userGuid, Pageable pageable);
+
 
 }

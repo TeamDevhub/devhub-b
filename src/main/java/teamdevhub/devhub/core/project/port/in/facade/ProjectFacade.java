@@ -216,4 +216,17 @@ public class ProjectFacade {
 		projectUseCase.closeProject(projectGuid);
 	}
 
+	public List<UserProjectResponseDto> getUserParticipateProjects(String userGuid, PageCommand pageCommand) {
+		List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+		PageResult<Project> pagedParticipateProjectList = projectUseCase.findEndProjectsByApplicantGuid(userGuid, pageCommand);
+		// 작업 예정
+		userProjectResponseDtoList = pagedParticipateProjectList.content().stream()
+            .map(participateProject -> {
+            	Project project = projectUseCase.getProjectDetail(participateProject.getProjectGuid());
+            	return UserProjectResponseDto.fromDomain(project, null);
+            })
+            .toList();
+		return userProjectResponseDtoList;
+	}
+
 }

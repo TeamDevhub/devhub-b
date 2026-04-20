@@ -141,4 +141,15 @@ public class UserProfileController {
                 )
         );
     }
+    
+    @GetMapping("/projects/participates")
+    public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserParticipateProjects(@RequestParam("page") int page, @RequestParam("size") int size, 
+    		@LoginUser AuthenticatedUser authenticatedUser) {
+        return ResponseEntity.ok(
+        		DataListApiResponseDto.successWithDataList(
+                        SuccessCode.READ_SUCCESS,
+                        projectFacade.getUserParticipateProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                )
+        );
+    }
 }
