@@ -15,4 +15,6 @@ public interface BoardLikeRepository {
 
 	void save(BoardLike boardLike);
 
+	boolean existsByBoardGuidAndUserGuid(String boardGuid, String userGuid);
+
 }

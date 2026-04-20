@@ -31,7 +31,7 @@ public class CommonCodeEntity extends BaseEntity {
     @Column(name = "name", nullable = false)	
 	private String name;
 	
-    @Column(name = "sort_order", nullable = false)	
+    @Column(name = "sort_order")
 	private String sortOrder;
 	
 	@Convert(converter = BooleanToYNConverter.class)

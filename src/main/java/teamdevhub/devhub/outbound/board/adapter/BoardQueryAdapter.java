@@ -1,5 +1,7 @@
 package teamdevhub.devhub.outbound.board.adapter;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.board.domain.Board;
+import teamdevhub.devhub.core.board.port.in.command.SearchAdminBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
 import teamdevhub.devhub.core.board.port.out.BoardQueryRepository;
 import teamdevhub.devhub.core.common.page.PageResult;
@@ -35,5 +38,35 @@ public class BoardQueryAdapter implements BoardQueryRepository {
 				pageBoardList.getSize(),
 				pageBoardList.getTotalElements());
 		 return aa;
+	} 
+	
+	@Override
+	public PageResult<Board> listAdminBoard(SearchAdminBoardCommand searchAdminBoardCommand, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by("registeredDate").descending());
+		Page<Object[]> pageBoardList = jpaBoardRepository.findBySearchCondition(				
+				searchAdminBoardCommand.title(),
+				searchAdminBoardCommand.categoryCd(),
+				searchAdminBoardCommand.userStatus(),
+				searchAdminBoardCommand.isReported(),
+				searchAdminBoardCommand.registeredStartDate(),
+				searchAdminBoardCommand.registeredEndDate(),
+											pageable);
+		
+		List<Board> boards = pageBoardList.getContent().stream()
+				.map(row -> {
+					BoardEntity entity = (BoardEntity) row[0];
+					String username = (String) row[1];
+					boolean deleted = (boolean) row[2];
+					boolean blocked = (boolean) row[3];
+					Long reportCount = (Long) row[4];
+		            
+		            return (Board) BoardMapper.toAdminBoard(entity, username, deleted, blocked, reportCount);
+				})
+				.toList();
+		return PageResult.of(
+				boards, 
+				pageBoardList.getNumber(),
+				pageBoardList.getSize(),
+				pageBoardList.getTotalElements()); 
 	} 
 }

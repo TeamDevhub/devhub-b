@@ -22,10 +22,6 @@ public class SignupOauthRequestDto {
     @NotBlank(message = "TEMP 토큰은 필수입니다")
     private String tempToken;
 
-    @NotBlank(message = "비밀번호는 필수입니다")
-    @RegexMatch(RegexPattern.AUTH_PASSWORD)
-    private String password;
-
     @RegexMatch(RegexPattern.USERNAME)
     private String username;
 
@@ -42,7 +38,6 @@ public class SignupOauthRequestDto {
     public SignupOauthUserCommand toSignupOauthUserCommand() {
         return SignupOauthUserCommand.builder()
                 .tempToken(this.tempToken)
-                .password(this.password)
                 .username(this.username)
                 .introduction(this.introduction)
                 .positionList(this.positionList)

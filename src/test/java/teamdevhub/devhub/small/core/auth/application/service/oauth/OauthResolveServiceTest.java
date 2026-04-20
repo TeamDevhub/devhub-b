@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthResolveService;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
@@ -49,7 +49,7 @@ class OauthResolveServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .build();
 
-        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1);
         User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
         userRepository.save(createdOauthUser);
 

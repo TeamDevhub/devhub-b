@@ -10,4 +10,5 @@ public interface CommonCodeUseCase {
     List<CommonCode> getCommonCodeList();
     void saveCommonCode(CommonCode commonCode);
     void saveCommonCodeList(List<CommonCode> commonCodeList);
+    boolean isDuplicate(String code);
 }

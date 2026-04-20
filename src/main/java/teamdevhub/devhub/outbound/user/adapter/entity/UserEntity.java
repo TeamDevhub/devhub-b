@@ -41,10 +41,10 @@ public class UserEntity extends BaseEntity {
     @Column
     private String oauthId;
 
-    @Column(nullable = false)
+    @Column
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     @Enumerated(value = EnumType.STRING)

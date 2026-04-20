@@ -17,7 +17,8 @@ public class CommonCodeRequestDto {
     private String parentCode;
     private String name;
     private String order;
-    private boolean isUsed;
+    private boolean used;
+    private boolean insert;
     private String remarks;
 
     public static CommonCodeRequestDto fromDomain(CommonCode commonCode) {
@@ -25,7 +26,7 @@ public class CommonCodeRequestDto {
                 .code(commonCode.getCode())
                 .parentCode(commonCode.getParentCode())
                 .name(commonCode.getName())
-                .isUsed(commonCode.isUsed())
+                .used(commonCode.isUsed())
                 .build();
     }
 
@@ -34,7 +35,7 @@ public class CommonCodeRequestDto {
                 .code(code)
                 .parentCode(parentCode)
                 .name(name)
-                .isUsed(isUsed)
+                .isUsed(used)
                 .order(order)
                 .remarks(remarks)
                 .build();

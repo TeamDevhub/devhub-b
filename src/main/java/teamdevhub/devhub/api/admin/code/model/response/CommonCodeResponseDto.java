@@ -15,6 +15,8 @@ public class CommonCodeResponseDto {
     private String code;
     private String parentCode;
     private String name;
+    private String remarks;
+    private String order;
     private boolean isUsed;
 
     public static CommonCodeResponseDto fromDomain(CommonCode commonCode) {
@@ -22,6 +24,8 @@ public class CommonCodeResponseDto {
                 .code(commonCode.getCode())
                 .parentCode(commonCode.getParentCode())
                 .name(commonCode.getName())
+                .remarks(commonCode.getRemarks())
+                .order(commonCode.getOrder())
                 .isUsed(commonCode.isUsed())
                 .build();
     }

@@ -3,7 +3,7 @@ package teamdevhub.devhub.core.user.application.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
@@ -74,9 +74,7 @@ public class UserSignupService implements UserSignupUseCase {
 
     private User createOauthUserForSignup(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
         String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = encodedPasswordProvider.encode(signupOauthUserCommand.password());
-
-        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, userGuid, encodedPassword);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, userGuid);
         return User.createOauthUser(oauthCreateUserCommand);
     }
 

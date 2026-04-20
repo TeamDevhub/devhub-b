@@ -1,4 +1,4 @@
-package teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.github;
+package teamdevhub.devhub.outbound.auth.infrastructure.oauth.github.vo;
 
 public record GithubTokenResponse(
         String access_token,

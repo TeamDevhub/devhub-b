@@ -2,7 +2,7 @@ package teamdevhub.devhub.core.user.domain.vo.command;
 
 import lombok.Builder;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.vo.OauthUser;
+import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
@@ -50,13 +50,13 @@ public record CreateUserCommand(
         );
     }
 
-    public static CreateUserCommand oauthUserCreateCommand(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser, String userGuid, String encodedPassword) {
+    public static CreateUserCommand oauthUserCreateCommand(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser, String userGuid) {
         return new CreateUserCommand(
                 userGuid,
                 oauthUser.verificationProvider(),
                 oauthUser.oauthId(),
                 oauthUser.email(),
-                encodedPassword,
+                null,
                 signupOauthUserCommand.username(),
                 signupOauthUserCommand.introduction(),
                 signupOauthUserCommand.positionList(),
