@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.auth;
 
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
@@ -33,20 +33,20 @@ public class FakeAuthenticatedUserUseCase implements AuthenticatedUserUseCase {
     }
 
     @Override
-    public AuthenticatedUser getUserForReissue(String userGuid) {
+    public UserCredential getUserForReissue(String userGuid) {
         return store.values().stream()
                 .filter(user -> user.getUserGuid().equals(userGuid))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getUserRole()))
+                .map(user -> new UserCredential(user.getUserGuid(), user.getEmail(), user.getUserRole()))
                 .orElse(null);
     }
 
     @Override
-    public AuthenticatedUser authenticate(LoginCommand loginCommand) {
+    public UserCredential authenticate(LoginCommand loginCommand) {
         return store.values().stream()
                 .filter(user -> user.getEmail().equals(loginCommand.email()))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getUserRole()))
+                .map(user -> new UserCredential(user.getUserGuid(), user.getEmail(), user.getUserRole()))
                 .orElse(null);
     }
 }

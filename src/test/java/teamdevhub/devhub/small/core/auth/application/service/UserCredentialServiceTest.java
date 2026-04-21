@@ -4,10 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
-import teamdevhub.devhub.core.auth.application.service.AuthenticatedUserService;
+import teamdevhub.devhub.core.auth.application.service.UserCredentialService;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.application.provider.FakeAuthenticatedUserResolver;
@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-public class AuthenticatedUserServiceTest {
+public class UserCredentialServiceTest {
 
-    private AuthenticatedUserService authenticatedUserService;
+    private UserCredentialService userCredentialService;
 
     private FakeTokenParseProvider tokenParseProvider;
     private FakeAuthenticatedUserResolver authenticatedUserResolver;
@@ -36,7 +36,7 @@ public class AuthenticatedUserServiceTest {
         userRepository = new FakeUserRepository();
         refreshTokenRepository = new FakeRefreshTokenRepository();
 
-        authenticatedUserService = new AuthenticatedUserService(tokenParseProvider, authenticatedUserResolver, userRepository, refreshTokenRepository);
+        userCredentialService = new UserCredentialService(tokenParseProvider, authenticatedUserResolver, userRepository, refreshTokenRepository);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class AuthenticatedUserServiceTest {
         refreshTokenRepository.givenRefreshToken(refreshToken);
 
         // when
-        AuthenticatedUser reissueUser = authenticatedUserService.getUserForReissue(refreshToken.token());
+        UserCredential reissueUser = userCredentialService.getUserForReissue(refreshToken.token());
 
         // then
         assertThat(reissueUser.userGuid()).isEqualTo(testUser.getUserGuid());
@@ -91,7 +91,7 @@ public class AuthenticatedUserServiceTest {
         tokenParseProvider.givenRefreshToken(invalidToken,TEST_USER_GUID_1);
 
         // when, then
-        assertThatThrownBy(() -> authenticatedUserService.getUserForReissue(invalidToken))
+        assertThatThrownBy(() -> userCredentialService.getUserForReissue(invalidToken))
                 .isInstanceOf(BusinessRuleException.class)
                 .hasMessageContaining(ErrorCode.REFRESH_TOKEN_INVALID.getMessage());
     }

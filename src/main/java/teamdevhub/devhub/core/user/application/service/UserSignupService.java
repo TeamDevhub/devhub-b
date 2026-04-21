@@ -49,33 +49,29 @@ public class UserSignupService implements UserSignupUseCase {
     }
 
     @Override
-    public String signup(SignupUserCommand signupUserCommand) {
-        User user = createGeneralUser(signupUserCommand);
-        saveUserPositions(user.getUserGuid(), signupUserCommand.positionList());
-        saveUserSkills(user.getUserGuid(), signupUserCommand.skillList());
-        return userRepository.save(user).getUserGuid();
+    public void saveEmailUserInfo(SignupUserCommand signupUserCommand, String userGuid) {
+        User user = createGeneralUser(signupUserCommand, userGuid);
+        saveUserPositions(userGuid, signupUserCommand.positionList());
+        saveUserSkills(userGuid, signupUserCommand.skillList());
+        userRepository.save(user);
     }
 
     @Override
-    public User signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
-        User user = createOauthUserForSignup(signupOauthUserCommand, oauthUser);
+    public void saveOAuthUserInfo(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser, String userGuid) {
+        User user = createOauthUser(signupOauthUserCommand, oauthUser, userGuid);
         saveUserPositions(user.getUserGuid(), signupOauthUserCommand.positionList());
         saveUserSkills(user.getUserGuid(), signupOauthUserCommand.skillList());
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
-    private User createGeneralUser(SignupUserCommand signupUserCommand) {
-        String userGuid = identifierProvider.generateIdentifier();
-        String encodedPassword = encodedPasswordProvider.encode(signupUserCommand.password());
-
-        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, userGuid, encodedPassword);
-        return User.createGeneralUser(generalCreateUserCommand);
+    private User createGeneralUser(SignupUserCommand signupUserCommand, String userGuid) {
+        CreateUserCommand generalUserCreateCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, userGuid);
+        return User.createGeneralUser(generalUserCreateCommand);
     }
 
-    private User createOauthUserForSignup(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
-        String userGuid = identifierProvider.generateIdentifier();
-        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, userGuid);
-        return User.createOauthUser(oauthCreateUserCommand);
+    private User createOauthUser(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser, String userGuid) {
+        CreateUserCommand createOAuthUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, userGuid);
+        return User.createOauthUser(createOAuthUserCommand);
     }
 
     private void saveUserPositions(String userGuid, List<String> positionList) {

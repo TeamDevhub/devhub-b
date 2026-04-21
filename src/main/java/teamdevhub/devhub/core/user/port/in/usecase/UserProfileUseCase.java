@@ -12,5 +12,5 @@ public interface UserProfileUseCase {
     User getCurrentUserProfile(String userGuid);
     void updateProfileImage(UpdateProfileImageCommand updateProfileImageCommand);
     void updateProfile(UpdateProfileCommand updateProfileCommand);
-    void updatePassword(UpdatePasswordCommand updatePasswordCommand);
+//    void updatePassword(UpdatePasswordCommand updatePasswordCommand);
 }

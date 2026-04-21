@@ -5,7 +5,7 @@ import teamdevhub.devhub.core.auth.application.selector.verification.Verificatio
 import teamdevhub.devhub.core.auth.port.out.verification.VerificationIssuer;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerification;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 
 import java.util.List;
 

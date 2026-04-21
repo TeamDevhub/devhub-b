@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
@@ -28,12 +28,12 @@ class UserMapperTest {
                 .build();
 
         // when
-        AuthenticatedUser authenticatedUser = UserMapper.toAuthenticatedUser(userEntity);
+        UserCredential userCredential = UserMapper.toAuthenticatedUser(userEntity);
 
         // then
-        assertThat(authenticatedUser.userGuid()).isEqualTo(userEntity.getUserGuid());
-        assertThat(authenticatedUser.loginId()).isEqualTo(userEntity.getEmail());
-        assertThat(authenticatedUser.userRole()).isEqualTo(userEntity.getUserRole());
+        assertThat(userCredential.userGuid()).isEqualTo(userEntity.getUserGuid());
+        assertThat(userCredential.loginId()).isEqualTo(userEntity.getEmail());
+        assertThat(userCredential.userRole()).isEqualTo(userEntity.getUserRole());
     }
 
     @Test

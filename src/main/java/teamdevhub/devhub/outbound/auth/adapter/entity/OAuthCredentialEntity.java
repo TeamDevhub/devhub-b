@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import static lombok.AccessLevel.PROTECTED;
@@ -38,4 +39,8 @@ public class OAuthCredentialEntity {
 
     @Column(nullable = false)
     private String oauthId;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole userRole;
 }

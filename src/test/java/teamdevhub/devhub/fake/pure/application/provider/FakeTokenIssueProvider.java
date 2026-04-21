@@ -1,7 +1,7 @@
 package teamdevhub.devhub.fake.pure.application.provider;
 
 import teamdevhub.devhub.core.auth.port.out.token.TokenIssueProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.util.HashMap;
@@ -16,8 +16,8 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
     private final Map<String, String> refreshTokenMap = new HashMap<>();
 
     @Override
-    public String createAccessToken(AuthenticatedUser authenticatedUser) {
-        return ACCESS_PREFIX + authenticatedUser.userGuid();
+    public String createAccessToken(UserCredential userCredential) {
+        return ACCESS_PREFIX + userCredential.userGuid();
     }
 
     @Override

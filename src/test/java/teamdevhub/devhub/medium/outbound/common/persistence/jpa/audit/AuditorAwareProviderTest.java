@@ -9,7 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.outbound.common.persistence.jpa.audit.AuditorAwareProvider;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
 import java.util.Collections;
@@ -69,13 +69,13 @@ class AuditorAwareProviderTest {
     @DisplayName("UserAuthentication_이면_유저_이메일을_반환한다")
     void returnUserEmailIfUserAuthentication() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(
+        UserCredential userCredential = new UserCredential(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 UserRole.USER
         );
 
-        UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
+        UserAuthentication userAuthentication = new UserAuthentication(userCredential);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userAuthentication, null, Collections.emptyList());
 
@@ -92,13 +92,13 @@ class AuditorAwareProviderTest {
     @DisplayName("principal_이_AuthenticatedUser_면_이메일을_반환한다")
     void returnEmailIfPrincipalIsAuthenticatedUser() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(
+        UserCredential userCredential = new UserCredential(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 UserRole.USER
         );
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null, Collections.emptyList());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userCredential, null, Collections.emptyList());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

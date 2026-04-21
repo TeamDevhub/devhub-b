@@ -8,11 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.core.auth.domain.vo.EmailCredential;
-import teamdevhub.devhub.core.auth.port.out.EmailCredentialRepository;
-import teamdevhub.devhub.core.user.domain.User;
-import teamdevhub.devhub.core.user.port.out.UserRepository;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.EmailUserCredential;
+import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 import java.util.List;
 
@@ -20,8 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private final EmailCredentialRepository emailCredentialRepository;
-    private final UserRepository userRepository;
+    private final EmailUserCredentialRepository emailUserCredentialRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -30,24 +27,22 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String email = authentication.getName();
         String rawPassword = authentication.getCredentials().toString();
 
-        EmailCredential credential = emailCredentialRepository.findByEmail(email);
+        EmailUserCredential emailUserCredential = emailUserCredentialRepository.findByEmail(email).orElseThrow();
 
-        if (!passwordEncoder.matches(rawPassword, credential.password())) {
+        if (!passwordEncoder.matches(rawPassword, emailUserCredential.password())) {
             throw new BadCredentialsException("invalid password");
         }
 
-        User user = userRepository.findByUserGuid(credential.userGuid());
-
-        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(
-                user.getUserGuid(),
-                credential.email(),
-                user.getUserRole()
+        UserCredential user = UserCredential.of(
+                emailUserCredential.userGuid(),
+                emailUserCredential.email(),
+                emailUserCredential.userRole()
         );
 
         return new UsernamePasswordAuthenticationToken(
-                new UserAuthentication(authenticatedUser),
+                new UserAuthentication(user),
                 null,
-                List.of(new SimpleGrantedAuthority(user.getUserRole().getAuthority()))
+                List.of(new SimpleGrantedAuthority(user.userRole().getAuthority()))
         );
     }
 

@@ -1,7 +1,7 @@
 package teamdevhub.devhub.core.auth.port.out.verification;
 
 import teamdevhub.devhub.core.auth.domain.Verification;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 
 import java.time.LocalDateTime;
 

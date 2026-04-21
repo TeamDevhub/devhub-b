@@ -2,7 +2,7 @@ package teamdevhub.devhub.core.auth.application.service.verification;
 
 import lombok.Builder;
 import teamdevhub.devhub.core.auth.domain.Verification;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
 
 import java.util.Optional;
 

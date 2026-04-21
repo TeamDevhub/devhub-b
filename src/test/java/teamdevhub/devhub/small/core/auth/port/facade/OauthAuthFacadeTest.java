@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOauthAuthenticationUseCase;
@@ -47,7 +47,7 @@ public class OauthAuthFacadeTest {
     @DisplayName("가입된_유저면_로그인_처리_후_OauthAuthResponseDto.loggedIn_을_반환한다")
     void handleOAuthCallbackLoginForCompletedUser() {
         // given
-        AuthenticatedUser signupCompletedUser = new AuthenticatedUser(
+        UserCredential signupCompletedUser = new UserCredential(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 UserRole.USER

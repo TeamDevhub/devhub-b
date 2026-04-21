@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -36,4 +37,8 @@ public class EmailCredentialEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole userRole;
 }

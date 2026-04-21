@@ -8,7 +8,7 @@ import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.notification.port.in.facade.NotificationFacade;
 import teamdevhub.devhub.core.notification.port.in.facade.model.NotificationResponseDto;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 @RestController
 @RequestMapping("/notification")
@@ -18,12 +18,12 @@ public class NotificationController {
 	private final NotificationFacade notificationFacade;
 
 	@GetMapping("/list")
-    public ResponseEntity<DataListApiResponseDto<NotificationResponseDto>> getNotificationList(@LoginUser AuthenticatedUser authenticatedUser) {
-        return ResponseEntity.ok(notificationFacade.getNotificationList(authenticatedUser.userGuid()));
+    public ResponseEntity<DataListApiResponseDto<NotificationResponseDto>> getNotificationList(@LoginUser UserCredential userCredential) {
+        return ResponseEntity.ok(notificationFacade.getNotificationList(userCredential.userGuid()));
     }
 
     @PutMapping("/checked/{notificationGuid}")
-    public ResponseEntity<DataApiResponseDto<Void>> checkedNotification(@LoginUser AuthenticatedUser authenticatedUser, @PathVariable String notificationGuid) {
+    public ResponseEntity<DataApiResponseDto<Void>> checkedNotification(@LoginUser UserCredential userCredential, @PathVariable String notificationGuid) {
         return ResponseEntity.ok(notificationFacade.checkedNotification(notificationGuid));
     }
 }

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthResolveService;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
-import teamdevhub.devhub.fake.pure.application.port.out.auth.FakeOauthCredentialRepository;
+import teamdevhub.devhub.fake.pure.application.port.out.auth.FakeOAuthUserCredentialRepository;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
@@ -23,13 +23,13 @@ class OauthResolveServiceTest {
     private OauthResolveService oauthResolveService;
 
     private FakeTokenParseProvider tokenParseProvider;
-    private FakeOauthCredentialRepository oauthCredentialRepository;
+    private FakeOAuthUserCredentialRepository oauthCredentialRepository;
     private FakeUserRepository userRepository;
 
     @BeforeEach
     void init() {
         tokenParseProvider = new FakeTokenParseProvider();
-        oauthCredentialRepository = new FakeOauthCredentialRepository();
+        oauthCredentialRepository = new FakeOAuthUserCredentialRepository();
         userRepository = new FakeUserRepository();
 
         oauthResolveService = new OauthResolveService(tokenParseProvider, oauthCredentialRepository, userRepository);
@@ -61,7 +61,7 @@ class OauthResolveServiceTest {
 
         // then
         assertThat(oauthUserResult.loginAvailable()).isTrue();
-        assertThat(oauthUserResult.authenticatedUser().userGuid()).isEqualTo(createdOauthUser.getUserGuid());
+        assertThat(oauthUserResult.userCredential().userGuid()).isEqualTo(createdOauthUser.getUserGuid());
     }
 
     @Test
@@ -75,7 +75,7 @@ class OauthResolveServiceTest {
 
         // then
         assertThat(oauthUserResult.loginAvailable()).isFalse();
-        assertThat(oauthUserResult.authenticatedUser()).isNull();
+        assertThat(oauthUserResult.userCredential()).isNull();
     }
 
     @Test

@@ -11,7 +11,7 @@ import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.application.port.in.facade.ProjectApplicationFacade;
 import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 @RestController
 @RequestMapping("/projects")
@@ -29,10 +29,10 @@ public class ApplicationController {
 	public ResponseEntity<DataApiResponseDto<Void>> approveApplication(
 		@PathVariable("applicationGuid") String applicationGuid,
 		@RequestParam("approved") boolean approved,
-		@LoginUser AuthenticatedUser authenticatedUser
+		@LoginUser UserCredential userCredential
 	) {
 		return ResponseEntity.ok(
-			projectApplicationFacade.approveApplication(applicationGuid, authenticatedUser.userGuid(), approved)
+			projectApplicationFacade.approveApplication(applicationGuid, userCredential.userGuid(), approved)
 		);
 	}
 
@@ -40,10 +40,10 @@ public class ApplicationController {
 	public ResponseEntity<DataApiResponseDto<Void>> createApplication(
 		@PathVariable("projectGuid") String projectGuid,
 		@Valid @RequestBody CreateApplicationRequestDto requestDto,
-		@LoginUser AuthenticatedUser authenticatedUser
+		@LoginUser UserCredential userCredential
 	) {
 		return ResponseEntity.ok(
-			projectApplicationFacade.createApplication(projectGuid, authenticatedUser.userGuid(), requestDto)
+			projectApplicationFacade.createApplication(projectGuid, userCredential.userGuid(), requestDto)
 		);
 	}
 

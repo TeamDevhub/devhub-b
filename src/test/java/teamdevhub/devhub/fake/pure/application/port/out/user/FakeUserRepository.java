@@ -4,7 +4,7 @@ import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.time.LocalDateTime;
@@ -22,29 +22,29 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public AuthenticatedUser findAuthenticatedUserByEmail(String email) {
+    public UserCredential findAuthenticatedUserByEmail(String email) {
         return store.values().stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getUserRole()))
+                .map(user -> new UserCredential(user.getUserGuid(), user.getEmail(), user.getUserRole()))
                 .orElse(null);
     }
 
     @Override
-    public AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid) {
+    public UserCredential findAuthenticatedUserByUserGuid(String userGuid) {
         return store.values().stream()
                 .filter(user -> user.getUserGuid().equals(userGuid))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getUserRole()))
+                .map(user -> new UserCredential(user.getUserGuid(), user.getEmail(), user.getUserRole()))
                 .orElse(null);
     }
 
     @Override
-    public Optional<AuthenticatedUser> findOptionalByEmail(String email) {
+    public Optional<UserCredential> findOptionalByEmail(String email) {
         return store.values().stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(
+                .map(user -> new UserCredential(
                         user.getUserGuid(),
                         user.getEmail(),
                         user.getUserRole()
@@ -52,14 +52,14 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<AuthenticatedUser> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
+    public Optional<UserCredential> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
         return store.values().stream()
                 .filter(user ->
                         verificationProvider == user.getVerificationProvider() &&
                                 oauthId.equals(user.getOauthId())
                 )
                 .findFirst()
-                .map(user -> new AuthenticatedUser(
+                .map(user -> new UserCredential(
                         user.getUserGuid(),
                         user.getEmail(),
                         user.getUserRole()

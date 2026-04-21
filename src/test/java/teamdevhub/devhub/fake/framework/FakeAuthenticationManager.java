@@ -4,22 +4,22 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 import java.util.Collections;
 
 public class FakeAuthenticationManager implements AuthenticationManager {
 
-    private final AuthenticatedUser authenticatedUser;
+    private final UserCredential userCredential;
 
-    public FakeAuthenticationManager(AuthenticatedUser authenticatedUser) {
-        this.authenticatedUser = authenticatedUser;
+    public FakeAuthenticationManager(UserCredential userCredential) {
+        this.userCredential = userCredential;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) {
         return new UsernamePasswordAuthenticationToken(
-                new UserAuthentication(authenticatedUser),
+                new UserAuthentication(userCredential),
                 authentication.getCredentials(),
                 Collections.emptyList()
         );

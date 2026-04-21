@@ -3,21 +3,21 @@ package teamdevhub.devhub.outbound.security.auth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 import java.util.Collection;
 import java.util.List;
 
 public class UserAuthentication implements UserDetails {
 
-    private final AuthenticatedUser authenticatedUser;
+    private final UserCredential userCredential;
 
-    public UserAuthentication(AuthenticatedUser authenticatedUser) {
-        this.authenticatedUser = authenticatedUser;
+    public UserAuthentication(UserCredential userCredential) {
+        this.userCredential = userCredential;
     }
 
-    public AuthenticatedUser getUser() {
-        return authenticatedUser;
+    public UserCredential getUser() {
+        return userCredential;
     }
 
     @Override
@@ -27,12 +27,12 @@ public class UserAuthentication implements UserDetails {
 
     @Override
     public String getUsername() {
-        return authenticatedUser.userGuid();
+        return userCredential.userGuid();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(authenticatedUser.userRole().getAuthority()));
+        return List.of(new SimpleGrantedAuthority(userCredential.userRole().getAuthority()));
     }
 
     @Override
@@ -56,6 +56,6 @@ public class UserAuthentication implements UserDetails {
     }
 
     public String getUserGuid() {
-        return authenticatedUser.userGuid();
+        return userCredential.userGuid();
     }
 }

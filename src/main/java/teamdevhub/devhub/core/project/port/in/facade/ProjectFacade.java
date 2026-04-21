@@ -35,7 +35,7 @@ import teamdevhub.devhub.core.project.port.in.usecase.ProjectLikeUseCase;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @Service
@@ -51,7 +51,7 @@ public class ProjectFacade {
 	private final ProjectApplicationUseCase projectApplicationUseCase;
 	private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
 
-	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, AuthenticatedUser user) {
+	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, UserCredential user) {
 		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
 		List<ProjectDetailResponseDto> projectDetailResponseDtoList = new ArrayList<>();
 		if(user == null) {
@@ -85,7 +85,7 @@ public class ProjectFacade {
 		projectUseCase.createProject(createProjectCommand, user.getUsername());
 	}
 
-	public ProjectDetailResponseDto getProjectDetail(String projectGuid, AuthenticatedUser user) {
+	public ProjectDetailResponseDto getProjectDetail(String projectGuid, UserCredential user) {
 		String imageFileUrl = null;
         Project project = projectUseCase.getProjectDetail(projectGuid);
         if(project.getImageFileGuid() != null && !project.getImageFileGuid().isBlank()) {
@@ -118,7 +118,10 @@ public class ProjectFacade {
 
 	public ProjectDetailWithFormResponseDto getProjectDetailWithForm(String projectGuid) {
 		Project project = projectUseCase.getProjectDetail(projectGuid);
-		String email = userProfileUseCase.getUserInfo(project.getUserGuid()).getEmail();
+		/**
+		 * 인증테이블 분리에 따라 추후 변경 필요
+		 */
+		String email = userProfileUseCase.getUserInfo(project.getUserGuid()).getUserGuid();
 
 		List<ProjectApplicationForm> projectForms = projectApplicationFormUseCase.findByProjectGuid(projectGuid);
 		List<String> applicationFormGuids = projectForms.stream()

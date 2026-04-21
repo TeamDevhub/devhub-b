@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.user.application.service.UserSignupService;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
@@ -89,7 +89,7 @@ public class UserSignupServiceTest {
         userSignupService.initializeAdminUser(signupAdminCommand);
 
         // then
-        AuthenticatedUser savedAdminUser = userRepository.findAuthenticatedUserByUserGuid(ADMIN_USER_GUID_1);
+        UserCredential savedAdminUser = userRepository.findAuthenticatedUserByUserGuid(ADMIN_USER_GUID_1);
         assertThat(savedAdminUser).isNotNull();
         assertThat(savedAdminUser.userGuid()).isEqualTo(ADMIN_USER_GUID_1);
         assertThat(savedAdminUser.userRole()).isEqualTo(UserRole.ADMIN);
@@ -104,7 +104,7 @@ public class UserSignupServiceTest {
         SignupUserCommand signupUserCommand = new SignupUserCommand(TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST, VERIFICATION_TARGET_1);
 
         // when
-        userSignupService.signup(signupUserCommand);
+        userSignupService.saveEmailUserInfo(signupUserCommand);
 
         // then
         assertThat(userRepository.wasCalled("saveTerms")).isTrue();
@@ -127,7 +127,7 @@ public class UserSignupServiceTest {
         );
 
         // when
-        userSignupService.signup(signupUserCommand);
+        userSignupService.saveEmailUserInfo(signupUserCommand);
         User persistedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
         Set<UserPosition> positions = userPositionRepository.findByUserGuid(TEST_USER_GUID_1);
         Set<UserSkill> skills = userSkillRepository.findByUserGuid(TEST_USER_GUID_1);
@@ -154,7 +154,7 @@ public class UserSignupServiceTest {
 
         OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
 
-        userSignupService.signupWithOauth(signupOauthUserCommand, oauthUser);
+        userSignupService.saveOAuthUserInfo(signupOauthUserCommand, oauthUser);
 
         Set<UserPosition> positions = userPositionRepository.findByUserGuid(TEST_USER_GUID_1);
         Set<UserSkill> skills = userSkillRepository.findByUserGuid(TEST_USER_GUID_1);
@@ -173,7 +173,7 @@ public class UserSignupServiceTest {
         SignupUserCommand signupUserCommand = new SignupUserCommand(UNVERIFIED_EMAIL, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST, VERIFICATION_TARGET_1);
 
         // when
-        userSignupService.signup(signupUserCommand);
+        userSignupService.saveEmailUserInfo(signupUserCommand);
 
         // then
         assertThat(userRepository.wasCalled("updateLastLoginDateTime")).isFalse();

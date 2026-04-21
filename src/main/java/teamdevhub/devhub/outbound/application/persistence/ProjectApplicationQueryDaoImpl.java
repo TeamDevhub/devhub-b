@@ -166,7 +166,7 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 				.fileGuid(answer.getFileGuid())
 				.content(answer.getContent())
 				.userName(user != null ? user.getUsername() : null)
-				.email(user != null ? user.getEmail() : null)
+				//.email(user != null ? user.getEmail() : null)
 				.mannerDegree(user != null ? user.getMannerDegree() : 0)
 				.userSkillList(skillList)
 				.positionCd(requirement != null ? requirement.getPositionCd() : null)

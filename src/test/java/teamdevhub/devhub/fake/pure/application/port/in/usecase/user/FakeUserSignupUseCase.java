@@ -29,7 +29,7 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
     }
 
     @Override
-    public String signup(SignupUserCommand signupUserCommand) {
+    public String saveEmailUserInfo(SignupUserCommand signupUserCommand) {
         this.called = true;
         CreateUserCommand createUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
         User user = User.createGeneralUser(createUserCommand);
@@ -38,7 +38,7 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
     }
 
     @Override
-    public User signupWithOauth(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
+    public User saveOAuthUserInfo(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
         this.called = true;
         this.lastSignupOauthUserCommand = signupOauthUserCommand;
         this.lastOauthUser = oauthUser;

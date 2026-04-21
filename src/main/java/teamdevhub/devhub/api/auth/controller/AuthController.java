@@ -1,7 +1,6 @@
 package teamdevhub.devhub.api.auth.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
 
 @RestController
@@ -49,8 +48,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<DataApiResponseDto<Void>> logout(@LoginUser AuthenticatedUser authenticatedUser) {
-        authFacade.logout(authenticatedUser.userGuid());
+    public ResponseEntity<DataApiResponseDto<Void>> logout(@LoginUser UserCredential userCredential) {
+        authFacade.logout(userCredential.userGuid());
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.LOGOUT_SUCCESS

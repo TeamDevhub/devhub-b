@@ -62,7 +62,7 @@
 //                ))
 //                .build();
 //        ResponseEntity<DataApiResponseDto<Void>> signupResponse = testRestTemplate.exchange(
-//                "/user/signup",
+//                "/user/saveEmailUserInfo",
 //                HttpMethod.POST,
 //                new HttpEntity<>(signupRequestDto),
 //                new ParameterizedTypeReference<>() {}

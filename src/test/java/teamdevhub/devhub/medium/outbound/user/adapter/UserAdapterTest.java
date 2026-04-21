@@ -12,7 +12,7 @@ import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.user.adapter.UserAdapter;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
@@ -88,11 +88,11 @@ class UserAdapterTest {
         jpaUserRepository.save(UserMapper.toEntity(testUser));
 
         // when
-        AuthenticatedUser authenticatedUser = userAdapter.findAuthenticatedUserByEmail(testUser.getEmail());
+        UserCredential userCredential = userAdapter.findAuthenticatedUserByEmail(testUser.getEmail());
 
         // then
-        assertThat(authenticatedUser).isNotNull();
-        assertThat(authenticatedUser.loginId()).isEqualTo(testUser.getEmail());
+        assertThat(userCredential).isNotNull();
+        assertThat(userCredential.loginId()).isEqualTo(testUser.getEmail());
     }
 
     @Test
@@ -115,12 +115,12 @@ class UserAdapterTest {
         jpaUserRepository.save(UserMapper.toEntity(user));
 
         // when
-        AuthenticatedUser authenticatedUser = userAdapter.findAuthenticatedUserByUserGuid(TEST_USER_GUID_1);
+        UserCredential userCredential = userAdapter.findAuthenticatedUserByUserGuid(TEST_USER_GUID_1);
 
         // then
-        assertThat(authenticatedUser).isNotNull();
-        assertThat(authenticatedUser.userGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(authenticatedUser.loginId()).isEqualTo(TEST_EMAIL_1);
+        assertThat(userCredential).isNotNull();
+        assertThat(userCredential.userGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(userCredential.loginId()).isEqualTo(TEST_EMAIL_1);
     }
 
     @Test
@@ -153,7 +153,7 @@ class UserAdapterTest {
         jpaUserRepository.save(UserMapper.toEntity(user));
 
         // when
-        Optional<AuthenticatedUser> result = userAdapter.findOptionalByEmail(TEST_EMAIL_1);
+        Optional<UserCredential> result = userAdapter.findOptionalByEmail(TEST_EMAIL_1);
 
         // then
         assertThat(result).isPresent();
@@ -177,7 +177,7 @@ class UserAdapterTest {
         jpaUserRepository.save(userEntity);
 
         // when
-        Optional<AuthenticatedUser> result =
+        Optional<UserCredential> result =
                 userAdapter.findByOAuth(VerificationProvider.GOOGLE, "oauth-id-123");
 
         // then
@@ -189,7 +189,7 @@ class UserAdapterTest {
     @DisplayName("존재하지 않는 OAuth 정보면 Optional.empty_를 반환한다")
     void findByOAuth_empty() {
         // when
-        Optional<AuthenticatedUser> result =
+        Optional<UserCredential> result =
                 userAdapter.findByOAuth(VerificationProvider.GOOGLE, "not-exist-oauth-id");
 
         // then
@@ -201,7 +201,7 @@ class UserAdapterTest {
     @DisplayName("존재하지 않는 이메일이면 Optional.empty_를 반환한다")
     void findOptionalByEmail_empty() {
         // when
-        Optional<AuthenticatedUser> result = userAdapter.findOptionalByEmail("not-exist@test.com");
+        Optional<UserCredential> result = userAdapter.findOptionalByEmail("not-exist@test.com");
 
         // then
         assertThat(result).isEmpty();

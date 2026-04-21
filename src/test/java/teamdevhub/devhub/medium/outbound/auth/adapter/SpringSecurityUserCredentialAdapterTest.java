@@ -8,9 +8,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.AuthenticatedUserAdapter;
+import teamdevhub.devhub.outbound.auth.adapter.SpringSecurityAuthenticatedUserAdapter;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,10 +20,10 @@ import static org.mockito.Mockito.mock;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 @SpringBootTest
-public class AuthenticatedUserAdapterTest {
+public class SpringSecurityUserCredentialAdapterTest {
 
     @Autowired
-    private AuthenticatedUserAdapter authenticatedUserAdapter;
+    private SpringSecurityAuthenticatedUserAdapter springSecurityAuthenticatedUserAdapter;
 
     @MockitoBean
     private AuthenticationManager authenticationManager;
@@ -32,13 +32,13 @@ public class AuthenticatedUserAdapterTest {
     @DisplayName("이메일과_비밀번호로_AuthenticatedUser_를_조회한다")
     void getAuthenticatedUserByEmailAndPassword() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(
+        UserCredential userCredential = new UserCredential(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 UserRole.USER
         );
 
-        UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
+        UserAuthentication userAuthentication = new UserAuthentication(userCredential);
 
         Authentication authentication = mock(Authentication.class);
         given(authentication.getPrincipal()).willReturn(userAuthentication);
@@ -47,7 +47,7 @@ public class AuthenticatedUserAdapterTest {
                 .willReturn(authentication);
 
         // when
-        AuthenticatedUser result = authenticatedUserAdapter.getAuthenticatedUser(TEST_EMAIL_1, TEST_PASSWORD_1);
+        UserCredential result = springSecurityAuthenticatedUserAdapter.getAuthenticatedUser(TEST_EMAIL_1, TEST_PASSWORD_1);
 
         // then
         assertThat(result).isNotNull();
