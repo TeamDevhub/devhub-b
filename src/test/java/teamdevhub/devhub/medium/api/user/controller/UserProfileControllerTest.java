@@ -47,9 +47,7 @@ class UserProfileControllerTest {
         // given
         UserCredential userCredential = new UserCredential(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
         User user = User.builder()
-                .email(TEST_EMAIL_1)
                 .username(TEST_USERNAME_1)
-                .password(TEST_PASSWORD_1)
                 .userRole(UserRole.USER)
                 .build();
 
@@ -61,7 +59,6 @@ class UserProfileControllerTest {
         // then
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
-        assertThat(response.getBody().getData().getUser().getEmail()).isEqualTo(TEST_EMAIL_1);
         assertThat(response.getBody().getData().getUser().getUsername()).isEqualTo(TEST_USERNAME_1);
 
         verify(userProfileFacade).getCurrentUserProfile(userCredential.userGuid());

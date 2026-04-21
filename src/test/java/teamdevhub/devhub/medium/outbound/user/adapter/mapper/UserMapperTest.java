@@ -17,26 +17,6 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 class UserMapperTest {
 
     @Test
-    @DisplayName("UserEntity_를_AuthenticatedUser_로_변환할_수_있다")
-    void convertEntityToAuthenticatedUser() {
-        // given
-        UserEntity userEntity = UserEntity.builder()
-                .userGuid(TEST_USER_GUID_1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
-                .userRole(UserRole.USER)
-                .build();
-
-        // when
-        UserCredential userCredential = UserMapper.toAuthenticatedUser(userEntity);
-
-        // then
-        assertThat(userCredential.userGuid()).isEqualTo(userEntity.getUserGuid());
-        assertThat(userCredential.loginId()).isEqualTo(userEntity.getEmail());
-        assertThat(userCredential.userRole()).isEqualTo(userEntity.getUserRole());
-    }
-
-    @Test
     @DisplayName("User_를_UserEntity_로_변환할_수_있다")
     void convertDomainToEntity() {
         // given
@@ -49,7 +29,7 @@ class UserMapperTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1);
         User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         // when
@@ -57,8 +37,6 @@ class UserMapperTest {
 
         // then
         assertThat(userEntity.getUserGuid()).isEqualTo(testUser.getUserGuid());
-        assertThat(userEntity.getEmail()).isEqualTo(testUser.getEmail());
-        assertThat(userEntity.getPassword()).isEqualTo(testUser.getPassword());
         assertThat(userEntity.getUserRole()).isEqualTo(UserRole.USER);
     }
 
@@ -68,8 +46,6 @@ class UserMapperTest {
         // given
         UserEntity userEntity = UserEntity.builder()
                 .userGuid(TEST_USER_GUID_1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .introduction(TEST_INTRO_1)
@@ -80,6 +56,5 @@ class UserMapperTest {
 
         // then
         assertThat(user.getUserGuid()).isEqualTo(userEntity.getUserGuid());
-        assertThat(user.getEmail()).isEqualTo(userEntity.getEmail());
     }
 }

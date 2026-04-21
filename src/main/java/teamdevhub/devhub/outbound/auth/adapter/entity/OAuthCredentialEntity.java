@@ -27,10 +27,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class OAuthCredentialEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
+    @Column(length = 32, nullable = false, unique = true)
     private String userGuid;
 
     @Enumerated(EnumType.STRING)

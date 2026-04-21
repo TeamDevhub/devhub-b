@@ -3,6 +3,7 @@ package teamdevhub.devhub.outbound.security.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import teamdevhub.devhub.core.auth.domain.vo.user.EmailUserCredential;
 import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
@@ -17,7 +18,10 @@ public class UserAuthenticationLoader implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) {
 
-        EmailUserCredential emailUserCredential = emailUserCredentialRepository.findByEmail(email).orElseThrow();
+        EmailUserCredential emailUserCredential =
+                emailUserCredentialRepository.findByEmail(email)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
 
         UserCredential userCredential = UserCredential.of(
                 emailUserCredential.userGuid(),

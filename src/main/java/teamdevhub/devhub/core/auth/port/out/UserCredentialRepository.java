@@ -10,4 +10,6 @@ public interface UserCredentialRepository {
     Optional<UserCredential> findEmailUserCredentialByUserGuid(String userGuid);
     Optional<UserCredential> findEmailUserCredentialByEmail(String email);
     Optional<UserCredential> findOAuthUserCredentialByOAuth(VerificationProvider verificationProvider, String oauthId);
+    void saveEmailUserCredential(UserCredential userCredential, String encryptedPassword);
+    void saveOAuthUserCredential(UserCredential userCredential, VerificationProvider verificationProvider, String oauthId);
 }

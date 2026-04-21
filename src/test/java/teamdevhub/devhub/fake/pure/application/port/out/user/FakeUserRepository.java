@@ -22,58 +22,13 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public UserCredential findAuthenticatedUserByEmail(String email) {
-        return store.values().stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst()
-                .map(user -> new UserCredential(user.getUserGuid(), user.getEmail(), user.getUserRole()))
-                .orElse(null);
-    }
-
-    @Override
-    public UserCredential findAuthenticatedUserByUserGuid(String userGuid) {
-        return store.values().stream()
-                .filter(user -> user.getUserGuid().equals(userGuid))
-                .findFirst()
-                .map(user -> new UserCredential(user.getUserGuid(), user.getEmail(), user.getUserRole()))
-                .orElse(null);
-    }
-
-    @Override
-    public Optional<UserCredential> findOptionalByEmail(String email) {
-        return store.values().stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst()
-                .map(user -> new UserCredential(
-                        user.getUserGuid(),
-                        user.getEmail(),
-                        user.getUserRole()
-                ));
-    }
-
-    @Override
-    public Optional<UserCredential> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
-        return store.values().stream()
-                .filter(user ->
-                        verificationProvider == user.getVerificationProvider() &&
-                                oauthId.equals(user.getOauthId())
-                )
-                .findFirst()
-                .map(user -> new UserCredential(
-                        user.getUserGuid(),
-                        user.getEmail(),
-                        user.getUserRole()
-                ));
-    }
-
-    @Override
     public User findByUserGuid(String userGuid) {
         return store.get(userGuid);
     }
 
     @Override
     public User save(User user) {
-        calledMethods.add("saveTerms");
+        calledMethods.add("save");
         store.put(user.getUserGuid(), user);
         return user;
     }
@@ -90,24 +45,33 @@ public class FakeUserRepository implements UserRepository {
     public void updateUserProfile(User user) {
         User existedUser = store.get(user.getUserGuid());
         if (existedUser != null) {
-            UpdateUserCommand updateUserCommand = new UpdateUserCommand(user.getUsername(), user.getIntroduction());
-            existedUser.updateBasicProfile(updateUserCommand);
+            UpdateUserCommand command =
+                    new UpdateUserCommand(user.getUsername(), user.getIntroduction());
+            existedUser.updateBasicProfile(command);
         }
     }
 
     @Override
     public void delete(User user) {
-        store.put(user.getUserGuid(), user);
+        store.remove(user.getUserGuid());
     }
 
     @Override
     public boolean existsByUserRole(UserRole userRole) {
-        return store.values().stream().anyMatch(user -> user.getUserRole().equals(userRole));
+        return store.values().stream()
+                .anyMatch(user -> user.getUserRole().equals(userRole));
     }
 
     @Override
     public Map<String, String> findNamesByUserGuid(List<String> userGuids) {
-        return Map.of();
+        Map<String, String> result = new HashMap<>();
+        for (String guid : userGuids) {
+            User user = store.get(guid);
+            if (user != null) {
+                result.put(guid, user.getUsername());
+            }
+        }
+        return result;
     }
 
     public boolean wasCalled(String methodName) {

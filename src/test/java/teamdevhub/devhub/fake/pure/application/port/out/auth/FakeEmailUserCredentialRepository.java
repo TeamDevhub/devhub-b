@@ -5,6 +5,7 @@ import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class FakeEmailUserCredentialRepository implements EmailUserCredentialRepository {
 
@@ -17,12 +18,12 @@ public class FakeEmailUserCredentialRepository implements EmailUserCredentialRep
     }
 
     @Override
-    public EmailUserCredential findByEmail(String email) {
-        return emailStore.get(email);
+    public Optional<EmailUserCredential> findByEmail(String email) {
+        return Optional.ofNullable(emailStore.get(email));
     }
 
     @Override
-    public EmailUserCredential findByUserGuid(String userGuid) {
-        return userGuidStore.get(userGuid);
+    public Optional<EmailUserCredential> findByUserGuid(String userGuid) {
+        return Optional.ofNullable(userGuidStore.get(userGuid));
     }
 }

@@ -19,33 +19,54 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
 
     private SignupOauthUserCommand lastSignupOauthUserCommand;
     private OauthUser lastOauthUser;
-    boolean called = false;
+    private boolean called = false;
 
     @Override
     public void initializeAdminUser(SignupAdminCommand signupAdminCommand) {
-        CreateUserCommand createUserCommand = CreateUserCommand.adminUserCreateCommand(signupAdminCommand, ADMIN_USER_GUID_1, ADMIN_PASSWORD_1);
+        CreateUserCommand createUserCommand =
+                CreateUserCommand.adminUserCreateCommand(
+                        signupAdminCommand,
+                        ADMIN_USER_GUID_1,
+                        ADMIN_PASSWORD_1
+                );
+
         User adminUser = User.createAdminUser(createUserCommand);
         store.put(adminUser.getUserGuid(), adminUser);
     }
 
     @Override
-    public String saveEmailUserInfo(SignupUserCommand signupUserCommand) {
+    public void saveEmailUserInfo(SignupUserCommand signupUserCommand, String userGuid) {
         this.called = true;
-        CreateUserCommand createUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+
+        CreateUserCommand createUserCommand =
+                CreateUserCommand.generalUserCreateCommand(
+                        signupUserCommand,
+                        userGuid
+                );
+
         User user = User.createGeneralUser(createUserCommand);
         store.put(user.getUserGuid(), user);
-        return user.getUserGuid();
     }
 
     @Override
-    public User saveOAuthUserInfo(SignupOauthUserCommand signupOauthUserCommand, OauthUser oauthUser) {
+    public void saveOAuthUserInfo(
+            SignupOauthUserCommand signupOauthUserCommand,
+            OauthUser oauthUser,
+            String userGuid
+    ) {
         this.called = true;
         this.lastSignupOauthUserCommand = signupOauthUserCommand;
         this.lastOauthUser = oauthUser;
-        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1);
-        User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
-        store.put(createdOauthUser.getUserGuid(), createdOauthUser);
-        return createdOauthUser;
+
+        CreateUserCommand createUserCommand =
+                CreateUserCommand.oauthUserCreateCommand(
+                        signupOauthUserCommand,
+                        oauthUser,
+                        userGuid
+                );
+
+        User user = User.createOauthUser(createUserCommand);
+        store.put(user.getUserGuid(), user);
     }
 
     public boolean isSignupCalled() {
@@ -58,5 +79,9 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
 
     public OauthUser getLastOauthUser() {
         return lastOauthUser;
+    }
+
+    public User getUser(String userGuid) {
+        return store.get(userGuid);
     }
 }

@@ -7,7 +7,7 @@ public class EmailCredentialMapper {
 
     private EmailCredentialMapper() {}
 
-    public static EmailUserCredential toDomain(EmailCredentialEntity emailCredentialEntity) {
+    public static EmailUserCredential toEmailUserCredential(EmailCredentialEntity emailCredentialEntity) {
         return new EmailUserCredential(
                 emailCredentialEntity.getUserGuid(),
                 emailCredentialEntity.getEmail(),
@@ -16,7 +16,7 @@ public class EmailCredentialMapper {
         );
     }
 
-    public static EmailCredentialEntity toEntity(EmailUserCredential emailUserCredential) {
+    public static EmailCredentialEntity toEmailCredentialEntity(EmailUserCredential emailUserCredential) {
         return EmailCredentialEntity.builder()
                 .userGuid(emailUserCredential.userGuid())
                 .email(emailUserCredential.email())

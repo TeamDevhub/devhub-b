@@ -21,7 +21,6 @@ public class OauthResolveService implements OauthResolveUseCase {
 
     private final TokenParseProvider tokenParseProvider;
     private final UserCredentialRepository userCredentialRepository;
-    private final UserRepository userRepository;
 
     @Override
     public OauthUserResult findOrRequireSignup(OauthUser oauthUser) {
