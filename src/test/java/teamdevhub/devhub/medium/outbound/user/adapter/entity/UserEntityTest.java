@@ -17,8 +17,6 @@ class UserEntityTest {
         // given, when
         UserEntity userEntity = UserEntity.builder()
                 .userGuid(TEST_USER_GUID_1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .introduction(TEST_INTRO_1)
@@ -30,8 +28,6 @@ class UserEntityTest {
 
         // then
         assertThat(userEntity.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(userEntity.getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(userEntity.getPassword()).isEqualTo(TEST_PASSWORD_1);
         assertThat(userEntity.getUsername()).isEqualTo(TEST_USERNAME_1);
         assertThat(userEntity.getUserRole()).isEqualTo(UserRole.USER);
         assertThat(userEntity.getIntroduction()).isEqualTo(TEST_INTRO_1);

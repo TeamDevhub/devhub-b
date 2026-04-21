@@ -47,7 +47,7 @@ public class UserQueryAdapterTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        CreateUserCommand generalCreateUserCommand1 = CreateUserCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand generalCreateUserCommand1 = CreateUserCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1);
         User testUser1 = User.createGeneralUser(generalCreateUserCommand1);
 
         SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
@@ -59,7 +59,7 @@ public class UserQueryAdapterTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_2)
                 .build();
-        CreateUserCommand generalCreateUserCommand2 = CreateUserCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        CreateUserCommand generalCreateUserCommand2 = CreateUserCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2);
         User testUser2 = User.createGeneralUser(generalCreateUserCommand2);
 
         jpaUserRepository.save(UserMapper.toEntity(testUser1));
