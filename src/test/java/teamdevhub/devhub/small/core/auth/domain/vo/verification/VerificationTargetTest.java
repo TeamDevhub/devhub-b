@@ -1,4 +1,4 @@
-package teamdevhub.devhub.small.core.auth.domain.vo;
+package teamdevhub.devhub.small.core.auth.domain.vo.verification;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
