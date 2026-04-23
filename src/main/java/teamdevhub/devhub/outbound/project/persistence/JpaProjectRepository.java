@@ -149,7 +149,6 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 		            and pa.statusCd = '3302'
 		            and pr.projectGuid = p.projectGuid
 		        )
-		        or p.userGuid = :userGuid
 	        )
 			and CURRENT_DATE > p.progressEndDate
 			""")
