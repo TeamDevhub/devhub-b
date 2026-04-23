@@ -53,7 +53,7 @@ public class FakeUserRepository implements UserRepository {
 
     @Override
     public void delete(User user) {
-        store.remove(user.getUserGuid());
+        store.put(user.getUserGuid(), user);
     }
 
     @Override
