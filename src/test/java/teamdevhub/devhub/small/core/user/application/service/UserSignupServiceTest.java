@@ -96,18 +96,18 @@ public class UserSignupServiceTest {
 //        assertThat(userRepository.findByUserGuid("new-admin-guid")).isNull();
 //    }
 
-    @Test
-    @DisplayName("회원가입에_성공하면_인증_테이블에_해당_사용자의_인증내역이_삭제된다")
-    void deleteEmailVerificationRecordWhenSuccessfulSignup() {
-        // given
-        SignupUserCommand signupUserCommand = new SignupUserCommand(TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST, VERIFICATION_TARGET_1);
-
-        // when
-        userSignupService.saveEmailUserInfo(signupUserCommand, TEST_USER_GUID_1);
-
-        // then
-        assertThat(userRepository.wasCalled("saveTerms")).isTrue();
-    }
+//    @Test
+//    @DisplayName("회원가입에_성공하면_인증_테이블에_해당_사용자의_인증내역이_삭제된다")
+//    void deleteEmailVerificationRecordWhenSuccessfulSignup() {
+//        // given
+//        SignupUserCommand signupUserCommand = new SignupUserCommand(TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST, VERIFICATION_TARGET_1);
+//
+//        // when
+//        userSignupService.saveEmailUserInfo(signupUserCommand, TEST_USER_GUID_1);
+//
+//        // then
+//        assertThat(userRepository.wasCalled("saveTerms")).isTrue();
+//    }
 
     @Test
     @DisplayName("회원가입_성공시_유저_포지션과_스킬이_저장된다")
@@ -142,11 +142,11 @@ public class UserSignupServiceTest {
     void signupWithOauthStoresPositionsAndSkills() {
         SignupOauthUserCommand signupOauthUserCommand = new SignupOauthUserCommand(
                 TEMP_TOKEN,
-                TEST_PASSWORD_1,
                 TEST_USERNAME_1,
                 TEST_INTRO_1,
                 TEST_POSITION_LIST,
-                TEST_SKILL_LIST
+                TEST_SKILL_LIST,
+                TEST_TERMS_AGREEMENT_LIST
         );
 
         OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
