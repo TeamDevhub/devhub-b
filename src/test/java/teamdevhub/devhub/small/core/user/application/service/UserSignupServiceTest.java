@@ -149,7 +149,7 @@ public class UserSignupServiceTest {
 
         OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
 
-        userSignupService.saveOAuthUserInfo(signupOauthUserCommand, oauthUser, TEST_OAUTH_ID_1);
+        userSignupService.saveOAuthUserInfo(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1);
 
         Set<UserPosition> positions = userPositionRepository.findByUserGuid(TEST_USER_GUID_1);
         Set<UserSkill> skills = userSkillRepository.findByUserGuid(TEST_USER_GUID_1);

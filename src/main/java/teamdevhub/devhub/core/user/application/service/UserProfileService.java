@@ -77,16 +77,16 @@ public class UserProfileService implements UserProfileUseCase {
     }
 
     private void replacePositions(User user, Set<UserPosition> positions) {
-        UserPositionChangeResult userPositionChangeResult = user.changePositions(positions);
-        if (userPositionChangeResult.changed()) {
-            userPositionRepository.replace(userPositionChangeResult.previousPositions(), userPositionChangeResult.changedPositions());
+        UserPositionChangeResult result = user.changePositions(positions);
+        if (result.changed()) {
+            userPositionRepository.replace(result.previousPositions(), result.changedPositions());
         }
     }
 
     private void replaceSkills(User user, Set<UserSkill> skills) {
-        UserSkillChangeResult userSkillChangeResult = user.changeSkills(skills);
-        if (userSkillChangeResult.changed()) {
-            userSkillRepository.replace(userSkillChangeResult.previousSkills(), userSkillChangeResult.changedSkills());
+        UserSkillChangeResult result = user.changeSkills(skills);
+        if (result.changed()) {
+            userSkillRepository.replace(result.previousSkills(), result.changedSkills());
         }
     }
 }

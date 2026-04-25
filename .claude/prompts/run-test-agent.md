@@ -1,38 +1,72 @@
-# Prompt: 테스트 에이전트 실행
+# Prompt: Run Test Agent
 
-## 사용 방법
+## Prompt
 
-이 파일의 내용을 Claude에게 붙여넣어 테스트 에이전트를 실행한다.
-`[대상 클래스]` 부분을 실제 클래스명으로 교체한다.
+Act as the Test Agent and improve test coverage for auth/user related source code.
+
+Refer to the following files:
+
+- .claude/agents/test-agent.md — agent role and principles
+- .claude/skills/generate-tests.md — test generation workflow
+- .claude/rules/testing.md — testing rules
+- .claude/memory/style-memory.md — project style memory
+
+## Scope Restriction
+
+This task is limited to auth/user related source and test files only.
+
+Source scope:
+
+- src/main/java/.../auth/**
+- src/main/java/.../user/**
+
+Test scope:
+
+- src/test/java/**/small/**/auth/**
+- src/test/java/**/small/**/user/**
+- src/test/java/**/medium/**/auth/**
+- src/test/java/**/medium/**/user/**
+
+Do not modify files outside this scope.
+
+Files outside the scope may be read for reference only.
 
 ---
 
-## 프롬프트
+## Goal
 
-```
-Test Agent 역할을 맡아 [대상 클래스]에 대한 테스트 코드를 작성해줘.
+Within the auth/user domains:
 
-다음 파일들을 참조해:
-- .claude/agents/test-agent.md — 에이전트 역할과 원칙
-- .claude/skills/generate-tests.md — 테스트 생성 절차
-- .claude/rules/testing.md — 테스트 규칙
-- .claude/memory/style-memory.md — 스타일 메모리
-
-작업 순서:
-1. 대상 클래스를 읽고 public 메서드와 의존성을 파악한다
-2. 테스트 종류를 결정한다 (small/medium)
-3. 필요한 Fake가 있는지 확인하고 없으면 먼저 작성한다
-4. 테스트 클래스를 작성한다
-5. 시나리오 체크리스트를 확인한다 (정상/누락/중복/없음/규칙위반)
-6. ./gradlew compileTestJava 로 컴파일 검증한다
-
-대상 클래스: [예: UserCredentialService, OauthResolveService, UserSignupFacade]
-```
+1. Detect production classes with missing tests
+2. Add missing test classes
+3. Add missing scenarios to existing tests
+4. Fix broken, weak, duplicated, or low-quality tests
+5. Improve consistency with existing small/medium test style
+6. Create missing Fake classes when necessary
 
 ---
 
-## 실행 전 체크리스트
+## Workflow
 
-- [ ] 대상 클래스의 전체 경로 확인
-- [ ] 기존 테스트 파일이 있는지 확인 (`small/` 또는 `medium/` 하위)
-- [ ] 의존하는 포트 인터페이스 목록 파악
+1. Scan auth/user production classes
+2. Match each class with existing small/medium tests
+3. Identify missing or insufficient coverage
+4. Read public methods, dependencies, and behavior
+5. Decide proper test type (`small` or `medium`)
+6. Reuse existing Fake/TestFixture classes if available
+7. If required Fake classes do not exist, create them
+8. Write or improve tests
+9. Validate key scenarios:
+
+- success case
+- null / missing input
+- duplicate data
+- not found case
+- validation failure
+- permission/auth failure
+- business rule violation
+
+10. Run:
+
+```bash id="5ep6x0"
+./gradlew compileTestJava

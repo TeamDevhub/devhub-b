@@ -16,7 +16,7 @@ public class FakeUserCredentialRepository implements UserCredentialRepository {
     private final Map<String, AuthenticatedUser> oauthStore = new HashMap<>();
 
     @Override
-    public Optional<AuthenticatedUser> findEmailUserCredentialByUserGuid(String userGuid) {
+    public Optional<AuthenticatedUser> findUserCredentialByUserGuid(String userGuid) {
         return Optional.ofNullable(emailByGuidStore.get(userGuid));
     }
 

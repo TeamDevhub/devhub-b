@@ -1,6 +1,5 @@
 package teamdevhub.devhub.outbound.user.adapter;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserSkillEntity;
 import teamdevhub.devhub.outbound.user.adapter.mapper.UserSkillMapper;
@@ -8,33 +7,31 @@ import teamdevhub.devhub.outbound.user.persistence.JpaUserSkillRepository;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.port.out.UserSkillRepository;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
-import teamdevhub.devhub.outbound.common.util.RelationChangeUtil;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
-public class UserSkillAdapter implements UserSkillRepository {
+public class UserSkillAdapter extends UserRelationAdapter<UserSkill> implements UserSkillRepository {
 
     private final JpaUserSkillRepository jpaUserSkillRepository;
-    private final IdentifierProvider identifierProvider;
+
+    public UserSkillAdapter(JpaUserSkillRepository jpaUserSkillRepository,
+                            IdentifierProvider identifierProvider) {
+        super(identifierProvider);
+        this.jpaUserSkillRepository = jpaUserSkillRepository;
+    }
 
     @Override
     public void saveAll(Set<UserSkill> skills) {
         if (skills.isEmpty()) {
             return;
         }
-
-        List<UserSkillEntity> userSkillEntityList = skills.stream()
-                .map(userSkill -> {
-                    String userSkillGuid = identifierProvider.generateIdentifier();
-                    return UserSkillMapper.toEntity(userSkillGuid, userSkill);
-                })
+        List<UserSkillEntity> entities = skills.stream()
+                .map(skill -> UserSkillMapper.toEntity(identifierProvider.generateIdentifier(), skill))
                 .toList();
-
-        jpaUserSkillRepository.saveAll(userSkillEntityList);
+        jpaUserSkillRepository.saveAll(entities);
     }
 
     @Override
@@ -50,50 +47,38 @@ public class UserSkillAdapter implements UserSkillRepository {
         if (changedSkills == null || changedSkills.isEmpty()) {
             return;
         }
-
-        syncSkills(previousSkills, changedSkills);
+        syncItems(previousSkills, changedSkills);
     }
 
-    private void syncSkills(Set<UserSkill> previousSkills, Set<UserSkill> currentSkills) {
-        String userGuid = currentSkills.iterator().next().userGuid();
+    @Override
+    protected String extractUserGuid(Set<UserSkill> items) {
+        return items.iterator().next().userGuid();
+    }
 
-        Set<String> oldSkillCds = previousSkills.stream()
-                .map(UserSkill::skillCd)
-                .collect(Collectors.toSet());
+    @Override
+    protected Set<String> extractCodes(Set<UserSkill> items) {
+        return items.stream().map(UserSkill::skillCd).collect(Collectors.toSet());
+    }
 
-        Set<String> newSkillCds = currentSkills.stream()
-                .map(UserSkill::skillCd)
-                .collect(Collectors.toSet());
+    @Override
+    protected void deleteByUserGuidAndCodes(String userGuid, Set<String> codes) {
+        if (!codes.isEmpty()) {
+            jpaUserSkillRepository.deleteByUserGuidAndSkillCdIn(userGuid, codes);
+        }
+    }
 
-        RelationChangeUtil.RelationChange<String> change = RelationChangeUtil.change(oldSkillCds, newSkillCds);
-
-        if (change.isEmpty()) {
+    @Override
+    protected void insertByUserGuidAndCodes(String userGuid, Set<String> codes) {
+        if (codes.isEmpty()) {
             return;
         }
-
-        deleteSkills(userGuid, change.toDelete());
-        insertSkills(userGuid, change.toInsert());
-    }
-
-    private void deleteSkills(String userGuid, Set<String> skillCds) {
-        if (!skillCds.isEmpty()) {
-            jpaUserSkillRepository.deleteByUserGuidAndSkillCdIn(userGuid, skillCds);
-        }
-    }
-
-    private void insertSkills(String userGuid, Set<String> skillCds) {
-        if (skillCds.isEmpty()) {
-            return;
-        }
-
-        List<UserSkillEntity> userSkillEntityList = skillCds.stream()
-                .map(skillCd -> UserSkillEntity.builder()
+        List<UserSkillEntity> entities = codes.stream()
+                .map(code -> UserSkillEntity.builder()
                         .userSkillGuid(identifierProvider.generateIdentifier())
                         .userGuid(userGuid)
-                        .skillCd(skillCd)
+                        .skillCd(code)
                         .build())
                 .toList();
-
-        jpaUserSkillRepository.saveAll(userSkillEntityList);
+        jpaUserSkillRepository.saveAll(entities);
     }
 }

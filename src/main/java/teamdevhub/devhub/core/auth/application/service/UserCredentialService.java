@@ -71,7 +71,8 @@ public class UserCredentialService implements UserCredentialUseCase {
             throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
         }
 
-        return userCredentialRepository.findEmailUserCredentialByUserGuid(userGuid).orElseThrow();
+        return userCredentialRepository.findUserCredentialByUserGuid(userGuid)
+                .orElseThrow(() -> BusinessRuleException.of(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override

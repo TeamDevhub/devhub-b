@@ -126,7 +126,7 @@ class AuthenticatedUserServiceTest {
         // then
         assertThat(result).isNotNull();
         assertThat(result.userGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(result.loginId()).isEqualTo(TEST_EMAIL_1);
+        assertThat(result.loginId()).isEqualTo(TEST_OAUTH_ID_1);
     }
 
     @Test

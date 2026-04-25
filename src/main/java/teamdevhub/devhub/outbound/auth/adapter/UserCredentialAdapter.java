@@ -23,9 +23,11 @@ public class UserCredentialAdapter implements UserCredentialRepository {
     private final JpaOauthCredentialRepository jpaOauthCredentialRepository;
 
     @Override
-    public Optional<AuthenticatedUser> findEmailUserCredentialByUserGuid(String userGuid) {
+    public Optional<AuthenticatedUser> findUserCredentialByUserGuid(String userGuid) {
         return jpaEmailCredentialRepository.findByUserGuid(userGuid)
-                .map(UserCredentialMapper::toAuthenticatedUser);
+                .map(UserCredentialMapper::toAuthenticatedUser)
+                .or(() -> jpaOauthCredentialRepository.findByUserGuid(userGuid)
+                        .map(UserCredentialMapper::toAuthenticatedUser));
     }
 
     @Override

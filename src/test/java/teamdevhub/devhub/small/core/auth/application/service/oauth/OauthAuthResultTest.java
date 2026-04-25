@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class OauthAuthResultTest {
@@ -53,5 +55,16 @@ public class OauthAuthResultTest {
 
         // then
         assertThat(header).isEqualTo("Bearer access-token-1");
+    }
+
+    @Test
+    @DisplayName("accessToken_이_없는_PENDING_상태에서_toAuthorizationHeader_호출_시_예외가_발생한다")
+    void toAuthorizationHeader_whenAccessTokenIsNull_throwsException() {
+        // given
+        OauthAuthResult pendingResult = OauthAuthResult.requiresSignup(TEMP_TOKEN);
+
+        // when, then
+        assertThatThrownBy(pendingResult::toAuthorizationHeader)
+                .isInstanceOf(BusinessRuleException.class);
     }
 }

@@ -85,7 +85,7 @@ class AuthenticatedUserAdapterTest {
         userCredentialAdapter.saveEmailUserCredential(authenticatedUser, TEST_PASSWORD_1);
 
         // when
-        Optional<AuthenticatedUser> result = userCredentialAdapter.findEmailUserCredentialByUserGuid(TEST_USER_GUID_1);
+        Optional<AuthenticatedUser> result = userCredentialAdapter.findUserCredentialByUserGuid(TEST_USER_GUID_1);
 
         // then
         assertThat(result).isPresent();
@@ -97,7 +97,7 @@ class AuthenticatedUserAdapterTest {
     @DisplayName("존재하지_않는_userGuid_로_조회하면_Optional_empty_를_반환한다")
     void findEmailUserCredentialByUserGuid_notFound_returnsEmpty() {
         // when
-        Optional<AuthenticatedUser> result = userCredentialAdapter.findEmailUserCredentialByUserGuid("NOT_EXIST_GUID");
+        Optional<AuthenticatedUser> result = userCredentialAdapter.findUserCredentialByUserGuid("NOT_EXIST_GUID");
 
         // then
         assertThat(result).isEmpty();

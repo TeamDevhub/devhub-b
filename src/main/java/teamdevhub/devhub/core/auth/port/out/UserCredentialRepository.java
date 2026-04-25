@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserCredentialRepository {
 
-    Optional<AuthenticatedUser> findEmailUserCredentialByUserGuid(String userGuid);
+    Optional<AuthenticatedUser> findUserCredentialByUserGuid(String userGuid);
     Optional<AuthenticatedUser> findEmailUserCredentialByEmail(String email);
     Optional<AuthenticatedUser> findOAuthUserCredentialByOAuth(VerificationProvider verificationProvider, String oauthId);
     void saveEmailUserCredential(AuthenticatedUser authenticatedUser, String encryptedPassword);
