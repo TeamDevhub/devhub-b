@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.board.domain.Board;
+import teamdevhub.devhub.core.board.port.in.command.SearchAdminBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardQueryUseCase;
 import teamdevhub.devhub.core.board.port.out.BoardLikeRepository;
@@ -44,6 +45,12 @@ public class BoardQueryService implements BoardQueryUseCase {
 					userNames.getOrDefault(board.getUserGuid(), "")
 					));
 		
+		return boardList;
+	}
+	
+	@Override
+	public PageResult<Board> listAdminBoard(SearchAdminBoardCommand searchAdminBoardCommand, PageCommand pageCommand) {
+		PageResult<Board> boardList = boardQueryRepository.listAdminBoard(searchAdminBoardCommand, pageCommand.page(), pageCommand.size());
 		return boardList;
 	}
 }

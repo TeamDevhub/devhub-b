@@ -3,8 +3,6 @@ package teamdevhub.devhub.fake.pure.application.port.in.usecase.board;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.UpdateBoardCommand;
@@ -47,5 +45,9 @@ public class FakeBoardUseCase implements BoardUseCase{
     public boolean isCalled() {
     	return called;
     }
-
+    
+    @Override
+    public void deleteBoard(String boardGuid) {
+    	
+    }
 }

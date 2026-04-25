@@ -45,4 +45,9 @@ public class BoardLikeAdapter implements BoardLikeRepository {
 	public void save(BoardLike boardLike) {
 		jpaBoardLikeRepository.save(BoardLikeMapper.toEntity(boardLike));
 	}
+	
+	@Override
+	public boolean existsByBoardGuidAndUserGuid(String boardGuid, String userGuid) {
+		return jpaBoardLikeRepository.existsByBoardGuidAndUserGuid(boardGuid, userGuid);
+	}
 }
