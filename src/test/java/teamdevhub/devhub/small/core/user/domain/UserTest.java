@@ -91,7 +91,6 @@ class UserTest {
         SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()
                 .tempToken("lastOauthUser")
                 .username(TEST_USERNAME_1)
-                .password(TEST_PASSWORD_1)
                 .introduction(TEST_INTRO_1)
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
