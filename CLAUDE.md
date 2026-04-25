@@ -137,12 +137,6 @@ public void withdraw() {
 - 비즈니스 정책 위반 시 `BusinessRuleException.of(ErrorCode.XXX)`를 던진다.
 - 도메인 규칙이 아닌 애플리케이션 수준의 중복 검사, 사전 조건 확인은 서비스에서 처리한다.
 
-```java
-// 올바른 예: 서비스가 포트만 사용
-userCredentialRepository.findEmailUserCredentialByEmail(email)
-    .ifPresent(c -> { throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL); });
-```
-
 ### Facade 규칙
 
 - Facade는 `@Service` + `@Transactional`로 선언한다.

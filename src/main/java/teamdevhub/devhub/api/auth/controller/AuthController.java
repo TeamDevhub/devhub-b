@@ -12,8 +12,8 @@ import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
 
 @RestController
@@ -48,8 +48,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<DataApiResponseDto<Void>> logout(@LoginUser UserCredential userCredential) {
-        authFacade.logout(userCredential.userGuid());
+    public ResponseEntity<DataApiResponseDto<Void>> logout(@LoginUser AuthenticatedUser authenticatedUser) {
+        authFacade.logout(authenticatedUser.userGuid());
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.LOGOUT_SUCCESS

@@ -1,6 +1,5 @@
 package teamdevhub.devhub.outbound.user.adapter;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserPositionEntity;
 import teamdevhub.devhub.outbound.user.adapter.mapper.UserPositionMapper;
@@ -8,33 +7,31 @@ import teamdevhub.devhub.outbound.user.persistence.JpaUserPositionRepository;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.port.out.UserPositionRepository;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
-import teamdevhub.devhub.outbound.common.util.RelationChangeUtil;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
-public class UserPositionAdapter implements UserPositionRepository {
+public class UserPositionAdapter extends UserRelationAdapter<UserPosition> implements UserPositionRepository {
 
     private final JpaUserPositionRepository jpaUserPositionRepository;
-    private final IdentifierProvider identifierProvider;
+
+    public UserPositionAdapter(JpaUserPositionRepository jpaUserPositionRepository,
+                               IdentifierProvider identifierProvider) {
+        super(identifierProvider);
+        this.jpaUserPositionRepository = jpaUserPositionRepository;
+    }
 
     @Override
     public void saveAll(Set<UserPosition> positions) {
         if (positions.isEmpty()) {
             return;
         }
-
-        List<UserPositionEntity> userPositionEntityList = positions.stream()
-                .map(userPosition -> {
-                    String userPositionGuid = identifierProvider.generateIdentifier();
-                    return UserPositionMapper.toEntity(userPositionGuid, userPosition);
-                })
+        List<UserPositionEntity> entities = positions.stream()
+                .map(position -> UserPositionMapper.toEntity(identifierProvider.generateIdentifier(), position))
                 .toList();
-
-        jpaUserPositionRepository.saveAll(userPositionEntityList);
+        jpaUserPositionRepository.saveAll(entities);
     }
 
     @Override
@@ -50,50 +47,38 @@ public class UserPositionAdapter implements UserPositionRepository {
         if (currentPositions == null || currentPositions.isEmpty()) {
             return;
         }
-
-        syncPositions(previousPositions, currentPositions);
+        syncItems(previousPositions, currentPositions);
     }
 
-    private void syncPositions(Set<UserPosition> previousPositions, Set<UserPosition> currentPositions) {
-        String userGuid = currentPositions.iterator().next().userGuid();
+    @Override
+    protected String extractUserGuid(Set<UserPosition> items) {
+        return items.iterator().next().userGuid();
+    }
 
-        Set<String> oldPositionCds = previousPositions.stream()
-                .map(UserPosition::positionCd)
-                .collect(Collectors.toSet());
+    @Override
+    protected Set<String> extractCodes(Set<UserPosition> items) {
+        return items.stream().map(UserPosition::positionCd).collect(Collectors.toSet());
+    }
 
-        Set<String> newPositionCds = currentPositions.stream()
-                .map(UserPosition::positionCd)
-                .collect(Collectors.toSet());
+    @Override
+    protected void deleteByUserGuidAndCodes(String userGuid, Set<String> codes) {
+        if (!codes.isEmpty()) {
+            jpaUserPositionRepository.deleteByUserGuidAndPositionCdIn(userGuid, codes);
+        }
+    }
 
-        RelationChangeUtil.RelationChange<String> change = RelationChangeUtil.change(oldPositionCds, newPositionCds);
-
-        if (change.isEmpty()) {
+    @Override
+    protected void insertByUserGuidAndCodes(String userGuid, Set<String> codes) {
+        if (codes.isEmpty()) {
             return;
         }
-
-        deletePositions(userGuid, change.toDelete());
-        insertPositions(userGuid, change.toInsert());
-    }
-
-    private void deletePositions(String userGuid, Set<String> positionCds) {
-        if (!positionCds.isEmpty()) {
-            jpaUserPositionRepository.deleteByUserGuidAndPositionCdIn(userGuid, positionCds);
-        }
-    }
-
-    private void insertPositions(String userGuid, Set<String> positionCds) {
-        if (positionCds.isEmpty()) {
-            return;
-        }
-
-        List<UserPositionEntity> entities = positionCds.stream()
-                .map(positionCd -> UserPositionEntity.builder()
+        List<UserPositionEntity> entities = codes.stream()
+                .map(code -> UserPositionEntity.builder()
                         .userPositionGuid(identifierProvider.generateIdentifier())
                         .userGuid(userGuid)
-                        .positionCd(positionCd)
+                        .positionCd(code)
                         .build())
                 .toList();
-
         jpaUserPositionRepository.saveAll(entities);
     }
 }

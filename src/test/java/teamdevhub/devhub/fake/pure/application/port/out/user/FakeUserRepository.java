@@ -4,8 +4,6 @@ import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.time.LocalDateTime;
 import java.util.*;

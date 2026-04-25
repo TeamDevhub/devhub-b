@@ -101,8 +101,8 @@ public ResponseEntity<...> refresh(@CookieValue("refreshToken") String refreshTo
 
 ```java
 @PostMapping("/logout")
-public ResponseEntity<...> logout(@LoginUser UserCredential userCredential) {
-    authFacade.logout(userCredential.userGuid());
+public ResponseEntity<...> logout(@LoginUser UserCredential authenticatedUser) {
+    authFacade.logout(authenticatedUser.userGuid());
     ...
 }
 ```

@@ -6,13 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import teamdevhub.devhub.core.auth.application.service.UserCredentialService;
 import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.fake.pure.application.port.out.auth.FakeRefreshTokenRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.auth.FakeUserCredentialRepository;
 import teamdevhub.devhub.fake.pure.application.provider.FakeAuthenticatedUserResolver;
+import teamdevhub.devhub.fake.pure.application.provider.FakeEncodedPasswordProvider;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTokenParseProvider;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-class UserCredentialServiceTest {
+class AuthenticatedUserServiceTest {
 
     private UserCredentialService userCredentialService;
 
@@ -37,15 +38,10 @@ class UserCredentialServiceTest {
         userCredentialRepository = new FakeUserCredentialRepository();
         refreshTokenRepository = new FakeRefreshTokenRepository();
 
-        PasswordEncoder noOpPasswordEncoder = new PasswordEncoder() {
-            @Override public String encode(CharSequence raw) { return raw.toString(); }
-            @Override public boolean matches(CharSequence raw, String encoded) { return raw.toString().equals(encoded); }
-        };
-
         userCredentialService = new UserCredentialService(
                 tokenParseProvider,
                 new FakeUuidIdentifierProvider(TEST_USER_GUID_1),
-                noOpPasswordEncoder,
+                new FakeEncodedPasswordProvider(),
                 new FakeAuthenticatedUserResolver(),
                 userCredentialRepository,
                 refreshTokenRepository
@@ -92,7 +88,7 @@ class UserCredentialServiceTest {
         userCredentialService.signupEmailUser(command);
 
         // then
-        UserCredential saved = userCredentialRepository.findEmailUserCredentialByEmail(TEST_EMAIL_1).orElseThrow();
+        AuthenticatedUser saved = userCredentialRepository.findEmailUserCredentialByEmail(TEST_EMAIL_1).orElseThrow();
         assertThat(saved.loginId()).isEqualTo(TEST_EMAIL_1);
         assertThat(saved.userGuid()).isEqualTo(TEST_USER_GUID_1);
     }
@@ -125,12 +121,12 @@ class UserCredentialServiceTest {
         OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
 
         // when
-        UserCredential result = userCredentialService.signupOAuthUser(oauthUser);
+        AuthenticatedUser result = userCredentialService.signupOAuthUser(oauthUser);
 
         // then
         assertThat(result).isNotNull();
         assertThat(result.userGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(result.loginId()).isEqualTo(TEST_EMAIL_1);
+        assertThat(result.loginId()).isEqualTo(TEST_OAUTH_ID_1);
     }
 
     @Test
@@ -165,7 +161,7 @@ class UserCredentialServiceTest {
         refreshTokenRepository.givenRefreshToken(refreshToken);
 
         // when
-        UserCredential result = userCredentialService.getUserForReissue(REFRESH_TOKEN);
+        AuthenticatedUser result = userCredentialService.getUserForReissue(REFRESH_TOKEN);
 
         // then
         assertThat(result.userGuid()).isEqualTo(TEST_USER_GUID_1);
@@ -211,7 +207,7 @@ class UserCredentialServiceTest {
                 .build();
 
         // when
-        UserCredential result = userCredentialService.authenticate(loginCommand);
+        AuthenticatedUser result = userCredentialService.authenticate(loginCommand);
 
         // then
         assertThat(result).isNotNull();

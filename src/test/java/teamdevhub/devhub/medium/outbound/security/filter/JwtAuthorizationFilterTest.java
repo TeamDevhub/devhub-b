@@ -9,8 +9,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.AccessTokenInfo;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.framework.FakeCustomFilterExceptionHandler;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTokenParseProvider;
@@ -104,7 +104,7 @@ class JwtAuthorizationFilterTest {
         // then
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assertThat(authentication).isNotNull();
-        UserCredential user = (UserCredential) authentication.getPrincipal();
+        AuthenticatedUser user = (AuthenticatedUser) authentication.getPrincipal();
         assertThat(user.userGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(user.loginId()).isEqualTo(TEST_EMAIL_1);
         assertThat(authentication.getAuthorities())

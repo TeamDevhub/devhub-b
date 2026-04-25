@@ -18,6 +18,7 @@ import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationForm;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
@@ -35,7 +36,6 @@ import teamdevhub.devhub.core.project.port.in.usecase.ProjectLikeUseCase;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @Service
@@ -51,7 +51,7 @@ public class ProjectFacade {
 	private final ProjectApplicationUseCase projectApplicationUseCase;
 	private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
 
-	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, UserCredential user) {
+	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, AuthenticatedUser user) {
 		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
 		List<ProjectDetailResponseDto> projectDetailResponseDtoList = new ArrayList<>();
 		if(user == null) {
@@ -85,7 +85,7 @@ public class ProjectFacade {
 		projectUseCase.createProject(createProjectCommand, user.getUsername());
 	}
 
-	public ProjectDetailResponseDto getProjectDetail(String projectGuid, UserCredential user) {
+	public ProjectDetailResponseDto getProjectDetail(String projectGuid, AuthenticatedUser user) {
 		String imageFileUrl = null;
         Project project = projectUseCase.getProjectDetail(projectGuid);
         if(project.getImageFileGuid() != null && !project.getImageFileGuid().isBlank()) {

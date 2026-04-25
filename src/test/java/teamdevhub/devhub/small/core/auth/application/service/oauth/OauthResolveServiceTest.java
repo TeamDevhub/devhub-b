@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthResolveService;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.pure.application.port.out.auth.FakeUserCredentialRepository;
@@ -36,7 +36,7 @@ class OauthResolveServiceTest {
     @DisplayName("OAuth_유저가_존재하면_loginAvailable_이_true_이다")
     void findOrRequireSignup_existingUser_loginAvailableIsTrue() {
         // given
-        UserCredential existingCredential = UserCredential.of(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        AuthenticatedUser existingCredential = AuthenticatedUser.of(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
         userCredentialRepository.saveOAuthUserCredential(existingCredential, VerificationProvider.GOOGLE, TEST_OAUTH_ID_1);
 
         OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
@@ -46,8 +46,8 @@ class OauthResolveServiceTest {
 
         // then
         assertThat(result.loginAvailable()).isTrue();
-        assertThat(result.userCredential()).isNotNull();
-        assertThat(result.userCredential().userGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(result.authenticatedUser()).isNotNull();
+        assertThat(result.authenticatedUser().userGuid()).isEqualTo(TEST_USER_GUID_1);
     }
 
     @Test
@@ -61,22 +61,22 @@ class OauthResolveServiceTest {
 
         // then
         assertThat(result.loginAvailable()).isFalse();
-        assertThat(result.userCredential()).isNull();
+        assertThat(result.authenticatedUser()).isNull();
     }
 
     @Test
     @DisplayName("다른_제공자의_동일한_oauthId_는_별도_사용자로_처리된다")
     void findOrRequireSignup_sameOauthIdDifferentProvider_treatedSeparately() {
-        // given: GOOGLE 로 가입된 사용자
-        UserCredential credential = UserCredential.of(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
-        userCredentialRepository.saveOAuthUserCredential(credential, VerificationProvider.GOOGLE, TEST_OAUTH_ID_1);
+        // given
+        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        userCredentialRepository.saveOAuthUserCredential(authenticatedUser, VerificationProvider.GOOGLE, TEST_OAUTH_ID_1);
 
         OauthUser githubUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GITHUB, TEST_EMAIL_1);
 
-        // when: GITHUB 로 조회
+        // when
         OauthUserResult result = oauthResolveService.findOrRequireSignup(githubUser);
 
-        // then: 다른 제공자이므로 미가입 상태
+        // then
         assertThat(result.loginAvailable()).isFalse();
     }
 

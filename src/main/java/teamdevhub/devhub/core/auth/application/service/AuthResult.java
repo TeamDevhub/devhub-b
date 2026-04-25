@@ -14,6 +14,10 @@ public record AuthResult(String accessToken, String refreshToken) {
         return new AuthResult(accessToken, null);
     }
 
+    public boolean hasRefreshToken() {
+        return refreshToken != null;
+    }
+
     public String toAuthorizationHeader() {
         return TokenPrefix.BEARER.withToken(accessToken);
     }

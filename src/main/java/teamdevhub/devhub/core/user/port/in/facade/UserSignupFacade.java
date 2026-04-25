@@ -5,11 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.terms.port.in.usecase.TermsUseCase;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
-import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.usecase.UserSignupUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
@@ -39,10 +38,10 @@ public class UserSignupFacade {
 
     public OauthAuthResult signupWithOauth(SignupOauthUserCommand signupOauthUserCommand) {
         OauthUser oauthUser = oauthResolveUseCase.extractOauthUser(signupOauthUserCommand);
-        UserCredential userCredential = userCredentialUseCase.signupOAuthUser(oauthUser);
-        userSignupUseCase.saveOAuthUserInfo(signupOauthUserCommand, oauthUser, userCredential.userGuid());
-        termsUseCase.saveTermsAgreement(signupOauthUserCommand.toAgreeTermsCommand(userCredential.userGuid()));
-        AuthResult authResult = authenticationUseCase.login(userCredential);
+        AuthenticatedUser authenticatedUser = userCredentialUseCase.signupOAuthUser(oauthUser);
+        userSignupUseCase.saveOAuthUserInfo(signupOauthUserCommand, oauthUser, authenticatedUser.userGuid());
+        termsUseCase.saveTermsAgreement(signupOauthUserCommand.toAgreeTermsCommand(authenticatedUser.userGuid()));
+        AuthResult authResult = authenticationUseCase.login(authenticatedUser);
         return OauthAuthResult.loggedIn(authResult);
     }
 }

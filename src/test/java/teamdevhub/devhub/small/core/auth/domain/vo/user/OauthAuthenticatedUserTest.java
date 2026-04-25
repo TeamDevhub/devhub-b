@@ -9,19 +9,19 @@ import teamdevhub.devhub.shared.enums.VerificationProvider;
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-class OauthUserCredentialTest {
+class OauthAuthenticatedUserTest {
 
     @Test
     @DisplayName("OAuth_사용자_자격증명을_생성하면_올바른_값을_갖는다")
     void create_oauthUserCredential_hasCorrectValues() {
-        OAuthUserCredential credential = new OAuthUserCredential(
+        OAuthUserCredential oAuthUserCredential = new OAuthUserCredential(
                 TEST_USER_GUID_1, VerificationProvider.GOOGLE, TEST_OAUTH_ID_1, UserRole.USER
         );
 
-        assertThat(credential.userGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(credential.provider()).isEqualTo(VerificationProvider.GOOGLE);
-        assertThat(credential.oauthId()).isEqualTo(TEST_OAUTH_ID_1);
-        assertThat(credential.userRole()).isEqualTo(UserRole.USER);
+        assertThat(oAuthUserCredential.userGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(oAuthUserCredential.provider()).isEqualTo(VerificationProvider.GOOGLE);
+        assertThat(oAuthUserCredential.oauthId()).isEqualTo(TEST_OAUTH_ID_1);
+        assertThat(oAuthUserCredential.userRole()).isEqualTo(UserRole.USER);
     }
 
     @Test
@@ -31,11 +31,11 @@ class OauthUserCredentialTest {
                 VerificationProvider.GOOGLE, VerificationProvider.GITHUB,
                 VerificationProvider.KAKAO, VerificationProvider.NAVER}) {
 
-            OAuthUserCredential credential = new OAuthUserCredential(
+            OAuthUserCredential oAuthUserCredential = new OAuthUserCredential(
                     TEST_USER_GUID_1, provider, TEST_OAUTH_ID_1, UserRole.USER
             );
 
-            assertThat(credential.provider()).isEqualTo(provider);
+            assertThat(oAuthUserCredential.provider()).isEqualTo(provider);
         }
     }
 

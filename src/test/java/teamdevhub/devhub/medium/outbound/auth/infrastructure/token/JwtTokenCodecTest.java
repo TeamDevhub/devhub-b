@@ -3,8 +3,8 @@ package teamdevhub.devhub.medium.outbound.auth.infrastructure.token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.JwtTokenCodec;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
@@ -46,14 +46,14 @@ class JwtTokenCodecTest {
     @DisplayName("accessToken_생성_후_토큰_정보를_정상적으로_추출한다")
     void createAccessTokenAndExtractInfo() {
         // given
-        UserCredential userCredential = new UserCredential(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
 
         // when
-        String accessToken = jwtTokenCodec.createAccessToken(userCredential);
+        String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
         AccessTokenInfo accessTokenInfo = jwtTokenCodec.getAccessTokenInfo(accessToken);
 
         // then
-        assertThat(accessTokenInfo.userGuid()).isEqualTo(userCredential.userGuid());
+        assertThat(accessTokenInfo.userGuid()).isEqualTo(authenticatedUser.userGuid());
         assertThat(accessTokenInfo.email()).isEqualTo(TEST_EMAIL_1);
         assertThat(accessTokenInfo.userRole()).isEqualTo(USER);
     }
@@ -89,8 +89,8 @@ class JwtTokenCodecTest {
     @DisplayName("accessToken_을_refreshToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다")
     void extractRefreshTokenInfoWithAccessTokenThrows() {
         // given
-        UserCredential userCredential = new UserCredential(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
-        String accessToken = jwtTokenCodec.createAccessToken(userCredential);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
 
         // when, then
         assertThatThrownBy(() ->
@@ -123,8 +123,8 @@ class JwtTokenCodecTest {
     @DisplayName("accessToken_을_tempToken_parser_에_넣으면_TOKEN_INVALID_예외가_발생한다")
     void extractTempTokenInfoWithAccessTokenThrows() {
         // given
-        UserCredential userCredential = new UserCredential(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
-        String accessToken = jwtTokenCodec.createAccessToken(userCredential);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
 
 
         // when, then
@@ -182,8 +182,8 @@ class JwtTokenCodecTest {
 
         jwtTokenCodec.init();
 
-        UserCredential userCredential = new UserCredential(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
-        String accessToken = jwtTokenCodec.createAccessToken(userCredential);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
 
         // when, then
         assertThatThrownBy(() ->

@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 @Getter
 public class User {
@@ -169,64 +170,45 @@ public class User {
     }
 
     public UserPositionChangeResult changePositions(Set<UserPosition> newPositions) {
-        if (newPositions == null || newPositions.isEmpty()) {
+        if (hasInvalidItems(newPositions, p -> p.positionCd())) {
             return UserPositionChangeResult.unchanged(this.positions);
         }
-
-        boolean hasNullPositionCd = newPositions.stream()
-                .anyMatch(userPosition -> userPosition.positionCd() == null || userPosition.positionCd().isBlank());
-
-        if (hasNullPositionCd) {
-            return UserPositionChangeResult.unchanged(this.positions);
-        }
-
         if (!this.positions.equals(newPositions)) {
             Set<UserPosition> oldPositions = Set.copyOf(positions);
             this.positions.clear();
             this.positions.addAll(newPositions);
             return UserPositionChangeResult.changed(oldPositions, this.positions);
         }
-
         return UserPositionChangeResult.unchanged(this.positions);
     }
 
     public UserSkillChangeResult changeSkills(Set<UserSkill> newSkills) {
-        if (newSkills == null || newSkills.isEmpty()) {
+        if (hasInvalidItems(newSkills, s -> s.skillCd())) {
             return UserSkillChangeResult.unchanged(this.skills);
         }
-
-        boolean hasNullSkillCd = newSkills.stream()
-                .anyMatch(userSkill -> userSkill.skillCd() == null || userSkill.skillCd().isBlank());
-
-        if (hasNullSkillCd) {
-            return UserSkillChangeResult.unchanged(this.skills);
-        }
-
         if (!this.skills.equals(newSkills)) {
             Set<UserSkill> oldSkills = Set.copyOf(this.skills);
             this.skills.clear();
             this.skills.addAll(newSkills);
             return UserSkillChangeResult.changed(oldSkills, this.skills);
         }
-
         return UserSkillChangeResult.unchanged(this.skills);
+    }
+
+    private <T> boolean hasInvalidItems(Set<T> items, Function<T, String> codeExtractor) {
+        if (items == null || items.isEmpty()) {
+            return true;
+        }
+        return items.stream().anyMatch(item -> {
+            String code = codeExtractor.apply(item);
+            return code == null || code.isBlank();
+        });
     }
 
     public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
         this.positions = new HashSet<>(positions);
         this.skills = new HashSet<>(skills);
     }
-
-
-//    public void changePassword(String encryptedNewPassword) {
-//        this.password = encryptedNewPassword;
-//    }
-
-//    private void validate(String email, String password) {
-//        if (!hasText(email)) {
-//            throw DomainRuleException.of(ErrorCode.USER_ID_FAIL);
-//        }
-//    }
 
     private boolean hasText(String value) {
         return value != null && !value.isBlank();

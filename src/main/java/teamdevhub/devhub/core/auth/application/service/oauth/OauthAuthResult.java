@@ -2,9 +2,9 @@ package teamdevhub.devhub.core.auth.application.service.oauth;
 
 import lombok.Builder;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.TokenPrefix;
-
-import java.util.Optional;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 @Builder
 public record OauthAuthResult(
@@ -33,8 +33,9 @@ public record OauthAuthResult(
     }
 
     public String toAuthorizationHeader() {
-        return Optional.ofNullable(accessToken)
-                .map(TokenPrefix.BEARER::withToken)
-                .orElse(null);
+        if (accessToken == null) {
+            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
+        }
+        return TokenPrefix.BEARER.withToken(accessToken);
     }
 }
