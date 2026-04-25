@@ -11,7 +11,7 @@ import teamdevhub.devhub.api.web.resolver.LoginUserArgumentResolver;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.framework.FakeAuthentication;
 
@@ -27,8 +27,8 @@ class LoginUserArgumentResolverTest {
 
 
     static class TestController {
-        public void testMethod(@LoginUser AuthenticatedUser authenticatedUser) {}
-        public void noAnnotationMethod(AuthenticatedUser authenticatedUser) {}
+        public void testMethod(@LoginUser UserCredential userCredential) {}
+        public void noAnnotationMethod(UserCredential userCredential) {}
         public void wrongTypeMethod(@LoginUser String user) {}
     }
 
@@ -46,7 +46,7 @@ class LoginUserArgumentResolverTest {
     @DisplayName("supportsParameter_는_LoginUser_어노테이션과_AuthenticatedUser_타입을_지원한다")
     void supportsParameter_returnsTrueForLoginUserAnnotatedAuthenticatedUser() throws NoSuchMethodException {
         // given
-        Method method = TestController.class.getMethod("testMethod", AuthenticatedUser.class);
+        Method method = TestController.class.getMethod("testMethod", UserCredential.class);
         MethodParameter methodParameter = new MethodParameter(method, 0);
 
         // when
@@ -60,7 +60,7 @@ class LoginUserArgumentResolverTest {
     @DisplayName("supportsParameter_는_어노테이션이_없으면_false_를_반환한다")
     void supportsParameter_returnsFalseWithoutAnnotation() throws NoSuchMethodException {
         // given
-        Method method = TestController.class.getMethod("noAnnotationMethod", AuthenticatedUser.class);
+        Method method = TestController.class.getMethod("noAnnotationMethod", UserCredential.class);
         MethodParameter methodParameter = new MethodParameter(method, 0);
 
         // when
@@ -88,8 +88,8 @@ class LoginUserArgumentResolverTest {
     @DisplayName("UserAuthentication_principal_이면_AuthenticatedUser_를_반환한다")
     void returnAuthenticatedUserIfUserAuthenticationPrincipal() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
-        UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
+        UserCredential userCredential = new UserCredential(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        UserAuthentication userAuthentication = new UserAuthentication(userCredential);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(userAuthentication));
 
         // when
@@ -97,22 +97,22 @@ class LoginUserArgumentResolverTest {
 
         // then
         assertThat(resolvedValue).isNotNull();
-        assertThat(resolvedValue).isInstanceOf(AuthenticatedUser.class);
-        assertThat(((AuthenticatedUser) resolvedValue).email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(resolvedValue).isInstanceOf(UserCredential.class);
+        assertThat(((UserCredential) resolvedValue).loginId()).isEqualTo(TEST_EMAIL_1);
     }
 
     @Test
     @DisplayName("AuthenticatedUser_principal_이면_그대로_반환한다")
     void returnAuthenticatedUserIfPrincipalIsAlreadyAuthenticatedUser() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
-        SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(authenticatedUser));
+        UserCredential userCredential = new UserCredential(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
+        SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(userCredential));
 
         // when
         Object resolved = loginUserArgumentResolver.resolveArgument(null, null, null, null);
 
         // then
-        assertThat(resolved).isEqualTo(authenticatedUser);
+        assertThat(resolved).isEqualTo(userCredential);
     }
 
     @Test

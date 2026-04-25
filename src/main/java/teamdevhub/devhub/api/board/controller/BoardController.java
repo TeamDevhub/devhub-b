@@ -27,7 +27,7 @@ import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardDetailResponseDto;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
 import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 @RestController
 @RequestMapping("/boards")
@@ -42,8 +42,8 @@ public class BoardController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<DataApiResponseDto<Void>> createBoard(@RequestBody CreateBoardRequestDto createBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-		return ResponseEntity.ok(boardFacade.createBoard(createBoardRequestDto.toCommand(authenticatedUser.userGuid())));
+	public ResponseEntity<DataApiResponseDto<Void>> createBoard(@RequestBody CreateBoardRequestDto createBoardRequestDto, @LoginUser UserCredential userCredential) {
+		return ResponseEntity.ok(boardFacade.createBoard(createBoardRequestDto.toCommand(userCredential.userGuid())));
 	}
 
 	@GetMapping("/{boardGuid}")
@@ -78,14 +78,14 @@ public class BoardController {
 	}
 	
 	@PutMapping("/{boardGuid}")
-	public ResponseEntity<DataApiResponseDto<Void>> updateBoard(@RequestBody UpdateBoardRequestDto updateBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser, 
+	public ResponseEntity<DataApiResponseDto<Void>> updateBoard(@RequestBody UpdateBoardRequestDto updateBoardRequestDto, @LoginUser UserCredential userCredential,
 			@PathVariable("boardGuid") String boardGuid) {
-		return ResponseEntity.ok(boardFacade.updateBoard(updateBoardRequestDto.toCommand(authenticatedUser.userGuid(), boardGuid)));
+		return ResponseEntity.ok(boardFacade.updateBoard(updateBoardRequestDto.toCommand(userCredential.userGuid(), boardGuid)));
 	}
 		
 	@PostMapping("/{boardGuid}/likes")
-	public ResponseEntity<DataApiResponseDto<Void>> likeBoard(@PathVariable("boardGuid") String boardGuid, @LoginUser AuthenticatedUser authenticatedUser) {
-		return ResponseEntity.ok(boardFacade.likeBoard(boardGuid, authenticatedUser.userGuid()));
+	public ResponseEntity<DataApiResponseDto<Void>> likeBoard(@PathVariable("boardGuid") String boardGuid, @LoginUser UserCredential userCredential) {
+		return ResponseEntity.ok(boardFacade.likeBoard(boardGuid, userCredential.userGuid()));
 	}
 	
 	@PostMapping("/delete")

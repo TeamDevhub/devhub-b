@@ -36,7 +36,7 @@ public class UserProfileFacade {
         userProfileUseCase.updateProfile(updateProfileCommand);
     }
 
-    public void updatePassword(UpdatePasswordCommand updatePasswordCommand) {
-        userProfileUseCase.updatePassword(updatePasswordCommand);
-    }
+//    public void updatePassword(UpdatePasswordCommand updatePasswordCommand) {
+//        userProfileUseCase.updatePassword(updatePasswordCommand);
+//    }
 }

@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import teamdevhub.devhub.outbound.security.auth.CustomAuthenticationProvider;
 import teamdevhub.devhub.outbound.security.filter.CustomFilterExceptionHandler;
 import teamdevhub.devhub.outbound.security.filter.JwtAuthorizationFilter;
 import teamdevhub.devhub.outbound.security.handler.CustomAccessDeniedHandler;
@@ -33,6 +34,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final TokenParseProvider tokenParseProvider;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
     private final CustomFilterExceptionHandler customFilterExceptionHandler;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -82,7 +84,7 @@ public class WebSecurityConfig {
                 .exceptionHandling(
                         ex -> ex.accessDeniedHandler(customAccessDeniedHandler)
                                 .authenticationEntryPoint(customAuthenticationEntryPoint))
-
+                .authenticationProvider(customAuthenticationProvider)
                 .authorizeHttpRequests(
                         (authorizeHttpRequests) -> authorizeHttpRequests
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()

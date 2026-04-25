@@ -3,7 +3,6 @@ package teamdevhub.devhub.outbound.user.adapter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -12,13 +11,11 @@ import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 import teamdevhub.devhub.outbound.user.adapter.mapper.UserMapper;
 import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 @Component
 @RequiredArgsConstructor
@@ -38,33 +35,9 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public AuthenticatedUser findAuthenticatedUserByEmail(String email) {
-        UserEntity userEntity = jpaUserRepository.findByEmail(email).
-                orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
-        return UserMapper.toAuthenticatedUser(userEntity);
-    }
-
-    @Override
-    public AuthenticatedUser findAuthenticatedUserByUserGuid(String userGuid) {
-        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid).
-                orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
-        return UserMapper.toAuthenticatedUser(userEntity);
-    }
-
-    @Override
-    public Optional<AuthenticatedUser> findOptionalByEmail(String email) {
-        return jpaUserRepository.findByEmail(email).map(UserMapper::toAuthenticatedUser);
-    }
-
-    @Override
-    public Optional<AuthenticatedUser> findByOAuth(VerificationProvider verificationProvider, String oauthId) {
-        return jpaUserRepository.findByProviderAndOauthId(verificationProvider, oauthId).map(UserMapper::toAuthenticatedUser);
-    }
-
-    @Override
     public User findByUserGuid(String userGuid) {
-        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid)
-                .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
+        UserEntity userEntity = jpaUserRepository.findByUserGuid(userGuid).orElseThrow(
+                () -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
         return UserMapper.toDomain(userEntity);
     }
 

@@ -41,7 +41,7 @@ class UserQueryServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        CreateUserCommand generalCreateUserCommand1 = CreateUserCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand generalCreateUserCommand1 = CreateUserCommand.generalUserCreateCommand(signupUserCommand1, TEST_USER_GUID_1);
         User testUser1 = User.createGeneralUser(generalCreateUserCommand1);
 
         SignupUserCommand signupUserCommand2 = SignupUserCommand.builder()
@@ -53,7 +53,7 @@ class UserQueryServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_2)
                 .build();
-        CreateUserCommand generalCreateUserCommand2 = CreateUserCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+        CreateUserCommand generalCreateUserCommand2 = CreateUserCommand.generalUserCreateCommand(signupUserCommand2, TEST_USER_GUID_2);
         User testUser2 = User.createGeneralUser(generalCreateUserCommand2);
 
         userQueryRepository.save(testUser1);
@@ -77,6 +77,5 @@ class UserQueryServiceTest {
         assertThat(pagedUserList.content().size()).isEqualTo(2);
         assertThat(pagedUserList.totalPages()).isEqualTo(1);
         assertThat(user.getUserGuid()).isEqualTo(testUser1.getUserGuid());
-        assertThat(user.getEmail()).isEqualTo(testUser1.getEmail());
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.AccessTokenInfo;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.auth.port.out.token.TokenParseProvider;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
 
@@ -30,13 +30,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-
-        String uri = httpServletRequest.getRequestURI();
-
-        if (uri.equals("/auth/reissue")) {
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
-            return;
-        }
 
         try {
             String token = httpServletRequest.getHeader(AUTHORIZATION_HEADER);
@@ -57,14 +50,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private void setAuthentication(AccessTokenInfo accessTokenInfo) {
-        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(
+        UserCredential userCredential = UserCredential.of(
                 accessTokenInfo.userGuid(),
                 accessTokenInfo.email(),
-                null,
                 accessTokenInfo.userRole()
         );
         Collection<? extends GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(accessTokenInfo.userRole().getAuthority()));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userCredential, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

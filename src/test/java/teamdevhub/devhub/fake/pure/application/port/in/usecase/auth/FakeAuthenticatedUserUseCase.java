@@ -1,7 +1,8 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.auth;
 
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticatedUserUseCase;
@@ -14,39 +15,45 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class FakeAuthenticatedUserUseCase implements AuthenticatedUserUseCase {
 
-    private final Map<String, User> store = new HashMap<>();
+    private final Map<String, UserCredential> credentialStore = new HashMap<>();
+    private final Map<String, String> passwordStore = new HashMap<>();
 
     public FakeAuthenticatedUserUseCase() {
-        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
-                .username(TEST_USERNAME_1)
-                .introduction(TEST_INTRO_1)
-                .positionList(TEST_POSITION_LIST)
-                .skillList(TEST_SKILL_LIST)
-                .verificationTarget(VERIFICATION_TARGET_1)
-                .build();
-        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
-        User testUser = User.createGeneralUser(generalCreateUserCommand);
 
-        store.put(TEST_USER_GUID_1, testUser);
+        UserCredential credential = UserCredential.of(
+                TEST_USER_GUID_1,
+                TEST_EMAIL_1,
+                UserRole.USER
+        );
+
+        credentialStore.put(TEST_EMAIL_1, credential);
+        passwordStore.put(TEST_EMAIL_1, TEST_PASSWORD_1);
     }
 
     @Override
-    public AuthenticatedUser getUserForReissue(String userGuid) {
-        return store.values().stream()
-                .filter(user -> user.getUserGuid().equals(userGuid))
+    public UserCredential getUserForReissue(String userGuid) {
+
+        return credentialStore.values().stream()
+                .filter(c -> c.userGuid().equals(userGuid))
                 .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
-                .orElse(null);
+                .orElseThrow();
     }
 
     @Override
-    public AuthenticatedUser authenticate(LoginCommand loginCommand) {
-        return store.values().stream()
-                .filter(user -> user.getEmail().equals(loginCommand.email()))
-                .findFirst()
-                .map(user -> new AuthenticatedUser(user.getUserGuid(), user.getEmail(), user.getPassword(), user.getUserRole()))
-                .orElse(null);
+    public UserCredential authenticate(LoginCommand loginCommand) {
+
+        UserCredential credential = credentialStore.get(loginCommand.email());
+
+        if (credential == null) {
+            throw new IllegalArgumentException("user not found");
+        }
+
+        String savedPassword = passwordStore.get(loginCommand.email());
+
+        if (!savedPassword.equals(loginCommand.password())) {
+            throw new IllegalArgumentException("invalid password");
+        }
+
+        return credential;
     }
 }

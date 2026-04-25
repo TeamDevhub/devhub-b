@@ -34,19 +34,6 @@ public class UserEntity extends BaseEntity {
     @Column(length = 32, nullable = false, unique = true)
     private String userGuid;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "provider")
-    private VerificationProvider provider;
-
-    @Column
-    private String oauthId;
-
-    @Column
-    private String email;
-
-    @Column
-    private String password;
-
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private UserRole userRole;

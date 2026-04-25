@@ -58,9 +58,11 @@ public class BoardService implements BoardUseCase {
         boardDetail.fillDetailSubquery(boardLikes.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
         		boardComments.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
         		user.getUsername(),
-        		user.getEmail(),
-        		commentList,
-        		isLiked
+				/**
+				 * 인증테이블 분리에 따라 추후 변경 필요
+				 */
+        		user.getUserGuid(),
+        		commentList
         		);
         
         return boardDetail;

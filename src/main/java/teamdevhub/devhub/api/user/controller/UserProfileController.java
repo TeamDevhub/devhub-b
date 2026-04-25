@@ -30,7 +30,7 @@ import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @RestController
@@ -44,28 +44,28 @@ public class UserProfileController {
     private final ProjectFacade projectFacade;
 
     @GetMapping()
-    public ResponseEntity<DataApiResponseDto<UserBasicResponseDto>> getUserInfo(@LoginUser AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<DataApiResponseDto<UserBasicResponseDto>> getUserInfo(@LoginUser UserCredential userCredential) {
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(
                         SuccessCode.READ_SUCCESS,
-                        userProfileFacade.getUserInfo(authenticatedUser.userGuid())
+                        userProfileFacade.getUserInfo(userCredential.userGuid())
                 )
         );
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> getProfile(@LoginUser AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> getProfile(@LoginUser UserCredential userCredential) {
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(
                         SuccessCode.READ_SUCCESS,
-                        userProfileFacade.getCurrentUserProfile(authenticatedUser.userGuid())
+                        userProfileFacade.getCurrentUserProfile(userCredential.userGuid())
                 )
         );
     }
 
     @PostMapping("/profile/image")
-    public ResponseEntity<DataApiResponseDto<Void>> updateProfileImage(@Valid @RequestBody UpdateProfileImageRequestDto updateProfileImageRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-        userProfileFacade.updateProfileImage(updateProfileImageRequestDto.toUpdateProfileImageCommand(authenticatedUser.userGuid()));
+    public ResponseEntity<DataApiResponseDto<Void>> updateProfileImage(@Valid @RequestBody UpdateProfileImageRequestDto updateProfileImageRequestDto, @LoginUser UserCredential userCredential) {
+        userProfileFacade.updateProfileImage(updateProfileImageRequestDto.toUpdateProfileImageCommand(userCredential.userGuid()));
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS
@@ -74,8 +74,8 @@ public class UserProfileController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<DataApiResponseDto<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-        userProfileFacade.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(authenticatedUser.userGuid()));
+    public ResponseEntity<DataApiResponseDto<Void>> updateProfile(@Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto, @LoginUser UserCredential userCredential) {
+        userProfileFacade.updateProfile(updateProfileRequestDto.toUpdateProfileCommand(userCredential.userGuid()));
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS
@@ -83,19 +83,19 @@ public class UserProfileController {
         );
     }
 
-    @PutMapping("/profile/password")
-    public ResponseEntity<DataApiResponseDto<Void>> updatePassword(@Valid @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-        userProfileFacade.updatePassword(updatePasswordRequestDto.toUpdatePasswordCommand(authenticatedUser.userGuid()));
-        return ResponseEntity.ok(
-                DataApiResponseDto.successWithoutData(
-                        SuccessCode.UPDATE_SUCCESS
-                )
-        );
-    }
+//    @PutMapping("/profile/password")
+//    public ResponseEntity<DataApiResponseDto<Void>> updatePassword(@Valid @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto, @LoginUser UserCredential userCredential) {
+//        userProfileFacade.updatePassword(updatePasswordRequestDto.toUpdatePasswordCommand(userCredential.userGuid()));
+//        return ResponseEntity.ok(
+//                DataApiResponseDto.successWithoutData(
+//                        SuccessCode.UPDATE_SUCCESS
+//                )
+//        );
+//    }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<DataApiResponseDto<Void>> withdraw(@LoginUser AuthenticatedUser authenticatedUser) {
-        userWithdrawFacade.withdraw(authenticatedUser.userGuid());
+    public ResponseEntity<DataApiResponseDto<Void>> withdraw(@LoginUser UserCredential userCredential) {
+        userWithdrawFacade.withdraw(userCredential.userGuid());
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.USER_DELETE_SUCCESS
@@ -105,39 +105,39 @@ public class UserProfileController {
     
     @GetMapping("/profile/boards")
     public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> getUserListBoard(@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto, 
-    		@LoginUser AuthenticatedUser authenticatedUser) {
-    	return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(authenticatedUser.userGuid()), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize())));
+    		@LoginUser UserCredential userCredential) {
+    	return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(userCredential.userGuid()), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize())));
     }
     
     @GetMapping("/projects")
     public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserProjects(@RequestParam("page") int page, @RequestParam("size") int size, 
-    		@LoginUser AuthenticatedUser authenticatedUser) {
+    		@LoginUser UserCredential userCredential) {
         return ResponseEntity.ok(
         		DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
-                        projectFacade.getUserProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                        projectFacade.getUserProjects(userCredential.userGuid(), PageCommand.of(page, size))
                 )
         );
     }
     
     @GetMapping("/projects/likes")
     public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserLikeProjects(@RequestParam("page") int page, @RequestParam("size") int size, 
-    		@LoginUser AuthenticatedUser authenticatedUser) {
+    		@LoginUser UserCredential userCredential) {
         return ResponseEntity.ok(
         		DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
-                        projectFacade.getUserLikeProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                        projectFacade.getUserLikeProjects(userCredential.userGuid(), PageCommand.of(page, size))
                 )
         );
     }
     
     @GetMapping("/projects/applications")
     public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserApplyProjects(@RequestParam("page") int page, @RequestParam("size") int size, 
-    		@LoginUser AuthenticatedUser authenticatedUser) {
+    		@LoginUser UserCredential userCredential) {
         return ResponseEntity.ok(
         		DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
-                        projectFacade.getUserApplyProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                        projectFacade.getUserApplyProjects(userCredential.userGuid(), PageCommand.of(page, size))
                 )
         );
     }

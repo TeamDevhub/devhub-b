@@ -13,7 +13,7 @@ import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.shared.enums.SuccessCode;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
 
@@ -88,17 +88,16 @@ class AuthControllerTest {
     @DisplayName("로그아웃에_성공하면_LOGOUT_SUCCESS_코드를_확인할_수_있다")
     void canVerifyCodeWhenLogoutSucceed() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(
+        UserCredential userCredential = new UserCredential(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
-                TEST_PASSWORD_1,
                 UserRole.USER
         );
 
         doNothing().when(authFacade).logout(TEST_USER_GUID_1);
 
         // when
-        ResponseEntity<DataApiResponseDto<Void>> response = authController.logout(authenticatedUser);
+        ResponseEntity<DataApiResponseDto<Void>> response = authController.logout(userCredential);
 
         // then
         assertThat(response.getBody()).isNotNull();

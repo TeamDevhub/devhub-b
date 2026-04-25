@@ -46,8 +46,6 @@ class UserQueryDaoImplTest {
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
                 .userGuid(randomGuid1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
@@ -59,8 +57,6 @@ class UserQueryDaoImplTest {
 
         UserEntity userEntity2 = UserEntity.builder()
                 .userGuid(randomGuid2)
-                .email(TEST_EMAIL_2)
-                .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
@@ -93,8 +89,6 @@ class UserQueryDaoImplTest {
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
                 .userGuid(randomGuid1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
@@ -106,8 +100,6 @@ class UserQueryDaoImplTest {
 
         UserEntity userEntity2 = UserEntity.builder()
                 .userGuid(randomGuid2)
-                .email(TEST_EMAIL_2)
-                .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
@@ -140,8 +132,6 @@ class UserQueryDaoImplTest {
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
                 .userGuid(randomGuid1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
@@ -153,8 +143,6 @@ class UserQueryDaoImplTest {
 
         UserEntity userEntity2 = UserEntity.builder()
                 .userGuid(randomGuid2)
-                .email(TEST_EMAIL_2)
-                .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
@@ -189,8 +177,6 @@ class UserQueryDaoImplTest {
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
                 .userGuid(randomGuid1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
@@ -202,8 +188,6 @@ class UserQueryDaoImplTest {
 
         UserEntity userEntity2 = UserEntity.builder()
                 .userGuid(randomGuid2)
-                .email(TEST_EMAIL_2)
-                .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)

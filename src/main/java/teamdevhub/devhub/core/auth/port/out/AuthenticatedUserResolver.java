@@ -1,8 +1,8 @@
 package teamdevhub.devhub.core.auth.port.out;
 
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 public interface AuthenticatedUserResolver {
 
-    AuthenticatedUser getAuthenticatedUser(String email, String rawPassword);
+    UserCredential getAuthenticatedUser(String email, String rawPassword);
 }

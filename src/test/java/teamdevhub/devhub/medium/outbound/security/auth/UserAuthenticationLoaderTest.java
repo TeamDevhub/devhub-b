@@ -5,11 +5,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import teamdevhub.devhub.core.auth.domain.vo.user.EmailUserCredential;
+import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
 import teamdevhub.devhub.outbound.security.auth.UserAuthenticationLoader;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
-import teamdevhub.devhub.core.user.port.out.UserRepository;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,50 +23,57 @@ public class UserAuthenticationLoaderTest {
 
     private UserAuthenticationLoader userAuthenticationLoader;
 
-    private UserRepository userRepository;
+    private EmailUserCredentialRepository emailUserCredentialRepository;
 
     @BeforeEach
     public void init() {
-        userRepository = mock(UserRepository.class);
-
-        userAuthenticationLoader = new UserAuthenticationLoader(userRepository);
+        emailUserCredentialRepository = mock(EmailUserCredentialRepository.class);
+        userAuthenticationLoader = new UserAuthenticationLoader(emailUserCredentialRepository);
     }
 
     @Test
     @DisplayName("존재하는_이메일이면_UserAuthentication_을_반환한다")
     void returnUserAuthenticationIfEmailExists() {
         // given
-        AuthenticatedUser user = new AuthenticatedUser(
+        EmailUserCredential emailUserCredential = new EmailUserCredential(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
                 UserRole.USER
         );
-        when(userRepository.findAuthenticatedUserByEmail(TEST_EMAIL_1)).thenReturn(user);
+
+        when(emailUserCredentialRepository.findByEmail(TEST_EMAIL_1))
+                .thenReturn(Optional.of(emailUserCredential));
 
         // when
         UserDetails details = userAuthenticationLoader.loadUserByUsername(TEST_EMAIL_1);
 
         // then
         assertThat(details).isInstanceOf(UserAuthentication.class);
+
         UserAuthentication userAuthentication = (UserAuthentication) details;
-        assertThat(userAuthentication.getUser()).isEqualTo(user);
+
+        UserCredential expected = UserCredential.of(
+                TEST_USER_GUID_1,
+                TEST_EMAIL_1,
+                UserRole.USER
+        );
+
+        assertThat(userAuthentication.getUser()).isEqualTo(expected);
         assertThat(userAuthentication.getUsername()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(userAuthentication.getPassword()).isEqualTo(TEST_PASSWORD_1);
     }
 
     @Test
-    @DisplayName("존재하지_않는_이메일이면_UsernameNotFoundException_가_발생한다")
-    void throwUsernameNotFoundExceptionIfEmailNotExists() {
+    @DisplayName("존재하지_않는_이메일이면_UsernameNotFoundException_발생")
+    void throwExceptionIfEmailNotExists() {
         // given
+        when(emailUserCredentialRepository.findByEmail("notfound@example.com"))
+                .thenReturn(Optional.empty());
 
-        // when
-        when(userRepository.findAuthenticatedUserByEmail("notfound@example.com"))
-                .thenThrow(new UsernameNotFoundException("User not found"));
-
-
-        // then
-        assertThrows(UsernameNotFoundException.class, () -> userAuthenticationLoader.loadUserByUsername("notfound@example.com"));
-        verify(userRepository).findAuthenticatedUserByEmail("notfound@example.com");
+        // when & then
+        assertThrows(
+                UsernameNotFoundException.class,
+                () -> userAuthenticationLoader.loadUserByUsername("notfound@example.com")
+        );
     }
 }

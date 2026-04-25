@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import teamdevhub.devhub.api.terms.model.AgreeTermsRequestDto;
 import teamdevhub.devhub.api.user.model.SignupOauthRequestDto;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 
@@ -36,6 +37,12 @@ public class SignupOauthRequestDtoTest {
                 .introduction("안녕하세요")
                 .positionList(List.of("BACKEND"))
                 .skillList(List.of("JAVA", "SPRING"))
+                .termsAgreementList(List.of(
+                        AgreeTermsRequestDto.builder()
+                                .termsGuid("TERMS1")
+                                .agreed(true)
+                                .build()
+                ))
                 .build();
 
         // when

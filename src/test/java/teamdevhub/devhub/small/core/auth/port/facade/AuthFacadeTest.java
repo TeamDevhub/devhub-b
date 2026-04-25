@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticatedUserUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeUserCredentialUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeUserLoginUseCase;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
@@ -17,18 +18,18 @@ public class AuthFacadeTest {
 
     private AuthFacade authFacade;
 
-    private FakeAuthenticatedUserUseCase authenticatedUserUseCase;
+    private FakeUserCredentialUseCase userCredentialUseCase;
     private FakeAuthenticationUseCase authenticationUseCase;
     private FakeUserLoginUseCase userLoginUseCase;
 
     @BeforeEach
     void init() {
-        authenticatedUserUseCase = new FakeAuthenticatedUserUseCase();
+        userCredentialUseCase = new FakeUserCredentialUseCase();
         authenticationUseCase = new FakeAuthenticationUseCase();
         userLoginUseCase = new FakeUserLoginUseCase();
 
         authFacade = new AuthFacade(
-                authenticatedUserUseCase,
+                userCredentialUseCase,
                 authenticationUseCase,
                 userLoginUseCase
         );

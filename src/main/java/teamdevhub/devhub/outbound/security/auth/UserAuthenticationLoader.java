@@ -1,22 +1,34 @@
 package teamdevhub.devhub.outbound.security.auth;
 
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import teamdevhub.devhub.core.user.port.out.UserRepository;
+import teamdevhub.devhub.core.auth.domain.vo.user.EmailUserCredential;
+import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 @Service
 @RequiredArgsConstructor
 public class UserAuthenticationLoader implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final EmailUserCredentialRepository emailUserCredentialRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AuthenticatedUser authenticatedUser = userRepository.findAuthenticatedUserByEmail(email);
-        return new UserAuthentication(authenticatedUser);
+    public UserDetails loadUserByUsername(String email) {
+
+        EmailUserCredential emailUserCredential =
+                emailUserCredentialRepository.findByEmail(email)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+
+        UserCredential userCredential = UserCredential.of(
+                emailUserCredential.userGuid(),
+                emailUserCredential.email(),
+                emailUserCredential.userRole()
+        );
+
+        return new UserAuthentication(userCredential);
     }
 }

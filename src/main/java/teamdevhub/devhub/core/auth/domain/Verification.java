@@ -2,8 +2,8 @@ package teamdevhub.devhub.core.auth.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationMessage;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
 

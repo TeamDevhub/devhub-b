@@ -11,7 +11,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.hasParameterAnnotation(LoginUser.class) && methodParameter.getParameterType().equals(AuthenticatedUser.class);
+        return methodParameter.hasParameterAnnotation(LoginUser.class) && methodParameter.getParameterType().equals(UserCredential.class);
     }
 
     @Override
@@ -42,8 +42,8 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
             return userAuthentication.getUser();
         }
 
-        if (principal instanceof AuthenticatedUser authenticatedUser) {
-            return authenticatedUser;
+        if (principal instanceof UserCredential userCredential) {
+            return userCredential;
         }
 
         throw AuthRuleException.of(ErrorCode.USER_NOT_FOUND);

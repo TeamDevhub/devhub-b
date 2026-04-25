@@ -7,9 +7,9 @@ import teamdevhub.devhub.core.auth.application.service.verification.IssuedVerifi
 import teamdevhub.devhub.core.common.provider.TimeProvider;
 import teamdevhub.devhub.core.auth.port.out.verification.VerificationCodeProvider;
 import teamdevhub.devhub.core.auth.domain.Verification;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationMessage;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 @Component
 @RequiredArgsConstructor

@@ -3,7 +3,7 @@ package teamdevhub.devhub.outbound.auth.adapter.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import teamdevhub.devhub.outbound.common.persistence.jpa.converter.BooleanToYNConverter;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import java.time.LocalDateTime;
 

@@ -27,7 +27,7 @@ public class ApplicationMapper {
 			.statusCd(applicationEntity.getStatusCd())
 			.isCanceled(applicationEntity.isCanceled())
 			.userName(applicantEntity.getUsername())
-			.email(applicantEntity.getEmail())
+			//.email(applicantEntity.getEmail())
 			.mannerDegree(applicantEntity.getMannerDegree())
 			.userSkillList(userSkillList)
 			.positionCd(requirementEntity.getPositionCd())
