@@ -1,6 +1,6 @@
 package teamdevhub.devhub.fake.pure.application.port.out.auth;
 
-import teamdevhub.devhub.core.auth.domain.vo.user.EmailUserCredential;
+import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
 
 import java.util.HashMap;
@@ -12,9 +12,9 @@ public class FakeEmailUserCredentialRepository implements EmailUserCredentialRep
     private final Map<String, EmailUserCredential> emailStore = new HashMap<>();
     private final Map<String, EmailUserCredential> userGuidStore = new HashMap<>();
 
-    public void save(EmailUserCredential credential) {
-        emailStore.put(credential.email(), credential);
-        userGuidStore.put(credential.userGuid(), credential);
+    public void save(EmailUserCredential emailUserCredential) {
+        emailStore.put(emailUserCredential.getEmail(), emailUserCredential);
+        userGuidStore.put(emailUserCredential.getUserGuid(), emailUserCredential);
     }
 
     @Override

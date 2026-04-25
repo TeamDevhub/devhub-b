@@ -8,10 +8,10 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.hasParameterAnnotation(LoginUser.class) && methodParameter.getParameterType().equals(UserCredential.class);
+        return methodParameter.hasParameterAnnotation(LoginUser.class) && methodParameter.getParameterType().equals(AuthenticatedUser.class);
     }
 
     @Override
@@ -42,8 +42,8 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
             return userAuthentication.getUser();
         }
 
-        if (principal instanceof UserCredential userCredential) {
-            return userCredential;
+        if (principal instanceof AuthenticatedUser authenticatedUser) {
+            return authenticatedUser;
         }
 
         throw AuthRuleException.of(ErrorCode.USER_NOT_FOUND);

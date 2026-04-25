@@ -16,7 +16,7 @@ import teamdevhub.devhub.api.board.model.UpdateCommentRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.board.port.in.Facade.CommentFacade;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 
 @RestController
 @RequestMapping("/boards")
@@ -26,9 +26,9 @@ public class CommentController {
 	private final CommentFacade commentFacade;
 	
 	@PostMapping("/{boardGuid}/comments")
-	public ResponseEntity<DataApiResponseDto<Void>> createComment(@RequestBody CreateCommentRequestDto createcommentRequestDto, @LoginUser UserCredential userCredential,
+	public ResponseEntity<DataApiResponseDto<Void>> createComment(@RequestBody CreateCommentRequestDto createcommentRequestDto, @LoginUser AuthenticatedUser authenticatedUser,
 			@PathVariable("boardGuid") String boardGuid) {
-		return ResponseEntity.ok(commentFacade.createComment(createcommentRequestDto.toCommand(userCredential.userGuid(), boardGuid)));
+		return ResponseEntity.ok(commentFacade.createComment(createcommentRequestDto.toCommand(authenticatedUser.userGuid(), boardGuid)));
 	}
 	
 	@PutMapping("/{boardGuid}/comments/{commentGuid}")

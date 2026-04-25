@@ -8,9 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.core.auth.domain.vo.user.EmailUserCredential;
+import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 
 import java.util.List;
 
@@ -29,14 +29,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         EmailUserCredential emailUserCredential = emailUserCredentialRepository.findByEmail(email).orElseThrow();
 
-        if (!passwordEncoder.matches(rawPassword, emailUserCredential.password())) {
+        if (!passwordEncoder.matches(rawPassword, emailUserCredential.getPassword())) {
             throw new BadCredentialsException("invalid password");
         }
 
-        UserCredential user = UserCredential.of(
-                emailUserCredential.userGuid(),
-                emailUserCredential.email(),
-                emailUserCredential.userRole()
+        AuthenticatedUser user = AuthenticatedUser.of(
+                emailUserCredential.getUserGuid(),
+                emailUserCredential.getEmail(),
+                emailUserCredential.getUserRole()
         );
 
         return new UsernamePasswordAuthenticationToken(

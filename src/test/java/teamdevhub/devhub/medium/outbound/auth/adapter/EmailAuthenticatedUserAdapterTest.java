@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.core.auth.domain.vo.user.EmailUserCredential;
+import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.outbound.auth.adapter.EmailUserCredentialAdapter;
 import teamdevhub.devhub.outbound.auth.adapter.entity.EmailCredentialEntity;
@@ -19,7 +19,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 @SpringBootTest
 @Transactional
-class EmailUserCredentialAdapterTest {
+class EmailAuthenticatedUserAdapterTest {
 
     @Autowired
     private EmailUserCredentialAdapter emailUserCredentialAdapter;
@@ -50,9 +50,9 @@ class EmailUserCredentialAdapterTest {
 
         // then
         assertThat(result).isPresent();
-        assertThat(result.get().email()).isEqualTo(TEST_EMAIL_1);
-        assertThat(result.get().userGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(result.get().userRole()).isEqualTo(UserRole.USER);
+        assertThat(result.get().getEmail()).isEqualTo(TEST_EMAIL_1);
+        assertThat(result.get().getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(result.get().getUserRole()).isEqualTo(UserRole.USER);
     }
 
     @Test
@@ -83,9 +83,9 @@ class EmailUserCredentialAdapterTest {
 
         // then
         assertThat(result).isPresent();
-        assertThat(result.get().userGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(result.get().email()).isEqualTo(TEST_EMAIL_1);
-        assertThat(result.get().password()).isEqualTo(TEST_PASSWORD_1);
+        assertThat(result.get().getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(result.get().getEmail()).isEqualTo(TEST_EMAIL_1);
+        assertThat(result.get().getPassword()).isEqualTo(TEST_PASSWORD_1);
     }
 
     @Test
@@ -116,7 +116,7 @@ class EmailUserCredentialAdapterTest {
 
         // then
         assertThat(result).isPresent();
-        assertThat(result.get().userRole()).isEqualTo(UserRole.ADMIN);
-        assertThat(result.get().userGuid()).isEqualTo(ADMIN_USER_GUID_1);
+        assertThat(result.get().getUserRole()).isEqualTo(UserRole.ADMIN);
+        assertThat(result.get().getUserGuid()).isEqualTo(ADMIN_USER_GUID_1);
     }
 }

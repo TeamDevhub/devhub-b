@@ -30,7 +30,7 @@ public class OauthAuthFacade {
         OauthUserResult oauthUserResult = oauthResolveUseCase.findOrRequireSignup(oauthUser);
 
         if (oauthUserResult.loginAvailable()) {
-            AuthResult authResult = authenticationUseCase.login(oauthUserResult.userCredential());
+            AuthResult authResult = authenticationUseCase.login(oauthUserResult.authenticatedUser());
             return OauthAuthResult.loggedIn(authResult);
         }
 

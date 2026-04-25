@@ -27,7 +27,7 @@ Claude Code CLI 환경에서는 `Bash` 도구를 직접 사용한다.
 ./gradlew test --tests "teamdevhub.devhub.medium.*"
 
 # 특정 테스트 클래스
-./gradlew test --tests "teamdevhub.devhub.small.core.auth.application.service.UserCredentialServiceTest"
+./gradlew test --tests "teamdevhub.devhub.small.core.auth.application.service.AuthenticatedUserServiceTest"
 
 # 전체 빌드
 ./gradlew build

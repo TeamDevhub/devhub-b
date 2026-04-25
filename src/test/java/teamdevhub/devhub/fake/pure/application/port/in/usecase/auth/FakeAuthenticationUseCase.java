@@ -1,22 +1,22 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.auth;
 
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
 
 public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     private String revokedUserGuid;
-    private UserCredential lastLoginUser;
+    private AuthenticatedUser lastLoginUser;
 
     @Override
-    public AuthResult login(UserCredential userCredential) {
-        this.lastLoginUser = userCredential;
+    public AuthResult login(AuthenticatedUser authenticatedUser) {
+        this.lastLoginUser = authenticatedUser;
         return AuthResult.of("access-token", "refresh-token");
     }
 
     @Override
-    public AuthResult reissueAccessToken(UserCredential userCredential) {
+    public AuthResult reissueAccessToken(AuthenticatedUser authenticatedUser) {
         return AuthResult.ofReissue("new-access-token");
     }
 
@@ -29,7 +29,7 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
         return revokedUserGuid;
     }
 
-    public UserCredential getLastLoginUser() {
+    public AuthenticatedUser getLastLoginUser() {
         return lastLoginUser;
     }
 }

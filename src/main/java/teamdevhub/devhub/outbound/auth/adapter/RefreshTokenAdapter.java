@@ -20,9 +20,7 @@ public class RefreshTokenAdapter implements RefreshTokenRepository {
         jpaRefreshTokenRepository.findByUserGuid(refreshToken.userGuid())
                 .ifPresentOrElse(
                         refreshTokenEntity -> refreshTokenEntity.rotate(refreshToken.token()),
-                        () -> jpaRefreshTokenRepository.save(
-                                RefreshTokenMapper.toEntity(refreshToken)
-                        )
+                        () -> jpaRefreshTokenRepository.save(RefreshTokenMapper.toEntity(refreshToken))
                 );
     }
 

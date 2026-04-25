@@ -68,16 +68,6 @@ public class UserProfileService implements UserProfileUseCase {
         }
     }
 
-//    @Override
-//    public void updatePassword(UpdatePasswordCommand updatePasswordCommand) {
-//        User user = userRepository.findByUserGuid(updatePasswordCommand.userGuid());
-//        if (!encodedPasswordProvider.matches(updatePasswordCommand.currentPassword(), user.getPassword())) {
-//            throw BusinessRuleException.of(ErrorCode.USER_PASSWORD_FAIL);
-//        }
-//        user.changePassword(encodedPasswordProvider.encode(updatePasswordCommand.newPassword()));
-//        userRepository.updateUserProfile(user);
-//    }
-
     private User getUserWithPositionsAndSkills(String userGuid) {
         User user = userRepository.findByUserGuid(userGuid);
         Set<UserPosition> userPositions = userPositionRepository.findByUserGuid(userGuid);

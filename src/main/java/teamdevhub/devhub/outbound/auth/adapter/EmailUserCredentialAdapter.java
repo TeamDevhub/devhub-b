@@ -2,7 +2,7 @@ package teamdevhub.devhub.outbound.auth.adapter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.core.auth.domain.vo.user.EmailUserCredential;
+import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
 import teamdevhub.devhub.outbound.auth.adapter.entity.EmailCredentialEntity;
 import teamdevhub.devhub.outbound.auth.persistence.JpaEmailCredentialRepository;
@@ -27,12 +27,7 @@ public class EmailUserCredentialAdapter implements EmailUserCredentialRepository
                 .map(this::toDomain);
     }
 
-    private EmailUserCredential toDomain(EmailCredentialEntity entity) {
-        return new EmailUserCredential(
-                entity.getUserGuid(),
-                entity.getEmail(),
-                entity.getPassword(),
-                entity.getUserRole()
-        );
+    private EmailUserCredential toDomain(EmailCredentialEntity emailCredentialEntity) {
+        return new EmailUserCredential(emailCredentialEntity.getUserGuid(), emailCredentialEntity.getEmail(), emailCredentialEntity.getPassword(), emailCredentialEntity.getUserRole());
     }
 }

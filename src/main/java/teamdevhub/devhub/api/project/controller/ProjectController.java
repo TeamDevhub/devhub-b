@@ -21,12 +21,12 @@ import teamdevhub.devhub.api.project.model.UpdateProjectRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectLikeCommand;
 import teamdevhub.devhub.core.project.port.in.facade.ProjectFacade;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailWithFormResponseDto;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @RestController
@@ -37,8 +37,8 @@ public class ProjectController {
 	private final ProjectFacade projectFacade;
 	
 	@PostMapping
-	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto, @LoginUser UserCredential userCredential) {
-		projectFacade.createProject(createProjectRequestDto.toCommand(userCredential.userGuid()));
+	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid()));
         return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
     }
 
@@ -52,12 +52,12 @@ public class ProjectController {
 	 */
 	@GetMapping
     public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto,
-    		@RequestParam("page") int page, @RequestParam("size") int size,  @AuthenticationPrincipal UserCredential user) {
+    		@RequestParam("page") int page, @RequestParam("size") int size,  @AuthenticationPrincipal AuthenticatedUser user) {
         return ResponseEntity.ok(projectFacade.getProjectList(searchProjectRequestDto.toSearchProjectListCommand(), PageCommand.of(page, size), user));
     }
 	
 	@GetMapping("/{projectGuid}")
-	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable("projectGuid") String projectGuid, @AuthenticationPrincipal UserCredential user) {
+	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable("projectGuid") String projectGuid, @AuthenticationPrincipal AuthenticatedUser user) {
 		ProjectDetailResponseDto responseDto = projectFacade.getProjectDetail(projectGuid, user);
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, responseDto)
@@ -76,7 +76,7 @@ public class ProjectController {
 	
 	@PutMapping("/{projectGuid}")
 	public ResponseEntity<DataApiResponseDto<Void>> updateProject(@PathVariable("projectGuid") String projectGuid,
-			@RequestBody UpdateProjectRequestDto updateProjectRequestDto, @LoginUser UserCredential userCredential) {
+			@RequestBody UpdateProjectRequestDto updateProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
 		projectFacade.updateProject(projectGuid, updateProjectRequestDto.toCommand());
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS)
@@ -93,8 +93,8 @@ public class ProjectController {
 	}
 	
 	@PostMapping("/{projectGuid}/likes")
-	public ResponseEntity<DataApiResponseDto<Void>> toggleProjectLike(@PathVariable("projectGuid") String projectGuid, @LoginUser UserCredential userCredential) {
-		projectFacade.toggleProjectLike(CreateProjectLikeCommand.toCreateProjectLikeCommand(projectGuid, userCredential.userGuid()));
+	public ResponseEntity<DataApiResponseDto<Void>> toggleProjectLike(@PathVariable("projectGuid") String projectGuid, @LoginUser AuthenticatedUser authenticatedUser) {
+		projectFacade.toggleProjectLike(CreateProjectLikeCommand.toCreateProjectLikeCommand(projectGuid, authenticatedUser.userGuid()));
 		return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
 	}
 }

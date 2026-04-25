@@ -1,46 +1,50 @@
-# Prompt: 리팩토링 에이전트 실행
+# Prompt: Run Refactor Agent
 
-## 사용 방법
+## Prompt
 
-이 파일의 내용을 Claude에게 붙여넣어 리팩토링 에이전트를 실행한다.
-`[대상]`과 `[목표]` 부분을 구체적으로 채운다.
+Act as the Refactor Agent and safely refactor [Target].
 
----
+Refer to the following files:
 
-## 프롬프트
+- .claude/agents/refactor-agent.md
+- .claude/skills/refactor-safely.md
+- .claude/rules/refactoring.md
+- .claude/rules/things-to-avoid.md
 
-```
-Refactor Agent 역할을 맡아 [대상]을 안전하게 리팩토링해줘.
+## Scope Restriction
 
-다음 파일들을 참조해:
-- .claude/agents/refactor-agent.md — 에이전트 역할과 원칙
-- .claude/skills/refactor-safely.md — 리팩토링 절차
-- .claude/rules/refactoring.md — 리팩토링 규칙
-- .claude/rules/things-to-avoid.md — 금지 패턴
+This task is limited to the following directories only:
 
-리팩토링 목표: [예: 서비스 계층에 있는 도메인 로직을 도메인 클래스로 이동]
+- src/main/java/.../auth/**
+- src/main/java/.../user/**
+- src/test/java/.../auth/**
+- src/test/java/.../user/**
 
-작업 순서:
-1. 대상 파일을 읽고 문제점을 목록화한다
-2. 영향 범위를 Grep으로 확인한다
-3. 커버하는 테스트가 있는지 확인한다 (없으면 먼저 작성)
-4. 단계적으로 하나의 리팩토링 목표만 처리한다
-5. ./gradlew compileJava 로 컴파일 확인
-6. 관련 테스트를 실행하여 동작 보존 확인
-7. 리팩토링 보고서를 작성한다
+Do not modify files outside this scope.
 
-절대 변경하지 않는 것:
-- 포트 인터페이스 메서드 시그니처
-- 테스트 코드의 assertThat 검증 내용
-- ErrorCode enum 값
+Files outside the scope may be read for reference only.  
+If external changes are required, do not edit them.  
+Instead, include the impact and recommended follow-up actions in the final report.
 
-대상: [파일 경로 또는 클래스명]
-```
+## Refactoring Goal
 
----
+[Example: Remove duplicated logic in the auth service layer]
 
-## 실행 전 체크리스트
+## Workflow
 
-- [ ] 대상 클래스의 현재 테스트 커버리지 확인
-- [ ] 리팩토링 후 깨질 수 있는 테스트 파악
-- [ ] 포트 인터페이스 변경이 수반되는지 여부 확인
+1. Analyze target files within the auth/user directories
+2. List current problems and refactoring opportunities
+3. Check impact scope using grep/search
+4. Verify whether tests exist (if not, create tests only within auth/user scope first)
+5. Perform refactoring incrementally, one goal at a time
+6. Run `./gradlew compileJava`
+7. Run related tests to verify behavior is preserved
+8. Write a final refactoring report
+
+## Strictly Do Not Change
+
+- Port interface method signatures
+- `ErrorCode` enum values
+- Any files outside auth/user directories
+
+Target: [File path or class name inside auth/user]

@@ -5,9 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import teamdevhub.devhub.core.auth.domain.vo.user.EmailUserCredential;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
 
 @Service
 @RequiredArgsConstructor
@@ -23,12 +23,12 @@ public class UserAuthenticationLoader implements UserDetailsService {
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
 
-        UserCredential userCredential = UserCredential.of(
-                emailUserCredential.userGuid(),
-                emailUserCredential.email(),
-                emailUserCredential.userRole()
+        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(
+                emailUserCredential.getUserGuid(),
+                emailUserCredential.getEmail(),
+                emailUserCredential.getUserRole()
         );
 
-        return new UserAuthentication(userCredential);
+        return new UserAuthentication(authenticatedUser);
     }
 }

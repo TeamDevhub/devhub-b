@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
-import teamdevhub.devhub.core.auth.domain.UserCredential;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
 import java.util.Collection;
@@ -18,7 +18,7 @@ public class UserAuthenticationTest {
     @DisplayName("AuthenticatedUser_를_Wrapping_해서_UserDetails_가_반환된다")
     void wrapAuthenticatedUserToUserDetails() {
         // given, when
-        UserCredential user = new UserCredential(
+        AuthenticatedUser user = new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 UserRole.USER
