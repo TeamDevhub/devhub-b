@@ -3,6 +3,7 @@ package teamdevhub.devhub.outbound.board.adapter.mapper;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.outbound.board.adapter.entity.BoardEntity;
+import teamdevhub.devhub.shared.enums.UserStatus;
 
 public class BoardMapper {
 	public static BoardEntity toEntity(Board board) {
@@ -47,5 +48,19 @@ public class BoardMapper {
 				.auditInfo(toAuditInfo(boardEntity))
 				.build();
 	}
+
+	public static Board toAdminBoard(BoardEntity boardEntity, String username, boolean deleted, boolean blocked, Long reportCount) {
+		return Board.builder()
+				.boardGuid(boardEntity.getBoardGuid())
+				.title(boardEntity.getTitle())
+				.categoryCd(boardEntity.getCategoryCd())
+				.userName(username)
+				.userStatus(UserStatus.from(deleted, blocked).getCode())
+				.reportCount(String.valueOf(reportCount))
+				.auditInfo(toAuditInfo(boardEntity))
+				.build();
+	}
+	
+	
 
 }

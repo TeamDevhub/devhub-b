@@ -17,4 +17,6 @@ public class BoardDetailResponseDto {
 	private BoardSummaryResponseDto boardSummaryResponseDto;
 	private List<Comment> commentList;
 	private String userEmail;
+	private boolean isLiked;
+	
 }
