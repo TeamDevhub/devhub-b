@@ -17,7 +17,6 @@ public class UserMapper {
                 .blocked(user.isBlocked())
                 .blockEndDate(user.getBlockEndDate())
                 .deleted(user.isDeleted())
-                .lastLoginDate(user.getLastLoginDate())
                 .build();
     }
 
@@ -32,7 +31,6 @@ public class UserMapper {
                 userEntity.isBlocked(),
                 userEntity.getBlockEndDate(),
                 userEntity.isDeleted(),
-                userEntity.getLastLoginDate(),
                 toAuditInfo(userEntity)
         );
     }

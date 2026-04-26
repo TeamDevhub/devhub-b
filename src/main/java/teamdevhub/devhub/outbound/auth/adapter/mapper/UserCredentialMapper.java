@@ -8,62 +8,63 @@ import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 public class UserCredentialMapper {
 
-    public static AuthenticatedUser toAuthenticatedUser(EmailCredentialEntity entity) {
+    public static AuthenticatedUser toAuthenticatedUser(EmailCredentialEntity emailCredentialEntity) {
         return AuthenticatedUser.of(
-                entity.getUserGuid(),
-                entity.getEmail(),
-                entity.getUserRole()
+                emailCredentialEntity.getUserGuid(),
+                emailCredentialEntity.getEmail(),
+                emailCredentialEntity.getUserRole()
         );
     }
 
-    public static AuthenticatedUser toAuthenticatedUser(OAuthCredentialEntity entity) {
+    public static AuthenticatedUser toAuthenticatedUser(OAuthCredentialEntity oAuthCredentialEntity) {
         return AuthenticatedUser.of(
-                entity.getUserGuid(),
-                entity.getOauthId(),
-                entity.getUserRole()
+                oAuthCredentialEntity.getUserGuid(),
+                oAuthCredentialEntity.getOauthId(),
+                oAuthCredentialEntity.getUserRole()
         );
     }
 
-    public static EmailUserCredential toEmailUserCredential(EmailCredentialEntity entity) {
+    public static EmailUserCredential toEmailUserCredential(EmailCredentialEntity emailCredentialEntity) {
         return new EmailUserCredential(
-                entity.getUserGuid(),
-                entity.getEmail(),
-                entity.getPassword(),
-                entity.getUserRole()
+                emailCredentialEntity.getUserGuid(),
+                emailCredentialEntity.getEmail(),
+                emailCredentialEntity.getPassword(),
+                emailCredentialEntity.getLastLoginDate(),
+                emailCredentialEntity.getUserRole()
         );
     }
 
-    public static EmailCredentialEntity toEmailCredentialEntity(EmailUserCredential domain) {
+    public static EmailCredentialEntity toEmailCredentialEntity(EmailUserCredential emailUserCredential) {
         return EmailCredentialEntity.builder()
-                .userGuid(domain.getUserGuid())
-                .email(domain.getEmail())
-                .password(domain.getPassword())
-                .userRole(domain.getUserRole())
+                .userGuid(emailUserCredential.getUserGuid())
+                .email(emailUserCredential.getEmail())
+                .password(emailUserCredential.getPassword())
+                .userRole(emailUserCredential.getUserRole())
                 .build();
     }
 
     public static EmailCredentialEntity toEmailCredentialEntity(
-            AuthenticatedUser user,
+            AuthenticatedUser authenticatedUser,
             String encryptedPassword
     ) {
         return EmailCredentialEntity.builder()
-                .userGuid(user.userGuid())
-                .email(user.loginId())
+                .userGuid(authenticatedUser.userGuid())
+                .email(authenticatedUser.loginId())
                 .password(encryptedPassword)
-                .userRole(user.userRole())
+                .userRole(authenticatedUser.userRole())
                 .build();
     }
 
     public static OAuthCredentialEntity toOAuthCredentialEntity(
-            AuthenticatedUser user,
+            AuthenticatedUser authenticatedUser,
             VerificationProvider verificationProvider,
             String oauthId
     ) {
         return OAuthCredentialEntity.builder()
-                .userGuid(user.userGuid())
+                .userGuid(authenticatedUser.userGuid())
                 .provider(verificationProvider)
                 .oauthId(oauthId)
-                .userRole(user.userRole())
+                .userRole(authenticatedUser.userRole())
                 .build();
     }
 }

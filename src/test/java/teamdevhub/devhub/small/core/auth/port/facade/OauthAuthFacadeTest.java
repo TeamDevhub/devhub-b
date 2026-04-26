@@ -14,7 +14,7 @@ import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOauthAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOauthResolveUseCase;
-import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeUserLoginUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeLoginPolicyUseCase;
 import teamdevhub.devhub.core.auth.port.in.facade.OauthAuthFacade;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
 
@@ -29,14 +29,14 @@ public class OauthAuthFacadeTest {
     private FakeOauthAuthenticationUseCase oauthAuthenticationUseCase;
     private FakeOauthResolveUseCase oauthResolveUseCase;
     private FakeAuthenticationUseCase authenticationUseCase;
-    private FakeUserLoginUseCase userLoginUseCase;
+    private FakeLoginPolicyUseCase userLoginUseCase;
 
     @BeforeEach
     void init() {
         oauthAuthenticationUseCase = new FakeOauthAuthenticationUseCase();
         oauthResolveUseCase = new FakeOauthResolveUseCase();
         authenticationUseCase = new FakeAuthenticationUseCase();
-        userLoginUseCase = new FakeUserLoginUseCase();
+        userLoginUseCase = new FakeLoginPolicyUseCase();
 
         oauthAuthFacade = new OauthAuthFacade(oauthAuthenticationUseCase, oauthResolveUseCase, authenticationUseCase, userLoginUseCase);
     }

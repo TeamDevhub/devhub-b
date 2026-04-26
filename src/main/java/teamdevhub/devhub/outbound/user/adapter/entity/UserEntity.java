@@ -60,7 +60,4 @@ public class UserEntity extends BaseEntity {
     @Convert(converter = BooleanToYNConverter.class)
     @Column(nullable = false)
     private boolean deleted;
-
-    @Column
-    private LocalDateTime lastLoginDate;
 }

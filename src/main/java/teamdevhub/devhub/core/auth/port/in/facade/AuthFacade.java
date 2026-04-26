@@ -8,7 +8,7 @@ import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
-import teamdevhub.devhub.core.user.port.in.usecase.UserLoginUseCase;
+import teamdevhub.devhub.core.auth.port.in.usecase.LoginPolicyUseCase;
 
 @Service
 @Transactional
@@ -17,13 +17,13 @@ public class AuthFacade {
 
     private final UserCredentialUseCase userCredentialUseCase;
     private final AuthenticationUseCase authenticationUseCase;
-    private final UserLoginUseCase userLoginUseCase;
+    private final LoginPolicyUseCase loginPolicyUseCase;
 
     public AuthResult login(LoginCommand loginCommand) {
         AuthenticatedUser authenticatedUser = userCredentialUseCase.authenticate(loginCommand);
-        userLoginUseCase.validateLoginUser(authenticatedUser.userGuid());
+        loginPolicyUseCase.validateLoginUser(authenticatedUser.userGuid());
         AuthResult authResult = authenticationUseCase.login(authenticatedUser);
-        userLoginUseCase.updateLastLoginDateTime(authenticatedUser.userGuid());
+        loginPolicyUseCase.updateLastLoginDateTime(authenticatedUser.userGuid());
         return authResult;
     }
 

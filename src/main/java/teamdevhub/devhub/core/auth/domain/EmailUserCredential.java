@@ -6,6 +6,8 @@ import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class EmailUserCredential {
 
@@ -13,16 +15,19 @@ public class EmailUserCredential {
     private final String email;
     private String password;
     private final UserRole userRole;
+    private LocalDateTime lastLoginDate;
 
     public EmailUserCredential(
             String userGuid,
             String email,
             String password,
+            LocalDateTime lastLoginDate,
             UserRole userRole
     ) {
         this.userGuid = userGuid;
         this.email = email;
         this.password = password;
+        this.lastLoginDate = lastLoginDate;
         this.userRole = userRole;
     }
 
@@ -36,7 +41,7 @@ public class EmailUserCredential {
         this.password = encodedPassword;
     }
 
-    public AuthenticatedUser toAuthenticatedUser() {
-        return AuthenticatedUser.of(userGuid, email, userRole);
+    public void markLoginSuccess() {
+        this.lastLoginDate = LocalDateTime.now();
     }
 }

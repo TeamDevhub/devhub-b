@@ -2,7 +2,7 @@ package teamdevhub.devhub.small.core.auth.domain.vo.user;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.core.auth.domain.vo.user.OAuthUserCredential;
+import teamdevhub.devhub.core.auth.domain.OAuthUserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 

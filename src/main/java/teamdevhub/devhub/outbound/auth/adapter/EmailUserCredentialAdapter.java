@@ -28,6 +28,6 @@ public class EmailUserCredentialAdapter implements EmailUserCredentialRepository
     }
 
     private EmailUserCredential toDomain(EmailCredentialEntity emailCredentialEntity) {
-        return new EmailUserCredential(emailCredentialEntity.getUserGuid(), emailCredentialEntity.getEmail(), emailCredentialEntity.getPassword(), emailCredentialEntity.getUserRole());
+        return new EmailUserCredential(emailCredentialEntity.getUserGuid(), emailCredentialEntity.getEmail(), emailCredentialEntity.getPassword(), emailCredentialEntity.getLastLoginDate(), emailCredentialEntity.getUserRole());
     }
 }

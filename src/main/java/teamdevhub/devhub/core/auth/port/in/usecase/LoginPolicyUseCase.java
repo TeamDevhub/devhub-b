@@ -1,6 +1,6 @@
-package teamdevhub.devhub.core.user.port.in.usecase;
+package teamdevhub.devhub.core.auth.port.in.usecase;
 
-public interface UserLoginUseCase {
+public interface LoginPolicyUseCase {
 
     void updateLastLoginDateTime(String userGuid);
     void validateLoginUser(String userGuid);
