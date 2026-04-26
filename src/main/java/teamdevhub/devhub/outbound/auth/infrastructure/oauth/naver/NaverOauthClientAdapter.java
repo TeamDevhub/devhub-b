@@ -8,7 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthHttpClient;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.BearerAuthHeaderProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.DefaultHeaderProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HttpResponse;

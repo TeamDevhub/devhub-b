@@ -18,7 +18,7 @@ import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
 @Service
@@ -65,9 +65,10 @@ public class UserCredentialService implements UserCredentialUseCase {
     @Override
     public AuthenticatedUser getUserForReissue(String refreshToken) {
         String userGuid = tokenParseProvider.getRefreshTokenInfo(refreshToken);
-        RefreshToken savedRefreshToken = refreshTokenRepository.findByUserGuid(userGuid);
+        RefreshToken savedRefreshToken = refreshTokenRepository.findByUserGuid(userGuid)
+                .orElseThrow(() -> BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID));
 
-        if (savedRefreshToken == null || !savedRefreshToken.token().equals(refreshToken)) {
+        if (!savedRefreshToken.token().equals(refreshToken)) {
             throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
         }
 

@@ -35,10 +35,10 @@ public class AuthResultTest {
     }
 
     @Test
-    @DisplayName("ofReissue_로_생성한_AuthResult_는_hasRefreshToken_이_false_다")
-    void hasRefreshToken_whenCreatedWithReissue_returnsFalse() {
+    @DisplayName("refreshToken_이_없으면_hasRefreshToken_이_false_다")
+    void hasRefreshToken_whenNoRefreshToken_returnsFalse() {
         // given
-        AuthResult authResult = AuthResult.ofReissue("access-token");
+        AuthResult authResult = AuthResult.of("access-token", null);
 
         // when, then
         assertThat(authResult.hasRefreshToken()).isFalse();

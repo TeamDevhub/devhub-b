@@ -8,7 +8,7 @@ import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.terms.port.in.usecase.TermsUseCase;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.user.port.in.usecase.UserSignupUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;

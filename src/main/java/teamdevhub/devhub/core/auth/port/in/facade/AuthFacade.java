@@ -21,6 +21,7 @@ public class AuthFacade {
 
     public AuthResult login(LoginCommand loginCommand) {
         AuthenticatedUser authenticatedUser = userCredentialUseCase.authenticate(loginCommand);
+        userLoginUseCase.validateLoginUser(authenticatedUser.userGuid());
         AuthResult authResult = authenticationUseCase.login(authenticatedUser);
         userLoginUseCase.updateLastLoginDateTime(authenticatedUser.userGuid());
         return authResult;

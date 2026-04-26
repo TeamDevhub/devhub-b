@@ -195,6 +195,21 @@ public class User {
         return UserSkillChangeResult.unchanged(this.skills);
     }
 
+    public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
+        this.positions = new HashSet<>(positions);
+        this.skills = new HashSet<>(skills);
+    }
+
+    public void assertActive() {
+        if (this.deleted) {
+            throw DomainRuleException.of(ErrorCode.USER_WITHDRAWN);
+        }
+
+        if (this.blocked) {
+            throw DomainRuleException.of(ErrorCode.USER_BLOCKED);
+        }
+    }
+
     private <T> boolean hasInvalidItems(Set<T> items, Function<T, String> codeExtractor) {
         if (items == null || items.isEmpty()) {
             return true;
@@ -203,11 +218,6 @@ public class User {
             String code = codeExtractor.apply(item);
             return code == null || code.isBlank();
         });
-    }
-
-    public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
-        this.positions = new HashSet<>(positions);
-        this.skills = new HashSet<>(skills);
     }
 
     private boolean hasText(String value) {

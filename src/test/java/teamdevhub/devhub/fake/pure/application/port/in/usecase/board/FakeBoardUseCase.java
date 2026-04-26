@@ -1,6 +1,7 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.board;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import teamdevhub.devhub.core.board.domain.Board;
@@ -23,7 +24,7 @@ public class FakeBoardUseCase implements BoardUseCase{
     }
 
     @Override
-    public Board detailBoard(String boardGuid, Boolean cookieResult) {
+    public Board detailBoard(String boardGuid, Boolean cookieResult, String userGuid) {
         return null;
     }
 
@@ -38,16 +39,11 @@ public class FakeBoardUseCase implements BoardUseCase{
     }
 
     @Override
-    public void deleteBoard(String boardGuid) {
+    public void deleteBoard(List<String> boardGuids) {
 
     }
 
     public boolean isCalled() {
     	return called;
-    }
-    
-    @Override
-    public void deleteBoard(String boardGuid) {
-    	
     }
 }

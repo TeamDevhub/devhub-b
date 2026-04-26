@@ -10,7 +10,7 @@ import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.pure.application.port.out.auth.FakeUserCredentialRepository;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTokenParseProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 

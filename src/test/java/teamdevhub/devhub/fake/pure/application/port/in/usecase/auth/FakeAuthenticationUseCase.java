@@ -17,7 +17,7 @@ public class FakeAuthenticationUseCase implements AuthenticationUseCase {
 
     @Override
     public AuthResult reissueAccessToken(AuthenticatedUser authenticatedUser) {
-        return AuthResult.ofReissue("new-access-token");
+        return AuthResult.of("new-access-token", "new-refresh-token");
     }
 
     @Override

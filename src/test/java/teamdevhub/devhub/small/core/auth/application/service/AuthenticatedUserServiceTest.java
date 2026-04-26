@@ -16,7 +16,7 @@ import teamdevhub.devhub.fake.pure.application.provider.FakeAuthenticatedUserRes
 import teamdevhub.devhub.fake.pure.application.provider.FakeEncodedPasswordProvider;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTokenParseProvider;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
