@@ -3,9 +3,9 @@ package teamdevhub.devhub.small.core.auth.application.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import teamdevhub.devhub.core.auth.application.service.UserCredentialService;
 import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
@@ -16,7 +16,6 @@ import teamdevhub.devhub.fake.pure.application.provider.FakeAuthenticatedUserRes
 import teamdevhub.devhub.fake.pure.application.provider.FakeEncodedPasswordProvider;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTokenParseProvider;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 

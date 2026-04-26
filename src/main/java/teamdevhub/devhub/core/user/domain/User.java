@@ -170,7 +170,7 @@ public class User {
     }
 
     public UserPositionChangeResult changePositions(Set<UserPosition> newPositions) {
-        if (hasInvalidItems(newPositions, p -> p.positionCd())) {
+        if (hasInvalidItems(newPositions, UserPosition::positionCd)) {
             return UserPositionChangeResult.unchanged(this.positions);
         }
         if (!this.positions.equals(newPositions)) {
@@ -183,7 +183,7 @@ public class User {
     }
 
     public UserSkillChangeResult changeSkills(Set<UserSkill> newSkills) {
-        if (hasInvalidItems(newSkills, s -> s.skillCd())) {
+        if (hasInvalidItems(newSkills, UserSkill::skillCd)) {
             return UserSkillChangeResult.unchanged(this.skills);
         }
         if (!this.skills.equals(newSkills)) {
