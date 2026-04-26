@@ -55,14 +55,16 @@ public class BoardService implements BoardUseCase {
             isLiked = boardLikeRepository.existsByBoardGuidAndUserGuid(boardGuid, userGuid);
         }
         
-        boardDetail.fillDetailSubquery(boardLikes.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
-        		boardComments.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
+        boardDetail.fillDetailSubquery(
+				boardLikes.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
+				boardComments.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
         		user.getUsername(),
 				/**
 				 * 인증테이블 분리에 따라 추후 변경 필요
 				 */
         		user.getUserGuid(),
-        		commentList
+        		commentList,
+				isLiked
         		);
         
         return boardDetail;

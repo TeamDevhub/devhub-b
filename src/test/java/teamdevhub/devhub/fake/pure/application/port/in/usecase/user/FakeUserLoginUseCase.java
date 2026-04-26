@@ -38,8 +38,20 @@ public class FakeUserLoginUseCase implements UserLoginUseCase {
         updatedLoginUsers.add(userGuid);
     }
 
+    @Override
+    public void validateLoginUser(String userGuid) {
+        User user = store.get(userGuid);
+        if (user != null) {
+            user.assertActive();
+        }
+    }
+
     public boolean isLoginTimeUpdated(String userGuid) {
         return updatedLoginUsers.contains(userGuid);
+    }
+
+    public void givenUser(User user) {
+        store.put(user.getUserGuid(), user);
     }
 
 }

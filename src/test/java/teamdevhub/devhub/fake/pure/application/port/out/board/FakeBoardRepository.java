@@ -1,6 +1,7 @@
 package teamdevhub.devhub.fake.pure.application.port.out.board;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import teamdevhub.devhub.core.board.domain.Board;
@@ -35,11 +36,7 @@ public class FakeBoardRepository implements BoardRepository {
 	}
 
 	@Override
-	public void deleteBoard(String boardGuid) {
+	public void deleteBoard(List<String> boardGuid) {
 
-	}
-	
-	public void deleteBoard(String boardGuid) {
-		
 	}
 }

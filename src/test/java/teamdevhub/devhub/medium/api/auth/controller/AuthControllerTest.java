@@ -67,21 +67,25 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("토큰_재발급에_성공하면_CREATE_SUCCESS_코드를_확인할_수_있다")
+    @DisplayName("토큰_재발급에_성공하면_CREATE_SUCCESS_코드와_새_리프레시_쿠키를_확인할_수_있다")
     void canVerifyCodeWhenRefreshingToken() {
         // given
-        AuthResult authResult = AuthResult.ofReissue("new-access-token");
-        String refreshToken = "refresh-token";
-        when(authFacade.reissueAccessToken(refreshToken)).thenReturn(authResult);
+        AuthResult authResult = AuthResult.of("new-access-token", "new-refresh-token");
+        String oldRefreshToken = "old-refresh-token";
+        when(authFacade.reissueAccessToken(oldRefreshToken)).thenReturn(authResult);
 
         // when
-        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = authController.refresh(refreshToken);
+        ResponseEntity<DataApiResponseDto<TokenResponseDto>> response = authController.refresh(oldRefreshToken);
 
         // then
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.CREATE_SUCCESS.getCode());
 
-        verify(authFacade).reissueAccessToken(refreshToken);
+        List<String> cookies = response.getHeaders().get(HttpHeaders.SET_COOKIE);
+        assertThat(cookies).isNotNull();
+        assertThat(cookies).anyMatch(c -> c.contains("new-refresh-token"));
+
+        verify(authFacade).reissueAccessToken(oldRefreshToken);
     }
 
     @Test

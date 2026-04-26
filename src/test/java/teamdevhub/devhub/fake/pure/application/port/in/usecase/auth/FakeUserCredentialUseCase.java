@@ -5,7 +5,7 @@ import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 

@@ -28,7 +28,9 @@ public class AuthenticationService implements AuthenticationUseCase {
     @Override
     public AuthResult reissueAccessToken(AuthenticatedUser authenticatedUser) {
         String newAccessToken = tokenIssueProvider.createAccessToken(authenticatedUser);
-        return AuthResult.ofReissue(newAccessToken);
+        String newRefreshToken = tokenIssueProvider.createRefreshToken(authenticatedUser.userGuid());
+        issueRefreshToken(authenticatedUser.userGuid(), newRefreshToken);
+        return AuthResult.of(newAccessToken, newRefreshToken);
     }
 
     @Override

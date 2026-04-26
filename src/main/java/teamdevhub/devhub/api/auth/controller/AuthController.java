@@ -39,12 +39,14 @@ public class AuthController {
     @PostMapping("/reissue")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> refresh(@CookieValue("refreshToken") String refreshToken) {
         AuthResult authResult = authFacade.reissueAccessToken(refreshToken);
-        return ResponseEntity.ok(
-                DataApiResponseDto.successWithData(
+        ResponseCookie newRefreshCookie = CookieFactory.createRefreshTokenCookie(authResult.refreshToken());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())
+                .header(HttpHeaders.SET_COOKIE, newRefreshCookie.toString())
+                .body(DataApiResponseDto.successWithData(
                         SuccessCode.CREATE_SUCCESS,
                         TokenResponseDto.issueAccessToken(authResult.accessToken())
-                )
-        );
+                ));
     }
 
     @PostMapping("/logout")
