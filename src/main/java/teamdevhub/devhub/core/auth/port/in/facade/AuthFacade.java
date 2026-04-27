@@ -7,8 +7,8 @@ import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
-import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.LoginPolicyUseCase;
+import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 
 @Service
 @Transactional

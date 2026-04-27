@@ -38,6 +38,10 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private UserRole userRole;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column
+    private VerificationProvider userType;
+
     @Column
     private String username;
 
@@ -60,4 +64,7 @@ public class UserEntity extends BaseEntity {
     @Convert(converter = BooleanToYNConverter.class)
     @Column(nullable = false)
     private boolean deleted;
+
+    @Column
+    private LocalDateTime lastLoginDateTime;
 }

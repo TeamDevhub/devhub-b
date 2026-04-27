@@ -52,7 +52,6 @@ class UserQueryDaoImplTest {
                 .blocked(false)
                 .deleted(false)
                 .introduction(TEST_INTRO_1)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
@@ -63,7 +62,6 @@ class UserQueryDaoImplTest {
                 .blocked(true)
                 .deleted(false)
                 .introduction(TEST_INTRO_2)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         entityManager.persist(userEntity1);
@@ -95,7 +93,6 @@ class UserQueryDaoImplTest {
                 .blocked(false)
                 .deleted(false)
                 .introduction(TEST_INTRO_1)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
@@ -106,7 +103,6 @@ class UserQueryDaoImplTest {
                 .blocked(true)
                 .deleted(false)
                 .introduction(TEST_INTRO_2)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         entityManager.persist(userEntity1);
@@ -138,7 +134,6 @@ class UserQueryDaoImplTest {
                 .blocked(false)
                 .deleted(false)
                 .introduction(TEST_INTRO_1)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
@@ -149,7 +144,6 @@ class UserQueryDaoImplTest {
                 .blocked(true)
                 .deleted(false)
                 .introduction(TEST_INTRO_2)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         entityManager.persist(userEntity1);
@@ -183,7 +177,6 @@ class UserQueryDaoImplTest {
                 .blocked(false)
                 .deleted(false)
                 .introduction(TEST_INTRO_1)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
@@ -194,7 +187,6 @@ class UserQueryDaoImplTest {
                 .blocked(true)
                 .deleted(false)
                 .introduction(TEST_INTRO_2)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         entityManager.persist(userEntity1);

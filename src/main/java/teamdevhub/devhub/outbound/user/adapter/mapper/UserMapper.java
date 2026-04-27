@@ -10,6 +10,7 @@ public class UserMapper {
         return UserEntity.builder()
                 .userGuid(user.getUserGuid())
                 .userRole(user.getUserRole())
+                .userType(user.getUserType())
                 .username(user.getUsername())
                 .introduction(user.getIntroduction())
                 .fileGuid(user.getFileGuid())
@@ -23,6 +24,7 @@ public class UserMapper {
     public static User toDomain(UserEntity userEntity) {
         return User.of(
                 userEntity.getUserGuid(),
+                userEntity.getUserType(),
                 userEntity.getUserRole(),
                 userEntity.getUsername(),
                 userEntity.getIntroduction(),

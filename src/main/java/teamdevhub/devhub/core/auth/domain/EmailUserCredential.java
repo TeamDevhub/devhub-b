@@ -21,14 +21,14 @@ public class EmailUserCredential {
             String userGuid,
             String email,
             String password,
-            LocalDateTime lastLoginDate,
-            UserRole userRole
+            UserRole userRole,
+            LocalDateTime lastLoginDate
     ) {
         this.userGuid = userGuid;
         this.email = email;
         this.password = password;
-        this.lastLoginDate = lastLoginDate;
         this.userRole = userRole;
+        this.lastLoginDate = lastLoginDate;
     }
 
     public void verifyPassword(boolean matches) {

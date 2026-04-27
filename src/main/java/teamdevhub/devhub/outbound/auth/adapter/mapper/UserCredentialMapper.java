@@ -29,8 +29,8 @@ public class UserCredentialMapper {
                 emailCredentialEntity.getUserGuid(),
                 emailCredentialEntity.getEmail(),
                 emailCredentialEntity.getPassword(),
-                emailCredentialEntity.getLastLoginDate(),
-                emailCredentialEntity.getUserRole()
+                emailCredentialEntity.getUserRole(),
+                emailCredentialEntity.getLastLoginDate()
         );
     }
 
@@ -40,6 +40,7 @@ public class UserCredentialMapper {
                 .email(emailUserCredential.getEmail())
                 .password(emailUserCredential.getPassword())
                 .userRole(emailUserCredential.getUserRole())
+                .lastLoginDate(emailUserCredential.getLastLoginDate())
                 .build();
     }
 

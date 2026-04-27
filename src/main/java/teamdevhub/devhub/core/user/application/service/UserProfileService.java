@@ -4,21 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.port.out.password.EncodedPasswordProvider;
-import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
-import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
-import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 import teamdevhub.devhub.core.user.port.out.UserPositionRepository;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
 import teamdevhub.devhub.core.user.port.out.UserSkillRepository;
-import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.util.Set;
 

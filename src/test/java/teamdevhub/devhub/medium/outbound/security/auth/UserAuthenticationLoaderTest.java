@@ -12,6 +12,7 @@ import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
 import teamdevhub.devhub.outbound.security.auth.UserAuthenticationLoader;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +40,8 @@ public class UserAuthenticationLoaderTest {
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
-                UserRole.USER
+                UserRole.USER,
+                LocalDateTime.now()
         );
 
         when(emailUserCredentialRepository.findByEmail(TEST_EMAIL_1))

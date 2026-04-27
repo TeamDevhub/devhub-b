@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
@@ -14,7 +16,7 @@ class EmailAuthenticatedUserTest {
     @DisplayName("이메일_사용자_자격증명을_생성하면_올바른_값을_갖는다")
     void create_emailUserCredential_hasCorrectValues() {
         EmailUserCredential emailUserCredential = new EmailUserCredential(
-                TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER
+                TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER, LocalDateTime.now()
         );
 
         assertThat(emailUserCredential.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
@@ -27,7 +29,7 @@ class EmailAuthenticatedUserTest {
     @DisplayName("관리자_역할로_이메일_자격증명을_생성할_수_있다")
     void create_emailUserCredential_withAdminRole() {
         EmailUserCredential emailUserCredential = new EmailUserCredential(
-                ADMIN_USER_GUID_1, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, UserRole.ADMIN
+                ADMIN_USER_GUID_1, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, UserRole.ADMIN, LocalDateTime.now()
         );
 
         assertThat(emailUserCredential.getUserRole()).isEqualTo(UserRole.ADMIN);

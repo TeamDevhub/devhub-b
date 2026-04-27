@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
 import teamdevhub.devhub.outbound.auth.adapter.entity.EmailCredentialEntity;
+import teamdevhub.devhub.outbound.auth.adapter.mapper.UserCredentialMapper;
 import teamdevhub.devhub.outbound.auth.persistence.JpaEmailCredentialRepository;
 
 import java.util.Optional;
@@ -18,16 +19,12 @@ public class EmailUserCredentialAdapter implements EmailUserCredentialRepository
     @Override
     public Optional<EmailUserCredential> findByEmail(String email) {
         return jpaEmailCredentialRepository.findByEmail(email)
-                .map(this::toDomain);
+                .map(UserCredentialMapper::toEmailUserCredential);
     }
 
     @Override
     public Optional<EmailUserCredential> findByUserGuid(String userGuid) {
         return jpaEmailCredentialRepository.findByUserGuid(userGuid)
-                .map(this::toDomain);
-    }
-
-    private EmailUserCredential toDomain(EmailCredentialEntity emailCredentialEntity) {
-        return new EmailUserCredential(emailCredentialEntity.getUserGuid(), emailCredentialEntity.getEmail(), emailCredentialEntity.getPassword(), emailCredentialEntity.getLastLoginDate(), emailCredentialEntity.getUserRole());
+                .map(UserCredentialMapper::toEmailUserCredential);
     }
 }
