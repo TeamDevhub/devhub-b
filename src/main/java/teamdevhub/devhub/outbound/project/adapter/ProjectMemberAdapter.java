@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.project.port.out.ProjectMemberRepository;
-import teamdevhub.devhub.outbound.application.adapter.entity.ProjectApplicationEntity;
 import teamdevhub.devhub.outbound.application.persistence.JpaProjectApplicationRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 import teamdevhub.devhub.outbound.project.persistence.JpaProjectRepository;

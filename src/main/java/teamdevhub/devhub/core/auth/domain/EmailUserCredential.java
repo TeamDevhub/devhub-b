@@ -5,8 +5,6 @@ import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
-import java.time.LocalDateTime;
-
 @Getter
 public class EmailUserCredential {
 
@@ -19,8 +17,7 @@ public class EmailUserCredential {
             String userGuid,
             String email,
             String password,
-            UserRole userRole,
-            LocalDateTime lastLoginDate
+            UserRole userRole
     ) {
         this.userGuid = userGuid;
         this.email = email;
