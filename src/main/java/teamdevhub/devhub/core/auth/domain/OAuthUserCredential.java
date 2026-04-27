@@ -14,24 +14,17 @@ public class OAuthUserCredential {
     private final String oauthId;
     private final VerificationProvider verificationProvider;
     private final UserRole userRole;
-    private LocalDateTime lastLoginDate;
 
     @Builder
     public OAuthUserCredential(
             String userGuid,
             String oauthId,
             VerificationProvider verificationProvider,
-            UserRole userRole,
-            LocalDateTime lastLoginDate
+            UserRole userRole
     ) {
         this.userGuid = userGuid;
         this.oauthId = oauthId;
         this.verificationProvider = verificationProvider;
         this.userRole = userRole;
-        this.lastLoginDate = lastLoginDate;
-    }
-
-    public void markLoginSuccess() {
-        this.lastLoginDate = LocalDateTime.now();
     }
 }

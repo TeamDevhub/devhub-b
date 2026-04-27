@@ -3,7 +3,7 @@ package teamdevhub.devhub.fake.pure.application.port.in.usecase.user;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
-import teamdevhub.devhub.core.auth.port.in.usecase.LoginPolicyUseCase;
+import teamdevhub.devhub.core.user.port.in.usecase.UserLoginUseCase;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,12 +12,12 @@ import java.util.Set;
 
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
-public class FakeLoginPolicyUseCase implements LoginPolicyUseCase {
+public class FakeUserLoginUseCase implements UserLoginUseCase {
 
     private final Map<String, User> store = new HashMap<>();
     private final Set<String> updatedLoginUsers = new HashSet<>();
 
-    public FakeLoginPolicyUseCase() {
+    public FakeUserLoginUseCase() {
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)

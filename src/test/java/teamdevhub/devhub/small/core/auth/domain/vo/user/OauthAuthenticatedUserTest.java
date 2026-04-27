@@ -17,7 +17,7 @@ class OauthAuthenticatedUserTest {
     @DisplayName("OAuth_사용자_자격증명을_생성하면_올바른_값을_갖는다")
     void create_oauthUserCredential_hasCorrectValues() {
         OAuthUserCredential oAuthUserCredential = new OAuthUserCredential(
-                TEST_USER_GUID_1, TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, UserRole.USER, LocalDateTime.now()
+                TEST_USER_GUID_1, TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, UserRole.USER
         );
 
         assertThat(oAuthUserCredential.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
@@ -34,7 +34,7 @@ class OauthAuthenticatedUserTest {
                 VerificationProvider.KAKAO, VerificationProvider.NAVER}) {
 
             OAuthUserCredential oAuthUserCredential = new OAuthUserCredential(
-                    TEST_USER_GUID_1, TEST_OAUTH_ID_1, verificationProvider, UserRole.USER, LocalDateTime.now()
+                    TEST_USER_GUID_1, TEST_OAUTH_ID_1, verificationProvider, UserRole.USER
             );
 
             assertThat(oAuthUserCredential.getVerificationProvider()).isEqualTo(verificationProvider);

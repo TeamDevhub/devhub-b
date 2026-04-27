@@ -140,7 +140,6 @@ public class UserSignupServiceTest {
     void signupWithOauthStoresPositionsAndSkills() {
         SignupOauthUserCommand signupOauthUserCommand = new SignupOauthUserCommand(
                 TEMP_TOKEN,
-                VerificationProvider.GOOGLE,
                 TEST_USERNAME_1,
                 TEST_INTRO_1,
                 TEST_POSITION_LIST,

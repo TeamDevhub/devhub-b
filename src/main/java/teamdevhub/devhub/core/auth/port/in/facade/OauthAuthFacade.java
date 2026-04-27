@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
-import teamdevhub.devhub.core.auth.port.in.usecase.LoginPolicyUseCase;
+import teamdevhub.devhub.core.user.port.in.usecase.UserLoginUseCase;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
@@ -21,7 +21,7 @@ public class OauthAuthFacade {
     private final OauthAuthenticationUseCase oauthAuthenticationUseCase;
     private final OauthResolveUseCase oauthResolveUseCase;
     private final AuthenticationUseCase authenticationUseCase;
-    private final LoginPolicyUseCase loginPolicyUseCase;
+    private final UserLoginUseCase userLoginUseCase;
 
     public String createOAuthAuthorizationUrl(String provider) {
         return oauthAuthenticationUseCase.createAuthorizationUrl(provider);
@@ -32,9 +32,9 @@ public class OauthAuthFacade {
         OauthUserResult oauthUserResult = oauthResolveUseCase.findOrRequireSignup(oauthUser);
 
         if (oauthUserResult.loginAvailable()) {
-            loginPolicyUseCase.validateLoginUser(oauthUserResult.authenticatedUser().userGuid());
+            userLoginUseCase.validateLoginUser(oauthUserResult.authenticatedUser().userGuid());
             AuthResult authResult = authenticationUseCase.login(oauthUserResult.authenticatedUser());
-            loginPolicyUseCase.updateLastLoginDateTime(oauthUserResult.authenticatedUser().userGuid());
+            userLoginUseCase.updateLastLoginDateTime(oauthUserResult.authenticatedUser().userGuid());
             return OauthAuthResult.loggedIn(authResult);
         }
 

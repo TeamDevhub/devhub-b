@@ -15,7 +15,6 @@ public class EmailUserCredential {
     private final String email;
     private String password;
     private final UserRole userRole;
-    private LocalDateTime lastLoginDate;
 
     public EmailUserCredential(
             String userGuid,
@@ -28,7 +27,6 @@ public class EmailUserCredential {
         this.email = email;
         this.password = password;
         this.userRole = userRole;
-        this.lastLoginDate = lastLoginDate;
     }
 
     public void verifyPassword(boolean matches) {
@@ -39,9 +37,5 @@ public class EmailUserCredential {
 
     public void changePassword(String encodedPassword) {
         this.password = encodedPassword;
-    }
-
-    public void markLoginSuccess() {
-        this.lastLoginDate = LocalDateTime.now();
     }
 }

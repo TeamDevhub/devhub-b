@@ -12,7 +12,7 @@ import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeUserCredentialUseCase;
-import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeLoginPolicyUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeUserLoginUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,13 +24,13 @@ public class AuthFacadeTest {
 
     private FakeUserCredentialUseCase userCredentialUseCase;
     private FakeAuthenticationUseCase authenticationUseCase;
-    private FakeLoginPolicyUseCase userLoginUseCase;
+    private FakeUserLoginUseCase userLoginUseCase;
 
     @BeforeEach
     void init() {
         userCredentialUseCase = new FakeUserCredentialUseCase();
         authenticationUseCase = new FakeAuthenticationUseCase();
-        userLoginUseCase = new FakeLoginPolicyUseCase();
+        userLoginUseCase = new FakeUserLoginUseCase();
 
         authFacade = new AuthFacade(
                 userCredentialUseCase,

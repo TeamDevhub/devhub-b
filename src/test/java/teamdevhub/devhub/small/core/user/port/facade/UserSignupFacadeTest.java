@@ -77,7 +77,7 @@ public class UserSignupFacadeTest {
     @DisplayName("signupWithOauth_는_signup_후_oauth-access-token_을_포함한_로그인_성공으로_이어진다")
     void signupWithOauthCallsSignupThenLogin() {
         // given
-        SignupOauthUserCommand signupCommand = new SignupOauthUserCommand(TEMP_TOKEN, VerificationProvider.GOOGLE, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST);
+        SignupOauthUserCommand signupCommand = new SignupOauthUserCommand(TEMP_TOKEN, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST);
 
         // when
         OauthAuthResult oauthAuthResult = userSignupFacade.signupWithOauth(signupCommand);

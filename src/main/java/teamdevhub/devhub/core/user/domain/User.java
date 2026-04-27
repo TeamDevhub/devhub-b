@@ -25,7 +25,6 @@ import java.util.function.Function;
 public class User {
 
     private final String userGuid;
-    private final VerificationProvider userType;
     private final UserRole userRole;
 
     private String username;
@@ -46,7 +45,6 @@ public class User {
     @Builder
     private User(
             String userGuid,
-            VerificationProvider userType,
             UserRole userRole,
             String username,
             String introduction,
@@ -60,7 +58,6 @@ public class User {
             AuditInfo auditInfo
     ) {
         this.userGuid = userGuid;
-        this.userType = userType;
         this.userRole = userRole;
 
         this.username = username;
@@ -86,7 +83,6 @@ public class User {
     public static User createAdminUser(CreateUserCommand adminCreateUserCommand) {
         return User.builder()
                 .userGuid(adminCreateUserCommand.userGuid())
-                .userType(adminCreateUserCommand.userType())
                 .userRole(UserRole.ADMIN)
                 .username(adminCreateUserCommand.username())
                 .blocked(false)
@@ -98,7 +94,6 @@ public class User {
     public static User createGeneralUser(CreateUserCommand generalCreateUserCommand) {
         return User.builder()
                 .userGuid(generalCreateUserCommand.userGuid())
-                .userType(generalCreateUserCommand.userType())
                 .userRole(UserRole.USER)
                 .username(generalCreateUserCommand.username())
                 .introduction(generalCreateUserCommand.introduction())
@@ -112,7 +107,6 @@ public class User {
     public static User createOauthUser(CreateUserCommand oauthCreateUserCommand) {
         return User.builder()
                 .userGuid(oauthCreateUserCommand.userGuid())
-                .userType(oauthCreateUserCommand.userType())
                 .userRole(UserRole.USER)
                 .username(oauthCreateUserCommand.username())
                 .introduction(oauthCreateUserCommand.introduction())
@@ -125,7 +119,6 @@ public class User {
 
     public static User of(
             String userGuid,
-            VerificationProvider userType,
             UserRole userRole,
             String username,
             String introduction,
@@ -138,7 +131,6 @@ public class User {
     ) {
         return User.builder()
                 .userGuid(userGuid)
-                .userType(userType)
                 .userRole(userRole)
                 .username(username)
                 .introduction(introduction)
