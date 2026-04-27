@@ -5,8 +5,6 @@ import lombok.Getter;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
-import java.time.LocalDateTime;
-
 @Getter
 public class OAuthUserCredential {
 

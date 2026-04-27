@@ -3,7 +3,6 @@ package teamdevhub.devhub.core.auth.port.in.command.oauth;
 import lombok.Builder;
 import teamdevhub.devhub.core.terms.domain.TermsAgreementItem;
 import teamdevhub.devhub.core.terms.port.in.command.AgreeTermsCommand;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.util.List;
 

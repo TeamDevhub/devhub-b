@@ -13,7 +13,6 @@ import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

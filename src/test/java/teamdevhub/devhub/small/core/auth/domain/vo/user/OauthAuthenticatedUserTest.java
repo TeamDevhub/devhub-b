@@ -6,10 +6,9 @@ import teamdevhub.devhub.core.auth.domain.OAuthUserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
-import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.UserTestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_OAUTH_ID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 class OauthAuthenticatedUserTest {
 

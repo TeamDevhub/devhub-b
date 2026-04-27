@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
-import teamdevhub.devhub.outbound.auth.adapter.entity.EmailCredentialEntity;
 import teamdevhub.devhub.outbound.auth.adapter.mapper.UserCredentialMapper;
 import teamdevhub.devhub.outbound.auth.persistence.JpaEmailCredentialRepository;
 

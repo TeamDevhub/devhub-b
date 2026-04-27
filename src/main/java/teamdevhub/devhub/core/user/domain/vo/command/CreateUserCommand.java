@@ -1,11 +1,10 @@
 package teamdevhub.devhub.core.user.domain.vo.command;
 
 import lombok.Builder;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.util.List;
 
