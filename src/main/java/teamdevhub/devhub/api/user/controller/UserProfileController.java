@@ -83,16 +83,6 @@ public class UserProfileController {
         );
     }
 
-    @PutMapping("/profile/password")
-    public ResponseEntity<DataApiResponseDto<Void>> updatePassword(@Valid @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
-        userProfileFacade.updatePassword(updatePasswordRequestDto.toUpdatePasswordCommand(authenticatedUser.userGuid()));
-        return ResponseEntity.ok(
-                DataApiResponseDto.successWithoutData(
-                        SuccessCode.UPDATE_SUCCESS
-                )
-        );
-    }
-
     @DeleteMapping("/profile")
     public ResponseEntity<DataApiResponseDto<Void>> withdraw(@LoginUser AuthenticatedUser authenticatedUser) {
         userWithdrawFacade.withdraw(authenticatedUser.userGuid());

@@ -20,6 +20,10 @@ public interface JpaUserRepository extends JpaRepository<UserEntity, String> {
     @Query("UPDATE UserEntity u SET u.lastLoginDateTime = :lastLoginDateTime WHERE u.userGuid = :userGuid")
     void updateLastLoginDateTime(@Param("userGuid") String userGuid, @Param("lastLoginDateTime") LocalDateTime lastLoginDateTime);
 
+    @Modifying
+    @Query("UPDATE UserEntity u SET u.mannerDegree = u.mannerDegree + :delta WHERE u.userGuid = :userGuid")
+    void updateMannerDegree(@Param("userGuid") String userGuid, @Param("delta") double delta);
+
     @Query("select u.userGuid, u.username from UserEntity u where u.userGuid IN (:userGuids)")
     List<Object[]> findNamesByUserGuid(@Param("userGuids") List<String> userGuids);
 }

@@ -38,13 +38,11 @@ class UserProfileServiceTest {
     @BeforeEach
     void init() {
 
-        encodedPasswordProvider = new FakeEncodedPasswordProvider();
         userRepository = new FakeUserRepository();
         userPositionRepository = new FakeUserPositionRepository();
         skillRepository = new FakeUserSkillRepository();
 
         userProfileService = new UserProfileService(
-                encodedPasswordProvider,
                 userRepository,
                 userPositionRepository,
                 skillRepository
@@ -576,6 +574,20 @@ class UserProfileServiceTest {
     }
 
     @Test
+    @DisplayName("리뷰_점수로_매너도를_업데이트하면_저장소에_반영된다")
+    void updateUserMannerDegree_validScore_delegatesToRepository() {
+        // given
+        double reviewScore = 1.5;
+
+        // when
+        userProfileService.updateUserMannerDegree(TEST_USER_GUID_1, reviewScore);
+
+        // then
+        assertThat(userRepository.wasCalled("updateMannerDegree")).isTrue();
+        assertThat(userRepository.mannerDegreeOf(TEST_USER_GUID_1)).isEqualTo(reviewScore);
+    }
+
+    @Test
     @DisplayName("일반_사용자는_USER_권한이_존재한다")
     void haveUserRoleForGeneralUser() {
         // given
@@ -596,80 +608,4 @@ class UserProfileServiceTest {
         // when, then
         assertThat(userProfileService.getCurrentUserProfile(testUser.getUserGuid()).getUserRole()).isEqualTo(UserRole.USER);
     }
-
-//    @Test
-//    @DisplayName("사용자가_올바른_현재_비밀번호를_입력하면_새로운_비밀번호로_변경된다")
-//    void updatePasswordCorrectly() {
-//        // given
-//        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-//                .email(TEST_EMAIL_1)
-//                .password(TEST_PASSWORD_1)
-//                .username(TEST_USERNAME_1)
-//                .introduction(TEST_INTRO_1)
-//                .positionList(TEST_POSITION_LIST)
-//                .skillList(TEST_SKILL_LIST)
-//                .verificationTarget(VERIFICATION_TARGET_1)
-//                .build();
-//
-//        CreateUserCommand generalCreateUserCommand =
-//                CreateUserCommand.generalUserCreateCommand(
-//                        signupUserCommand,
-//                        TEST_USER_GUID_1
-//                );
-//
-//        User testUser = User.createGeneralUser(generalCreateUserCommand);
-//        userRepository.save(testUser);
-//
-//        String NEW_PASSWORD = "NEW_PASSWORD";
-//
-//        UpdatePasswordCommand updatePasswordCommand = new UpdatePasswordCommand(TEST_USER_GUID_1, TEST_PASSWORD_1, NEW_PASSWORD);
-//
-//        // when
-//        userProfileService.updatePassword(updatePasswordCommand);
-//
-//        // then
-//        User updatedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
-//
-//        assertThat(encodedPasswordProvider.matches(NEW_PASSWORD, updatedUser.getPassword())).isTrue();
-//    }
-//
-//    @Test
-//    @DisplayName("현재_비밀번호가_틀리면_비밀번호_변경이_실패한다")
-//    void updatePasswordFailWhenCurrentPasswordWrong() {
-//        // given
-//        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
-//                .email(TEST_EMAIL_1)
-//                .password(TEST_PASSWORD_1)
-//                .username(TEST_USERNAME_1)
-//                .introduction(TEST_INTRO_1)
-//                .positionList(TEST_POSITION_LIST)
-//                .skillList(TEST_SKILL_LIST)
-//                .verificationTarget(VERIFICATION_TARGET_1)
-//                .build();
-//
-//        CreateUserCommand generalCreateUserCommand =
-//                CreateUserCommand.generalUserCreateCommand(
-//                        signupUserCommand,
-//                        TEST_USER_GUID_1,
-//                        encodedPasswordProvider.encode(TEST_PASSWORD_1)
-//                );
-//
-//        User testUser = User.createGeneralUser(generalCreateUserCommand);
-//        userRepository.save(testUser);
-//
-//        UpdatePasswordCommand updatePasswordCommand =
-//                new UpdatePasswordCommand(TEST_USER_GUID_1, "WRONG_PASSWORD", "NEW_PASSWORD");
-//
-//        // when & then
-//        assertThatThrownBy(() -> userProfileService.updatePassword(updatePasswordCommand)).isInstanceOf(BusinessRuleException.class);
-//    }
-//
-//    @Test
-//    @DisplayName("존재하지_않는_사용자의_비밀번호를_변경하면_예외가_발생한다")
-//    void updatePasswordFailWhenUserNotExist() {
-//
-//        UpdatePasswordCommand updatePasswordCommand = new UpdatePasswordCommand("NOT_EXIST_USER", "1234", "NEW_PASSWORD");
-//
-//        assertThatThrownBy(() -> userProfileService.updatePassword(updatePasswordCommand)).isInstanceOf(NullPointerException.class);
-//    }
 }

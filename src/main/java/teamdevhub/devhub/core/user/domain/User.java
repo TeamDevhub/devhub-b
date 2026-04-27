@@ -205,6 +205,10 @@ public class User {
         }
     }
 
+    public void applyReviewScore(double score) {
+        this.mannerDegree += (score - 3.0);
+    }
+
     private <T> boolean hasInvalidItems(Set<T> items, Function<T, String> codeExtractor) {
         if (items == null || items.isEmpty()) {
             return true;

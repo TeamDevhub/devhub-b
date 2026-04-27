@@ -7,6 +7,7 @@ import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
+import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserLoginUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 
@@ -34,5 +35,9 @@ public class AuthFacade {
 
     public void logout(String userGuid) {
         authenticationUseCase.revoke(userGuid);
+    }
+
+    public void updatePassword(UpdatePasswordCommand updatePasswordCommand) {
+        userCredentialUseCase.updatePassword(updatePasswordCommand);
     }
 }
