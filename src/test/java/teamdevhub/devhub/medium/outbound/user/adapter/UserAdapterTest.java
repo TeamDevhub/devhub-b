@@ -20,7 +20,6 @@ import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 @SpringBootTest

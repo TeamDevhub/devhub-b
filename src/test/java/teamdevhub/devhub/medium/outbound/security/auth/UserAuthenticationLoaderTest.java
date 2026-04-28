@@ -5,19 +5,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
 import teamdevhub.devhub.outbound.security.auth.UserAuthenticationLoader;
-import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserAuthenticationLoaderTest {
