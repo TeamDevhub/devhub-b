@@ -1,68 +1,76 @@
-# 예외 처리 규칙
+# Exception Handling Rules
 
-## 예외 계층 구조
+## Exception Hierarchy
 
-세 가지 예외 타입이 있다. 발생 위치에 따라 구분하여 사용한다.
+There are three exception types.
+Use them according to the layer where the error occurs.
 
-| 예외 클래스 | 발생 위치 | 의미 |
-|---|---|---|
-| `DomainRuleException` | `core/{domain}/domain/` | 도메인 규칙 위반 |
-| `BusinessRuleException` | `core/{domain}/application/` | 비즈니스 정책 위반, 전제 조건 미충족 |
-| `AdapterDataException` | `outbound/{domain}/adapter/` | 데이터 없음, 인프라 접근 실패 |
+| Exception Class         | Occurrence Layer             | Meaning                                         |
+| ----------------------- | ---------------------------- | ----------------------------------------------- |
+| `DomainRuleException`   | `core/{domain}/domain/`      | Domain rule violation                           |
+| `BusinessRuleException` | `core/{domain}/application/` | Business policy violation / unmet preconditions |
+| `AdapterDataException`  | `outbound/{domain}/adapter/` | Missing data / infrastructure access failure    |
 
-모두 동일한 생성 패턴을 따른다:
+All follow the same creation pattern:
 
-```java
-// 도메인 계층: 도메인 규칙 위반
+```java id="7r4nxt"
+// Domain layer: domain rule violation
 throw DomainRuleException.of(ErrorCode.ALREADY_DELETED);
 
-// 애플리케이션 계층: 비즈니스 정책 위반
+// Application layer: business policy violation
 throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
 
-// 어댑터 계층: 데이터 없음
+// Adapter layer: missing data
 throw AdapterDataException.of(ErrorCode.USER_NOT_FOUND);
 ```
 
-## ErrorCode 사용 원칙
+---
 
-- 에러 메시지를 하드코딩하지 않는다. 반드시 `ErrorCode` enum 값을 사용한다.
-- 새로운 에러 상황이 생기면 `ErrorCode`에 먼저 추가한 뒤, 예외를 던진다.
-- `ErrorCode.UNKNOWN_FAIL`은 임시 처리에만 사용한다. 가능한 빨리 구체적인 코드로 교체한다.
+## ErrorCode Usage Principles
 
-```java
-// ErrorCode 구조
+* Do not hardcode error messages.
+* Always use values from the `ErrorCode` enum.
+* If a new error case appears, add it to `ErrorCode` first, then throw the exception.
+* `ErrorCode.UNKNOWN_FAIL` should be temporary only and replaced with a specific code as soon as possible.
+
+```java id="4k9vpd"
 public enum ErrorCode {
-    USER_NOT_FOUND("ERR.DVH.0014", "로그인된 사용자가 존재하지 않습니다", UNAUTHORIZED),
-    REFRESH_TOKEN_INVALID("ERR.DVH.0015", "유효하지 않은 토큰입니다", UNAUTHORIZED),
-    ALREADY_DELETED("ERR.DVH.0032", "이미 탈퇴한 회원입니다", BAD_REQUEST),
+    USER_NOT_FOUND("ERR.DVH.0014", "Logged-in user does not exist", UNAUTHORIZED),
+    REFRESH_TOKEN_INVALID("ERR.DVH.0015", "Invalid token", UNAUTHORIZED),
+    ALREADY_DELETED("ERR.DVH.0032", "User already withdrawn", BAD_REQUEST),
     ...
 }
 ```
 
-## API 응답 규칙
+---
 
-모든 API 응답은 `DataApiResponseDto<T>`로 감싼다.
+## API Response Rules
 
-```java
-// 성공 응답: 데이터 있음
+All API responses must be wrapped with `DataApiResponseDto<T>`.
+
+```java id="9m2qxs"
+// Success response with data
 return ResponseEntity.ok(
     DataApiResponseDto.successWithData(SuccessCode.LOGIN_SUCCESS, data)
 );
 
-// 성공 응답: 데이터 없음
+// Success response without data
 return ResponseEntity.ok(
     DataApiResponseDto.successWithoutData(SuccessCode.LOGOUT_SUCCESS)
 );
 ```
 
-컨트롤러에서 직접 에러 응답을 만들지 않는다. 예외를 던지면 `GlobalExceptionHandler`가 처리한다.
+Do not manually create error responses inside controllers.
+Throw exceptions and let `GlobalExceptionHandler` process them.
 
-## 계층별 예외 패턴
+---
 
-### 도메인 계층
+## Exception Patterns by Layer
 
-```java
-// 도메인 메서드 내부에서 상태를 검사하고 예외를 던진다
+### Domain Layer
+
+```java id="3v8nka"
+// Validate state inside domain methods and throw exceptions
 public void withdraw() {
     if (this.deleted) {
         throw DomainRuleException.of(ErrorCode.ALREADY_DELETED);
@@ -78,41 +86,52 @@ public void confirm(String code, LocalDateTime now) {
 }
 ```
 
-### 애플리케이션 계층
+---
 
-```java
-// 중복 검사: 존재하면 예외
+### Application Layer
+
+```java id="1t6qwr"
+// Duplicate check: throw if exists
 userCredentialRepository.findEmailUserCredentialByEmail(email)
         .ifPresent(c -> {
             throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
         });
 
-// 전제 조건: 토큰 불일치
+// Preconditions: token mismatch
 if (savedRefreshToken == null || !savedRefreshToken.token().equals(refreshToken)) {
     throw BusinessRuleException.of(ErrorCode.REFRESH_TOKEN_INVALID);
 }
 ```
 
-### 어댑터 계층
+---
 
-```java
-// 데이터 없음: Optional이 아닌, 존재를 보장하는 조회
+### Adapter Layer
+
+```java id="6p4xzm"
+// Missing data: retrieval that guarantees existence
 public User findByUserGuid(String userGuid) {
     return jpaUserRepository.findByUserGuid(userGuid)
             .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
 }
 ```
 
-## Optional 반환 vs 예외 던지기
+---
 
-어댑터 메서드에서 두 가지 패턴을 명확히 구분한다.
+## Optional Return vs Throwing Exception
 
-```java
-// 데이터가 없을 수도 있는 경우 → Optional 반환
+Use two distinct patterns in adapter methods.
+
+```java id="8n1vct"
+// Data may not exist → return Optional
 Optional<UserCredential> findEmailUserCredentialByEmail(String email);
-Optional<UserCredential> findOAuthUserCredentialByOAuth(VerificationProvider provider, String oauthId);
+Optional<UserCredential> findOAuthUserCredentialByOAuth(
+        VerificationProvider provider,
+        String oauthId
+);
 
-// 반드시 존재해야 하는 경우 → 없으면 예외
+// Data must exist → throw exception if absent
 User findByUserGuid(String userGuid);
-Verification findByVerificationTarget(VerificationTarget verificationTarget);
+Verification findByVerificationTarget(
+        VerificationTarget verificationTarget
+);
 ```

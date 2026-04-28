@@ -1,11 +1,12 @@
-# 코드 컨벤션
+# Code Conventions
 
-## 의존성 주입
+## Dependency Injection
 
-`@Autowired`는 사용하지 않는다. 모든 의존성은 생성자 주입으로 처리한다.
+Do not use `@Autowired`.
+All dependencies must be injected via constructor injection.
 
-```java
-// 올바른 방식
+```java id="1k9xzm"
+// Correct approach
 @Service
 @RequiredArgsConstructor
 public class UserProfileService implements UserProfileUseCase {
@@ -14,30 +15,35 @@ public class UserProfileService implements UserProfileUseCase {
 }
 ```
 
-## 트랜잭션
+---
 
-- `@Transactional`은 클래스 레벨에 선언한다. 메서드별로 따로 붙이지 않는다.
-- `readOnly = true`는 명시적인 성능상 이유가 있을 때만 사용한다.
+## Transactions
 
-```java
+* Declare `@Transactional` at the class level only. Do not apply it per method.
+* Use `readOnly = true` only when there is a clear performance reason.
+
+```java id="6f3qdp"
 @Service
-@Transactional          // ✅ 클래스 레벨
+@Transactional          // ✅ Class-level declaration
 @RequiredArgsConstructor
 public class UserSignupService implements UserSignupUseCase { ... }
 ```
 
-## 도메인 객체 생성 패턴
+---
 
-도메인 클래스의 생성자는 `private`이다. 외부에서는 반드시 정적 팩토리 메서드를 사용한다.
+## Domain Object Creation Pattern
 
-```java
+Constructors of domain classes must be `private`.
+Objects must be created through static factory methods.
+
+```java id="8z4nwr"
 @Getter
 public class User {
 
-    @Builder                          // 빌더는 클래스 내부에서만 사용
-    private User(...) { ... }         // private 생성자
+    @Builder                          // Builder used internally only
+    private User(...) { ... }         // private constructor
 
-    // 정적 팩토리 메서드로만 생성
+    // Create via static factory method only
     public static User createGeneralUser(CreateUserCommand command) {
         return User.builder()
                 .userGuid(command.userGuid())
@@ -46,22 +52,24 @@ public class User {
                 .build();
     }
 
-    public static User of(...) { ... }  // DB에서 복원할 때 사용
+    public static User of(...) { ... }  // Used for reconstruction from DB
 }
 ```
 
-## 불변 값 객체
+---
 
-상태가 변하지 않는 값 객체는 `record`로 선언한다.
+## Immutable Value Objects
 
-```java
-// VO: record 사용
+Use `record` for immutable value objects.
+
+```java id="3m7qks"
+// VO: use record
 public record EmailUserCredential(
-        String userGuid,
-        String email,
-        String password,
-        UserRole userRole
-) {}
+                String userGuid,
+                String email,
+                String password,
+                UserRole userRole
+        ) {}
 
 // Command: record + @Builder
 @Builder
@@ -72,7 +80,7 @@ public record SignupUserCommand(
         ...
 ) {}
 
-// Result: record + @Builder + 정적 팩토리
+// Result: record + @Builder + static factory
 @Builder
 public record AuthResult(String accessToken, String refreshToken) {
     public static AuthResult of(String accessToken, String refreshToken) {
@@ -81,46 +89,70 @@ public record AuthResult(String accessToken, String refreshToken) {
 }
 ```
 
-## 도메인 필드 불변성
+---
 
-도메인 엔티티에서 식별자와 역할처럼 변하지 않아야 하는 필드는 `final`로 선언한다.
+## Domain Field Immutability
 
-```java
+Fields that must not change (e.g., identifiers, roles) should be declared as `final`.
+
+```java id="5t2lcn"
 public class User {
-    private final String userGuid;     // 식별자: 불변
-    private final UserRole userRole;   // 역할: 불변
+    private final String userGuid;     // Identifier: immutable
+    private final UserRole userRole;   // Role: immutable
 
-    private String username;           // 프로필: 변경 가능
-    private boolean deleted;           // 상태: 변경 가능
+    private String username;           // Profile: mutable
+    private boolean deleted;           // State: mutable
 }
 ```
 
-## Null 처리
+---
 
-- `null` 반환 대신 `Optional<T>` 또는 예외를 반환한다.
-- 컬렉션 필드는 `null` 대신 빈 컬렉션으로 초기화한다.
+## Null Handling
 
-```java
-// 도메인 생성자에서 null 방어
+* Do not return `null`. Use `Optional<T>` or throw exceptions.
+* Initialize collection fields with empty collections instead of `null`.
+
+```java id="2p8vra"
+// Null safety in constructor
 this.positions = Objects.requireNonNullElseGet(positions, HashSet::new);
 
-// 포트에서 Optional 반환
+// Return Optional from port
 Optional<UserCredential> findEmailUserCredentialByEmail(String email);
 
-// 어댑터에서 존재 보장 조회는 예외
-User findByUserGuid(String userGuid); // 없으면 AdapterDataException
+// Guaranteed retrieval in adapter throws exception if not found
+User findByUserGuid(String userGuid); // throws AdapterDataException if not found
 ```
 
-## Stream과 컬렉션
+---
 
-- `Collectors.toUnmodifiableSet()`이나 `Set.copyOf()`를 적극 활용하여 불변 컬렉션을 반환한다.
-- `.stream().map().collect(Collectors.toUnmodifiableSet())` 패턴을 도메인/서비스 내에서 사용한다.
+## Streams and Collections
 
-## 주석
+* Use immutable collections such as:
 
-주석은 작성하지 않는다. 코드 자체가 의도를 설명해야 한다. 주석이 필요하다는 느낌이 들면, 메서드나 변수 이름을 더 명확하게 바꾸는 것을 먼저 시도한다.
+    * `Collectors.toUnmodifiableSet()`
+    * `Set.copyOf()`
+* Common pattern:
 
-## import 순서
+```java id="9d1xqs"
+.stream()
+.map(...)
+.collect(Collectors.toUnmodifiableSet())
+```
 
-- 사용하지 않는 import는 남기지 않는다.
-- 와일드카드 import(`import java.util.*`)는 사용하지 않는다.
+Use this pattern within domain and service layers.
+
+---
+
+## Comments
+
+Do not write comments.
+The code itself should clearly express intent.
+
+If you feel the need to add a comment, first try improving method or variable naming.
+
+---
+
+## Import Rules
+
+* Do not leave unused imports.
+* Do not use wildcard imports (e.g., `import java.util.*`).

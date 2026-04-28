@@ -1,64 +1,131 @@
-# 영속성 계층 규칙
+# Persistence Layer Rules
 
-## JPA 엔티티 설계
+## JPA Entity Design
 
-### 기본 구조
+### Basic Structure
 
-```java
+```java id="4m8xkr"
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = PROTECTED)   // JPA 기본 생성자: protected
+@NoArgsConstructor(access = PROTECTED)   // JPA default constructor: protected
 @Table(name = "user_email_credentials")
 public class EmailCredentialEntity {
 
     @Id
     @Column(length = 32, nullable = false, unique = true)
-    private String userGuid;             // GUID 기반 PK: String 타입
+    private String userGuid;             // GUID-based PK: String type
 
     @Column(nullable = false)
     private String email;
 
-    @Enumerated(EnumType.STRING)         // Enum: 반드시 STRING 방식
+    @Enumerated(EnumType.STRING)         // Enum: must use STRING strategy
     @Column(nullable = false)
     private UserRole userRole;
 }
 ```
 
-### 규칙
+---
 
-- 기본 생성자는 `PROTECTED`로 선언한다. 외부에서 `new XxxEntity()`를 호출하지 못하게 막는다.
-- PK가 GUID(`String`)인 경우: `@Column(length = 32, nullable = false, unique = true)` + `@Id`
-- PK가 자동 증가(`Long`)인 경우: `@Id @GeneratedValue(strategy = GenerationType.IDENTITY)`
-- Enum 컬럼은 반드시 `@Enumerated(EnumType.STRING)`을 사용한다.
-- `boolean` 컬럼은 컬럼명에 `is` 접두사를 붙이지 않고 `deleted`, `blocked` 처럼 명명한다.
-- 연관관계 매핑(`@ManyToOne`, `@OneToMany`)은 최소화한다. 다른 도메인의 데이터는 GUID 값으로 참조한다.
-- Audit 정보(등록자, 등록일시 등)는 `BaseEntity`나 `@MappedSuperclass`를 활용한다.
+### Rules
 
-## JPA Repository 설계
+* Default constructor must be `PROTECTED`
+* Prevent external `new XxxEntity()` usage
+* If PK is GUID (`String`):
 
-```java
-public interface JpaEmailCredentialRepository extends JpaRepository<EmailCredentialEntity, String> {
+```java id="7q2vtn"
+@Id
+@Column(length = 32, nullable = false, unique = true)
+```
+
+* If PK is auto-increment (`Long`):
+
+```java id="1p6xds"
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+```
+
+* Enum columns must always use:
+
+```java id="3n9kqa"
+@Enumerated(EnumType.STRING)
+```
+
+* Boolean columns should not use `is` prefix
+
+Use:
+
+```text id="8r4mcf"
+deleted
+blocked
+```
+
+Not:
+
+```text id="6t1vzw"
+isDeleted
+isBlocked
+```
+
+* Minimize relationship mappings:
+
+    * `@ManyToOne`
+    * `@OneToMany`
+
+Use GUID references for cross-domain relations instead.
+
+* Audit fields (creator, created time, etc.) should use:
+
+    * `BaseEntity`
+    * `@MappedSuperclass`
+
+---
+
+## JPA Repository Design
+
+```java id="5k3xpt"
+public interface JpaEmailCredentialRepository
+        extends JpaRepository<EmailCredentialEntity, String> {
 
     Optional<EmailCredentialEntity> findByEmail(String email);
     Optional<EmailCredentialEntity> findByUserGuid(String userGuid);
 }
 ```
 
-- 인터페이스 이름은 `Jpa{도메인}Repository` 패턴을 따른다.
-- `JpaRepository<Entity, PK타입>`을 확장한다. PK 타입에 주의한다.
-- 단순 조회는 Spring Data JPA 쿼리 메서드를 사용한다.
-- 복잡한 조회(동적 조건, 집계, 페이징)는 QueryDSL 구현체(`{도메인}QueryDaoImpl`)를 별도로 작성한다.
+### Rules
 
-## 어댑터 설계
+* Interface naming:
 
-### 기본 구조
+```text id="9m7qld"
+Jpa{Domain}Repository
+```
 
-```java
+* Extend:
+
+```text id="2v8xra"
+JpaRepository<Entity, PKType>
+```
+
+* Be careful with PK type
+* Use Spring Data JPA query methods for simple lookups
+* For complex queries (dynamic filters, aggregates, pagination), create separate QueryDSL implementation:
+
+```text id="6n1kcs"
+{Domain}QueryDaoImpl
+```
+
+---
+
+## Adapter Design
+
+### Basic Structure
+
+```java id="3t5vpm"
 @Component
 @RequiredArgsConstructor
-public class EmailUserCredentialAdapter implements EmailUserCredentialRepository {
+public class EmailUserCredentialAdapter
+        implements EmailUserCredentialRepository {
 
     private final JpaEmailCredentialRepository jpaEmailCredentialRepository;
 
@@ -68,7 +135,9 @@ public class EmailUserCredentialAdapter implements EmailUserCredentialRepository
                 .map(this::toDomain);
     }
 
-    private EmailUserCredential toDomain(EmailCredentialEntity entity) {
+    private EmailUserCredential toDomain(
+            EmailCredentialEntity entity
+    ) {
         return new EmailUserCredential(
                 entity.getUserGuid(),
                 entity.getEmail(),
@@ -79,16 +148,21 @@ public class EmailUserCredentialAdapter implements EmailUserCredentialRepository
 }
 ```
 
-- `@Component`로 선언한다. `@Repository`를 사용하지 않는다.
-- 단순 변환은 어댑터 내부의 private 메서드로 처리한다.
-- 변환 로직이 복잡하거나 양방향으로 사용된다면 별도 `Mapper` 클래스로 분리한다.
+### Rules
 
-## Mapper 설계
+* Use `@Component`
+* Do not use `@Repository`
+* Simple conversion logic may remain as private methods inside adapter
+* If mapping becomes complex or bidirectional, extract to separate `Mapper`
 
-```java
+---
+
+## Mapper Design
+
+```java id="8x2ntr"
 public class UserMapper {
 
-    // 인스턴스화 금지 (정적 유틸리티 클래스)
+    // Prevent instantiation
     private UserMapper() {}
 
     public static UserEntity toEntity(User user) {
@@ -107,29 +181,58 @@ public class UserMapper {
 }
 ```
 
-- Mapper는 정적 메서드만 가진 유틸리티 클래스다. 인스턴스를 만들지 않는다.
-- `toEntity(Domain)`, `toDomain(Entity)` 두 방향 모두 제공한다.
-- Mapper 안에 비즈니스 로직을 넣지 않는다. 단순 필드 매핑만 수행한다.
-- `AuditInfo`처럼 공통 매핑이 있으면 private static 헬퍼 메서드로 분리한다.
+### Rules
 
-## QueryDSL 사용
+* Mapper is a static utility class
+* No instances allowed
+* Provide both directions:
 
-- QueryDSL 구현체 클래스는 `{도메인}QueryDaoImpl`로 명명한다.
-- Q클래스는 `build/generated/querydsl/`에 자동 생성된다. 직접 수정하지 않는다.
-- QueryDSL은 동적 조건 필터링, 페이지네이션, 복잡한 집계에만 사용한다.
+    * `toEntity(Domain)`
+    * `toDomain(Entity)`
+* No business logic inside mapper
+* Only field mapping
+* Shared mappings (e.g. `AuditInfo`) may use private static helper methods
 
-## 소프트 삭제 패턴
+---
 
-삭제는 실제 DB 레코드를 지우지 않고 `deleted = true`로 처리한다.
+## QueryDSL Usage
 
-```java
-// 도메인에서 소프트 삭제 처리
+* Implementation class naming:
+
+```text id="1r7kzd"
+{Domain}QueryDaoImpl
+```
+
+* Q classes are auto-generated under:
+
+```text id="4v9xmb"
+build/generated/querydsl/
+```
+
+* Do not modify generated Q classes directly
+* Use QueryDSL only for:
+
+    * dynamic condition filtering
+    * pagination
+    * complex aggregation
+
+---
+
+## Soft Delete Pattern
+
+Do not physically delete DB records.
+Use `deleted = true`.
+
+```java id="7m3qcf"
+// Soft delete in domain
 public void withdraw() {
     this.deleted = true;
 }
 
-// 어댑터에서 save로 상태 반영
+// Persist changed state in adapter
 public void delete(User user) {
-    jpaUserRepository.save(UserMapper.toEntity(user));  // deleted=true 상태로 저장
+    jpaUserRepository.save(
+            UserMapper.toEntity(user)
+    ); // saved with deleted=true
 }
 ```
