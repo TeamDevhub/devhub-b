@@ -1,7 +1,7 @@
 package teamdevhub.devhub.outbound.auth.infrastructure.oauth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -12,11 +12,15 @@ import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HeaderProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HttpResponse;
 
 @Component
-@RequiredArgsConstructor
 public class WebClientOauthHttpClient implements OauthHttpClient {
 
     private final WebClient oauthWebClient;
     private final ObjectMapper objectMapper;
+
+    public WebClientOauthHttpClient(@Qualifier("oauthWebClient") WebClient oauthWebClient, ObjectMapper objectMapper) {
+        this.oauthWebClient = oauthWebClient;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public <T> HttpResponse<T> postFormUrlEncoded(String uri, MultiValueMap<String, String> formData, HeaderProvider headerProvider, Class<T> responseType) {
@@ -60,17 +64,18 @@ public class WebClientOauthHttpClient implements OauthHttpClient {
                 .block();
     }
 
-    private <T> HttpResponse<T> buildResponse(HttpStatusCode httpStatusCode, HttpHeaders httpHeaders, String rawBody, Class<T> responseType) {
-        T body = null;
-
+    private <T> HttpResponse<T> buildResponse(
+            HttpStatusCode status,
+            HttpHeaders headers,
+            String rawBody,
+            Class<T> responseType
+    ) {
         try {
-            if (!rawBody.isBlank()) {
-                body = objectMapper.readValue(rawBody, responseType);
-            }
-        } catch (Exception ignored) {
+            T body = rawBody.isBlank() ? null : objectMapper.readValue(rawBody, responseType);
+            return new HttpResponse<>(status.value(), body, rawBody, headers);
 
+        } catch (Exception e) {
+            return new HttpResponse<>(status.value(), null, rawBody, headers);
         }
-
-        return new HttpResponse<>(httpStatusCode.value(), body, rawBody, httpHeaders);
     }
 }

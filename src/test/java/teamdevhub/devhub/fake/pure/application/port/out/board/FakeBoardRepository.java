@@ -38,4 +38,8 @@ public class FakeBoardRepository implements BoardRepository {
 	public void deleteBoard(String boardGuid) {
 
 	}
+	
+	public void deleteBoard(String boardGuid) {
+		
+	}
 }

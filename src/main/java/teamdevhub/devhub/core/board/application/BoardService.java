@@ -40,7 +40,7 @@ public class BoardService implements BoardUseCase {
 	}
 	
 	@Override
-	public Board detailBoard(String boardGuid, Boolean cookieResult) {
+	public Board detailBoard(String boardGuid, Boolean cookieResult, String userGuid) {
 		if(cookieResult) { boardRepository.updateViewCount(boardGuid); }
 		Board boardDetail = boardRepository.detailBoard(boardGuid);
 		
@@ -49,12 +49,18 @@ public class BoardService implements BoardUseCase {
         User user = userRepository.findByUserGuid(boardDetail.getUserGuid());
         
         List<Comment> commentList = commentService.commentList(boardDetail.getBoardGuid());
+
+        boolean isLiked = false;
+        if (userGuid != null && !userGuid.isBlank()) {
+            isLiked = boardLikeRepository.existsByBoardGuidAndUserGuid(boardGuid, userGuid);
+        }
         
         boardDetail.fillDetailSubquery(boardLikes.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
         		boardComments.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
         		user.getUsername(),
         		user.getEmail(),
-        		commentList
+        		commentList,
+        		isLiked
         		);
         
         return boardDetail;
@@ -85,7 +91,7 @@ public class BoardService implements BoardUseCase {
 	}
 	
 	@Override
-	public void deleteBoard(String boardGuid) {
-		boardRepository.deleteBoard(boardGuid);
+	public void deleteBoard(List<String> boardGuids) {
+		boardRepository.deleteBoard(boardGuids);
 	}
 }

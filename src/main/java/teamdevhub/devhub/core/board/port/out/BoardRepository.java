@@ -1,5 +1,7 @@
 package teamdevhub.devhub.core.board.port.out;
 
+import java.util.List;
+
 import teamdevhub.devhub.core.board.domain.Board;
 
 public interface BoardRepository {
@@ -14,5 +16,5 @@ public interface BoardRepository {
 
 	void updateViewCount(String boardGuid);
 
-	void deleteBoard(String boardGuid);
+	void deleteBoard(List<String> boardGuid);
 }

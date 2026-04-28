@@ -1,6 +1,10 @@
 package teamdevhub.devhub.outbound.auth.infrastructure.oauth.naver.vo;
 
 public record NaverUserResponse(
-        String id,
-        String email
-) {}
+        Response response
+) {
+    public record Response(
+            String id,
+            String email
+    ) {}
+}

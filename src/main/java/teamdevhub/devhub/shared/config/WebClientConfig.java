@@ -19,7 +19,7 @@ import java.time.Duration;
 @Configuration
 public class WebClientConfig {
 
-    @Bean
+    @Bean("defaultWebClient")
     public WebClient defaultWebClient() {
         return WebClient.builder()
                 .filter(logRequest())
@@ -27,7 +27,7 @@ public class WebClientConfig {
                 .build();
     }
 
-    @Bean
+    @Bean("oauthWebClient")
     public WebClient oauthWebClient() {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)

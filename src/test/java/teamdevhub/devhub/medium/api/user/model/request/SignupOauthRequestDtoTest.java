@@ -32,7 +32,6 @@ public class SignupOauthRequestDtoTest {
         // given
         SignupOauthRequestDto signupOauthRequestDto = SignupOauthRequestDto.builder()
                 .tempToken("temp-token-123")
-                .password("Password123!")
                 .username("testUser")
                 .introduction("안녕하세요")
                 .positionList(List.of("BACKEND"))
@@ -44,7 +43,6 @@ public class SignupOauthRequestDtoTest {
 
         // then
         assertThat(signupOauthUserCommand.tempToken()).isEqualTo("temp-token-123");
-        assertThat(signupOauthUserCommand.password()).isEqualTo("Password123!");
         assertThat(signupOauthUserCommand.username()).isEqualTo("testUser");
         assertThat(signupOauthUserCommand.introduction()).isEqualTo("안녕하세요");
         assertThat(signupOauthUserCommand.positionList()).containsExactly("BACKEND");
@@ -67,7 +65,6 @@ public class SignupOauthRequestDtoTest {
                 .map(ConstraintViolation::getMessage)
                 .toList())
                 .contains("TEMP 토큰은 필수입니다",
-                        "비밀번호는 필수입니다",
                         "관심 포지션은 필수입니다",
                         "보유 스킬은 필수입니다");
     }
@@ -78,7 +75,6 @@ public class SignupOauthRequestDtoTest {
         // given
         SignupOauthRequestDto signupOauthRequestDto = SignupOauthRequestDto.builder()
                 .tempToken("temp-token-123")
-                .password("Password123!")
                 .positionList(List.of())
                 .skillList(List.of())
                 .build();
