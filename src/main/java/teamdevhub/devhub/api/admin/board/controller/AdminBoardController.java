@@ -1,6 +1,8 @@
 package teamdevhub.devhub.api.admin.board.controller;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,13 +17,16 @@ import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.board.port.in.Facade.model.AdminBoardResponseDto;
 import teamdevhub.devhub.core.common.page.PageCommand;
 
+@Tag(name = "Admin - Board", description = "관리자 게시글 관리 API")
 @RestController
 @RequestMapping("/admin/boards")
 @RequiredArgsConstructor
 public class AdminBoardController {
-	
+
 	private final BoardFacade boardFacade;
 
+	@Operation(summary = "게시글 목록 조회 (관리자)", description = "관리자가 검색 조건으로 전체 게시글 목록을 페이징 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "조회 성공")
 	@GetMapping
 	public ResponseEntity<DataListApiResponseDto<AdminBoardResponseDto>> listAdminBoard(@ModelAttribute SearchAdminBoardRequestDto searchAdminBoardRequestDto, PageRequestDto pageRequestDto) {
 		return ResponseEntity.ok(boardFacade.listAdminBoard(searchAdminBoardRequestDto.toCommand(), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize())));
