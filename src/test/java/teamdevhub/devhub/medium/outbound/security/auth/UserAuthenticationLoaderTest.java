@@ -40,8 +40,7 @@ public class UserAuthenticationLoaderTest {
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,
-                UserRole.USER,
-                LocalDateTime.now()
+                UserRole.USER
         );
 
         when(emailUserCredentialRepository.findByEmail(TEST_EMAIL_1))

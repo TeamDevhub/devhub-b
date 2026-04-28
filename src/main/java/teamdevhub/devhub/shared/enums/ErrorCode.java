@@ -71,6 +71,7 @@ public enum ErrorCode {
     REVIEW_DUPLICATE("ERR.DVH.0084", "이미 해당 프로젝트에서 리뷰한 사용자입니다", BAD_REQUEST),
     REVIEW_SCORE_INVALID("ERR.DVH.0085", "리뷰 점수는 1.0~5.0 사이의 0.5 단위 값이어야 합니다", BAD_REQUEST),
 
+    FILE_INVALID("ERR.DVH.1000", "파일처리 과정에서 오류가 발생했습니다", INTERNAL_SERVER_ERROR),
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다",BAD_REQUEST);
 
 

@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
-import java.time.LocalDateTime;
-
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -40,7 +38,4 @@ public class EmailCredentialEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private UserRole userRole;
-
-    @Column
-    private LocalDateTime lastLoginDate;
 }

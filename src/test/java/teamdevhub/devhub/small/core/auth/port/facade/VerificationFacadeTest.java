@@ -17,6 +17,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 public class VerificationFacadeTest {
 
     private VerificationFacade verificationFacade;
+
     private FakeVerificationUseCase verificationUseCase;
     private FakeNotificationUseCase notificationUseCase;
 
@@ -24,6 +25,7 @@ public class VerificationFacadeTest {
     void init() {
         verificationUseCase = new FakeVerificationUseCase();
         notificationUseCase = new FakeNotificationUseCase();
+
         verificationFacade = new VerificationFacade(verificationUseCase, notificationUseCase);
     }
 
@@ -51,7 +53,7 @@ public class VerificationFacadeTest {
 
         ConfirmVerificationCommand confirmCommand = new ConfirmVerificationCommand(target, TEST_EMAIL_CODE);
 
-        // when, then — no exception means success
+        // when, then
         verificationFacade.confirmVerification(confirmCommand);
     }
 }

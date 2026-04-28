@@ -16,6 +16,8 @@ import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.google.config.GoogleOauthConfig;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.google.vo.GoogleTokenResponse;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.google.vo.GoogleUserResponse;
+import teamdevhub.devhub.outbound.common.exception.ExternalServiceException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.net.URI;
@@ -53,7 +55,7 @@ public class GoogleOauthClientAdapter implements OauthClient {
         HttpResponse<GoogleUserResponse> response = oauthHttpClient.get(googleOauthConfig.getUserInfoUri(), new BearerAuthHeaderProvider(accessToken), GoogleUserResponse.class);
 
         if (!response.is2xx() || response.body() == null) {
-            throw new RuntimeException("구글 사용자 정보 조회 실패: " + response.rawBody());
+            throw ExternalServiceException.of(ErrorCode.UNKNOWN_FAIL);
         }
 
         GoogleUserResponse googleUser = response.body();
@@ -73,7 +75,7 @@ public class GoogleOauthClientAdapter implements OauthClient {
         HttpResponse<GoogleTokenResponse> googleToken = oauthHttpClient.postFormUrlEncoded(googleOauthConfig.getTokenUri(), form, new DefaultHeaderProvider(), GoogleTokenResponse.class);
 
         if (!googleToken.is2xx() || googleToken.body() == null || googleToken.body().access_token() == null) {
-            throw new RuntimeException("구글 토큰 요청 실패: " + googleToken.rawBody());
+            throw ExternalServiceException.of(ErrorCode.UNKNOWN_FAIL);
         }
 
         return googleToken.body().access_token();
