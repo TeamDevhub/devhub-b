@@ -1,5 +1,10 @@
 package teamdevhub.devhub.api.project.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,35 +34,46 @@ import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponse
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailWithFormResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
+@Tag(name = "Project", description = "프로젝트 생성/조회/수정/삭제 API")
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor
 public class ProjectController {
-	
+
 	private final ProjectFacade projectFacade;
-	
+
+	@Operation(summary = "프로젝트 생성", description = "새로운 프로젝트를 생성합니다.")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", description = "프로젝트 생성 성공"),
+			@ApiResponse(responseCode = "400", description = "유효성 검사 실패"),
+			@ApiResponse(responseCode = "401", description = "인증되지 않은 사용자")
+	})
 	@PostMapping
 	public ResponseEntity<DataApiResponseDto<Void>> createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
 		projectFacade.createProject(createProjectRequestDto.toCommand(authenticatedUser.userGuid()));
         return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
     }
 
-	/**
-	 * 리뷰
-	 * API 명세에 따라 목록조회는 list 없이 단순 GetMapping 만 명시하는 걸로 변경했습니다.
-	 * @param searchProjectRequestDto
-	 * @param page
-	 * @param size
-	 * @return
-	 */
+	@Operation(summary = "프로젝트 목록 조회", description = "검색 조건(제목, 포지션, 스킬 등)으로 프로젝트 목록을 페이징 조회합니다. 로그인 시 좋아요 여부가 포함됩니다.")
+	@ApiResponse(responseCode = "200", description = "조회 성공")
 	@GetMapping
-    public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto,
-    		@RequestParam("page") int page, @RequestParam("size") int size,  @AuthenticationPrincipal AuthenticatedUser user) {
+    public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(
+    		@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto,
+    		@Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam("page") int page,
+    		@Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size,
+    		@AuthenticationPrincipal AuthenticatedUser user) {
         return ResponseEntity.ok(projectFacade.getProjectList(searchProjectRequestDto.toSearchProjectListCommand(), PageCommand.of(page, size), user));
     }
 	
+	@Operation(summary = "프로젝트 상세 조회", description = "프로젝트 GUID로 프로젝트 상세 정보를 조회합니다.")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", description = "조회 성공"),
+			@ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없음")
+	})
 	@GetMapping("/{projectGuid}")
-	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(@PathVariable("projectGuid") String projectGuid, @AuthenticationPrincipal AuthenticatedUser user) {
+	public ResponseEntity<DataApiResponseDto<ProjectDetailResponseDto>> getProjectDetail(
+			@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid,
+			@AuthenticationPrincipal AuthenticatedUser user) {
 		ProjectDetailResponseDto responseDto = projectFacade.getProjectDetail(projectGuid, user);
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, responseDto)
@@ -65,8 +81,11 @@ public class ProjectController {
 	
 	}
 	
+	@Operation(summary = "프로젝트 + 지원서 양식 조회", description = "프로젝트 상세 정보와 지원서 양식을 함께 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "조회 성공")
 	@GetMapping("/{projectGuid}/form")
-	public ResponseEntity<DataApiResponseDto<ProjectDetailWithFormResponseDto>> getProjectDetailWithForm(@PathVariable("projectGuid") String projectGuid) {
+	public ResponseEntity<DataApiResponseDto<ProjectDetailWithFormResponseDto>> getProjectDetailWithForm(
+			@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid) {
 		ProjectDetailWithFormResponseDto responseDto = projectFacade.getProjectDetailWithForm(projectGuid);
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, responseDto)
@@ -74,9 +93,17 @@ public class ProjectController {
 	
 	}
 	
+	@Operation(summary = "프로젝트 수정", description = "프로젝트 정보를 수정합니다. 프로젝트 생성자만 수정 가능합니다.")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", description = "수정 성공"),
+			@ApiResponse(responseCode = "401", description = "인증되지 않은 사용자"),
+			@ApiResponse(responseCode = "403", description = "수정 권한 없음")
+	})
 	@PutMapping("/{projectGuid}")
-	public ResponseEntity<DataApiResponseDto<Void>> updateProject(@PathVariable("projectGuid") String projectGuid,
-			@RequestBody UpdateProjectRequestDto updateProjectRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+	public ResponseEntity<DataApiResponseDto<Void>> updateProject(
+			@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid,
+			@RequestBody UpdateProjectRequestDto updateProjectRequestDto,
+			@LoginUser AuthenticatedUser authenticatedUser) {
 		projectFacade.updateProject(projectGuid, updateProjectRequestDto.toCommand());
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS)
@@ -84,16 +111,26 @@ public class ProjectController {
 	
 	}
 	
+	@Operation(summary = "프로젝트 삭제", description = "프로젝트를 삭제합니다.")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", description = "삭제 성공"),
+			@ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없음")
+	})
 	@DeleteMapping("/{projectGuid}")
-	public ResponseEntity<DataApiResponseDto<Void>> deleteProject(@PathVariable("projectGuid") String projectGuid) {
+	public ResponseEntity<DataApiResponseDto<Void>> deleteProject(
+			@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid) {
 		projectFacade.deleteProject(projectGuid);
 		return ResponseEntity.ok(
 				DataApiResponseDto.successWithoutData(SuccessCode.DELETE_SUCCESS)
 		);
 	}
 	
+	@Operation(summary = "프로젝트 좋아요 토글", description = "프로젝트에 좋아요를 추가하거나 취소합니다.")
+	@ApiResponse(responseCode = "200", description = "좋아요 토글 성공")
 	@PostMapping("/{projectGuid}/likes")
-	public ResponseEntity<DataApiResponseDto<Void>> toggleProjectLike(@PathVariable("projectGuid") String projectGuid, @LoginUser AuthenticatedUser authenticatedUser) {
+	public ResponseEntity<DataApiResponseDto<Void>> toggleProjectLike(
+			@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid,
+			@LoginUser AuthenticatedUser authenticatedUser) {
 		projectFacade.toggleProjectLike(CreateProjectLikeCommand.toCreateProjectLikeCommand(projectGuid, authenticatedUser.userGuid()));
 		return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
 	}
