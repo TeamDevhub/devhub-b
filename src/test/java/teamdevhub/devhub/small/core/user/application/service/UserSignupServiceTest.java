@@ -73,40 +73,6 @@ public class UserSignupServiceTest {
         assertThat(userRepository.findByUserGuid(ADMIN_USER_GUID_1).getUserRole()).isEqualTo(UserRole.ADMIN);
     }
 
-//    @Test
-//    @DisplayName("관리자_계정이_이미_존재하면_새로운_계정을_생성하지_않는다")
-//    void doNotCreateAdminWhenAlreadyExists() {
-//        // given
-//        CreateUserCommand adminCreateUserCommand = new CreateUserCommand(ADMIN_USER_GUID_1, VerificationProvider.EMAIL, ADMIN_EMAIL_1, ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of());
-//        User existedAdminUser = User.createAdminUser(adminCreateUserCommand);
-//        userRepository.saveAdminUser(existedAdminUser);
-//
-//        // when
-//        SignupAdminCommand signupAdminCommand = new SignupAdminCommand("new-admin-guid", ADMIN_EMAIL_1, ADMIN_PASSWORD_1, ADMIN_USERNAME_1, "", List.of(), List.of(), VERIFICATION_TARGET_1);
-//        userSignupService.initializeAdminUser(signupAdminCommand);
-//
-//        // then
-//        UserCredential savedAdminUser = userRepository.findAuthenticatedUserByUserGuid(ADMIN_USER_GUID_1);
-//        assertThat(savedAdminUser).isNotNull();
-//        assertThat(savedAdminUser.userGuid()).isEqualTo(ADMIN_USER_GUID_1);
-//        assertThat(savedAdminUser.userRole()).isEqualTo(UserRole.ADMIN);
-//
-//        assertThat(userRepository.findByUserGuid("new-admin-guid")).isNull();
-//    }
-
-//    @Test
-//    @DisplayName("회원가입에_성공하면_인증_테이블에_해당_사용자의_인증내역이_삭제된다")
-//    void deleteEmailVerificationRecordWhenSuccessfulSignup() {
-//        // given
-//        SignupUserCommand signupUserCommand = new SignupUserCommand(TEST_EMAIL_1, TEST_PASSWORD_1, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST, VERIFICATION_TARGET_1);
-//
-//        // when
-//        userSignupService.saveEmailUserInfo(signupUserCommand, TEST_USER_GUID_1);
-//
-//        // then
-//        assertThat(userRepository.wasCalled("saveTerms")).isTrue();
-//    }
-
     @Test
     @DisplayName("회원가입_성공시_유저_포지션과_스킬이_저장된다")
     void signupStoresPositionsAndSkills() {

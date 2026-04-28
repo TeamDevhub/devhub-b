@@ -88,6 +88,10 @@ public class Project {
 				.build();
 	}
 	
+	public boolean isProgressCompleted() {
+		return progressEndDate != null && LocalDate.now().isAfter(progressEndDate);
+	}
+
 	public String getRecruitStatus() {
 		LocalDate now = LocalDate.now();
 		

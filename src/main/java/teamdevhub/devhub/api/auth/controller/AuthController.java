@@ -1,5 +1,6 @@
 package teamdevhub.devhub.api.auth.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import teamdevhub.devhub.api.auth.model.request.LoginRequestDto;
+import teamdevhub.devhub.api.user.model.UpdatePasswordRequestDto;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 
 import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
@@ -55,6 +57,16 @@ public class AuthController {
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.LOGOUT_SUCCESS
+                )
+        );
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<DataApiResponseDto<Void>> updatePassword(@Valid @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+        authFacade.updatePassword(updatePasswordRequestDto.toUpdatePasswordCommand(authenticatedUser.userGuid()));
+        return ResponseEntity.ok(
+                DataApiResponseDto.successWithoutData(
+                        SuccessCode.UPDATE_SUCCESS
                 )
         );
     }

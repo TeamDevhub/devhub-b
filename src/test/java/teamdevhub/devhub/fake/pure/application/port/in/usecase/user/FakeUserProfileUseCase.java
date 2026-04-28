@@ -56,4 +56,8 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
         user.changePositions(updateProfileCommand.positions());
         user.changeSkills(updateProfileCommand.skills());
     }
+
+    @Override
+    public void updateUserMannerDegree(String revieweeGuid, double reviewScore) {
+    }
 }

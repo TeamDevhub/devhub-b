@@ -43,6 +43,30 @@ Within the auth/user domains:
 4. Fix broken, weak, duplicated, or low-quality tests
 5. Improve consistency with existing small/medium test style
 6. Create missing Fake classes when necessary
+7. Achieve at least **95% test coverage** for auth/user related source code within the allowed scope
+
+---
+
+## Coverage Rule
+
+Prioritize meaningful coverage, not artificial numbers.
+
+Coverage target includes:
+
+- Line Coverage ≥ 95%
+- Branch Coverage as high as reasonably possible
+- Critical business logic paths must be fully covered
+
+Do not write meaningless tests only to increase metrics.
+
+Focus on:
+
+- business rules
+- exception flows
+- authorization/authentication failures
+- edge cases
+- state changes
+- persistence interactions
 
 ---
 
@@ -68,5 +92,6 @@ Within the auth/user domains:
 
 10. Run:
 
-```bash id="5ep6x0"
+```bash
 ./gradlew compileTestJava
+./gradlew test

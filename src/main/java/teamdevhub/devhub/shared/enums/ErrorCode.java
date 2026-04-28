@@ -64,6 +64,14 @@ public enum ErrorCode {
     BOOLEAN_CONVERT_FAIL("ERR.DVH.0070", "Boolean 값 변환에 실패했습니다",INTERNAL_SERVER_ERROR),
     STRING_LENGTH_INVALID("ERR.DVH.0071", "문자열 최대 길이는 0 이상이어야 합니다", BAD_REQUEST),
 
+    PROJECT_NOT_FOUND("ERR.DVH.0080", "프로젝트를 찾을 수 없습니다", BAD_REQUEST),
+    PROJECT_NOT_COMPLETED("ERR.DVH.0081", "완료되지 않은 프로젝트입니다", BAD_REQUEST),
+    REVIEW_NOT_A_MEMBER("ERR.DVH.0082", "프로젝트 멤버만 리뷰할 수 있습니다", BAD_REQUEST),
+    REVIEW_SELF_NOT_ALLOWED("ERR.DVH.0083", "자기 자신에게 리뷰할 수 없습니다", BAD_REQUEST),
+    REVIEW_DUPLICATE("ERR.DVH.0084", "이미 해당 프로젝트에서 리뷰한 사용자입니다", BAD_REQUEST),
+    REVIEW_SCORE_INVALID("ERR.DVH.0085", "리뷰 점수는 1.0~5.0 사이의 0.5 단위 값이어야 합니다", BAD_REQUEST),
+
+    FILE_INVALID("ERR.DVH.1000", "파일처리 과정에서 오류가 발생했습니다", INTERNAL_SERVER_ERROR),
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다",BAD_REQUEST);
 
 

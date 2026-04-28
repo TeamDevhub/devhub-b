@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamdevhub.devhub.outbound.common.persistence.jpa.converter.BooleanToYNConverter;
-import teamdevhub.devhub.outbound.common.persistence.jpa.audit.BaseEntity;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.outbound.common.persistence.jpa.audit.BaseEntity;
+import teamdevhub.devhub.outbound.common.persistence.jpa.converter.BooleanToYNConverter;
 
 import java.time.LocalDateTime;
 
@@ -62,5 +61,5 @@ public class UserEntity extends BaseEntity {
     private boolean deleted;
 
     @Column
-    private LocalDateTime lastLoginDate;
+    private LocalDateTime lastLoginDateTime;
 }

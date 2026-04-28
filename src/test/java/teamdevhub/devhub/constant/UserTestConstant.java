@@ -75,4 +75,7 @@ public final class UserTestConstant {
 
     public static final List<TermsAgreementItem> TEST_TERMS_AGREEMENT_LIST = List.of(new TermsAgreementItem(TEST_TERMS_GUID_1, true));
 
+    public static final String TEST_PROJECT_GUID_1 = "PRJT1a1b2c3d4e5f6g7h8i9j10k11l1";
+    public static final String TEST_REVIEW_GUID_1 = "RVEW1a1b2c3d4e5f6g7h8i9j10k11l1";
+
 }
