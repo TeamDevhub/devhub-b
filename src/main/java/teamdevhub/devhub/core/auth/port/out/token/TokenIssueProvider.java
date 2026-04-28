@@ -1,6 +1,6 @@
 package teamdevhub.devhub.core.auth.port.out.token;
 
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 public interface TokenIssueProvider {

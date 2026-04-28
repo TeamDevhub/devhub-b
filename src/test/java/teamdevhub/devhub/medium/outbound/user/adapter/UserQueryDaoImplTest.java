@@ -46,28 +46,22 @@ class UserQueryDaoImplTest {
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
                 .userGuid(randomGuid1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
                 .blocked(false)
                 .deleted(false)
                 .introduction(TEST_INTRO_1)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
                 .userGuid(randomGuid2)
-                .email(TEST_EMAIL_2)
-                .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
                 .blocked(true)
                 .deleted(false)
                 .introduction(TEST_INTRO_2)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         entityManager.persist(userEntity1);
@@ -93,28 +87,22 @@ class UserQueryDaoImplTest {
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
                 .userGuid(randomGuid1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
                 .blocked(false)
                 .deleted(false)
                 .introduction(TEST_INTRO_1)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
                 .userGuid(randomGuid2)
-                .email(TEST_EMAIL_2)
-                .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
                 .blocked(true)
                 .deleted(false)
                 .introduction(TEST_INTRO_2)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         entityManager.persist(userEntity1);
@@ -140,28 +128,22 @@ class UserQueryDaoImplTest {
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
                 .userGuid(randomGuid1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
                 .blocked(false)
                 .deleted(false)
                 .introduction(TEST_INTRO_1)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
                 .userGuid(randomGuid2)
-                .email(TEST_EMAIL_2)
-                .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
                 .blocked(true)
                 .deleted(false)
                 .introduction(TEST_INTRO_2)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         entityManager.persist(userEntity1);
@@ -189,28 +171,22 @@ class UserQueryDaoImplTest {
         String randomGuid2 = UUID.randomUUID().toString().replace("-", "");
         UserEntity userEntity1 = UserEntity.builder()
                 .userGuid(randomGuid1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
                 .blocked(false)
                 .deleted(false)
                 .introduction(TEST_INTRO_1)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
                 .userGuid(randomGuid2)
-                .email(TEST_EMAIL_2)
-                .password(TEST_PASSWORD_2)
                 .username(TEST_USERNAME_2)
                 .userRole(UserRole.USER)
                 .mannerDegree(50.0)
                 .blocked(true)
                 .deleted(false)
                 .introduction(TEST_INTRO_2)
-                .lastLoginDate(LocalDateTime.now().minusDays(1))
                 .build();
 
         entityManager.persist(userEntity1);

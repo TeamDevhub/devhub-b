@@ -13,22 +13,17 @@ import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 @Getter
 public class User {
 
     private final String userGuid;
-    private VerificationProvider verificationProvider;
-    private String oauthId;
-
-    private final String email;
-    private String password;
     private final UserRole userRole;
 
     private String username;
@@ -43,17 +38,12 @@ public class User {
     private boolean blocked;
     private LocalDateTime blockEndDate;
     private boolean deleted;
-    private LocalDateTime lastLoginDate;
 
     private final AuditInfo auditInfo;
 
     @Builder
     private User(
             String userGuid,
-            VerificationProvider verificationProvider,
-            String oauthId,
-            String email,
-            String password,
             UserRole userRole,
             String username,
             String introduction,
@@ -64,17 +54,9 @@ public class User {
             boolean blocked,
             LocalDateTime blockEndDate,
             boolean deleted,
-            LocalDateTime lastLoginDate,
             AuditInfo auditInfo
     ) {
-        validate(email, password);
-
         this.userGuid = userGuid;
-        this.verificationProvider = verificationProvider;
-        this.oauthId = oauthId;
-
-        this.email = email;
-        this.password = password;
         this.userRole = userRole;
 
         this.username = username;
@@ -89,7 +71,6 @@ public class User {
         this.blocked = blocked;
         this.blockEndDate = blockEndDate;
         this.deleted = deleted;
-        this.lastLoginDate = lastLoginDate;
 
         if (auditInfo == null) {
             this.auditInfo = AuditInfo.empty();
@@ -101,10 +82,6 @@ public class User {
     public static User createAdminUser(CreateUserCommand adminCreateUserCommand) {
         return User.builder()
                 .userGuid(adminCreateUserCommand.userGuid())
-                .verificationProvider(VerificationProvider.EMAIL)
-                .oauthId(adminCreateUserCommand.email())
-                .email(adminCreateUserCommand.email())
-                .password(adminCreateUserCommand.encodedPassword())
                 .userRole(UserRole.ADMIN)
                 .username(adminCreateUserCommand.username())
                 .blocked(false)
@@ -116,10 +93,6 @@ public class User {
     public static User createGeneralUser(CreateUserCommand generalCreateUserCommand) {
         return User.builder()
                 .userGuid(generalCreateUserCommand.userGuid())
-                .verificationProvider(VerificationProvider.EMAIL)
-                .oauthId(generalCreateUserCommand.email())
-                .email(generalCreateUserCommand.email())
-                .password(generalCreateUserCommand.encodedPassword())
                 .userRole(UserRole.USER)
                 .username(generalCreateUserCommand.username())
                 .introduction(generalCreateUserCommand.introduction())
@@ -133,10 +106,6 @@ public class User {
     public static User createOauthUser(CreateUserCommand oauthCreateUserCommand) {
         return User.builder()
                 .userGuid(oauthCreateUserCommand.userGuid())
-                .verificationProvider(oauthCreateUserCommand.verificationProvider())
-                .oauthId(oauthCreateUserCommand.oauthId())
-                .email(oauthCreateUserCommand.email())
-                .password(oauthCreateUserCommand.encodedPassword())
                 .userRole(UserRole.USER)
                 .username(oauthCreateUserCommand.username())
                 .introduction(oauthCreateUserCommand.introduction())
@@ -149,10 +118,6 @@ public class User {
 
     public static User of(
             String userGuid,
-            VerificationProvider verificationProvider,
-            String oauthId,
-            String email,
-            String password,
             UserRole userRole,
             String username,
             String introduction,
@@ -161,15 +126,10 @@ public class User {
             boolean blocked,
             LocalDateTime blockEndDate,
             boolean deleted,
-            LocalDateTime lastLoginDateTime,
             AuditInfo auditInfo
     ) {
         return User.builder()
                 .userGuid(userGuid)
-                .verificationProvider(verificationProvider)
-                .oauthId(oauthId)
-                .email(email)
-                .password(password)
                 .userRole(userRole)
                 .username(username)
                 .introduction(introduction)
@@ -178,7 +138,6 @@ public class User {
                 .blocked(blocked)
                 .blockEndDate(blockEndDate)
                 .deleted(deleted)
-                .lastLoginDate(lastLoginDateTime)
                 .auditInfo(auditInfo)
                 .build();
     }
@@ -206,46 +165,28 @@ public class User {
     }
 
     public UserPositionChangeResult changePositions(Set<UserPosition> newPositions) {
-        if (newPositions == null || newPositions.isEmpty()) {
+        if (hasInvalidItems(newPositions, UserPosition::positionCd)) {
             return UserPositionChangeResult.unchanged(this.positions);
         }
-
-        boolean hasNullPositionCd = newPositions.stream()
-                .anyMatch(userPosition -> userPosition.positionCd() == null || userPosition.positionCd().isBlank());
-
-        if (hasNullPositionCd) {
-            return UserPositionChangeResult.unchanged(this.positions);
-        }
-
         if (!this.positions.equals(newPositions)) {
             Set<UserPosition> oldPositions = Set.copyOf(positions);
             this.positions.clear();
             this.positions.addAll(newPositions);
             return UserPositionChangeResult.changed(oldPositions, this.positions);
         }
-
         return UserPositionChangeResult.unchanged(this.positions);
     }
 
     public UserSkillChangeResult changeSkills(Set<UserSkill> newSkills) {
-        if (newSkills == null || newSkills.isEmpty()) {
+        if (hasInvalidItems(newSkills, UserSkill::skillCd)) {
             return UserSkillChangeResult.unchanged(this.skills);
         }
-
-        boolean hasNullSkillCd = newSkills.stream()
-                .anyMatch(userSkill -> userSkill.skillCd() == null || userSkill.skillCd().isBlank());
-
-        if (hasNullSkillCd) {
-            return UserSkillChangeResult.unchanged(this.skills);
-        }
-
         if (!this.skills.equals(newSkills)) {
             Set<UserSkill> oldSkills = Set.copyOf(this.skills);
             this.skills.clear();
             this.skills.addAll(newSkills);
             return UserSkillChangeResult.changed(oldSkills, this.skills);
         }
-
         return UserSkillChangeResult.unchanged(this.skills);
     }
 
@@ -254,15 +195,28 @@ public class User {
         this.skills = new HashSet<>(skills);
     }
 
+    public void assertActive() {
+        if (this.deleted) {
+            throw DomainRuleException.of(ErrorCode.USER_WITHDRAWN);
+        }
 
-    public void changePassword(String encryptedNewPassword) {
-        this.password = encryptedNewPassword;
+        if (this.blocked) {
+            throw DomainRuleException.of(ErrorCode.USER_BLOCKED);
+        }
     }
 
-    private void validate(String email, String password) {
-        if (!hasText(email)) {
-            throw DomainRuleException.of(ErrorCode.USER_ID_FAIL);
+    public void applyReviewScore(double score) {
+        this.mannerDegree += (score - 3.0);
+    }
+
+    private <T> boolean hasInvalidItems(Set<T> items, Function<T, String> codeExtractor) {
+        if (items == null || items.isEmpty()) {
+            return true;
         }
+        return items.stream().anyMatch(item -> {
+            String code = codeExtractor.apply(item);
+            return code == null || code.isBlank();
+        });
     }
 
     private boolean hasText(String value) {

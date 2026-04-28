@@ -3,8 +3,8 @@ package teamdevhub.devhub.constant;
 import teamdevhub.devhub.core.terms.domain.TermsAgreementItem;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -74,5 +74,8 @@ public final class UserTestConstant {
     public static final String TEST_TERMS_GUID_1 = "TERMS1a1b2c3d4e5f6g7h8i9j10k11l12";
 
     public static final List<TermsAgreementItem> TEST_TERMS_AGREEMENT_LIST = List.of(new TermsAgreementItem(TEST_TERMS_GUID_1, true));
+
+    public static final String TEST_PROJECT_GUID_1 = "PRJT1a1b2c3d4e5f6g7h8i9j10k11l1";
+    public static final String TEST_REVIEW_GUID_1 = "RVEW1a1b2c3d4e5f6g7h8i9j10k11l1";
 
 }

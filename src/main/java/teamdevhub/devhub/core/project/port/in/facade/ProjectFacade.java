@@ -18,6 +18,7 @@ import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationForm;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
@@ -35,7 +36,6 @@ import teamdevhub.devhub.core.project.port.in.usecase.ProjectLikeUseCase;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @Service
@@ -118,7 +118,10 @@ public class ProjectFacade {
 
 	public ProjectDetailWithFormResponseDto getProjectDetailWithForm(String projectGuid) {
 		Project project = projectUseCase.getProjectDetail(projectGuid);
-		String email = userProfileUseCase.getUserInfo(project.getUserGuid()).getEmail();
+		/**
+		 * 인증테이블 분리에 따라 추후 변경 필요
+		 */
+		String email = userProfileUseCase.getUserInfo(project.getUserGuid()).getUserGuid();
 
 		List<ProjectApplicationForm> projectForms = projectApplicationFormUseCase.findByProjectGuid(projectGuid);
 		List<String> applicationFormGuids = projectForms.stream()

@@ -1,0 +1,72 @@
+package teamdevhub.devhub.outbound.auth.adapter;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.port.out.UserCredentialRepository;
+import teamdevhub.devhub.outbound.auth.adapter.entity.EmailCredentialEntity;
+import teamdevhub.devhub.outbound.auth.adapter.mapper.UserCredentialMapper;
+import teamdevhub.devhub.outbound.auth.persistence.JpaEmailCredentialRepository;
+import teamdevhub.devhub.outbound.auth.persistence.JpaOauthCredentialRepository;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
+
+import java.util.Optional;
+
+@Component
+@RequiredArgsConstructor
+public class UserCredentialAdapter implements UserCredentialRepository {
+
+    private final JpaEmailCredentialRepository jpaEmailCredentialRepository;
+    private final JpaOauthCredentialRepository jpaOauthCredentialRepository;
+
+    @Override
+    public Optional<AuthenticatedUser> findUserCredentialByUserGuid(String userGuid) {
+        return jpaEmailCredentialRepository.findByUserGuid(userGuid)
+                .map(UserCredentialMapper::toAuthenticatedUser)
+                .or(() -> jpaOauthCredentialRepository.findByUserGuid(userGuid)
+                        .map(UserCredentialMapper::toAuthenticatedUser));
+    }
+
+    @Override
+    public Optional<AuthenticatedUser> findEmailUserCredentialByEmail(String email) {
+        return jpaEmailCredentialRepository.findByEmail(email)
+                .map(UserCredentialMapper::toAuthenticatedUser);
+    }
+
+    @Override
+    public Optional<AuthenticatedUser> findOAuthUserCredentialByOAuth(VerificationProvider verificationProvider, String oauthId) {
+        return jpaOauthCredentialRepository.findByProviderAndOauthId(verificationProvider, oauthId)
+                .map(UserCredentialMapper::toAuthenticatedUser);
+    }
+
+    @Override
+    public void saveEmailUserCredential(AuthenticatedUser authenticatedUser, String encryptedPassword) {
+        jpaEmailCredentialRepository.save(
+                UserCredentialMapper.toEmailCredentialEntity(authenticatedUser, encryptedPassword)
+        );
+    }
+
+    @Override
+    public void saveOAuthUserCredential(AuthenticatedUser authenticatedUser, VerificationProvider verificationProvider, String oauthId) {
+        jpaOauthCredentialRepository.save(
+                UserCredentialMapper.toOAuthCredentialEntity(authenticatedUser, verificationProvider, oauthId)
+        );
+    }
+
+    @Override
+    public EmailUserCredential findEmailCredentialByUserGuid(String userGuid) {
+        EmailCredentialEntity emailCredentialEntity = jpaEmailCredentialRepository.findByUserGuid(userGuid)
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.USER_NOT_FOUND));
+
+        return UserCredentialMapper.toEmailUserCredential(emailCredentialEntity);
+    }
+
+    @Override
+    public void savePassword(EmailUserCredential emailUserCredential) {
+        EmailCredentialEntity emailCredentialEntity = UserCredentialMapper.toEmailCredentialEntity(emailUserCredential);
+        jpaEmailCredentialRepository.save(emailCredentialEntity);
+    }
+}

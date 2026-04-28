@@ -4,9 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.auth.domain.Verification;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationMessage;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationType;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationType;
 
 import java.time.LocalDateTime;
 

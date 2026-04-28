@@ -18,7 +18,9 @@ public enum SuccessCode {
     LOGOUT_SUCCESS("SUC.DVH.0014", "로그아웃이 성공했습니다"),
     USER_DELETE_SUCCESS("SUC.DVH.0015", "회원탈퇴를 성공했습니다"),
 
-    SIGNUP_REQUIRED("SUC.DVH.0020", "회원정보 작성이 필요합니다.");
+    SIGNUP_REQUIRED("SUC.DVH.0020", "회원정보 작성이 필요합니다."),
+
+    REVIEW_SUCCESS("SUC.DVH.0021", "리뷰가 완료되었습니다.");
 
     private final String code;
     private final String message;

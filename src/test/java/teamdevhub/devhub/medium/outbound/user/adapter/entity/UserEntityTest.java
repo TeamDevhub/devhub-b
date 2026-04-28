@@ -17,27 +17,21 @@ class UserEntityTest {
         // given, when
         UserEntity userEntity = UserEntity.builder()
                 .userGuid(TEST_USER_GUID_1)
-                .email(TEST_EMAIL_1)
-                .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
                 .userRole(UserRole.USER)
                 .introduction(TEST_INTRO_1)
                 .mannerDegree(TEST_MANNER)
                 .blocked(TEST_BLOCKED)
                 .deleted(TEST_DELETED)
-                .lastLoginDate(TEST_LAST_LOGIN)
                 .build();
 
         // then
         assertThat(userEntity.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(userEntity.getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(userEntity.getPassword()).isEqualTo(TEST_PASSWORD_1);
         assertThat(userEntity.getUsername()).isEqualTo(TEST_USERNAME_1);
         assertThat(userEntity.getUserRole()).isEqualTo(UserRole.USER);
         assertThat(userEntity.getIntroduction()).isEqualTo(TEST_INTRO_1);
         assertThat(userEntity.getMannerDegree()).isEqualTo(TEST_MANNER);
         assertThat(userEntity.isBlocked()).isEqualTo(TEST_BLOCKED);
         assertThat(userEntity.isDeleted()).isEqualTo(TEST_DELETED);
-        assertThat(userEntity.getLastLoginDate()).isEqualTo(TEST_LAST_LOGIN);
     }
 }

@@ -4,6 +4,7 @@ import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
 import teamdevhub.devhub.core.auth.port.out.token.RefreshTokenRepository;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class FakeRefreshTokenRepository implements RefreshTokenRepository {
 
@@ -15,8 +16,8 @@ public class FakeRefreshTokenRepository implements RefreshTokenRepository {
     }
 
     @Override
-    public RefreshToken findByUserGuid(String userGuid) {
-        return store.get(userGuid);
+    public Optional<RefreshToken> findByUserGuid(String userGuid) {
+        return Optional.ofNullable(store.get(userGuid));
     }
 
     @Override
@@ -26,5 +27,9 @@ public class FakeRefreshTokenRepository implements RefreshTokenRepository {
 
     public void givenRefreshToken(RefreshToken refreshToken) {
         store.put(refreshToken.userGuid(), refreshToken);
+    }
+
+    public boolean contains(String userGuid) {
+        return store.containsKey(userGuid);
     }
 }

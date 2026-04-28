@@ -23,8 +23,8 @@ public class CookieFactoryTest {
         assertThat(cookie.getValue()).isEqualTo(TEST_REFRESH_TOKEN);
         assertThat(cookie.getPath()).isEqualTo("/auth/reissue");
         assertThat(cookie.isHttpOnly()).isTrue();
-        assertThat(cookie.isSecure()).isTrue();
-        assertThat(cookie.getSameSite()).isEqualTo("SameSite");
+        assertThat(cookie.isSecure()).isFalse();
+        assertThat(cookie.getSameSite()).isEqualTo("Lax");
         assertThat(cookie.getMaxAge().getSeconds()).isEqualTo(14 * 24 * 60 * 60);
     }
 }

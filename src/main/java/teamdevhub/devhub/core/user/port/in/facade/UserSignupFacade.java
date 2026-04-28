@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.terms.port.in.usecase.TermsUseCase;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
-import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.user.port.in.usecase.UserSignupUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
@@ -24,27 +24,23 @@ public class UserSignupFacade {
     private final UserSignupUseCase userSignupUseCase;
     private final TermsUseCase termsUseCase;
     private final OauthResolveUseCase oauthResolveUseCase;
+    private final UserCredentialUseCase userCredentialUseCase;
     private final AuthenticationUseCase authenticationUseCase;
     private final VerificationUseCase verificationUseCase;
 
     public void signup(SignupUserCommand signupUserCommand) {
         verificationUseCase.assertAllowed(signupUserCommand.verificationTarget());
-        String userGuid = userSignupUseCase.signup(signupUserCommand);
+        String userGuid = userCredentialUseCase.signupEmailUser(signupUserCommand);
+        userSignupUseCase.saveEmailUserInfo(signupUserCommand, userGuid);
         termsUseCase.saveTermsAgreement(signupUserCommand.toAgreeTermsCommand(userGuid));
         verificationUseCase.consume(signupUserCommand.verificationTarget());
     }
 
     public OauthAuthResult signupWithOauth(SignupOauthUserCommand signupOauthUserCommand) {
         OauthUser oauthUser = oauthResolveUseCase.extractOauthUser(signupOauthUserCommand);
-        User savedUser = userSignupUseCase.signupWithOauth(signupOauthUserCommand, oauthUser);
-
-        AuthenticatedUser authenticatedUser = AuthenticatedUser.builder()
-                .userGuid(savedUser.getUserGuid())
-                .email(savedUser.getEmail())
-                .password(savedUser.getPassword())
-                .userRole(savedUser.getUserRole())
-                .build();
-
+        AuthenticatedUser authenticatedUser = userCredentialUseCase.signupOAuthUser(oauthUser);
+        userSignupUseCase.saveOAuthUserInfo(signupOauthUserCommand, oauthUser, authenticatedUser.userGuid());
+        termsUseCase.saveTermsAgreement(signupOauthUserCommand.toAgreeTermsCommand(authenticatedUser.userGuid()));
         AuthResult authResult = authenticationUseCase.login(authenticatedUser);
         return OauthAuthResult.loggedIn(authResult);
     }

@@ -6,10 +6,12 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.AuthenticationService;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTokenIssueProvider;
 import teamdevhub.devhub.fake.pure.application.port.out.auth.FakeRefreshTokenRepository;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -38,7 +40,6 @@ class AuthenticationServiceTest {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
-                TEST_PASSWORD_1,
                 UserRole.USER
         );
 
@@ -58,7 +59,6 @@ class AuthenticationServiceTest {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
-                TEST_PASSWORD_1,
                 UserRole.USER
         );
 
@@ -66,10 +66,10 @@ class AuthenticationServiceTest {
         authenticationService.login(authenticatedUser);
 
         // then
-        RefreshToken refreshToken = refreshTokenRepository.findByUserGuid(TEST_USER_GUID_1);
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserGuid(TEST_USER_GUID_1);
 
         assertThat(refreshToken).isNotNull();
-        assertThat(refreshToken.token()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
+        assertThat(refreshToken.get().token()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
     }
 
     @Test
@@ -79,7 +79,6 @@ class AuthenticationServiceTest {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
-                TEST_PASSWORD_1,
                 UserRole.USER
         );
 
@@ -93,22 +92,25 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    @DisplayName("액세스토큰을_재발급할_수_있다")
-    void reissueAccessToken() {
+    @DisplayName("액세스토큰_재발급_시_새로운_리프레시토큰도_함께_발급된다")
+    void reissueAccessToken_alsoRotatesRefreshToken() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
-                TEST_PASSWORD_1,
                 UserRole.USER
         );
+        refreshTokenRepository.save(RefreshToken.of(TEST_USER_GUID_1, "old-refresh-token"));
 
         // when
         AuthResult authResult = authenticationService.reissueAccessToken(authenticatedUser);
 
         // then
-        assertThat(authResult).isNotNull();
         assertThat(authResult.accessToken()).isEqualTo("access-token-" + TEST_USER_GUID_1);
+        assertThat(authResult.refreshToken()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
+        assertThat(refreshTokenRepository.findByUserGuid(TEST_USER_GUID_1))
+                .isPresent()
+                .hasValueSatisfying(t -> assertThat(t.token()).isEqualTo("refresh-token-" + TEST_USER_GUID_1));
     }
 
     @Test
@@ -121,6 +123,6 @@ class AuthenticationServiceTest {
         authenticationService.revoke(TEST_USER_GUID_1);
 
         // then
-        assertThat(refreshTokenRepository.findByUserGuid(TEST_USER_GUID_1)).isNull();
+        assertThat(refreshTokenRepository.contains(TEST_USER_GUID_1)).isFalse();
     }
 }

@@ -2,9 +2,9 @@ package teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth;
 
 import lombok.Setter;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthResolveUseCase;
@@ -24,7 +24,7 @@ public class FakeOauthResolveUseCase implements OauthResolveUseCase {
         if (oauthUserResult.loginAvailable()) {
             AuthenticatedUser authenticatedUser = AuthenticatedUser.builder()
                     .userGuid(TEST_USER_GUID_1)
-                    .email(TEST_EMAIL_1)
+                    .loginId(TEST_EMAIL_1)
                     .userRole(UserRole.USER)
                     .build();
 

@@ -6,15 +6,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
 import teamdevhub.devhub.outbound.auth.adapter.RefreshTokenAdapter;
 import teamdevhub.devhub.outbound.auth.adapter.entity.RefreshTokenEntity;
-import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.auth.persistence.JpaRefreshTokenRepository;
-import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -70,26 +69,25 @@ class RefreshTokenAdapterTest {
         jpaRefreshTokenRepository.save(RefreshTokenEntity.of("USER_GUID_1", "REFRESH_TOKEN_1"));
 
         // when
-        RefreshToken refreshToken = refreshTokenAdapter.findByUserGuid("USER_GUID_1");
+        Optional<RefreshToken> refreshToken = refreshTokenAdapter.findByUserGuid("USER_GUID_1");
 
         // then
-        assertThat(refreshToken.userGuid()).isEqualTo("USER_GUID_1");
-        assertThat(refreshToken.token()).isEqualTo("REFRESH_TOKEN_1");
+        assertThat(refreshToken.get().userGuid()).isEqualTo("USER_GUID_1");
+        assertThat(refreshToken.get().token()).isEqualTo("REFRESH_TOKEN_1");
     }
 
     @Test
-    @DisplayName("리프레시_토큰이_없으면_예외를_발생시킨다")
-    void findByUserGuid_notExists_throwsException() {
+    @DisplayName("리프레시 토큰이 없으면 Optional.empty 를 반환한다")
+    void findByUserGuid_notExists_returnsEmpty() {
         // given
         String userGuid = "NOT_EXIST_USER";
 
-        // when then
-        assertThatThrownBy(
-                () -> refreshTokenAdapter.findByUserGuid(userGuid))
-                .isInstanceOf(AdapterDataException.class)
-                .hasMessageContaining(ErrorCode.REFRESH_TOKEN_INVALID.getMessage());
-    }
+        // when
+        Optional<RefreshToken> result = refreshTokenAdapter.findByUserGuid(userGuid);
 
+        // then
+        assertThat(result).isEmpty();
+    }
     @Test
     @DisplayName("사용자_식별키로_리프레시_토큰을_삭제한다")
     void deleteByUserGuid() {

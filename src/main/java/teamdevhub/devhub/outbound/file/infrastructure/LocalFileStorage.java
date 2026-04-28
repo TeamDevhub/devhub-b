@@ -3,6 +3,8 @@ package teamdevhub.devhub.outbound.file.infrastructure;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.file.port.out.FileStorage;
+import teamdevhub.devhub.outbound.common.exception.ExternalServiceException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,7 +24,7 @@ public class LocalFileStorage implements FileStorage {
             Files.write(destination, content);
             return destination.toString();
         } catch (IOException e) {
-            throw new RuntimeException("File saveTerms failed", e);
+            throw ExternalServiceException.of(ErrorCode.FILE_INVALID);
         }
     }
 
@@ -32,7 +34,7 @@ public class LocalFileStorage implements FileStorage {
             Path path = fileStorageProperties.resolve(fileGuid);
             return Files.readAllBytes(path);
         } catch (IOException e) {
-            throw new RuntimeException("File read failed", e);
+            throw ExternalServiceException.of(ErrorCode.FILE_INVALID);
         }
     }
 
@@ -42,7 +44,7 @@ public class LocalFileStorage implements FileStorage {
             Path destination = fileStorageProperties.resolve(fileGuid);
             Files.deleteIfExists(destination);
         } catch (IOException e) {
-            throw new RuntimeException("File deleteByFileGuid failed", e);
+            throw ExternalServiceException.of(ErrorCode.FILE_INVALID);
         }
     }
 }

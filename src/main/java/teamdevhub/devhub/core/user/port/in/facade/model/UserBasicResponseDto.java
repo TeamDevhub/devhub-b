@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 public class UserBasicResponseDto {
 
     private String userGuid;
-    private String email;
-
     private String username;
     private String introduction;
 
@@ -38,7 +36,6 @@ public class UserBasicResponseDto {
 
         return UserBasicResponseDto.builder()
                 .userGuid(user.getUserGuid())
-                .email(user.getEmail())
                 .username(user.getUsername())
                 .introduction(user.getIntroduction())
                 .fileGuid(user.getFileGuid())
@@ -46,7 +43,6 @@ public class UserBasicResponseDto {
                 .blocked(user.isBlocked())
                 .blockEndDate(user.getBlockEndDate())
                 .deleted(user.isDeleted())
-                .lastLoginDateTime(user.getLastLoginDate())
                 .registrantGuid(user.getAuditInfo().registrantGuid())
                 .registeredDate(user.getAuditInfo().registeredDate())
                 .modifierGuid(user.getAuditInfo().modifierGuid())
