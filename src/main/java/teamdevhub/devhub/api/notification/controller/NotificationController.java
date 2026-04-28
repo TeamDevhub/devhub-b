@@ -8,7 +8,7 @@ import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.notification.port.in.facade.NotificationFacade;
 import teamdevhub.devhub.core.notification.port.in.facade.model.NotificationResponseDto;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 
 @RestController
 @RequestMapping("/notification")

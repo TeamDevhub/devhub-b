@@ -15,7 +15,6 @@ public class FakeApplicationFormUseCase implements ApplicationFormUseCase {
 
 	@Override
 	public List<String> saveApplicationForms(List<CreateApplicationFormCommand> additionalFormList) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -27,7 +27,7 @@ import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardDetailResponseDto;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
 import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 
 @RestController
 @RequestMapping("/boards")
@@ -78,7 +78,7 @@ public class BoardController {
 	}
 	
 	@PutMapping("/{boardGuid}")
-	public ResponseEntity<DataApiResponseDto<Void>> updateBoard(@RequestBody UpdateBoardRequestDto updateBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser, 
+	public ResponseEntity<DataApiResponseDto<Void>> updateBoard(@RequestBody UpdateBoardRequestDto updateBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser,
 			@PathVariable("boardGuid") String boardGuid) {
 		return ResponseEntity.ok(boardFacade.updateBoard(updateBoardRequestDto.toCommand(authenticatedUser.userGuid(), boardGuid)));
 	}

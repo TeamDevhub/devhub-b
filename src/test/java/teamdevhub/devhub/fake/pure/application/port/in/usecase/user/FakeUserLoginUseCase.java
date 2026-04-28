@@ -27,7 +27,7 @@ public class FakeUserLoginUseCase implements UserLoginUseCase {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1);
         User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         store.put(TEST_USER_GUID_1, testUser);
@@ -38,8 +38,20 @@ public class FakeUserLoginUseCase implements UserLoginUseCase {
         updatedLoginUsers.add(userGuid);
     }
 
+    @Override
+    public void validateLoginUser(String userGuid) {
+        User user = store.get(userGuid);
+        if (user != null) {
+            user.assertActive();
+        }
+    }
+
     public boolean isLoginTimeUpdated(String userGuid) {
         return updatedLoginUsers.contains(userGuid);
+    }
+
+    public void givenUser(User user) {
+        store.put(user.getUserGuid(), user);
     }
 
 }

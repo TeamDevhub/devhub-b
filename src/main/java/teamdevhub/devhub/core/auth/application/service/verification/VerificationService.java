@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.application.selector.verification.VerificationIssuerSelector;
 import teamdevhub.devhub.core.auth.domain.Verification;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 import teamdevhub.devhub.core.auth.port.in.command.verification.ConfirmVerificationCommand;
 import teamdevhub.devhub.core.auth.port.in.command.verification.IssueVerificationCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.verification.VerificationUseCase;

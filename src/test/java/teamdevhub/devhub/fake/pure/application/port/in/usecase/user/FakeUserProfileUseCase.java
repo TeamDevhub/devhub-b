@@ -4,7 +4,6 @@ import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
-import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
@@ -28,7 +27,7 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1);
         User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         store.put(TEST_USER_GUID_1, testUser);
@@ -56,10 +55,5 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
         user.updateBasicProfile(updateUserCommand);
         user.changePositions(updateProfileCommand.positions());
         user.changeSkills(updateProfileCommand.skills());
-    }
-
-    @Override
-    public void updatePassword(UpdatePasswordCommand updatePasswordCommand) {
-
     }
 }

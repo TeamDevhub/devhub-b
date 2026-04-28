@@ -19,8 +19,6 @@ public class FakeUserQueryUseCase implements UserQueryUseCase {
         userList.add(
                 User.builder()
                         .userGuid(TEST_USER_GUID_1)
-                        .password(TEST_PASSWORD_1)
-                        .email(TEST_EMAIL_1)
                         .username(TEST_USERNAME_1)
                         .blocked(false)
                         .build()
@@ -28,8 +26,6 @@ public class FakeUserQueryUseCase implements UserQueryUseCase {
         userList.add(
                 User.builder()
                         .userGuid(TEST_USER_GUID_2)
-                        .password(TEST_PASSWORD_2)
-                        .email(TEST_EMAIL_2)
                         .username(TEST_USERNAME_2)
                         .blocked(false)
                         .build()

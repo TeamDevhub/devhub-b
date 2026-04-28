@@ -43,6 +43,8 @@ public enum ErrorCode {
     ALREADY_DELETED("ERR.DVH.0032", "이미 탈퇴한 회원입니다", BAD_REQUEST ),
     USER_POSITION_REQUIRED("ERR.DVH.0033", "관심 포지션은 필수입니다", BAD_REQUEST),
     USER_SKILL_REQUIRED("ERR.DVH.0034", "보유 스킬목록은 필수입니다", BAD_REQUEST),
+    USER_WITHDRAWN("ERR.DVH.0035", "탈퇴한 회원입니다", BAD_REQUEST),
+    USER_BLOCKED("ERR.DVH.0036", "정지된 회원입니다", BAD_REQUEST),
 
     OAUTH_FAIL("ERR.DVH.0040", "지원하지 않는 OAuth 로그인입니다", BAD_REQUEST),
 
@@ -63,6 +65,7 @@ public enum ErrorCode {
     STRING_LENGTH_INVALID("ERR.DVH.0071", "문자열 최대 길이는 0 이상이어야 합니다", BAD_REQUEST),
 
     UNKNOWN_FAIL("ERR.DVH.9999", "원인 미상의 에러가 발생했습니다",BAD_REQUEST);
+
 
     private final String code;
     private final String message;

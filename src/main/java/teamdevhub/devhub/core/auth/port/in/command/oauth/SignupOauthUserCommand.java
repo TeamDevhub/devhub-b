@@ -1,11 +1,17 @@
 package teamdevhub.devhub.core.auth.port.in.command.oauth;
 
 import lombok.Builder;
+import teamdevhub.devhub.core.terms.domain.TermsAgreementItem;
+import teamdevhub.devhub.core.terms.port.in.command.AgreeTermsCommand;
 
 import java.util.List;
 
 @Builder
-public record SignupOauthUserCommand(String tempToken, String password, String username, String introduction,
-                                     List<String> positionList, List<String> skillList) {
+public record SignupOauthUserCommand(String tempToken, String username, String introduction,
+                                     List<String> positionList, List<String> skillList, List<TermsAgreementItem> termsAgreementItemList) {
+
+    public AgreeTermsCommand toAgreeTermsCommand(String userGuid) {
+        return new AgreeTermsCommand(userGuid, this.termsAgreementItemList);
+    }
 
 }

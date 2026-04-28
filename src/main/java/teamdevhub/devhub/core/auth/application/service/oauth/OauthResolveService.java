@@ -3,12 +3,12 @@ package teamdevhub.devhub.core.auth.application.service.oauth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamdevhub.devhub.core.auth.port.out.UserCredentialRepository;
 import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthResolveUseCase;
 import teamdevhub.devhub.core.auth.port.out.token.TokenParseProvider;
-import teamdevhub.devhub.core.user.port.out.UserRepository;
 
 @Service
 @Transactional
@@ -16,12 +16,16 @@ import teamdevhub.devhub.core.user.port.out.UserRepository;
 public class OauthResolveService implements OauthResolveUseCase {
 
     private final TokenParseProvider tokenParseProvider;
-    private final UserRepository userRepository;
+    private final UserCredentialRepository userCredentialRepository;
 
     @Override
     public OauthUserResult findOrRequireSignup(OauthUser oauthUser) {
-        return userRepository
-                .findByOAuth(oauthUser.verificationProvider(), oauthUser.oauthId())
+
+        return userCredentialRepository
+                .findOAuthUserCredentialByOAuth(
+                        oauthUser.verificationProvider(),
+                        oauthUser.oauthId()
+                )
                 .map(OauthUserResult::success)
                 .orElseGet(OauthUserResult::requiresSignup);
     }

@@ -10,8 +10,8 @@ public record AuthResult(String accessToken, String refreshToken) {
         return new AuthResult(accessToken, refreshToken);
     }
 
-    public static AuthResult ofReissue(String accessToken) {
-        return new AuthResult(accessToken, null);
+    public boolean hasRefreshToken() {
+        return refreshToken != null;
     }
 
     public String toAuthorizationHeader() {

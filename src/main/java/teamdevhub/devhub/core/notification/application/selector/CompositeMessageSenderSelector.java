@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.notification.port.out.NotificationSender;
 import teamdevhub.devhub.outbound.common.exception.ExternalServiceException;
 import teamdevhub.devhub.shared.enums.ErrorCode;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationMessage;
-import teamdevhub.devhub.core.auth.domain.vo.VerificationTarget;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationMessage;
+import teamdevhub.devhub.core.auth.domain.vo.verification.VerificationTarget;
 
 import java.util.List;
 

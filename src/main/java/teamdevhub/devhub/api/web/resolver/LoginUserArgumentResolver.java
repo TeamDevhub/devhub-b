@@ -8,10 +8,10 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 
 import java.util.Optional;
 

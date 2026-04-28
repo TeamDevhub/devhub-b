@@ -12,7 +12,7 @@ import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthHttpClient;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.BearerAuthHeaderProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.DefaultHeaderProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.HttpResponse;
-import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.google.config.GoogleOauthConfig;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.google.vo.GoogleTokenResponse;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.google.vo.GoogleUserResponse;

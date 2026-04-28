@@ -21,6 +21,7 @@ import teamdevhub.devhub.api.web.model.request.PageRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
 import teamdevhub.devhub.core.common.page.PageCommand;
@@ -30,7 +31,6 @@ import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserWithdrawFacade;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserDetailResponseDto;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @RestController

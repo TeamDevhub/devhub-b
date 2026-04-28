@@ -38,7 +38,7 @@ public class UserWithdrawServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1);
         User testUser = User.createGeneralUser(generalCreateUserCommand);
 
         userRepository.save(testUser);

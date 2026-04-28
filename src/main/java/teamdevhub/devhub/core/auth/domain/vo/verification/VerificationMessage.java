@@ -1,4 +1,4 @@
-package teamdevhub.devhub.core.auth.domain.vo;
+package teamdevhub.devhub.core.auth.domain.vo.verification;
 
 import lombok.Builder;
 

@@ -1,8 +1,8 @@
 package teamdevhub.devhub.fake.pure.application.provider;
 
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.out.AuthenticatedUserResolver;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
@@ -13,7 +13,6 @@ public class FakeAuthenticatedUserResolver implements AuthenticatedUserResolver 
         return new AuthenticatedUser(
                 TEST_USER_GUID_1,
                 email,
-                password,
                 UserRole.USER
         );
     }

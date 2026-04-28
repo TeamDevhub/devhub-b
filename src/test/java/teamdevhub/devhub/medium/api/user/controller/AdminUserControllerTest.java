@@ -54,7 +54,7 @@ public class AdminUserControllerTest {
                 .build();
 
         CreateUserCommand createUserCommand1 = CreateUserCommand.generalUserCreateCommand(
-                signupUserCommand1, TEST_USER_GUID_1, TEST_PASSWORD_1);
+                signupUserCommand1, TEST_USER_GUID_1);
 
         User testUser1 = User.createGeneralUser(createUserCommand1);
 
@@ -69,7 +69,7 @@ public class AdminUserControllerTest {
                 .build();
 
         CreateUserCommand createUserCommand2 = CreateUserCommand.generalUserCreateCommand(
-                signupUserCommand2, TEST_USER_GUID_2, TEST_PASSWORD_2);
+                signupUserCommand2, TEST_USER_GUID_2);
 
         User testUser2 = User.createGeneralUser(createUserCommand2);
 
@@ -101,8 +101,6 @@ public class AdminUserControllerTest {
         assertThat(body.getCode()).isEqualTo(SuccessCode.READ_SUCCESS.getCode());
 
         assertThat(body.getDataList()).hasSize(2);
-        assertThat(body.getDataList().get(0).getEmail()).isEqualTo(TEST_EMAIL_1);
-        assertThat(body.getDataList().get(1).getEmail()).isEqualTo(TEST_EMAIL_2);
 
         PageResponseDto pageResponseDto = body.getPagination();
         assertThat(pageResponseDto.getPage()).isEqualTo(0);

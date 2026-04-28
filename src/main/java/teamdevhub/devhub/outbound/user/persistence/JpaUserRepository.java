@@ -14,10 +14,7 @@ import java.util.Optional;
 
 public interface JpaUserRepository extends JpaRepository<UserEntity, String> {
 
-    Optional<UserEntity> findByEmail(String email);
     Optional<UserEntity> findByUserGuid(String userGuid);
-    Optional<UserEntity> findByProviderAndOauthId(VerificationProvider verificationProvider, String oauthId);
-
     @Modifying
     @Query("update UserEntity u set u.lastLoginDate = :lastLoginDate where u.userGuid = :userGuid")
     int updateLastLoginDateTime(@Param("userGuid") String userGuid, @Param("lastLoginDate") LocalDateTime lastLoginDate);

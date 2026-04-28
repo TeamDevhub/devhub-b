@@ -3,11 +3,11 @@ package teamdevhub.devhub.outbound.auth.adapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.outbound.auth.adapter.mapper.RefreshTokenMapper;
-import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.auth.persistence.JpaRefreshTokenRepository;
-import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
 import teamdevhub.devhub.core.auth.port.out.token.RefreshTokenRepository;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,17 +20,14 @@ public class RefreshTokenAdapter implements RefreshTokenRepository {
         jpaRefreshTokenRepository.findByUserGuid(refreshToken.userGuid())
                 .ifPresentOrElse(
                         refreshTokenEntity -> refreshTokenEntity.rotate(refreshToken.token()),
-                        () -> jpaRefreshTokenRepository.save(
-                                RefreshTokenMapper.toEntity(refreshToken)
-                        )
+                        () -> jpaRefreshTokenRepository.save(RefreshTokenMapper.toEntity(refreshToken))
                 );
     }
 
     @Override
-    public RefreshToken findByUserGuid(String userGuid) {
+    public Optional<RefreshToken> findByUserGuid(String userGuid) {
         return jpaRefreshTokenRepository.findByUserGuid(userGuid)
-                .map(refreshTokenEntity -> RefreshToken.of(refreshTokenEntity.getUserGuid(), refreshTokenEntity.getToken()))
-                .orElseThrow(() -> AdapterDataException.of(ErrorCode.REFRESH_TOKEN_INVALID));
+                .map(entity -> RefreshToken.of(entity.getUserGuid(), entity.getToken()));
     }
 
     @Override

@@ -8,10 +8,10 @@ import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.api.web.resolver.LoginUserArgumentResolver;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.outbound.common.exception.AuthRuleException;
 import teamdevhub.devhub.outbound.security.auth.UserAuthentication;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.fake.framework.FakeAuthentication;
 
@@ -88,7 +88,7 @@ class LoginUserArgumentResolverTest {
     @DisplayName("UserAuthentication_principal_이면_AuthenticatedUser_를_반환한다")
     void returnAuthenticatedUserIfUserAuthenticationPrincipal() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
         UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(userAuthentication));
 
@@ -98,14 +98,14 @@ class LoginUserArgumentResolverTest {
         // then
         assertThat(resolvedValue).isNotNull();
         assertThat(resolvedValue).isInstanceOf(AuthenticatedUser.class);
-        assertThat(((AuthenticatedUser) resolvedValue).email()).isEqualTo(TEST_EMAIL_1);
+        assertThat(((AuthenticatedUser) resolvedValue).loginId()).isEqualTo(TEST_EMAIL_1);
     }
 
     @Test
     @DisplayName("AuthenticatedUser_principal_이면_그대로_반환한다")
     void returnAuthenticatedUserIfPrincipalIsAlreadyAuthenticatedUser() {
         // given
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, TEST_PASSWORD_1, UserRole.USER);
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
         SecurityContextHolder.getContext().setAuthentication(new FakeAuthentication(authenticatedUser));
 
         // when

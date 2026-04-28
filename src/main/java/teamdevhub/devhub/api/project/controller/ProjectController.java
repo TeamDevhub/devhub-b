@@ -21,12 +21,12 @@ import teamdevhub.devhub.api.project.model.UpdateProjectRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectLikeCommand;
 import teamdevhub.devhub.core.project.port.in.facade.ProjectFacade;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailWithFormResponseDto;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 @RestController

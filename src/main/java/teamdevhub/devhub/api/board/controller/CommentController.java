@@ -16,7 +16,7 @@ import teamdevhub.devhub.api.board.model.UpdateCommentRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.board.port.in.Facade.CommentFacade;
-import teamdevhub.devhub.outbound.auth.infrastructure.security.vo.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 
 @RestController
 @RequestMapping("/boards")

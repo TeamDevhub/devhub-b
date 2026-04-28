@@ -3,16 +3,19 @@ package teamdevhub.devhub.small.core.user.application.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.application.service.UserLoginService;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTimeProvider;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserLoginServiceTest {
@@ -30,6 +33,28 @@ public class UserLoginServiceTest {
         userLoginService = new UserLoginService(timeProvider, userRepository);
     }
 
+    private User buildUser(String userGuid) {
+        SignupUserCommand command = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST).skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1).build();
+        return User.createGeneralUser(CreateUserCommand.generalUserCreateCommand(command, userGuid));
+    }
+
+    @Test
+    @DisplayName("탈퇴한_유저가_로그인을_시도하면_예외가_발생한다")
+    void validateLoginUser_withdrawnUser_throwsException() {
+        // given
+        User withdrawnUser = buildUser(TEST_USER_GUID_1);
+        withdrawnUser.withdraw();
+        userRepository.save(withdrawnUser);
+
+        // when, then
+        assertThatThrownBy(() -> userLoginService.validateLoginUser(TEST_USER_GUID_1))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.USER_WITHDRAWN.getMessage());
+    }
+
     @Test
     @DisplayName("로그인을_하면_최종_로그인_일시가_변한다")
     void updateLastLoginDateWhenLogin() {
@@ -43,7 +68,7 @@ public class UserLoginServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1, TEST_PASSWORD_1);
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1);
         User testUser = User.createGeneralUser(generalCreateUserCommand);
         userRepository.save(testUser);
 
