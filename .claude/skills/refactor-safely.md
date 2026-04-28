@@ -1,166 +1,235 @@
-# Skill: 안전한 리팩토링
+# Skill: Safe Refactoring
 
-## 목적
+## Purpose
 
-기존 동작을 보존하면서 헥사고날 아키텍처 원칙에 맞게 코드를 개선하는 절차를 정의한다.
+Defines the process for improving code according to Hexagonal Architecture principles **while preserving existing behavior**.
 
 ---
 
-## Step 1. 대상 파악 및 문제 목록화
+# Step 1. Identify Target and List Problems
 
-대상 파일을 읽고 다음을 확인한다:
+Read the target file and check the following:
 
-- 도메인 로직이 서비스 계층에 누출되어 있는가?
-- 파라미터가 3개 이상인 메서드가 있는가?
-- 여러 도메인 UseCase를 조합하는 서비스가 있는가?
-- 잘못된 계층 의존 관계가 있는가?
+* Is domain logic leaking into the service layer?
+* Are there methods with 3 or more parameters?
+* Does a service combine multiple domain UseCases?
+* Are there invalid layer dependencies?
 
-```bash
+```bash id="f1x8kr"
 Read src/main/java/teamdevhub/devhub/core/{domain}/application/service/{Class}.java
 ```
 
 ---
 
-## Step 2. 영향 범위 확인
+# Step 2. Check Impact Scope
 
-변경 대상을 참조하는 모든 파일을 검색한다.
+Search all files referencing the target.
 
-```bash
+```bash id="k7m2vd"
 Grep "{ClassName}" src/main/java --include="*.java"
 Grep "{ClassName}" src/test/java --include="*.java"
 ```
 
 ---
 
-## Step 3. 테스트 존재 확인
+# Step 3. Verify Existing Tests
 
-리팩토링 전 커버하는 테스트가 있는지 확인한다.
+Check whether tests already cover the behavior before refactoring.
 
-```bash
+```bash id="n4q7tp"
 Glob src/test/java/teamdevhub/devhub/small/core/{domain}/**/*.java
 ```
 
-테스트가 없으면 리팩토링 전에 먼저 `/generate-tests` 스킬로 작성한다.
+If tests do not exist, create them first using the **/generate-tests** skill.
 
 ---
 
-## Step 4. 리팩토링 패턴 선택
+# Step 4. Select Refactoring Pattern
 
-| 문제 | 패턴 |
-|---|---|
-| 서비스에 도메인 로직 | 도메인 메서드 추출 |
-| 파라미터 3개 이상 | 커맨드 record 도입 |
-| 여러 도메인 조합 | Facade 분리 |
-| 복잡한 상태 변경 결과 | ChangeResult record 도입 |
-| 잘못된 계층 의존 | 포트 인터페이스로 역전 |
+| Problem                       | Pattern                         |
+| ----------------------------- | ------------------------------- |
+| Domain logic inside service   | Extract domain method           |
+| 3+ parameters                 | Introduce command `record`      |
+| Multiple domain orchestration | Split into Facade               |
+| Complex state change results  | Introduce `ChangeResult` record |
+| Invalid layer dependency      | Invert through port interface   |
 
 ---
 
-## Step 5. 단계적 변경
+# Step 5. Apply Changes Incrementally
 
-한 번에 하나의 리팩토링 목표만 처리한다.
+Refactor **one goal at a time**.
 
-### 도메인 메서드 추출 예시
+---
 
-**Before (서비스 계층에 도메인 로직 누출):**
-```java
+# Example: Extract Domain Method
+
+### Before (domain logic leaked into service)
+
+```java id="u8r3pk"
 // UserService.java
 public void withdraw(String userGuid) {
-    User user = userRepository.findByGuid(userGuid).orElseThrow(...);
-    if (user.isDeleted()) throw new BusinessRuleException(ErrorCode.ALREADY_WITHDRAWN);
-    user.setDeleted(true);  // ← 도메인 로직이 서비스에 있음
+
+    User user = userRepository
+            .findByGuid(userGuid)
+            .orElseThrow(...);
+
+    if (user.isDeleted()) {
+        throw new BusinessRuleException(
+                ErrorCode.ALREADY_WITHDRAWN
+        );
+    }
+
+    user.setDeleted(true);
+
     userRepository.save(user);
 }
 ```
 
-**After (도메인 메서드로 이동):**
-```java
+### After (moved into domain)
+
+```java id="m5x9cq"
 // User.java
 public void withdraw() {
-    if (this.deleted) throw new DomainRuleException(ErrorCode.ALREADY_WITHDRAWN);
+
+    if (this.deleted) {
+        throw new DomainRuleException(
+                ErrorCode.ALREADY_WITHDRAWN
+        );
+    }
+
     this.deleted = true;
 }
 
 // UserService.java
 public void withdraw(String userGuid) {
-    User user = userRepository.findByGuid(userGuid).orElseThrow(...);
+
+    User user = userRepository
+            .findByGuid(userGuid)
+            .orElseThrow(...);
+
     user.withdraw();
+
     userRepository.save(user);
 }
 ```
 
-### 커맨드 record 도입 예시
+---
 
-**Before:**
-```java
-public void signupEmailUser(String email, String password, String name, String userGuid) { ... }
+# Example: Introduce Command Record
+
+### Before
+
+```java id="q1n6vd"
+public void signupEmailUser(
+        String email,
+        String password,
+        String name,
+        String userGuid
+) { ... }
 ```
 
-**After:**
-```java
-public record SignupEmailUserCommand(String email, String password, String name, String userGuid) {}
-public void signupEmailUser(SignupEmailUserCommand command) { ... }
+### After
+
+```java id="c8t2mr"
+public record SignupEmailUserCommand(
+        String email,
+        String password,
+        String name,
+        String userGuid
+) {}
+
+public void signupEmailUser(
+        SignupEmailUserCommand command
+) { ... }
 ```
 
-### ChangeResult 도입 예시
+---
 
-```java
+# Example: Introduce ChangeResult
+
+```java id="z3p7kx"
 // User.java
-public record PositionChangeResult(List<String> added, List<String> removed) {}
+public record PositionChangeResult(
+        List<String> added,
+        List<String> removed
+) {}
 
-public PositionChangeResult changePositions(List<String> newPositions) {
-    List<String> added = newPositions.stream().filter(p -> !this.positions.contains(p)).toList();
-    List<String> removed = this.positions.stream().filter(p -> !newPositions.contains(p)).toList();
-    this.positions = new ArrayList<>(newPositions);
-    return new PositionChangeResult(added, removed);
+public PositionChangeResult changePositions(
+        List<String> newPositions
+) {
+    List<String> added =
+            newPositions.stream()
+                    .filter(p ->
+                            !this.positions.contains(p))
+                    .toList();
+
+    List<String> removed =
+            this.positions.stream()
+                    .filter(p ->
+                            !newPositions.contains(p))
+                    .toList();
+
+    this.positions =
+            new ArrayList<>(newPositions);
+
+    return new PositionChangeResult(
+            added,
+            removed
+    );
 }
 ```
 
 ---
 
-## Step 6. 절대 변경하지 않는 것
+# Step 6. Never Change These
 
-- 포트 인터페이스 메서드 시그니처
-- 테스트 코드의 검증 내용 (assertThat 부분)
-- `ErrorCode` enum 값과 메시지
-- `DataApiResponseDto` 구조
+Do **not** modify:
 
----
-
-## Step 7. 리팩토링 금지 패턴
-
-코드 작성 시 다음을 도입하지 않는다:
-
-- `setXxx()` 메서드 추가
-- 도메인 클래스에 `@Service`, `@Component` 등 Spring 어노테이션
-- `Mockito.mock()` 또는 `@MockBean`
-- `// TODO` 주석으로 코드 비활성화 (주석처리 금지)
+* Port interface method signatures
+* Test assertions (`assertThat(...)`)
+* `ErrorCode` enum values or messages
+* `DataApiResponseDto` structure
 
 ---
 
-## Step 8. 컴파일 및 테스트 검증
+# Step 7. Forbidden Refactoring Patterns
 
-```bash
+Do **not** introduce:
+
+* `setXxx()` methods
+* Spring annotations on domain classes
+  (`@Service`, `@Component`, etc.)
+* `Mockito.mock()` or `@MockBean`
+* Disabled code via `// TODO` or commented-out blocks
+
+---
+
+# Step 8. Compile and Test Validation
+
+```bash id="r6v2pt"
 ./gradlew compileJava
 ./gradlew test --tests "teamdevhub.devhub.small.core.{domain}.*"
 ```
 
 ---
 
-## Step 9. 리팩토링 보고서 작성
+# Step 9. Refactoring Report Format
 
-```
-## 리팩토링 요약
+```text id="w9m4xd"
+## Refactoring Summary
 
-### 변경된 파일
-- path/to/File.java — 변경 이유
+### Changed Files
+- path/to/File.java — reason for change
 
-### 적용된 패턴
-- 도메인 메서드 추출: XxxService.someLogic() → Xxx.someMethod()
+### Applied Patterns
+- Extract Domain Method:
+  XxxService.someLogic()
+  → Xxx.someMethod()
 
-### 보존된 동작
-- 기존 테스트 X개 모두 통과
+### Preserved Behavior
+- All existing X tests passed
 
-### 주의사항
-- (추가 작업이 필요한 항목)
+### Notes
+- (Items requiring follow-up work)
 ```

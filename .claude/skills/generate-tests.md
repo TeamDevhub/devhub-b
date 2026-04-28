@@ -1,59 +1,61 @@
-# Skill: 테스트 코드 생성
+# Skill: Test Code Generation
 
-## 목적
+## Purpose
 
-이 프로젝트의 규칙에 맞는 테스트 코드를 생성하는 절차를 정의한다.
+Defines the process for generating test code that follows this project's conventions and standards.
 
 ---
 
-## Step 1. 대상 분석
+# Step 1. Analyze the Target
 
-대상 클래스를 읽고 다음을 파악한다:
+Read the target class and identify:
 
-- public 메서드 목록
-- 각 메서드의 성공 시나리오
-- 각 메서드의 실패 시나리오 (예외 조건)
-- 외부 의존성 목록 (포트 인터페이스들)
+* List of public methods
+* Success scenarios for each method
+* Failure scenarios for each method (exception cases)
+* External dependencies (port interfaces)
 
-```bash
-# 클래스 파일 읽기
+```bash id="n4t8xq"
+# Read target class
 Read src/main/java/teamdevhub/devhub/core/{domain}/application/service/{Class}.java
 ```
 
 ---
 
-## Step 2. 테스트 종류 결정
+# Step 2. Decide Test Type
 
-| 대상 클래스 | 테스트 종류 | 패키지 |
-|---|---|---|
-| 도메인 엔티티 (`User`, `Verification`) | small | `small/core/{domain}/domain/` |
-| 서비스 (`XxxService`) | small | `small/core/{domain}/application/service/` |
-| Facade (`XxxFacade`) | small | `small/core/{domain}/port/facade/` |
-| 어댑터 (`XxxAdapter`) | medium | `medium/outbound/{domain}/adapter/` |
-| 컨트롤러 (`XxxController`) | medium | `medium/api/{domain}/controller/` |
-| DTO 검증 (`XxxRequestDto`) | medium | `medium/api/{domain}/model/request/` |
+| Target Class                           | Test Type | Package                                    |
+| -------------------------------------- | --------- | ------------------------------------------ |
+| Domain Entity (`User`, `Verification`) | small     | `small/core/{domain}/domain/`              |
+| Service (`XxxService`)                 | small     | `small/core/{domain}/application/service/` |
+| Facade (`XxxFacade`)                   | small     | `small/core/{domain}/port/facade/`         |
+| Adapter (`XxxAdapter`)                 | medium    | `medium/outbound/{domain}/adapter/`        |
+| Controller (`XxxController`)           | medium    | `medium/api/{domain}/controller/`          |
+| DTO Validation (`XxxRequestDto`)       | medium    | `medium/api/{domain}/model/request/`       |
 
 ---
 
-## Step 3. 필요한 Fake 확인 및 생성
+# Step 3. Check Required Fakes and Create If Needed
 
-단위 테스트에 필요한 Fake가 `fake/` 패키지에 있는지 확인한다.
+Verify whether required Fake implementations already exist under `fake/`.
 
-```bash
-# 기존 Fake 확인
+```bash id="k7p3vm"
+# Search existing Fake classes
 Glob src/test/java/teamdevhub/devhub/fake/**/*.java
 ```
 
-없는 Fake는 아래 템플릿으로 먼저 작성한다:
+If missing, create one first using this template:
 
-```java
+```java id="r2x8nc"
 package teamdevhub.devhub.fake.pure.application.port.out.{domain};
 
-public class Fake{PortName} implements {PortInterface} {
+public class Fake{PortName}
+        implements {PortInterface} {
 
-    private final Map<String, T> store = new HashMap<>();
+    private final Map<String, T> store =
+            new HashMap<>();
 
-    // given*() 메서드: 테스트 데이터 사전 세팅
+    // given*() method for test setup
     public void given{Data}({Type} value) {
         store.put(key, value);
     }
@@ -67,11 +69,11 @@ public class Fake{PortName} implements {PortInterface} {
 
 ---
 
-## Step 4. 테스트 클래스 작성
+# Step 4. Write Test Class
 
-### 단위 테스트 템플릿
+# Unit Test Template
 
-```java
+```java id="m5q1zt"
 package teamdevhub.devhub.small.core.{domain}.application.service;
 
 import static org.assertj.core.api.Assertions.*;
@@ -81,18 +83,22 @@ class {ClassName}Test {
 
     private {TargetClass} target;
 
-    // Fake 의존성들
+    // Fake dependencies
     private Fake{Port1} fake{Port1};
 
     @BeforeEach
     void init() {
         fake{Port1} = new Fake{Port1}();
-        target = new {TargetClass}(fake{Port1});
+
+        target = new {TargetClass}(
+                fake{Port1}
+        );
     }
 
     @Test
     @DisplayName("{시나리오_한국어_설명}")
     void {methodName}_{scenario}() {
+
         // given
         {설정 코드}
 
@@ -106,20 +112,28 @@ class {ClassName}Test {
     @Test
     @DisplayName("{실패_시나리오_한국어_설명}")
     void {methodName}_{scenario}_throwsException() {
+
         // given
         {설정 코드}
 
         // when, then
-        assertThatThrownBy(() -> {실행 코드})
-                .isInstanceOf({ExceptionClass}.class)
-                .hasMessageContaining({ErrorCode}.getMessage());
+        assertThatThrownBy(() ->
+                {실행 코드})
+                .isInstanceOf(
+                        {ExceptionClass}.class
+                )
+                .hasMessageContaining(
+                        {ErrorCode}.getMessage()
+                );
     }
 }
 ```
 
-### 통합 테스트 템플릿 (어댑터)
+---
 
-```java
+# Integration Test Template (Adapter)
+
+```java id="v8t4kp"
 @SpringBootTest
 @Transactional
 class {AdapterClass}Test {
@@ -138,33 +152,38 @@ class {AdapterClass}Test {
     @Test
     @DisplayName("{시나리오}")
     void {method}_{scenario}() {
-        // given: JPA로 직접 저장하거나 어댑터 save 호출
 
-        // when: 어댑터 조회/수정 메서드 호출
+        // given:
+        // save directly via JPA
+        // or call adapter.save()
 
-        // then: JPA로 직접 조회하여 DB 상태 검증
+        // when:
+        // call adapter query/update method
+
+        // then:
+        // verify DB state via JPA repository
     }
 }
 ```
 
 ---
 
-## Step 5. 시나리오 체크리스트
+# Step 5. Scenario Checklist
 
-모든 public 메서드에 대해 다음 시나리오를 커버했는지 확인한다:
+For every public method, confirm these scenarios are covered:
 
-- [ ] 정상 동작 (happy path)
-- [ ] 필수 조건 누락 (null, empty)
-- [ ] 중복 데이터 처리
-- [ ] 데이터 없음 (not found)
-- [ ] 도메인 규칙 위반
+* [ ] Happy path
+* [ ] Missing required input (`null`, empty)
+* [ ] Duplicate data handling
+* [ ] Data not found
+* [ ] Domain rule violation
 
 ---
 
-## Step 6. 컴파일 검증
+# Step 6. Compile Validation
 
-```bash
+```bash id="p9x2rm"
 ./gradlew compileTestJava
 ```
 
-오류가 없으면 완료다.
+If there are no compilation errors, the task is complete.

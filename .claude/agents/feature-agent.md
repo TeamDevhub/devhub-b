@@ -117,6 +117,13 @@ Every new feature should include the relevant test scope below.
 
 ---
 
+## Reference Files
+
+- `.claude/rules/refactoring.md`
+- `.claude/rules/architecture.md`
+- `.claude/rules/things-to-avoid.md`
+- `.claude/memory/style-memory.md`
+
 ## Response Format
 
 ```text
@@ -138,9 +145,4 @@ Every new feature should include the relevant test scope below.
 ### Notes
 - Future improvement points
 
-## 참조 규칙 파일
 
-- `.claude/rules/refactoring.md`
-- `.claude/rules/architecture.md`
-- `.claude/rules/things-to-avoid.md`
-- `.claude/memory/style-memory.md`
