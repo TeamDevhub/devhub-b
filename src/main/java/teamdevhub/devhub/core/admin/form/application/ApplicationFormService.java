@@ -13,6 +13,7 @@ import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationFormItem;
 import teamdevhub.devhub.core.admin.form.port.in.command.ApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
+import teamdevhub.devhub.core.admin.form.port.in.command.UpdateApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormItemRepository;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormRepository;
@@ -60,6 +61,17 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 				.collect(Collectors.toUnmodifiableSet());
 		applicationFormItemRepository.saveAll(items);
 		
+	}
+
+	@Override
+	public void updateApplicationForm(String applicationFormGuid, UpdateApplicationFormCommand command) {
+		ApplicationForm applicationForm = applicationFormRepository.findByApplicationFormGuid(applicationFormGuid);
+		applicationForm.update(command.getTitle(), command.getHelpText(), command.isUsed());
+		applicationFormRepository.update(applicationForm);
+		applicationFormItemRepository.deleteByApplicationFormGuid(List.of(applicationFormGuid));
+		if (command.getItemList() != null && !command.getItemList().isEmpty()) {
+			saveApplcationFormItems(applicationFormGuid, command.getItemList());
+		}
 	}
 
 	@Override

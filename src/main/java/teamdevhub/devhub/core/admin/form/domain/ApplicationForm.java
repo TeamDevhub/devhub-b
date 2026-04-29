@@ -31,4 +31,10 @@ public class ApplicationForm {
 				.isUsed(true)
 				.build();
 	}
+
+	public void update(String title, String helpText, boolean isUsed) {
+		this.title = title;
+		this.helpText = helpText;
+		this.isUsed = isUsed;
+	}
 }
