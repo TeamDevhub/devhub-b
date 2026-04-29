@@ -2,26 +2,24 @@ package teamdevhub.devhub.small.core.user.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
+import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPositionChangeResult;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
-import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
-import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
-import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
+import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
