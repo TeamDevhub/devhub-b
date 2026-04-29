@@ -93,11 +93,11 @@ public class OauthAuthFacadeTest {
     @DisplayName("탈퇴한_유저가_OAuth_로그인을_시도하면_예외가_발생한다")
     void handleOAuthCallback_withdrawnUser_throwsException() {
         // given
-        SignupUserCommand command = SignupUserCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
                 .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST).skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1).build();
-        User withdrawnUser = User.createGeneralUser(CreateUserCommand.generalUserCreateCommand(command, TEST_USER_GUID_1));
+        User withdrawnUser = User.createGeneralUser(CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1));
         withdrawnUser.withdraw();
         userLoginUseCase.givenUser(withdrawnUser);
 

@@ -18,9 +18,9 @@ public class AdminUserManagementService implements AdminUserManagementUseCase {
     private final UserRepository userRepository;
 
     @Override
-    public void banUser(BanUserCommand command) {
-        User user = userRepository.findByUserGuid(command.userGuid());
-        user.ban(command.blockEndDate());
+    public void banUser(BanUserCommand banUserCommand) {
+        User user = userRepository.findByUserGuid(banUserCommand.userGuid());
+        user.ban(banUserCommand.blockEndDate());
         userRepository.save(user);
     }
 
@@ -32,9 +32,9 @@ public class AdminUserManagementService implements AdminUserManagementUseCase {
     }
 
     @Override
-    public void updateUser(AdminUpdateUserCommand command) {
-        User user = userRepository.findByUserGuid(command.userGuid());
-        user.updateBasicProfile(new UpdateUserCommand(command.username(), command.introduction()));
+    public void updateUser(AdminUpdateUserCommand adminUpdateUserCommand) {
+        User user = userRepository.findByUserGuid(adminUpdateUserCommand.userGuid());
+        user.updateBasicProfile(new UpdateUserCommand(adminUpdateUserCommand.username(), adminUpdateUserCommand.introduction()));
         userRepository.save(user);
     }
 }

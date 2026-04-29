@@ -55,8 +55,8 @@ public class AdminUserController {
     @GetMapping("/{userGuid}")
     public ResponseEntity<DataApiResponseDto<AdminUserDetailResponseDto>> getUserDetail(
             @Parameter(description = "사용자 GUID") @PathVariable String userGuid) {
-        AdminUserDetailResponseDto dto = adminUserFacade.getUserDetail(userGuid);
-        return ResponseEntity.ok(DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, dto));
+        AdminUserDetailResponseDto adminUserDetailResponseDto = adminUserFacade.getUserDetail(userGuid);
+        return ResponseEntity.ok(DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, adminUserDetailResponseDto));
     }
 
     @Operation(summary = "사용자 정보 수정", description = "특정 사용자의 닉네임과 자기소개를 수정합니다.")
@@ -64,8 +64,8 @@ public class AdminUserController {
     @PutMapping("/{userGuid}")
     public ResponseEntity<DataApiResponseDto<Void>> updateUser(
             @Parameter(description = "사용자 GUID") @PathVariable String userGuid,
-            @Valid @RequestBody AdminUpdateUserRequestDto request) {
-        adminUserFacade.updateUser(request.toCommand(userGuid));
+            @Valid @RequestBody AdminUpdateUserRequestDto adminUpdateUserRequestDto) {
+        adminUserFacade.updateUser(adminUpdateUserRequestDto.toAdminUpdateUserCommand(userGuid));
         return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS));
     }
 
@@ -74,8 +74,8 @@ public class AdminUserController {
     @PostMapping("/{userGuid}/password")
     public ResponseEntity<DataApiResponseDto<Void>> resetPassword(
             @Parameter(description = "사용자 GUID") @PathVariable String userGuid,
-            @Valid @RequestBody AdminResetPasswordRequestDto request) {
-        adminUserFacade.resetUserPassword(userGuid, request.getNewPassword());
+            @Valid @RequestBody AdminResetPasswordRequestDto adminResetPasswordRequestDto) {
+        adminUserFacade.resetUserPassword(userGuid, adminResetPasswordRequestDto.getNewPassword());
         return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.PASSWORD_RESET_SUCCESS));
     }
 
@@ -84,8 +84,8 @@ public class AdminUserController {
     @PostMapping("/{userGuid}/ban")
     public ResponseEntity<DataApiResponseDto<Void>> banUser(
             @Parameter(description = "사용자 GUID") @PathVariable String userGuid,
-            @RequestBody AdminBanUserRequestDto request) {
-        adminUserFacade.banUser(request.toCommand(userGuid));
+            @RequestBody AdminBanUserRequestDto adminBanUserRequestDto) {
+        adminUserFacade.banUser(adminBanUserRequestDto.toBanUserCommand(userGuid));
         return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.BAN_SUCCESS));
     }
 

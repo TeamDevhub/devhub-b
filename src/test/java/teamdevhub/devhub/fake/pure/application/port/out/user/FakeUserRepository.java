@@ -50,9 +50,9 @@ public class FakeUserRepository implements UserRepository {
     public void updateUserProfile(User user) {
         User existedUser = store.get(user.getUserGuid());
         if (existedUser != null) {
-            UpdateUserCommand command =
+            UpdateUserCommand updateUserCommand =
                     new UpdateUserCommand(user.getUsername(), user.getIntroduction());
-            existedUser.updateBasicProfile(command);
+            existedUser.updateBasicProfile(updateUserCommand);
         }
     }
 

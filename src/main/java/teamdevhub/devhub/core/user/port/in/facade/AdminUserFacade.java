@@ -38,12 +38,12 @@ public class AdminUserFacade {
     private final ProjectApplicationUseCase projectApplicationUseCase;
     private final ReportQueryUseCase reportQueryUseCase;
 
-    public PageResult<UserBasicResponseDto> listUsers(SearchUserCommand command, PageCommand pageCommand) {
-        PageResult<User> result = userQueryUseCase.listUser(command, pageCommand);
-        List<UserBasicResponseDto> dtos = result.content().stream()
+    public PageResult<UserBasicResponseDto> listUsers(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
+        PageResult<User> result = userQueryUseCase.listUser(searchUserCommand, pageCommand);
+        List<UserBasicResponseDto> userBasicResponseDtoList = result.content().stream()
                 .map(UserBasicResponseDto::fromDomain)
                 .toList();
-        return PageResult.of(dtos, result.page(), result.size(), result.totalElements());
+        return PageResult.of(userBasicResponseDtoList, result.page(), result.size(), result.totalElements());
     }
 
     public AdminUserDetailResponseDto getUserDetail(String userGuid) {
@@ -51,16 +51,16 @@ public class AdminUserFacade {
         return AdminUserDetailResponseDto.fromDomain(user);
     }
 
-    public void updateUser(AdminUpdateUserCommand command) {
-        adminUserManagementUseCase.updateUser(command);
+    public void updateUser(AdminUpdateUserCommand adminUpdateUserCommand) {
+        adminUserManagementUseCase.updateUser(adminUpdateUserCommand);
     }
 
     public void resetUserPassword(String userGuid, String newPassword) {
         userCredentialUseCase.resetUserPassword(userGuid, newPassword);
     }
 
-    public void banUser(BanUserCommand command) {
-        adminUserManagementUseCase.banUser(command);
+    public void banUser(BanUserCommand banUserCommand) {
+        adminUserManagementUseCase.banUser(banUserCommand);
     }
 
     public void unbanUser(String userGuid) {
@@ -99,9 +99,9 @@ public class AdminUserFacade {
     }
 
     private PageResult<AdminReportResponseDto> toReportDtoPage(PageResult<Report> result) {
-        List<AdminReportResponseDto> dtos = result.content().stream()
+        List<AdminReportResponseDto> adminReportResponseDtoList = result.content().stream()
                 .map(AdminReportResponseDto::fromDomain)
                 .toList();
-        return PageResult.of(dtos, result.page(), result.size(), result.totalElements());
+        return PageResult.of(adminReportResponseDtoList, result.page(), result.size(), result.totalElements());
     }
 }

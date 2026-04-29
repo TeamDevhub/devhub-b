@@ -51,10 +51,10 @@ class FileFacadeTest {
     @DisplayName("파일_조회_테스트")
     void find_test() {
         // given
-        UploadFileCommand command =
+        UploadFileCommand uploadFileCommand =
                 new UploadFileCommand("a.txt", "txt", 4L, "data".getBytes());
 
-        String guid = fileFacade.upload(Map.of("file", command))
+        String guid = fileFacade.upload(Map.of("file", uploadFileCommand))
                 .fileGuids()
                 .get("file");
 
@@ -69,10 +69,10 @@ class FileFacadeTest {
     @Test
     @DisplayName("파일_삭제_테스트")
     void delete_test() {
-        UploadFileCommand command =
+        UploadFileCommand uploadFileCommand =
                 new UploadFileCommand("a.txt", "txt", 4L, "data".getBytes());
 
-        String guid = fileFacade.upload(Map.of("file", command))
+        String guid = fileFacade.upload(Map.of("file", uploadFileCommand))
                 .fileGuids()
                 .get("file");
 

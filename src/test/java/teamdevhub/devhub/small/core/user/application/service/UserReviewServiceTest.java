@@ -78,10 +78,10 @@ class UserReviewServiceTest {
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_2);
 
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 4.0);
+        ReviewUserCommand reviewUserCommand = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 4.0);
 
         // when
-        double reviewScore = userReviewService.reviewMember(command);
+        double reviewScore = userReviewService.reviewMember(reviewUserCommand);
 
         // then
         assertThat(userReviewRepository.findAll()).hasSize(1);
@@ -96,10 +96,10 @@ class UserReviewServiceTest {
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_2);
 
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 4.0);
+        ReviewUserCommand reviewUserCommand = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 4.0);
 
         // when, then
-        assertThatThrownBy(() -> userReviewService.reviewMember(command))
+        assertThatThrownBy(() -> userReviewService.reviewMember(reviewUserCommand))
                 .isInstanceOf(BusinessRuleException.class)
                 .hasMessageContaining(ErrorCode.PROJECT_NOT_COMPLETED.getMessage());
     }
@@ -111,10 +111,10 @@ class UserReviewServiceTest {
         projectRepository.save(completedProject());
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
 
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_1, 3.0);
+        ReviewUserCommand reviewUserCommand = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_1, 3.0);
 
         // when, then
-        assertThatThrownBy(() -> userReviewService.reviewMember(command))
+        assertThatThrownBy(() -> userReviewService.reviewMember(reviewUserCommand))
                 .isInstanceOf(BusinessRuleException.class)
                 .hasMessageContaining(ErrorCode.REVIEW_SELF_NOT_ALLOWED.getMessage());
     }
@@ -127,8 +127,8 @@ class UserReviewServiceTest {
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_2);
 
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
-        userReviewService.reviewMember(command);
+        ReviewUserCommand reviewUserCommand = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
+        userReviewService.reviewMember(reviewUserCommand);
 
         // when, then
         ReviewUserCommand duplicateCommand = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 5.0);
@@ -144,10 +144,10 @@ class UserReviewServiceTest {
         projectRepository.save(completedProject());
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_2);
 
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
+        ReviewUserCommand reviewUserCommand = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
 
         // when, then
-        assertThatThrownBy(() -> userReviewService.reviewMember(command))
+        assertThatThrownBy(() -> userReviewService.reviewMember(reviewUserCommand))
                 .isInstanceOf(BusinessRuleException.class)
                 .hasMessageContaining(ErrorCode.REVIEW_NOT_A_MEMBER.getMessage());
     }
@@ -159,10 +159,10 @@ class UserReviewServiceTest {
         projectRepository.save(completedProject());
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
 
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
+        ReviewUserCommand reviewUserCommand = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
 
         // when, then
-        assertThatThrownBy(() -> userReviewService.reviewMember(command))
+        assertThatThrownBy(() -> userReviewService.reviewMember(reviewUserCommand))
                 .isInstanceOf(BusinessRuleException.class)
                 .hasMessageContaining(ErrorCode.REVIEW_NOT_A_MEMBER.getMessage());
     }

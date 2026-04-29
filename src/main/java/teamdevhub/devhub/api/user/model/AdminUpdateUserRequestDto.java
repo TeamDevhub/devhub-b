@@ -20,7 +20,7 @@ public class AdminUpdateUserRequestDto {
     @Schema(description = "자기소개", example = "안녕하세요.")
     private String introduction;
 
-    public AdminUpdateUserCommand toCommand(String userGuid) {
+    public AdminUpdateUserCommand toAdminUpdateUserCommand(String userGuid) {
         return AdminUpdateUserCommand.builder()
                 .userGuid(userGuid)
                 .username(this.username)

@@ -26,12 +26,12 @@ class AdminUserManagementServiceTest {
         userRepository = new FakeUserRepository();
         adminUserManagementService = new AdminUserManagementService(userRepository);
 
-        SignupUserCommand command = SignupUserCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
                 .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST).verificationTarget(VERIFICATION_TARGET_1).build();
         User user = User.createGeneralUser(
-                CreateUserCommand.generalUserCreateCommand(command, TEST_USER_GUID_1));
+                CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1));
         userRepository.save(user);
     }
 
@@ -39,13 +39,13 @@ class AdminUserManagementServiceTest {
     @DisplayName("사용자를_정지하면_blocked_상태가_되고_저장된다")
     void banUser_setsBlockedAndSaves() {
         // given
-        BanUserCommand command = BanUserCommand.builder()
+        BanUserCommand banUserCommand = BanUserCommand.builder()
                 .userGuid(TEST_USER_GUID_1)
                 .blockEndDate(TEST_BLOCK_END_DATE)
                 .build();
 
         // when
-        adminUserManagementService.banUser(command);
+        adminUserManagementService.banUser(banUserCommand);
 
         // then
         User saved = userRepository.findByUserGuid(TEST_USER_GUID_1);
@@ -58,14 +58,14 @@ class AdminUserManagementServiceTest {
     @DisplayName("이미_정지된_사용자를_다시_정지하면_예외가_발생한다")
     void banUser_alreadyBanned_throwsException() {
         // given
-        BanUserCommand command = BanUserCommand.builder()
+        BanUserCommand banUserCommand = BanUserCommand.builder()
                 .userGuid(TEST_USER_GUID_1)
                 .blockEndDate(TEST_BLOCK_END_DATE)
                 .build();
-        adminUserManagementService.banUser(command);
+        adminUserManagementService.banUser(banUserCommand);
 
         // when, then
-        assertThatThrownBy(() -> adminUserManagementService.banUser(command))
+        assertThatThrownBy(() -> adminUserManagementService.banUser(banUserCommand))
                 .isInstanceOf(DomainRuleException.class)
                 .hasMessageContaining("이미 정지된 회원입니다");
     }
@@ -102,14 +102,14 @@ class AdminUserManagementServiceTest {
     @DisplayName("관리자가_사용자_정보를_수정하면_저장된다")
     void updateUser_savesUpdatedInfo() {
         // given
-        AdminUpdateUserCommand command = AdminUpdateUserCommand.builder()
+        AdminUpdateUserCommand adminUpdateUserCommand = AdminUpdateUserCommand.builder()
                 .userGuid(TEST_USER_GUID_1)
                 .username(NEW_USERNAME)
                 .introduction(NEW_INTRO)
                 .build();
 
         // when
-        adminUserManagementService.updateUser(command);
+        adminUserManagementService.updateUser(adminUpdateUserCommand);
 
         // then
         User saved = userRepository.findByUserGuid(TEST_USER_GUID_1);

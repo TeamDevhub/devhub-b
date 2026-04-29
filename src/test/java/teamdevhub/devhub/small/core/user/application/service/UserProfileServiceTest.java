@@ -106,10 +106,10 @@ class UserProfileServiceTest {
 
         String NEW_PROFILE_IMAGE_GUID = "NEW_PROFILE_IMAGE_GUID";
 
-        UpdateProfileImageCommand command = new UpdateProfileImageCommand(TEST_USER_GUID_1, NEW_PROFILE_IMAGE_GUID);
+        UpdateProfileImageCommand updateProfileImageCommand = new UpdateProfileImageCommand(TEST_USER_GUID_1, NEW_PROFILE_IMAGE_GUID);
 
         // when
-        userProfileService.updateProfileImage(command);
+        userProfileService.updateProfileImage(updateProfileImageCommand);
 
         // then
         User updatedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
@@ -140,10 +140,10 @@ class UserProfileServiceTest {
         testUser.updateProfileImage(new UpdateProfileImageCommand(TEST_USER_GUID_1, "OLD_IMAGE_GUID"));
 
         userRepository.save(testUser);
-        UpdateProfileImageCommand command = new UpdateProfileImageCommand(TEST_USER_GUID_1, "NEW_IMAGE_GUID");
+        UpdateProfileImageCommand updateProfileImageCommand = new UpdateProfileImageCommand(TEST_USER_GUID_1, "NEW_IMAGE_GUID");
 
         // when
-        userProfileService.updateProfileImage(command);
+        userProfileService.updateProfileImage(updateProfileImageCommand);
 
         // then
         User updatedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
@@ -153,10 +153,10 @@ class UserProfileServiceTest {
     @Test
     @DisplayName("존재하지_않는_사용자의_프로필_이미지를_수정하면_예외가_발생한다")
     void updateProfileImageWithInvalidUser() {
-        UpdateProfileImageCommand command = new UpdateProfileImageCommand("NOT_EXIST_GUID", "IMAGE_GUID");
+        UpdateProfileImageCommand updateProfileImageCommand = new UpdateProfileImageCommand("NOT_EXIST_GUID", "IMAGE_GUID");
 
         assertThatThrownBy(() ->
-                userProfileService.updateProfileImage(command)
+                userProfileService.updateProfileImage(updateProfileImageCommand)
         ).isInstanceOf(NullPointerException.class);
     }
 

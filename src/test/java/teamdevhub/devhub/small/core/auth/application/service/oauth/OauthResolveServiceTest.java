@@ -87,7 +87,7 @@ class OauthResolveServiceTest {
         TempTokenInfo tokenInfo = new TempTokenInfo(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
         tokenParseProvider.givenTempToken(TEMP_TOKEN, tokenInfo);
 
-        SignupOauthUserCommand command = SignupOauthUserCommand.builder()
+        SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()
                 .tempToken(TEMP_TOKEN)
                 .username(TEST_USERNAME_1)
                 .introduction(TEST_INTRO_1)
@@ -96,7 +96,7 @@ class OauthResolveServiceTest {
                 .build();
 
         // when
-        OauthUser oauthUser = oauthResolveService.extractOauthUser(command);
+        OauthUser oauthUser = oauthResolveService.extractOauthUser(signupOauthUserCommand);
 
         // then
         assertThat(oauthUser.oauthId()).isEqualTo(TEST_OAUTH_ID_1);
@@ -107,8 +107,8 @@ class OauthResolveServiceTest {
     @Test
     @DisplayName("유효하지_않은_tempToken_으로_OauthUser_추출_시_예외가_발생한다")
     void extractOauthUser_invalidTempToken_throwsException() {
-        // given: 등록되지 않은 토큰
-        SignupOauthUserCommand command = SignupOauthUserCommand.builder()
+        // given
+        SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()
                 .tempToken("invalid-temp-token")
                 .username(TEST_USERNAME_1)
                 .introduction(TEST_INTRO_1)
@@ -118,7 +118,7 @@ class OauthResolveServiceTest {
 
         // when, then
         org.assertj.core.api.Assertions.assertThatThrownBy(
-                () -> oauthResolveService.extractOauthUser(command))
+                () -> oauthResolveService.extractOauthUser(signupOauthUserCommand))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

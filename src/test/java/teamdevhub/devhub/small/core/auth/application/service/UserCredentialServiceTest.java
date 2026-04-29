@@ -62,10 +62,10 @@ class UserCredentialServiceTest {
     @DisplayName("이메일_회원가입_시_사용자_GUID가_반환된다")
     void signupEmailUser_newEmail_returnsUserGuid() {
         // given
-        SignupUserCommand command = signupCommand();
+        SignupUserCommand signupUserCommand = signupCommand();
 
         // when
-        String userGuid = userCredentialService.signupEmailUser(command);
+        String userGuid = userCredentialService.signupEmailUser(signupUserCommand);
 
         // then
         assertThat(userGuid).isEqualTo(TEST_USER_GUID_1);
@@ -165,13 +165,13 @@ class UserCredentialServiceTest {
     @DisplayName("로그인_요청하면_인증된_사용자_정보가_반환된다")
     void authenticate_validCredentials_returnsAuthenticatedUser() {
         // given
-        LoginCommand command = LoginCommand.builder()
+        LoginCommand loginCommand = LoginCommand.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .build();
 
         // when
-        AuthenticatedUser result = userCredentialService.authenticate(command);
+        AuthenticatedUser result = userCredentialService.authenticate(loginCommand);
 
         // then
         assertThat(result.userGuid()).isEqualTo(TEST_USER_GUID_1);

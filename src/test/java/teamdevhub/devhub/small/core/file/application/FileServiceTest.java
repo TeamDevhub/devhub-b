@@ -42,7 +42,7 @@ class FileServiceTest {
         // given
         byte[] content = "data".getBytes();
 
-        UploadFileCommand command = new UploadFileCommand(
+        UploadFileCommand uploadFileCommand = new UploadFileCommand(
                 "test.txt",
                 "txt",
                 4L,
@@ -50,7 +50,7 @@ class FileServiceTest {
         );
 
         // when
-        FileMetadata metadata = fileService.upload(command);
+        FileMetadata metadata = fileService.upload(uploadFileCommand);
 
         // then
         assertThat(metadata.fileGuid()).isEqualTo("TestFileGuid1");
@@ -68,14 +68,14 @@ class FileServiceTest {
         // given
         byte[] content = "data".getBytes();
 
-        UploadFileCommand command = new UploadFileCommand(
+        UploadFileCommand uploadFileCommand = new UploadFileCommand(
                 "test.txt",
                 "txt",
                 4L,
                 content
         );
 
-        fileService.upload(command);
+        fileService.upload(uploadFileCommand);
 
         // when
         FileResource resource = fileService.find("TestFileGuid1");
@@ -91,14 +91,14 @@ class FileServiceTest {
         // given
         byte[] content = "data".getBytes();
 
-        UploadFileCommand command = new UploadFileCommand(
+        UploadFileCommand uploadFileCommand = new UploadFileCommand(
                 "test.txt",
                 "txt",
                 4L,
                 content
         );
 
-        fileService.upload(command);
+        fileService.upload(uploadFileCommand);
 
         // when
         fileService.delete("TestFileGuid1");

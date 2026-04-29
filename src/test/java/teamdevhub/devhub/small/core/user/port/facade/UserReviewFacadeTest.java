@@ -29,7 +29,7 @@ class UserReviewFacadeTest {
     @DisplayName("리뷰_요청을_하면_리뷰가_저장되고_매너도가_업데이트된다")
     void reviewMember_validCommand_delegatesReviewAndUpdatesManner() {
         // given
-        ReviewUserCommand command = ReviewUserCommand.builder()
+        ReviewUserCommand reviewUserCommand = ReviewUserCommand.builder()
                 .userReviewGuid(TEST_REVIEW_GUID_1)
                 .projectGuid(TEST_PROJECT_GUID_1)
                 .reviewerGuid(TEST_USER_GUID_1)
@@ -38,7 +38,7 @@ class UserReviewFacadeTest {
                 .build();
 
         // when
-        userReviewFacade.reviewMember(command);
+        userReviewFacade.reviewMember(reviewUserCommand);
 
         // then
         assertThat(userReviewUseCase.getLastRevieweeGuid()).isEqualTo(TEST_USER_GUID_2);
@@ -49,7 +49,7 @@ class UserReviewFacadeTest {
     @DisplayName("점수_3.0으로_리뷰하면_매너도_변화량은_0이다")
     void reviewMember_score3_mannerDeltaIsZero() {
         // given
-        ReviewUserCommand command = ReviewUserCommand.builder()
+        ReviewUserCommand reviewUserCommand = ReviewUserCommand.builder()
                 .userReviewGuid(TEST_REVIEW_GUID_1)
                 .projectGuid(TEST_PROJECT_GUID_1)
                 .reviewerGuid(TEST_USER_GUID_1)
@@ -58,7 +58,7 @@ class UserReviewFacadeTest {
                 .build();
 
         // when
-        userReviewFacade.reviewMember(command);
+        userReviewFacade.reviewMember(reviewUserCommand);
 
         // then
         assertThat(userReviewUseCase.getLastReviewScore()).isEqualTo(0.0);

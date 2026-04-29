@@ -36,11 +36,11 @@ public class UserLoginServiceTest {
     }
 
     private User buildUser(String userGuid) {
-        SignupUserCommand command = SignupUserCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
                 .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST).skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1).build();
-        return User.createGeneralUser(CreateUserCommand.generalUserCreateCommand(command, userGuid));
+        return User.createGeneralUser(CreateUserCommand.generalUserCreateCommand(signupUserCommand, userGuid));
     }
 
     private User buildBlockedUser(String userGuid) {

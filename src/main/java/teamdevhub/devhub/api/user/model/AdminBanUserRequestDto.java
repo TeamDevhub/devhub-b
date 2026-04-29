@@ -21,7 +21,7 @@ public class AdminBanUserRequestDto {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime blockEndDate;
 
-    public BanUserCommand toCommand(String userGuid) {
+    public BanUserCommand toBanUserCommand(String userGuid) {
         return BanUserCommand.builder()
                 .userGuid(userGuid)
                 .blockEndDate(this.blockEndDate)

@@ -34,14 +34,14 @@ class TermsServiceTest {
     @DisplayName("약관을 등록하면 정상적으로 저장되고 조회된다")
     void shouldRegisterTermsSuccessfully() {
         // given
-        CreateTermsCommand command = CreateTermsCommand.builder()
+        CreateTermsCommand createTermsCommand = CreateTermsCommand.builder()
                 .title("이용약관")
                 .content("약관 내용")
                 .isRequired(true)
                 .build();
 
         // when
-        termsService.registerTerms(command);
+        termsService.registerTerms(createTermsCommand);
 
         // then
         List<Terms> result = termsService.listTerms();
