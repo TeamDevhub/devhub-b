@@ -13,4 +13,5 @@ public interface UserCredentialUseCase {
     AuthenticatedUser getUserForReissue(String refreshToken);
     AuthenticatedUser authenticate(LoginCommand loginCommand);
     void updatePassword(UpdatePasswordCommand updatePasswordCommand);
+    void resetUserPassword(String userGuid, String newPassword);
 }

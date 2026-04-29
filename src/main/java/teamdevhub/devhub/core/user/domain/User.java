@@ -195,6 +195,25 @@ public class User {
         this.skills = new HashSet<>(skills);
     }
 
+    public void ban(LocalDateTime blockEndDate) {
+        if (this.deleted) {
+            throw DomainRuleException.of(ErrorCode.USER_WITHDRAWN);
+        }
+        if (this.blocked) {
+            throw DomainRuleException.of(ErrorCode.USER_ALREADY_BANNED);
+        }
+        this.blocked = true;
+        this.blockEndDate = blockEndDate;
+    }
+
+    public void unban() {
+        if (!this.blocked) {
+            throw DomainRuleException.of(ErrorCode.USER_NOT_BANNED);
+        }
+        this.blocked = false;
+        this.blockEndDate = null;
+    }
+
     public void assertActive() {
         if (this.deleted) {
             throw DomainRuleException.of(ErrorCode.USER_WITHDRAWN);

@@ -6,7 +6,8 @@
       "Bash(./gradlew compileTestJava *)",
       "Bash(./gradlew test *)",
       "Bash(./gradlew compileJava compileTestJava)",
-      "Bash(./gradlew compileJava --no-daemon)"
+      "Bash(./gradlew compileJava --no-daemon)",
+      "Bash(xargs grep *)"
     ]
   }
 }

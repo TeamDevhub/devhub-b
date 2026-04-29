@@ -89,4 +89,11 @@ public class UserCredentialService implements UserCredentialUseCase {
         userCredentialRepository.savePassword(emailUserCredential);
     }
 
+    @Override
+    public void resetUserPassword(String userGuid, String newPassword) {
+        EmailUserCredential emailUserCredential = userCredentialRepository.findEmailCredentialByUserGuid(userGuid);
+        emailUserCredential.changePassword(encodedPasswordProvider.encode(newPassword));
+        userCredentialRepository.savePassword(emailUserCredential);
+    }
+
 }

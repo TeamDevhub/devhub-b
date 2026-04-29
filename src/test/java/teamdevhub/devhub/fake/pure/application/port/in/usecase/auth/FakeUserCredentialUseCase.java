@@ -40,6 +40,9 @@ public class FakeUserCredentialUseCase implements UserCredentialUseCase {
 
     @Override
     public void updatePassword(UpdatePasswordCommand updatePasswordCommand) {
+    }
 
+    @Override
+    public void resetUserPassword(String userGuid, String newPassword) {
     }
 }

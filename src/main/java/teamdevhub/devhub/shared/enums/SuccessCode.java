@@ -20,7 +20,11 @@ public enum SuccessCode {
 
     SIGNUP_REQUIRED("SUC.DVH.0020", "회원정보 작성이 필요합니다."),
 
-    REVIEW_SUCCESS("SUC.DVH.0021", "리뷰가 완료되었습니다.");
+    REVIEW_SUCCESS("SUC.DVH.0021", "리뷰가 완료되었습니다."),
+
+    BAN_SUCCESS("SUC.DVH.0022", "사용자 정지가 완료되었습니다"),
+    UNBAN_SUCCESS("SUC.DVH.0023", "사용자 정지 해제가 완료되었습니다"),
+    PASSWORD_RESET_SUCCESS("SUC.DVH.0024", "비밀번호 초기화가 완료되었습니다");
 
     private final String code;
     private final String message;

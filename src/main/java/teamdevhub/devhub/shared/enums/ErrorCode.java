@@ -45,6 +45,8 @@ public enum ErrorCode {
     USER_SKILL_REQUIRED("ERR.DVH.0034", "보유 스킬목록은 필수입니다", BAD_REQUEST),
     USER_WITHDRAWN("ERR.DVH.0035", "탈퇴한 회원입니다", BAD_REQUEST),
     USER_BLOCKED("ERR.DVH.0036", "정지된 회원입니다", BAD_REQUEST),
+    USER_ALREADY_BANNED("ERR.DVH.0037", "이미 정지된 회원입니다", BAD_REQUEST),
+    USER_NOT_BANNED("ERR.DVH.0038", "정지 중이 아닌 회원입니다", BAD_REQUEST),
 
     OAUTH_FAIL("ERR.DVH.0040", "지원하지 않는 OAuth 로그인입니다", BAD_REQUEST),
 

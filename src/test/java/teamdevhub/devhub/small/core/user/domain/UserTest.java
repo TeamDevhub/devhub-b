@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -420,6 +422,98 @@ class UserTest {
         assertThat(result.changed()).isFalse();
         assertThat(result.previousSkills()).containsExactly(previousSkill);
         assertThat(result.changedSkills()).containsExactly(newSkill);
+    }
+
+    @Test
+    @DisplayName("사용자를_정지하면_blocked_가_true_이고_blockEndDate_가_설정된다")
+    void banUser_setsBlockedAndEndDate() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST).verificationTarget(VERIFICATION_TARGET_1).build();
+        User user = User.createGeneralUser(
+                CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1));
+
+        // when
+        user.ban(TEST_BLOCK_END_DATE);
+
+        // then
+        assertThat(user.isBlocked()).isTrue();
+        assertThat(user.getBlockEndDate()).isEqualTo(TEST_BLOCK_END_DATE);
+    }
+
+    @Test
+    @DisplayName("이미_정지된_사용자를_다시_정지하면_예외가_발생한다")
+    void banUser_alreadyBanned_throwsException() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST).verificationTarget(VERIFICATION_TARGET_1).build();
+        User user = User.createGeneralUser(
+                CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1));
+        user.ban(TEST_BLOCK_END_DATE);
+
+        // when, then
+        assertThatThrownBy(() -> user.ban(TEST_BLOCK_END_DATE))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("이미 정지된 회원입니다");
+    }
+
+    @Test
+    @DisplayName("탈퇴한_사용자를_정지하면_예외가_발생한다")
+    void banUser_withdrawnUser_throwsException() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST).verificationTarget(VERIFICATION_TARGET_1).build();
+        User user = User.createGeneralUser(
+                CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1));
+        user.withdraw();
+
+        // when, then
+        assertThatThrownBy(() -> user.ban(TEST_BLOCK_END_DATE))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("탈퇴한 회원입니다");
+    }
+
+    @Test
+    @DisplayName("정지_해제하면_blocked_가_false_이고_blockEndDate_가_null_이다")
+    void unbanUser_clearsBlockedState() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST).verificationTarget(VERIFICATION_TARGET_1).build();
+        User user = User.createGeneralUser(
+                CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1));
+        user.ban(TEST_BLOCK_END_DATE);
+
+        // when
+        user.unban();
+
+        // then
+        assertThat(user.isBlocked()).isFalse();
+        assertThat(user.getBlockEndDate()).isNull();
+    }
+
+    @Test
+    @DisplayName("정지_중이_아닌_사용자를_정지_해제하면_예외가_발생한다")
+    void unbanUser_notBanned_throwsException() {
+        // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST).verificationTarget(VERIFICATION_TARGET_1).build();
+        User user = User.createGeneralUser(
+                CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1));
+
+        // when, then
+        assertThatThrownBy(user::unban)
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining("정지 중이 아닌 회원입니다");
     }
 
     @Test
