@@ -24,6 +24,12 @@ public class ApplicationFormAdapter implements ApplicationFormRepository{
 	}
 
 	@Override
+	public void update(ApplicationForm applicationForm) {
+		ApplicationFormEntity applicationFormEntity = ApplicationFormMapper.toEntity(applicationForm);
+		jpaApplicationFormRepository.save(applicationFormEntity);
+	}
+
+	@Override
 	public ApplicationForm findByApplicationFormGuid(String applicationFormGuid) {
 		ApplicationFormEntity applicationFormEntity = jpaApplicationFormRepository.findByApplicationFormGuid(applicationFormGuid);
 		return ApplicationFormMapper.toApplicationForm(applicationFormEntity);
