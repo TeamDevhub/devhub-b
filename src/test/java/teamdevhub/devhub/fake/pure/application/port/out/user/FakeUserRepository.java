@@ -22,6 +22,7 @@ public class FakeUserRepository implements UserRepository {
 
     @Override
     public User findByUserGuid(String userGuid) {
+        calledMethods.add("findByUserGuid");
         return store.get(userGuid);
     }
 
@@ -41,17 +42,10 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public void updateMannerDegree(String userGuid, double delta) {
-        calledMethods.add("updateMannerDegree");
-        mannerDegreeStore.merge(userGuid, delta, Double::sum);
-    }
-
-    @Override
     public void updateUserProfile(User user) {
         User existedUser = store.get(user.getUserGuid());
         if (existedUser != null) {
-            UpdateUserCommand updateUserCommand =
-                    new UpdateUserCommand(user.getUsername(), user.getIntroduction());
+            UpdateUserCommand updateUserCommand = new UpdateUserCommand(user.getUsername(), user.getIntroduction());
             existedUser.updateBasicProfile(updateUserCommand);
         }
     }
