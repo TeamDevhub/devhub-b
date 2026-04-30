@@ -207,20 +207,45 @@ http://localhost:8080/swagger-ui/index.html
 | GET | `/terms` | 불필요 | 약관 목록 조회 |
 | POST | `/terms` | 불필요 | 약관 등록 |
 
-### 관리자 (`/admin`)
+### 관리자 - 사용자 관리 (`/admin/users`)
 
 > **주의**: `/admin/**` 경로가 현재 `permitAll()` 상태입니다. 운영 전 ADMIN Role 검증 설정이 필요합니다.
 
 | 메서드 | URL | 인증 필요 | 설명 |
 |---|---|---|---|
-| GET | `/admin/users` | 🚧 미완성 | 사용자 목록 조회 (관리자 전용 예정) |
-| GET | `/admin/boards` | 🚧 미완성 | 게시판 관리 목록 조회 (관리자 전용 예정) |
-| GET | `/admin/banner/list` | 🚧 미완성 | 배너 목록 조회 (관리자 전용 예정) |
-| PUT | `/admin/banner` | 🚧 미완성 | 배너 등록 (관리자 전용 예정) |
-| PUT | `/admin/banner/{bannerGuid}` | 🚧 미완성 | 배너 수정 (관리자 전용 예정) |
-| DELETE | `/admin/banner/{bannerGuid}` | 🚧 미완성 | 배너 삭제 (관리자 전용 예정) |
-| GET | `/admin/code/list` | 🚧 미완성 | 공통코드 목록 조회 (관리자 전용 예정) |
-| PUT | `/admin/code` | 🚧 미완성 | 공통코드 저장 (관리자 전용 예정) |
+| GET | `/admin/users` | 🚧 | 사용자 목록 조회 (검색 필터 + 페이징) |
+| GET | `/admin/users/{userGuid}` | 🚧 | 사용자 상세 조회 (역할·정지 상태 포함) |
+| PUT | `/admin/users/{userGuid}` | 🚧 | 사용자 정보 수정 (닉네임·소개) |
+| POST | `/admin/users/{userGuid}/password` | 🚧 | 비밀번호 초기화 (이메일 계정 전용) |
+| POST | `/admin/users/{userGuid}/ban` | 🚧 | 사용자 정지 |
+| DELETE | `/admin/users/{userGuid}/ban` | 🚧 | 사용자 정지 해제 |
+| GET | `/admin/users/{userGuid}/projects` | 🚧 | 사용자가 등록한 프로젝트 목록 |
+| GET | `/admin/users/{userGuid}/projects/applicant` | 🚧 | 사용자가 지원한 프로젝트 목록 |
+| GET | `/admin/users/{userGuid}/reports` | 🚧 | 사용자가 받은 신고 목록 |
+| GET | `/admin/users/{userGuid}/reports/reported` | 🚧 | 사용자가 제출한 신고 목록 |
+| GET | `/admin/users/reports` | 🚧 | 전체 신고 목록 조회 (페이징) |
+
+### 관리자 - 게시판 관리 (`/admin/boards`)
+
+| 메서드 | URL | 인증 필요 | 설명 |
+|---|---|---|---|
+| GET | `/admin/boards` | 🚧 | 게시글 목록 조회 (검색 필터 + 페이징) |
+
+### 관리자 - 배너 관리 (`/admin/banner`)
+
+| 메서드 | URL | 인증 필요 | 설명 |
+|---|---|---|---|
+| GET | `/admin/banner/list` | 🚧 | 배너 목록 조회 (검색 필터 + 페이징) |
+| PUT | `/admin/banner` | 🚧 | 배너 등록 |
+| PUT | `/admin/banner/{bannerGuid}` | 🚧 | 배너 수정 |
+| DELETE | `/admin/banner/{bannerGuid}` | 🚧 | 배너 삭제 |
+
+### 관리자 - 공통코드 관리 (`/admin/code`)
+
+| 메서드 | URL | 인증 필요 | 설명 |
+|---|---|---|---|
+| GET | `/admin/code/list` | 🚧 | 공통코드 목록 조회 |
+| PUT | `/admin/code` | 🚧 | 공통코드 등록/수정 |
 
 ---
 
@@ -292,3 +317,13 @@ http://localhost:8080/swagger-ui/index.html
 - 파일 업로드 / 다운로드
 - 알림 조회 / 읽음 처리
 - 약관 등록 / 조회
+- 관리자 사용자 관리 (목록/상세 조회, 정보 수정, 비밀번호 초기화, 정지/해제, 프로젝트·신고 조회)
+- 관리자 게시판 관리 (목록 조회)
+- 관리자 배너 관리 (CRUD)
+- 관리자 공통코드 관리 (등록/수정/조회)
+
+### 미완성 기능
+
+- `/admin/**` 경로 ADMIN Role 인가 설정 (`WebSecurityConfig` — 현재 `permitAll()` 상태)
+- `User.changePassword()` 도메인 메서드 (주석 처리됨)
+- `UserProfileUseCase.updatePassword()` 인터페이스 메서드 (주석 처리됨)
