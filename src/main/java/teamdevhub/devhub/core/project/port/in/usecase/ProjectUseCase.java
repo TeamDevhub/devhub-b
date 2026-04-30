@@ -25,6 +25,8 @@ public interface ProjectUseCase {
 
 	void closeProject(String projectGuid);
 
-	PageResult<Project> findEndProjectsByApplicantGuid(String userGuid, PageCommand pageCommand);
+	PageResult<Project> getEndProjectsByApplicantGuid(String userGuid, PageCommand pageCommand);
+
+	Project getProjectByRequirementGuid(String requirementGuid);
 
 }

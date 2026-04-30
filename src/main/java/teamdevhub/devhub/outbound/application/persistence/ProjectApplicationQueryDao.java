@@ -14,4 +14,6 @@ public interface ProjectApplicationQueryDao {
 	ProjectApplication findApplicationByGuid(String applicationGuid);
 
 	List<ProjectApplicationAnswer> findAnswersByApplicationGuid(String applicationGuid);
+
+	List<ProjectApplication> findAcceptedByProjectGuid(String projectGuid);
 }

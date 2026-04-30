@@ -155,8 +155,13 @@ public class ProjectService implements ProjectUseCase {
 	}
 
 	@Override
-	public PageResult<Project> findEndProjectsByApplicantGuid(String userGuid, PageCommand pageCommand) {
+	public PageResult<Project> getEndProjectsByApplicantGuid(String userGuid, PageCommand pageCommand) {
 		return projectRepository.findEndProjectsByApplicantGuid(userGuid, pageCommand);
+	}
+
+	@Override
+	public Project getProjectByRequirementGuid(String requirementGuid) {
+		return projectRepository.getProjectByRequirementGuid(requirementGuid);
 	}
 
 }

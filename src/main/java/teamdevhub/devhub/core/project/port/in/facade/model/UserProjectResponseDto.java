@@ -1,6 +1,7 @@
 package teamdevhub.devhub.core.project.port.in.facade.model;
 
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 	private String approvalNumber;
 	private String approvalState;
 	private String progressState;
+	
+	private List<ProjectApplication> applicationList;
 
 	public static UserProjectResponseDto fromDomain(Project project, List<ProjectApplication> projectApplicationList) {
 		UserProjectResponseDtoBuilder<?, ?> builder = UserProjectResponseDto.builder();
@@ -37,6 +40,7 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 			        .mapToInt(item -> item.getCapacity())
 			        .sum();
 		long getApprovalNumber = projectApplicationList.stream().filter(item -> ProjectApprovalStatus.PENDING.getCode().equals(item.getStatusCd())).count();
+		String getProgressState = LocalDate.now().isBefore(project.getProgressEndDate()) ? "ing" : "end";
 
 		return builder
 			.recruitStatus(project.getRecruitStatus())
@@ -44,6 +48,8 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 			.totalRecriutNumber(String.valueOf(getTotalRecriutNumber))
 			.applicantNumber(String.valueOf(projectApplicationList.size()))
 			.approvalNumber(String.valueOf(getApprovalNumber))
+			.progressState(getProgressState)
+			.applicationList(projectApplicationList)
 			.build();
 	}
 }

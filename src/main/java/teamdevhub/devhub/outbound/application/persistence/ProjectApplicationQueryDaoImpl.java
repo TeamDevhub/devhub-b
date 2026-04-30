@@ -183,4 +183,12 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 			.stream()
 			.collect(Collectors.toMap(CommonCodeEntity::getCodeId, CommonCodeEntity::getName));
 	}
+
+	@Override
+	public List<ProjectApplication> findAcceptedByProjectGuid(String projectGuid) {
+		Page<ProjectApplication> result = findApplicationsByProjectGuid(projectGuid, Pageable.unpaged());
+		return result.getContent().stream()
+				.filter(application -> "3302".equals(application.getStatusCd()))
+				.toList();
+	}
 }

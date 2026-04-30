@@ -270,3 +270,9 @@ INSERT INTO terms (
              'Y',
              'N'
          );
+
+INSERT INTO APPLICATION_FORM( MODIFIED_DATE, REGISTERED_DATE, APPLICATION_FORM_GUID, CUSTOM_YN, HELP_TEXT, MODIFIER_GUID, REGISTRANT_GUID, TITLE, TYPE_CD, USE_YN) VALUES 
+	(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '1', 'N', '이름을 입력하세요', '1', '1', '이름', 'textfield_100', 'Y'),
+ 	(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '2', 'N', '나이를 입력하세요', '1', '1', '나이', 'textfield_100', 'Y'),
+ 	(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '3', 'N', '자기소개를 입력하세요', '1', '1', '자기소개', 'textarea', 'Y'),
+ 	(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '4', 'N', '성별을 선택하세요', '1', '1', '성별', 'checkbox', 'Y');

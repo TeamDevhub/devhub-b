@@ -208,8 +208,9 @@ public class ProjectFacade {
 		// 작업 예정
 		userProjectResponseDtoList = pagedApplyProjectList.content().stream()
             .map(projectApply -> {
-            	Project project = projectUseCase.getProjectDetail(projectApply.getRequirementGuid());
-            	return UserProjectResponseDto.fromDomain(project, null);
+            	Project project = projectUseCase.getProjectByRequirementGuid(projectApply.getRequirementGuid());
+            	Project projectDetail = projectUseCase.getProjectDetail(project.getProjectGuid());
+            	return UserProjectResponseDto.fromDomain(projectDetail, null);
             })
             .toList();
 		return userProjectResponseDtoList;
@@ -221,12 +222,13 @@ public class ProjectFacade {
 
 	public List<UserProjectResponseDto> getUserParticipateProjects(String userGuid, PageCommand pageCommand) {
 		List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
-		PageResult<Project> pagedParticipateProjectList = projectUseCase.findEndProjectsByApplicantGuid(userGuid, pageCommand);
+		PageResult<Project> pagedParticipateProjectList = projectUseCase.getEndProjectsByApplicantGuid(userGuid, pageCommand);
 		// 작업 예정
 		userProjectResponseDtoList = pagedParticipateProjectList.content().stream()
             .map(participateProject -> {
+            	List<ProjectApplication> applicationList = projectApplicationUseCase.findAcceptedByProjectGuid(participateProject.getProjectGuid());
             	Project project = projectUseCase.getProjectDetail(participateProject.getProjectGuid());
-            	return UserProjectResponseDto.fromDomain(project, null);
+            	return UserProjectResponseDto.fromDomain(project, applicationList);
             })
             .toList();
 		return userProjectResponseDtoList;

@@ -150,9 +150,18 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 		            and pr.projectGuid = p.projectGuid
 		        )
 	        )
-			and CURRENT_DATE > p.progressEndDate
+			and CURRENT_DATE > p.progressStartDate
 			""")
 	Page<ProjectEntity> findEndProjectsByApplicantGuid(@Param("userGuid")String userGuid, Pageable pageable);
+
+	@Query("""
+		    select p
+		    from ProjectEntity p
+		    join ProjectRequirementEntity pr
+		        on pr.projectGuid = p.projectGuid
+		    where pr.projectRequirementGuid = :requirementGuid
+		""")
+	ProjectEntity getProjectByRequirementGuid(@Param("requirementGuid") String requirementGuid);
 
 
 }

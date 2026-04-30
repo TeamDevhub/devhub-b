@@ -16,4 +16,5 @@ public interface ProjectRepository {
 	PageResult<Project> getUserProjects(String userGuid, PageCommand pageCommand);
 	void closeProject(String projectGuid);
 	PageResult<Project> findEndProjectsByApplicantGuid(String userGuid, PageCommand pageCommand);
+	Project getProjectByRequirementGuid(String requirementGuid);
 }
