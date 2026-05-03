@@ -13,6 +13,7 @@ public class FakeUserRepository implements UserRepository {
     private final Map<String, User> store = new HashMap<>();
     private final List<String> calledMethods = new ArrayList<>();
     private final Map<String, LocalDateTime> lastLoginStore = new HashMap<>();
+    private final Map<String, Double> mannerDegreeStore = new HashMap<>();
 
     @Override
     public void saveAdminUser(User adminUser) {
@@ -37,6 +38,12 @@ public class FakeUserRepository implements UserRepository {
             calledMethods.add("updateLastLoginDateTime");
             lastLoginStore.put(userGuid, lastLoginDateTime);
         }
+    }
+
+    @Override
+    public void updateMannerDegree(String userGuid, double delta) {
+        calledMethods.add("updateMannerDegree");
+        mannerDegreeStore.merge(userGuid, delta, Double::sum);
     }
 
     @Override
@@ -84,5 +91,9 @@ public class FakeUserRepository implements UserRepository {
 
     public LocalDateTime lastLoginOf(String userGuid) {
         return lastLoginStore.get(userGuid);
+    }
+
+    public double mannerDegreeOf(String userGuid) {
+        return mannerDegreeStore.getOrDefault(userGuid, 0.0);
     }
 }

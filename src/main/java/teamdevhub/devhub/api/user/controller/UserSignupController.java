@@ -1,5 +1,9 @@
 package teamdevhub.devhub.api.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +23,7 @@ import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
 
+@Tag(name = "User - Signup", description = "이메일 회원가입 API")
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -27,6 +32,11 @@ public class UserSignupController {
     private final UserSignupFacade userSignupFacade;
     private final AuthFacade authFacade;
 
+    @Operation(summary = "이메일 회원가입", description = "이메일, 비밀번호, 프로필 정보, 약관 동의 정보를 입력하여 회원가입합니다. 가입 후 자동 로그인되어 토큰이 반환됩니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원가입 및 로그인 성공, Access Token 반환"),
+            @ApiResponse(responseCode = "400", description = "유효성 검사 실패 또는 이미 존재하는 이메일")
+    })
     @PostMapping("/signup")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         userSignupFacade.signup(signupRequestDto.toSignupCommand());

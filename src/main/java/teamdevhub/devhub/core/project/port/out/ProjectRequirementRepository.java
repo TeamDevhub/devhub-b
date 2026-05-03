@@ -18,5 +18,7 @@ public interface ProjectRequirementRepository {
 	List<ProjectRequirement> findByProjectGuid(String projectGuid);
 
 	void deleteByProjectGuid(String projectGuid);
+	
+	ProjectRequirement findById (String projectRequirementGuid);
 
 }

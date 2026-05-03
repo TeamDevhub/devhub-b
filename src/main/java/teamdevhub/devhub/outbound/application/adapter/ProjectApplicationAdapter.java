@@ -76,9 +76,14 @@ public class ProjectApplicationAdapter implements ApplicationRepository {
 			);
 		
 		return PageResult.of(
-				page.getContent().stream().map(entity -> ApplicationMapper.toApplication(entity, null, null, null)).toList(),
+				page.getContent().stream().map(entity -> ApplicationMapper.toApplicationOnly(entity)).toList(),
 				page.getNumber(),
 				page.getSize(),
 				page.getTotalElements());
+	}
+
+	@Override
+	public List<ProjectApplication> findAcceptedByProjectGuid(String projectGuid) {
+		return projectApplicationQueryDao.findAcceptedByProjectGuid(projectGuid);
 	}
 }

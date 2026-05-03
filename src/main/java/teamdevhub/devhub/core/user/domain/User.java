@@ -38,7 +38,6 @@ public class User {
     private boolean blocked;
     private LocalDateTime blockEndDate;
     private boolean deleted;
-    private LocalDateTime lastLoginDate;
 
     private final AuditInfo auditInfo;
 
@@ -55,7 +54,6 @@ public class User {
             boolean blocked,
             LocalDateTime blockEndDate,
             boolean deleted,
-            LocalDateTime lastLoginDate,
             AuditInfo auditInfo
     ) {
         this.userGuid = userGuid;
@@ -73,7 +71,6 @@ public class User {
         this.blocked = blocked;
         this.blockEndDate = blockEndDate;
         this.deleted = deleted;
-        this.lastLoginDate = lastLoginDate;
 
         if (auditInfo == null) {
             this.auditInfo = AuditInfo.empty();
@@ -129,7 +126,6 @@ public class User {
             boolean blocked,
             LocalDateTime blockEndDate,
             boolean deleted,
-            LocalDateTime lastLoginDateTime,
             AuditInfo auditInfo
     ) {
         return User.builder()
@@ -142,7 +138,6 @@ public class User {
                 .blocked(blocked)
                 .blockEndDate(blockEndDate)
                 .deleted(deleted)
-                .lastLoginDate(lastLoginDateTime)
                 .auditInfo(auditInfo)
                 .build();
     }
@@ -208,6 +203,10 @@ public class User {
         if (this.blocked) {
             throw DomainRuleException.of(ErrorCode.USER_BLOCKED);
         }
+    }
+
+    public void applyReviewScore(double score) {
+        this.mannerDegree += (score - 3.0);
     }
 
     private <T> boolean hasInvalidItems(Set<T> items, Function<T, String> codeExtractor) {

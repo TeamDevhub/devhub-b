@@ -64,5 +64,10 @@ public class ProjectRecruitementAdapter implements ProjectRequirementRepository 
 	public void deleteByProjectGuid(String projectGuid) {
 		jpaProjectRequirementRepository.deleteAllByProjectGuid(projectGuid);
 	}
+	@Override
+	public ProjectRequirement findById(String projectRequiementGuid) {
+		ProjectRequirementEntity entity = jpaProjectRequirementRepository.findById(projectRequiementGuid).get();
+		return ProjectRequirementMapper.toProjectRequirement(entity);
+	}
 
 }

@@ -43,6 +43,18 @@ public class ApplicationMapper {
 			))
 			.build();
 	}
+	
+	public static ProjectApplication toApplicationOnly(ProjectApplicationEntity applicationEntity) {
+		return ProjectApplication.builder()
+			.applicationGuid(applicationEntity.getApplicationGuid())
+			.requirementGuid(applicationEntity.getRequirementGuid())
+			.applicantGuid(applicationEntity.getApplicantGuid())
+			.approverGuid(applicationEntity.getApproverGuid())
+			.decisionDate(applicationEntity.getDecisionDate())
+			.statusCd(applicationEntity.getStatusCd())
+			.isCanceled(applicationEntity.isCanceled())
+			.build();
+	}
 
 	public static ProjectApplicationEntity toApplicationEntity(ProjectApplication application) {
 		return ProjectApplicationEntity.builder()

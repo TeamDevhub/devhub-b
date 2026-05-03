@@ -1,105 +1,189 @@
-# 신규 기능 추가 방법
+# How to Add a New Feature
 
-## 개발 순서
+## Development Order
 
-신규 기능을 추가할 때는 반드시 아래 순서를 따른다. 계층 간 의존 방향이 안쪽 → 바깥쪽이기 때문에, 안쪽(도메인)부터 작성한다.
+When adding a new feature, always follow the sequence below.
+Because dependency flow must go **inner → outer**, implementation starts from the innermost layer (domain).
 
+```text id="5n2xkr"
+1. Domain model
+2. Command / Result objects
+3. Port interfaces (UseCase + Repository)
+4. Service implementation
+5. Facade (if needed)
+6. Adapter + JPA entity + Mapper
+7. Controller + DTO
+8. Tests
 ```
-1. 도메인 모델
-2. 커맨드/결과 객체
-3. 포트 인터페이스 (UseCase + Repository)
-4. 서비스 구현
-5. Facade (필요한 경우)
-6. 어댑터 + JPA 엔티티 + Mapper
-7. 컨트롤러 + DTO
-8. 테스트
+
+---
+
+## Step-by-Step Checklist
+
+## Step 1: Domain Model (`core/{domain}/domain/`)
+
+* [ ] Create entity class or VO `record`
+* [ ] Use `@Builder(access = PRIVATE)` + private constructor
+* [ ] Add static factory methods (`create*`, `of`, `issue`)
+* [ ] Implement business methods
+* [ ] Use `DomainRuleException.of(ErrorCode.XXX)` for domain rule violations
+
+---
+
+## Step 2: Command / Result Objects (`core/{domain}/port/in/command/`)
+
+* [ ] Create commands using `@Builder` + `record`
+* [ ] Add conversion methods (`toXxxCommand()`) when needed
+
+---
+
+## Step 3: Port Interfaces
+
+### Input Ports (`core/{domain}/port/in/usecase/`)
+
+* [ ] Create UseCase interfaces
+
+### Output Ports (`core/{domain}/port/out/`)
+
+* [ ] Create Repository interfaces
+* [ ] Create Provider interfaces (when external dependencies exist)
+
+---
+
+## Step 4: Service Implementation (`core/{domain}/application/`)
+
+* [ ] Declare:
+
+    * `@Service`
+    * `@Transactional`
+    * `@RequiredArgsConstructor`
+* [ ] Implement UseCase interfaces
+* [ ] Inject only port interfaces (no direct JPA dependency)
+* [ ] Use `BusinessRuleException.of(ErrorCode.XXX)` for business policy violations
+
+---
+
+## Step 5: Facade (`core/{domain}/port/in/facade/`)
+
+Create only when two or more UseCases must be combined.
+
+* [ ] Declare:
+
+    * `@Service`
+    * `@Transactional`
+    * `@RequiredArgsConstructor`
+* [ ] Inject only UseCase interfaces
+* [ ] Write orchestration logic only
+* [ ] Do not implement business logic directly
+
+---
+
+## Step 6: Adapter + Persistence (`outbound/{domain}/`)
+
+### JPA Entity (`adapter/entity/`)
+
+* [ ] Declare:
+
+    * `@Entity`
+    * `@Getter`
+    * `@Builder`
+    * `@NoArgsConstructor(access = PROTECTED)`
+* [ ] Apply `@Enumerated(EnumType.STRING)` to enum fields
+* [ ] Configure proper `@Table`, `@UniqueConstraint`
+
+### JPA Repository (`persistence/`)
+
+* [ ] Create:
+
+```text id="8v1mqt"
+Jpa{Domain}Repository extends JpaRepository<Entity, PkType>
 ```
 
-## 단계별 체크리스트
+### Mapper (`adapter/mapper/`)
 
-### 1단계: 도메인 모델 (`core/{domain}/domain/`)
+* [ ] Create `{Domain}Mapper` class (static methods only)
+* [ ] Provide both:
 
-- [ ] 엔티티 클래스 또는 VO `record` 작성
-- [ ] `@Builder(access = PRIVATE)` + private 생성자
-- [ ] 정적 팩토리 메서드 (`create*`, `of`, `issue`)
-- [ ] 비즈니스 메서드 작성
-- [ ] 도메인 규칙 위반 시 `DomainRuleException.of(ErrorCode.XXX)` 사용
+    * `toEntity()`
+    * `toDomain()`
 
-### 2단계: 커맨드/결과 객체 (`core/{domain}/port/in/command/`)
+### Adapter (`adapter/`)
 
-- [ ] `@Builder` + `record`로 커맨드 작성
-- [ ] 변환 메서드 추가 (`toXxxCommand()`) — 필요한 경우
+* [ ] Declare:
 
-### 3단계: 포트 인터페이스
+    * `@Component`
+    * `@RequiredArgsConstructor`
+* [ ] Implement port interfaces
+* [ ] If data is missing:
 
-입력 포트 (`core/{domain}/port/in/usecase/`):
-- [ ] UseCase 인터페이스 작성
+    * return `AdapterDataException.of(ErrorCode.XXX)`
+    * or `Optional.empty()`
 
-출력 포트 (`core/{domain}/port/out/`):
-- [ ] Repository 인터페이스 작성
-- [ ] Provider 인터페이스 작성 (외부 의존이 있는 경우)
+---
 
-### 4단계: 서비스 구현 (`core/{domain}/application/`)
+## Step 7: API Layer (`api/{domain}/`)
 
-- [ ] `@Service`, `@Transactional`, `@RequiredArgsConstructor` 선언
-- [ ] UseCase 인터페이스 구현
-- [ ] 포트 인터페이스만 의존성으로 주입 (JPA 클래스 직접 참조 금지)
-- [ ] 비즈니스 정책 위반 시 `BusinessRuleException.of(ErrorCode.XXX)` 사용
+### DTO (`api/{domain}/model/`)
 
-### 5단계: Facade (`core/{domain}/port/in/facade/`)
+* [ ] Request:
 
-두 개 이상의 UseCase 조합이 필요한 경우에만 작성한다.
+    * `record`
+    * `@Builder`
+    * Bean Validation annotations
+* [ ] Request includes `to{Command}()` conversion method
+* [ ] Response:
 
-- [ ] `@Service`, `@Transactional`, `@RequiredArgsConstructor` 선언
-- [ ] UseCase 인터페이스만 의존성으로 주입
-- [ ] 조합 로직만 작성, 비즈니스 로직 직접 구현 금지
+    * `record`
+    * static factory methods
 
-### 6단계: 어댑터 + 영속성 (`outbound/{domain}/`)
+### Controller (`api/{domain}/controller/`)
 
-JPA 엔티티 (`adapter/entity/`):
-- [ ] `@Entity`, `@Getter`, `@Builder`, `@NoArgsConstructor(access = PROTECTED)` 선언
-- [ ] Enum 필드에 `@Enumerated(EnumType.STRING)` 적용
-- [ ] 적절한 `@Table`, `@UniqueConstraint` 설정
+* [ ] Declare:
 
-JPA Repository (`persistence/`):
-- [ ] `Jpa{도메인}Repository extends JpaRepository<Entity, PkType>` 작성
+    * `@RestController`
+    * `@RequestMapping`
+    * `@RequiredArgsConstructor`
+* [ ] Inject Facade only
+* [ ] Return type:
 
-Mapper (`adapter/mapper/`):
-- [ ] `{도메인}Mapper` 클래스 작성 (정적 메서드만)
-- [ ] `toEntity()`, `toDomain()` 양방향 제공
-
-어댑터 (`adapter/`):
-- [ ] `@Component`, `@RequiredArgsConstructor` 선언
-- [ ] 포트 인터페이스 구현
-- [ ] 데이터 없을 때 `AdapterDataException.of(ErrorCode.XXX)` 또는 `Optional.empty()` 반환
-
-### 7단계: API 계층 (`api/{domain}/`)
-
-DTO (`api/{domain}/model/`):
-- [ ] Request: `record` + `@Builder` + Bean Validation 어노테이션
-- [ ] Request: `to{Command}()` 변환 메서드
-- [ ] Response: `record` + 정적 팩토리 메서드
-
-컨트롤러 (`api/{domain}/controller/`):
-- [ ] `@RestController`, `@RequestMapping`, `@RequiredArgsConstructor` 선언
-- [ ] Facade만 주입
-- [ ] `ResponseEntity<DataApiResponseDto<T>>` 반환 타입
-- [ ] `@Valid` + `@RequestBody` 사용
-
-### 8단계: 테스트
-
-- [ ] 도메인 단위 테스트 (`small/core/{domain}/domain/`)
-- [ ] 서비스 단위 테스트 (`small/core/{domain}/application/`) — Fake 사용
-- [ ] Facade 단위 테스트 (`small/core/{domain}/port/facade/`) — Fake UseCase 사용
-- [ ] 어댑터 통합 테스트 (`medium/outbound/{domain}/adapter/`) — `@SpringBootTest`
-- [ ] 컨트롤러 통합 테스트 (`medium/api/{domain}/controller/`) — `@MockitoBean` Facade
-- [ ] Fake 구현체 작성 (`fake/pure/application/port/`) — 새 Repository가 있는 경우
-
-## 신규 도메인 추가 시 패키지 생성 예시
-
-`notification` 도메인을 새로 추가한다고 가정:
-
+```text id="2q7ldp"
+ResponseEntity<DataApiResponseDto<T>>
 ```
+
+* [ ] Use:
+
+    * `@Valid`
+    * `@RequestBody`
+
+---
+
+## Step 8: Tests
+
+* [ ] Domain unit tests
+  `small/core/{domain}/domain/`
+
+* [ ] Service unit tests (using Fake implementations)
+  `small/core/{domain}/application/`
+
+* [ ] Facade unit tests (using Fake UseCases)
+  `small/core/{domain}/port/facade/`
+
+* [ ] Adapter integration tests (`@SpringBootTest`)
+  `medium/outbound/{domain}/adapter/`
+
+* [ ] Controller integration tests (`@MockitoBean` Facade)
+  `medium/api/{domain}/controller/`
+
+* [ ] Fake implementations for new repositories
+  `fake/pure/application/port/`
+
+---
+
+## Example Package Structure for a New Domain
+
+Assume a new `notification` domain is added:
+
+```text id="6m3xra"
 core/notification/
 ├── domain/
 │   ├── Notification.java

@@ -3,9 +3,7 @@ package teamdevhub.devhub.core.user.port.in.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.user.domain.User;
-import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
@@ -18,7 +16,6 @@ import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 public class UserProfileFacade {
 
     private final UserProfileUseCase userProfileUseCase;
-    private final UserCredentialUseCase userCredentialUseCase;
 
     public UserBasicResponseDto getUserInfo(String userGuid) {
         User user = userProfileUseCase.getUserInfo(userGuid);
@@ -36,9 +33,5 @@ public class UserProfileFacade {
 
     public void updateProfile(UpdateProfileCommand updateProfileCommand) {
         userProfileUseCase.updateProfile(updateProfileCommand);
-    }
-
-    public void updatePassword(UpdatePasswordCommand updatePasswordCommand) {
-        userCredentialUseCase.updatePassword(updatePasswordCommand);
     }
 }

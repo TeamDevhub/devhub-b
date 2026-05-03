@@ -1,5 +1,10 @@
 package teamdevhub.devhub.api.application.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +18,7 @@ import teamdevhub.devhub.core.application.port.in.facade.ProjectApplicationFacad
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
 
+@Tag(name = "Application", description = "프로젝트 지원 관리 API")
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor
@@ -20,15 +26,16 @@ public class ApplicationController {
 
 	private final ProjectApplicationFacade projectApplicationFacade;
 
-	/**
-	 * 리뷰
-	 * @PathVaribale 로 작성하신 projectGuid를 따로 사용하진 않는데, 혹시 사용하신 이유가 있을까요?
-	 * HTTP 메서드 PATCH 는 사용하지 않고 PutMapping 으로 사용하도록 컨벤션에 적어놓았습니다.
-	 */
+	@Operation(summary = "지원 승인/거절", description = "프로젝트 지원을 승인하거나 거절합니다. 프로젝트 리더만 처리 가능합니다.")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", description = "처리 성공"),
+			@ApiResponse(responseCode = "401", description = "인증되지 않은 사용자"),
+			@ApiResponse(responseCode = "403", description = "처리 권한 없음")
+	})
 	@PutMapping("/applications/{applicationGuid}/approve")
 	public ResponseEntity<DataApiResponseDto<Void>> approveApplication(
-		@PathVariable("applicationGuid") String applicationGuid,
-		@RequestParam("approved") boolean approved,
+		@Parameter(description = "지원 GUID", required = true) @PathVariable("applicationGuid") String applicationGuid,
+		@Parameter(description = "승인 여부 (true: 승인, false: 거절)", required = true) @RequestParam("approved") boolean approved,
 		@LoginUser AuthenticatedUser authenticatedUser
 	) {
 		return ResponseEntity.ok(
@@ -36,9 +43,15 @@ public class ApplicationController {
 		);
 	}
 
+	@Operation(summary = "프로젝트 지원", description = "프로젝트에 지원합니다. 지원서 양식 답변을 포함하여 제출합니다.")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", description = "지원 성공"),
+			@ApiResponse(responseCode = "400", description = "유효성 검사 실패"),
+			@ApiResponse(responseCode = "401", description = "인증되지 않은 사용자")
+	})
 	@PostMapping("/{projectGuid}/applications")
 	public ResponseEntity<DataApiResponseDto<Void>> createApplication(
-		@PathVariable("projectGuid") String projectGuid,
+		@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid,
 		@Valid @RequestBody CreateApplicationRequestDto requestDto,
 		@LoginUser AuthenticatedUser authenticatedUser
 	) {
@@ -47,24 +60,24 @@ public class ApplicationController {
 		);
 	}
 
+	@Operation(summary = "프로젝트 지원 목록 조회", description = "프로젝트에 대한 지원 목록을 페이징 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "조회 성공")
 	@GetMapping("/{projectGuid}/applications")
 	public ResponseEntity<DataApiResponseDto<ProjectApplicationListResponseDto>> getApplicationsByProjectGuid(
-		@PathVariable("projectGuid") String projectGuid,
-		@RequestParam("page") int page,
-		@RequestParam("size") int size
+		@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid,
+		@Parameter(description = "페이지 번호", example = "0") @RequestParam("page") int page,
+		@Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size
 	) {
 		return ResponseEntity.ok(
 			projectApplicationFacade.getApplicationsByProjectGuid(projectGuid, PageCommand.of(page, size))
 		);
 	}
 
-	/**
-	 * 리뷰
-	 * @PathVaribale 로 작성하신 projectGuid를 따로 사용하진 않는데, 혹시 사용하신 이유가 있을까요?
-	 */
+	@Operation(summary = "지원 상세 조회", description = "지원 GUID로 지원서 상세 내용(답변 포함)을 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "조회 성공")
 	@GetMapping("/applications/{applicationGuid}")
 	public ResponseEntity<DataApiResponseDto<ProjectApplicationDetailWrapperResponseDto>> getApplicationDetail(
-		@PathVariable("applicationGuid") String applicationGuid
+		@Parameter(description = "지원 GUID", required = true) @PathVariable("applicationGuid") String applicationGuid
 	) {
 		return ResponseEntity.ok(
 			projectApplicationFacade.getApplicationDetail(applicationGuid)

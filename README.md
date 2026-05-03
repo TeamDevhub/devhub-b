@@ -124,6 +124,7 @@ http://localhost:8080/swagger-ui/index.html
 | POST | `/auth/login` | 불필요 | 이메일 로그인 — Bearer 토큰 + 리프레시 쿠키 발급 |
 | POST | `/auth/reissue` | 쿠키 | 액세스 토큰 재발급 (refreshToken 쿠키 사용) |
 | POST | `/auth/logout` | 필요 | 로그아웃 — 리프레시 토큰 무효화 |
+| PUT | `/auth/password` | 필요 | 비밀번호 변경 |
 | GET | `/auth/oauth/{provider}` | 불필요 | OAuth 인증 시작 — provider: `google`, `github`, `kakao`, `naver` |
 | GET | `/auth/oauth/{provider}/callback` | 불필요 | OAuth 콜백 처리 — 기존 회원이면 홈으로 리다이렉트, 신규면 회원가입 페이지로 |
 | POST | `/auth/oauth/signup` | 불필요 | OAuth 신규 회원가입 (tempToken 사용) |
@@ -159,7 +160,8 @@ http://localhost:8080/swagger-ui/index.html
 | POST | `/projects/{projectGuid}/applications` | 필요 | 프로젝트 지원 |
 | GET | `/projects/{projectGuid}/applications` | 불필요 | 프로젝트 지원자 목록 (페이징) |
 | GET | `/projects/applications/{applicationGuid}` | 불필요 | 지원서 상세 |
-| PUT | `/projects/applications/{applicationGuid}/approve` | 필요 | 지원서 승인/거절 |
+| PUT | `/projects/applications/{applicationGuid}/approve` | 필요 | 지원서 승인/거절 (`?approved=true\|false`) |
+| POST | `/projects/{projectGuid}/members/{userGuid}` | 필요 | 프로젝트 멤버 평가 |
 
 ### 게시판 (`/boards`)
 
@@ -167,10 +169,19 @@ http://localhost:8080/swagger-ui/index.html
 |---|---|---|---|
 | GET | `/boards` | 불필요 | 게시글 목록 조회 (검색 + 페이징) |
 | POST | `/boards` | 필요 | 게시글 작성 |
-| GET | `/boards/{boardGuid}` | 불필요 | 게시글 상세 (조회수 쿠키 처리) |
+| GET | `/boards/{boardGuid}` | 선택 | 게시글 상세 (조회수 쿠키 처리) |
 | PUT | `/boards/{boardGuid}` | 필요 | 게시글 수정 |
 | POST | `/boards/{boardGuid}/likes` | 필요 | 게시글 좋아요 |
-| DELETE | `/boards/{boardGuid}` | 불필요 | 게시글 삭제 |
+| POST | `/boards/delete` | 불필요 | 게시글 삭제 (배열로 복수 삭제 가능) |
+| POST | `/boards/{boardGuid}/comments` | 필요 | 댓글 작성 |
+| PUT | `/boards/{boardGuid}/comments/{commentGuid}` | 필요 | 댓글 수정 |
+| DELETE | `/boards/{boardGuid}/comments/{commentGuid}` | 불필요 | 댓글 삭제 |
+
+### 모집폼 (`/applicationForms`)
+
+| 메서드 | URL | 인증 필요 | 설명 |
+|---|---|---|---|
+| GET | `/applicationForms` | 불필요 | 모집폼 목록 조회 (검색 필터) |
 
 ### 알림 (`/notification`)
 
@@ -198,9 +209,18 @@ http://localhost:8080/swagger-ui/index.html
 
 ### 관리자 (`/admin`)
 
+> **주의**: `/admin/**` 경로가 현재 `permitAll()` 상태입니다. 운영 전 ADMIN Role 검증 설정이 필요합니다.
+
 | 메서드 | URL | 인증 필요 | 설명 |
 |---|---|---|---|
 | GET | `/admin/users` | 🚧 미완성 | 사용자 목록 조회 (관리자 전용 예정) |
+| GET | `/admin/boards` | 🚧 미완성 | 게시판 관리 목록 조회 (관리자 전용 예정) |
+| GET | `/admin/banner/list` | 🚧 미완성 | 배너 목록 조회 (관리자 전용 예정) |
+| PUT | `/admin/banner` | 🚧 미완성 | 배너 등록 (관리자 전용 예정) |
+| PUT | `/admin/banner/{bannerGuid}` | 🚧 미완성 | 배너 수정 (관리자 전용 예정) |
+| DELETE | `/admin/banner/{bannerGuid}` | 🚧 미완성 | 배너 삭제 (관리자 전용 예정) |
+| GET | `/admin/code/list` | 🚧 미완성 | 공통코드 목록 조회 (관리자 전용 예정) |
+| PUT | `/admin/code` | 🚧 미완성 | 공통코드 저장 (관리자 전용 예정) |
 
 ---
 
@@ -260,18 +280,15 @@ http://localhost:8080/swagger-ui/index.html
 - 이메일 회원가입 / 로그인 / 로그아웃
 - OAuth 로그인 (Google, GitHub, Kakao, Naver)
 - 이메일 인증코드 발송 및 확인
+- 비밀번호 변경
 - 프로필 조회 / 수정 / 이미지 변경
 - 회원 탈퇴 (소프트 삭제)
 - 프로젝트 CRUD / 좋아요
+- 프로젝트 지원 / 승인
+- 프로젝트 멤버 평가
 - 게시판 CRUD / 조회수 / 좋아요
+- 게시판 댓글 CRUD
+- 모집폼 목록 조회
 - 파일 업로드 / 다운로드
 - 알림 조회 / 읽음 처리
-- 프로젝트 지원 / 승인
-
-### 미완성 기능
-
-| 기능 | 위치 | 현황 |
-|---|---|---|
-| 비밀번호 변경 | `UserProfileController`, `User.changePassword()` | 컨트롤러와 도메인 메서드 주석처리 |
-| Admin 권한 검증 | `WebSecurityConfig:106` | `/admin/**` 가 `permitAll()` 상태 — ADMIN Role 검증 미구현 |
-| ProjectServiceTest | `ProjectServiceTest.java` | 의존성 불일치로 전체 주석 상태 |
+- 약관 등록 / 조회

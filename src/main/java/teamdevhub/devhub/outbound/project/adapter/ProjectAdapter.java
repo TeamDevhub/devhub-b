@@ -93,4 +93,10 @@ public class ProjectAdapter implements ProjectRepository {
         		pagedProjectList.getTotalElements());
 	}
 
+	@Override
+	public Project getProjectByRequirementGuid(String requirementGuid) {
+		ProjectEntity entity = jpaProjectRepository.getProjectByRequirementGuid(requirementGuid);
+		return ProjectMapper.toProject(entity);
+	}
+
 }

@@ -1,14 +1,14 @@
-# API 설계 규칙
+# API Design Rules
 
-## 컨트롤러 구조
+## Controller Structure
 
-```java
+```java id="7d2mka"
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthFacade authFacade;   // Facade만 주입
+    private final AuthFacade authFacade;   // Inject Facade only
 
     @PostMapping("/login")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> login(
@@ -27,14 +27,16 @@ public class AuthController {
 }
 ```
 
-- 컨트롤러는 `Facade`만 주입받는다.
-- 요청 DTO에 `@Valid`를 붙여 Bean Validation을 활성화한다.
-- 모든 응답은 `DataApiResponseDto<T>`로 감싼다.
-- 컨트롤러에서 비즈니스 로직을 작성하지 않는다.
+* Controllers should inject only a `Facade`.
+* Apply `@Valid` to request DTOs to enable Bean Validation.
+* All responses must be wrapped with `DataApiResponseDto<T>`.
+* Do not write business logic inside controllers.
+
+---
 
 ## Request DTO
 
-```java
+```java id="4v9xpt"
 @Builder
 public record SignupRequestDto(
         @NotBlank String email,
@@ -52,13 +54,20 @@ public record SignupRequestDto(
 }
 ```
 
-- 검증 어노테이션(`@NotBlank`, `@NotNull`, `@Size`, `@Pattern`)을 DTO 필드에 선언한다.
-- DTO에서 Command 또는 비즈니스 객체로 변환하는 `to{Object}()` 메서드를 제공한다.
-- DTO 클래스는 `record`로 선언한다.
+* Declare validation annotations on DTO fields:
+
+    * `@NotBlank`
+    * `@NotNull`
+    * `@Size`
+    * `@Pattern`
+* DTOs should provide `to{Object}()` methods to convert into Commands or business objects.
+* DTO classes should be declared as `record`.
+
+---
 
 ## Response DTO
 
-```java
+```java id="8n3wqy"
 public record TokenResponseDto(String accessToken) {
 
     public static TokenResponseDto issueAccessToken(String accessToken) {
@@ -67,56 +76,92 @@ public record TokenResponseDto(String accessToken) {
 }
 ```
 
-- 정적 팩토리 메서드로 생성한다.
-- 도메인 객체를 DTO로 변환하는 로직은 DTO 클래스의 정적 메서드나 컨트롤러 레이어에서 처리한다.
+* Use static factory methods for creation.
+* Logic for converting domain objects into DTOs should be handled either:
 
-## 응답 래퍼
+    * inside DTO static methods, or
+    * in the controller layer.
 
-```java
-// 데이터 있는 성공 응답
+---
+
+## Response Wrapper
+
+```java id="6r1kcf"
+// Success response with data
 DataApiResponseDto.successWithData(SuccessCode.LOGIN_SUCCESS, data)
 
-// 데이터 없는 성공 응답
+// Success response without data
 DataApiResponseDto.successWithoutData(SuccessCode.LOGOUT_SUCCESS)
 
-// 실패 응답은 GlobalExceptionHandler가 자동으로 처리
+// Failure responses are automatically handled by GlobalExceptionHandler
 ```
 
-`SuccessCode`에 없는 코드가 필요하면 `SuccessCode` enum에 먼저 추가한다.
+If a required success code does not exist, add it to the `SuccessCode` enum first.
 
-## JWT 인증 흐름
+---
 
-- **액세스 토큰**: `Authorization: Bearer {token}` 헤더로 전달
-- **리프레시 토큰**: `Set-Cookie: refreshToken=...; HttpOnly` 쿠키로 전달
-- 재발급 시 쿠키의 `refreshToken` 값을 `@CookieValue`로 수신
+## JWT Authentication Flow
 
-```java
+* **Access Token**: delivered through the header
+  `Authorization: Bearer {token}`
+
+* **Refresh Token**: delivered through cookie
+  `Set-Cookie: refreshToken=...; HttpOnly`
+
+* During reissue, receive the cookie value with `@CookieValue`
+
+```java id="2m7vhs"
 @PostMapping("/reissue")
-public ResponseEntity<...> refresh(@CookieValue("refreshToken") String refreshToken) { ... }
+public ResponseEntity<...> refresh(
+        @CookieValue("refreshToken") String refreshToken) { ... }
 ```
 
-## 로그인 사용자 정보 획득
+---
 
-`@LoginUser` 어노테이션으로 현재 인증된 사용자의 `UserCredential`을 컨트롤러 파라미터로 받는다.
+## Getting Logged-in User Information
 
-```java
+Use the `@LoginUser` annotation to receive the authenticated user's `UserCredential` in controller parameters.
+
+```java id="9q4ldb"
 @PostMapping("/logout")
-public ResponseEntity<...> logout(@LoginUser UserCredential authenticatedUser) {
+public ResponseEntity<...> logout(
+        @LoginUser UserCredential authenticatedUser) {
+
     authFacade.logout(authenticatedUser.userGuid());
     ...
 }
 ```
 
-## URL 설계 규칙
+---
 
-- 도메인별로 컨트롤러를 분리하고 `@RequestMapping`으로 기본 경로를 지정한다.
-- URL은 소문자 + 하이픈(`-`)으로 구성한다. 카멜케이스를 쓰지 않는다.
-- 리소스 중심으로 설계한다: `/user/profile`, `/auth/login`, `/projects/{projectGuid}`
+## URL Design Rules
 
-## Spring Security 설정 원칙
+* Separate controllers by domain and define base paths using `@RequestMapping`.
+* URLs must use lowercase + hyphen (`-`), not camelCase.
+* Use resource-oriented design:
 
-- `@EnableWebSecurity` 설정은 `shared/config/WebSecurityConfig`에 한 곳만 존재한다.
-- JWT 필터는 `UsernamePasswordAuthenticationFilter` 앞에 등록한다.
-- 인증이 필요 없는 경로는 `permitAll()`로 명시한다.
-- `SessionCreationPolicy.STATELESS`를 유지한다. 세션을 사용하지 않는다.
-- **현재 미완성**: `/admin/**` 경로가 `permitAll()` 상태다. ADMIN 권한이 필요한 경로에는 `.hasRole("ADMIN")`을 적용해야 한다.
+```text id="5y8nwr"
+/user/profile
+/auth/login
+/projects/{projectGuid}
+```
+
+---
+
+## Spring Security Configuration Principles
+
+* `@EnableWebSecurity` must exist only once in:
+  `shared/config/WebSecurityConfig`
+* Register JWT filters before `UsernamePasswordAuthenticationFilter`
+* Explicitly declare unauthenticated paths using `permitAll()`
+* Keep `SessionCreationPolicy.STATELESS`
+* Do not use sessions
+
+### Current Incomplete Area
+
+* `/admin/**` is currently configured as `permitAll()`
+* Endpoints requiring admin privileges should use:
+
+```java id="1t6xeg"
+.hasRole("ADMIN")
+```

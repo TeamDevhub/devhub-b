@@ -22,4 +22,6 @@ public interface ApplicationRepository {
 	List<ProjectApplicationAnswer> findAnswersByApplicationGuid(String applicationGuid);
 
 	PageResult<ProjectApplication> findByApplicantGuid(String userGuid, PageCommand pageCommand);
+
+	List<ProjectApplication> findAcceptedByProjectGuid(String projectGuid);
 }

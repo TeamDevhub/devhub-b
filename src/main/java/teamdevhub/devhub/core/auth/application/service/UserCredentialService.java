@@ -88,4 +88,5 @@ public class UserCredentialService implements UserCredentialUseCase {
         emailUserCredential.changePassword(encodedPasswordProvider.encode(updatePasswordCommand.newPassword()));
         userCredentialRepository.savePassword(emailUserCredential);
     }
+
 }

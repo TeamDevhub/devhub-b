@@ -3,7 +3,10 @@
     "allow": [
       "Bash(grep -n \"^[[:space:]]*//\" /d/devhub-b/src/test/java/teamdevhub/devhub/medium/api/auth/controller/CookieFactoryTest.java)",
       "Bash(./gradlew compileJava)",
-      "Bash(./gradlew compileTestJava *)"
+      "Bash(./gradlew compileTestJava *)",
+      "Bash(./gradlew test *)",
+      "Bash(./gradlew compileJava compileTestJava)",
+      "Bash(./gradlew compileJava --no-daemon)"
     ]
   }
 }

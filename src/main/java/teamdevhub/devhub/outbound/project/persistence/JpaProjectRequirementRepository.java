@@ -1,6 +1,7 @@
 package teamdevhub.devhub.outbound.project.persistence;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,8 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
-
-import java.util.Optional;
 
 public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRequirementEntity, String> {
 
@@ -43,5 +42,7 @@ public interface JpaProjectRequirementRepository extends JpaRepository<ProjectRe
 			""")
 	void deleteAllByProjectGuid(@Param("projectGuid") String projectGuid);
 	Optional<ProjectRequirementEntity> findByProjectRequirementGuid(String projectRequirementGuid);
-
+	
+	
+	Optional<ProjectRequirementEntity> findById(String projectRequirementGuid);
 }

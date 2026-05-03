@@ -1,44 +1,67 @@
-# 테스트 코드 규칙
+# Test Code Rules
 
-## 테스트 분류 및 패키지 구조
+## Test Classification and Package Structure
 
-```
+```text id="4n8xkr"
 src/test/java/teamdevhub/devhub/
-├── small/      # 단위 테스트: Spring Context 없이 실행
-├── medium/     # 통합 테스트: @SpringBootTest 사용
-├── large/      # E2E 테스트: TestRestTemplate 전체 흐름
-├── fake/       # Fake 구현체 (테스트 더블)
-└── constant/   # 테스트 상수 (UserTestConstant)
+├── small/      # Unit tests: run without Spring Context
+├── medium/     # Integration tests: use @SpringBootTest
+├── large/      # E2E tests: full flow with TestRestTemplate
+├── fake/       # Fake implementations (test doubles)
+└── constant/   # Test constants (UserTestConstant)
 ```
 
-## 테스트 작성 형식
+---
 
-```java
+## Test Writing Format
+
+```java id="7m2qvd"
 @Test
 @DisplayName("유효하지_않은_리프레시_토큰으로_재발급_요청하면_예외가_발생한다")
 void getUserForReissue_tokenNotSaved_throwsException() {
     // given
     String invalidToken = "invalid-refresh-token";
-    tokenParseProvider.givenRefreshToken(invalidToken, TEST_USER_GUID_1);
+    tokenParseProvider.givenRefreshToken(
+            invalidToken,
+            TEST_USER_GUID_1
+    );
 
     // when, then
-    assertThatThrownBy(() -> userCredentialService.getUserForReissue(invalidToken))
+    assertThatThrownBy(() ->
+            userCredentialService.getUserForReissue(invalidToken))
             .isInstanceOf(BusinessRuleException.class)
-            .hasMessageContaining(ErrorCode.REFRESH_TOKEN_INVALID.getMessage());
+            .hasMessageContaining(
+                    ErrorCode.REFRESH_TOKEN_INVALID.getMessage()
+            );
 }
 ```
 
-- `@DisplayName`은 한국어로 작성하고, 공백은 언더스코어(`_`)로 표현한다.
-- GWT 주석(`// given`, `// when`, `// then`, `// when, then`)을 항상 작성한다.
-- AssertJ(`assertThat`, `assertThatThrownBy`)만 사용한다. JUnit의 `Assertions`는 쓰지 않는다.
+### Rules
 
-## 단위 테스트 (small) 규칙
+* `@DisplayName` must be written in Korean
+* Represent spaces using underscores (`_`)
+* Always include GWT comments:
 
-- `@SpringBootTest` 없이 순수 Java로 실행한다.
-- Mockito를 사용하지 않는다. Fake 구현체로 대체한다.
-- `@BeforeEach`에서 의존성을 직접 생성하고 주입한다.
+    * `// given`
+    * `// when`
+    * `// then`
+    * `// when, then`
+* Use AssertJ only:
 
-```java
+    * `assertThat`
+    * `assertThatThrownBy`
+* Do not use JUnit `Assertions`
+
+---
+
+## Unit Test (`small`) Rules
+
+* Run as pure Java without `@SpringBootTest`
+* Do not use Mockito
+* Replace dependencies with Fake implementations
+* Create and inject dependencies manually in `@BeforeEach`
+
+```java id="1p6xtr"
 class UserCredentialServiceTest {
 
     private UserCredentialService userCredentialService;
@@ -46,28 +69,46 @@ class UserCredentialServiceTest {
 
     @BeforeEach
     void init() {
-        userCredentialRepository = new FakeUserCredentialRepository();
-        // ... 다른 Fake들 초기화
+        userCredentialRepository =
+                new FakeUserCredentialRepository();
 
-        userCredentialService = new UserCredentialService(
-                tokenParseProvider,
-                new FakeUuidIdentifierProvider(TEST_USER_GUID_1),
-                noOpPasswordEncoder,
-                new FakeAuthenticatedUserResolver(),
-                userCredentialRepository,
-                refreshTokenRepository
-        );
+        // initialize other fakes...
+
+        userCredentialService =
+                new UserCredentialService(
+                        tokenParseProvider,
+                        new FakeUuidIdentifierProvider(
+                                TEST_USER_GUID_1
+                        ),
+                        noOpPasswordEncoder,
+                        new FakeAuthenticatedUserResolver(),
+                        userCredentialRepository,
+                        refreshTokenRepository
+                );
     }
 }
 ```
 
-## 통합 테스트 (medium) 규칙
+---
 
-- `@SpringBootTest` + `@Transactional`을 선언한다.
-- `@BeforeEach`에서 `jpaXxxRepository.deleteAll()`로 테스트 간 상태를 격리한다.
-- 어댑터 테스트는 JPA 레포지토리를 직접 `@Autowired`로 주입받아 DB 상태를 검증한다.
+## Integration Test (`medium`) Rules
 
-```java
+* Use:
+
+```text id="8v3mcf"
+@SpringBootTest
+@Transactional
+```
+
+* In `@BeforeEach`, isolate state using:
+
+```java id="5k1qpd"
+jpaXxxRepository.deleteAll();
+```
+
+* Adapter tests may inject JPA repositories directly using `@Autowired` to verify DB state
+
+```java id="9n7xra"
 @SpringBootTest
 @Transactional
 class UserCredentialAdapterTest {
@@ -76,7 +117,8 @@ class UserCredentialAdapterTest {
     private UserCredentialAdapter userCredentialAdapter;
 
     @Autowired
-    private JpaEmailCredentialRepository jpaEmailCredentialRepository;
+    private JpaEmailCredentialRepository
+            jpaEmailCredentialRepository;
 
     @BeforeEach
     void init() {
@@ -85,11 +127,13 @@ class UserCredentialAdapterTest {
 }
 ```
 
-## Fake 구현체 작성 규칙
+---
 
-### 위치
+## Fake Implementation Rules
 
-```
+## Location
+
+```text id="2r8ltk"
 fake/pure/application/
 ├── port/
 │   ├── in/usecase/{domain}/Fake{UseCase}.java
@@ -97,70 +141,140 @@ fake/pure/application/
 └── provider/Fake{Provider}.java
 ```
 
-### 작성 원칙
+---
 
-- 내부 저장소는 `Map<String, T>`를 사용한다.
-- 테스트 준비를 위한 `given*()` 메서드를 추가할 수 있다.
-- `null`을 반환하지 않는다. 없으면 예외를 던지거나 `Optional.empty()`를 반환한다.
-- 포트 인터페이스를 완전히 구현한다. 빈 메서드를 남기지 않는다.
+## Principles
 
-```java
-public class FakeUserCredentialRepository implements UserCredentialRepository {
+* Use internal `Map<String, T>` storage
+* May add `given*()` methods for test setup
+* Do not return `null`
+* If absent:
 
-    private final Map<String, UserCredential> emailByGuidStore = new HashMap<>();
-    private final Map<String, UserCredential> emailByEmailStore = new HashMap<>();
-    private final Map<String, UserCredential> oauthStore = new HashMap<>();
+    * throw exception
+    * or return `Optional.empty()`
+* Fully implement the port interface
+* Do not leave empty methods
+
+```java id="6m4xzs"
+public class FakeUserCredentialRepository
+        implements UserCredentialRepository {
+
+    private final Map<String, UserCredential>
+            emailByGuidStore = new HashMap<>();
+
+    private final Map<String, UserCredential>
+            emailByEmailStore = new HashMap<>();
+
+    private final Map<String, UserCredential>
+            oauthStore = new HashMap<>();
 
     @Override
-    public void saveEmailUserCredential(UserCredential credential, String encryptedPassword) {
-        emailByGuidStore.put(credential.userGuid(), credential);
-        emailByEmailStore.put(credential.loginId(), credential);
+    public void saveEmailUserCredential(
+            UserCredential credential,
+            String encryptedPassword
+    ) {
+        emailByGuidStore.put(
+                credential.userGuid(),
+                credential
+        );
+
+        emailByEmailStore.put(
+                credential.loginId(),
+                credential
+        );
     }
 
     @Override
-    public Optional<UserCredential> findEmailUserCredentialByEmail(String email) {
-        return Optional.ofNullable(emailByEmailStore.get(email));
+    public Optional<UserCredential>
+    findEmailUserCredentialByEmail(String email) {
+        return Optional.ofNullable(
+                emailByEmailStore.get(email)
+        );
     }
 }
 ```
 
-## 테스트 상수 사용
+---
 
-`UserTestConstant`에 이미 정의된 상수를 테스트 내에서 하드코딩하지 않는다.
+## Test Constant Usage
 
-```java
-// ✅ 올바른 방식
+Do not hardcode values already defined in `UserTestConstant`.
+
+```java id="3t9vkp"
+// ✅ Correct
 import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 void someTest() {
-    String email = TEST_EMAIL_1;   // 상수 사용
+    String email = TEST_EMAIL_1;
 }
 
-// ❌ 금지
+// ❌ Prohibited
 void someTest() {
-    String email = "user1@example.com";  // 하드코딩
+    String email = "user1@example.com";
 }
 ```
 
-새로운 상수가 필요하면 `UserTestConstant`에 먼저 추가한다.
+If a new constant is needed, add it to `UserTestConstant` first.
 
-## 테스트 대상별 가이드
+---
 
-### 도메인 테스트
-- 생성 시나리오, 상태 변경, 도메인 규칙 위반 시 예외 발생을 검증한다.
-- Fake나 Spring Context 불필요.
+## Guidance by Test Target
 
-### 서비스 테스트
-- Fake Repository + Fake Provider를 주입해 로직을 검증한다.
-- 성공 케이스와 실패(예외) 케이스를 모두 작성한다.
+## Domain Tests
 
-### Facade 테스트
-- Fake UseCase들을 주입해 호출 순서와 조합을 검증한다.
+* Verify creation scenarios
+* Verify state changes
+* Verify exceptions on domain rule violations
+* No Fake or Spring Context needed
 
-### 어댑터 테스트
-- `@SpringBootTest` + `@Transactional` + 실제 JPA 레포지토리로 검증한다.
-- 저장 후 JPA 레포지토리로 직접 조회하여 DB 상태를 확인한다.
+---
 
-### 컨트롤러 테스트
-- `@SpringBootTest` + `@MockitoBean`으로 Facade를 Mock 처리한다.
-- HTTP 상태 코드, 응답 바디, 헤더를 검증한다.
+## Service Tests
+
+* Inject Fake repositories + Fake providers
+* Cover both:
+
+    * success cases
+    * failure / exception cases
+
+---
+
+## Facade Tests
+
+* Inject Fake UseCases
+* Verify:
+
+    * call order
+    * orchestration behavior
+
+---
+
+## Adapter Tests
+
+* Use:
+
+```text id="7q2nwd"
+@SpringBootTest
+@Transactional
+```
+
+* Verify using real JPA repositories
+* Save through adapter, then query directly through JPA repository
+
+---
+
+## Controller Tests
+
+* Use:
+
+```text id="1m8xrc"
+@SpringBootTest
+@MockitoBean
+```
+
+* Mock the Facade
+* Verify:
+
+    * HTTP status code
+    * response body
+    * headers

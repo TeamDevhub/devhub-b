@@ -12,8 +12,9 @@ public interface UserRepository {
     void saveAdminUser(User adminUser);
     User save(User user);
     User findByUserGuid(String userGuid);
-    void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
     void updateUserProfile(User user);
+    void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime);
+    void updateMannerDegree(String userGuid, double delta);
     void delete(User user);
     boolean existsByUserRole(UserRole userRole);
     Map<String, String> findNamesByUserGuid(List<String> userGuids);

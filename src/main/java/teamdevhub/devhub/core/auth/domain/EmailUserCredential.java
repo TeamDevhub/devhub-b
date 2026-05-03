@@ -1,7 +1,6 @@
 package teamdevhub.devhub.core.auth.domain;
 
 import lombok.Getter;
-import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.shared.enums.ErrorCode;
@@ -34,9 +33,5 @@ public class EmailUserCredential {
 
     public void changePassword(String encodedPassword) {
         this.password = encodedPassword;
-    }
-
-    public AuthenticatedUser toAuthenticatedUser() {
-        return AuthenticatedUser.of(userGuid, email, userRole);
     }
 }

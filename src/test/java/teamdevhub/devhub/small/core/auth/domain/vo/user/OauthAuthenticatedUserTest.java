@@ -2,12 +2,13 @@ package teamdevhub.devhub.small.core.auth.domain.vo.user;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.core.auth.domain.vo.user.OAuthUserCredential;
+import teamdevhub.devhub.core.auth.domain.OAuthUserCredential;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static teamdevhub.devhub.constant.UserTestConstant.*;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_OAUTH_ID_1;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 class OauthAuthenticatedUserTest {
 
@@ -15,45 +16,27 @@ class OauthAuthenticatedUserTest {
     @DisplayName("OAuth_사용자_자격증명을_생성하면_올바른_값을_갖는다")
     void create_oauthUserCredential_hasCorrectValues() {
         OAuthUserCredential oAuthUserCredential = new OAuthUserCredential(
-                TEST_USER_GUID_1, VerificationProvider.GOOGLE, TEST_OAUTH_ID_1, UserRole.USER
+                TEST_USER_GUID_1, TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, UserRole.USER
         );
 
-        assertThat(oAuthUserCredential.userGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(oAuthUserCredential.provider()).isEqualTo(VerificationProvider.GOOGLE);
-        assertThat(oAuthUserCredential.oauthId()).isEqualTo(TEST_OAUTH_ID_1);
-        assertThat(oAuthUserCredential.userRole()).isEqualTo(UserRole.USER);
+        assertThat(oAuthUserCredential.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(oAuthUserCredential.getVerificationProvider()).isEqualTo(VerificationProvider.GOOGLE);
+        assertThat(oAuthUserCredential.getOauthId()).isEqualTo(TEST_OAUTH_ID_1);
+        assertThat(oAuthUserCredential.getUserRole()).isEqualTo(UserRole.USER);
     }
 
     @Test
     @DisplayName("다양한_OAuth_제공자로_자격증명을_생성할_수_있다")
     void create_oauthUserCredential_withDifferentProviders() {
-        for (VerificationProvider provider : new VerificationProvider[]{
+        for (VerificationProvider verificationProvider : new VerificationProvider[]{
                 VerificationProvider.GOOGLE, VerificationProvider.GITHUB,
                 VerificationProvider.KAKAO, VerificationProvider.NAVER}) {
 
             OAuthUserCredential oAuthUserCredential = new OAuthUserCredential(
-                    TEST_USER_GUID_1, provider, TEST_OAUTH_ID_1, UserRole.USER
+                    TEST_USER_GUID_1, TEST_OAUTH_ID_1, verificationProvider, UserRole.USER
             );
 
-            assertThat(oAuthUserCredential.provider()).isEqualTo(provider);
+            assertThat(oAuthUserCredential.getVerificationProvider()).isEqualTo(verificationProvider);
         }
-    }
-
-    @Test
-    @DisplayName("동일한_값으로_생성한_OAuthUserCredential_은_동등하다")
-    void oauthUserCredentials_withSameValues_areEqual() {
-        OAuthUserCredential c1 = new OAuthUserCredential(TEST_USER_GUID_1, VerificationProvider.GOOGLE, TEST_OAUTH_ID_1, UserRole.USER);
-        OAuthUserCredential c2 = new OAuthUserCredential(TEST_USER_GUID_1, VerificationProvider.GOOGLE, TEST_OAUTH_ID_1, UserRole.USER);
-
-        assertThat(c1).isEqualTo(c2);
-    }
-
-    @Test
-    @DisplayName("제공자가_다른_OAuthUserCredential_은_동등하지_않다")
-    void oauthUserCredentials_withDifferentProvider_areNotEqual() {
-        OAuthUserCredential google = new OAuthUserCredential(TEST_USER_GUID_1, VerificationProvider.GOOGLE, TEST_OAUTH_ID_1, UserRole.USER);
-        OAuthUserCredential github = new OAuthUserCredential(TEST_USER_GUID_1, VerificationProvider.GITHUB, TEST_OAUTH_ID_1, UserRole.USER);
-
-        assertThat(google).isNotEqualTo(github);
     }
 }

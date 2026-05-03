@@ -1,13 +1,7 @@
 package teamdevhub.devhub.outbound.user.adapter;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
@@ -16,6 +10,11 @@ import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 import teamdevhub.devhub.outbound.user.adapter.mapper.UserMapper;
 import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -42,13 +41,18 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
+    public void updateUserProfile(User user) {
+        jpaUserRepository.save(UserMapper.toEntity(user));
+    }
+
+    @Override
     public void updateLastLoginDateTime(String userGuid, LocalDateTime lastLoginDateTime) {
         jpaUserRepository.updateLastLoginDateTime(userGuid, lastLoginDateTime);
     }
 
     @Override
-    public void updateUserProfile(User user) {
-        jpaUserRepository.save(UserMapper.toEntity(user));
+    public void updateMannerDegree(String userGuid, double delta) {
+        jpaUserRepository.updateMannerDegree(userGuid, delta);
     }
 
     @Override
@@ -60,14 +64,14 @@ public class UserAdapter implements UserRepository {
     public boolean existsByUserRole(UserRole userRole) {
         return jpaUserRepository.existsByUserRole(userRole);
     }
-    
+
     @Override
     public Map<String, String> findNamesByUserGuid(List<String> userGuids) {
-    	List<Object[]> results = jpaUserRepository.findNamesByUserGuid(userGuids);
-    	
-    	return results.stream().collect(Collectors.toMap(
-    			row -> (String) row[0],
-    			row -> (String) row[1]
-    			));
+        List<Object[]> results = jpaUserRepository.findNamesByUserGuid(userGuids);
+
+        return results.stream().collect(Collectors.toMap(
+                row -> (String) row[0],
+                row -> (String) row[1]
+        ));
     }
-} 
+}
