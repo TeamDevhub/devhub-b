@@ -11,7 +11,6 @@ import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.core.user.domain.UserReview;
 import teamdevhub.devhub.core.user.port.in.command.ReviewUserCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserReviewUseCase;
-import teamdevhub.devhub.core.user.port.out.UserRepository;
 import teamdevhub.devhub.core.user.port.out.UserReviewRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
@@ -22,7 +21,6 @@ public class UserReviewService implements UserReviewUseCase {
 
     private final IdentifierProvider identifierProvider;
     private final UserReviewRepository userReviewRepository;
-    private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final ProjectMemberRepository projectMemberRepository;
 
@@ -30,29 +28,41 @@ public class UserReviewService implements UserReviewUseCase {
     public double reviewMember(ReviewUserCommand reviewUserCommand) {
         Project project = projectRepository.getProjectDetail(reviewUserCommand.projectGuid());
 
+        validateReviewableProject(project);
+        validateDuplicateReview(reviewUserCommand);
+        validateProjectMembers(reviewUserCommand);
+        UserReview userReview = UserReview.create(identifierProvider.generateIdentifier(), reviewUserCommand);
+        userReviewRepository.save(userReview);
+
+        return userReview.reviewScore();
+    }
+
+    private void validateReviewableProject(Project project) {
         if (!project.isProgressCompleted()) {
             throw BusinessRuleException.of(ErrorCode.PROJECT_NOT_COMPLETED);
         }
+    }
 
-        if (reviewUserCommand.reviewerGuid().equals(reviewUserCommand.revieweeGuid())) {
-            throw BusinessRuleException.of(ErrorCode.REVIEW_SELF_NOT_ALLOWED);
-        }
+    private void validateDuplicateReview(ReviewUserCommand reviewUserCommand) {
+        boolean alreadyReviewed = userReviewRepository.existsByProjectGuidAndReviewerAndReviewee(
+                reviewUserCommand.projectGuid(),
+                reviewUserCommand.reviewerGuid(),
+                reviewUserCommand.revieweeGuid()
+        );
 
-        if (userReviewRepository.existsByProjectGuidAndReviewerAndReviewee(
-                reviewUserCommand.projectGuid(), reviewUserCommand.reviewerGuid(), reviewUserCommand.revieweeGuid())) {
+        if (alreadyReviewed) {
             throw BusinessRuleException.of(ErrorCode.REVIEW_DUPLICATE);
         }
+    }
 
-        if (!projectMemberRepository.isMember(reviewUserCommand.projectGuid(), reviewUserCommand.reviewerGuid())) {
+    private void validateProjectMembers(ReviewUserCommand reviewUserCommand) {
+        validateMember(reviewUserCommand.projectGuid(), reviewUserCommand.reviewerGuid());
+        validateMember(reviewUserCommand.projectGuid(), reviewUserCommand.revieweeGuid());
+    }
+
+    private void validateMember(String projectGuid, String userGuid) {
+        if (!projectMemberRepository.isMember(projectGuid, userGuid)) {
             throw BusinessRuleException.of(ErrorCode.REVIEW_NOT_A_MEMBER);
         }
-
-        if (!projectMemberRepository.isMember(reviewUserCommand.projectGuid(), reviewUserCommand.revieweeGuid())) {
-            throw BusinessRuleException.of(ErrorCode.REVIEW_NOT_A_MEMBER);
-        }
-
-        UserReview userReview = UserReview.create(identifierProvider.generateIdentifier(), reviewUserCommand);
-        userReviewRepository.save(userReview);
-        return userReview.reviewScore();
     }
 }

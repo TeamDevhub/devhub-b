@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.user.application.service.UserReviewService;
 import teamdevhub.devhub.core.user.port.in.command.ReviewUserCommand;
@@ -24,21 +25,18 @@ class UserReviewServiceTest {
 
     private UserReviewService userReviewService;
     private FakeUserReviewRepository userReviewRepository;
-    private FakeUserRepository userRepository;
     private FakeProjectRepository projectRepository;
     private FakeProjectMemberRepository projectMemberRepository;
 
     @BeforeEach
     void init() {
         userReviewRepository = new FakeUserReviewRepository();
-        userRepository = new FakeUserRepository();
         projectRepository = new FakeProjectRepository();
         projectMemberRepository = new FakeProjectMemberRepository();
 
         userReviewService = new UserReviewService(
                 new FakeUuidIdentifierProvider(TEST_REVIEW_GUID_1),
                 userReviewRepository,
-                userRepository,
                 projectRepository,
                 projectMemberRepository
         );
@@ -115,7 +113,7 @@ class UserReviewServiceTest {
 
         // when, then
         assertThatThrownBy(() -> userReviewService.reviewMember(reviewUserCommand))
-                .isInstanceOf(BusinessRuleException.class)
+                .isInstanceOf(DomainRuleException.class)
                 .hasMessageContaining(ErrorCode.REVIEW_SELF_NOT_ALLOWED.getMessage());
     }
 
