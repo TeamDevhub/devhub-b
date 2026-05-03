@@ -39,36 +39,6 @@ class UserReviewTest {
     }
 
     @Test
-    @DisplayName("점수_3.0이면_reviewScore는_0이다")
-    void reviewScore_score3_returnsZero() {
-        // given
-        UserReview review = UserReview.create(TEST_REVIEW_GUID_1, commandWith(3.0));
-
-        // when, then
-        assertThat(review.reviewScore()).isEqualTo(0.0);
-    }
-
-    @Test
-    @DisplayName("점수_5.0이면_reviewScore는_플러스_2.0이다")
-    void reviewScore_score5_returnsPlusTwo() {
-        // given
-        UserReview review = UserReview.create(TEST_REVIEW_GUID_1, commandWith(5.0));
-
-        // when, then
-        assertThat(review.reviewScore()).isEqualTo(2.0);
-    }
-
-    @Test
-    @DisplayName("점수_1.0이면_reviewScore는_마이너스_2.0이다")
-    void reviewScore_score1_returnsMinusTwo() {
-        // given
-        UserReview review = UserReview.create(TEST_REVIEW_GUID_1, commandWith(1.0));
-
-        // when, then
-        assertThat(review.reviewScore()).isEqualTo(-2.0);
-    }
-
-    @Test
     @DisplayName("점수_1.0_미만이면_예외가_발생한다")
     void create_scoreBelowMin_throwsException() {
         // given

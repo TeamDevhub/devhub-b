@@ -47,11 +47,18 @@ teamdevhub.devhub
 │   └── things-to-avoid.md
 │
 ├── agents/               ← Role definitions for repetitive tasks
-│   ├── readme-agent.md
-│   ├── test-agent.md
+│   ├── super-agent.md    ← Orchestration agent (use first)
+│   ├── code-review-agent.md
+│   ├── feature-agent.md
 │   ├── refactor-agent.md
+│   ├── test-agent.md
+│   ├── readme-agent.md
 │   ├── notion-agent.md
 │   └── build-agent.md
+│
+├── docs/                 ← Generated review and analysis documents
+│   ├── full-project-review.md          ← Full codebase review (2026-05-03)
+│   └── fix-user-review-score-double-subtraction.md
 │
 ├── skills/               ← Step-by-step execution procedures
 │   ├── write-readme.md
@@ -94,22 +101,51 @@ teamdevhub.devhub
 
 ## How to Run Agents
 
-| Task               | Execution Command                        |
-| ------------------ | ---------------------------------------- |
-| Write README       | Refer to `prompts/run-readme-agent.md`   |
-| Generate Tests     | Refer to `prompts/run-test-agent.md`     |
-| Safe Refactoring   | Refer to `prompts/run-refactor-agent.md` |
-| Sync to Notion     | Refer to `prompts/run-notion-agent.md`   |
-| Build Verification | Refer to `prompts/run-build-agent.md`    |
+Use `super-agent.md` as the orchestration entry point for all tasks.
+
+| Task               | Command                                        |
+| ------------------ | ---------------------------------------------- |
+| Code Review        | `run-super-agent code-review-agent [scope]`    |
+| Feature Work       | `run-super-agent feature-agent [scope]`        |
+| Refactoring        | `run-super-agent refactor-agent [scope]`       |
+| Generate Tests     | `run-super-agent test-agent [scope]`           |
+| Write README       | Refer to `prompts/run-readme-agent.md`         |
+| Sync to Notion     | Refer to `prompts/run-notion-agent.md`         |
+| Build Verification | Refer to `prompts/run-build-agent.md`          |
+
+Valid scopes: `auth` · `user` · `project` · `admin` · `board` · `changed-files` · `all`
 
 ---
 
 ## Currently Known Incomplete Areas
 
-* `User.changePassword()` — commented out, password change feature incomplete
-* `UserProfileUseCase.updatePassword()` — commented out in interface
-* `WebSecurityConfig` line 106 — `/admin/**` is currently `permitAll()`, ADMIN authorization required
-* `ProjectServiceTest` — fully commented out due to dependency mismatch
+* `ProjectServiceTest` — fully commented out due to dependency mismatch (`FakeProjectLikeRepository` missing)
+
+---
+
+## Known Technical Debt (from full-project-review 2026-05-03)
+
+Critical issues requiring fix before release — see `docs/full-project-review.md` for full detail.
+
+**Security (Block Release)**
+* `OauthController` — OAuth CSRF: no state parameter on callback validation
+* `LoggingAspect` — serializes all service params including passwords to INFO log
+* `TraceIdMDCFilter` — `X-Trace-Id` header value injected into MDC without sanitization (log injection)
+* `FileResponseFactory.attachment()` — Content-Disposition header injection via unsanitized filename
+* `CookieFactory` — Refresh Token cookie `secure=false`
+* `OauthController` — hardcoded `http://localhost:5173` redirect URL
+
+**Correctness**
+* `ProjectAdapter.getProjectDetail()` — `.get()` without `orElseThrow` (NoSuchElementException risk)
+* `ProjectService.deleteProject()` — `findAllGuidByProjectGuid` called after `deleteByProjectGuid` (always returns empty)
+* `GlobalExceptionHandler` — all unhandled exceptions return HTTP 400 instead of 500
+* `AuthController.login()` — `@Valid` missing on `LoginRequestDto`
+
+**Architecture**
+* `BoardService` / `BoardQueryService` — directly depend on `UserRepository` (cross-domain violation)
+* `Project` domain — `@Builder` is public, bypassing factory method enforcement
+* `Project.getRecruitStatus()` — NPE if `recruitmentStartDate` / `recruitmentEndDate` is null
+* `ProjectService.updateProject()` — inline TODO comments in production code
 
 ---
 

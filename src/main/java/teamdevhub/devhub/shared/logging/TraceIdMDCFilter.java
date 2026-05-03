@@ -29,7 +29,7 @@ public class TraceIdMDCFilter extends OncePerRequestFilter {
             if (traceId == null) {
                 traceId = httpServletRequest.getHeader("X-Trace-Id");
 
-                if (traceId == null || traceId.isBlank()) {
+                if (traceId == null || !traceId.matches("[a-zA-Z0-9\\-]{8,36}")) {
                     traceId = identifierProvider.generateIdentifier().substring(0, 16);
                 }
 

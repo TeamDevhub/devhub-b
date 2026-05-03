@@ -31,13 +31,13 @@ public class NaverOauthClientAdapter implements OauthClient {
     }
 
     @Override
-    public String getAuthorizationUrl() {
+    public String getAuthorizationUrl(String state) {
         return UriComponentsBuilder
                 .fromUriString(naverOauthConfig.getAuthorizationUri())
                 .queryParam("response_type", "code")
                 .queryParam("client_id", naverOauthConfig.getClientId())
                 .queryParam("redirect_uri", naverOauthConfig.getRedirectUri())
-                .queryParam("state", identifierProvider.generateIdentifier())
+                .queryParam("state", state)
                 .build()
                 .toUriString();
     }

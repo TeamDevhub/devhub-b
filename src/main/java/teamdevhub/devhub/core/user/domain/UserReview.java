@@ -12,7 +12,6 @@ public class UserReview {
     private static final double MIN_SCORE = 1.0;
     private static final double MAX_SCORE = 5.0;
     private static final double SCORE_STEP = 0.5;
-    private static final double SCORE_OFFSET = 3.0;
 
     private final String userReviewGuid;
     private final String projectGuid;
@@ -49,10 +48,6 @@ public class UserReview {
                 .reviewee(reviewUserCommand.revieweeGuid())
                 .score(reviewUserCommand.score())
                 .build();
-    }
-
-    public double reviewScore() {
-        return this.score - SCORE_OFFSET;
     }
 
     private static void validateReviewer(String reviewer, String reviewee) {

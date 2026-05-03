@@ -6,6 +6,6 @@ import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 public interface OauthClient {
 
     boolean supports(VerificationProvider verificationProvider);
-    String getAuthorizationUrl();
+    String getAuthorizationUrl(String state);
     OauthUser fetchUser(String authorizationCode);
 }

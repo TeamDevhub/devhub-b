@@ -49,6 +49,7 @@ public enum ErrorCode {
     USER_NOT_BANNED("ERR.DVH.0038", "정지 중이 아닌 회원입니다", BAD_REQUEST),
 
     OAUTH_FAIL("ERR.DVH.0040", "지원하지 않는 OAuth 로그인입니다", BAD_REQUEST),
+    OAUTH_STATE_INVALID("ERR.DVH.0041", "유효하지 않은 OAuth state 값입니다", BAD_REQUEST),
 
     NOTIFICATION_SEND_FAIL("ERR.DVH.0050", "발송이 실패했습니다",INTERNAL_SERVER_ERROR),
 

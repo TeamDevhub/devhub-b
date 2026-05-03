@@ -4,11 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthenticationService;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthorizationResult;
 import teamdevhub.devhub.fake.pure.application.port.out.auth.oauth.FakeOauthClient;
 import teamdevhub.devhub.fake.pure.application.provider.FakeTokenIssueProvider;
+import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.fake.pure.application.selector.FakeOauthClientSelector;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
 public class OauthAuthenticationServiceTest {
 
@@ -21,8 +24,9 @@ public class OauthAuthenticationServiceTest {
         oauthClient = new FakeOauthClient();
         FakeOauthClientSelector fakeOauthClientSelector = new FakeOauthClientSelector(oauthClient);
         FakeTokenIssueProvider tokenIssueProvider = new FakeTokenIssueProvider();
+        FakeUuidIdentifierProvider identifierProvider = new FakeUuidIdentifierProvider(TEST_USER_GUID_1);
 
-        oauthAuthenticationService = new OauthAuthenticationService(tokenIssueProvider, fakeOauthClientSelector);
+        oauthAuthenticationService = new OauthAuthenticationService(tokenIssueProvider, fakeOauthClientSelector, identifierProvider);
     }
 
     @Test
@@ -32,9 +36,10 @@ public class OauthAuthenticationServiceTest {
         String provider = "google";
 
         // when
-        String redirectAuthorizationUrl = oauthAuthenticationService.createAuthorizationUrl(provider);
+        OauthAuthorizationResult result = oauthAuthenticationService.createAuthorizationUrl(provider);
 
         // then
-        assertThat(redirectAuthorizationUrl).isEqualTo("https://oauth.test/authorize/");
+        assertThat(result.url()).isEqualTo("https://oauth.test/authorize/");
+        assertThat(result.state()).isEqualTo(TEST_USER_GUID_1);
     }
 }

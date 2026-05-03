@@ -6,7 +6,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
-import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthHttpClient;
 import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.DefaultHeaderProvider;
@@ -25,7 +24,6 @@ public class KakaoOauthClientAdapter implements OauthClient {
 
     private final OauthHttpClient oauthHttpClient;
     private final KakaoOauthConfig kakaoOauthConfig;
-    private final IdentifierProvider identifierProvider;
 
     @Override
     public boolean supports(VerificationProvider verificationProvider) {
@@ -33,13 +31,13 @@ public class KakaoOauthClientAdapter implements OauthClient {
     }
 
     @Override
-    public String getAuthorizationUrl() {
+    public String getAuthorizationUrl(String state) {
         return UriComponentsBuilder
                 .fromUri(URI.create(kakaoOauthConfig.getAuthorizationUri()))
                 .queryParam("client_id", kakaoOauthConfig.getClientId())
                 .queryParam("redirect_uri", kakaoOauthConfig.getRedirectUri())
                 .queryParam("response_type", "code")
-                .queryParam("state", identifierProvider.generateIdentifier())
+                .queryParam("state", state)
                 .build()
                 .toUriString();
     }

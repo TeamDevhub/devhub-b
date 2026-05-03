@@ -10,7 +10,6 @@ import teamdevhub.devhub.core.user.application.service.UserReviewService;
 import teamdevhub.devhub.core.user.port.in.command.ReviewUserCommand;
 import teamdevhub.devhub.fake.pure.application.port.out.project.FakeProjectMemberRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.project.FakeProjectRepository;
-import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserReviewRepository;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.shared.enums.ErrorCode;
@@ -69,8 +68,8 @@ class UserReviewServiceTest {
     }
 
     @Test
-    @DisplayName("유효한_요청으로_리뷰하면_리뷰가_저장되고_매너도가_변경된다")
-    void reviewMember_validRequest_savesReviewAndUpdatesManner() {
+    @DisplayName("유효한_요청으로_리뷰하면_리뷰가_저장되고_raw_점수가_반환된다")
+    void reviewMember_validRequest_savesReviewAndReturnsRawScore() {
         // given
         projectRepository.save(completedProject());
         projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
@@ -83,7 +82,7 @@ class UserReviewServiceTest {
 
         // then
         assertThat(userReviewRepository.findAll()).hasSize(1);
-        assertThat(reviewScore).isEqualTo(1.0);
+        assertThat(reviewScore).isEqualTo(4.0);
     }
 
     @Test

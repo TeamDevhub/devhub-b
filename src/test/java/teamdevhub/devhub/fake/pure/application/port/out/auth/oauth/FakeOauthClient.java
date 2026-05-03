@@ -18,7 +18,7 @@ public class FakeOauthClient implements OauthClient {
     }
 
     @Override
-    public String getAuthorizationUrl() {
+    public String getAuthorizationUrl(String state) {
         return "https://oauth.test/authorize/";
     }
 

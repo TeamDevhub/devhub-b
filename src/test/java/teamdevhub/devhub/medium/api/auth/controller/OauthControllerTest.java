@@ -12,13 +12,17 @@ import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.user.model.SignupOauthRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthorizationResult;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.auth.port.in.facade.OauthAuthFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,24 +42,52 @@ public class OauthControllerTest {
         oauthController = new OauthController(userSignupFacade, oauthAuthFacade);
     }
 
-
     @Test
-    @DisplayName("OAuth_로그인_요청시_Provider_인증_URL_로_리다이렉트된다")
+    @DisplayName("OAuth_로그인_요청시_Provider_인증_URL_로_리다이렉트되고_state_쿠키가_설정된다")
     void redirectToProvider_redirectsToAuthorizationUrl() throws Exception {
         // given
         String provider = "google";
         String authorizationUrl = "https://google.com/oauth/authorize";
+        String state = "test-state-value";
+        OauthAuthorizationResult authorizationResult = OauthAuthorizationResult.of(authorizationUrl, state);
 
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
         Mockito.when(oauthAuthFacade.createOAuthAuthorizationUrl(provider))
-                .thenReturn(authorizationUrl);
+                .thenReturn(authorizationResult);
 
         // when
         oauthController.redirectToProvider(provider, response);
 
         // then
         verify(oauthAuthFacade).createOAuthAuthorizationUrl(provider);
+        verify(response).addHeader(Mockito.eq(HttpHeaders.SET_COOKIE), Mockito.contains("oauthState=" + state));
         verify(response).sendRedirect(authorizationUrl);
+    }
+
+    @Test
+    @DisplayName("OAuth_콜백에서_state_값이_일치하지_않으면_예외가_발생한다")
+    void handleOauthCallback_stateMismatch_throwsException() {
+        // given
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+
+        // when, then
+        assertThatThrownBy(() ->
+                oauthController.handleOauthCallback("google", "auth-code", "state-from-provider", "different-cookie-state", response))
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessageContaining(ErrorCode.OAUTH_STATE_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("OAuth_콜백에서_state_쿠키가_없으면_예외가_발생한다")
+    void handleOauthCallback_missingStateCookie_throwsException() {
+        // given
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+
+        // when, then
+        assertThatThrownBy(() ->
+                oauthController.handleOauthCallback("google", "auth-code", "some-state", null, response))
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessageContaining(ErrorCode.OAUTH_STATE_INVALID.getMessage());
     }
 
     @Test

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.application.selector.oauth.OauthClientSelector;
+import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthAuthenticationUseCase;
@@ -17,12 +18,15 @@ public class OauthAuthenticationService implements OauthAuthenticationUseCase {
 
     private final TokenIssueProvider tokenIssueProvider;
     private final OauthClientSelector oauthClientSelector;
+    private final IdentifierProvider identifierProvider;
 
     @Override
-    public String createAuthorizationUrl(String provider) {
+    public OauthAuthorizationResult createAuthorizationUrl(String provider) {
         VerificationProvider verificationProvider = VerificationProvider.from(provider);
         OauthClient oauthClient = oauthClientSelector.select(verificationProvider);
-        return oauthClient.getAuthorizationUrl();
+        String state = identifierProvider.generateIdentifier();
+        String url = oauthClient.getAuthorizationUrl(state);
+        return OauthAuthorizationResult.of(url, state);
     }
 
     @Override

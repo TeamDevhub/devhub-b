@@ -18,7 +18,7 @@ public class StubOauthClient implements OauthClient {
     }
 
     @Override
-    public String getAuthorizationUrl() {
+    public String getAuthorizationUrl(String state) {
         return "https://fake-oauth.com/auth";
     }
 

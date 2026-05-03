@@ -1,6 +1,7 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth;
 
 import lombok.Setter;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthorizationResult;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthAuthenticationUseCase;
@@ -16,8 +17,8 @@ public class FakeOauthAuthenticationUseCase implements OauthAuthenticationUseCas
     private String tempToken;
 
     @Override
-    public String createAuthorizationUrl(String provider) {
-        return "https://oauth.test/" + provider;
+    public OauthAuthorizationResult createAuthorizationUrl(String provider) {
+        return OauthAuthorizationResult.of("https://oauth.test/" + provider, "test-state");
     }
 
     @Override

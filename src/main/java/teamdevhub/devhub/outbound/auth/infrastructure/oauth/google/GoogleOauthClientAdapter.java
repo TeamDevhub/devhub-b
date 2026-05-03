@@ -7,7 +7,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import teamdevhub.devhub.core.auth.port.out.oauth.OauthClient;
-import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.OauthHttpClient;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.BearerAuthHeaderProvider;
 import teamdevhub.devhub.outbound.auth.infrastructure.oauth.http.DefaultHeaderProvider;
@@ -27,7 +26,6 @@ import java.net.URI;
 public class GoogleOauthClientAdapter implements OauthClient {
 
     private final OauthHttpClient oauthHttpClient;
-    private final IdentifierProvider identifierProvider;
     private final GoogleOauthConfig googleOauthConfig;
 
     @Override
@@ -36,14 +34,14 @@ public class GoogleOauthClientAdapter implements OauthClient {
     }
 
     @Override
-    public String getAuthorizationUrl() {
+    public String getAuthorizationUrl(String state) {
         return UriComponentsBuilder
                 .fromUri(URI.create(googleOauthConfig.getAuthorizationUri()))
                 .queryParam("client_id", googleOauthConfig.getClientId())
                 .queryParam("redirect_uri", googleOauthConfig.getRedirectUri())
                 .queryParam("response_type", "code")
                 .queryParam("scope", "profile email")
-                .queryParam("state", identifierProvider.generateIdentifier())
+                .queryParam("state", state)
                 .build()
                 .toUriString();
     }

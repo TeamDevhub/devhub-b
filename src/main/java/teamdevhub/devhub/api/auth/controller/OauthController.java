@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.user.model.SignupOauthRequestDto;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthorizationResult;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.auth.port.in.facade.OauthAuthFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
@@ -39,8 +42,10 @@ public class OauthController {
             @Parameter(description = "OAuth 제공자 (google, github, kakao, naver)", example = "google", required = true)
             @PathVariable String provider,
             HttpServletResponse httpServletResponse) throws IOException {
-        String authorizationUrl = oauthAuthFacade.createOAuthAuthorizationUrl(provider);
-        httpServletResponse.sendRedirect(authorizationUrl);
+        OauthAuthorizationResult result = oauthAuthFacade.createOAuthAuthorizationUrl(provider);
+        ResponseCookie stateCookie = CookieFactory.createOauthStateCookie(result.state());
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, stateCookie.toString());
+        httpServletResponse.sendRedirect(result.url());
     }
 
     @Operation(summary = "OAuth 콜백 처리", description = "OAuth 제공자로부터 인가 코드를 받아 로그인 또는 회원가입 흐름을 처리합니다.")
@@ -51,7 +56,16 @@ public class OauthController {
     public void handleOauthCallback(
             @Parameter(description = "OAuth 제공자", example = "google", required = true) @PathVariable String provider,
             @Parameter(description = "OAuth 제공자로부터 받은 인가 코드", required = true) @RequestParam String code,
+            @Parameter(description = "OAuth state 값") @RequestParam String state,
+            @CookieValue(value = "oauthState", required = false) String cookieState,
             HttpServletResponse response) throws IOException {
+        if (cookieState == null || !cookieState.equals(state)) {
+            throw BusinessRuleException.of(ErrorCode.OAUTH_STATE_INVALID);
+        }
+
+        ResponseCookie expiredStateCookie = CookieFactory.expireOauthStateCookie();
+        response.addHeader(HttpHeaders.SET_COOKIE, expiredStateCookie.toString());
+
         OauthAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback(provider, code);
 
         if (oauthAuthResult.signupStatus().equals(SignupStatus.COMPLETED)) {

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthorizationResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
@@ -42,13 +43,14 @@ public class OauthAuthFacadeTest {
     }
 
     @Test
-    @DisplayName("provider_를_받으면_createOAuthAuthorizationUrl_로_리다이렉트_URL_을_리턴받을_수_있다")
+    @DisplayName("provider_를_받으면_createOAuthAuthorizationUrl_로_리다이렉트_URL_과_state_를_리턴받을_수_있다")
     void createOAuthAuthorizationUrlDelegates() {
         // when
-        String redirectUrl = oauthAuthFacade.createOAuthAuthorizationUrl("google");
+        OauthAuthorizationResult result = oauthAuthFacade.createOAuthAuthorizationUrl("google");
 
         // then
-        assertThat(redirectUrl).isEqualTo("https://oauth.test/google");
+        assertThat(result.url()).isEqualTo("https://oauth.test/google");
+        assertThat(result.state()).isEqualTo("test-state");
     }
 
     @Test

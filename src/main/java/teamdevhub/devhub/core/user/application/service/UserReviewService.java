@@ -34,7 +34,7 @@ public class UserReviewService implements UserReviewUseCase {
         UserReview userReview = UserReview.create(identifierProvider.generateIdentifier(), reviewUserCommand);
         userReviewRepository.save(userReview);
 
-        return userReview.reviewScore();
+        return userReview.getScore();
     }
 
     private void validateReviewableProject(Project project) {

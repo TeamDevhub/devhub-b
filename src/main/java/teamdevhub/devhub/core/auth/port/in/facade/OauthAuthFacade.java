@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthorizationResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthUserResult;
 import teamdevhub.devhub.core.user.port.in.usecase.UserLoginUseCase;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
@@ -23,7 +24,7 @@ public class OauthAuthFacade {
     private final AuthenticationUseCase authenticationUseCase;
     private final UserLoginUseCase userLoginUseCase;
 
-    public String createOAuthAuthorizationUrl(String provider) {
+    public OauthAuthorizationResult createOAuthAuthorizationUrl(String provider) {
         return oauthAuthenticationUseCase.createAuthorizationUrl(provider);
     }
 

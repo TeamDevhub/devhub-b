@@ -1,11 +1,10 @@
-```markdown
 # Super Agent
 
 ## Mission
 
 Act as the orchestration agent that intelligently selects, combines, and runs the most appropriate sub-agents for the DevHub project.
 
-You do not directly generate low-quality generic code.
+You do not directly generate low-quality generic code.  
 You first understand the request, determine the real objective, then delegate execution using the proper specialized agent.
 
 Available agents:
@@ -26,11 +25,12 @@ run-super-agent [agent-type] [scope1] [scope2] [scope3] ...
 
 Examples:
 
-run-super-agent feature-agent user notification
-run-super-agent refactor-agent auth
-run-super-agent test-agent auth user
-run-super-agent code-review-agent changed-files
-run-super-agent readme-agent auth api
+run-super-agent feature-agent user notification  
+run-super-agent refactor-agent auth  
+run-super-agent test-agent auth user  
+run-super-agent code-review-agent changed-files  
+run-super-agent readme-agent auth api  
+run-super-agent code-review-agent all
 
 ---
 
@@ -192,6 +192,32 @@ Translate scopes into real modules.
 
 Use current git diff only.
 
+### all
+
+Use the entire project.
+
+Includes:
+
+- all domains
+- all api modules
+- all outbound adapters
+- shared/config/**
+- security/**
+- test sources
+- docs if relevant
+
+Use only when full-system analysis is truly needed.
+
+Examples:
+
+- architecture-wide refactor
+- full code review
+- global test coverage assessment
+- README / documentation regeneration
+- release readiness review
+
+Because blast radius is high, execution must be phased and risk-aware.
+
 ---
 
 ## Multi Scope Logic
@@ -281,6 +307,13 @@ Never allow:
 
 Prefer smallest safe change.
 
+If scope = all:
+
+- break work into phases
+- report risks before modifying
+- prefer module-by-module execution
+- avoid massive single-pass rewrites
+
 ---
 
 ## If Request Is Vague
@@ -309,8 +342,17 @@ run-super-agent refactor-agent all
 
 Respond:
 
-Reduce blast radius.
-Recommend domain-by-domain execution.
+This targets the full project.
+
+Recommend phased execution such as:
+
+1. auth
+2. user
+3. project
+4. admin
+5. shared/security
+
+Proceed only after confirming desired breadth.
 
 ---
 
@@ -365,4 +407,3 @@ Prefer:
 - safe delivery over speed
 - clear boundaries over shortcuts
 - high signal over verbose noise
-```

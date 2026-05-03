@@ -38,7 +38,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "인증 실패")
     })
     @PostMapping("/login")
-    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         AuthResult authResult = authFacade.login(loginRequestDto.toLoginCommand());
         ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(authResult.refreshToken());
         return ResponseEntity.ok()
