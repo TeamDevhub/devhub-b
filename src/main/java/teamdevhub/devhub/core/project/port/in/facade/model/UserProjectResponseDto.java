@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.shared.enums.ProjectApprovalStatus;
 
@@ -26,9 +27,9 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 	private String approvalState;
 	private String progressState;
 	
-	private List<ProjectApplication> applicationList;
+	private List<ProjectApplicationScore> applicationList;
 
-	public static UserProjectResponseDto fromDomain(Project project, List<ProjectApplication> projectApplicationList) {
+	public static UserProjectResponseDto fromDomain(Project project, List<ProjectApplicationScore> projectApplicationList) {
 		UserProjectResponseDtoBuilder<?, ?> builder = UserProjectResponseDto.builder();
 		fillBase(builder, project);
 		if(projectApplicationList == null) {
