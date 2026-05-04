@@ -185,7 +185,7 @@ public class ProjectFacade {
 	            .map(item -> {
 	            	PageResult<ProjectApplication> pagedApplicatgionList = projectApplicationQueryUseCase.getApplicationsByProjectGuid(item.getProjectGuid(), new PageCommand(0, Integer.MAX_VALUE));
 	            	Project project = projectUseCase.getProjectDetail(item.getProjectGuid());
-	            	return UserProjectResponseDto.fromDomain(project, pagedApplicatgionList.content().stream().map(application -> ProjectApplicationScore.toApplicationWithScore(application, 0.0)).toList());
+	            	return UserProjectResponseDto.fromDomain(project, pagedApplicatgionList.content().stream().map(application -> ProjectApplicationScore.toApplicationWithScore(application, 0.0)).toList(), null);
 	            })
 	            .toList();
 		return userProjectResponseDtoList;
@@ -197,7 +197,7 @@ public class ProjectFacade {
 		userProjectResponseDtoList = pagedLikeProjectList.content().stream()
             .map(projectLike -> {
             	Project project = projectUseCase.getProjectDetail(projectLike.getProjectGuid());
-            	return UserProjectResponseDto.fromDomain(project, null);
+            	return UserProjectResponseDto.fromDomain(project, null, null);
             })
             .toList();
 		return userProjectResponseDtoList;
@@ -211,7 +211,7 @@ public class ProjectFacade {
             .map(projectApply -> {
             	Project project = projectUseCase.getProjectByRequirementGuid(projectApply.getRequirementGuid());
             	Project projectDetail = projectUseCase.getProjectDetail(project.getProjectGuid());
-            	return UserProjectResponseDto.fromDomain(projectDetail, null);
+            	return UserProjectResponseDto.fromDomain(projectDetail, null, projectApply.getStatusCd());
             })
             .toList();
 		return userProjectResponseDtoList;
@@ -229,7 +229,7 @@ public class ProjectFacade {
             .map(participateProject -> {
             	List<ProjectApplicationScore> applicationList = projectApplicationUseCase.findAcceptedByProjectGuid(participateProject.getProjectGuid());
             	Project project = projectUseCase.getProjectDetail(participateProject.getProjectGuid());
-            	return UserProjectResponseDto.fromDomain(project, applicationList);
+            	return UserProjectResponseDto.fromDomain(project, applicationList, null);
             })
             .toList();
 		return userProjectResponseDtoList;
