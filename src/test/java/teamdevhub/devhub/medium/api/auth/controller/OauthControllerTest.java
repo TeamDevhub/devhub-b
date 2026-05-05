@@ -14,6 +14,7 @@ import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthorizationResult;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
+import teamdevhub.devhub.api.auth.controller.CookieFactory;
 import teamdevhub.devhub.core.auth.port.in.facade.OauthAuthFacade;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
 import teamdevhub.devhub.shared.enums.ErrorCode;
@@ -39,7 +40,7 @@ public class OauthControllerTest {
         userSignupFacade = Mockito.mock(UserSignupFacade.class);
         oauthAuthFacade = Mockito.mock(OauthAuthFacade.class);
 
-        oauthController = new OauthController(userSignupFacade, oauthAuthFacade);
+        oauthController = new OauthController(userSignupFacade, oauthAuthFacade, new CookieFactory());
     }
 
     @Test

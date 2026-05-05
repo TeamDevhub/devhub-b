@@ -14,7 +14,7 @@ public class FakeTermsAgreeUseCase implements TermsUseCase {
 
     @Override
     public List<Terms> listTerms() {
-        return null;
+        return List.of();
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class FakeTimeProvider implements TimeProvider {
 
-    private final LocalDateTime currentDateTime;
+    private LocalDateTime currentDateTime;
 
     public FakeTimeProvider(LocalDateTime initialDateTime) {
         this.currentDateTime = initialDateTime;
@@ -17,29 +17,40 @@ public class FakeTimeProvider implements TimeProvider {
     public LocalDateTime now() {
         return currentDateTime;
     }
+    public void setNow(LocalDateTime newTime) {
+        this.currentDateTime = newTime;
+    }
+
+    public void plusMinutes(long minutes) {
+        this.currentDateTime = this.currentDateTime.plusMinutes(minutes);
+    }
+
+    public void plusHours(long hours) {
+        this.currentDateTime = this.currentDateTime.plusHours(hours);
+    }
 
     @Override
     public String formatDate(LocalDate date, String pattern) {
-        return "";
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String formatDateTime(LocalDateTime dateTime, String pattern) {
-        return "";
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public LocalDate parseDate(String dateStr, String pattern) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public LocalDateTime parseDateTime(String dateTimeStr, String pattern) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public LocalDate today() {
-        return null;
+        return currentDateTime.toLocalDate();
     }
 }

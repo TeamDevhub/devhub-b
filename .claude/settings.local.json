@@ -14,7 +14,12 @@
       "Bash(Get-ChildItem -Path \"D:\\\\devhub-b\\\\src\\\\main\\\\java\\\\teamdevhub\\\\devhub\\\\core\" -Directory)",
       "Bash(Select-Object -ExpandProperty Name)",
       "Bash(git stash *)",
-      "Bash(xargs head *)"
+      "Bash(xargs head *)",
+      "Bash(./gradlew compileJava compileTestJava --no-daemon)",
+      "Bash(Get-ChildItem *)",
+      "Bash(New-Item -ItemType File -Path \"D:\\\\devhub-b\\\\.claude\\\\docs\\\\code-review-auth-user-terms-file-2026-05-05.md\" -Force)",
+      "Bash(Out-Null)",
+      "Bash(Write-Output \"created\")"
     ]
   }
 }

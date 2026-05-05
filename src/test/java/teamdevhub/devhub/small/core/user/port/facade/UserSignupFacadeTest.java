@@ -13,6 +13,8 @@ import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeUserCred
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOauthResolveUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.verification.FakeVerificationUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.terms.FakeTermsAgreeUseCase;
+import teamdevhub.devhub.core.auth.application.service.AuthResult;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeUserLoginUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.user.FakeUserSignupUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +30,7 @@ public class UserSignupFacadeTest {
     private FakeUserCredentialUseCase userCredentialUseCase;
     private FakeAuthenticationUseCase authenticationUseCase;
     private FakeVerificationUseCase verificationUseCase;
+    private FakeUserLoginUseCase userLoginUseCase;
 
     @BeforeEach
     void init() {
@@ -37,6 +40,7 @@ public class UserSignupFacadeTest {
         userCredentialUseCase = new FakeUserCredentialUseCase();
         authenticationUseCase = new FakeAuthenticationUseCase();
         verificationUseCase = new FakeVerificationUseCase();
+        userLoginUseCase = new FakeUserLoginUseCase();
 
         userSignupFacade = new UserSignupFacade(
                 userSignupUseCase,
@@ -44,7 +48,8 @@ public class UserSignupFacadeTest {
                 oauthResolveUseCase,
                 userCredentialUseCase,
                 authenticationUseCase,
-                verificationUseCase
+                verificationUseCase,
+                userLoginUseCase
         );
     }
 
@@ -64,10 +69,12 @@ public class UserSignupFacadeTest {
         );
 
         // when
-        userSignupFacade.signup(signupUserCommand);
+        AuthResult authResult = userSignupFacade.signup(signupUserCommand);
 
         // then
         assertThat(userSignupUseCase.isSignupCalled()).isTrue();
+        assertThat(authResult.accessToken()).isEqualTo("access-token");
+        assertThat(authResult.refreshToken()).isEqualTo("refresh-token");
     }
 
     @Test

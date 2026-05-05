@@ -34,7 +34,7 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
 
     @Override
     public void saveTerms(Terms terms) {
-        jpaTermsRepository.save(terms);
+        jpaTermsRepository.save(TermsMapper.toTermsEntity(terms));
     }
 
     @Override

@@ -71,4 +71,21 @@ class UserReviewTest {
         assertThatThrownBy(() -> UserReview.create(TEST_REVIEW_GUID_1, reviewUserCommand))
                 .isInstanceOf(DomainRuleException.class);
     }
+
+    @Test
+    @DisplayName("자기_자신에게_리뷰하면_예외가_발생한다")
+    void create_selfReview_throwsException() {
+        // given
+        ReviewUserCommand selfReviewCommand = ReviewUserCommand.builder()
+                .userReviewGuid(TEST_REVIEW_GUID_1)
+                .projectGuid(TEST_PROJECT_GUID_1)
+                .reviewerGuid(TEST_USER_GUID_1)
+                .revieweeGuid(TEST_USER_GUID_1)
+                .score(3.0)
+                .build();
+
+        // when, then
+        assertThatThrownBy(() -> UserReview.create(TEST_REVIEW_GUID_1, selfReviewCommand))
+                .isInstanceOf(DomainRuleException.class);
+    }
 }

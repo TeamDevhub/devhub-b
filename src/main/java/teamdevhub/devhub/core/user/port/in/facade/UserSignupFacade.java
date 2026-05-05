@@ -9,6 +9,8 @@ import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.terms.port.in.usecase.TermsUseCase;
 import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.user.port.in.usecase.UserLoginUseCase;
 import teamdevhub.devhub.core.user.port.in.usecase.UserSignupUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
@@ -27,13 +29,17 @@ public class UserSignupFacade {
     private final UserCredentialUseCase userCredentialUseCase;
     private final AuthenticationUseCase authenticationUseCase;
     private final VerificationUseCase verificationUseCase;
+    private final UserLoginUseCase userLoginUseCase;
 
-    public void signup(SignupUserCommand signupUserCommand) {
+    public AuthResult signup(SignupUserCommand signupUserCommand) {
         verificationUseCase.assertAllowed(signupUserCommand.verificationTarget());
         String userGuid = userCredentialUseCase.signupEmailUser(signupUserCommand);
         userSignupUseCase.saveEmailUserInfo(signupUserCommand, userGuid);
         termsUseCase.saveTermsAgreement(signupUserCommand.toAgreeTermsCommand(userGuid));
         verificationUseCase.consume(signupUserCommand.verificationTarget());
+        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(userGuid, signupUserCommand.email(), UserRole.USER);
+        userLoginUseCase.updateLastLoginDateTime(userGuid);
+        return authenticationUseCase.login(authenticatedUser);
     }
 
     public OauthAuthResult signupWithOauth(SignupOauthUserCommand signupOauthUserCommand) {

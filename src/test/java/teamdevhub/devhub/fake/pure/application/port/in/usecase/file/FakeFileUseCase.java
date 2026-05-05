@@ -1,12 +1,13 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.file;
 
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.core.file.application.FileMetadata;
 import teamdevhub.devhub.core.file.application.FileResource;
 import teamdevhub.devhub.core.file.port.in.command.UploadFileCommand;
 import teamdevhub.devhub.core.file.port.in.facade.model.FileResponseDto;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,9 +40,8 @@ public class FakeFileUseCase implements FileUseCase {
     public FileResource find(String fileGuid) {
         FileMetadata metadata = metadataStore.get(fileGuid);
         if (metadata == null) {
-            throw new RuntimeException(new FileNotFoundException(fileGuid));
+            throw AdapterDataException.of(ErrorCode.FILE_READ_FAIL);
         }
-
         return FileResource.of(metadata, contentStore.get(fileGuid));
     }
 
@@ -53,6 +53,10 @@ public class FakeFileUseCase implements FileUseCase {
 
     @Override
     public FileResponseDto selectFileObject(String fileGuid) {
-        return null;
+        FileMetadata metadata = metadataStore.get(fileGuid);
+        if (metadata == null) {
+            throw AdapterDataException.of(ErrorCode.FILE_READ_FAIL);
+        }
+        return FileResponseDto.from(metadata);
     }
 }

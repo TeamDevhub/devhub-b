@@ -3,6 +3,7 @@ package teamdevhub.devhub.small.core.user.application.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.core.user.application.service.UserProfileService;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
@@ -157,7 +158,7 @@ class UserProfileServiceTest {
 
         assertThatThrownBy(() ->
                 userProfileService.updateProfileImage(updateProfileImageCommand)
-        ).isInstanceOf(NullPointerException.class);
+        ).isInstanceOf(AdapterDataException.class);
     }
 
     @Test

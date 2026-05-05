@@ -14,14 +14,19 @@ import teamdevhub.devhub.api.user.model.AdminUserDetailResponseDto;
 import teamdevhub.devhub.api.user.model.SearchUserRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
+import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
+import teamdevhub.devhub.core.report.domain.Report;
+import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 import teamdevhub.devhub.core.user.port.in.facade.AdminUserFacade;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -70,9 +75,14 @@ class AdminUserControllerTest {
     @DisplayName("사용자_상세_조회_시_READ_SUCCESS_코드와_상세_정보를_반환한다")
     void getUserDetail_returnsReadSuccessWithDetail() {
         // given
-        AdminUserDetailResponseDto detail = AdminUserDetailResponseDto.builder()
-                .userGuid(TEST_USER_GUID_1).username(TEST_USERNAME_1).userRole("USER").build();
-        when(adminUserFacade.getUserDetail(TEST_USER_GUID_1)).thenReturn(detail);
+        User user = Mockito.mock(User.class);
+        when(user.getUserGuid()).thenReturn(TEST_USER_GUID_1);
+        when(user.getUsername()).thenReturn(TEST_USERNAME_1);
+        when(user.getUserRole()).thenReturn(UserRole.USER);
+        when(user.getPositions()).thenReturn(Set.of());
+        when(user.getSkills()).thenReturn(Set.of());
+        when(user.getAuditInfo()).thenReturn(AuditInfo.empty());
+        when(adminUserFacade.getUserDetail(TEST_USER_GUID_1)).thenReturn(user);
 
         // when
         ResponseEntity<DataApiResponseDto<AdminUserDetailResponseDto>> response =
@@ -183,7 +193,7 @@ class AdminUserControllerTest {
     @DisplayName("사용자_받은_신고_조회_시_READ_SUCCESS_코드와_페이지_정보를_반환한다")
     void getUserReceivedReports_returnsReadSuccessWithPageInfo() {
         // given
-        PageResult<AdminReportResponseDto> pageResult = PageResult.of(List.of(), 0, 10, 0);
+        PageResult<Report> pageResult = PageResult.of(List.of(), 0, 10, 0);
         when(adminUserFacade.getUserReceivedReports(anyString(), any(PageCommand.class)))
                 .thenReturn(pageResult);
 
@@ -200,7 +210,7 @@ class AdminUserControllerTest {
     @DisplayName("사용자_제출한_신고_조회_시_READ_SUCCESS_코드와_페이지_정보를_반환한다")
     void getUserSubmittedReports_returnsReadSuccessWithPageInfo() {
         // given
-        PageResult<AdminReportResponseDto> pageResult = PageResult.of(List.of(), 0, 10, 0);
+        PageResult<Report> pageResult = PageResult.of(List.of(), 0, 10, 0);
         when(adminUserFacade.getUserSubmittedReports(anyString(), any(PageCommand.class)))
                 .thenReturn(pageResult);
 
@@ -217,7 +227,7 @@ class AdminUserControllerTest {
     @DisplayName("전체_신고_목록_조회_시_READ_SUCCESS_코드와_페이지_정보를_반환한다")
     void getAllReports_returnsReadSuccessWithPageInfo() {
         // given
-        PageResult<AdminReportResponseDto> pageResult = PageResult.of(List.of(), 0, 10, 0);
+        PageResult<Report> pageResult = PageResult.of(List.of(), 0, 10, 0);
         when(adminUserFacade.getAllReports(any(PageCommand.class))).thenReturn(pageResult);
 
         // when

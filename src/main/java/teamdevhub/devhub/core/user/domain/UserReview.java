@@ -6,12 +6,15 @@ import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.port.in.command.ReviewUserCommand;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
+import java.util.Set;
+
 @Getter
 public class UserReview {
 
     private static final double MIN_SCORE = 1.0;
     private static final double MAX_SCORE = 5.0;
-    private static final double SCORE_STEP = 0.5;
+    private static final Set<Double> VALID_SCORES =
+            Set.of(1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0);
 
     private final String userReviewGuid;
     private final String projectGuid;
@@ -68,9 +71,7 @@ public class UserReview {
     }
 
     private static void validateScoreStep(double score) {
-        double normalized = score / SCORE_STEP;
-
-        if (normalized % 1 != 0) {
+        if (!VALID_SCORES.contains(score)) {
             throw DomainRuleException.of(ErrorCode.REVIEW_SCORE_INVALID);
         }
     }

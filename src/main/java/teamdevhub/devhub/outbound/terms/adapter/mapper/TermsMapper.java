@@ -7,6 +7,8 @@ import teamdevhub.devhub.outbound.terms.adapter.entity.TermsEntity;
 
 public class TermsMapper {
 
+    private TermsMapper() {}
+
     public static Terms toDomain(TermsEntity termsEntity) {
         return Terms.of(
                 termsEntity.getTermsGuid(),
@@ -16,6 +18,17 @@ public class TermsMapper {
                 termsEntity.isUsed(),
                 termsEntity.isDeleted()
         );
+    }
+
+    public static TermsEntity toTermsEntity(Terms terms) {
+        return TermsEntity.builder()
+                .termsGuid(terms.getTermsGuid())
+                .title(terms.getTitle())
+                .content(terms.getContent())
+                .isRequired(terms.isRequired())
+                .isUsed(terms.isUsed())
+                .isDeleted(terms.isDeleted())
+                .build();
     }
 
     public static TermsAgreementEntity toEntity(TermsAgreement termsAgreement) {

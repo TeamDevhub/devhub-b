@@ -73,4 +73,56 @@ class UserReviewServiceTest {
                 .isInstanceOf(BusinessRuleException.class)
                 .hasMessageContaining(ErrorCode.REVIEW_DUPLICATE.getMessage());
     }
+
+    @Test
+    @DisplayName("자기_자신을_리뷰하면_도메인_예외가_발생한다")
+    void reviewMember_selfReview_throwsDomainException() {
+        // given
+        ReviewUserCommand selfReviewCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_1, 3.0);
+
+        // when, then
+        assertThatThrownBy(() -> userReviewService.reviewMember(selfReviewCommand))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.REVIEW_SELF_NOT_ALLOWED.getMessage());
+    }
+
+    @Test
+    @DisplayName("최소_점수_미만의_점수로_리뷰하면_도메인_예외가_발생한다")
+    void reviewMember_scoreBelowMin_throwsDomainException() {
+        // given
+        ReviewUserCommand lowScoreCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 0.5);
+
+        // when, then
+        assertThatThrownBy(() -> userReviewService.reviewMember(lowScoreCommand))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.REVIEW_SCORE_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("0.5_단위가_아닌_점수로_리뷰하면_도메인_예외가_발생한다")
+    void reviewMember_scoreInvalidStep_throwsDomainException() {
+        // given
+        ReviewUserCommand invalidStepCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.3);
+
+        // when, then
+        assertThatThrownBy(() -> userReviewService.reviewMember(invalidStepCommand))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.REVIEW_SCORE_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("최대_점수를_초과하면_도메인_예외가_발생한다")
+    void reviewMember_scoreAboveMax_throwsDomainException() {
+        // given
+        ReviewUserCommand highScoreCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 5.5);
+
+        // when, then
+        assertThatThrownBy(() -> userReviewService.reviewMember(highScoreCommand))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.REVIEW_SCORE_INVALID.getMessage());
+    }
 }

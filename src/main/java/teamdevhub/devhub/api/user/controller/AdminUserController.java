@@ -20,9 +20,13 @@ import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.port.in.facade.model.UserProjectResponseDto;
+import teamdevhub.devhub.core.report.domain.Report;
+import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.facade.AdminUserFacade;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
 import teamdevhub.devhub.shared.enums.SuccessCode;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -55,8 +59,8 @@ public class AdminUserController {
     @GetMapping("/{userGuid}")
     public ResponseEntity<DataApiResponseDto<AdminUserDetailResponseDto>> getUserDetail(
             @Parameter(description = "사용자 GUID") @PathVariable String userGuid) {
-        AdminUserDetailResponseDto adminUserDetailResponseDto = adminUserFacade.getUserDetail(userGuid);
-        return ResponseEntity.ok(DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, adminUserDetailResponseDto));
+        User user = adminUserFacade.getUserDetail(userGuid);
+        return ResponseEntity.ok(DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, AdminUserDetailResponseDto.fromDomain(user)));
     }
 
     @Operation(summary = "사용자 정보 수정", description = "특정 사용자의 닉네임과 자기소개를 수정합니다.")
@@ -84,7 +88,7 @@ public class AdminUserController {
     @PostMapping("/{userGuid}/ban")
     public ResponseEntity<DataApiResponseDto<Void>> banUser(
             @Parameter(description = "사용자 GUID") @PathVariable String userGuid,
-            @RequestBody AdminBanUserRequestDto adminBanUserRequestDto) {
+            @Valid @RequestBody AdminBanUserRequestDto adminBanUserRequestDto) {
         adminUserFacade.banUser(adminBanUserRequestDto.toBanUserCommand(userGuid));
         return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.BAN_SUCCESS));
     }
@@ -131,13 +135,10 @@ public class AdminUserController {
             @Parameter(description = "사용자 GUID") @PathVariable String userGuid,
             @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam int page,
             @Parameter(description = "페이지 크기", example = "10") @RequestParam int size) {
-        PageResult<AdminReportResponseDto> result = adminUserFacade.getUserReceivedReports(
-                userGuid, PageCommand.of(page, size));
+        PageResult<Report> result = adminUserFacade.getUserReceivedReports(userGuid, PageCommand.of(page, size));
+        List<AdminReportResponseDto> dtos = result.content().stream().map(AdminReportResponseDto::fromDomain).toList();
         return ResponseEntity.ok(
-                DataListApiResponseDto.successWithDataList(
-                        SuccessCode.READ_SUCCESS,
-                        result.content(),
-                        PageResponseDto.from(result)));
+                DataListApiResponseDto.successWithDataList(SuccessCode.READ_SUCCESS, dtos, PageResponseDto.from(result)));
     }
 
     @Operation(summary = "사용자가 제출한 신고 조회", description = "특정 사용자가 신고한 내역을 조회합니다.")
@@ -147,13 +148,10 @@ public class AdminUserController {
             @Parameter(description = "사용자 GUID") @PathVariable String userGuid,
             @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam int page,
             @Parameter(description = "페이지 크기", example = "10") @RequestParam int size) {
-        PageResult<AdminReportResponseDto> result = adminUserFacade.getUserSubmittedReports(
-                userGuid, PageCommand.of(page, size));
+        PageResult<Report> result = adminUserFacade.getUserSubmittedReports(userGuid, PageCommand.of(page, size));
+        List<AdminReportResponseDto> dtos = result.content().stream().map(AdminReportResponseDto::fromDomain).toList();
         return ResponseEntity.ok(
-                DataListApiResponseDto.successWithDataList(
-                        SuccessCode.READ_SUCCESS,
-                        result.content(),
-                        PageResponseDto.from(result)));
+                DataListApiResponseDto.successWithDataList(SuccessCode.READ_SUCCESS, dtos, PageResponseDto.from(result)));
     }
 
     @Operation(summary = "전체 신고 목록 조회", description = "모든 신고 내역을 페이징 조회합니다.")
@@ -162,11 +160,9 @@ public class AdminUserController {
     public ResponseEntity<DataListApiResponseDto<AdminReportResponseDto>> getAllReports(
             @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam int page,
             @Parameter(description = "페이지 크기", example = "10") @RequestParam int size) {
-        PageResult<AdminReportResponseDto> result = adminUserFacade.getAllReports(PageCommand.of(page, size));
+        PageResult<Report> result = adminUserFacade.getAllReports(PageCommand.of(page, size));
+        List<AdminReportResponseDto> dtos = result.content().stream().map(AdminReportResponseDto::fromDomain).toList();
         return ResponseEntity.ok(
-                DataListApiResponseDto.successWithDataList(
-                        SuccessCode.READ_SUCCESS,
-                        result.content(),
-                        PageResponseDto.from(result)));
+                DataListApiResponseDto.successWithDataList(SuccessCode.READ_SUCCESS, dtos, PageResponseDto.from(result)));
     }
 }

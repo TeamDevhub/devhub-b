@@ -3,8 +3,6 @@ package teamdevhub.devhub.core.user.port.in.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.api.user.model.AdminReportResponseDto;
-import teamdevhub.devhub.api.user.model.AdminUserDetailResponseDto;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
@@ -46,9 +44,8 @@ public class AdminUserFacade {
         return PageResult.of(userBasicResponseDtoList, result.page(), result.size(), result.totalElements());
     }
 
-    public AdminUserDetailResponseDto getUserDetail(String userGuid) {
-        User user = userProfileUseCase.getCurrentUserProfile(userGuid);
-        return AdminUserDetailResponseDto.fromDomain(user);
+    public User getUserDetail(String userGuid) {
+        return userProfileUseCase.getCurrentUserProfile(userGuid);
     }
 
     public void updateUser(AdminUpdateUserCommand adminUpdateUserCommand) {
@@ -83,25 +80,15 @@ public class AdminUserFacade {
                 .toList();
     }
 
-    public PageResult<AdminReportResponseDto> getUserReceivedReports(String userGuid, PageCommand pageCommand) {
-        PageResult<Report> result = reportQueryUseCase.getReportsByReportedUser(userGuid, pageCommand);
-        return toReportDtoPage(result);
+    public PageResult<Report> getUserReceivedReports(String userGuid, PageCommand pageCommand) {
+        return reportQueryUseCase.getReportsByReportedUser(userGuid, pageCommand);
     }
 
-    public PageResult<AdminReportResponseDto> getUserSubmittedReports(String userGuid, PageCommand pageCommand) {
-        PageResult<Report> result = reportQueryUseCase.getReportsByReporterUser(userGuid, pageCommand);
-        return toReportDtoPage(result);
+    public PageResult<Report> getUserSubmittedReports(String userGuid, PageCommand pageCommand) {
+        return reportQueryUseCase.getReportsByReporterUser(userGuid, pageCommand);
     }
 
-    public PageResult<AdminReportResponseDto> getAllReports(PageCommand pageCommand) {
-        PageResult<Report> result = reportQueryUseCase.getAllReports(pageCommand);
-        return toReportDtoPage(result);
-    }
-
-    private PageResult<AdminReportResponseDto> toReportDtoPage(PageResult<Report> result) {
-        List<AdminReportResponseDto> adminReportResponseDtoList = result.content().stream()
-                .map(AdminReportResponseDto::fromDomain)
-                .toList();
-        return PageResult.of(adminReportResponseDtoList, result.page(), result.size(), result.totalElements());
+    public PageResult<Report> getAllReports(PageCommand pageCommand) {
+        return reportQueryUseCase.getAllReports(pageCommand);
     }
 }

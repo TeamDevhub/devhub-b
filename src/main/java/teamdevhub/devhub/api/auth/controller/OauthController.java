@@ -6,7 +6,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,10 @@ public class OauthController {
 
     private final UserSignupFacade userSignupFacade;
     private final OauthAuthFacade oauthAuthFacade;
+    private final CookieFactory cookieFactory;
+
+    @Value("${app.frontend.base-url}")
+    private String frontendBaseUrl;
 
     @Operation(summary = "OAuth 인가 URL 리다이렉트", description = "지정된 OAuth 제공자의 로그인 페이지로 리다이렉트합니다. (google, github, kakao, naver)")
     @ApiResponse(responseCode = "302", description = "OAuth 제공자 인가 페이지로 리다이렉트")
@@ -43,7 +49,7 @@ public class OauthController {
             @PathVariable String provider,
             HttpServletResponse httpServletResponse) throws IOException {
         OauthAuthorizationResult result = oauthAuthFacade.createOAuthAuthorizationUrl(provider);
-        ResponseCookie stateCookie = CookieFactory.createOauthStateCookie(result.state());
+        ResponseCookie stateCookie = cookieFactory.createOauthStateCookie(result.state());
         httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, stateCookie.toString());
         httpServletResponse.sendRedirect(result.url());
     }
@@ -63,18 +69,17 @@ public class OauthController {
             throw BusinessRuleException.of(ErrorCode.OAUTH_STATE_INVALID);
         }
 
-        ResponseCookie expiredStateCookie = CookieFactory.expireOauthStateCookie();
+        ResponseCookie expiredStateCookie = cookieFactory.expireOauthStateCookie();
         response.addHeader(HttpHeaders.SET_COOKIE, expiredStateCookie.toString());
 
         OauthAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback(provider, code);
 
         if (oauthAuthResult.signupStatus().equals(SignupStatus.COMPLETED)) {
-            ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
+            ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
             response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
-            response.sendRedirect("http://localhost:5173/");
+            response.sendRedirect(frontendBaseUrl + "/");
         } else {
-            String redirectUrl = "http://localhost:5173/auth/signup" + "?token=" + oauthAuthResult.tempToken();
-            response.sendRedirect(redirectUrl);
+            response.sendRedirect(frontendBaseUrl + "/auth/signup?token=" + oauthAuthResult.tempToken());
         }
     }
 
@@ -84,9 +89,9 @@ public class OauthController {
             @ApiResponse(responseCode = "400", description = "유효하지 않은 임시 토큰 또는 요청 데이터")
     })
     @PostMapping("/signup")
-    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> signup(@RequestBody SignupOauthRequestDto signupOauthRequestDto) {
+    public ResponseEntity<DataApiResponseDto<TokenResponseDto>> signup(@Valid @RequestBody SignupOauthRequestDto signupOauthRequestDto) {
         OauthAuthResult oauthAuthResult = userSignupFacade.signupWithOauth(signupOauthRequestDto.toSignupOauthUserCommand());
-        ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
+        ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(oauthAuthResult.refreshToken());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, oauthAuthResult.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())

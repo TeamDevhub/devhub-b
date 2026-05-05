@@ -1,28 +1,32 @@
-# Code Review: Auth · User · Terms · File Domains
+# Code Review Result
 
-**Date:** 2026-05-05  
-**Branch:** feature/user  
-**Reviewer:** code-review-agent (via super-agent)  
-**Scope:** `auth` · `user` · `terms` · `file`
+## Review Target
+
+Domains: `auth` · `user` · `terms` · `file`
+
+Layers reviewed:
+- `core/{domain}/domain/` — User, Terms, File
+- `core/{domain}/application/service/` — all services in scope
+- `core/{domain}/port/in/facade/` — AuthFacade, OauthAuthFacade, UserProfileFacade, UserReviewFacade, UserSignupFacade, TermsFacade, FileFacade
+- `api/` — AuthController, OauthController, UserProfileController, UserSignupController, TermsController, FileController
+- `outbound/` — UserAdapter, FileMetadataAdapter, LocalFileStorage, TermsAdapter
+- `shared/` — WebSecurityConfig, GlobalExceptionHandler, LoggingAspect, TraceIdMDCFilter, CookieFactory
+
+Review date: 2026-05-05
 
 ---
 
 ## Executive Summary
 
-The four domains follow hexagonal architecture consistently: port interfaces are respected, domain classes are pure Java with static factory methods, and Fake-based unit tests are used correctly throughout. However, **two correctness bugs block production use** (TermsAdapter saves domain objects directly to JPA, FileFacade has no transaction wrapping a multi-file upload), **one architecture inversion** exists in AdminUserFacade, and **a cluster of security issues** — hardcoded localhost redirects, insecure refresh-token cookies, wildcard CORS exposure header, an open unauthenticated `POST /terms` endpoint, and a path-traversal risk in LocalFileStorage — must be resolved before release. Several Fake implementations also violate the project's core no-null / no-RuntimeException rules, making those test doubles unreliable.
+The codebase has seen meaningful security improvements since the last review (2026-05-03): OAuth CSRF state validation is now implemented, LoggingAspect masks sensitive fields, TraceIdMDCFilter validates incoming trace IDs, FileResponseFactory sanitizes Content-Disposition headers, and the admin authorization gap in WebSecurityConfig is closed.
 
----
+Three new issues require attention before release:
 
-## Review Priority Order
+1. `FileMetadataAdapter.find()` throws a raw `IllegalArgumentException` with a hardcoded message instead of the project-standard `AdapterDataException`. This bypasses the exception handler contract and leaks an internal error message.
+2. `GlobalExceptionHandler` still maps all unhandled exceptions to HTTP 400 — infrastructure failures appear as client errors, making incident diagnosis difficult.
+3. `CookieFactory` still defaults `secure=false`, leaving production deployments at risk of misconfiguration.
 
-1. Correctness / hidden bugs  
-2. Security risks  
-3. Transaction / concurrency issues  
-4. Architecture boundary violations  
-5. Maintainability / readability  
-6. Test gaps  
-7. Performance concerns  
-8. Naming / style consistency  
+The rest of the codebase is structurally sound: hexagonal boundaries are respected, domain logic is properly encapsulated, and the Facade orchestration layer is clean.
 
 ---
 
@@ -30,519 +34,262 @@ The four domains follow hexagonal architecture consistently: port interfaces are
 
 ---
 
-### AUTH DOMAIN
+### F-01 — Critical
 
----
-
-#### [CRITICAL] `OauthController` — Hardcoded `http://localhost:5173` redirect URLs
-
-**Location:** `api/auth/controller/OauthController.java:74,76`
+**Location:** `outbound/file/adapter/FileMetadataAdapter.java:27` — `find()`
 
 **Problem:**
 ```java
-response.sendRedirect("http://localhost:5173/");
-String redirectUrl = "http://localhost:5173/auth/signup" + "?token=" + oauthAuthResult.tempToken();
+.orElseThrow(() -> new IllegalArgumentException("File not found"));
 ```
-Both the post-login and post-OAuth-signup redirects are hardcoded development URLs.
+Throws a raw `IllegalArgumentException` with a hardcoded string instead of `AdapterDataException.of(ErrorCode.FILE_READ_FAIL)`.
 
-**Why it matters:** This is a production-blocking defect. All social login completions redirect to the developer's localhost in any non-development environment.
+**Why it matters:**
+- `GlobalExceptionHandler` has no handler for `IllegalArgumentException` — it falls through to the generic `Exception.class` handler which returns HTTP 400 with the raw exception message exposed in the response body.
+- Hardcoded message text violates the project rule "Do not hardcode error messages — use the ErrorCode enum."
+- The Fake (`FakeFileMetadataRepository`) and the real adapter now have divergent exception types — `FakeFileMetadataRepository.find()` throws `AdapterDataException.of(FILE_READ_FAIL)` while the real adapter throws `IllegalArgumentException`. Tests pass but production behavior differs.
 
-**Fix:** Inject via `@Value("${app.frontend.base-url}")`.
-
----
-
-#### [CRITICAL] `CookieFactory` — `secure=false` on the Refresh Token cookie
-
-**Location:** `api/auth/controller/CookieFactory.java:21`
-
-**Problem:**
+**Recommended fix:**
 ```java
-return ResponseCookie.from(REFRESH_COOKIE_NAME, refreshToken)
-        .httpOnly(true)
-        .secure(false)   // explicit false
-        ...
+.orElseThrow(() -> AdapterDataException.of(ErrorCode.FILE_READ_FAIL));
 ```
-The 14-day refresh token is transmitted over plain HTTP.
-
-**Why it matters:** Network-level interception exposes the long-lived refresh credential. `httpOnly` alone is insufficient when `secure` is false.
-
-**Fix:** Set `secure(true)`. Use a `@Value`-injected property to disable for local development only.
 
 ---
 
-#### [CRITICAL] `WebSecurityConfig` — `addExposedHeader("*")` exposes all headers cross-origin
+### F-02 — Major
 
-**Location:** `shared/config/WebSecurityConfig.java:67`
+**Location:** `shared/exception/GlobalExceptionHandler.java:64` — `handleException()`
 
 **Problem:**
 ```java
-config.addExposedHeader("*");
-```
-Every response header — including `Authorization` — is exposed to JavaScript on allowed origins.
-
-**Why it matters:** Exposes access tokens and any internal server headers to cross-origin scripts.
-
-**Fix:** Replace with `config.addExposedHeader(HttpHeaders.AUTHORIZATION)`.
-
----
-
-#### [HIGH] `OauthController.signup` — Missing `@Valid` on request body
-
-**Location:** `api/auth/controller/OauthController.java:87`
-
-**Problem:** `@RequestBody SignupOauthRequestDto` has no `@Valid`. Bean Validation constraints will not execute.
-
-**Fix:** Add `@Valid` before `@RequestBody`.
-
----
-
-#### [HIGH] `JwtTokenCodec` — `ZoneId.systemDefault()` for token expiry
-
-**Location:** `outbound/auth/infrastructure/token/JwtTokenCodec.java:165-167`
-
-**Problem:**
-```java
-private Date toDate(LocalDateTime ldt) {
-    return Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+@ExceptionHandler(Exception.class)
+@ResponseStatus(BAD_REQUEST)
+public ResponseEntity<DataApiResponseDto<?>> handleException(Exception e) {
+    ...
+    return ResponseEntity.badRequest()
+            .body(DataApiResponseDto.failureFromThrowable(e));
 }
 ```
-Container timezone misconfiguration silently shifts all token expiry times.
+All unhandled exceptions — including `NullPointerException`, `IllegalStateException`, `DataIntegrityViolationException`, unchecked infrastructure exceptions — return HTTP 400 BAD_REQUEST.
 
-**Fix:** Use `ZoneOffset.UTC` explicitly.
+**Why it matters:**
+- HTTP 400 signals a bad client request. Returning 400 for a database failure or uncaught NPE misleads the client and corrupts monitoring (SLAs calculated on 5xx become invisible).
+- `failureFromThrowable(e)` likely exposes raw exception messages to the client, leaking internal implementation details.
+- On-call engineers diagnosing a production incident will see a wall of 400s with no 500s, making impact assessment incorrect.
 
----
-
-### USER DOMAIN
-
----
-
-#### [CRITICAL] `UserReview.validateScoreStep` — Floating-point modulo corrupts step validation
-
-**Location:** `core/user/domain/UserReview.java:71-74`
-
-**Problem:**
+**Recommended fix:**
 ```java
-double normalized = score / SCORE_STEP;   // 3.0 / 0.5 = 6.0000000000000004 in IEEE 754
-if (normalized % 1 != 0) {
-    throw DomainRuleException.of(ErrorCode.REVIEW_SCORE_INVALID);
-}
-```
-IEEE 754 floating-point division produces tiny fractional parts for valid inputs like `1.5` or `4.5`, causing the check to throw `REVIEW_SCORE_INVALID` on legitimate scores. It can also silently pass invalid scores near step boundaries.
-
-**Why it matters:** Both outcomes corrupt the `mannerDegree` accumulation on every affected review — a silent, irreversible data integrity failure.
-
-**Fix:** Use an explicit allowlist:
-```java
-Set.of(1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0).contains(score)
-```
-Or use integer arithmetic: `(int)(score * 2) * 0.5 != score`.
-
----
-
-#### [CRITICAL] `AdminUserFacade` — Imports `api/` DTOs into the `core/` layer
-
-**Location:** `core/user/port/in/facade/AdminUserFacade.java:6-7`
-
-**Problem:**
-```java
-import teamdevhub.devhub.api.user.model.AdminReportResponseDto;
-import teamdevhub.devhub.api.user.model.AdminUserDetailResponseDto;
-```
-`core/` depends on `api/`, inverting the required `api → core` dependency rule.
-
-**Why it matters:** Couples domain orchestration to HTTP presentation concerns. Breaks hexagonal architecture boundaries.
-
-**Fix:** Move those DTOs to `core/user/port/in/facade/model/` alongside the existing `UserBasicResponseDto` and `UserDetailResponseDto`, or perform the mapping in the controller.
-
----
-
-#### [HIGH] `AdminUserController.banUser` — Missing `@Valid` on request body
-
-**Location:** `api/user/controller/AdminUserController.java:87`
-
-**Problem:** `@RequestBody AdminBanUserRequestDto` has no `@Valid`. A null `blockEndDate` reaches `User.ban(null)` setting an indefinite ban with no API-level contract.
-
-**Fix:** Add `@Valid`. Document the `null = permanent ban` contract explicitly in the DTO or domain method.
-
----
-
-#### [HIGH] `UserSignupController` — Raw password re-used across two facade calls
-
-**Location:** `api/user/controller/UserSignupController.java:31-52`
-
-**Problem:** The controller calls `userSignupFacade.signup()` then immediately `authFacade.login()` with credentials taken directly from the request DTO. If signup succeeds but login fails (transient error), the user is persisted but receives no token. The raw password also travels through the controller layer twice.
-
-**Fix:** Move the post-signup auto-login into `UserSignupFacade.signup()` so it returns `AuthResult` directly, eliminating the dual-facade controller pattern.
-
----
-
-#### [MEDIUM] `UserWithdrawService` / `UserAdapter` — `delete` method actually performs a soft-delete save
-
-**Location:** `core/user/application/service/UserWithdrawService.java:18-21` and `outbound/user/adapter/UserAdapter.java:54-56`
-
-**Problem:**
-```java
-// UserAdapter
-public void delete(User user) {
-    jpaUserRepository.save(UserMapper.toEntity(user)); // saves with deleted=true
-}
-```
-Method is named `delete` but calls `save`. Future developers may introduce a real `deleteById` call, causing accidental hard-deletes.
-
-**Fix:** Rename port method and adapter to `softDelete(User user)`.
-
----
-
-#### [MEDIUM] `UserProfileService.updateProfile` — Three repository calls even for username-only updates
-
-**Location:** `core/user/application/service/UserProfileService.java:48-64`
-
-**Problem:** `getUserWithPositionsAndSkills` always fetches user + positions + skills regardless of which fields are changing.
-
-**Fix:** Load positions and skills lazily — call the repository only when the corresponding change flag is true in the command.
-
----
-
-#### [MEDIUM] `AdminUserFacade.getUserApplyProjects` — N+1 queries
-
-**Location:** `core/user/port/in/facade/AdminUserFacade.java:77-84`
-
-**Problem:** One `getProjectDetail` call per application record per page. 50 applications = 51 queries.
-
-**Fix:** Add a batch `getProjectDetails(List<String> guids)` method to `ProjectUseCase` and perform a single `IN` query.
-
----
-
-#### [LOW] `FakeUserProfileUseCase.updateProfileImage` — Empty method body
-
-**Location:** `test/.../FakeUserProfileUseCase.java:51-53`
-
-**Problem:** Empty `@Override` body violates the project rule prohibiting empty methods in Fake implementations.
-
-**Fix:** Add an `imageCalled` tracking flag, set it `true` in the method body.
-
----
-
-#### [LOW] `UserLoginServiceTest` — Test method name breaks naming convention
-
-**Location:** `test/.../UserLoginServiceTest.java:89-90`
-
-**Problem:** `updateLastLoginDateWhenLogin` does not follow the `method_condition_outcome` pattern used by all sibling tests.
-
-**Fix:** Rename to `updateLastLoginDateTime_normalUser_updatesLastLoginDateTime`.
-
----
-
-#### [LOW] `UserReviewServiceTest` — Missing self-review and score-step boundary tests
-
-**Location:** `test/.../UserReviewServiceTest.java`
-
-**Problem:** No test exercises `ErrorCode.REVIEW_SELF_NOT_ALLOWED` or `ErrorCode.REVIEW_SCORE_INVALID`.
-
-**Fix:** Add `reviewMember_selfReview_throwsDomainException`, `reviewMember_scoreBelowMin_throwsDomainException`, `reviewMember_scoreInvalidStep_throwsDomainException`.
-
----
-
-### TERMS DOMAIN
-
----
-
-#### [CRITICAL] `TermsAdapter.saveTerms` — Saves domain object directly to `JpaRepository`
-
-**Location:** `outbound/terms/adapter/TermsAdapter.java`
-
-**Problem:** `jpaTermsRepository.save(terms)` where `terms` is a domain `Terms` object but the repository expects `TermsEntity`. `JpaTermsRepository` also re-declares `void save(Terms terms)` which shadows `JpaRepository.save()` and will never behave as a JPA persistence call. Every call to `termsFacade.registerTerms()` fails at runtime.
-
-**Why it matters:** Terms registration is completely non-functional.
-
-**Fix:** Call `TermsMapper.toEntity(terms)` before saving. Remove the illegal `void save(Terms terms)` re-declaration from `JpaTermsRepository`.
-
----
-
-#### [CRITICAL] `WebSecurityConfig` — `POST /terms` is fully unauthenticated
-
-**Location:** `shared/config/WebSecurityConfig.java:103` (`.requestMatchers("/terms/**").permitAll()`)
-
-**Problem:** All HTTP methods on `/terms/**` are open. Anonymous callers can POST arbitrary terms with `isRequired=true`, polluting the terms table and forcing users to agree to fabricated content on next signup.
-
-**Why it matters:** Privilege escalation / data integrity attack vector.
-
-**Fix:** Change to `requestMatchers(HttpMethod.GET, "/terms/**").permitAll()`. Protect `POST /terms` with `.hasRole("ADMIN")`.
-
----
-
-#### [CRITICAL] `TermsService.validateAllTermsExist` — Throws `ErrorCode.UNKNOWN_FAIL`
-
-**Location:** `core/terms/application/TermsService.java:78`
-
-**Problem:** Uses a placeholder error code explicitly prohibited by project rules.
-
-**Fix:** Add a dedicated `ErrorCode` (e.g., `TERMS_NOT_FOUND`) and use it here.
-
----
-
-#### [MAJOR] `TermsService` — Uses `jakarta.transaction.Transactional` instead of Spring's
-
-**Location:** `core/terms/application/TermsService.java`
-
-**Problem:** Import is `jakarta.transaction.Transactional`; everywhere else in the codebase uses `org.springframework.transaction.annotation.Transactional`. In some Spring proxy configurations, the Jakarta annotation is not intercepted by Spring's transaction infrastructure.
-
-**Fix:** Change to `org.springframework.transaction.annotation.Transactional`.
-
----
-
-#### [MAJOR] `TermsAdapter` — Implements two port interfaces in one class
-
-**Location:** `outbound/terms/adapter/TermsAdapter.java`
-
-**Problem:** `TermsAdapter` implements both `TermsRepository` and `TermsAgreementRepository`, coupling two distinct port interfaces into a single adapter and breaking isolation.
-
-**Fix:** Split into `TermsAdapter` (implements `TermsRepository`) and `TermsAgreementAdapter` (implements `TermsAgreementRepository`).
-
----
-
-#### [MAJOR] `CreateTermsRequestDto` — Not a record, exposes `isDeleted`, no validation
-
-**Location:** `api/terms/model/CreateTermsRequestDto.java`
-
-**Problem:**
-1. POJO class instead of `record`.
-2. Exposes `isDeleted` — a caller can POST `isDeleted: true` to delete a term on creation.
-3. No `@NotBlank` on `title`/`content`; blank values reach a `nullable=false` DB column and throw `DataIntegrityViolationException`.
-
-**Fix:** Convert to `record`. Add `@NotBlank` to `title` and `content`. Remove `isDeleted` from the DTO and `CreateTermsCommand` — the service must always set it `false`.
-
----
-
-#### [MAJOR] `TermsMapper` — Dead code; both mappers missing private constructors
-
-**Location:** `outbound/terms/adapter/mapper/TermsMapper.java`
-
-**Problem:** `TermsMapper.toEntity(TermsAgreement)` is never called (the adapter uses `TermsAgreementMapper` instead). Neither mapper class has the `private ctor()` required by persistence rules.
-
-**Fix:** Remove the dead method. Add `private TermsMapper() {}` and `private TermsAgreementMapper() {}`.
-
----
-
-#### [MEDIUM] `FakeTermsAgreeUseCase.listTerms` — Returns `null`
-
-**Location:** `test/.../FakeTermsAgreeUseCase.java:17`
-
-**Problem:** Violates the project's Fake rule: "Do not return null from Fake objects."
-
-**Fix:** Return `List.of()`.
-
----
-
-#### [MEDIUM] `FakeTermsRepository.findByTermsGuid` — Returns `null` on miss
-
-**Location:** `test/.../FakeTermsRepository.java:33`
-
-**Problem:** `store.get(termsGuid)` returns `null` when absent; port contract expects either a value or an exception.
-
-**Fix:** Throw `AdapterDataException.of(ErrorCode.TERMS_NOT_FOUND)` when absent.
-
----
-
-#### [MEDIUM] `TermsResponseDto` — Lives in `core/` layer, is not a `record`
-
-**Location:** `core/terms/port/in/facade/models/TermsResponseDto.java`
-
-**Problem:** A response DTO for the API layer lives in `core/`. This bleeds HTTP presentation concerns into the domain. Also a POJO class instead of `record`.
-
-**Fix:** Move to `api/terms/model/response/TermsResponseDto.java` and convert to `record`.
-
----
-
-#### [MINOR] `TermsAgreementEntity` — No uniqueness constraint on `(user_guid, terms_guid)`
-
-**Location:** `outbound/terms/adapter/entity/TermsAgreementEntity.java`
-
-**Problem:** A user can agree to the same term repeatedly; no uniqueness constraint or service-level deduplication check.
-
-**Fix:** Add `@UniqueConstraint(columnNames = {"user_guid", "terms_guid"})`. Add a service-level guard or handle `DataIntegrityViolationException` with a specific `ErrorCode`.
-
----
-
-#### [MINOR] `AgreeTermsRequestDto` — `@NotNull` on primitive `boolean`
-
-**Location:** `api/terms/model/AgreeTermsRequestDto.java`
-
-**Problem:** `@NotNull` on a primitive `boolean` is a no-op. Primitives can never be `null`.
-
-**Fix:** Remove `@NotNull`, or convert to `Boolean` (boxed) if null rejection is intentional.
-
----
-
-### FILE DOMAIN
-
----
-
-#### [CRITICAL] `LocalFileStorage` — No path traversal guard
-
-**Location:** `outbound/file/infrastructure/LocalFileStorage.java`
-
-**Problem:** `fileGuid` from HTTP path parameters is resolved directly into a filesystem path with no normalization check. A crafted value like `../../etc/passwd` can escape the storage root.
-
-**Why it matters:** Arbitrary file read or delete from the server filesystem.
-
-**Fix:**
-```java
-Path resolved = rootPath.resolve(prefix).resolve(fileGuid).normalize();
-if (!resolved.startsWith(rootPath.normalize())) {
-    throw ExternalServiceException.of(ErrorCode.FILE_INVALID);
+@ExceptionHandler(Exception.class)
+@ResponseStatus(INTERNAL_SERVER_ERROR)
+public ResponseEntity<DataApiResponseDto<?>> handleException(Exception e) {
+    logException(e);
+    return ResponseEntity.internalServerError()
+            .body(DataApiResponseDto.failureWithoutData(ErrorCode.UNKNOWN_FAIL));
 }
 ```
 
 ---
 
-#### [MAJOR] `FileFacade` — Missing `@Transactional`
+### F-03 — Major
 
-**Location:** `core/file/port/in/facade/FileFacade.java`
+**Location:** `api/auth/controller/CookieFactory.java:19`
 
-**Problem:** `FileFacade` is `@Service` with no `@Transactional`. `upload` iterates files and calls `fileUseCase.upload()` in a loop — each in a separate transaction. A failure on file `n` leaves files `1..n-1` committed to the DB as orphaned metadata with no corresponding files on disk.
+**Problem:**
+```java
+@Value("${app.cookie.secure:false}")
+private boolean secureCookie;
+```
+The default value for `app.cookie.secure` is `false`. If the production deployment omits this property (misconfiguration, missing env var, outdated config), refresh tokens are sent over plain HTTP.
 
-**Fix:** Add `@Transactional` at class level on `FileFacade`.
+**Why it matters:**
+- Refresh tokens issued over non-HTTPS connections are interceptable on the network. An attacker who captures a refresh token has persistent access until expiry (14 days).
+- `secure=false` is correct for local development but the wrong default for a shared configuration.
 
----
-
-#### [MAJOR] `FileService.delete` — Deletes physical file before DB record
-
-**Location:** `core/file/application/FileService.java`
-
-**Problem:** `fileStorage.delete(fileGuid)` (filesystem) runs before `fileMetadataRepository.deleteByFileGuid(fileGuid)` (DB). If the DB delete fails, the physical file is gone but the DB record remains, pointing to a non-existent file.
-
-**Fix:** Delete the DB metadata first (within the transaction), then delete the physical file after commit. Log orphaned paths for cleanup if the physical delete fails.
-
----
-
-#### [MAJOR] `FileService` — Method-level `@Transactional` violates class-level-only convention
-
-**Location:** `core/file/application/FileService.java:23,38`
-
-**Problem:** `upload` and `find` have their own `@Transactional` annotations in addition to the class-level one. The project rule: "Declare `@Transactional` at the class level only."
-
-**Fix:** Remove both method-level `@Transactional` annotations.
+**Recommended fix:**
+Invert the default: `@Value("${app.cookie.secure:true}")`. Developers who need HTTP locally must explicitly opt-out. Add a startup warning if `app.cookie.secure=false` is detected in a non-dev profile.
 
 ---
 
-#### [MEDIUM] `FakeFileMetadataRepository` and `FakeFileUseCase` — Throw raw `RuntimeException`
+### F-04 — Major
 
-**Location:** `test/.../FakeFileMetadataRepository.java:24` and `test/.../FakeFileUseCase.java:42`
+**Location:** `core/auth/application/service/UserCredentialService.java` — `signupEmailUser()`
 
-**Problem:** Missing keys throw `new RuntimeException(fileGuid)` and `new RuntimeException(new FileNotFoundException(...))`. Test assertions that match `RuntimeException.class` will pass for the wrong reasons and mask future type changes in the real adapter.
+**Problem:**
+Duplicate email signup throws `ErrorCode.SIGNUP_FAIL` instead of a specific duplicate-email error code.
 
-**Fix:** Throw `AdapterDataException.of(ErrorCode.FILE_NOT_FOUND)` from both Fakes. Update test assertions to match the specific exception type and message.
+**Why it matters:**
+- The frontend receives a generic "signup failed" message and cannot distinguish a duplicate email from a system error, preventing appropriate UX feedback (e.g., "This email is already registered — try logging in").
+- `SIGNUP_FAIL` is semantically incorrect: the domain rule violation is a duplicate credential, not a generic failure.
 
----
-
-#### [MEDIUM] `FileController.selectFile` — Wrong `SuccessCode`
-
-**Location:** `api/file/controller/FileController.java:53`
-
-**Problem:** `selectFile` (GET `/{fileGuid}/meta`) returns `SuccessCode.CREATE_SUCCESS` for a read operation.
-
-**Fix:** Change to `SuccessCode.READ_SUCCESS`.
+**Recommended fix:**
+Add `ErrorCode.EMAIL_DUPLICATED` (or use the closest existing code) and throw it specifically on the `ifPresent` duplicate check.
 
 ---
 
-#### [MEDIUM] `FileController.view` / `download` — Bypass `DataApiResponseDto`
+### F-05 — Minor
 
-**Location:** `api/file/controller/FileController.java`
+**Location:** `outbound/terms/adapter/TermsAdapter.java:44` — `findByTermsGuid()`
 
-**Problem:** Binary streaming endpoints return `ResponseEntity<byte[]>` directly. The project rule requires `DataApiResponseDto<T>` wrapping for all API responses.
+**Problem:**
+```java
+.orElseThrow(() -> AdapterDataException.of(ErrorCode.UNKNOWN_FAIL));
+```
+Uses `UNKNOWN_FAIL` as the error code when a terms record is not found.
 
-**Fix:** If binary streaming endpoints are intentionally exempted from the wrapper (which is architecturally reasonable), document the exemption explicitly. Otherwise, these endpoints are non-conforming.
+**Why it matters:**
+Per `error-handling.md`: "`ErrorCode.UNKNOWN_FAIL` should be temporary only and replaced with a specific code as soon as possible." A terms-not-found scenario is predictable and deserves its own error code for correct HTTP status mapping and client-side interpretation.
 
----
-
-#### [MEDIUM] `FileStorageProperties` — Public setter violates no-setter rule
-
-**Location:** `outbound/file/infrastructure/FileStorageProperties.java`
-
-**Problem:** A public `setRootPath(Path)` method allows arbitrary runtime changes to the storage root path. The project prohibits setters on domain and configuration classes.
-
-**Fix:** Use constructor binding with `@ConstructorBinding` in Spring Boot 3.x. If a setter is required for `@ConfigurationProperties` binding, narrow its visibility.
+**Recommended fix:**
+Add `ErrorCode.TERMS_NOT_FOUND` to the `ErrorCode` enum and use it here.
 
 ---
 
-#### [MINOR] `FileControllerTest` — Entirely commented out
+### F-06 — Minor
 
-**Location:** `test/.../FileControllerTest.java`
+**Location:** `shared/config/WebSecurityConfig.java:103` — security filter chain
 
-**Problem:** The entire test file is disabled via comments, violating the "do not disable code with comments" rule. The commented content also references a stale constructor that no longer matches the current `FileResponseDto` record.
+**Problem:**
+```java
+.requestMatchers("/auth/**").permitAll()
+```
+This `permitAll()` rule covers `/auth/logout`, `/auth/reissue`, and `/auth/password` — endpoints that require an authenticated user. Authentication for these endpoints is enforced only at the application layer via `@LoginUser` / `AuthenticatedUser`, not at the security filter level.
 
-**Fix:** Implement the controller test properly (use `@MockitoBean` for the facade as per testing rules) or delete the file entirely.
+**Why it matters:**
+- Defense-in-depth is reduced: if the `@LoginUser` resolver is misconfigured or bypassed, unauthenticated requests reach the business logic.
+- The security config implies these are public endpoints, which is misleading.
+
+**Recommended fix:**
+Split the auth rules to expose only the truly public endpoints as `permitAll()`:
+```java
+.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+.requestMatchers(HttpMethod.POST, "/auth/reissue").permitAll()
+.requestMatchers("/auth/oauth/**").permitAll()
+// logout and password change: leave as authenticated()
+```
+
+---
+
+### F-07 — Minor
+
+**Location:** `core/user/domain/User.java:228` — `applyReviewScore()`
+
+**Problem:**
+```java
+public void applyReviewScore(double score) {
+    this.mannerDegree += (score - 3.0);
+}
+```
+No floor or ceiling is applied to `mannerDegree`. The service layer clamps the incoming `score` to `[1.0, 5.0]`, but the cumulative effect on `mannerDegree` is unbounded: a user with many negative reviews could reach arbitrarily low values.
+
+**Why it matters:**
+- If initial value is 36.5 (body temperature metaphor), reaching -50 has no semantic meaning and might cause unexpected rendering or comparison behavior downstream.
+- Bounds enforcement belongs in the domain, not the service layer.
+
+**Recommended fix:**
+```java
+public void applyReviewScore(double score) {
+    this.mannerDegree = Math.max(0.0, Math.min(100.0, this.mannerDegree + (score - 3.0)));
+}
+```
+The exact bounds are a product decision; the domain should enforce whatever they are.
+
+---
+
+### F-08 — Minor
+
+**Location:** `core/user/application/service/UserSignupService.java:39` — `initializeAdminUser()`
+
+**Problem:**
+```java
+if (existsByUserRole()) {
+    return;
+}
+// ... create admin user
+```
+Check-then-act race condition: two concurrent startup threads can both pass the `existsByUserRole()` check and both attempt to insert an admin user.
+
+**Why it matters:**
+In a multi-instance deployment without startup synchronization, the race produces a unique constraint violation that surfaces as an unhandled exception. In practice the risk is low (startup typically serializes in practice), but the code assumes rather than handles it.
+
+**Recommended fix:**
+Wrap the insert in a try/catch for `DataIntegrityViolationException` (attempt insert, catch duplicate), or rely exclusively on the DB unique constraint as the enforcer.
+
+---
+
+### F-09 — Nitpick
+
+**Location:** `api/file/controller/FileController.java:53` — `selectFile()`
+
+**Problem:**
+```java
+DataApiResponseDto.successWithData(
+        SuccessCode.CREATE_SUCCESS,  // wrong for a GET
+        fileFacade.selectFileObject(fileGuid)
+)
+```
+
+**Recommended fix:** Change to `SuccessCode.READ_SUCCESS`.
+
+---
+
+### F-10 — Nitpick
+
+**Location:** `shared/logging/LoggingAspect.java:50` — `logAround()`
+
+**Problem:**
+The pointcut covers all methods in `api`, `core`, and `outbound` packages. The `maskSensitiveFields()` method uses reflection (`field.setAccessible(true)`) to walk all fields of every method argument on every invocation.
+
+**Why it matters:**
+At scale, reflection on every service call adds measurable overhead. Consider profiling under load and narrowing the pointcut if needed.
+
+---
+
+## Previously Reported — Now Fixed
+
+The following issues from the 2026-05-03 full-project-review have been resolved:
+
+| Issue | Status |
+|---|---|
+| `OauthController` — OAuth CSRF: no state parameter validation | **FIXED** — cookie state compared against request param |
+| `LoggingAspect` — serializes all params including passwords | **FIXED** — SENSITIVE_FIELDS masking list implemented |
+| `TraceIdMDCFilter` — X-Trace-Id injected without sanitization | **FIXED** — regex `[a-zA-Z0-9\\-]{8,36}` validation added |
+| `FileResponseFactory.attachment()` — header injection via filename | **FIXED** — `replaceAll("[\r\n\"\\\\;]", "_")` sanitization added |
+| `CookieFactory` — Refresh Token cookie `secure=false` | **PARTIALLY FIXED** — now configurable via `app.cookie.secure`, but default remains `false` (see F-03) |
+| `OauthController` — hardcoded `http://localhost:5173` | **FIXED** — uses `${app.frontend.base-url}` |
+| `WebSecurityConfig` — `/admin/**` was `permitAll()` | **FIXED** — `.hasRole("ADMIN")` applied |
+| `AuthController.login()` — `@Valid` missing on `LoginRequestDto` | **FIXED** — `@Valid` is present |
 
 ---
 
 ## Priority Fix List
 
-### Block Release (Critical Security + Correctness)
-
-1. **`TermsAdapter.saveTerms`** — Map domain object to entity before saving; remove the illegal JPA re-declaration. Terms registration is currently broken.
-2. **`POST /terms` open to anonymous callers** — Apply `hasRole("ADMIN")` to the create endpoint; allow only `GET /terms/**` publicly.
-3. **`LocalFileStorage` path traversal** — Add normalize + startsWith guard before all file system operations.
-4. **`UserReview.validateScoreStep` floating-point bug** — Replace with allowlist or integer-based check; current code silently corrupts user reputation data.
-5. **`OauthController` hardcoded `localhost:5173` redirects** — Inject from `@Value("${app.frontend.base-url}")`.
-6. **`CookieFactory` `secure=false`** — Set `secure(true)` on the refresh token cookie.
-7. **`WebSecurityConfig` `addExposedHeader("*")`** — Replace with `addExposedHeader(HttpHeaders.AUTHORIZATION)`.
-
-### High Priority (Fix Before Merge)
-
-8. **`AdminUserFacade` imports `api/` DTOs into `core/`** — Move to `core/user/port/in/facade/model/` or map in the controller.
-9. **`FileFacade` missing `@Transactional`** — Wrap multi-file upload in a single transaction.
-10. **`FileService.delete` ordering** — Delete DB record first, then physical file.
-11. **`TermsService` Jakarta import** — Switch to `org.springframework.transaction.annotation.Transactional`.
-12. **`CreateTermsRequestDto`** — Convert to `record`, add validation annotations, remove `isDeleted`.
-13. **`validateAllTermsExist` throws `ErrorCode.UNKNOWN_FAIL`** — Replace with a specific `ErrorCode`.
-14. **`UserSignupController` dual-facade raw-password pattern** — Move auto-login into `UserSignupFacade`.
-15. **`OauthController.signup` and `AdminUserController.banUser` missing `@Valid`** — Add to both.
-16. **`JwtTokenCodec.toDate`** — Use `ZoneOffset.UTC`.
-
-### Medium Priority
-
-17. `UserAdapter.delete` misleading name — rename to `softDelete`.
-18. `UserProfileService.updateProfile` — lazy-load positions/skills.
-19. `AdminUserFacade.getUserApplyProjects` N+1 — batch project lookup.
-20. `TermsAdapter` split — one adapter per port interface.
-21. `TermsMapper` dead code removal + private constructors on both mappers.
-22. `FakeTermsAgreeUseCase.listTerms` — return `List.of()`.
-23. `FakeTermsRepository.findByTermsGuid` — throw typed domain exception.
-24. `FakeFileMetadataRepository` / `FakeFileUseCase` — throw typed domain exceptions.
-25. `FileController.selectFile` wrong `SuccessCode` — use `READ_SUCCESS`.
-26. `TermsResponseDto` — move to `api/` layer, convert to `record`.
-27. `FileStorageProperties` public setter — use constructor binding.
-
-### Minor / Cleanup
-
-28. `FakeUserProfileUseCase.updateProfileImage` — add call-tracking flag.
-29. `UserLoginServiceTest` test method rename to `method_condition_outcome` format.
-30. Add `UserReviewServiceTest` cases: self-review, score boundary, invalid step.
-31. `TermsAgreementEntity` — add unique constraint on `(user_guid, terms_guid)`.
-32. `AgreeTermsRequestDto` — remove `@NotNull` from primitive `boolean`.
-33. `FileControllerTest` — implement properly or delete.
+1. **Immediate** — `FileMetadataAdapter.find()`: change `IllegalArgumentException` → `AdapterDataException.of(ErrorCode.FILE_READ_FAIL)`. Single-line fix; divergence between fake and real adapter breaks the test-as-contract guarantee.
+2. **Immediate** — `GlobalExceptionHandler`: change generic handler from HTTP 400 → HTTP 500 and stop exposing raw exception messages in the response body.
+3. **Before release** — `CookieFactory`: invert default to `secure=true`.
+4. **Before release** — `UserCredentialService.signupEmailUser()`: replace `SIGNUP_FAIL` with a specific duplicate-credential error code.
+5. **Backlog** — `TermsAdapter.findByTermsGuid()`: replace `UNKNOWN_FAIL` with `TERMS_NOT_FOUND`.
+6. **Backlog** — `WebSecurityConfig`: narrow `/auth/**` permitAll to specific public endpoints only.
+7. **Backlog** — `User.applyReviewScore()`: add floor/ceiling enforcement on `mannerDegree`.
+8. **Backlog** — `FileController.selectFile()`: fix `CREATE_SUCCESS` → `READ_SUCCESS`.
 
 ---
 
 ## Strengths
 
-- `User` domain class: private constructor, static factory methods per role (`createGeneralUser`, `createAdminUser`, `createOauthUser`), all state changes via domain methods, no setters, no Spring annotations.
-- `UserReview.create()` encapsulates range-check and self-review validation inside the factory — invalid objects cannot be constructed.
-- `UserWithdrawFacade` correctly wraps cross-usecase concerns (withdraw + token revocation) in a single facade transaction.
-- `VerificationService.assertIssuable()` prevents re-sending a code while a valid unexpired one exists — a commonly missed guard.
-- `OauthController.handleOauthCallback` implements CSRF state cookie validation correctly (cookie vs. query-param comparison, expires cookie on receipt).
-- `UserCredentialService.getUserForReissue` performs two-stage token validation: parse JWT → lookup stored token → compare. Prevents token substitution attacks.
-- `Terms` domain class: private `@Builder`, static factory methods (`of`, `createTerms`, `createAgreement`), all validation inside domain methods with specific `ErrorCode` values.
-- `FileMetadata` uses a `record` with a static `create` factory that runs validation inline.
-- `FileMetadataMapper` has a private constructor blocking instantiation and provides both `toEntity` and `toDomain` directions.
-- `UploadFileResponseDto.from` uses `Map.copyOf` for defensive copying — correct immutability practice.
-- All reviewed unit tests use Fake implementations, GWT structure, Korean `@DisplayName`, and `ErrorCode` enum references in assertions.
+- `OauthAuthFacade.handleOAuthCallback()` correctly handles both the login path and the signup-required path; state cookie is expired before redirect in both cases.
+- `TraceIdMDCFilter` cleanup in `finally` block guarantees MDC does not leak across requests in thread-pool environments.
+- `User.assertActive()` centralizes the deleted/blocked guard in one place; both the email and OAuth login paths call it before issuing tokens.
+- `LocalFileStorage.safeResolve()` performs path traversal prevention (`!resolved.startsWith(root)`) — correctly defends against `../` injection in file GUIDs.
+- `User` domain uses `@Builder` with `private` constructor and static factory methods throughout — construction bypass from outside the domain is impossible.
+- `LoggingAspect` sensitive field masking covers all token and password field name variants including nested objects via reflection.
+- `AuthFacade.login()` correctly sequences: authenticate → validate login eligibility → issue tokens → update last login datetime, in a single transaction.
 
 ---
 
 ## Final Verdict
 
-**Request Changes — Block Release**
+**Request Changes**
 
-Seven issues independently block release: the broken `TermsAdapter.saveTerms`, the open `POST /terms` endpoint, the path traversal in `LocalFileStorage`, the floating-point score validation bug, the hardcoded OAuth redirects, the insecure refresh-token cookie, and the wildcard CORS exposure header. The architecture inversion in `AdminUserFacade` and the non-atomic `FileFacade.upload` must also be resolved before merging to `dev`. All remaining items should be tracked as follow-up tasks.
+F-01 and F-02 are must-fix before release: F-01 creates a behavioral divergence between tests and production that makes file-not-found untestable, and F-02 has been a known issue long enough that it should not ship. Both are small changes. F-03 requires a deployment config audit.
+
+Once items 1–4 in the Priority Fix List are resolved, this scope is releasable.

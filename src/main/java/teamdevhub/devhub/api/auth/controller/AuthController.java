@@ -30,6 +30,7 @@ import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
 public class AuthController {
 
     private final AuthFacade authFacade;
+    private final CookieFactory cookieFactory;
 
     @Operation(summary = "로그인", description = "이메일과 비밀번호로 로그인합니다. 응답 헤더에 Access Token, 쿠키에 Refresh Token이 설정됩니다.")
     @ApiResponses({
@@ -40,7 +41,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         AuthResult authResult = authFacade.login(loginRequestDto.toLoginCommand());
-        ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(authResult.refreshToken());
+        ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(authResult.refreshToken());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
@@ -60,7 +61,7 @@ public class AuthController {
             @Parameter(description = "HTTP-only 쿠키로 전달되는 Refresh Token", required = true)
             @CookieValue("refreshToken") String refreshToken) {
         AuthResult authResult = authFacade.reissueAccessToken(refreshToken);
-        ResponseCookie newRefreshCookie = CookieFactory.createRefreshTokenCookie(authResult.refreshToken());
+        ResponseCookie newRefreshCookie = cookieFactory.createRefreshTokenCookie(authResult.refreshToken());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, newRefreshCookie.toString())
