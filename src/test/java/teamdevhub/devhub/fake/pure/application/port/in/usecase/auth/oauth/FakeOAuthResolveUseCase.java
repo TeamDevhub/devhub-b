@@ -15,13 +15,13 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 public class FakeOAuthResolveUseCase implements OAuthResolveUseCase {
 
     private OAuthUser lastOAuthUser;
-    private OAuthUserResult oAuthUserResult;
+    private OAuthUserResult oauthUserResult;
 
     @Override
     public OAuthUserResult findOrRequireSignup(OAuthUser oauthUser) {
         this.lastOAuthUser = oauthUser;
 
-        if (oAuthUserResult.loginAvailable()) {
+        if (oauthUserResult.loginAvailable()) {
             AuthenticatedUser authenticatedUser = AuthenticatedUser.builder()
                     .userGuid(TEST_USER_GUID_1)
                     .loginId(TEST_EMAIL_1)

@@ -35,7 +35,7 @@ import java.io.IOException;
 public class OAuthController {
 
     private final UserSignupFacade userSignupFacade;
-    private final OAuthFacade oAuthFacade;
+    private final OAuthFacade oauthFacade;
     private final CookieFactory cookieFactory;
 
     @Value("${app.frontend.base-url}")
@@ -48,7 +48,7 @@ public class OAuthController {
             @Parameter(description = "OAuth 제공자 (google, github, kakao, naver)", example = "google", required = true)
             @PathVariable String provider,
             HttpServletResponse httpServletResponse) throws IOException {
-        OAuthAuthorizationResult result = oAuthFacade.createOAuthAuthorizationUrl(provider);
+        OAuthAuthorizationResult result = oauthFacade.createOAuthAuthorizationUrl(provider);
         ResponseCookie stateCookie = cookieFactory.createOAuthStateCookie(result.state());
         httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, stateCookie.toString());
         httpServletResponse.sendRedirect(result.url());
@@ -72,14 +72,14 @@ public class OAuthController {
         ResponseCookie expiredStateCookie = cookieFactory.expireOAuthStateCookie();
         response.addHeader(HttpHeaders.SET_COOKIE, expiredStateCookie.toString());
 
-        OAuthResult oAuthResult = oAuthFacade.handleOAuthCallback(provider, code);
+        OAuthResult oauthResult = oauthFacade.handleOAuthCallback(provider, code);
 
-        if (oAuthResult.signupStatus().equals(SignupStatus.COMPLETED)) {
-            ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(oAuthResult.refreshToken());
+        if (oauthResult.signupStatus().equals(SignupStatus.COMPLETED)) {
+            ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(oauthResult.refreshToken());
             response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
             response.sendRedirect(frontendBaseUrl + "/");
         } else {
-            response.sendRedirect(frontendBaseUrl + "/auth/signup?token=" + oAuthResult.tempToken());
+            response.sendRedirect(frontendBaseUrl + "/auth/signup?token=" + oauthResult.tempToken());
         }
     }
 
@@ -90,14 +90,14 @@ public class OAuthController {
     })
     @PostMapping("/signup")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> signup(@Valid @RequestBody SignupOAuthRequestDto signupOAuthRequestDto) {
-        OAuthResult oAuthResult = userSignupFacade.signupWithOAuth(signupOAuthRequestDto.toSignupOAuthUserCommand());
-        ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(oAuthResult.refreshToken());
+        OAuthResult oauthResult = userSignupFacade.signupWithOAuth(signupOAuthRequestDto.toSignupOAuthUserCommand());
+        ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(oauthResult.refreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, oAuthResult.toAuthorizationHeader())
+                .header(HttpHeaders.AUTHORIZATION, oauthResult.toauthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(DataApiResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,
-                        TokenResponseDto.issueAccessToken(oAuthResult.accessToken()))
+                        TokenResponseDto.issueAccessToken(oauthResult.accessToken()))
                 );
     }
 }

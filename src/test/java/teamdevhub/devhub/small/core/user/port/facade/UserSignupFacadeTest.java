@@ -26,7 +26,7 @@ public class UserSignupFacadeTest {
 
     private FakeUserSignupUseCase userSignupUseCase;
     private FakeTermsAgreeUseCase termsAgreeUseCase;
-    private FakeOAuthResolveUseCase oAuthResolveUseCase;
+    private FakeOAuthResolveUseCase oauthResolveUseCase;
     private FakeUserCredentialUseCase userCredentialUseCase;
     private FakeAuthenticationUseCase authenticationUseCase;
     private FakeVerificationUseCase verificationUseCase;
@@ -35,7 +35,7 @@ public class UserSignupFacadeTest {
     @BeforeEach
     void init() {
         userSignupUseCase = new FakeUserSignupUseCase();
-        oAuthResolveUseCase = new FakeOAuthResolveUseCase();
+        oauthResolveUseCase = new FakeOAuthResolveUseCase();
         termsAgreeUseCase = new FakeTermsAgreeUseCase();
         userCredentialUseCase = new FakeUserCredentialUseCase();
         authenticationUseCase = new FakeAuthenticationUseCase();
@@ -45,7 +45,7 @@ public class UserSignupFacadeTest {
         userSignupFacade = new UserSignupFacade(
                 userSignupUseCase,
                 termsAgreeUseCase,
-                oAuthResolveUseCase,
+                oauthResolveUseCase,
                 userCredentialUseCase,
                 authenticationUseCase,
                 verificationUseCase,
@@ -78,17 +78,17 @@ public class UserSignupFacadeTest {
     }
 
     @Test
-    @DisplayName("signupWithOAuth_는_signup_후_oAuth-access-token_을_포함한_로그인_성공으로_이어진다")
+    @DisplayName("signupWithOAuth_는_signup_후_oauth-access-token_을_포함한_로그인_성공으로_이어진다")
     void signupWithOAuthCallsSignupThenLogin() {
         // given
         SignupOAuthUserCommand signupCommand = new SignupOAuthUserCommand(TEMP_TOKEN, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST);
 
         // when
-        OAuthResult oAuthResult = userSignupFacade.signupWithOAuth(signupCommand);
+        OAuthResult oauthResult = userSignupFacade.signupWithOAuth(signupCommand);
 
         // then
-        assertThat(oAuthResult.accessToken()).isEqualTo("access-token");
-        assertThat(oAuthResult.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
-        assertThat(oAuthResult.tempToken()).isNull();
+        assertThat(oauthResult.accessToken()).isEqualTo("access-token");
+        assertThat(oauthResult.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
+        assertThat(oauthResult.tempToken()).isNull();
     }
 }

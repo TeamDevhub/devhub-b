@@ -99,7 +99,7 @@ class OAuthResolveServiceTest {
         OAuthUser oauthUser = oauthResolveService.extractOAuthUser(signupOAuthUserCommand);
 
         // then
-        assertThat(oauthUser.oAuthId()).isEqualTo(TEST_OAUTH_ID_1);
+        assertThat(oauthUser.oauthId()).isEqualTo(TEST_OAUTH_ID_1);
         assertThat(oauthUser.verificationProvider()).isEqualTo(VerificationProvider.GOOGLE);
         assertThat(oauthUser.email()).isEqualTo(TEST_EMAIL_1);
     }

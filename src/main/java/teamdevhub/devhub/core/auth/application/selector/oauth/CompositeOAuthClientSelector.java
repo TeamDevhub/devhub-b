@@ -13,12 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompositeOAuthClientSelector implements OAuthClientSelector {
 
-    private final List<OAuthClient> oAuthClientList;
+    private final List<OAuthClient> oauthClientList;
 
     @Override
     public OAuthClient select(VerificationProvider verificationProvider) {
-        return oAuthClientList.stream()
-                .filter(oAuthClient -> oAuthClient.supports(verificationProvider))
+        return oauthClientList.stream()
+                .filter(oauthClient -> oauthClient.supports(verificationProvider))
                 .findFirst()
                 .orElseThrow(() -> BusinessRuleException.of(ErrorCode.OAUTH_FAIL));
     }

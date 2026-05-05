@@ -103,12 +103,12 @@ public class User {
                 .build();
     }
 
-    public static User createOAuthUser(CreateUserCommand oAuthCreateUserCommand) {
+    public static User createOAuthUser(CreateUserCommand oauthCreateUserCommand) {
         return User.builder()
-                .userGuid(oAuthCreateUserCommand.userGuid())
+                .userGuid(oauthCreateUserCommand.userGuid())
                 .userRole(UserRole.USER)
-                .username(oAuthCreateUserCommand.username())
-                .introduction(oAuthCreateUserCommand.introduction())
+                .username(oauthCreateUserCommand.username())
+                .introduction(oauthCreateUserCommand.introduction())
                 .mannerDegree(36.5)
                 .blocked(false)
                 .deleted(false)

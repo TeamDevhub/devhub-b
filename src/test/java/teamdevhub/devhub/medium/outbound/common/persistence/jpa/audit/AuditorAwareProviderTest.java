@@ -35,7 +35,7 @@ class AuditorAwareProviderTest {
 
     @Test
     @DisplayName("인증_정보가_없으면_system_을_반환한다")
-    void returnSystemIfNoAuthentication() {
+    void returnSystemIfNoauthentication() {
         // given
         SecurityContextHolder.clearContext();
 

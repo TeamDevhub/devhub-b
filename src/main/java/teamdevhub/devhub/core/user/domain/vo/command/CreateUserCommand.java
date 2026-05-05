@@ -1,7 +1,6 @@
 package teamdevhub.devhub.core.user.domain.vo.command;
 
 import lombok.Builder;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
@@ -37,7 +36,7 @@ public record CreateUserCommand(
         );
     }
 
-    public static CreateUserCommand oAuthUserCreateCommand(SignupOAuthUserCommand signupOAuthUserCommand, String userGuid) {
+    public static CreateUserCommand oauthUserCreateCommand(SignupOAuthUserCommand signupOAuthUserCommand, String userGuid) {
         return new CreateUserCommand(
                 userGuid,
                 signupOAuthUserCommand.username(),

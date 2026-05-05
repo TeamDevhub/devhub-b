@@ -20,12 +20,12 @@ public class OAuthResolveService implements OAuthResolveUseCase {
     private final UserCredentialRepository userCredentialRepository;
 
     @Override
-    public OAuthUserResult findOrRequireSignup(OAuthUser oAuthUser) {
+    public OAuthUserResult findOrRequireSignup(OAuthUser oauthUser) {
 
         return userCredentialRepository
                 .findOAuthUserCredentialByOAuth(
-                        oAuthUser.verificationProvider(),
-                        oAuthUser.oAuthId()
+                        oauthUser.verificationProvider(),
+                        oauthUser.oauthId()
                 )
                 .map(OAuthUserResult::success)
                 .orElseGet(OAuthUserResult::requiresSignup);
@@ -34,6 +34,6 @@ public class OAuthResolveService implements OAuthResolveUseCase {
     @Override
     public OAuthUser extractOAuthUser(SignupOAuthUserCommand signupOAuthUserCommand) {
         TempTokenInfo tempTokenInfo = tokenParseProvider.getTempTokenInfo(signupOAuthUserCommand.tempToken());
-        return new OAuthUser(tempTokenInfo.oAuthId(), tempTokenInfo.verificationProvider(), tempTokenInfo.email());
+        return new OAuthUser(tempTokenInfo.oauthId(), tempTokenInfo.verificationProvider(), tempTokenInfo.email());
     }
 }

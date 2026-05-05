@@ -18,26 +18,26 @@ import teamdevhub.devhub.core.auth.port.out.token.TokenIssueProvider;
 public class OAuthAuthenticationService implements OAuthAuthenticationUseCase {
 
     private final TokenIssueProvider tokenIssueProvider;
-    private final OAuthClientSelector oAuthClientSelector;
+    private final OAuthClientSelector oauthClientSelector;
     private final IdentifierProvider identifierProvider;
 
     @Override
     public OAuthAuthorizationResult createAuthorizationUrl(String provider) {
         VerificationProvider verificationProvider = VerificationProvider.from(provider);
-        OAuthClient oAuthClient = oAuthClientSelector.select(verificationProvider);
+        OAuthClient oauthClient = oauthClientSelector.select(verificationProvider);
         String state = identifierProvider.generateIdentifier();
-        String url = oAuthClient.getAuthorizationUrl(state);
+        String url = oauthClient.getAuthorizationUrl(state);
         return OAuthAuthorizationResult.of(url, state);
     }
 
     @Override
     public OAuthUser handleOAuthCallback(VerificationProvider verificationProvider, String authorizationCode) {
-        OAuthClient oAuthClient = oAuthClientSelector.select(verificationProvider);
-        return oAuthClient.fetchUser(authorizationCode);
+        OAuthClient oauthClient = oauthClientSelector.select(verificationProvider);
+        return oauthClient.fetchUser(authorizationCode);
     }
 
     @Override
-    public String issueTempToken(OAuthUser oAuthUser) {
-        return tokenIssueProvider.createTempToken(oAuthUser.oAuthId(), oAuthUser.verificationProvider(), oAuthUser.email());
+    public String issueTempToken(OAuthUser oauthUser) {
+        return tokenIssueProvider.createTempToken(oauthUser.oauthId(), oauthUser.verificationProvider(), oauthUser.email());
     }
 }

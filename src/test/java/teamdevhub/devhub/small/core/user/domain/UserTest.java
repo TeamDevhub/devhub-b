@@ -2,7 +2,6 @@ package teamdevhub.devhub.small.core.user.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.domain.User;
@@ -15,7 +14,6 @@ import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkillChangeResult;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.util.HashSet;
 import java.util.List;
@@ -94,10 +92,10 @@ class UserTest {
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .build();
-        CreateUserCommand oAuthCreateUserCommand = CreateUserCommand.oAuthUserCreateCommand(signupOAuthUserCommand, TEST_USER_GUID_1);
+        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOAuthUserCommand, TEST_USER_GUID_1);
 
         // when
-        User createdOAuthUser = User.createOAuthUser(oAuthCreateUserCommand);
+        User createdOAuthUser = User.createOAuthUser(oauthCreateUserCommand);
 
         // then
         assertThat(createdOAuthUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);

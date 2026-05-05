@@ -114,7 +114,7 @@ class JwtTokenCodecTest {
         TempTokenInfo tempTokenInfo = jwtTokenCodec.getTempTokenInfo(tempToken);
 
         // then
-        assertThat(tempTokenInfo.oAuthId()).isEqualTo(oauthId);
+        assertThat(tempTokenInfo.oauthId()).isEqualTo(oauthId);
         assertThat(tempTokenInfo.verificationProvider()).isEqualTo(VerificationProvider.GOOGLE);
         assertThat(tempTokenInfo.email()).isEqualTo(TEST_EMAIL_1);
     }

@@ -7,5 +7,5 @@ public interface TokenIssueProvider {
 
     String createAccessToken(AuthenticatedUser authenticatedUser);
     String createRefreshToken(String email);
-    String createTempToken(String oAuthId, VerificationProvider verificationProvider, String email);
+    String createTempToken(String oauthId, VerificationProvider verificationProvider, String email);
 }

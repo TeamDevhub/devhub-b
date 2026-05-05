@@ -283,7 +283,7 @@ The codebase has matured since the initial review: the most glaring security gap
 - **Location**: `core/auth/application/service/AuthResult.java:4`, `OAuthAuthResult.java:6`
 - **Problem**: These core domain result objects import `outbound.auth.infrastructure.token.TokenPrefix` to build the `Authorization` header string. This inverts the dependency: core depends on outbound infrastructure.
 - **Why it matters**: `TokenPrefix` is a formatting detail. The core should not know about HTTP header formatting.
-- **Fix**: Move `TokenPrefix` (or an equivalent constant) to `shared/` or `core/auth/domain/`. Alternatively, move `toAuthorizationHeader()` to the controller or a utility in the API layer.
+- **Fix**: Move `TokenPrefix` (or an equivalent constant) to `shared/` or `core/auth/domain/`. Alternatively, move `toauthorizationHeader()` to the controller or a utility in the API layer.
 
 ---
 

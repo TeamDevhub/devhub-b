@@ -28,19 +28,19 @@ public class OAuthFacadeTest {
 
     private OAuthFacade oauthAuthFacade;
 
-    private FakeOAuthAuthenticationUseCase oAuthAuthenticationUseCase;
-    private FakeOAuthResolveUseCase oAuthResolveUseCase;
+    private FakeOAuthAuthenticationUseCase oauthAuthenticationUseCase;
+    private FakeOAuthResolveUseCase oauthResolveUseCase;
     private FakeAuthenticationUseCase authenticationUseCase;
     private FakeUserLoginUseCase userLoginUseCase;
 
     @BeforeEach
     void init() {
-        oAuthAuthenticationUseCase = new FakeOAuthAuthenticationUseCase();
-        oAuthResolveUseCase = new FakeOAuthResolveUseCase();
+        oauthAuthenticationUseCase = new FakeOAuthAuthenticationUseCase();
+        oauthResolveUseCase = new FakeOAuthResolveUseCase();
         authenticationUseCase = new FakeAuthenticationUseCase();
         userLoginUseCase = new FakeUserLoginUseCase();
 
-        oauthAuthFacade = new OAuthFacade(oAuthAuthenticationUseCase, oAuthResolveUseCase, authenticationUseCase, userLoginUseCase);
+        oauthAuthFacade = new OAuthFacade(oauthAuthenticationUseCase, oauthResolveUseCase, authenticationUseCase, userLoginUseCase);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class OAuthFacadeTest {
                 TEST_EMAIL_1,
                 UserRole.USER
         );
-        oAuthResolveUseCase.setOAuthUserResult(OAuthUserResult.success(signupCompletedUser));
+        oauthResolveUseCase.setOauthUserResult(OAuthUserResult.success(signupCompletedUser));
 
         // when
         OAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback("google", "code123");
@@ -83,7 +83,7 @@ public class OAuthFacadeTest {
                 TEST_EMAIL_1,
                 UserRole.USER
         );
-        oAuthResolveUseCase.setOAuthUserResult(OAuthUserResult.success(signupCompletedUser));
+        oauthResolveUseCase.setOauthUserResult(OAuthUserResult.success(signupCompletedUser));
 
         // when
         oauthAuthFacade.handleOAuthCallback("google", "code123");
@@ -105,7 +105,7 @@ public class OAuthFacadeTest {
         userLoginUseCase.givenUser(withdrawnUser);
 
         AuthenticatedUser withdrawnAuthUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
-        oAuthResolveUseCase.setOAuthUserResult(OAuthUserResult.success(withdrawnAuthUser));
+        oauthResolveUseCase.setOauthUserResult(OAuthUserResult.success(withdrawnAuthUser));
 
         // when, then
         assertThatThrownBy(() -> oauthAuthFacade.handleOAuthCallback("google", "code789"))
@@ -116,7 +116,7 @@ public class OAuthFacadeTest {
     @DisplayName("가입되지_않은_유저면_로그인_처리_후_OAuthAuthResponseDto.fromCallback_을_반환한다")
     void handleOAuthCallbackRequiresSignup() {
         // given
-        oAuthResolveUseCase.setOAuthUserResult(OAuthUserResult.requiresSignup());
+        oauthResolveUseCase.setOauthUserResult(OAuthUserResult.requiresSignup());
 
         // when
         OAuthResult oauthAuthResult = oauthAuthFacade.handleOAuthCallback("google", "code456");

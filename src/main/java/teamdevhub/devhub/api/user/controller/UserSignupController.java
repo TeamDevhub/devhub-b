@@ -41,7 +41,7 @@ public class UserSignupController {
         AuthResult authResult = userSignupFacade.signup(signupRequestDto.toSignupCommand());
         ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(authResult.refreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())
+                .header(HttpHeaders.AUTHORIZATION, authResult.toauthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(DataApiResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,

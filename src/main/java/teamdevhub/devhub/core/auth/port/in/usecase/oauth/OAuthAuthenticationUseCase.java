@@ -8,5 +8,5 @@ public interface OAuthAuthenticationUseCase {
 
     OAuthAuthorizationResult createAuthorizationUrl(String provider);
     OAuthUser handleOAuthCallback(VerificationProvider verificationProvider, String code);
-    String issueTempToken(OAuthUser oAuthUser);
+    String issueTempToken(OAuthUser oauthUser);
 }

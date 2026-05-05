@@ -1,6 +1,5 @@
 package teamdevhub.devhub.core.user.port.in.usecase;
 
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;

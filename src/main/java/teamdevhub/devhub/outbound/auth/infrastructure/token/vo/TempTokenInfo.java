@@ -4,4 +4,4 @@ import lombok.Builder;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 @Builder
-public record TempTokenInfo(String oAuthId, VerificationProvider verificationProvider, String email) {}
+public record TempTokenInfo(String oauthId, VerificationProvider verificationProvider, String email) {}

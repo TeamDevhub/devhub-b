@@ -69,7 +69,11 @@ class AuthenticationServiceTest {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserGuid(TEST_USER_GUID_1);
 
         assertThat(refreshToken).isNotNull();
-        assertThat(refreshToken.get().token()).isEqualTo("refresh-token-" + TEST_USER_GUID_1);
+        assertThat(refreshToken)
+                .isPresent()
+                .get()
+                .extracting(RefreshToken::token)
+                .isEqualTo("refresh-token-" + TEST_USER_GUID_1);
     }
 
     @Test

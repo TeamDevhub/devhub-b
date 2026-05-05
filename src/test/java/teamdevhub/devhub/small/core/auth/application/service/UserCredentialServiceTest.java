@@ -89,7 +89,7 @@ class UserCredentialServiceTest {
     void signupOAuthUser_newOAuthId_returnsAuthenticatedUser() {
         // given
         OAuthUser oauthUser = OAuthUser.builder()
-                .oAuthId(TEST_OAUTH_ID_1)
+                .oauthId(TEST_OAUTH_ID_1)
                 .verificationProvider(VerificationProvider.GOOGLE)
                 .email(TEST_EMAIL_1)
                 .build();
@@ -107,7 +107,7 @@ class UserCredentialServiceTest {
     void signupOAuthUser_duplicateOAuthId_throwsException() {
         // given
         OAuthUser oauthUser = OAuthUser.builder()
-                .oAuthId(TEST_OAUTH_ID_1)
+                .oauthId(TEST_OAUTH_ID_1)
                 .verificationProvider(VerificationProvider.GOOGLE)
                 .email(TEST_EMAIL_1)
                 .build();

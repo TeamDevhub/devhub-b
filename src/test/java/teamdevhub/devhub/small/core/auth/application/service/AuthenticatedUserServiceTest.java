@@ -117,10 +117,10 @@ class AuthenticatedUserServiceTest {
     @DisplayName("OAuth_회원가입에_성공하면_UserCredential_을_반환한다")
     void signupOAuthUser_success_returns_userCredential() {
         // given
-        OAuthUser oAuthUser = new OAuthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        OAuthUser oauthUser = new OAuthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
 
         // when
-        AuthenticatedUser result = userCredentialService.signupOAuthUser(oAuthUser);
+        AuthenticatedUser result = userCredentialService.signupOAuthUser(oauthUser);
 
         // then
         assertThat(result).isNotNull();
@@ -132,11 +132,11 @@ class AuthenticatedUserServiceTest {
     @DisplayName("중복된_OAuth_정보로_회원가입_시_예외가_발생한다")
     void signupOAuthUser_duplicate_throwsException() {
         // given
-        OAuthUser oAuthUser = new OAuthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
-        userCredentialService.signupOAuthUser(oAuthUser);
+        OAuthUser oauthUser = new OAuthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        userCredentialService.signupOAuthUser(oauthUser);
 
         // when, then
-        assertThatThrownBy(() -> userCredentialService.signupOAuthUser(oAuthUser))
+        assertThatThrownBy(() -> userCredentialService.signupOAuthUser(oauthUser))
                 .isInstanceOf(BusinessRuleException.class);
     }
 

@@ -33,7 +33,7 @@ public record OAuthResult(
         );
     }
 
-    public String toAuthorizationHeader() {
+    public String toauthorizationHeader() {
         if (accessToken == null) {
             throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
         }

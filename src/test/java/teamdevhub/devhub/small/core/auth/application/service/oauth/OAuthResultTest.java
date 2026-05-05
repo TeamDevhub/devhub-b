@@ -43,7 +43,7 @@ public class OAuthResultTest {
     }
 
     @Test
-    @DisplayName("toAuthorizationHeader_로_Bearer_토큰_헤더를_생성할_수_있다")
+    @DisplayName("toauthorizationHeader_로_Bearer_토큰_헤더를_생성할_수_있다")
     void canGetAuthorizationHeader() {
         // given
         OAuthResult oauthAuthResult = OAuthResult.builder()
@@ -51,20 +51,20 @@ public class OAuthResultTest {
                 .build();
 
         // when
-        String header = oauthAuthResult.toAuthorizationHeader();
+        String header = oauthAuthResult.toauthorizationHeader();
 
         // then
         assertThat(header).isEqualTo("Bearer access-token-1");
     }
 
     @Test
-    @DisplayName("accessToken_이_없는_PENDING_상태에서_toAuthorizationHeader_호출_시_예외가_발생한다")
-    void toAuthorizationHeader_whenAccessTokenIsNull_throwsException() {
+    @DisplayName("accessToken_이_없는_PENDING_상태에서_toauthorizationHeader_호출_시_예외가_발생한다")
+    void toauthorizationHeader_whenAccessTokenIsNull_throwsException() {
         // given
         OAuthResult pendingResult = OAuthResult.requiresSignup(TEMP_TOKEN);
 
         // when, then
-        assertThatThrownBy(pendingResult::toAuthorizationHeader)
+        assertThatThrownBy(pendingResult::toauthorizationHeader)
                 .isInstanceOf(BusinessRuleException.class);
     }
 }

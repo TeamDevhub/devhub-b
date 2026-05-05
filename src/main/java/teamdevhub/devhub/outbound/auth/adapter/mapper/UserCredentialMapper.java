@@ -8,7 +8,7 @@ import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 public class UserCredentialMapper {
 
-    public static AuthenticatedUser toAuthenticatedUser(EmailCredentialEntity emailCredentialEntity) {
+    public static AuthenticatedUser toauthenticatedUser(EmailCredentialEntity emailCredentialEntity) {
         return AuthenticatedUser.of(
                 emailCredentialEntity.getUserGuid(),
                 emailCredentialEntity.getEmail(),
@@ -16,11 +16,11 @@ public class UserCredentialMapper {
         );
     }
 
-    public static AuthenticatedUser toAuthenticatedUser(OAuthCredentialEntity oAuthCredentialEntity) {
+    public static AuthenticatedUser toauthenticatedUser(OAuthCredentialEntity oauthCredentialEntity) {
         return AuthenticatedUser.of(
-                oAuthCredentialEntity.getUserGuid(),
-                oAuthCredentialEntity.getOauthId(),
-                oAuthCredentialEntity.getUserRole()
+                oauthCredentialEntity.getUserGuid(),
+                oauthCredentialEntity.getOauthId(),
+                oauthCredentialEntity.getUserRole()
         );
     }
 
@@ -57,12 +57,12 @@ public class UserCredentialMapper {
     public static OAuthCredentialEntity toOAuthCredentialEntity(
             AuthenticatedUser authenticatedUser,
             VerificationProvider verificationProvider,
-            String oAuthId
+            String oauthId
     ) {
         return OAuthCredentialEntity.builder()
                 .userGuid(authenticatedUser.userGuid())
                 .provider(verificationProvider)
-                .oauthId(oAuthId)
+                .oauthId(oauthId)
                 .userRole(authenticatedUser.userRole())
                 .build();
     }

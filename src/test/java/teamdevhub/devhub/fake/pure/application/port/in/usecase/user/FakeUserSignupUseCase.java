@@ -57,7 +57,7 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
         this.lastSignupOAuthUserCommand = signupOAuthUserCommand;
 
         CreateUserCommand createUserCommand =
-                CreateUserCommand.oAuthUserCreateCommand(
+                CreateUserCommand.oauthUserCreateCommand(
                         signupOAuthUserCommand,
                         userGuid
                 );

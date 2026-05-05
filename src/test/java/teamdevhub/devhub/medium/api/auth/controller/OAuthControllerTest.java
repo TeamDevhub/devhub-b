@@ -33,19 +33,19 @@ public class OAuthControllerTest {
     private OAuthController oauthController;
 
     private UserSignupFacade userSignupFacade;
-    private OAuthFacade oAuthFacade;
+    private OAuthFacade oauthFacade;
 
     @BeforeEach
     void init() {
         userSignupFacade = Mockito.mock(UserSignupFacade.class);
-        oAuthFacade = Mockito.mock(OAuthFacade.class);
+        oauthFacade = Mockito.mock(OAuthFacade.class);
 
-        oauthController = new OAuthController(userSignupFacade, oAuthFacade, new CookieFactory());
+        oauthController = new OAuthController(userSignupFacade, oauthFacade, new CookieFactory());
     }
 
     @Test
     @DisplayName("OAuth_로그인_요청시_Provider_인증_URL_로_리다이렉트되고_state_쿠키가_설정된다")
-    void redirectToProvider_redirectsToAuthorizationUrl() throws Exception {
+    void redirectToProvider_redirectsToauthorizationUrl() throws Exception {
         // given
         String provider = "google";
         String authorizationUrl = "https://google.com/oauth/authorize";
@@ -53,14 +53,14 @@ public class OAuthControllerTest {
         OAuthAuthorizationResult authorizationResult = OAuthAuthorizationResult.of(authorizationUrl, state);
 
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-        Mockito.when(oAuthFacade.createOAuthAuthorizationUrl(provider))
+        Mockito.when(oauthFacade.createOAuthAuthorizationUrl(provider))
                 .thenReturn(authorizationResult);
 
         // when
         oauthController.redirectToProvider(provider, response);
 
         // then
-        verify(oAuthFacade).createOAuthAuthorizationUrl(provider);
+        verify(oauthFacade).createOAuthAuthorizationUrl(provider);
         verify(response).addHeader(Mockito.eq(HttpHeaders.SET_COOKIE), Mockito.contains("oauthState=" + state));
         verify(response).sendRedirect(authorizationUrl);
     }

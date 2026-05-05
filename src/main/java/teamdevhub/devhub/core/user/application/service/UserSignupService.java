@@ -3,18 +3,17 @@ package teamdevhub.devhub.core.user.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
+import teamdevhub.devhub.core.auth.port.out.password.EncodedPasswordProvider;
+import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
-import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
-import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserSignupUseCase;
-import teamdevhub.devhub.core.auth.port.out.password.EncodedPasswordProvider;
-import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.user.port.out.UserPositionRepository;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
 import teamdevhub.devhub.core.user.port.out.UserSkillRepository;
@@ -70,7 +69,7 @@ public class UserSignupService implements UserSignupUseCase {
     }
 
     private User createOAuthUser(SignupOAuthUserCommand signupOAuthUserCommand, String userGuid) {
-        CreateUserCommand createOAuthUserCommand = CreateUserCommand.oAuthUserCreateCommand(signupOAuthUserCommand, userGuid);
+        CreateUserCommand createOAuthUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOAuthUserCommand, userGuid);
         return User.createOAuthUser(createOAuthUserCommand);
     }
 

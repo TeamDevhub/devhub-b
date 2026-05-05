@@ -50,15 +50,15 @@ public class UserCredentialService implements UserCredentialUseCase {
 
     @Override
     public AuthenticatedUser signupOAuthUser(OAuthUser oauthUser) {
-        userCredentialRepository.findOAuthUserCredentialByOAuth(oauthUser.verificationProvider(), oauthUser.oAuthId())
+        userCredentialRepository.findOAuthUserCredentialByOAuth(oauthUser.verificationProvider(), oauthUser.oauthId())
                 .ifPresent(existingCredential -> {
                     throw BusinessRuleException.of(ErrorCode.DUPLICATED_ACCOUNT);
                 });
 
         String userGuid = identifierProvider.generateIdentifier();
-        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(userGuid, oauthUser.oAuthId(), UserRole.USER);
+        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(userGuid, oauthUser.oauthId(), UserRole.USER);
 
-        userCredentialRepository.saveOAuthUserCredential(authenticatedUser, oauthUser.verificationProvider(), oauthUser.oAuthId());
+        userCredentialRepository.saveOAuthUserCredential(authenticatedUser, oauthUser.verificationProvider(), oauthUser.oauthId());
         return authenticatedUser;
     }
 

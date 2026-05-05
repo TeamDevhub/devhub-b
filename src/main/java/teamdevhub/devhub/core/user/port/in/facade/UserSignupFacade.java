@@ -43,8 +43,8 @@ public class UserSignupFacade {
     }
 
     public OAuthResult signupWithOAuth(SignupOAuthUserCommand signupOAuthUserCommand) {
-        OAuthUser oAuthUser = oauthResolveUseCase.extractOAuthUser(signupOAuthUserCommand);
-        AuthenticatedUser authenticatedUser = userCredentialUseCase.signupOAuthUser(oAuthUser);
+        OAuthUser oauthUser = oauthResolveUseCase.extractOAuthUser(signupOAuthUserCommand);
+        AuthenticatedUser authenticatedUser = userCredentialUseCase.signupOAuthUser(oauthUser);
         userSignupUseCase.saveOAuthUserInfo(signupOAuthUserCommand, authenticatedUser.userGuid());
         termsUseCase.saveTermsAgreement(signupOAuthUserCommand.toAgreeTermsCommand(authenticatedUser.userGuid()));
         AuthResult authResult = authenticationUseCase.login(authenticatedUser);
