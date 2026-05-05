@@ -11,7 +11,7 @@ import teamdevhub.devhub.core.user.port.out.UserRepository;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserUserLoginService implements UserLoginUseCase {
+public class UserLoginService implements UserLoginUseCase {
 
     private final TimeProvider timeProvider;
     private final UserRepository userRepository;

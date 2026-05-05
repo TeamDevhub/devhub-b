@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
-import teamdevhub.devhub.core.user.application.service.UserUserLoginService;
+import teamdevhub.devhub.core.user.application.service.UserLoginService;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
@@ -22,7 +22,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserLoginServiceTest {
 
-    private UserUserLoginService userLoginService;
+    private UserLoginService userLoginService;
 
     private FakeUserRepository userRepository;
     private FakeTimeProvider timeProvider;
@@ -32,7 +32,7 @@ public class UserLoginServiceTest {
         timeProvider = new FakeTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
         userRepository = new FakeUserRepository();
 
-        userLoginService = new UserUserLoginService(timeProvider, userRepository);
+        userLoginService = new UserLoginService(timeProvider, userRepository);
     }
 
     private User buildUser(String userGuid) {

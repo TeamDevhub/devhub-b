@@ -16,6 +16,9 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 public class FakeUserProfileUseCase implements UserProfileUseCase {
 
     private final Map<String, User> store = new HashMap<>();
+    public boolean called = false;
+    public String lastUserGuid;
+    public double lastScore;
 
     public FakeUserProfileUseCase() {
         SignupUserCommand signupUserCommand = SignupUserCommand.builder()
@@ -58,6 +61,9 @@ public class FakeUserProfileUseCase implements UserProfileUseCase {
     }
 
     @Override
-    public void updateUserMannerDegree(String revieweeGuid, double reviewScore) {
+    public void updateUserMannerDegree(String userGuid, double score) {
+        this.called = true;
+        this.lastUserGuid = userGuid;
+        this.lastScore = score;
     }
 }
