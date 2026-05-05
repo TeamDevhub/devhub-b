@@ -1,6 +1,8 @@
 package teamdevhub.devhub.fake.pure.application.port.out.file;
 
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.core.file.port.out.FileStorage;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +21,7 @@ public class FakeFileStorage implements FileStorage {
     public byte[] read(String fileGuid) {
         byte[] content = storage.get(fileGuid);
         if (content == null) {
-            throw new RuntimeException(fileGuid);
+            throw AdapterDataException.of(ErrorCode.FILE_READ_FAIL);
         }
         return content;
     }
@@ -31,9 +33,5 @@ public class FakeFileStorage implements FileStorage {
 
     public boolean exists(String fileGuid) {
         return storage.containsKey(fileGuid);
-    }
-
-    byte[] get(String fileGuid) {
-        return storage.get(fileGuid);
     }
 }

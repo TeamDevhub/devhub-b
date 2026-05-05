@@ -10,19 +10,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_OAUTH_ID_1;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
-class OauthAuthenticatedUserTest {
+class OAuthAuthenticatedUserTest {
 
     @Test
     @DisplayName("OAuth_사용자_자격증명을_생성하면_올바른_값을_갖는다")
     void create_oauthUserCredential_hasCorrectValues() {
-        OAuthUserCredential oAuthUserCredential = new OAuthUserCredential(
+        OAuthUserCredential oauthUserCredential = new OAuthUserCredential(
                 TEST_USER_GUID_1, TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, UserRole.USER
         );
 
-        assertThat(oAuthUserCredential.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(oAuthUserCredential.getVerificationProvider()).isEqualTo(VerificationProvider.GOOGLE);
-        assertThat(oAuthUserCredential.getOauthId()).isEqualTo(TEST_OAUTH_ID_1);
-        assertThat(oAuthUserCredential.getUserRole()).isEqualTo(UserRole.USER);
+        assertThat(oauthUserCredential.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(oauthUserCredential.getVerificationProvider()).isEqualTo(VerificationProvider.GOOGLE);
+        assertThat(oauthUserCredential.getOauthId()).isEqualTo(TEST_OAUTH_ID_1);
+        assertThat(oauthUserCredential.getUserRole()).isEqualTo(UserRole.USER);
     }
 
     @Test
@@ -32,11 +32,11 @@ class OauthAuthenticatedUserTest {
                 VerificationProvider.GOOGLE, VerificationProvider.GITHUB,
                 VerificationProvider.KAKAO, VerificationProvider.NAVER}) {
 
-            OAuthUserCredential oAuthUserCredential = new OAuthUserCredential(
+            OAuthUserCredential oauthUserCredential = new OAuthUserCredential(
                     TEST_USER_GUID_1, TEST_OAUTH_ID_1, verificationProvider, UserRole.USER
             );
 
-            assertThat(oAuthUserCredential.getVerificationProvider()).isEqualTo(verificationProvider);
+            assertThat(oauthUserCredential.getVerificationProvider()).isEqualTo(verificationProvider);
         }
     }
 }

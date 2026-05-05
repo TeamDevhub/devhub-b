@@ -21,7 +21,7 @@ import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.security.Key;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.Date;
 
@@ -152,6 +152,7 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
+                    .setClock(() -> Date.from(timeProvider.now().toInstant(ZoneOffset.UTC)))
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
@@ -163,6 +164,6 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
     }
 
     private Date toDate(LocalDateTime ldt) {
-        return Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        return Date.from(ldt.toInstant(ZoneOffset.UTC));
     }
 }

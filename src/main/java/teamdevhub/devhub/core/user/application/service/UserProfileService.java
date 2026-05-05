@@ -65,7 +65,9 @@ public class UserProfileService implements UserProfileUseCase {
 
     @Override
     public void updateUserMannerDegree(String revieweeGuid, double reviewScore) {
-        userRepository.updateMannerDegree(revieweeGuid, reviewScore);
+        User user = userRepository.findByUserGuid(revieweeGuid);
+        user.applyReviewScore(reviewScore);
+        userRepository.save(user);
     }
 
     private User getUserWithPositionsAndSkills(String userGuid) {

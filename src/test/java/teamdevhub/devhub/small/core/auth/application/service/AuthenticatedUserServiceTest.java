@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.UserCredentialService;
 import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
@@ -51,7 +51,7 @@ class AuthenticatedUserServiceTest {
     @DisplayName("이메일_회원가입에_성공하면_userGuid_를_반환한다")
     void signupEmailUser_success_returns_userGuid() {
         // given
-        SignupUserCommand command = SignupUserCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -62,7 +62,7 @@ class AuthenticatedUserServiceTest {
                 .build();
 
         // when
-        String userGuid = userCredentialService.signupEmailUser(command);
+        String userGuid = userCredentialService.signupEmailUser(signupUserCommand);
 
         // then
         assertThat(userGuid).isEqualTo(TEST_USER_GUID_1);
@@ -73,7 +73,7 @@ class AuthenticatedUserServiceTest {
     @DisplayName("이메일_회원가입_후_자격증명이_저장된다")
     void signupEmailUser_credentialIsSaved() {
         // given
-        SignupUserCommand command = SignupUserCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -84,7 +84,7 @@ class AuthenticatedUserServiceTest {
                 .build();
 
         // when
-        userCredentialService.signupEmailUser(command);
+        userCredentialService.signupEmailUser(signupUserCommand);
 
         // then
         AuthenticatedUser saved = userCredentialRepository.findEmailUserCredentialByEmail(TEST_EMAIL_1).orElseThrow();
@@ -96,7 +96,7 @@ class AuthenticatedUserServiceTest {
     @DisplayName("중복된_이메일로_회원가입_시_예외가_발생한다")
     void signupEmailUser_duplicateEmail_throwsException() {
         // given
-        SignupUserCommand command = SignupUserCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -106,10 +106,10 @@ class AuthenticatedUserServiceTest {
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
 
-        userCredentialService.signupEmailUser(command);
+        userCredentialService.signupEmailUser(signupUserCommand);
 
         // when, then
-        assertThatThrownBy(() -> userCredentialService.signupEmailUser(command))
+        assertThatThrownBy(() -> userCredentialService.signupEmailUser(signupUserCommand))
                 .isInstanceOf(BusinessRuleException.class);
     }
 
@@ -117,7 +117,7 @@ class AuthenticatedUserServiceTest {
     @DisplayName("OAuth_회원가입에_성공하면_UserCredential_을_반환한다")
     void signupOAuthUser_success_returns_userCredential() {
         // given
-        OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        OAuthUser oauthUser = new OAuthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
 
         // when
         AuthenticatedUser result = userCredentialService.signupOAuthUser(oauthUser);
@@ -132,7 +132,7 @@ class AuthenticatedUserServiceTest {
     @DisplayName("중복된_OAuth_정보로_회원가입_시_예외가_발생한다")
     void signupOAuthUser_duplicate_throwsException() {
         // given
-        OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
+        OAuthUser oauthUser = new OAuthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
         userCredentialService.signupOAuthUser(oauthUser);
 
         // when, then
@@ -144,7 +144,7 @@ class AuthenticatedUserServiceTest {
     @DisplayName("유효한_리프레시_토큰으로_UserCredential_을_조회한다")
     void getUserForReissue_validToken_returnsUserCredential() {
         // given
-        SignupUserCommand command = SignupUserCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .username(TEST_USERNAME_1)
@@ -153,7 +153,7 @@ class AuthenticatedUserServiceTest {
                 .skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1)
                 .build();
-        userCredentialService.signupEmailUser(command);
+        userCredentialService.signupEmailUser(signupUserCommand);
 
         RefreshToken refreshToken = new RefreshToken(TEST_USER_GUID_1, REFRESH_TOKEN);
         tokenParseProvider.givenRefreshToken(REFRESH_TOKEN, TEST_USER_GUID_1);

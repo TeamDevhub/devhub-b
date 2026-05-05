@@ -4,17 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
-import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.application.service.UserReviewService;
 import teamdevhub.devhub.core.user.port.in.command.ReviewUserCommand;
-import teamdevhub.devhub.fake.pure.application.port.out.project.FakeProjectMemberRepository;
-import teamdevhub.devhub.fake.pure.application.port.out.project.FakeProjectRepository;
-import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserReviewRepository;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 import teamdevhub.devhub.shared.enums.ErrorCode;
-
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,40 +19,15 @@ class UserReviewServiceTest {
 
     private UserReviewService userReviewService;
     private FakeUserReviewRepository userReviewRepository;
-    private FakeUserRepository userRepository;
-    private FakeProjectRepository projectRepository;
-    private FakeProjectMemberRepository projectMemberRepository;
 
     @BeforeEach
     void init() {
         userReviewRepository = new FakeUserReviewRepository();
-        userRepository = new FakeUserRepository();
-        projectRepository = new FakeProjectRepository();
-        projectMemberRepository = new FakeProjectMemberRepository();
 
         userReviewService = new UserReviewService(
                 new FakeUuidIdentifierProvider(TEST_REVIEW_GUID_1),
-                userReviewRepository,
-                userRepository,
-                projectRepository,
-                projectMemberRepository
+                userReviewRepository
         );
-    }
-
-    private Project completedProject() {
-        return Project.builder()
-                .projectGuid(TEST_PROJECT_GUID_1)
-                .userGuid(TEST_USER_GUID_1)
-                .progressEndDate(LocalDate.now().minusDays(1))
-                .build();
-    }
-
-    private Project incompleteProject() {
-        return Project.builder()
-                .projectGuid(TEST_PROJECT_GUID_1)
-                .userGuid(TEST_USER_GUID_1)
-                .progressEndDate(LocalDate.now().plusDays(30))
-                .build();
     }
 
     private ReviewUserCommand reviewCommand(String reviewerGuid, String revieweeGuid, double score) {
@@ -71,99 +41,88 @@ class UserReviewServiceTest {
     }
 
     @Test
-    @DisplayName("유효한_요청으로_리뷰하면_리뷰가_저장되고_매너도가_변경된다")
-    void reviewMember_validRequest_savesReviewAndUpdatesManner() {
+    @DisplayName("유효한_요청으로_리뷰하면_리뷰가_저장되고_raw_점수가_반환된다")
+    void reviewMember_validRequest_savesReviewAndReturnsRawScore() {
         // given
-        projectRepository.save(completedProject());
-        projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
-        projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_2);
-
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 4.0);
+        ReviewUserCommand reviewUserCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 4.0);
 
         // when
-        double reviewScore = userReviewService.reviewMember(command);
+        double reviewScore = userReviewService.reviewMember(reviewUserCommand);
 
         // then
         assertThat(userReviewRepository.findAll()).hasSize(1);
-        assertThat(reviewScore).isEqualTo(1.0);
-    }
-
-    @Test
-    @DisplayName("프로젝트가_완료되지_않으면_예외가_발생한다")
-    void reviewMember_projectNotCompleted_throwsException() {
-        // given
-        projectRepository.save(incompleteProject());
-        projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
-        projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_2);
-
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 4.0);
-
-        // when, then
-        assertThatThrownBy(() -> userReviewService.reviewMember(command))
-                .isInstanceOf(BusinessRuleException.class)
-                .hasMessageContaining(ErrorCode.PROJECT_NOT_COMPLETED.getMessage());
-    }
-
-    @Test
-    @DisplayName("자기_자신을_리뷰하면_예외가_발생한다")
-    void reviewMember_selfReview_throwsException() {
-        // given
-        projectRepository.save(completedProject());
-        projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
-
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_1, 3.0);
-
-        // when, then
-        assertThatThrownBy(() -> userReviewService.reviewMember(command))
-                .isInstanceOf(BusinessRuleException.class)
-                .hasMessageContaining(ErrorCode.REVIEW_SELF_NOT_ALLOWED.getMessage());
+        assertThat(reviewScore).isEqualTo(4.0);
     }
 
     @Test
     @DisplayName("동일_프로젝트에서_같은_대상을_중복_리뷰하면_예외가_발생한다")
     void reviewMember_duplicateReview_throwsException() {
         // given
-        projectRepository.save(completedProject());
-        projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
-        projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_2);
+        ReviewUserCommand reviewUserCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
 
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
-        userReviewService.reviewMember(command);
+        userReviewService.reviewMember(reviewUserCommand);
 
-        // when, then
-        ReviewUserCommand duplicateCommand = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 5.0);
+        // when
+        ReviewUserCommand duplicateCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 5.0);
+
+        // then
         assertThatThrownBy(() -> userReviewService.reviewMember(duplicateCommand))
                 .isInstanceOf(BusinessRuleException.class)
                 .hasMessageContaining(ErrorCode.REVIEW_DUPLICATE.getMessage());
     }
 
     @Test
-    @DisplayName("리뷰어가_프로젝트_멤버가_아니면_예외가_발생한다")
-    void reviewMember_reviewerNotMember_throwsException() {
+    @DisplayName("자기_자신을_리뷰하면_도메인_예외가_발생한다")
+    void reviewMember_selfReview_throwsDomainException() {
         // given
-        projectRepository.save(completedProject());
-        projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_2);
-
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
+        ReviewUserCommand selfReviewCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_1, 3.0);
 
         // when, then
-        assertThatThrownBy(() -> userReviewService.reviewMember(command))
-                .isInstanceOf(BusinessRuleException.class)
-                .hasMessageContaining(ErrorCode.REVIEW_NOT_A_MEMBER.getMessage());
+        assertThatThrownBy(() -> userReviewService.reviewMember(selfReviewCommand))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.REVIEW_SELF_NOT_ALLOWED.getMessage());
     }
 
     @Test
-    @DisplayName("리뷰이가_프로젝트_멤버가_아니면_예외가_발생한다")
-    void reviewMember_revieweeNotMember_throwsException() {
+    @DisplayName("최소_점수_미만의_점수로_리뷰하면_도메인_예외가_발생한다")
+    void reviewMember_scoreBelowMin_throwsDomainException() {
         // given
-        projectRepository.save(completedProject());
-        projectMemberRepository.givenMember(TEST_PROJECT_GUID_1, TEST_USER_GUID_1);
-
-        ReviewUserCommand command = reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.0);
+        ReviewUserCommand lowScoreCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 0.5);
 
         // when, then
-        assertThatThrownBy(() -> userReviewService.reviewMember(command))
-                .isInstanceOf(BusinessRuleException.class)
-                .hasMessageContaining(ErrorCode.REVIEW_NOT_A_MEMBER.getMessage());
+        assertThatThrownBy(() -> userReviewService.reviewMember(lowScoreCommand))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.REVIEW_SCORE_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("0.5_단위가_아닌_점수로_리뷰하면_도메인_예외가_발생한다")
+    void reviewMember_scoreInvalidStep_throwsDomainException() {
+        // given
+        ReviewUserCommand invalidStepCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 3.3);
+
+        // when, then
+        assertThatThrownBy(() -> userReviewService.reviewMember(invalidStepCommand))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.REVIEW_SCORE_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("최대_점수를_초과하면_도메인_예외가_발생한다")
+    void reviewMember_scoreAboveMax_throwsDomainException() {
+        // given
+        ReviewUserCommand highScoreCommand =
+                reviewCommand(TEST_USER_GUID_1, TEST_USER_GUID_2, 5.5);
+
+        // when, then
+        assertThatThrownBy(() -> userReviewService.reviewMember(highScoreCommand))
+                .isInstanceOf(DomainRuleException.class)
+                .hasMessageContaining(ErrorCode.REVIEW_SCORE_INVALID.getMessage());
     }
 }

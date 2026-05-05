@@ -1,7 +1,9 @@
 package teamdevhub.devhub.fake.pure.application.port.out.terms;
 
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.core.terms.domain.Terms;
 import teamdevhub.devhub.core.terms.port.out.TermsRepository;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,6 +33,10 @@ public class FakeTermsRepository implements TermsRepository {
 
     @Override
     public Terms findByTermsGuid(String termsGuid) {
-        return store.get(termsGuid);
+        Terms terms = store.get(termsGuid);
+        if (terms == null) {
+            throw AdapterDataException.of(ErrorCode.UNKNOWN_FAIL);
+        }
+        return terms;
     }
 }

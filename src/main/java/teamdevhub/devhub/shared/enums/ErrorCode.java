@@ -26,7 +26,7 @@ public enum ErrorCode {
 
     SIGNUP_FAIL("ERR.DVH.0018", "회원가입에 실패했습니다", BAD_REQUEST),
     LOGIN_FAIL("ERR.DVH.0019", "로그인에 실패했습니다", BAD_REQUEST),
-    EMAIL_DUPLICATED("ERR.DVH.0020", "중복된 이메일을 사용할 수는 없습니다", BAD_REQUEST),
+    DUPLICATED_ACCOUNT("ERR.DVH.0020", "중복된 계정이 존재합니다", BAD_REQUEST),
 
     VERIFICATION_ALREADY_SENT("ERR.DVH.0021", "본인인증 코드가 이미 발송되었습니다 잠시 후 재시도해주세요.", BAD_REQUEST),
     VERIFICATION_FAIL("ERR.DVH.0022", "본인인증에 실패했습니다", BAD_REQUEST),
@@ -45,8 +45,11 @@ public enum ErrorCode {
     USER_SKILL_REQUIRED("ERR.DVH.0034", "보유 스킬목록은 필수입니다", BAD_REQUEST),
     USER_WITHDRAWN("ERR.DVH.0035", "탈퇴한 회원입니다", BAD_REQUEST),
     USER_BLOCKED("ERR.DVH.0036", "정지된 회원입니다", BAD_REQUEST),
+    USER_ALREADY_BANNED("ERR.DVH.0037", "이미 정지된 회원입니다", BAD_REQUEST),
+    USER_NOT_BANNED("ERR.DVH.0038", "정지 중이 아닌 회원입니다", BAD_REQUEST),
 
     OAUTH_FAIL("ERR.DVH.0040", "지원하지 않는 OAuth 로그인입니다", BAD_REQUEST),
+    OAUTH_STATE_INVALID("ERR.DVH.0041", "유효하지 않은 OAuth state 값입니다", BAD_REQUEST),
 
     NOTIFICATION_SEND_FAIL("ERR.DVH.0050", "발송이 실패했습니다",INTERNAL_SERVER_ERROR),
 
@@ -60,6 +63,7 @@ public enum ErrorCode {
 
     INVALID_TERMS("ERR.DVH.0067", "유효하지 않은 약관입니다", INTERNAL_SERVER_ERROR),
     INVALID_TERMS_AGREEMENT("ERR.DVH.0068", "유효하지 않은 약관 동의입니다", BAD_REQUEST),
+    NOT_EXISTED_TERMS_AGREEMENT("ERR.DVH.0069", "존재하지 않는 약관입니다", BAD_REQUEST),
 
     BOOLEAN_CONVERT_FAIL("ERR.DVH.0070", "Boolean 값 변환에 실패했습니다",INTERNAL_SERVER_ERROR),
     STRING_LENGTH_INVALID("ERR.DVH.0071", "문자열 최대 길이는 0 이상이어야 합니다", BAD_REQUEST),

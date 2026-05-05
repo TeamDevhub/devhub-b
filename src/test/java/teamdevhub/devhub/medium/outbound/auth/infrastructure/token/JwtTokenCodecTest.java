@@ -171,7 +171,7 @@ class JwtTokenCodecTest {
     @DisplayName("만료된_accessToken_은_TOKEN_EXPIRED_예외가_발생한다")
     void expiredAccessTokenThrowsAgain() throws NoSuchFieldException, IllegalAccessException {
         // given
-        FakeTimeProvider fakeTimeProvider = new FakeTimeProvider(LocalDateTime.now().minusHours(1));
+        FakeTimeProvider fakeTimeProvider = new FakeTimeProvider(LocalDateTime.now().minusHours(2));
         jwtTokenCodec = new JwtTokenCodec(fakeTimeProvider);
         String secret = "abcdefghijklmnopqrstuvwxyz123456";
         String base64Key = Base64.getEncoder().encodeToString(secret.getBytes());
@@ -184,6 +184,7 @@ class JwtTokenCodecTest {
 
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(TEST_USER_GUID_1, TEST_EMAIL_1, UserRole.USER);
         String accessToken = jwtTokenCodec.createAccessToken(authenticatedUser);
+        fakeTimeProvider.setNow(LocalDateTime.now());
 
         // when, then
         assertThatThrownBy(() ->

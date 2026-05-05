@@ -31,7 +31,7 @@
 
 ```text id="xy7n2q"
 Email Login:     POST /auth/login            → AuthFacade → UserCredentialService.authenticate()
-OAuth Login:     GET /oauth/{provider}/callback → OauthAuthFacade
+OAuth Login:     GET /oauth/{provider}/callback → OAuthAuthFacade
 User Signup:     POST /user/signup          → UserSignupFacade
 Token Reissue:   POST /auth/reissue         → UserCredentialService.getUserForReissue()
 ```

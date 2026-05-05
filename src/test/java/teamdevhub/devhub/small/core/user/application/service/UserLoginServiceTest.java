@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
-import teamdevhub.devhub.core.user.application.service.UserUserLoginService;
+import teamdevhub.devhub.core.user.application.service.UserLoginService;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
@@ -22,7 +22,7 @@ import static teamdevhub.devhub.constant.UserTestConstant.*;
 
 public class UserLoginServiceTest {
 
-    private UserUserLoginService userLoginService;
+    private UserLoginService userLoginService;
 
     private FakeUserRepository userRepository;
     private FakeTimeProvider timeProvider;
@@ -32,15 +32,15 @@ public class UserLoginServiceTest {
         timeProvider = new FakeTimeProvider(LocalDateTime.of(2025, 1, 1, 12, 0));
         userRepository = new FakeUserRepository();
 
-        userLoginService = new UserUserLoginService(timeProvider, userRepository);
+        userLoginService = new UserLoginService(timeProvider, userRepository);
     }
 
     private User buildUser(String userGuid) {
-        SignupUserCommand command = SignupUserCommand.builder()
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
                 .email(TEST_EMAIL_1).password(TEST_PASSWORD_1).username(TEST_USERNAME_1)
                 .introduction(TEST_INTRO_1).positionList(TEST_POSITION_LIST).skillList(TEST_SKILL_LIST)
                 .verificationTarget(VERIFICATION_TARGET_1).build();
-        return User.createGeneralUser(CreateUserCommand.generalUserCreateCommand(command, userGuid));
+        return User.createGeneralUser(CreateUserCommand.generalUserCreateCommand(signupUserCommand, userGuid));
     }
 
     private User buildBlockedUser(String userGuid) {

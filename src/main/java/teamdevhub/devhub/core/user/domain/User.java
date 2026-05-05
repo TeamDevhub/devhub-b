@@ -103,7 +103,7 @@ public class User {
                 .build();
     }
 
-    public static User createOauthUser(CreateUserCommand oauthCreateUserCommand) {
+    public static User createOAuthUser(CreateUserCommand oauthCreateUserCommand) {
         return User.builder()
                 .userGuid(oauthCreateUserCommand.userGuid())
                 .userRole(UserRole.USER)
@@ -193,6 +193,25 @@ public class User {
     public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
         this.positions = new HashSet<>(positions);
         this.skills = new HashSet<>(skills);
+    }
+
+    public void ban(LocalDateTime blockEndDate) {
+        if (this.deleted) {
+            throw DomainRuleException.of(ErrorCode.USER_WITHDRAWN);
+        }
+        if (this.blocked) {
+            throw DomainRuleException.of(ErrorCode.USER_ALREADY_BANNED);
+        }
+        this.blocked = true;
+        this.blockEndDate = blockEndDate;
+    }
+
+    public void unban() {
+        if (!this.blocked) {
+            throw DomainRuleException.of(ErrorCode.USER_NOT_BANNED);
+        }
+        this.blocked = false;
+        this.blockEndDate = null;
     }
 
     public void assertActive() {

@@ -15,6 +15,7 @@ import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
+import teamdevhub.devhub.api.auth.controller.CookieFactory;
 import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
 
 import java.util.List;
@@ -33,7 +34,7 @@ class AuthControllerTest {
     void init() {
         authFacade = Mockito.mock(AuthFacade.class);
 
-        authController = new AuthController(authFacade);
+        authController = new AuthController(authFacade, new CookieFactory());
     }
 
     @Test

@@ -17,7 +17,7 @@ public class AuthController {
         AuthResult authResult = authFacade.login(loginRequestDto.toLoginCommand());
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())
+                .header(HttpHeaders.AUTHORIZATION, authResult.toauthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(DataApiResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,

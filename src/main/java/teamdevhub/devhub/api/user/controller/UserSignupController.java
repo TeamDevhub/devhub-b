@@ -19,7 +19,6 @@ import teamdevhub.devhub.api.auth.model.response.TokenResponseDto;
 import teamdevhub.devhub.api.user.model.SignupRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
-import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
 
@@ -30,7 +29,7 @@ import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
 public class UserSignupController {
 
     private final UserSignupFacade userSignupFacade;
-    private final AuthFacade authFacade;
+    private final CookieFactory cookieFactory;
 
     @Operation(summary = "이메일 회원가입", description = "이메일, 비밀번호, 프로필 정보, 약관 동의 정보를 입력하여 회원가입합니다. 가입 후 자동 로그인되어 토큰이 반환됩니다.")
     @ApiResponses({
@@ -39,11 +38,10 @@ public class UserSignupController {
     })
     @PostMapping("/signup")
     public ResponseEntity<DataApiResponseDto<TokenResponseDto>> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
-        userSignupFacade.signup(signupRequestDto.toSignupCommand());
-        AuthResult authResult = authFacade.login(signupRequestDto.toLoginCommand());
-        ResponseCookie refreshCookie = CookieFactory.createRefreshTokenCookie(authResult.refreshToken());
+        AuthResult authResult = userSignupFacade.signup(signupRequestDto.toSignupCommand());
+        ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(authResult.refreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())
+                .header(HttpHeaders.AUTHORIZATION, authResult.toauthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(DataApiResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,
