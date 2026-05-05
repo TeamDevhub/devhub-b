@@ -41,7 +41,7 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
     public Terms findByTermsGuid(String termsGuid) {
         return jpaTermsRepository.findByTermsGuid(termsGuid)
                 .map(TermsMapper::toDomain)
-                .orElseThrow(() -> AdapterDataException.of(ErrorCode.UNKNOWN_FAIL));
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.NOT_EXISTED_TERMS_AGREEMENT));
     }
 
     @Override

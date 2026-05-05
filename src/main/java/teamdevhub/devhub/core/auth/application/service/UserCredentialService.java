@@ -37,7 +37,7 @@ public class UserCredentialService implements UserCredentialUseCase {
     public String signupEmailUser(SignupUserCommand signupUserCommand) {
         userCredentialRepository.findEmailUserCredentialByEmail(signupUserCommand.email())
                 .ifPresent(existingCredential -> {
-                    throw BusinessRuleException.of(ErrorCode.SIGNUP_FAIL);
+                    throw BusinessRuleException.of(ErrorCode.DUPLICATED_ACCOUNT);
                 });
 
         String userGuid = identifierProvider.generateIdentifier();
@@ -52,7 +52,7 @@ public class UserCredentialService implements UserCredentialUseCase {
     public AuthenticatedUser signupOAuthUser(OauthUser oauthUser) {
         userCredentialRepository.findOAuthUserCredentialByOAuth(oauthUser.verificationProvider(), oauthUser.oauthId())
                 .ifPresent(existingCredential -> {
-                    throw BusinessRuleException.of(ErrorCode.SIGNUP_FAIL);
+                    throw BusinessRuleException.of(ErrorCode.DUPLICATED_ACCOUNT);
                 });
 
         String userGuid = identifierProvider.generateIdentifier();

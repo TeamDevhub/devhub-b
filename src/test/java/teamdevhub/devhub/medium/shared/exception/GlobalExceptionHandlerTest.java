@@ -32,7 +32,7 @@ class GlobalExceptionHandlerTest {
     class TestController {
         @GetMapping("/domain-exception")
         public void domainException() {
-            throw DomainRuleException.of(ErrorCode.EMAIL_DUPLICATED);
+            throw DomainRuleException.of(ErrorCode.DUPLICATED_ACCOUNT);
         }
 
         @GetMapping("/business-exception")
@@ -67,7 +67,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.error.code").value(ErrorCode.EMAIL_DUPLICATED.getCode()));
+                .andExpect(jsonPath("$.error.code").value(ErrorCode.DUPLICATED_ACCOUNT.getCode()));
     }
 
     @Test
