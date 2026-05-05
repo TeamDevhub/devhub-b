@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
-import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.project.application.ProjectMemberService;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.fake.pure.application.port.out.project.FakeProjectMemberRepository;

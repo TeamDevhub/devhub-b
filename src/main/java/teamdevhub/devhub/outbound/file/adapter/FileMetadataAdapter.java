@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.file.application.FileMetadata;
 import teamdevhub.devhub.core.file.port.out.FileMetadataRepository;
 import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
+import teamdevhub.devhub.outbound.file.adapter.entity.FileEntity;
 import teamdevhub.devhub.outbound.file.adapter.mapper.FileMetadataMapper;
 import teamdevhub.devhub.outbound.file.persistence.JpaFileRepository;
 import teamdevhub.devhub.shared.enums.ErrorCode;
