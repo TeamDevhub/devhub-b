@@ -2,8 +2,8 @@ package teamdevhub.devhub.small.core.user.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
-import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
@@ -84,28 +84,27 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Oauth_사용자를_생성한다")
-    void createOauthUser() {
+    @DisplayName("OAuth_사용자를_생성한다")
+    void createOAuthUser() {
         // given
-        OauthUser oauthUser = new OauthUser("testOauthId", VerificationProvider.GOOGLE, TEST_EMAIL_1);
-        SignupOauthUserCommand signupOauthUserCommand = SignupOauthUserCommand.builder()
-                .tempToken("lastOauthUser")
+        SignupOAuthUserCommand signupOAuthUserCommand = SignupOAuthUserCommand.builder()
+                .tempToken("lastOAuthUser")
                 .username(TEST_USERNAME_1)
                 .introduction(TEST_INTRO_1)
                 .positionList(TEST_POSITION_LIST)
                 .skillList(TEST_SKILL_LIST)
                 .build();
-        CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1);
+        CreateUserCommand oAuthCreateUserCommand = CreateUserCommand.oAuthUserCreateCommand(signupOAuthUserCommand, TEST_USER_GUID_1);
 
         // when
-        User createdOauthUser = User.createOauthUser(oauthCreateUserCommand);
+        User createdOAuthUser = User.createOAuthUser(oAuthCreateUserCommand);
 
         // then
-        assertThat(createdOauthUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
-        assertThat(createdOauthUser.getUsername()).isEqualTo(signupOauthUserCommand.username());
-        assertThat(createdOauthUser.isDeleted()).isFalse();
-        assertThat(createdOauthUser.isBlocked()).isFalse();
-        assertThat(createdOauthUser.getMannerDegree()).isEqualTo(36.5);
+        assertThat(createdOAuthUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
+        assertThat(createdOAuthUser.getUsername()).isEqualTo(signupOAuthUserCommand.username());
+        assertThat(createdOAuthUser.isDeleted()).isFalse();
+        assertThat(createdOAuthUser.isBlocked()).isFalse();
+        assertThat(createdOAuthUser.getMannerDegree()).isEqualTo(36.5);
     }
 
     @Test

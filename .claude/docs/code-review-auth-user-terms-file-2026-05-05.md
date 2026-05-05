@@ -7,8 +7,8 @@ Domains: `auth` · `user` · `terms` · `file`
 Layers reviewed:
 - `core/{domain}/domain/` — User, Terms, File
 - `core/{domain}/application/service/` — all services in scope
-- `core/{domain}/port/in/facade/` — AuthFacade, OauthAuthFacade, UserProfileFacade, UserReviewFacade, UserSignupFacade, TermsFacade, FileFacade
-- `api/` — AuthController, OauthController, UserProfileController, UserSignupController, TermsController, FileController
+- `core/{domain}/port/in/facade/` — AuthFacade, OAuthAuthFacade, UserProfileFacade, UserReviewFacade, UserSignupFacade, TermsFacade, FileFacade
+- `api/` — AuthController, OAuthController, UserProfileController, UserSignupController, TermsController, FileController
 - `outbound/` — UserAdapter, FileMetadataAdapter, LocalFileStorage, TermsAdapter
 - `shared/` — WebSecurityConfig, GlobalExceptionHandler, LoggingAspect, TraceIdMDCFilter, CookieFactory
 
@@ -250,12 +250,12 @@ The following issues from the 2026-05-03 full-project-review have been resolved:
 
 | Issue | Status |
 |---|---|
-| `OauthController` — OAuth CSRF: no state parameter validation | **FIXED** — cookie state compared against request param |
+| `OAuthController` — OAuth CSRF: no state parameter validation | **FIXED** — cookie state compared against request param |
 | `LoggingAspect` — serializes all params including passwords | **FIXED** — SENSITIVE_FIELDS masking list implemented |
 | `TraceIdMDCFilter` — X-Trace-Id injected without sanitization | **FIXED** — regex `[a-zA-Z0-9\\-]{8,36}` validation added |
 | `FileResponseFactory.attachment()` — header injection via filename | **FIXED** — `replaceAll("[\r\n\"\\\\;]", "_")` sanitization added |
 | `CookieFactory` — Refresh Token cookie `secure=false` | **PARTIALLY FIXED** — now configurable via `app.cookie.secure`, but default remains `false` (see F-03) |
-| `OauthController` — hardcoded `http://localhost:5173` | **FIXED** — uses `${app.frontend.base-url}` |
+| `OAuthController` — hardcoded `http://localhost:5173` | **FIXED** — uses `${app.frontend.base-url}` |
 | `WebSecurityConfig` — `/admin/**` was `permitAll()` | **FIXED** — `.hasRole("ADMIN")` applied |
 | `AuthController.login()` — `@Valid` missing on `LoginRequestDto` | **FIXED** — `@Valid` is present |
 
@@ -276,7 +276,7 @@ The following issues from the 2026-05-03 full-project-review have been resolved:
 
 ## Strengths
 
-- `OauthAuthFacade.handleOAuthCallback()` correctly handles both the login path and the signup-required path; state cookie is expired before redirect in both cases.
+- `OAuthAuthFacade.handleOAuthCallback()` correctly handles both the login path and the signup-required path; state cookie is expired before redirect in both cases.
 - `TraceIdMDCFilter` cleanup in `finally` block guarantees MDC does not leak across requests in thread-pool environments.
 - `User.assertActive()` centralizes the deleted/blocked guard in one place; both the email and OAuth login paths call it before issuing tokens.
 - `LocalFileStorage.safeResolve()` performs path traversal prevention (`!resolved.startsWith(root)`) — correctly defends against `../` injection in file GUIDs.

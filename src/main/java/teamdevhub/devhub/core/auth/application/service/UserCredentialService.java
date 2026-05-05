@@ -18,7 +18,7 @@ import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdatePasswordCommand;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
 @Service
@@ -49,16 +49,16 @@ public class UserCredentialService implements UserCredentialUseCase {
     }
 
     @Override
-    public AuthenticatedUser signupOAuthUser(OauthUser oauthUser) {
-        userCredentialRepository.findOAuthUserCredentialByOAuth(oauthUser.verificationProvider(), oauthUser.oauthId())
+    public AuthenticatedUser signupOAuthUser(OAuthUser oauthUser) {
+        userCredentialRepository.findOAuthUserCredentialByOAuth(oauthUser.verificationProvider(), oauthUser.oAuthId())
                 .ifPresent(existingCredential -> {
                     throw BusinessRuleException.of(ErrorCode.DUPLICATED_ACCOUNT);
                 });
 
         String userGuid = identifierProvider.generateIdentifier();
-        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(userGuid, oauthUser.oauthId(), UserRole.USER);
+        AuthenticatedUser authenticatedUser = AuthenticatedUser.of(userGuid, oauthUser.oAuthId(), UserRole.USER);
 
-        userCredentialRepository.saveOAuthUserCredential(authenticatedUser, oauthUser.verificationProvider(), oauthUser.oauthId());
+        userCredentialRepository.saveOAuthUserCredential(authenticatedUser, oauthUser.verificationProvider(), oauthUser.oAuthId());
         return authenticatedUser;
     }
 

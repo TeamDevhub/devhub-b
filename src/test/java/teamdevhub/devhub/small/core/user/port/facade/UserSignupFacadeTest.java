@@ -3,14 +3,14 @@ package teamdevhub.devhub.small.core.user.port.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.vo.OAuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
-import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeAuthenticationUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.FakeUserCredentialUseCase;
-import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOauthResolveUseCase;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.oauth.FakeOAuthResolveUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.auth.verification.FakeVerificationUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.terms.FakeTermsAgreeUseCase;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
@@ -26,7 +26,7 @@ public class UserSignupFacadeTest {
 
     private FakeUserSignupUseCase userSignupUseCase;
     private FakeTermsAgreeUseCase termsAgreeUseCase;
-    private FakeOauthResolveUseCase oauthResolveUseCase;
+    private FakeOAuthResolveUseCase oAuthResolveUseCase;
     private FakeUserCredentialUseCase userCredentialUseCase;
     private FakeAuthenticationUseCase authenticationUseCase;
     private FakeVerificationUseCase verificationUseCase;
@@ -35,7 +35,7 @@ public class UserSignupFacadeTest {
     @BeforeEach
     void init() {
         userSignupUseCase = new FakeUserSignupUseCase();
-        oauthResolveUseCase = new FakeOauthResolveUseCase();
+        oAuthResolveUseCase = new FakeOAuthResolveUseCase();
         termsAgreeUseCase = new FakeTermsAgreeUseCase();
         userCredentialUseCase = new FakeUserCredentialUseCase();
         authenticationUseCase = new FakeAuthenticationUseCase();
@@ -45,7 +45,7 @@ public class UserSignupFacadeTest {
         userSignupFacade = new UserSignupFacade(
                 userSignupUseCase,
                 termsAgreeUseCase,
-                oauthResolveUseCase,
+                oAuthResolveUseCase,
                 userCredentialUseCase,
                 authenticationUseCase,
                 verificationUseCase,
@@ -78,17 +78,17 @@ public class UserSignupFacadeTest {
     }
 
     @Test
-    @DisplayName("signupWithOauth_는_signup_후_oauth-access-token_을_포함한_로그인_성공으로_이어진다")
-    void signupWithOauthCallsSignupThenLogin() {
+    @DisplayName("signupWithOAuth_는_signup_후_oAuth-access-token_을_포함한_로그인_성공으로_이어진다")
+    void signupWithOAuthCallsSignupThenLogin() {
         // given
-        SignupOauthUserCommand signupCommand = new SignupOauthUserCommand(TEMP_TOKEN, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST);
+        SignupOAuthUserCommand signupCommand = new SignupOAuthUserCommand(TEMP_TOKEN, TEST_USERNAME_1, TEST_INTRO_1, TEST_POSITION_LIST, TEST_SKILL_LIST, TEST_TERMS_AGREEMENT_LIST);
 
         // when
-        OauthAuthResult oauthAuthResult = userSignupFacade.signupWithOauth(signupCommand);
+        OAuthResult oAuthResult = userSignupFacade.signupWithOAuth(signupCommand);
 
         // then
-        assertThat(oauthAuthResult.accessToken()).isEqualTo("access-token");
-        assertThat(oauthAuthResult.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
-        assertThat(oauthAuthResult.tempToken()).isNull();
+        assertThat(oAuthResult.accessToken()).isEqualTo("access-token");
+        assertThat(oAuthResult.signupStatus()).isEqualTo(SignupStatus.COMPLETED);
+        assertThat(oAuthResult.tempToken()).isNull();
     }
 }

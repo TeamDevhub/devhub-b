@@ -4,17 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
-import teamdevhub.devhub.core.auth.application.service.oauth.OauthAuthResult;
+import teamdevhub.devhub.core.auth.application.service.oauth.vo.OAuthResult;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.terms.port.in.usecase.TermsUseCase;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.port.in.usecase.UserLoginUseCase;
 import teamdevhub.devhub.core.user.port.in.usecase.UserSignupUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.AuthenticationUseCase;
-import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
-import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OauthResolveUseCase;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
+import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OAuthResolveUseCase;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.verification.VerificationUseCase;
 
@@ -25,7 +25,7 @@ public class UserSignupFacade {
 
     private final UserSignupUseCase userSignupUseCase;
     private final TermsUseCase termsUseCase;
-    private final OauthResolveUseCase oauthResolveUseCase;
+    private final OAuthResolveUseCase oauthResolveUseCase;
     private final UserCredentialUseCase userCredentialUseCase;
     private final AuthenticationUseCase authenticationUseCase;
     private final VerificationUseCase verificationUseCase;
@@ -42,12 +42,12 @@ public class UserSignupFacade {
         return authenticationUseCase.login(authenticatedUser);
     }
 
-    public OauthAuthResult signupWithOauth(SignupOauthUserCommand signupOauthUserCommand) {
-        OauthUser oauthUser = oauthResolveUseCase.extractOauthUser(signupOauthUserCommand);
-        AuthenticatedUser authenticatedUser = userCredentialUseCase.signupOAuthUser(oauthUser);
-        userSignupUseCase.saveOAuthUserInfo(signupOauthUserCommand, oauthUser, authenticatedUser.userGuid());
-        termsUseCase.saveTermsAgreement(signupOauthUserCommand.toAgreeTermsCommand(authenticatedUser.userGuid()));
+    public OAuthResult signupWithOAuth(SignupOAuthUserCommand signupOAuthUserCommand) {
+        OAuthUser oAuthUser = oauthResolveUseCase.extractOAuthUser(signupOAuthUserCommand);
+        AuthenticatedUser authenticatedUser = userCredentialUseCase.signupOAuthUser(oAuthUser);
+        userSignupUseCase.saveOAuthUserInfo(signupOAuthUserCommand, authenticatedUser.userGuid());
+        termsUseCase.saveTermsAgreement(signupOAuthUserCommand.toAgreeTermsCommand(authenticatedUser.userGuid()));
         AuthResult authResult = authenticationUseCase.login(authenticatedUser);
-        return OauthAuthResult.loggedIn(authResult);
+        return OAuthResult.loggedIn(authResult);
     }
 }

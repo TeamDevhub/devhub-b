@@ -128,12 +128,12 @@ Valid scopes: `auth` · `user` · `project` · `admin` · `board` · `changed-fi
 Critical issues requiring fix before release — see `docs/full-project-review.md` for full detail.
 
 **Security (Block Release)**
-* `OauthController` — OAuth CSRF: no state parameter on callback validation
+* `OAuthController` — OAuth CSRF: no state parameter on callback validation
 * `LoggingAspect` — serializes all service params including passwords to INFO log
 * `TraceIdMDCFilter` — `X-Trace-Id` header value injected into MDC without sanitization (log injection)
 * `FileResponseFactory.attachment()` — Content-Disposition header injection via unsanitized filename
 * `CookieFactory` — Refresh Token cookie `secure=false`
-* `OauthController` — hardcoded `http://localhost:5173` redirect URL
+* `OAuthController` — hardcoded `http://localhost:5173` redirect URL
 
 **Correctness**
 * `ProjectAdapter.getProjectDetail()` — `.get()` without `orElseThrow` (NoSuchElementException risk)

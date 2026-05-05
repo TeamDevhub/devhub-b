@@ -28,7 +28,7 @@ public class FakeTokenIssueProvider implements TokenIssueProvider {
     }
 
     @Override
-    public String createTempToken(String oauthId, VerificationProvider verificationProvider, String email) {
-        return TEMP_PREFIX + oauthId;
+    public String createTempToken(String oAuthId, VerificationProvider verificationProvider, String email) {
+        return TEMP_PREFIX + oAuthId;
     }
 }

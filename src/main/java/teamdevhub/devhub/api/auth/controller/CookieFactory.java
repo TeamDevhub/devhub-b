@@ -28,7 +28,7 @@ public class CookieFactory {
                 .build();
     }
 
-    public ResponseCookie createOauthStateCookie(String state) {
+    public ResponseCookie createOAuthStateCookie(String state) {
         return ResponseCookie.from(OAUTH_STATE_COOKIE_NAME, state)
                 .httpOnly(true)
                 .secure(secureCookie)
@@ -38,7 +38,7 @@ public class CookieFactory {
                 .build();
     }
 
-    public ResponseCookie expireOauthStateCookie() {
+    public ResponseCookie expireOAuthStateCookie() {
         return ResponseCookie.from(OAUTH_STATE_COOKIE_NAME, "")
                 .httpOnly(true)
                 .secure(secureCookie)

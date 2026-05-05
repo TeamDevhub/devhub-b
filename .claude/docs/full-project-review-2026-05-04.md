@@ -28,7 +28,7 @@ The codebase has matured since the initial review: the most glaring security gap
 - **Location**: `core/auth/port/out/token/TokenParseProvider.java:3-4`
 - **Problem**: The port interface directly imports `teamdevhub.devhub.outbound.auth.infrastructure.token.vo.AccessTokenInfo` and `TempTokenInfo`. A core port must not reference outbound types; this creates a hard dependency from the hexagonal core to the adapter layer, defeating the entire point of the port.
 - **Why it matters**: Any change to the outbound token VO forces a recompile of the core port. Services and fakes that implement this interface must know about the outbound package.
-- **Fix**: Move `AccessTokenInfo` and `TempTokenInfo` to `core/auth/domain/vo/` or a new `core/auth/port/out/token/vo/` package. Similarly, `AuthResult` and `OauthAuthResult` import `outbound.auth.infrastructure.token.TokenPrefix` — `TokenPrefix` must be moved to `core` or `shared`.
+- **Fix**: Move `AccessTokenInfo` and `TempTokenInfo` to `core/auth/domain/vo/` or a new `core/auth/port/out/token/vo/` package. Similarly, `AuthResult` and `OAuthAuthResult` import `outbound.auth.infrastructure.token.TokenPrefix` — `TokenPrefix` must be moved to `core` or `shared`.
 
 ---
 
@@ -234,7 +234,7 @@ The codebase has matured since the initial review: the most glaring security gap
 #### `CookieFactory` — `secure=false` on both refresh and OAuth state cookies (previously documented, still present)
 - **Severity**: Critical (Security)
 - **Location**: `api/auth/controller/CookieFactory.java:21,31`
-- **Problem**: Both `createRefreshTokenCookie` and `createOauthStateCookie` use `.secure(false)`.
+- **Problem**: Both `createRefreshTokenCookie` and `createOAuthStateCookie` use `.secure(false)`.
 - **Why it matters**: Refresh tokens and OAuth state cookies will be transmitted over HTTP, making them vulnerable to interception.
 - **Fix**: Set `.secure(true)` and configure a HTTPS-only deployment, or make secure configurable via `@Value`.
 
@@ -278,18 +278,18 @@ The codebase has matured since the initial review: the most glaring security gap
 
 ---
 
-#### `AuthResult` and `OauthAuthResult` import outbound `TokenPrefix`
+#### `AuthResult` and `OAuthAuthResult` import outbound `TokenPrefix`
 - **Severity**: Major
-- **Location**: `core/auth/application/service/AuthResult.java:4`, `OauthAuthResult.java:6`
+- **Location**: `core/auth/application/service/AuthResult.java:4`, `OAuthAuthResult.java:6`
 - **Problem**: These core domain result objects import `outbound.auth.infrastructure.token.TokenPrefix` to build the `Authorization` header string. This inverts the dependency: core depends on outbound infrastructure.
 - **Why it matters**: `TokenPrefix` is a formatting detail. The core should not know about HTTP header formatting.
 - **Fix**: Move `TokenPrefix` (or an equivalent constant) to `shared/` or `core/auth/domain/`. Alternatively, move `toAuthorizationHeader()` to the controller or a utility in the API layer.
 
 ---
 
-#### `OauthResolveService` imports outbound infrastructure VO
+#### `OAuthResolveService` imports outbound infrastructure VO
 - **Severity**: Major
-- **Location**: `core/auth/application/service/oauth/OauthResolveService.java:7`
+- **Location**: `core/auth/application/service/oauth/OAuthResolveService.java:7`
 - **Problem**: `import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo` — core application service depends on an outbound VO.
 - **Why it matters**: Same dependency inversion as above. The core should not know about the JWT implementation's VO structure.
 - **Fix**: Move `TempTokenInfo` to `core/auth/port/out/token/vo/` or define an equivalent core record returned by `TokenParseProvider.getTempTokenInfo()`.
@@ -425,8 +425,8 @@ The codebase has matured since the initial review: the most glaring security gap
 10. **`UserReviewService`** — cross-domain dependency on project ports; must move validation to `UserReviewFacade`.
 11. **`ProjectService`** — directly imports and uses `outbound` mapper; violates hexagonal boundary.
 12. **`TokenParseProvider` port** — imports outbound VOs; move VOs to core.
-13. **`AuthResult` + `OauthAuthResult`** — import outbound `TokenPrefix`; move to shared/core.
-14. **`OauthResolveService`** — imports outbound `TempTokenInfo`; move to core.
+13. **`AuthResult` + `OAuthAuthResult`** — import outbound `TokenPrefix`; move to shared/core.
+14. **`OAuthResolveService`** — imports outbound `TempTokenInfo`; move to core.
 15. **`ProjectApplicationFacade` + `ApplicationFormFacade` + `BoardFacade`** — return/import API layer types from core; invert the dependency.
 16. **`GlobalExceptionHandler`** — does not handle `AdapterDataException` or `ExternalServiceException` (returns 400 instead of appropriate codes).
 17. **`RefreshTokenAdapter.save()`** — token rotation via dirty-check only; add explicit `.save()` call.
@@ -463,7 +463,7 @@ The codebase has matured since the initial review: the most glaring security gap
 - `TraceIdMDCFilter` now validates the incoming `X-Trace-Id` header against a safe regex before trusting it — the log injection issue has been substantially mitigated.
 - `JwtTokenCodec` correctly validates token type on every parse operation, preventing access tokens from being used as refresh tokens.
 - `RefreshTokenAdapter.save()` correctly implements refresh token rotation.
-- The `OauthController.handleOauthCallback()` now validates the state cookie before processing, resolving the previously documented OAuth CSRF issue.
+- The `OAuthController.handleOAuthCallback()` now validates the state cookie before processing, resolving the previously documented OAuth CSRF issue.
 - `WebSecurityConfig` now has `hasRole("ADMIN")` on `/admin/**`, resolving the previously documented open admin route.
 
 ---

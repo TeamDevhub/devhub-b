@@ -57,12 +57,12 @@ public class UserCredentialMapper {
     public static OAuthCredentialEntity toOAuthCredentialEntity(
             AuthenticatedUser authenticatedUser,
             VerificationProvider verificationProvider,
-            String oauthId
+            String oAuthId
     ) {
         return OAuthCredentialEntity.builder()
                 .userGuid(authenticatedUser.userGuid())
                 .provider(verificationProvider)
-                .oauthId(oauthId)
+                .oauthId(oAuthId)
                 .userRole(authenticatedUser.userRole())
                 .build();
     }

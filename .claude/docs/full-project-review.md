@@ -96,21 +96,21 @@
 
 ---
 
-**[C-5] OauthController — OAuth state 파라미터 없음 (CSRF 취약점)**
+**[C-5] OAuthController — OAuth state 파라미터 없음 (CSRF 취약점)**
 
-- **위치**: `api/auth/controller/OauthController.java:51-65`
-- **문제**: `handleOauthCallback()`이 `code` 파라미터를 수신할 때 `state` 값을 검증하지 않음. `createAuthorizationUrl()`도 `state`를 생성하지 않음
+- **위치**: `api/auth/controller/OAuthController.java:51-65`
+- **문제**: `handleOAuthCallback()`이 `code` 파라미터를 수신할 때 `state` 값을 검증하지 않음. `createAuthorizationUrl()`도 `state`를 생성하지 않음
 - **영향**: 공격자가 피해자 브라우저에서 자신의 인가 코드로 콜백을 강제 실행 → Authorization Code Injection → 공격자 계정으로 강제 로그인 (OAuth CSRF)
 - **수정**:
   1. `redirectToProvider` 시 `state` 값을 세션 또는 쿠키에 저장
-  2. `handleOauthCallback` 에서 `state` 파라미터 수신 및 저장값과 일치 여부 검증
+  2. `handleOAuthCallback` 에서 `state` 파라미터 수신 및 저장값과 일치 여부 검증
   3. 불일치 시 요청 거부
 
 ---
 
-**[C-6] OauthController — 하드코딩된 localhost URL**
+**[C-6] OAuthController — 하드코딩된 localhost URL**
 
-- **위치**: `api/auth/controller/OauthController.java:60, 62`
+- **위치**: `api/auth/controller/OAuthController.java:60, 62`
 - **문제**:
   ```java
   response.sendRedirect("http://localhost:5173/");
@@ -334,10 +334,10 @@
 
 | 우선순위 | 이슈 | 위치 |
 |---------|------|------|
-| 1 | OAuth CSRF — state 파라미터 누락 [C-5] | `OauthController` |
+| 1 | OAuth CSRF — state 파라미터 누락 [C-5] | `OAuthController` |
 | 2 | 비밀번호 로그 노출 [C-7] | `LoggingAspect` |
 | 3 | Log Injection via X-Trace-Id [C-2] | `TraceIdMDCFilter` |
-| 4 | OAuth 하드코딩 localhost [C-6] | `OauthController` |
+| 4 | OAuth 하드코딩 localhost [C-6] | `OAuthController` |
 | 5 | `ProjectAdapter.get()` 미검증 [C-1] | `ProjectAdapter` |
 | 6 | `deleteProject()` 조회/삭제 순서 역전 [C-8] | `ProjectService` |
 | 7 | Content-Disposition 헤더 인젝션 [C-3] | `FileResponseFactory` |
@@ -370,7 +370,7 @@
 
 ### 현재 강점
 
-- `auth` 도메인 서비스 레이어: `UserCredentialServiceTest`, `OauthAuthenticationServiceTest` 존재
+- `auth` 도메인 서비스 레이어: `UserCredentialServiceTest`, `OAuthAuthenticationServiceTest` 존재
 - `user` 도메인: `UserReviewServiceTest`, `UserReviewTest`, `UserWithdrawFacadeTest` 등 핵심 흐름 커버
 - `terms`, `board` 도메인: 도메인 유닛 테스트 존재 (`TermsTest`, `BoardTest`, `BoardFacadeTest`)
 - Fake 구현체: 프로젝트 규칙 준수 (Mockito 사용 없음)

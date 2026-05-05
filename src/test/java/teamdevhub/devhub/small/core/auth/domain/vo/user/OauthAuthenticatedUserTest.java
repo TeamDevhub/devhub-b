@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_OAUTH_ID_1;
 import static teamdevhub.devhub.constant.UserTestConstant.TEST_USER_GUID_1;
 
-class OauthAuthenticatedUserTest {
+class OAuthAuthenticatedUserTest {
 
     @Test
     @DisplayName("OAuth_사용자_자격증명을_생성하면_올바른_값을_갖는다")
@@ -21,7 +21,7 @@ class OauthAuthenticatedUserTest {
 
         assertThat(oAuthUserCredential.getUserGuid()).isEqualTo(TEST_USER_GUID_1);
         assertThat(oAuthUserCredential.getVerificationProvider()).isEqualTo(VerificationProvider.GOOGLE);
-        assertThat(oAuthUserCredential.getOauthId()).isEqualTo(TEST_OAUTH_ID_1);
+        assertThat(oAuthUserCredential.getOAuthId()).isEqualTo(TEST_OAUTH_ID_1);
         assertThat(oAuthUserCredential.getUserRole()).isEqualTo(UserRole.USER);
     }
 

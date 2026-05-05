@@ -74,7 +74,7 @@ class AuthenticationServiceTest {
 
     @Test
     @DisplayName("OAuth_로그인을_하면_액세스토큰과_리프레시토큰이_발급된다")
-    void issueAccessAndRefreshTokenWhenLoginWithOauth() {
+    void issueAccessAndRefreshTokenWhenLoginWithOAuth() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 TEST_USER_GUID_1,

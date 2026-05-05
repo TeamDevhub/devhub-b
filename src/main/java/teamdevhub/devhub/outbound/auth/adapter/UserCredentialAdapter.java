@@ -8,7 +8,7 @@ import teamdevhub.devhub.core.auth.port.out.UserCredentialRepository;
 import teamdevhub.devhub.outbound.auth.adapter.entity.EmailCredentialEntity;
 import teamdevhub.devhub.outbound.auth.adapter.mapper.UserCredentialMapper;
 import teamdevhub.devhub.outbound.auth.persistence.JpaEmailCredentialRepository;
-import teamdevhub.devhub.outbound.auth.persistence.JpaOauthCredentialRepository;
+import teamdevhub.devhub.outbound.auth.persistence.JpaOAuthCredentialRepository;
 import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
@@ -20,13 +20,13 @@ import java.util.Optional;
 public class UserCredentialAdapter implements UserCredentialRepository {
 
     private final JpaEmailCredentialRepository jpaEmailCredentialRepository;
-    private final JpaOauthCredentialRepository jpaOauthCredentialRepository;
+    private final JpaOAuthCredentialRepository jpaOAuthCredentialRepository;
 
     @Override
     public Optional<AuthenticatedUser> findUserCredentialByUserGuid(String userGuid) {
         return jpaEmailCredentialRepository.findByUserGuid(userGuid)
                 .map(UserCredentialMapper::toAuthenticatedUser)
-                .or(() -> jpaOauthCredentialRepository.findByUserGuid(userGuid)
+                .or(() -> jpaOAuthCredentialRepository.findByUserGuid(userGuid)
                         .map(UserCredentialMapper::toAuthenticatedUser));
     }
 
@@ -38,7 +38,7 @@ public class UserCredentialAdapter implements UserCredentialRepository {
 
     @Override
     public Optional<AuthenticatedUser> findOAuthUserCredentialByOAuth(VerificationProvider verificationProvider, String oauthId) {
-        return jpaOauthCredentialRepository.findByProviderAndOauthId(verificationProvider, oauthId)
+        return jpaOAuthCredentialRepository.findByProviderAndOauthId(verificationProvider, oauthId)
                 .map(UserCredentialMapper::toAuthenticatedUser);
     }
 
@@ -51,7 +51,7 @@ public class UserCredentialAdapter implements UserCredentialRepository {
 
     @Override
     public void saveOAuthUserCredential(AuthenticatedUser authenticatedUser, VerificationProvider verificationProvider, String oauthId) {
-        jpaOauthCredentialRepository.save(
+        jpaOAuthCredentialRepository.save(
                 UserCredentialMapper.toOAuthCredentialEntity(authenticatedUser, verificationProvider, oauthId)
         );
     }

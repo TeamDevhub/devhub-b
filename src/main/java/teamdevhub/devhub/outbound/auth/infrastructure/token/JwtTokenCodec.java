@@ -71,11 +71,11 @@ public class JwtTokenCodec implements TokenIssueProvider, TokenParseProvider {
     }
 
     @Override
-    public String createTempToken(String oauthId, VerificationProvider verificationProvider, String email) {
+    public String createTempToken(String oAuthId, VerificationProvider verificationProvider, String email) {
         LocalDateTime now = timeProvider.now();
         LocalDateTime expireAt = now.plusMinutes(3);
         return Jwts.builder()
-                .setSubject(oauthId)
+                .setSubject(oAuthId)
                 .claim(JwtClaims.TOKEN_TYPE, TokenType.TEMP.name())
                 .claim(JwtClaims.OAUTH_PROVIDER, verificationProvider.name())
                 .claim(JwtClaims.EMAIL, email)

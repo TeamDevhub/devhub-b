@@ -9,19 +9,19 @@ import teamdevhub.devhub.shared.enums.VerificationProvider;
 public class OAuthUserCredential {
 
     private final String userGuid;
-    private final String oauthId;
+    private final String oAuthId;
     private final VerificationProvider verificationProvider;
     private final UserRole userRole;
 
     @Builder
     public OAuthUserCredential(
             String userGuid,
-            String oauthId,
+            String oAuthId,
             VerificationProvider verificationProvider,
             UserRole userRole
     ) {
         this.userGuid = userGuid;
-        this.oauthId = oauthId;
+        this.oAuthId = oAuthId;
         this.verificationProvider = verificationProvider;
         this.userRole = userRole;
     }

@@ -22,7 +22,7 @@ public final class UserTestConstant {
     public static final String ACCESS_TOKEN = "access-token-1";
     public static final String REFRESH_TOKEN = "refresh-token-1";
     public static final String TEMP_TOKEN = "temp-token-1";
-    public static final String TEST_OAUTH_ID_1 = "testOauthId";
+    public static final String TEST_OAUTH_ID_1 = "testOAuthId";
 
     public static final String TEST_USER_GUID_1 = "USER1a1b2c3d4e5f6g7h8i9j10k11l12";
     public static final String TEST_EMAIL_1 = "user1@example.com";
