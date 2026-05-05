@@ -1,10 +1,15 @@
 package teamdevhub.devhub.core.application.application;
 
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
 import teamdevhub.devhub.core.application.port.in.command.ApproveApplicationCommand;
 import teamdevhub.devhub.core.application.port.in.command.CreateApplicationCommand;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
@@ -14,9 +19,6 @@ import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.shared.enums.ProjectApprovalStatus;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -87,5 +89,10 @@ public class ProjectApplicationService implements ProjectApplicationQueryUseCase
 	@Override
 	public PageResult<ProjectApplication> findByApplicantGuid(String userGuid, PageCommand pageCommand) {
 		return applicationRepository.findByApplicantGuid(userGuid, pageCommand);
+	}
+
+	@Override
+	public List<ProjectApplicationScore> findAcceptedByProjectGuid(String projectGuid) {
+		return applicationRepository.findAcceptedByProjectGuid(projectGuid);
 	}
 }

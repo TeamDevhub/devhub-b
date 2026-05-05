@@ -1,13 +1,14 @@
 package teamdevhub.devhub.core.project.port.in.facade.model;
 
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import teamdevhub.devhub.core.application.domain.ProjectApplication;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.shared.enums.ProjectApprovalStatus;
 
@@ -24,8 +25,10 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 	private String approvalNumber;
 	private String approvalState;
 	private String progressState;
+	
+	private List<ProjectApplicationScore> applicationList;
 
-	public static UserProjectResponseDto fromDomain(Project project, List<ProjectApplication> projectApplicationList) {
+	public static UserProjectResponseDto fromDomain(Project project, List<ProjectApplicationScore> projectApplicationList, String approvalState) {
 		UserProjectResponseDtoBuilder<?, ?> builder = UserProjectResponseDto.builder();
 		fillBase(builder, project);
 		if(projectApplicationList == null) {
@@ -37,6 +40,7 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 			        .mapToInt(item -> item.getCapacity())
 			        .sum();
 		long getApprovalNumber = projectApplicationList.stream().filter(item -> ProjectApprovalStatus.PENDING.getCode().equals(item.getStatusCd())).count();
+		String getProgressState = LocalDate.now().isBefore(project.getProgressEndDate()) ? "ing" : "end";
 
 		return builder
 			.recruitStatus(project.getRecruitStatus())
@@ -44,6 +48,9 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 			.totalRecriutNumber(String.valueOf(getTotalRecriutNumber))
 			.applicantNumber(String.valueOf(projectApplicationList.size()))
 			.approvalNumber(String.valueOf(getApprovalNumber))
+			.approvalState(approvalState)
+			.progressState(getProgressState)
+			.applicationList(projectApplicationList)
 			.build();
 	}
 }

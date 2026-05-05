@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum ProjectApprovalStatus {
 
-	PENDING("001"),
-    APPROVED("002"),
-    REJECTED("003");
+	PENDING("3301"),
+    APPROVED("3302"),
+    REJECTED("3303");
 
 	private final String code;
 

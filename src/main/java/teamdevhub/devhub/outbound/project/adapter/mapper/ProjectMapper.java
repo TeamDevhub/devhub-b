@@ -62,6 +62,7 @@ public class ProjectMapper {
                 .projectSkill(projectSkills)
                 .projectRequirement(projectRequirementList)
                 .auditInfo(project.getAuditInfo())
+                .capacityClosed(project.isCapacityClosed())
                 .build();
     }
 
@@ -92,6 +93,7 @@ public class ProjectMapper {
 //                .progressPeriod(entity.getpro)
                 .progressStartDate(entity.getProgressStartDate())
                 .progressEndDate(entity.getProgressEndDate())
+                .capacityClosed(entity.isCapacityClosed())
                 .auditInfo(toAuditInfo(entity))
                 .build();
     }
@@ -196,6 +198,7 @@ public class ProjectMapper {
                                         .toList()
                 )
                 .auditInfo(toAuditInfo(projectEntity))
+                .capacityClosed(projectEntity.isCapacityClosed())
                 .build();
     }
 
@@ -218,6 +221,7 @@ public class ProjectMapper {
                 .projectRequirement(requirements)
                 .auditInfo(project.getAuditInfo())
                 .likeCount(likeCount)
+                .capacityClosed(project.isCapacityClosed())
                 .build();
 	}
 

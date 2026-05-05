@@ -76,4 +76,27 @@ public class ProjectAdapter implements ProjectRepository {
         		pagedProjectList.getTotalElements());
     }
 
+	@Override
+	public void closeProject(String projectGuid) {
+		jpaProjectRepository.closeProject(projectGuid);
+	}
+
+	@Override
+	public PageResult<Project> findEndProjectsByApplicantGuid(String userGuid, PageCommand pageCommand) {
+		Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
+		
+		Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findEndProjectsByApplicantGuid(userGuid, pageable);
+		return PageResult.of(
+        		pagedProjectList.getContent().stream().map(ProjectMapper::toProject).toList(),
+        		pagedProjectList.getNumber(),
+        		pagedProjectList.getSize(),
+        		pagedProjectList.getTotalElements());
+	}
+
+	@Override
+	public Project getProjectByRequirementGuid(String requirementGuid) {
+		ProjectEntity entity = jpaProjectRepository.getProjectByRequirementGuid(requirementGuid);
+		return ProjectMapper.toProject(entity);
+	}
+
 }
