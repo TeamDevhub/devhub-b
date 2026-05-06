@@ -22,6 +22,16 @@ public record FileMetadata(
         return new FileMetadata(fileGuid, originalName, extensionName, path, size);
     }
 
+    public static FileMetadata of(
+            String fileGuid,
+            String originalName,
+            String extensionName,
+            String path,
+            long size
+    ) {
+        return new FileMetadata(fileGuid, originalName, extensionName, path, size);
+    }
+
     private static void validate(
             String originalName,
             String extensionName,

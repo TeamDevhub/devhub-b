@@ -19,7 +19,7 @@ public final class FileMetadataMapper {
     }
 
     public static FileMetadata toDomain(FileEntity fileEntity) {
-        return FileMetadata.create(
+        return FileMetadata.of(
                 fileEntity.getFileGuid(),
                 fileEntity.getOriginalName(),
                 fileEntity.getExtensionName(),

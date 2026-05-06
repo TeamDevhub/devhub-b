@@ -46,4 +46,9 @@ public class FakeProjectRequirementRepository implements ProjectRequirementRepos
 
 	}
 
+	@Override
+	public ProjectRequirement findById(String projectRequirementGuid) {
+		return null;
+	}
+
 }

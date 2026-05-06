@@ -4,7 +4,6 @@ import lombok.Builder;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
 import teamdevhub.devhub.core.auth.application.service.oauth.SignupStatus;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
-import teamdevhub.devhub.outbound.auth.infrastructure.token.TokenPrefix;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
 @Builder
@@ -35,8 +34,8 @@ public record OAuthResult(
 
     public String toauthorizationHeader() {
         if (accessToken == null) {
-            throw BusinessRuleException.of(ErrorCode.UNKNOWN_FAIL);
+            throw BusinessRuleException.of(ErrorCode.TOKEN_INVALID);
         }
-        return TokenPrefix.BEARER.withToken(accessToken);
+        return "Bearer " + accessToken;
     }
 }

@@ -49,7 +49,7 @@ public class FileController {
             @Parameter(description = "파일 GUID", required = true) @PathVariable("fileGuid") String fileGuid) {
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithData(
-                        SuccessCode.CREATE_SUCCESS,
+                        SuccessCode.READ_SUCCESS,
                         fileFacade.selectFileObject(fileGuid)
                 )
         );

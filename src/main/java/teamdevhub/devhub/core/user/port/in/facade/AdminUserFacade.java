@@ -64,10 +64,16 @@ public class AdminUserFacade {
         adminUserManagementUseCase.unbanUser(userGuid);
     }
 
+    /**
+     * approval state 의미 및 필요성
+     * @param userGuid
+     * @param pageCommand
+     * @return
+     */
     public List<UserProjectResponseDto> getUserProjects(String userGuid, PageCommand pageCommand) {
         PageResult<Project> result = projectUseCase.getUserProjects(userGuid, pageCommand);
         return result.content().stream()
-                .map(project -> UserProjectResponseDto.fromDomain(project, null))
+                .map(project -> UserProjectResponseDto.fromDomain(project, null, null))
                 .toList();
     }
 
@@ -75,7 +81,7 @@ public class AdminUserFacade {
         return projectApplicationUseCase.findByApplicantGuid(userGuid, pageCommand).content().stream()
                 .map(application -> {
                     Project project = projectUseCase.getProjectDetail(application.getRequirementGuid());
-                    return UserProjectResponseDto.fromDomain(project, null);
+                    return UserProjectResponseDto.fromDomain(project, null, null);
                 })
                 .toList();
     }

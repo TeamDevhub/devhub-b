@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamdevhub.devhub.core.auth.application.service.oauth.vo.OAuthUserResult;
 import teamdevhub.devhub.core.auth.port.out.UserCredentialRepository;
-import teamdevhub.devhub.outbound.auth.infrastructure.token.vo.TempTokenInfo;
 import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
 import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.oauth.OAuthResolveUseCase;
@@ -33,7 +32,7 @@ public class OAuthResolveService implements OAuthResolveUseCase {
 
     @Override
     public OAuthUser extractOAuthUser(SignupOAuthUserCommand signupOAuthUserCommand) {
-        TempTokenInfo tempTokenInfo = tokenParseProvider.getTempTokenInfo(signupOAuthUserCommand.tempToken());
+        var tempTokenInfo = tokenParseProvider.getTempTokenInfo(signupOAuthUserCommand.tempToken());
         return new OAuthUser(tempTokenInfo.oauthId(), tempTokenInfo.verificationProvider(), tempTokenInfo.email());
     }
 }
