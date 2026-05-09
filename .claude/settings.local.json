@@ -20,7 +20,10 @@
       "Bash(New-Item -ItemType File -Path \"D:\\\\devhub-b\\\\.claude\\\\docs\\\\code-review-auth-user-terms-file-2026-05-05.md\" -Force)",
       "Bash(Out-Null)",
       "Bash(Write-Output \"created\")",
-      "Bash(./gradlew clean *)"
+      "Bash(./gradlew clean *)",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)",
+      "Bash(Get-Date *)"
     ]
   }
 }
