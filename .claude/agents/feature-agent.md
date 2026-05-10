@@ -17,32 +17,30 @@ When implementing new functionality, it follows:
 
 ## Core Objectives
 
-1. Integrate new requirements naturally into the current codebase.
-2. Extend functionality without breaking existing behavior.
-3. Keep business rules inside the domain layer.
-4. Maintain testable and scalable design.
-5. Preserve consistency with the current code style.
+1. Integrate new requirements naturally into the current codebase
+2. Extend functionality without breaking existing behavior
+3. Keep business rules inside the domain layer
+4. Maintain testable and scalable design
+5. Preserve consistency with the current code style
 
 ---
 
-## Prior Knowledge
-
-### Feature Development Principles for This Project
+## Feature Development Principles
 
 1. **Domain First**  
-   Business rules belong in domain objects, not service classes.
+   Business rules belong in domain objects, not service classes
 
 2. **Use Command Objects**  
-   If a method requires 3 or more parameters, prefer a `record`-based Command object.
+   If a method requires 3 or more parameters, use a `record`-based Command object
 
 3. **Separate Facades**  
-   If multiple UseCases must be orchestrated, move coordination logic into a Facade layer.
+   If multiple UseCases must be orchestrated, move coordination logic into a Facade layer
 
 4. **Respect Port / Adapter Boundaries**  
-   External systems (DB, APIs, messaging) must remain behind Ports.
+   External systems (DB, APIs, messaging) must remain behind Ports
 
 5. **Test-First Approach**  
-   New features should include unit tests and flow/service tests.
+   Every new feature must include tests
 
 ---
 
@@ -52,7 +50,8 @@ When implementing new functionality, it follows:
 - Existing `ErrorCode` enum values
 - Core authentication / authorization flow
 - Existing test assertions
-- Existing Port method signatures (new methods may be added)
+- Existing Port method signatures  
+  (new methods may be added)
 
 ---
 
@@ -64,22 +63,23 @@ When implementing new functionality, it follows:
 - Implementing policy logic inside Repositories
 - Adding Spring annotations to domain objects
 - Commenting out code instead of fixing it
-- Ignoring existing architecture for convenience
+- Ignoring architecture for convenience
 
 ---
 
 ## Feature Development Process
 
-1. Analyze the relevant domain / service / port structure first.
-2. Check for conflicts with existing features.
-3. Define required test cases before implementation.
-4. Extend in this order:
+1. Analyze domain / service / port structure
+2. Check for conflicts with existing features
+3. Define test cases BEFORE implementation
+4. Extend in the following order:
 
    Domain → UseCase → Facade → Port → Adapter → Controller
 
-5. Follow the current project style and naming conventions.
-6. Run `./gradlew compileJava`
-7. Run related tests.
+5. Follow project naming and style conventions
+6. Run compile:
+   ./gradlew compileJava
+7. Run related tests
 
 ---
 
@@ -97,7 +97,7 @@ When implementing new functionality, it follows:
 
 ## Testing Principles
 
-Every new feature should include the relevant test scope below.
+Every feature must include proper test coverage.
 
 ### Unit Tests
 
@@ -119,30 +119,38 @@ Every new feature should include the relevant test scope below.
 
 ## Reference Files
 
-- `.claude/rules/refactoring.md`
-- `.claude/rules/architecture.md`
-- `.claude/rules/things-to-avoid.md`
-- `.claude/memory/style-memory.md`
+- .claude/rules/refactoring.md
+- .claude/rules/architecture.md
+- .claude/rules/things-to-avoid.md
+- .claude/memory/style-memory.md
+
+---
 
 ## Response Format
 
-```text
-## Feature Summary
+### Feature Summary
 
-### Added Files
+#### Added Files
 - path/File.java — purpose
 
-### Modified Files
+#### Modified Files
 - path/File.java — reason
 
-### Added Business Rules
+#### Added Business Rules
 - description
 
-### Tests
+#### Tests
 - Added N tests
 - Summary of verified scenarios
 
-### Notes
+#### Notes
 - Future improvement points
 
+---
 
+## Execution Principles
+
+- Do not break existing behavior
+- Prefer explicit domain modeling over shortcuts
+- Keep changes isolated and testable
+- Respect architecture boundaries at all times

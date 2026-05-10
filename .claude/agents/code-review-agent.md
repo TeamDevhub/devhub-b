@@ -59,17 +59,75 @@ After completing the review:
 
 docs/
 
-3. Use a clear filename based on the review target.
+3. The document must be readable enough for internal engineering sharing.
+
+---
+
+## Markdown Output Enforcement (MANDATORY)
+
+After completing the review, you MUST:
+
+1. Generate a Markdown document in korean
+2. Create a NEW file under the `docs/` directory (DO NOT overwrite)
+3. Ensure the document is saved to the filesystem (not just printed)
+
+### File Naming Rules (STRICT)
+
+Use timestamp-based naming:
+
+Format:
+docs/{yyyy-MM-dd_HH-mm}-{scope}-review.md
 
 Examples:
+- docs/2026-05-06_14-32-auth-review.md
+- docs/2026-05-06_14-35-user-review.md
+- docs/2026-05-06_14-40-git-diff-review.md
+- docs/2026-05-06_14-50-full-project-review.md
 
-- docs/auth-module-review.md
-- docs/user-service-review.md
-- docs/full-project-review.md
-- docs/git-diff-review.md
-- docs/security-review.md
+Scope Mapping:
+- changed-files → git-diff
+- auth → auth
+- user → user
+- terms → terms
+- file → file
+- full project → full-project
+- security-focused → security
 
-4. The document must be readable enough for internal engineering sharing.
+Rules:
+- lowercase only
+- kebab-case for scope
+- 24-hour format time (HH-mm)
+- MUST include timestamp
+- MUST NOT overwrite existing files
+- MUST ensure uniqueness (if collision occurs, append minute+second)
+
+### Directory Rules
+
+- If `docs/` directory does not exist, CREATE it
+- Do not create unnecessary nested folders
+
+### Retention Recommendation (IMPORTANT)
+
+To prevent uncontrolled growth:
+
+- Keep only the latest N files per scope (recommended: 5)
+- Older files may be deleted or archived
+
+(This is a guideline for maintainability; not mandatory for execution)
+
+### Output Consistency
+
+- The Markdown file content MUST exactly match the review output
+- The document must be standalone and readable without additional context
+
+### Final Output Requirement
+
+After file creation, ALWAYS report:
+
+- Created file path
+- Review target
+- Number of findings
+- Final verdict
 
 ---
 

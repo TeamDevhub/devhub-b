@@ -25,7 +25,7 @@ public class UserCredentialMapper {
     }
 
     public static EmailUserCredential toEmailUserCredential(EmailCredentialEntity emailCredentialEntity) {
-        return new EmailUserCredential(
+        return EmailUserCredential.of(
                 emailCredentialEntity.getUserGuid(),
                 emailCredentialEntity.getEmail(),
                 emailCredentialEntity.getPassword(),

@@ -25,6 +25,15 @@ public class EmailUserCredential {
         this.userRole = userRole;
     }
 
+    public static EmailUserCredential of(
+            String userGuid,
+            String email,
+            String password,
+            UserRole userRole
+    ) {
+        return new EmailUserCredential(userGuid, email, password, userRole);
+    }
+
     public void verifyPassword(boolean matches) {
         if (!matches) {
             throw DomainRuleException.of(ErrorCode.USER_PASSWORD_FAIL);

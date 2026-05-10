@@ -38,8 +38,10 @@ public class AdminUserController {
             @ModelAttribute SearchUserRequestDto searchUserRequestDto,
             @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam int page,
             @Parameter(description = "페이지 크기", example = "10") @RequestParam int size) {
+
         PageResult<UserBasicResponseDto> result = adminUserFacade.listUsers(
                 searchUserRequestDto.toSearchUserCommand(), PageCommand.of(page, size));
+
         return ResponseEntity.ok(
                 DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
@@ -88,7 +90,7 @@ public class AdminUserController {
 
     @Operation(summary = "사용자 정지 해제", description = "정지된 사용자의 정지를 해제합니다.")
     @ApiResponse(responseCode = "200", description = "정지 해제 성공")
-    @DeleteMapping("/{userGuid}/ban")
+    @PostMapping("/{userGuid}/unban")
     public ResponseEntity<DataApiResponseDto<Void>> unbanUser(
             @Parameter(description = "사용자 GUID") @PathVariable String userGuid) {
         adminUserFacade.unbanUser(userGuid);

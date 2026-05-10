@@ -1,14 +1,13 @@
 package teamdevhub.devhub.fake.pure.application.port.out.project;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectRequirementRepository;
 import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class FakeProjectRequirementRepository implements ProjectRequirementRepository {
 	
@@ -44,6 +43,11 @@ public class FakeProjectRequirementRepository implements ProjectRequirementRepos
 	@Override
 	public void deleteByProjectGuid(String projectGuid) {
 
+	}
+
+	@Override
+	public ProjectRequirement findById(String projectRequirementGuid) {
+		return null;
 	}
 
 }
