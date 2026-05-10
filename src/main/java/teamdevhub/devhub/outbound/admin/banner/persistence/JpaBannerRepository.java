@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import teamdevhub.devhub.outbound.admin.banner.adapter.entity.BannerEntity;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface JpaBannerRepository extends JpaRepository<BannerEntity, String> {
 
@@ -36,16 +35,4 @@ public interface JpaBannerRepository extends JpaRepository<BannerEntity, String>
             Pageable pageable
     );
 
-    @Query("""
-            SELECT b FROM BannerEntity b
-            WHERE b.mainBanner = :mainBanner
-            AND b.used = true
-            AND b.startDate <= :today
-            AND b.endDate >= :today
-            ORDER BY b.sortOrder ASC
-            """)
-    List<BannerEntity> findExposableBanners(
-            @Param("mainBanner") boolean mainBanner,
-            @Param("today") LocalDate today
-    );
 }
