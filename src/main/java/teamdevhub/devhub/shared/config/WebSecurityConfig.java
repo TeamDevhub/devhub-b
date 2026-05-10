@@ -101,6 +101,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/projects").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/home").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/skill-trends").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/terms/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/terms/**").hasRole("ADMIN")
                                 //.requestMatchers("/admin/**").hasRole("ADMIN")

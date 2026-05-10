@@ -23,7 +23,8 @@
       "Bash(./gradlew clean *)",
       "Bash(Select-Object FullName)",
       "Bash(Sort-Object FullName)",
-      "Bash(Get-Date *)"
+      "Bash(Get-Date *)",
+      "Bash(Select-Object Name)"
     ]
   }
 }
