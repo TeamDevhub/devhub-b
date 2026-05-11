@@ -7,20 +7,24 @@ import java.util.Map;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 import teamdevhub.devhub.core.admin.form.port.in.command.ApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
+import teamdevhub.devhub.core.admin.form.port.in.command.SaveApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 
 public class FakeApplicationFormUseCase implements ApplicationFormUseCase {
-	
+
 	private final Map<String, ApplicationForm> store = new HashMap<>();
 
 	@Override
 	public List<String> saveApplicationForms(List<CreateApplicationFormCommand> additionalFormList) {
-		return null;
+		return List.of();
+	}
+
+	@Override
+	public void saveApplicationForm(SaveApplicationFormCommand command) {
 	}
 
 	@Override
 	public void deleteApplicationForms(List<String> deleteApplicationFormGuids) {
-
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package teamdevhub.devhub.outbound.admin.form.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +11,7 @@ import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormEntit
 
 public interface JpaApplicationFormRepository  extends JpaRepository<ApplicationFormEntity, String>{
 
-	ApplicationFormEntity findByApplicationFormGuid(String applicationFormGuid);
+	Optional<ApplicationFormEntity> findByApplicationFormGuid(String applicationFormGuid);
 
 	@Query("""
 			select af

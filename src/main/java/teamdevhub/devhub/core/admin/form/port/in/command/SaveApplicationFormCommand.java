@@ -2,7 +2,6 @@ package teamdevhub.devhub.core.admin.form.port.in.command;
 
 import java.util.List;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,14 +11,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateApplicationFormCommand {
+public class SaveApplicationFormCommand {
 
-	@NotBlank(message = "제목은 필수입니다.")
+	private String applicationFormGuid;
+	private String typeCd;
 	private String title;
-
+	private String helpYn;
 	private String helpText;
-
 	private boolean isUsed;
-
+	private String defaultFieldYn;
+	private boolean insert;
 	private List<String> itemList;
 }

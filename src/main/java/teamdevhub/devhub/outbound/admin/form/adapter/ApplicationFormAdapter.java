@@ -7,32 +7,32 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormRepository;
-import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormEntity;
 import teamdevhub.devhub.outbound.admin.form.adapter.mapper.ApplicationFormMapper;
 import teamdevhub.devhub.outbound.admin.form.persistence.JpaApplicationFormRepository;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 @Component
 @RequiredArgsConstructor
-public class ApplicationFormAdapter implements ApplicationFormRepository{
-	
+public class ApplicationFormAdapter implements ApplicationFormRepository {
+
 	private final JpaApplicationFormRepository jpaApplicationFormRepository;
 
 	@Override
 	public void save(ApplicationForm applicationForm) {
-		ApplicationFormEntity applicationFormEntity = ApplicationFormMapper.toEntity(applicationForm);
-		jpaApplicationFormRepository.save(applicationFormEntity);
+		jpaApplicationFormRepository.save(ApplicationFormMapper.toEntity(applicationForm));
 	}
 
 	@Override
 	public void update(ApplicationForm applicationForm) {
-		ApplicationFormEntity applicationFormEntity = ApplicationFormMapper.toEntity(applicationForm);
-		jpaApplicationFormRepository.save(applicationFormEntity);
+		save(applicationForm);
 	}
 
 	@Override
 	public ApplicationForm findByApplicationFormGuid(String applicationFormGuid) {
-		ApplicationFormEntity applicationFormEntity = jpaApplicationFormRepository.findByApplicationFormGuid(applicationFormGuid);
-		return ApplicationFormMapper.toApplicationForm(applicationFormEntity);
+		return jpaApplicationFormRepository.findByApplicationFormGuid(applicationFormGuid)
+				.map(ApplicationFormMapper::toApplicationForm)
+				.orElseThrow(() -> AdapterDataException.of(ErrorCode.APPLICATION_FORM_NOT_FOUND));
 	}
 
 	@Override
@@ -42,16 +42,14 @@ public class ApplicationFormAdapter implements ApplicationFormRepository{
 
 	@Override
 	public List<ApplicationForm> findByIdAndIsCustomized(List<String> deleteApplicationFormGuids) {
-		List<ApplicationFormEntity> entityList = jpaApplicationFormRepository.findByIdAndIsCustomized(deleteApplicationFormGuids);
-		return entityList.stream()
+		return jpaApplicationFormRepository.findByIdAndIsCustomized(deleteApplicationFormGuids).stream()
 				.map(ApplicationFormMapper::toApplicationForm)
 				.toList();
 	}
 
 	@Override
 	public List<ApplicationForm> findByIdAndIsNotCustomized(List<String> formList) {
-		List<ApplicationFormEntity> entityList = jpaApplicationFormRepository.findByIdAndIsNotCustomized(formList);
-		return entityList.stream()
+		return jpaApplicationFormRepository.findByIdAndIsNotCustomized(formList).stream()
 				.map(ApplicationFormMapper::toApplicationForm)
 				.toList();
 	}
