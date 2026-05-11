@@ -25,4 +25,11 @@ public interface JpaApplicationFormItemRepository extends JpaRepository<Applicat
 			""")
 	List<ApplicationFormItemEntity> findByFormGuid(@Param("applicationFormGuid") String applicationFormGuid);
 
+	@Query("""
+			select afi
+			from ApplicationFormItemEntity afi
+			where afi.formGuid in :formGuids
+			""")
+	List<ApplicationFormItemEntity> findByFormGuidIn(@Param("formGuids") List<String> formGuids);
+
 }

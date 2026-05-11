@@ -3,6 +3,8 @@ package teamdevhub.devhub.outbound.admin.form.persistence;
 import static teamdevhub.devhub.outbound.admin.form.adapter.entity.QApplicationFormEntity.applicationFormEntity;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 import teamdevhub.devhub.core.application.port.in.command.SearchApplicationFormCommand;
 import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormEntity;
+import teamdevhub.devhub.outbound.admin.form.adapter.entity.ApplicationFormItemEntity;
 import teamdevhub.devhub.outbound.admin.form.adapter.mapper.ApplicationFormMapper;
 
 @Repository
@@ -23,6 +26,7 @@ import teamdevhub.devhub.outbound.admin.form.adapter.mapper.ApplicationFormMappe
 public class ApplicationFormQueryDaoImpl implements ApplicationFormQueryDao {
 
 	private final JPAQueryFactory queryFactory;
+	private final JpaApplicationFormItemRepository jpaApplicationFormItemRepository;
 
 	@Override
 	public Page<ApplicationForm> listApplicationForm(SearchApplicationFormCommand searchApplicationFormCommand,
@@ -69,6 +73,41 @@ public class ApplicationFormQueryDaoImpl implements ApplicationFormQueryDao {
 				.toList();
 
 		return new PageImpl<>(content);
+	}
+
+	@Override
+	public List<ApplicationForm> listApplicationFormsWithItems(SearchApplicationFormCommand searchApplicationFormCommand) {
+		BooleanExpression titleContains = titleCond(searchApplicationFormCommand.title());
+		BooleanExpression useYnEquals = useYnCond(searchApplicationFormCommand.isUsed());
+		BooleanExpression customYnEquals = customYnCond(searchApplicationFormCommand.isCustomized());
+
+		List<ApplicationFormEntity> formEntities = queryFactory
+				.selectFrom(applicationFormEntity)
+				.where(titleContains, useYnEquals, customYnEquals)
+				.fetch();
+
+		List<String> formGuids = formEntities.stream()
+				.map(ApplicationFormEntity::getApplicationFormGuid)
+				.toList();
+
+		Map<String, List<String>> itemsByFormGuid = jpaApplicationFormItemRepository.findByFormGuidIn(formGuids)
+				.stream()
+				.collect(Collectors.groupingBy(
+						ApplicationFormItemEntity::getFormGuid,
+						Collectors.mapping(ApplicationFormItemEntity::getContent, Collectors.toList())
+				));
+
+		return formEntities.stream()
+				.map(entity -> ApplicationForm.builder()
+						.applicationFormGuid(entity.getApplicationFormGuid())
+						.typeCd(entity.getTypeCd())
+						.title(entity.getTitle())
+						.helpText(entity.getHelpText())
+						.isCustomized(entity.isCustomized())
+						.isUsed(entity.isUsed())
+						.items(itemsByFormGuid.getOrDefault(entity.getApplicationFormGuid(), List.of()))
+						.build())
+				.toList();
 	}
 
 	private BooleanExpression titleCond(String searchTitle) {

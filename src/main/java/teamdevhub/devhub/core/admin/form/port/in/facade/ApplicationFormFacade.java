@@ -1,6 +1,7 @@
 package teamdevhub.devhub.core.admin.form.port.in.facade;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,18 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
-import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
-import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
-import teamdevhub.devhub.core.admin.form.port.in.command.UpdateApplicationFormCommand;
+import teamdevhub.devhub.core.admin.form.port.in.command.SaveApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormQueryUseCase;
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 import teamdevhub.devhub.core.application.port.in.command.SearchApplicationFormCommand;
-import teamdevhub.devhub.core.common.page.PageCommand;
-import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
-@Service
+@Service("adminApplicationFormFacade")
 @Transactional
 @RequiredArgsConstructor
 public class ApplicationFormFacade {
@@ -28,44 +25,47 @@ public class ApplicationFormFacade {
 	private final ApplicationFormQueryUseCase applicationFormQueryUseCase;
 
 	public DataListApiResponseDto<ApplicationFormListItemDto> getApplicationForms(
-			SearchApplicationFormCommand command, PageCommand pageCommand) {
-		PageResult<ApplicationForm> result = applicationFormQueryUseCase.getApplicationForms(command, pageCommand);
-		List<ApplicationFormListItemDto> dataList = result.content().stream()
-				.map(ApplicationFormListItemDto::fromDomain)
+			SearchApplicationFormCommand command) {
+		List<ApplicationForm> forms = applicationFormQueryUseCase.getApplicationFormsWithItems(command);
+		List<ApplicationFormListItemDto> dataList = IntStream.range(0, forms.size())
+				.mapToObj(i -> ApplicationFormListItemDto.fromDomain(forms.get(i), i + 1))
 				.toList();
-		return DataListApiResponseDto.successWithDataList(
-				SuccessCode.READ_SUCCESS,
-				dataList,
-				PageResponseDto.from(result)
-		);
+		return DataListApiResponseDto.successWithDataList(SuccessCode.READ_SUCCESS, dataList);
 	}
 
-	public DataApiResponseDto<Void> createApplicationForm(CreateApplicationFormCommand command) {
-		applicationFormUseCase.saveApplicationForms(List.of(command));
-		return DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS);
+	public DataApiResponseDto<Void> saveApplicationForm(SaveApplicationFormCommand command) {
+		applicationFormUseCase.saveApplicationForm(command);
+		return DataApiResponseDto.successWithoutData(command.isInsert() ? SuccessCode.CREATE_SUCCESS : SuccessCode.UPDATE_SUCCESS);
 	}
 
-	public DataApiResponseDto<Void> updateApplicationForm(String applicationFormGuid, UpdateApplicationFormCommand command) {
-		applicationFormUseCase.updateApplicationForm(applicationFormGuid, command);
-		return DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS);
+	public DataApiResponseDto<Void> deleteApplicationForm(String applicationFormGuid) {
+		List<String> applicationFormGuidList = List.of(applicationFormGuid);
+		applicationFormUseCase.deleteApplicationForms(applicationFormGuidList);
+		return DataApiResponseDto.successWithoutData(SuccessCode.DELETE_SUCCESS);
 	}
 
 	public record ApplicationFormListItemDto(
 			String applicationFormGuid,
-			String typeCd,
-			String title,
+			Integer classify,
+			String fieldName,
+			String type,
+			List<String> options,
+			String helpYn,
 			String helpText,
-			boolean isCustomized,
-			boolean isUsed
+			String usedYn,
+			String defaultFieldYn
 	) {
-		public static ApplicationFormListItemDto fromDomain(ApplicationForm form) {
+		public static ApplicationFormListItemDto fromDomain(ApplicationForm form, int classify) {
 			return new ApplicationFormListItemDto(
 					form.getApplicationFormGuid(),
-					form.getTypeCd(),
+					classify,
 					form.getTitle(),
+					form.getTypeCd(),
+					form.getItems(),
+					(form.getHelpText() != null && !form.getHelpText().isBlank()) ? "true" : "false",
 					form.getHelpText(),
-					form.isCustomized(),
-					form.isUsed()
+					form.isUsed() ? "Y" : "N",
+					form.isCustomized() ? "N" : "Y"
 			);
 		}
 	}
