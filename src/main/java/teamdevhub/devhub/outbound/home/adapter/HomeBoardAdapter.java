@@ -20,14 +20,14 @@ public class HomeBoardAdapter implements LoadHomeBoardPort {
         boolean sortByLike = HomeBoardQuery.BoardSortType.LIKE_COUNT.equals(query.sortType());
         return homeBoardQueryDao.findPopularBoards(PageRequest.of(0, query.limit()), sortByLike)
                 .stream()
-                .map(row -> new HomeBoardResult(
-                        (String) row[0],
-                        (String) row[1],
-                        (String) row[2],
-                        (String) row[3],
-                        row[4] != null ? ((Number) row[4]).intValue() : 0,
-                        row[5] != null ? ((Number) row[5]).longValue() : 0L,
-                        row[6] != null ? row[6].toString() : null
+                .map(dto -> new HomeBoardResult(
+                        dto.boardGuid(),
+                        dto.title(),
+                        dto.categoryCd(),
+                        dto.username(),
+                        dto.viewCount() != null ? dto.viewCount() : 0,
+                        dto.likeCount() != null ? dto.likeCount() : 0L,
+                        dto.registeredDate() != null ? dto.registeredDate().toString() : null
                 ))
                 .toList();
     }
