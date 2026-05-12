@@ -22,13 +22,13 @@ import teamdevhub.devhub.core.application.port.in.facade.model.ApplicationFormRe
 @RequiredArgsConstructor
 public class ApplicationFormController {
 
-	private final ApplicationFormFacade applicationFormFacade;
+	private final ApplicationFormFacade applicationApplicationFormFacade;
 
 	@Operation(summary = "지원서 양식 목록 조회", description = "검색 조건으로 지원서 양식 목록을 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "조회 성공")
 	@GetMapping
 	public ResponseEntity<DataListApiResponseDto<ApplicationFormResponseDto>> getApplicationForms(@Valid @ModelAttribute SearchApplicationFormRequestDto searchApplicationFormRequestDto) {
-		return ResponseEntity.ok(applicationFormFacade.getApplicationFormsWithoutItem(searchApplicationFormRequestDto.toCommand()));
+		return ResponseEntity.ok(applicationApplicationFormFacade.getApplicationFormsWithoutItem(searchApplicationFormRequestDto.toCommand()));
 	}
 
 }

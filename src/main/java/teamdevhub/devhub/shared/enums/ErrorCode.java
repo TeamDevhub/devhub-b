@@ -68,6 +68,8 @@ public enum ErrorCode {
     BOOLEAN_CONVERT_FAIL("ERR.DVH.0070", "Boolean 값 변환에 실패했습니다",INTERNAL_SERVER_ERROR),
     STRING_LENGTH_INVALID("ERR.DVH.0071", "문자열 최대 길이는 0 이상이어야 합니다", BAD_REQUEST),
 
+    APPLICATION_FORM_NOT_FOUND("ERR.DVH.0079", "지원 폼을 찾을 수 없습니다", BAD_REQUEST),
+
     PROJECT_NOT_FOUND("ERR.DVH.0080", "프로젝트를 찾을 수 없습니다", BAD_REQUEST),
     PROJECT_NOT_COMPLETED("ERR.DVH.0081", "완료되지 않은 프로젝트입니다", BAD_REQUEST),
     REVIEW_NOT_A_MEMBER("ERR.DVH.0082", "프로젝트 멤버만 리뷰할 수 있습니다", BAD_REQUEST),

@@ -14,7 +14,7 @@ import teamdevhub.devhub.core.application.port.in.facade.model.ApplicationFormRe
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
-@Service
+@Service("applicationApplicationFormFacade")
 @RequiredArgsConstructor
 public class ApplicationFormFacade {
 	
