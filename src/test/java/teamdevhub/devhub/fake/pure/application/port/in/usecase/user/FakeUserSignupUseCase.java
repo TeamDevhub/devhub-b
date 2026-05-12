@@ -23,8 +23,7 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
 
     @Override
     public void initializeAdminUser(SignupAdminCommand signupAdminCommand) {
-        CreateUserCommand createUserCommand =
-                CreateUserCommand.adminUserCreateCommand(
+        CreateUserCommand createUserCommand = CreateUserCommand.adminUserCreateCommand(
                         signupAdminCommand,
                         ADMIN_USER_GUID_1,
                         ADMIN_PASSWORD_1

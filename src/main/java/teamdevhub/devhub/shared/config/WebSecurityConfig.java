@@ -105,8 +105,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/skill-trends").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/terms/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/terms/**").hasRole("ADMIN")
-                                //.requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/admin/**").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
 
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
