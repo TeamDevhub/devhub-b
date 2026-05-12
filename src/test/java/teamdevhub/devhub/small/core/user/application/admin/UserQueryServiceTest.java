@@ -61,7 +61,7 @@ class UserQueryServiceTest {
 
         SearchUserCommand searchUserCommand = SearchUserCommand.builder()
                 .blocked(null)
-                .keyword(null)
+                .username(null)
                 .joinedTo(null)
                 .joinedFrom(null)
                 .build();

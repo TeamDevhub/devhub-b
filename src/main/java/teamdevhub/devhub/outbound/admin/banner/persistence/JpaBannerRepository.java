@@ -25,7 +25,7 @@ public interface JpaBannerRepository extends JpaRepository<BannerEntity, String>
             AND (:endDate IS NULL OR b.endDate >= :endDate)
             """)
     Page<BannerEntity> findByComplexCondition(
-            @Param("keyword") String keyword,
+            @Param("username") String keyword,
             @Param("isUsed") Boolean isUsed,
             @Param("isMainBanner") Boolean isMainBanner,
             @Param("alwaysPublication") Boolean alwaysPublication,

@@ -77,14 +77,14 @@ class SearchUserRequestDtoTest {
     void keywordIsNullWhenKeywordIsNull() {
         // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
-                .keyword(null)
+                .username(null)
                 .build();
 
         // when
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.keyword()).isNull();
+        assertThat(searchUserCommand.username()).isNull();
     }
 
     @Test
@@ -92,14 +92,14 @@ class SearchUserRequestDtoTest {
     void keywordIsNullWhenKeywordIsBlank() {
         // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
-                .keyword("   ")
+                .username("   ")
                 .build();
 
         // when
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.keyword()).isNull();
+        assertThat(searchUserCommand.username()).isNull();
     }
 
     @Test
@@ -107,14 +107,14 @@ class SearchUserRequestDtoTest {
     void keywordIsTrimmed() {
         // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
-                .keyword("  hello world  ")
+                .username("  hello world  ")
                 .build();
 
         // when
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.keyword()).isEqualTo("hello world");
+        assertThat(searchUserCommand.username()).isEqualTo("hello world");
     }
 
     @Test

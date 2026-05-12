@@ -61,14 +61,14 @@ class SearchUserCommandTest {
     void returnNullWhenKeywordIsBlank() {
         // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
-                .keyword("   ")
+                .username("   ")
                 .build();
 
         // when
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.keyword()).isNull();
+        assertThat(searchUserCommand.username()).isNull();
     }
 
     @Test
@@ -76,14 +76,14 @@ class SearchUserCommandTest {
     void trimKeywordWhenItExists() {
         // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
-                .keyword("  hello  ")
+                .username("  hello  ")
                 .build();
 
         // when
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.keyword()).isEqualTo("hello");
+        assertThat(searchUserCommand.username()).isEqualTo("hello");
     }
 
     @Test
