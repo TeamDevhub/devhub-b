@@ -15,7 +15,7 @@ public class SearchUserRequestDto {
     private String blocked;
     private LocalDateTime joinedFrom;
     private LocalDateTime joinedTo;
-    private String keyword;
+    private String username;
 
     public SearchUserCommand toSearchUserCommand() {
         Boolean blocked = null;
@@ -27,16 +27,16 @@ public class SearchUserRequestDto {
             blocked = Boolean.FALSE;
         }
 
-        String keyword = null;
-        if (this.keyword != null && !this.keyword.isBlank()) {
-            keyword = this.keyword.trim();
+        String username = null;
+        if (this.username != null && !this.username.isBlank()) {
+            username = this.username.trim();
         }
 
         return SearchUserCommand.builder()
                 .blocked(blocked)
                 .joinedFrom(this.joinedFrom)
                 .joinedTo(this.joinedTo)
-                .keyword(keyword)
+                .username(username)
                 .build();
     }
 }

@@ -29,7 +29,7 @@ public class UserQueryDaoImpl implements UserQueryDao {
                         blockedCondition(searchUserCommand.blocked()),
                         joinedFromCondition(searchUserCommand.joinedFrom()),
                         joinedToCondition(searchUserCommand.joinedTo()),
-                        keywordCondition(searchUserCommand.keyword()))
+                        usernameCondition(searchUserCommand.username()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(userEntity.registeredDate.desc())
@@ -42,7 +42,7 @@ public class UserQueryDaoImpl implements UserQueryDao {
                         blockedCondition(searchUserCommand.blocked()),
                         joinedFromCondition(searchUserCommand.joinedFrom()),
                         joinedToCondition(searchUserCommand.joinedTo()),
-                        keywordCondition(searchUserCommand.keyword()))
+                        usernameCondition(searchUserCommand.username()))
                 .fetchOne();
 
         if (total == null) {
@@ -73,7 +73,7 @@ public class UserQueryDaoImpl implements UserQueryDao {
         return userEntity.registeredDate.loe(joinedTo);
     }
 
-    private BooleanExpression keywordCondition(String keyword) {
+    private BooleanExpression usernameCondition(String keyword) {
         if (keyword == null) {
             return null;
         }
