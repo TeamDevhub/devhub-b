@@ -42,7 +42,7 @@ public class ProjectAdapter implements ProjectRepository {
 				searchProjectListCommand.positionLevelCodeList(), searchProjectListCommand.projectRecruitTypeList(),
 				searchProjectListCommand.projectRecruitStatusList(), searchProjectListCommand.projectProgressTypeList(),
 				searchProjectListCommand.recruitmentStartDate(), searchProjectListCommand.recruitmentEndDate(),
-				searchProjectListCommand.progressStartDate(), searchProjectListCommand.progressPeriodList(), pageable);
+				searchProjectListCommand.progressStartDate(), searchProjectListCommand.progressEndDate(), searchProjectListCommand.progressPeriodList(), pageable);
         
         return PageResult.of(
         		pagedProjectList.getContent().stream().map(ProjectMapper::toProject).toList(),
