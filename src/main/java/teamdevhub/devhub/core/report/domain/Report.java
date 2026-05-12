@@ -3,6 +3,7 @@ package teamdevhub.devhub.core.report.domain;
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
+import teamdevhub.devhub.core.report.port.in.command.CreateReportCommand;
 
 @Getter
 @Builder
@@ -15,7 +16,7 @@ public class Report {
     private final String reporterUser;
     private final String categoryCd;
     private final String reason;
-    private final boolean processed;
+    private final boolean isProcessed;
     private final AuditInfo auditInfo;
 
     public static Report of(
@@ -26,7 +27,7 @@ public class Report {
             String reporterUser,
             String categoryCd,
             String reason,
-            boolean processed,
+            boolean isProcessed,
             AuditInfo auditInfo
     ) {
         return Report.builder()
@@ -37,8 +38,21 @@ public class Report {
                 .reporterUser(reporterUser)
                 .categoryCd(categoryCd)
                 .reason(reason)
-                .processed(processed)
+                .isProcessed(isProcessed)
                 .auditInfo(auditInfo)
+                .build();
+    }
+
+    public static Report createReport(CreateReportCommand createReportCommand, String reportGuid) {
+        return Report.builder()
+                .reportGuid(reportGuid)
+                .boardGuid(createReportCommand.boardGuid())
+                .commentGuid(createReportCommand.commentGuid())
+                .reportedUser(createReportCommand.reportedUser())
+                .reporterUser(createReportCommand.reporterUser())
+                .categoryCd(createReportCommand.categoryCd())
+                .reason(createReportCommand.reason())
+                .isProcessed(false)	//enum 처리가 나을지도
                 .build();
     }
 }

@@ -10,6 +10,8 @@ public interface CommentRepository {
 	Map<String, Long> countByCommentCount(List<String> boardGuids);
 
 	List<Comment> findByBoardGuid(String boardGuid);
+	
+	Comment findByCommentGuid(String commentGuid);
 
 	void save(Comment comment);
 

@@ -1,4 +1,4 @@
-package teamdevhub.devhub.outbound.board.adapter.entity;
+package teamdevhub.devhub.outbound.report.adapter.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,10 +21,10 @@ public class ReportEntity extends BaseEntity {
     @Column(length = 32)
     private String reportGuid;
     
-    @Column(name = "board_guid", nullable = false)
+    @Column(name = "board_guid")
     private String boardGuid;
     
-    @Column(name = "comment_guid", nullable = false)
+    @Column(name = "comment_guid")
     private String commentGuid;
     
     @Column(name = "reported_user", nullable = false)
@@ -36,7 +36,7 @@ public class ReportEntity extends BaseEntity {
     @Column(name = "category_cd", nullable = false)
     private String categoryCd;
     
-    @Column(name = "reason", nullable = false)
+    @Column(name = "reason")
     private String reason;
     
     @Convert(converter = BooleanToYNConverter.class)

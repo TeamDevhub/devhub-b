@@ -1,19 +1,20 @@
 package teamdevhub.devhub.outbound.report.adapter;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.report.domain.Report;
 import teamdevhub.devhub.core.report.port.out.ReportQueryRepository;
-import teamdevhub.devhub.outbound.board.adapter.entity.ReportEntity;
-import teamdevhub.devhub.outbound.board.persistence.JpaReportRepository;
+import teamdevhub.devhub.outbound.report.adapter.entity.ReportEntity;
 import teamdevhub.devhub.outbound.report.adapter.mapper.ReportMapper;
-
-import java.util.List;
+import teamdevhub.devhub.outbound.report.persistence.JpaReportRepository;
 
 @Component
 @RequiredArgsConstructor
