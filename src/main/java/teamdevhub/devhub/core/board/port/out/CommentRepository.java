@@ -16,4 +16,6 @@ public interface CommentRepository {
 	void save(Comment comment);
 
 	void deleteByBoardGuidAndCommentGuid(String boardGuid, String commentGuid);
+
+	void updateComment(Comment comment);
 }
