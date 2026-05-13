@@ -13,7 +13,7 @@ public class EmailUserCredential {
     private String password;
     private final UserRole userRole;
 
-    public EmailUserCredential(
+    private EmailUserCredential(
             String userGuid,
             String email,
             String password,
@@ -31,7 +31,12 @@ public class EmailUserCredential {
             String password,
             UserRole userRole
     ) {
-        return new EmailUserCredential(userGuid, email, password, userRole);
+        return new EmailUserCredential(
+                userGuid,
+                email,
+                password,
+                userRole
+        );
     }
 
     public void verifyPassword(boolean matches) {

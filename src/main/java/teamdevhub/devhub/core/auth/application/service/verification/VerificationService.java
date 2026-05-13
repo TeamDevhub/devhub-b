@@ -10,6 +10,7 @@ import teamdevhub.devhub.core.auth.port.in.command.verification.ConfirmVerificat
 import teamdevhub.devhub.core.auth.port.in.command.verification.IssueVerificationCommand;
 import teamdevhub.devhub.core.auth.port.in.usecase.verification.VerificationUseCase;
 import teamdevhub.devhub.core.auth.port.out.verification.VerificationRepository;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.common.provider.TimeProvider;
 import teamdevhub.devhub.shared.enums.ErrorCode;
@@ -52,7 +53,7 @@ public class VerificationService implements VerificationUseCase {
     private void assertIssuable(VerificationTarget verificationTarget) {
         boolean isAlreadySent = verificationRepository.existsUnverifiedAndNotExpired(verificationTarget, timeProvider.now());
         if (isAlreadySent) {
-            throw DomainRuleException.of(ErrorCode.VERIFICATION_ALREADY_SENT);
+            throw BusinessRuleException.of(ErrorCode.VERIFICATION_ALREADY_SENT);
         }
     }
 }

@@ -160,7 +160,9 @@ public class UserProfileController {
                 )
         );
     }
-    
+
+    @Operation(summary = "내 참여 프로젝트 목록 조회", description = "로그인된 사용자가 참여한 프로젝트 목록을 페이징으로 반환합니다.")
+    @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping("/projects/participates")
     public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserParticipateProjects(@RequestParam("page") int page, @RequestParam("size") int size, 
     		@LoginUser AuthenticatedUser authenticatedUser) {
