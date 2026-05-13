@@ -6,7 +6,6 @@ import teamdevhub.devhub.api.user.model.SearchUserRequestDto;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
