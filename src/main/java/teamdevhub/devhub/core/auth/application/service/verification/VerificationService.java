@@ -11,7 +11,6 @@ import teamdevhub.devhub.core.auth.port.in.command.verification.IssueVerificatio
 import teamdevhub.devhub.core.auth.port.in.usecase.verification.VerificationUseCase;
 import teamdevhub.devhub.core.auth.port.out.verification.VerificationRepository;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
-import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.common.provider.TimeProvider;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
