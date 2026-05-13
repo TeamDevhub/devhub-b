@@ -3,7 +3,9 @@ package teamdevhub.devhub.api.user.model;
 import lombok.*;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -13,8 +15,8 @@ import java.time.LocalDateTime;
 public class SearchUserRequestDto {
 
     private String blocked;
-    private LocalDateTime joinedFrom;
-    private LocalDateTime joinedTo;
+    private LocalDate joinedFrom;
+    private LocalDate joinedTo;
     private String username;
 
     public SearchUserCommand toSearchUserCommand() {
@@ -32,10 +34,20 @@ public class SearchUserRequestDto {
             username = this.username.trim();
         }
 
+        LocalDateTime joinedFromDateTime = null;
+        if (this.joinedFrom != null) {
+            joinedFromDateTime = this.joinedFrom.atStartOfDay();
+        }
+
+        LocalDateTime joinedToDateTime = null;
+        if (this.joinedTo != null) {
+            joinedToDateTime = this.joinedTo.atTime(LocalTime.MAX);
+        }
+
         return SearchUserCommand.builder()
                 .blocked(blocked)
-                .joinedFrom(this.joinedFrom)
-                .joinedTo(this.joinedTo)
+                .joinedFrom(joinedFromDateTime)
+                .joinedTo(joinedToDateTime)
                 .username(username)
                 .build();
     }

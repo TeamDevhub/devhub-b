@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.api.user.model.SearchUserRequestDto;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -121,8 +123,8 @@ class SearchUserRequestDtoTest {
     @DisplayName("joinedFrom_과_joinedTo_는_그대로_전달된다")
     void joinedFromAndJoinedToArePassedThrough() {
         // given
-        LocalDateTime joinedFrom = LocalDateTime.of(2024, 1, 1, 0, 0);
-        LocalDateTime joinedTo = LocalDateTime.of(2024, 12, 31, 23, 59);
+        LocalDate joinedFrom = LocalDate.of(2024, 1, 1);
+        LocalDate joinedTo = LocalDate.of(2024, 12, 31);
 
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .joinedFrom(joinedFrom)
@@ -133,7 +135,10 @@ class SearchUserRequestDtoTest {
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.joinedFrom()).isEqualTo(joinedFrom);
-        assertThat(searchUserCommand.joinedTo()).isEqualTo(joinedTo);
+        assertThat(searchUserCommand.joinedFrom())
+                .isEqualTo(joinedFrom.atStartOfDay());
+
+        assertThat(searchUserCommand.joinedTo())
+                .isEqualTo(joinedTo.atTime(LocalTime.MAX));
     }
 }
