@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.report.model.CreateReportRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
@@ -30,9 +31,9 @@ public class ReportController {
 		@ApiResponse(responseCode = "200", description = "신고 등록 성공"),
 		@ApiResponse(responseCode = "401", description = "인증되지 않은 사용자")
     })
-    @PostMapping("/reports")
+    @PostMapping
     public ResponseEntity<DataApiResponseDto<Void>> createReport(
-            @RequestBody CreateReportRequestDto createReportRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+    		@Valid @RequestBody CreateReportRequestDto createReportRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
         return ResponseEntity.ok(reportFacade.createReport(createReportRequestDto.toCommand(authenticatedUser.userGuid())));
     }
 }

@@ -6,7 +6,6 @@ import lombok.Builder;
 public record CreateReportCommand(
         String boardGuid,
         String commentGuid,
-        String reportedUser,
         String reporterUser,
         String categoryCd,
         String reason

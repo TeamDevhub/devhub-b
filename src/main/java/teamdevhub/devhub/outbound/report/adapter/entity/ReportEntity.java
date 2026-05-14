@@ -21,7 +21,7 @@ public class ReportEntity extends BaseEntity {
     @Column(length = 32)
     private String reportGuid;
     
-    @Column(name = "board_guid")
+    @Column(name = "board_guid", nullable = false)
     private String boardGuid;
     
     @Column(name = "comment_guid")
@@ -36,7 +36,7 @@ public class ReportEntity extends BaseEntity {
     @Column(name = "category_cd", nullable = false)
     private String categoryCd;
     
-    @Column(name = "reason")
+    @Column(name = "reason", nullable = false)
     private String reason;
     
     @Convert(converter = BooleanToYNConverter.class)

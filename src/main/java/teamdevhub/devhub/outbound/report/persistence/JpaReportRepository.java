@@ -18,8 +18,8 @@ public interface JpaReportRepository extends JpaRepository<ReportEntity, String>
             from ReportEntity r
             where r.reporterUser = :reporterUser
               and (
-                    (:boardGuid is not null and r.boardGuid = :boardGuid)
-                 or (:commentGuid is not null and r.commentGuid = :commentGuid)
+                    (:commentGuid is not null and r.commentGuid = :commentGuid)
+                 or (:commentGuid is null and r.boardGuid = :boardGuid and r.commentGuid is null)
               )
             """)
     boolean existsDuplicate(

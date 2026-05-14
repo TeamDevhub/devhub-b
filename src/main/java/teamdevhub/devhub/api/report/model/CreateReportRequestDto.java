@@ -19,19 +19,16 @@ public class CreateReportRequestDto {
 
     private String commentGuid;
 
-    @NotBlank(message = "신고당한 회원은 필수입니다.")
-    private String reportedUser;
-
     @NotBlank(message = "카테고리 설정은 필수입니다")
     private String categoryCd;
 
+    @NotBlank(message = "상세 사유는 필수입니다")
     private String reason;
 
     public CreateReportCommand toCommand(String reporterUser) {
         return CreateReportCommand.builder()
                 .boardGuid(this.boardGuid)
                 .commentGuid(this.commentGuid)
-                .reportedUser(this.reportedUser)
                 .reporterUser(reporterUser)
                 .categoryCd(this.categoryCd)
                 .reason(this.reason)

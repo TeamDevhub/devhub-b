@@ -28,28 +28,27 @@ public class ReportService implements ReportUseCase {
 
     @Override
     public void createReport(CreateReportCommand createReportCommand) {
-        String boardGuid = createReportCommand.boardGuid();
+        String commentGuid = createReportCommand.commentGuid();
+        String reportedUserGuid;
 
-        boolean duplicated = reportRepository.existsDuplicate(createReportCommand.reporterUser(), boardGuid, createReportCommand.commentGuid());
+        boolean duplicated = reportRepository.existsDuplicate(createReportCommand.reporterUser(), createReportCommand.boardGuid(), commentGuid);
         if (duplicated) {
             throw BusinessRuleException.of(ErrorCode.REPORT_DUPLICATE);
         }
 
-        // 신고당한 회원이 실제 작성자인지 확인
-        if (boardGuid != null && !boardGuid.isBlank()) {
-            Board board = boardRepository.findByBoardGuid(boardGuid);
-            if (!board.getUserGuid().equals(createReportCommand.reportedUser())) {
-                throw BusinessRuleException.of(ErrorCode.REPORT_TARGET_MISMATCH);
-            }
+        if (commentGuid == null) {
+            Board board = boardRepository.findByBoardGuid(createReportCommand.boardGuid());
+            reportedUserGuid = board.getUserGuid();
         } else {
-            Comment comment = commentRepository.findByCommentGuid(createReportCommand.commentGuid());
-            if (!comment.getUserGuid().equals(createReportCommand.reportedUser())) {
-                throw BusinessRuleException.of(ErrorCode.REPORT_TARGET_MISMATCH);
-            }
+            Comment comment = commentRepository.findByCommentGuid(commentGuid);
+           if (!createReportCommand.boardGuid().equals(comment.getBoardGuid())) {
+               throw BusinessRuleException.of(ErrorCode.REPORT_TARGET_MISMATCH);
+           }
+            reportedUserGuid = comment.getUserGuid();
         }
 
         String reportGuid = identifierProvider.generateIdentifier();
-        Report report = Report.createReport(createReportCommand, reportGuid);
+        Report report = Report.createReport(createReportCommand, reportGuid, reportedUserGuid);
         reportRepository.save(report);
     }
 }

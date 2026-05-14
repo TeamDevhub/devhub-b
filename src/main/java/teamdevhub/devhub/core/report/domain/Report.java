@@ -43,12 +43,12 @@ public class Report {
                 .build();
     }
 
-    public static Report createReport(CreateReportCommand createReportCommand, String reportGuid) {
+    public static Report createReport(CreateReportCommand createReportCommand, String reportGuid, String reportedUserGuid) {
         return Report.builder()
                 .reportGuid(reportGuid)
                 .boardGuid(createReportCommand.boardGuid())
                 .commentGuid(createReportCommand.commentGuid())
-                .reportedUser(createReportCommand.reportedUser())
+                .reportedUser(reportedUserGuid)
                 .reporterUser(createReportCommand.reporterUser())
                 .categoryCd(createReportCommand.categoryCd())
                 .reason(createReportCommand.reason())
