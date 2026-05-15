@@ -1,8 +1,8 @@
 package teamdevhub.devhub.outbound.home.persistence;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -10,32 +10,40 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import static teamdevhub.devhub.outbound.project.adapter.entity.QProjectEntity.projectEntity;
+
 @Repository
 @RequiredArgsConstructor
 public class HomeProjectQueryDaoImpl implements HomeProjectQueryDao {
 
-    @PersistenceContext
-    private final EntityManager entityManager;
+    private final JPAQueryFactory queryFactory;
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Object[]> findHomeProjects(LocalDate today, Pageable pageable) {
-        String jpql = """
-                SELECT p.projectGuid, p.title, p.category, p.username,
-                       p.imageFileGuid, p.recruitmentStartDate, p.recruitmentEndDate,
-                       p.registeredDate
-                FROM ProjectEntity p
-                WHERE p.deleted = false
-                ORDER BY
-                    CASE WHEN p.recruitmentStartDate <= :today AND p.recruitmentEndDate >= :today THEN 0 ELSE 1 END ASC,
-                    p.registeredDate DESC
-                """;
-
-        Query query = entityManager.createQuery(jpql)
-                .setParameter("today", today)
-                .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize());
-
-        return query.getResultList();
+    public List<HomeProjectDto> findHomeProjects(LocalDate today, Pageable pageable) {
+        return queryFactory
+                .select(Projections.constructor(HomeProjectDto.class,
+                        projectEntity.projectGuid,
+                        projectEntity.title,
+                        projectEntity.category,
+                        projectEntity.username,
+                        projectEntity.imageFileGuid,
+                        projectEntity.recruitmentStartDate,
+                        projectEntity.recruitmentEndDate,
+                        projectEntity.registeredDate
+                ))
+                .from(projectEntity)
+                .where(projectEntity.deleted.isFalse())
+                .orderBy(
+                        new CaseBuilder()
+                                .when(projectEntity.recruitmentStartDate.loe(today)
+                                        .and(projectEntity.recruitmentEndDate.goe(today)))
+                                .then(0)
+                                .otherwise(1)
+                                .asc(),
+                        projectEntity.registeredDate.desc()
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
     }
 }

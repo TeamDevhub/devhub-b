@@ -1,5 +1,7 @@
 package teamdevhub.devhub.outbound.admin.form.persistence;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,5 +14,7 @@ public interface ApplicationFormQueryDao {
 			Pageable pageable);
 
 	Page<ApplicationForm> listApplicationFormWithoutItem(SearchApplicationFormCommand searchApplicationFormCommand);
+
+	List<ApplicationForm> listApplicationFormsWithItems(SearchApplicationFormCommand searchApplicationFormCommand);
 
 }

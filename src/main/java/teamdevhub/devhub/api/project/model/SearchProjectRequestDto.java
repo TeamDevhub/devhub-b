@@ -35,11 +35,14 @@ public class SearchProjectRequestDto {
     private LocalDate recruitmentEndDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate progressStartDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate progressEndDate;
 
 	public SearchProjectListCommand toSearchProjectListCommand() {
 		LocalDateTime formattedRecruitmentStartDate = null;
 		LocalDateTime formattedRecruitmentEndDate = null;
 		LocalDateTime formattedProgressStartDate = null;
+		LocalDateTime formattedProgressEndDate = null;
 		if(recruitmentStartDate != null) {
 			formattedRecruitmentStartDate = recruitmentStartDate.atStartOfDay();
 		} 
@@ -48,6 +51,9 @@ public class SearchProjectRequestDto {
 		} 
 		if(progressStartDate != null) {
 			formattedProgressStartDate = progressStartDate.atStartOfDay();
+		} 
+		if(progressEndDate != null) {
+			formattedProgressEndDate = progressEndDate.atStartOfDay();
 		} 
 		return SearchProjectListCommand.builder()
 				.order(order)
@@ -60,9 +66,10 @@ public class SearchProjectRequestDto {
 				.projectRecruitTypeList(projectRecruitTypeList)
 				.projectProgressTypeList(projectProgressTypeList)
 				.projectRecruitStatusList(projectRecruitStatusList)
-				.recruitmentStartDate(formattedRecruitmentStartDate)
-				.recruitmentEndDate(formattedRecruitmentEndDate)
-				.progressStartDate(formattedProgressStartDate)
+				.recruitmentStartDate(recruitmentStartDate)
+				.recruitmentEndDate(recruitmentEndDate)
+				.progressStartDate(progressStartDate)
+				.progressEndDate(progressEndDate)
 				.build();
 	}
 }
