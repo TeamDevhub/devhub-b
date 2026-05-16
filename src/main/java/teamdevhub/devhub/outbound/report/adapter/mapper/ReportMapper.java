@@ -2,7 +2,7 @@ package teamdevhub.devhub.outbound.report.adapter.mapper;
 
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.report.domain.Report;
-import teamdevhub.devhub.outbound.board.adapter.entity.ReportEntity;
+import teamdevhub.devhub.outbound.report.adapter.entity.ReportEntity;
 
 public class ReportMapper {
 
@@ -25,5 +25,18 @@ public class ReportMapper {
                         entity.getModifiedDate()
                 )
         );
+    }
+
+    public static ReportEntity toEntity(Report report) {
+        return ReportEntity.builder()
+                .reportGuid(report.getReportGuid())
+                .boardGuid(report.getBoardGuid())
+                .commentGuid(report.getCommentGuid())
+                .reportedUser(report.getReportedUser())
+                .reporterUser(report.getReporterUser())
+                .categoryCd(report.getCategoryCd())
+                .reason(report.getReason())
+                .isProcessed(report.isProcessed())
+                .build();
     }
 }

@@ -24,6 +24,10 @@ public class Comment {
 		 this.userName = userName;
 	}
 
+	public void updateContent(String content) {
+		this.content = content;
+	}
+
 	public static Comment createComment(CreateCommentCommand createCommentCommand, String commentGuid) {
 		return Comment.builder()
 				.commentGuid(commentGuid)
