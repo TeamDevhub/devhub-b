@@ -61,7 +61,7 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
                         userGuid
                 );
 
-        User user = User.createOAuthUser(createUserCommand);
+        User user = User.createOauthUser(createUserCommand);
         store.put(user.getUserGuid(), user);
     }
 

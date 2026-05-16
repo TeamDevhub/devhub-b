@@ -10,6 +10,8 @@ import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.shared.enums.ErrorCode;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static teamdevhub.devhub.constant.UserTestConstant.*;
@@ -26,7 +28,7 @@ class UserActiveAndReviewTest {
 
     private User buildBlockedUser(String userGuid) {
         return User.of(userGuid, UserRole.USER, TEST_USERNAME_1, TEST_INTRO_1,
-                null, 36.5, true, TEST_BLOCK_END_DATE, false, AuditInfo.empty());
+                null, 36.5, true, TEST_BLOCK_END_DATE, false, LocalDateTime.now(), AuditInfo.empty());
     }
 
     private User buildDeletedUser(String userGuid) {
@@ -38,7 +40,7 @@ class UserActiveAndReviewTest {
     // --- assertActive ---
 
     @Test
-    @DisplayName("활성_상태의_사용자는_assertActive를_호출해도_예외가_발생하지_않는다")
+    @DisplayName("활성_상태의_사용자는_assertActive_를_호출해도_예외가_발생하지_않는다")
     void assertActive_activeUser_noException() {
         // given
         User user = buildGeneralUser(TEST_USER_GUID_1);
@@ -48,7 +50,7 @@ class UserActiveAndReviewTest {
     }
 
     @Test
-    @DisplayName("탈퇴한_사용자는_assertActive를_호출하면_USER_WITHDRAWN_예외가_발생한다")
+    @DisplayName("탈퇴한_사용자는_assertActive_를_호출하면_USER_WITHDRAWN_예외가_발생한다")
     void assertActive_withdrawnUser_throwsDomainRuleException() {
         // given
         User user = buildDeletedUser(TEST_USER_GUID_1);
@@ -60,7 +62,7 @@ class UserActiveAndReviewTest {
     }
 
     @Test
-    @DisplayName("정지된_사용자는_assertActive를_호출하면_USER_BLOCKED_예외가_발생한다")
+    @DisplayName("정지된_사용자는_assertActive_를_호출하면_USER_BLOCKED_예외가_발생한다")
     void assertActive_blockedUser_throwsDomainRuleException() {
         // given
         User user = buildBlockedUser(TEST_USER_GUID_1);

@@ -19,7 +19,7 @@ public class AuthResultTest {
         AuthResult authResult = AuthResult.of(accessToken, refreshToken);
 
         // then
-        assertThat(authResult.toauthorizationHeader()).isEqualTo("Bearer access-token-random");
+        assertThat(authResult.toAuthorizationHeader()).isEqualTo("Bearer access-token-random");
         assertThat(authResult.accessToken()).isEqualTo(accessToken);
         assertThat(authResult.refreshToken()).isEqualTo(refreshToken);
     }

@@ -8,7 +8,7 @@ import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 public class UserCredentialMapper {
 
-    public static AuthenticatedUser toauthenticatedUser(EmailCredentialEntity emailCredentialEntity) {
+    public static AuthenticatedUser toAuthenticatedUser(EmailCredentialEntity emailCredentialEntity) {
         return AuthenticatedUser.of(
                 emailCredentialEntity.getUserGuid(),
                 emailCredentialEntity.getEmail(),
@@ -16,7 +16,7 @@ public class UserCredentialMapper {
         );
     }
 
-    public static AuthenticatedUser toauthenticatedUser(OAuthCredentialEntity oauthCredentialEntity) {
+    public static AuthenticatedUser toAuthenticatedUser(OAuthCredentialEntity oauthCredentialEntity) {
         return AuthenticatedUser.of(
                 oauthCredentialEntity.getUserGuid(),
                 oauthCredentialEntity.getOauthId(),

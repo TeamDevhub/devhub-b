@@ -70,7 +70,7 @@ public class UserSignupService implements UserSignupUseCase {
 
     private User createOAuthUser(SignupOAuthUserCommand signupOAuthUserCommand, String userGuid) {
         CreateUserCommand createOAuthUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOAuthUserCommand, userGuid);
-        return User.createOAuthUser(createOAuthUserCommand);
+        return User.createOauthUser(createOAuthUserCommand);
     }
 
     private void saveUserPositions(String userGuid, List<String> positionList) {

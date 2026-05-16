@@ -13,7 +13,7 @@ public record AuthResult(String accessToken, String refreshToken) {
         return refreshToken != null;
     }
 
-    public String toauthorizationHeader() {
+    public String toAuthorizationHeader() {
         return "Bearer " + accessToken;
     }
 }

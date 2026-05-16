@@ -43,13 +43,13 @@ public class FakeFullUserCredentialRepository implements UserCredentialRepositor
     public void saveEmailUserCredential(AuthenticatedUser authenticatedUser, String encryptedPassword) {
         byGuid.put(authenticatedUser.userGuid(), authenticatedUser);
         byEmail.put(authenticatedUser.loginId(), authenticatedUser);
-        EmailUserCredential credential = new EmailUserCredential(
+        EmailUserCredential emailUserCredential = EmailUserCredential.of(
                 authenticatedUser.userGuid(),
                 authenticatedUser.loginId(),
                 encryptedPassword,
                 UserRole.USER
         );
-        emailCredentialByGuid.put(authenticatedUser.userGuid(), credential);
+        emailCredentialByGuid.put(authenticatedUser.userGuid(), emailUserCredential);
     }
 
     @Override

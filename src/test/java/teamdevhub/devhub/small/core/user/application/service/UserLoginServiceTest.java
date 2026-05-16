@@ -54,6 +54,7 @@ public class UserLoginServiceTest {
                 true,
                 null,
                 false,
+                LocalDateTime.now(),
                 AuditInfo.empty()
         );
     }

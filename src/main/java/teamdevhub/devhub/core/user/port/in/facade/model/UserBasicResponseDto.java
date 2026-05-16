@@ -43,6 +43,7 @@ public class UserBasicResponseDto {
                 .blocked(user.isBlocked())
                 .blockEndDate(user.getBlockEndDate())
                 .deleted(user.isDeleted())
+                .lastLoginDateTime(user.getLastLoginDateTime())
                 .registrantGuid(user.getAuditInfo().registrantGuid())
                 .registeredDate(user.getAuditInfo().registeredDate())
                 .modifierGuid(user.getAuditInfo().modifierGuid())

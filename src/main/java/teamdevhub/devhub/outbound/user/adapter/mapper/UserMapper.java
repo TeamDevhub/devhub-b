@@ -1,8 +1,8 @@
 package teamdevhub.devhub.outbound.user.adapter.mapper;
 
+import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
-import teamdevhub.devhub.core.common.audit.AuditInfo;
 
 public class UserMapper {
 
@@ -17,6 +17,7 @@ public class UserMapper {
                 .blocked(user.isBlocked())
                 .blockEndDate(user.getBlockEndDate())
                 .deleted(user.isDeleted())
+                .lastLoginDateTime(user.getLastLoginDateTime())
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class UserMapper {
                 userEntity.isBlocked(),
                 userEntity.getBlockEndDate(),
                 userEntity.isDeleted(),
+                userEntity.getLastLoginDateTime(),
                 toAuditInfo(userEntity)
         );
     }
