@@ -10,3 +10,4 @@ public interface TokenParseProvider {
     String getRefreshTokenInfo(String refreshToken);
     String removeBearer(String token);
 }
+

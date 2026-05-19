@@ -11,7 +11,7 @@ import teamdevhub.devhub.api.user.controller.UserSignupController;
 import teamdevhub.devhub.api.user.model.SignupRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.core.auth.application.service.AuthResult;
-import teamdevhub.devhub.core.auth.port.in.facade.AuthFacade;
+import teamdevhub.devhub.api.auth.controller.CookieFactory;
 import teamdevhub.devhub.core.user.port.in.facade.UserSignupFacade;
 import teamdevhub.devhub.shared.enums.SuccessCode;
 
@@ -28,13 +28,11 @@ public class UserSignupControllerTest {
     private UserSignupController userSignupController;
 
     private UserSignupFacade userSignupFacade;
-    private AuthFacade authFacade;
 
     @BeforeEach
     void init() {
         userSignupFacade = Mockito.mock(UserSignupFacade.class);
-        authFacade = Mockito.mock(AuthFacade.class);
-        userSignupController = new UserSignupController(userSignupFacade, authFacade);
+        userSignupController = new UserSignupController(userSignupFacade, new CookieFactory());
     }
 
     @Test
@@ -58,7 +56,7 @@ public class UserSignupControllerTest {
 
         AuthResult mockResult = new AuthResult("access-token", "refresh-token");
 
-        when(authFacade.login(any()))
+        when(userSignupFacade.signup(any()))
                 .thenReturn(mockResult);
 
         // when

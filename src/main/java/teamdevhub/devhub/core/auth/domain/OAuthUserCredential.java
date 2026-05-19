@@ -25,4 +25,18 @@ public class OAuthUserCredential {
         this.verificationProvider = verificationProvider;
         this.userRole = userRole;
     }
+
+    public static OAuthUserCredential of(
+            String userGuid,
+            String oauthId,
+            VerificationProvider verificationProvider,
+            UserRole userRole
+    ) {
+        return OAuthUserCredential.builder()
+                .userGuid(userGuid)
+                .oauthId(oauthId)
+                .verificationProvider(verificationProvider)
+                .userRole(userRole)
+                .build();
+    }
 }

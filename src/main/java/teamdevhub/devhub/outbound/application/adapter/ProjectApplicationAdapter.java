@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
 import teamdevhub.devhub.core.application.port.out.ApplicationRepository;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
@@ -83,7 +84,7 @@ public class ProjectApplicationAdapter implements ApplicationRepository {
 	}
 
 	@Override
-	public List<ProjectApplication> findAcceptedByProjectGuid(String projectGuid) {
+	public List<ProjectApplicationScore> findAcceptedByProjectGuid(String projectGuid) {
 		return projectApplicationQueryDao.findAcceptedByProjectGuid(projectGuid);
 	}
 }

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface ProjectApplicationQueryDao {
 
 	List<ProjectApplicationAnswer> findAnswersByApplicationGuid(String applicationGuid);
 
-	List<ProjectApplication> findAcceptedByProjectGuid(String projectGuid);
+	List<ProjectApplicationScore> findAcceptedByProjectGuid(String projectGuid);
 }

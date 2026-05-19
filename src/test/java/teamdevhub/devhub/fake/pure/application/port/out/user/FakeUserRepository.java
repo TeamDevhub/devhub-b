@@ -1,9 +1,11 @@
 package teamdevhub.devhub.fake.pure.application.port.out.user;
 
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.command.UpdateUserCommand;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -22,7 +24,12 @@ public class FakeUserRepository implements UserRepository {
 
     @Override
     public User findByUserGuid(String userGuid) {
-        return store.get(userGuid);
+        calledMethods.add("findByUserGuid");
+        User user = store.get(userGuid);
+        if (user == null) {
+            throw AdapterDataException.of(ErrorCode.USER_NOT_FOUND);
+        }
+        return user;
     }
 
     @Override
@@ -41,18 +48,11 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public void updateMannerDegree(String userGuid, double delta) {
-        calledMethods.add("updateMannerDegree");
-        mannerDegreeStore.merge(userGuid, delta, Double::sum);
-    }
-
-    @Override
     public void updateUserProfile(User user) {
         User existedUser = store.get(user.getUserGuid());
         if (existedUser != null) {
-            UpdateUserCommand command =
-                    new UpdateUserCommand(user.getUsername(), user.getIntroduction());
-            existedUser.updateBasicProfile(command);
+            UpdateUserCommand updateUserCommand = new UpdateUserCommand(user.getUsername(), user.getIntroduction());
+            existedUser.updateBasicProfile(updateUserCommand);
         }
     }
 
@@ -64,7 +64,7 @@ public class FakeUserRepository implements UserRepository {
     @Override
     public boolean existsByUserRole(UserRole userRole) {
         return store.values().stream()
-                .anyMatch(user -> user.getUserRole().equals(userRole));
+                .anyMatch(u -> u.getUserRole().equals(userRole));
     }
 
     @Override
@@ -77,6 +77,10 @@ public class FakeUserRepository implements UserRepository {
             }
         }
         return result;
+    }
+
+    public void givenUser(User user) {
+        store.put(user.getUserGuid(), user);
     }
 
     public boolean wasCalled(String methodName) {

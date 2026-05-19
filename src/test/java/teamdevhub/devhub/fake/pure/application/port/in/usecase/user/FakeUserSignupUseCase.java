@@ -1,9 +1,9 @@
 package teamdevhub.devhub.fake.pure.application.port.in.usecase.user;
 
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.command.CreateUserCommand;
-import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
 import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.core.user.port.in.usecase.UserSignupUseCase;
@@ -17,14 +17,13 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
 
     private final Map<String, User> store = new HashMap<>();
 
-    private SignupOauthUserCommand lastSignupOauthUserCommand;
-    private OauthUser lastOauthUser;
+    private SignupOAuthUserCommand lastSignupOAuthUserCommand;
+    private OAuthUser lastOAuthUser;
     private boolean called = false;
 
     @Override
     public void initializeAdminUser(SignupAdminCommand signupAdminCommand) {
-        CreateUserCommand createUserCommand =
-                CreateUserCommand.adminUserCreateCommand(
+        CreateUserCommand createUserCommand = CreateUserCommand.adminUserCreateCommand(
                         signupAdminCommand,
                         ADMIN_USER_GUID_1,
                         ADMIN_PASSWORD_1
@@ -50,18 +49,15 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
 
     @Override
     public void saveOAuthUserInfo(
-            SignupOauthUserCommand signupOauthUserCommand,
-            OauthUser oauthUser,
+            SignupOAuthUserCommand signupOAuthUserCommand,
             String userGuid
     ) {
         this.called = true;
-        this.lastSignupOauthUserCommand = signupOauthUserCommand;
-        this.lastOauthUser = oauthUser;
+        this.lastSignupOAuthUserCommand = signupOAuthUserCommand;
 
         CreateUserCommand createUserCommand =
                 CreateUserCommand.oauthUserCreateCommand(
-                        signupOauthUserCommand,
-                        oauthUser,
+                        signupOAuthUserCommand,
                         userGuid
                 );
 
@@ -73,12 +69,12 @@ public class FakeUserSignupUseCase implements UserSignupUseCase {
         return called;
     }
 
-    public SignupOauthUserCommand getLastOauthSignupCommand() {
-        return lastSignupOauthUserCommand;
+    public SignupOAuthUserCommand getLastOAuthSignupCommand() {
+        return lastSignupOAuthUserCommand;
     }
 
-    public OauthUser getLastOauthUser() {
-        return lastOauthUser;
+    public OAuthUser getLastOAuthUser() {
+        return lastOAuthUser;
     }
 
     public User getUser(String userGuid) {

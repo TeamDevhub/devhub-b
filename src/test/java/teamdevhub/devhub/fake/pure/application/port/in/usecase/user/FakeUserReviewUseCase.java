@@ -5,21 +5,19 @@ import teamdevhub.devhub.core.user.port.in.usecase.UserReviewUseCase;
 
 public class FakeUserReviewUseCase implements UserReviewUseCase {
 
-    private double lastReviewScore;
-    private String lastRevieweeGuid;
+    public boolean called = false;
+    public ReviewUserCommand lastCommand;
+
+    private double returnScore = 0.0;
 
     @Override
     public double reviewMember(ReviewUserCommand command) {
-        lastReviewScore = command.score() - 3.0;
-        lastRevieweeGuid = command.revieweeGuid();
-        return lastReviewScore;
+        this.called = true;
+        this.lastCommand = command;
+        return returnScore;
     }
 
-    public double getLastReviewScore() {
-        return lastReviewScore;
-    }
-
-    public String getLastRevieweeGuid() {
-        return lastRevieweeGuid;
+    public void willReturn(double score) {
+        this.returnScore = score;
     }
 }

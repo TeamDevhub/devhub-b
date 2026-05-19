@@ -7,7 +7,7 @@
 | Domain Entity            | `{Domain}`                                 | `User`, `Verification`                                      |
 | UseCase Interface        | `{Role}UseCase`                            | `UserSignupUseCase`, `AuthenticationUseCase`                |
 | Service Implementation   | `{Role}Service`                            | `UserSignupService`, `UserCredentialService`                |
-| Facade                   | `{Domain}{Role}Facade`                     | `UserSignupFacade`, `AuthFacade`, `OauthAuthFacade`         |
+| Facade                   | `{Domain}{Role}Facade`                     | `UserSignupFacade`, `AuthFacade`, `OAuthAuthFacade`         |
 | Output Port (Repository) | `{Domain}Repository`                       | `UserCredentialRepository`, `VerificationRepository`        |
 | Output Port (Provider)   | `{Feature}Provider`                        | `TokenIssueProvider`, `EncodedPasswordProvider`             |
 | JPA Repository           | `Jpa{Domain}Repository`                    | `JpaEmailCredentialRepository`, `JpaUserRepository`         |
@@ -18,7 +18,7 @@
 | Request DTO              | `{Action}{Target}RequestDto`               | `SignupRequestDto`, `LoginRequestDto`                       |
 | Response DTO             | `{Target}ResponseDto`                      | `TokenResponseDto`, `UserDetailResponseDto`                 |
 | Command Object           | `{Verb}{Target}Command`                    | `SignupUserCommand`, `UpdateProfileCommand`, `LoginCommand` |
-| Result Object            | `{Verb}{Target}Result` or `{Target}Result` | `AuthResult`, `OauthAuthResult`, `OauthUserResult`          |
+| Result Object            | `{Verb}{Target}Result` or `{Target}Result` | `AuthResult`, `OAuthAuthResult`, `OAuthUserResult`          |
 | Change Result Object     | `{Target}ChangeResult`                     | `UserPositionChangeResult`, `UserSkillChangeResult`         |
 
 ---
@@ -112,7 +112,7 @@
 
 Example:
 
-* `StubOauthClient`
+* `StubOAuthClient`
 
 ---
 

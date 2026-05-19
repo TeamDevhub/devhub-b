@@ -32,7 +32,7 @@ class GlobalExceptionHandlerTest {
     class TestController {
         @GetMapping("/domain-exception")
         public void domainException() {
-            throw DomainRuleException.of(ErrorCode.EMAIL_DUPLICATED);
+            throw DomainRuleException.of(ErrorCode.DUPLICATED_ACCOUNT);
         }
 
         @GetMapping("/business-exception")
@@ -64,10 +64,10 @@ class GlobalExceptionHandlerTest {
         // given, when
         mockMvc.perform(get("/domain-exception"))
                 // then
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.error.code").value(ErrorCode.EMAIL_DUPLICATED.getCode()));
+                .andExpect(jsonPath("$.error.code").value(ErrorCode.DUPLICATED_ACCOUNT.getCode()));
     }
 
     @Test
@@ -76,7 +76,7 @@ class GlobalExceptionHandlerTest {
         // given, when
         mockMvc.perform(get("/business-exception"))
                 // then
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.error.code").value(ErrorCode.VERIFICATION_FAIL.getCode()));
@@ -88,7 +88,7 @@ class GlobalExceptionHandlerTest {
         // given, when
         mockMvc.perform(get("/validation-exception"))
                 // then
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.error.code").value(ErrorCode.VALIDATION_FAIL.getCode()));

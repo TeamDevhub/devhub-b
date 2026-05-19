@@ -46,4 +46,19 @@ public class FakeProjectRepository implements ProjectRepository {
 		return null;
 	}
 
+	@Override
+	public void closeProject(String projectGuid) {
+
+	}
+
+	@Override
+	public PageResult<Project> findEndProjectsByApplicantGuid(String userGuid, PageCommand pageCommand) {
+		return null;
+	}
+
+	@Override
+	public Project getProjectByRequirementGuid(String requirementGuid) {
+		return null;
+	}
+
 }

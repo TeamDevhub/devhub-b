@@ -8,7 +8,7 @@
 * Create instances only through static factory methods such as:
 
     * `createGeneralUser()`
-    * `createOauthUser()`
+    * `createOAuthUser()`
     * `of()`
 * State changes must occur only through domain methods:
 

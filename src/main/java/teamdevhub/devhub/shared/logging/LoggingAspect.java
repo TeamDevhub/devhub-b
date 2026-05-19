@@ -11,8 +11,12 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -21,10 +25,27 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoggingAspect {
 
-    private final ObjectMapper objectMapper;
     private static final String EMPTY_JSON = "[]";
     private static final String NULL_JSON = "null";
+    private static final String MASKED_VALUE = "******";
+
     private static final int SAMPLE_LIMIT = 5;
+
+    private static final List<String> SENSITIVE_FIELDS = List.of(
+            "password",
+            "newPassword",
+            "oldPassword",
+            "confirmPassword",
+            "encodedPassword",
+            "token",
+            "accessToken",
+            "refreshToken",
+            "tempToken",
+            "secret",
+            "authorization"
+    );
+
+    private final ObjectMapper objectMapper;
 
     @Around("execution(* teamdevhub.devhub.api..*(..)) || " +
             "execution(* teamdevhub.devhub.core..*(..)) || " +
@@ -45,6 +66,7 @@ public class LoggingAspect {
         log.info("[START] {}.{}() with params: {}", className, methodName, params);
 
         Object result = joinPoint.proceed();
+
         long elapsed = System.currentTimeMillis() - start;
         String resultLog = summarizeResult(result);
 
@@ -67,7 +89,14 @@ public class LoggingAspect {
         if (args == null || args.length == 0) {
             return EMPTY_JSON;
         }
-        return toSafeJson(args);
+
+        Object[] maskedArgs = new Object[args.length];
+
+        for (int i = 0; i < args.length; i++) {
+            maskedArgs[i] = maskSensitiveFields(args[i]);
+        }
+
+        return toSafeJson(maskedArgs);
     }
 
     private String summarizeResult(Object result) {
@@ -85,22 +114,84 @@ public class LoggingAspect {
                     );
         }
 
-        if (result instanceof Collection<?> coll) {
-            return summarizeCollection(coll);
+        if (result instanceof Collection<?> collection) {
+            return summarizeCollection(collection);
         }
 
-        return toSafeJson(result);
+        return toSafeJson(maskSensitiveFields(result));
     }
 
     private String summarizeCollection(Collection<?> collection) {
         int size = collection.size();
 
         if (size <= SAMPLE_LIMIT) {
-            return toSafeJson(collection);
+            return toSafeJson(maskSensitiveFields(collection));
         }
 
-        List<?> sample = collection.stream().limit(SAMPLE_LIMIT).toList();
+        List<?> sample = collection.stream()
+                .limit(SAMPLE_LIMIT)
+                .map(this::maskSensitiveFields)
+                .toList();
+
         return "%s... (total %d items)".formatted(toSafeJson(sample), size);
+    }
+
+    private Object maskSensitiveFields(Object source) {
+        if (source == null) {
+            return null;
+        }
+
+        if (isSimpleType(source.getClass())) {
+            return source;
+        }
+
+        if (source instanceof Collection<?> collection) {
+            return collection.stream()
+                    .map(this::maskSensitiveFields)
+                    .toList();
+        }
+
+        Map<String, Object> result = new LinkedHashMap<>();
+
+        Class<?> type = source.getClass();
+
+        while (type != null && type != Object.class) {
+            Field[] fields = type.getDeclaredFields();
+
+            for (Field field : fields) {
+                try {
+                    field.setAccessible(true);
+                    Object value = field.get(source);
+
+                    if (isSensitiveField(field.getName())) {
+                        result.put(field.getName(), MASKED_VALUE);
+                    } else {
+                        result.put(field.getName(), value);
+                    }
+                } catch (IllegalAccessException | InaccessibleObjectException ignored) {
+                    result.put(field.getName(), "[unreadable]");
+                }
+            }
+
+            type = type.getSuperclass();
+        }
+
+        return result;
+    }
+
+    private boolean isSensitiveField(String fieldName) {
+        return SENSITIVE_FIELDS.stream()
+                .anyMatch(sensitive ->
+                        sensitive.equalsIgnoreCase(fieldName));
+    }
+
+    private boolean isSimpleType(Class<?> type) {
+        return type.isPrimitive()
+                || String.class.equals(type)
+                || Number.class.isAssignableFrom(type)
+                || Boolean.class.equals(type)
+                || Enum.class.isAssignableFrom(type)
+                || type.getPackageName().startsWith("java.time");
     }
 
     private String toSafeJson(Object object) {

@@ -12,8 +12,10 @@ import teamdevhub.devhub.core.board.port.in.command.CreateCommentCommand;
 import teamdevhub.devhub.core.board.port.in.command.UpdateCommentCommand;
 import teamdevhub.devhub.core.board.port.in.usecase.CommentUseCase;
 import teamdevhub.devhub.core.board.port.out.CommentRepository;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -48,7 +50,12 @@ public class CommentService implements CommentUseCase {
 	
 	@Override
 	public void updateComment(UpdateCommentCommand updateCommentCommand) {
+		Comment comment = commentRepository.findByCommentGuid(updateCommentCommand.commentGuid());
+		if (!comment.getBoardGuid().equals(updateCommentCommand.boardGuid())) {
+	        throw BusinessRuleException.of(ErrorCode.READ_FAIL);
+	    }
 		
-//		commentRepository.updateComment(updateCommentCommand);
+		comment.updateContent(updateCommentCommand.content());
+		commentRepository.updateComment(comment);
 	}
 }

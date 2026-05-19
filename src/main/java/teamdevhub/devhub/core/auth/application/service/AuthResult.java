@@ -1,7 +1,6 @@
 package teamdevhub.devhub.core.auth.application.service;
 
 import lombok.Builder;
-import teamdevhub.devhub.outbound.auth.infrastructure.token.TokenPrefix;
 
 @Builder
 public record AuthResult(String accessToken, String refreshToken) {
@@ -15,6 +14,6 @@ public record AuthResult(String accessToken, String refreshToken) {
     }
 
     public String toAuthorizationHeader() {
-        return TokenPrefix.BEARER.withToken(accessToken);
+        return "Bearer " + accessToken;
     }
 }

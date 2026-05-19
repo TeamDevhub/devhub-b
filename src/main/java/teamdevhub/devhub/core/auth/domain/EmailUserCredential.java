@@ -13,7 +13,7 @@ public class EmailUserCredential {
     private String password;
     private final UserRole userRole;
 
-    public EmailUserCredential(
+    private EmailUserCredential(
             String userGuid,
             String email,
             String password,
@@ -23,6 +23,20 @@ public class EmailUserCredential {
         this.email = email;
         this.password = password;
         this.userRole = userRole;
+    }
+
+    public static EmailUserCredential of(
+            String userGuid,
+            String email,
+            String password,
+            UserRole userRole
+    ) {
+        return new EmailUserCredential(
+                userGuid,
+                email,
+                password,
+                userRole
+        );
     }
 
     public void verifyPassword(boolean matches) {

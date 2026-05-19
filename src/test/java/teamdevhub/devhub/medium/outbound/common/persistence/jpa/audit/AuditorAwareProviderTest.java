@@ -35,7 +35,7 @@ class AuditorAwareProviderTest {
 
     @Test
     @DisplayName("인증_정보가_없으면_system_을_반환한다")
-    void returnSystemIfNoAuthentication() {
+    void returnSystemIfNoauthentication() {
         // given
         SecurityContextHolder.clearContext();
 
@@ -66,7 +66,7 @@ class AuditorAwareProviderTest {
     }
 
     @Test
-    @DisplayName("UserAuthentication_이면_유저_이메일을_반환한다")
+    @DisplayName("UserAuthentication_이면_USERGUID_를_반환한다")
     void returnUserEmailIfUserAuthentication() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
@@ -85,11 +85,11 @@ class AuditorAwareProviderTest {
         Optional<String> auditor = auditorAwareProvider.getCurrentAuditor();
 
         // then
-        assertThat(auditor).contains(TEST_EMAIL_1);
+        assertThat(auditor).contains(TEST_USER_GUID_1);
     }
 
     @Test
-    @DisplayName("principal_이_AuthenticatedUser_면_이메일을_반환한다")
+    @DisplayName("principal_이_AuthenticatedUser_면_USERGUID_를_반환한다")
     void returnEmailIfPrincipalIsAuthenticatedUser() {
         // given
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
@@ -106,7 +106,7 @@ class AuditorAwareProviderTest {
         Optional<String> auditor = auditorAwareProvider.getCurrentAuditor();
 
         // then
-        assertThat(auditor).contains(TEST_EMAIL_1);
+        assertThat(auditor).contains(TEST_USER_GUID_1);
     }
 
     @Test

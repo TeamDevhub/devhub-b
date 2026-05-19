@@ -10,7 +10,7 @@ import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.outbound.auth.adapter.UserCredentialAdapter;
 import teamdevhub.devhub.outbound.auth.persistence.JpaEmailCredentialRepository;
-import teamdevhub.devhub.outbound.auth.persistence.JpaOauthCredentialRepository;
+import teamdevhub.devhub.outbound.auth.persistence.JpaOAuthCredentialRepository;
 import teamdevhub.devhub.shared.enums.VerificationProvider;
 
 import java.util.Optional;
@@ -29,12 +29,12 @@ class AuthenticatedUserAdapterTest {
     private JpaEmailCredentialRepository jpaEmailCredentialRepository;
 
     @Autowired
-    private JpaOauthCredentialRepository jpaOauthCredentialRepository;
+    private JpaOAuthCredentialRepository jpaOAuthCredentialRepository;
 
     @BeforeEach
     void init() {
         jpaEmailCredentialRepository.deleteAll();
-        jpaOauthCredentialRepository.deleteAll();
+        jpaOAuthCredentialRepository.deleteAll();
     }
 
     @Test
@@ -113,7 +113,7 @@ class AuthenticatedUserAdapterTest {
         userCredentialAdapter.saveOAuthUserCredential(authenticatedUser, VerificationProvider.GOOGLE, TEST_OAUTH_ID_1);
 
         // then
-        assertThat(jpaOauthCredentialRepository.findByProviderAndOauthId(VerificationProvider.GOOGLE, TEST_OAUTH_ID_1)).isPresent();
+        assertThat(jpaOAuthCredentialRepository.findByProviderAndOauthId(VerificationProvider.GOOGLE, TEST_OAUTH_ID_1)).isPresent();
     }
 
     @Test

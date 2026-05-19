@@ -52,10 +52,10 @@ public class VerificationServiceTest {
         // given
         VerificationTarget verificationTarget = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
 
-        IssueVerificationCommand command = new IssueVerificationCommand(verificationTarget);
+        IssueVerificationCommand issueVerificationCommand = new IssueVerificationCommand(verificationTarget);
 
         // when
-        verificationService.issueVerification(command);
+        verificationService.issueVerification(issueVerificationCommand);
 
         // then
         Verification verification = verificationRepository.findByVerificationTarget(verificationTarget);

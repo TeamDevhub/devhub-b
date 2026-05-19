@@ -16,16 +16,16 @@ public class UserCredentialMapper {
         );
     }
 
-    public static AuthenticatedUser toAuthenticatedUser(OAuthCredentialEntity oAuthCredentialEntity) {
+    public static AuthenticatedUser toAuthenticatedUser(OAuthCredentialEntity oauthCredentialEntity) {
         return AuthenticatedUser.of(
-                oAuthCredentialEntity.getUserGuid(),
-                oAuthCredentialEntity.getOauthId(),
-                oAuthCredentialEntity.getUserRole()
+                oauthCredentialEntity.getUserGuid(),
+                oauthCredentialEntity.getOauthId(),
+                oauthCredentialEntity.getUserRole()
         );
     }
 
     public static EmailUserCredential toEmailUserCredential(EmailCredentialEntity emailCredentialEntity) {
-        return new EmailUserCredential(
+        return EmailUserCredential.of(
                 emailCredentialEntity.getUserGuid(),
                 emailCredentialEntity.getEmail(),
                 emailCredentialEntity.getPassword(),

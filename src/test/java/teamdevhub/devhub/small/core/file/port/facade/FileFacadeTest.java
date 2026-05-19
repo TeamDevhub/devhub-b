@@ -3,11 +3,14 @@ package teamdevhub.devhub.small.core.file.port.facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.core.file.application.FileResource;
 import teamdevhub.devhub.core.file.port.in.command.UploadFileCommand;
 import teamdevhub.devhub.core.file.port.in.facade.FileFacade;
+import teamdevhub.devhub.core.file.port.in.facade.model.FileResponseDto;
 import teamdevhub.devhub.core.file.port.in.facade.model.UploadFileResponseDto;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.file.FakeFileUseCase;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.util.Map;
 
@@ -24,15 +27,17 @@ class FileFacadeTest {
         fileFacade = new FileFacade(fakeFileUseCase);
     }
 
+    private String uploadSingle(String name) {
+        UploadFileCommand command = new UploadFileCommand(name + ".txt", "txt", 4L, "data".getBytes());
+        return fileFacade.upload(Map.of("file", command)).fileGuids().get("file");
+    }
+
     @Test
     @DisplayName("파일_다중_업로드_테스트")
     void upload_multiple_files() {
         // given
-        UploadFileCommand command1 =
-                new UploadFileCommand("a.txt", "txt", 4L, "data".getBytes());
-
-        UploadFileCommand command2 =
-                new UploadFileCommand("b.txt", "txt", 4L, "data".getBytes());
+        UploadFileCommand command1 = new UploadFileCommand("a.txt", "txt", 4L, "data".getBytes());
+        UploadFileCommand command2 = new UploadFileCommand("b.txt", "txt", 4L, "data".getBytes());
 
         Map<String, UploadFileCommand> commands = Map.of(
                 "profileImage", command1,
@@ -51,12 +56,7 @@ class FileFacadeTest {
     @DisplayName("파일_조회_테스트")
     void find_test() {
         // given
-        UploadFileCommand command =
-                new UploadFileCommand("a.txt", "txt", 4L, "data".getBytes());
-
-        String guid = fileFacade.upload(Map.of("file", command))
-                .fileGuids()
-                .get("file");
+        String guid = uploadSingle("a");
 
         // when
         FileResource resource = fileFacade.find(guid);
@@ -67,20 +67,50 @@ class FileFacadeTest {
     }
 
     @Test
-    @DisplayName("파일_삭제_테스트")
-    void delete_test() {
-        UploadFileCommand command =
-                new UploadFileCommand("a.txt", "txt", 4L, "data".getBytes());
+    @DisplayName("존재하지_않는_파일을_조회하면_AdapterDataException이_발생한다")
+    void find_nonExistent_throwsAdapterDataException() {
+        // when, then
+        assertThatThrownBy(() -> fileFacade.find("nonExistentGuid"))
+                .isInstanceOf(AdapterDataException.class)
+                .hasMessageContaining(ErrorCode.FILE_READ_FAIL.getMessage());
+    }
 
-        String guid = fileFacade.upload(Map.of("file", command))
-                .fileGuids()
-                .get("file");
+    @Test
+    @DisplayName("파일_삭제_후_조회하면_AdapterDataException이_발생한다")
+    void delete_thenFind_throwsAdapterDataException() {
+        // given
+        String guid = uploadSingle("a");
 
         // when
         fileFacade.delete(guid);
 
         // then
         assertThatThrownBy(() -> fileFacade.find(guid))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(AdapterDataException.class)
+                .hasMessageContaining(ErrorCode.FILE_READ_FAIL.getMessage());
+    }
+
+    @Test
+    @DisplayName("파일_메타데이터를_조회하면_파일정보를_반환한다")
+    void selectFileObject_returnsFileResponseDto() {
+        // given
+        String guid = uploadSingle("a");
+
+        // when
+        FileResponseDto result = fileFacade.selectFileObject(guid);
+
+        // then
+        assertThat(result.fileGuid()).isEqualTo(guid);
+        assertThat(result.filename()).isEqualTo("a.txt");
+        assertThat(result.size()).isEqualTo(4L);
+    }
+
+    @Test
+    @DisplayName("존재하지_않는_파일의_메타데이터_조회시_AdapterDataException이_발생한다")
+    void selectFileObject_nonExistent_throwsAdapterDataException() {
+        // when, then
+        assertThatThrownBy(() -> fileFacade.selectFileObject("nonExistentGuid"))
+                .isInstanceOf(AdapterDataException.class)
+                .hasMessageContaining(ErrorCode.FILE_READ_FAIL.getMessage());
     }
 }

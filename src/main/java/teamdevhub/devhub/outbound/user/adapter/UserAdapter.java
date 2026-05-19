@@ -51,11 +51,6 @@ public class UserAdapter implements UserRepository {
     }
 
     @Override
-    public void updateMannerDegree(String userGuid, double delta) {
-        jpaUserRepository.updateMannerDegree(userGuid, delta);
-    }
-
-    @Override
     public void delete(User user) {
         jpaUserRepository.save(UserMapper.toEntity(user));
     }

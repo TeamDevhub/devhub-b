@@ -5,7 +5,7 @@ import teamdevhub.devhub.outbound.auth.adapter.entity.EmailCredentialEntity;
 
 import java.util.Optional;
 
-public interface JpaEmailCredentialRepository extends JpaRepository<EmailCredentialEntity, Long> {
+public interface JpaEmailCredentialRepository extends JpaRepository<EmailCredentialEntity, String> {
 
     Optional<EmailCredentialEntity> findByEmail(String email);
 

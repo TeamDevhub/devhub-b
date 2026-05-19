@@ -20,7 +20,6 @@ public class FileService implements FileUseCase {
     private final FileMetadataRepository fileMetadataRepository;
 
     @Override
-    @Transactional
     public FileMetadata upload(UploadFileCommand uploadFileCommand) {
         String fileGuid = identifierProvider.generateIdentifier();
         String path = fileStorage.save(fileGuid, uploadFileCommand.content());
@@ -36,7 +35,6 @@ public class FileService implements FileUseCase {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public FileResource find(String fileGuid) {
         FileMetadata fileMetadata = fileMetadataRepository.find(fileGuid);
         byte[] content = fileStorage.read(fileGuid);
@@ -45,8 +43,8 @@ public class FileService implements FileUseCase {
 
     @Override
     public void delete(String fileGuid) {
-        fileStorage.delete(fileGuid);
         fileMetadataRepository.deleteByFileGuid(fileGuid);
+        fileStorage.delete(fileGuid);
     }
 
     @Override

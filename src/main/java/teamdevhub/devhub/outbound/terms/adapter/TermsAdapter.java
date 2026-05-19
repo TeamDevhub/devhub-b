@@ -34,14 +34,14 @@ public class TermsAdapter implements TermsRepository, TermsAgreementRepository {
 
     @Override
     public void saveTerms(Terms terms) {
-        jpaTermsRepository.save(terms);
+        jpaTermsRepository.save(TermsMapper.toTermsEntity(terms));
     }
 
     @Override
     public Terms findByTermsGuid(String termsGuid) {
         return jpaTermsRepository.findByTermsGuid(termsGuid)
                 .map(TermsMapper::toDomain)
-                .orElseThrow(() -> AdapterDataException.of(ErrorCode.UNKNOWN_FAIL));
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.NOT_EXISTED_TERMS_AGREEMENT));
     }
 
     @Override

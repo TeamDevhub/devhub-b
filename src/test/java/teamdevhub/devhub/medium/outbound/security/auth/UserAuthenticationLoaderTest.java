@@ -36,7 +36,7 @@ public class UserAuthenticationLoaderTest {
     @DisplayName("존재하는_이메일이면_UserAuthentication_을_반환한다")
     void returnUserAuthenticationIfEmailExists() {
         // given
-        EmailUserCredential emailUserCredential = new EmailUserCredential(
+        EmailUserCredential emailUserCredential = EmailUserCredential.of(
                 TEST_USER_GUID_1,
                 TEST_EMAIL_1,
                 TEST_PASSWORD_1,

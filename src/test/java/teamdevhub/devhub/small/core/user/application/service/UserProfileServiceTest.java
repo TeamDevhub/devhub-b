@@ -3,6 +3,7 @@ package teamdevhub.devhub.small.core.user.application.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.core.user.application.service.UserProfileService;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
@@ -106,10 +107,10 @@ class UserProfileServiceTest {
 
         String NEW_PROFILE_IMAGE_GUID = "NEW_PROFILE_IMAGE_GUID";
 
-        UpdateProfileImageCommand command = new UpdateProfileImageCommand(TEST_USER_GUID_1, NEW_PROFILE_IMAGE_GUID);
+        UpdateProfileImageCommand updateProfileImageCommand = new UpdateProfileImageCommand(TEST_USER_GUID_1, NEW_PROFILE_IMAGE_GUID);
 
         // when
-        userProfileService.updateProfileImage(command);
+        userProfileService.updateProfileImage(updateProfileImageCommand);
 
         // then
         User updatedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
@@ -140,10 +141,10 @@ class UserProfileServiceTest {
         testUser.updateProfileImage(new UpdateProfileImageCommand(TEST_USER_GUID_1, "OLD_IMAGE_GUID"));
 
         userRepository.save(testUser);
-        UpdateProfileImageCommand command = new UpdateProfileImageCommand(TEST_USER_GUID_1, "NEW_IMAGE_GUID");
+        UpdateProfileImageCommand updateProfileImageCommand = new UpdateProfileImageCommand(TEST_USER_GUID_1, "NEW_IMAGE_GUID");
 
         // when
-        userProfileService.updateProfileImage(command);
+        userProfileService.updateProfileImage(updateProfileImageCommand);
 
         // then
         User updatedUser = userRepository.findByUserGuid(TEST_USER_GUID_1);
@@ -153,11 +154,11 @@ class UserProfileServiceTest {
     @Test
     @DisplayName("존재하지_않는_사용자의_프로필_이미지를_수정하면_예외가_발생한다")
     void updateProfileImageWithInvalidUser() {
-        UpdateProfileImageCommand command = new UpdateProfileImageCommand("NOT_EXIST_GUID", "IMAGE_GUID");
+        UpdateProfileImageCommand updateProfileImageCommand = new UpdateProfileImageCommand("NOT_EXIST_GUID", "IMAGE_GUID");
 
         assertThatThrownBy(() ->
-                userProfileService.updateProfileImage(command)
-        ).isInstanceOf(NullPointerException.class);
+                userProfileService.updateProfileImage(updateProfileImageCommand)
+        ).isInstanceOf(AdapterDataException.class);
     }
 
     @Test
@@ -575,14 +576,28 @@ class UserProfileServiceTest {
     @DisplayName("리뷰_점수로_매너도를_업데이트하면_저장소에_반영된다")
     void updateUserMannerDegree_validScore_delegatesToRepository() {
         // given
+        SignupUserCommand signupUserCommand = SignupUserCommand.builder()
+                .email(TEST_EMAIL_1)
+                .password(TEST_PASSWORD_1)
+                .username(TEST_USERNAME_1)
+                .introduction(TEST_INTRO_1)
+                .positionList(TEST_POSITION_LIST)
+                .skillList(TEST_SKILL_LIST)
+                .verificationTarget(VERIFICATION_TARGET_1)
+                .build();
+        CreateUserCommand generalCreateUserCommand = CreateUserCommand.generalUserCreateCommand(signupUserCommand, TEST_USER_GUID_1);
+        User testUser = User.createGeneralUser(generalCreateUserCommand);
+
+        userRepository.save(testUser);
         double reviewScore = 1.5;
 
         // when
         userProfileService.updateUserMannerDegree(TEST_USER_GUID_1, reviewScore);
 
         // then
-        assertThat(userRepository.wasCalled("updateMannerDegree")).isTrue();
-        assertThat(userRepository.mannerDegreeOf(TEST_USER_GUID_1)).isEqualTo(reviewScore);
+        assertThat(userRepository.wasCalled("findByUserGuid")).isTrue();
+        assertThat(userRepository.wasCalled("save")).isTrue();
+        assertThat(userRepository.findByUserGuid(TEST_USER_GUID_1).getMannerDegree()).isEqualTo(36.5 + (reviewScore - 3));
     }
 
     @Test

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.core.auth.application.service.UserCredentialService;
 import teamdevhub.devhub.core.auth.application.service.token.RefreshToken;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
+import teamdevhub.devhub.core.auth.domain.vo.oauth.OAuthUser;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.auth.port.in.command.LoginCommand;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
@@ -62,10 +62,10 @@ class UserCredentialServiceTest {
     @DisplayName("이메일_회원가입_시_사용자_GUID가_반환된다")
     void signupEmailUser_newEmail_returnsUserGuid() {
         // given
-        SignupUserCommand command = signupCommand();
+        SignupUserCommand signupUserCommand = signupCommand();
 
         // when
-        String userGuid = userCredentialService.signupEmailUser(command);
+        String userGuid = userCredentialService.signupEmailUser(signupUserCommand);
 
         // then
         assertThat(userGuid).isEqualTo(TEST_USER_GUID_1);
@@ -81,14 +81,14 @@ class UserCredentialServiceTest {
         // when, then
         assertThatThrownBy(() -> userCredentialService.signupEmailUser(signupCommand()))
                 .isInstanceOf(BusinessRuleException.class)
-                .hasMessageContaining(ErrorCode.SIGNUP_FAIL.getMessage());
+                .hasMessageContaining(ErrorCode.DUPLICATED_ACCOUNT.getMessage());
     }
 
     @Test
     @DisplayName("OAuth_회원가입_시_AuthenticatedUser가_반환된다")
-    void signupOAuthUser_newOauthId_returnsAuthenticatedUser() {
+    void signupOAuthUser_newOAuthId_returnsAuthenticatedUser() {
         // given
-        OauthUser oauthUser = OauthUser.builder()
+        OAuthUser oauthUser = OAuthUser.builder()
                 .oauthId(TEST_OAUTH_ID_1)
                 .verificationProvider(VerificationProvider.GOOGLE)
                 .email(TEST_EMAIL_1)
@@ -104,9 +104,9 @@ class UserCredentialServiceTest {
 
     @Test
     @DisplayName("이미_가입된_OAuth_ID로_가입하면_예외가_발생한다")
-    void signupOAuthUser_duplicateOauthId_throwsException() {
+    void signupOAuthUser_duplicateOAuthId_throwsException() {
         // given
-        OauthUser oauthUser = OauthUser.builder()
+        OAuthUser oauthUser = OAuthUser.builder()
                 .oauthId(TEST_OAUTH_ID_1)
                 .verificationProvider(VerificationProvider.GOOGLE)
                 .email(TEST_EMAIL_1)
@@ -116,7 +116,7 @@ class UserCredentialServiceTest {
         // when, then
         assertThatThrownBy(() -> userCredentialService.signupOAuthUser(oauthUser))
                 .isInstanceOf(BusinessRuleException.class)
-                .hasMessageContaining(ErrorCode.SIGNUP_FAIL.getMessage());
+                .hasMessageContaining(ErrorCode.DUPLICATED_ACCOUNT.getMessage());
     }
 
     @Test
@@ -165,13 +165,13 @@ class UserCredentialServiceTest {
     @DisplayName("로그인_요청하면_인증된_사용자_정보가_반환된다")
     void authenticate_validCredentials_returnsAuthenticatedUser() {
         // given
-        LoginCommand command = LoginCommand.builder()
+        LoginCommand loginCommand = LoginCommand.builder()
                 .email(TEST_EMAIL_1)
                 .password(TEST_PASSWORD_1)
                 .build();
 
         // when
-        AuthenticatedUser result = userCredentialService.authenticate(command);
+        AuthenticatedUser result = userCredentialService.authenticate(loginCommand);
 
         // then
         assertThat(result.userGuid()).isEqualTo(TEST_USER_GUID_1);

@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import teamdevhub.devhub.core.file.application.FileMetadata;
 import teamdevhub.devhub.core.file.port.out.FileMetadataRepository;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.outbound.file.adapter.entity.FileEntity;
 import teamdevhub.devhub.outbound.file.adapter.mapper.FileMetadataMapper;
 import teamdevhub.devhub.outbound.file.persistence.JpaFileRepository;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class FileMetadataAdapter implements FileMetadataRepository {
     public FileMetadata find(String fileGuid) {
         return jpaFileRepository.findByFileGuid(fileGuid)
                 .map(FileMetadataMapper::toDomain)
-                .orElseThrow(() -> new IllegalArgumentException("File not found"));
+                .orElseThrow(() -> AdapterDataException.of(ErrorCode.FILE_READ_FAIL));
     }
 
     @Override

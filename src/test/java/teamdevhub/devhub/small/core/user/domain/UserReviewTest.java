@@ -39,43 +39,13 @@ class UserReviewTest {
     }
 
     @Test
-    @DisplayName("점수_3.0이면_reviewScore는_0이다")
-    void reviewScore_score3_returnsZero() {
-        // given
-        UserReview review = UserReview.create(TEST_REVIEW_GUID_1, commandWith(3.0));
-
-        // when, then
-        assertThat(review.reviewScore()).isEqualTo(0.0);
-    }
-
-    @Test
-    @DisplayName("점수_5.0이면_reviewScore는_플러스_2.0이다")
-    void reviewScore_score5_returnsPlusTwo() {
-        // given
-        UserReview review = UserReview.create(TEST_REVIEW_GUID_1, commandWith(5.0));
-
-        // when, then
-        assertThat(review.reviewScore()).isEqualTo(2.0);
-    }
-
-    @Test
-    @DisplayName("점수_1.0이면_reviewScore는_마이너스_2.0이다")
-    void reviewScore_score1_returnsMinusTwo() {
-        // given
-        UserReview review = UserReview.create(TEST_REVIEW_GUID_1, commandWith(1.0));
-
-        // when, then
-        assertThat(review.reviewScore()).isEqualTo(-2.0);
-    }
-
-    @Test
     @DisplayName("점수_1.0_미만이면_예외가_발생한다")
     void create_scoreBelowMin_throwsException() {
         // given
-        ReviewUserCommand command = commandWith(0.5);
+        ReviewUserCommand reviewUserCommand = commandWith(0.5);
 
         // when, then
-        assertThatThrownBy(() -> UserReview.create(TEST_REVIEW_GUID_1, command))
+        assertThatThrownBy(() -> UserReview.create(TEST_REVIEW_GUID_1, reviewUserCommand))
                 .isInstanceOf(DomainRuleException.class);
     }
 
@@ -83,10 +53,10 @@ class UserReviewTest {
     @DisplayName("점수_5.0_초과이면_예외가_발생한다")
     void create_scoreAboveMax_throwsException() {
         // given
-        ReviewUserCommand command = commandWith(5.5);
+        ReviewUserCommand reviewUserCommand = commandWith(5.5);
 
         // when, then
-        assertThatThrownBy(() -> UserReview.create(TEST_REVIEW_GUID_1, command))
+        assertThatThrownBy(() -> UserReview.create(TEST_REVIEW_GUID_1, reviewUserCommand))
                 .isInstanceOf(DomainRuleException.class);
     }
 
@@ -95,10 +65,27 @@ class UserReviewTest {
     @DisplayName("0.5_단위가_아닌_점수면_예외가_발생한다")
     void create_invalidIncrement_throwsException(double score) {
         // given
-        ReviewUserCommand command = commandWith(score);
+        ReviewUserCommand reviewUserCommand = commandWith(score);
 
         // when, then
-        assertThatThrownBy(() -> UserReview.create(TEST_REVIEW_GUID_1, command))
+        assertThatThrownBy(() -> UserReview.create(TEST_REVIEW_GUID_1, reviewUserCommand))
+                .isInstanceOf(DomainRuleException.class);
+    }
+
+    @Test
+    @DisplayName("자기_자신에게_리뷰하면_예외가_발생한다")
+    void create_selfReview_throwsException() {
+        // given
+        ReviewUserCommand selfReviewCommand = ReviewUserCommand.builder()
+                .userReviewGuid(TEST_REVIEW_GUID_1)
+                .projectGuid(TEST_PROJECT_GUID_1)
+                .reviewerGuid(TEST_USER_GUID_1)
+                .revieweeGuid(TEST_USER_GUID_1)
+                .score(3.0)
+                .build();
+
+        // when, then
+        assertThatThrownBy(() -> UserReview.create(TEST_REVIEW_GUID_1, selfReviewCommand))
                 .isInstanceOf(DomainRuleException.class);
     }
 }

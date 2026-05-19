@@ -2,11 +2,11 @@ package teamdevhub.devhub.medium.api.user.model.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import teamdevhub.devhub.api.user.model.SearchUserRequestDto;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -77,14 +77,14 @@ class SearchUserRequestDtoTest {
     void keywordIsNullWhenKeywordIsNull() {
         // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
-                .keyword(null)
+                .username(null)
                 .build();
 
         // when
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.keyword()).isNull();
+        assertThat(searchUserCommand.username()).isNull();
     }
 
     @Test
@@ -92,14 +92,14 @@ class SearchUserRequestDtoTest {
     void keywordIsNullWhenKeywordIsBlank() {
         // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
-                .keyword("   ")
+                .username("   ")
                 .build();
 
         // when
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.keyword()).isNull();
+        assertThat(searchUserCommand.username()).isNull();
     }
 
     @Test
@@ -107,22 +107,22 @@ class SearchUserRequestDtoTest {
     void keywordIsTrimmed() {
         // given
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
-                .keyword("  hello world  ")
+                .username("  hello world  ")
                 .build();
 
         // when
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.keyword()).isEqualTo("hello world");
+        assertThat(searchUserCommand.username()).isEqualTo("hello world");
     }
 
     @Test
     @DisplayName("joinedFrom_과_joinedTo_는_그대로_전달된다")
     void joinedFromAndJoinedToArePassedThrough() {
         // given
-        LocalDateTime joinedFrom = LocalDateTime.of(2024, 1, 1, 0, 0);
-        LocalDateTime joinedTo = LocalDateTime.of(2024, 12, 31, 23, 59);
+        LocalDate joinedFrom = LocalDate.of(2024, 1, 1);
+        LocalDate joinedTo = LocalDate.of(2024, 12, 31);
 
         SearchUserRequestDto searchUserRequestDto = SearchUserRequestDto.builder()
                 .joinedFrom(joinedFrom)
@@ -133,7 +133,10 @@ class SearchUserRequestDtoTest {
         SearchUserCommand searchUserCommand = searchUserRequestDto.toSearchUserCommand();
 
         // then
-        assertThat(searchUserCommand.joinedFrom()).isEqualTo(joinedFrom);
-        assertThat(searchUserCommand.joinedTo()).isEqualTo(joinedTo);
+        assertThat(searchUserCommand.joinedFrom())
+                .isEqualTo(joinedFrom.atStartOfDay());
+
+        assertThat(searchUserCommand.joinedTo())
+                .isEqualTo(joinedTo.atTime(LocalTime.MAX));
     }
 }

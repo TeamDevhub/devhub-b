@@ -34,10 +34,10 @@ public class VerificationFacadeTest {
     void issueVerification_issuesAndSendsNotification() {
         // given
         VerificationTarget target = VerificationTarget.of(VerificationType.EMAIL, TEST_EMAIL_1);
-        IssueVerificationCommand command = new IssueVerificationCommand(target);
+        IssueVerificationCommand issueVerificationCommand = new IssueVerificationCommand(target);
 
         // when
-        verificationFacade.issueVerification(command);
+        verificationFacade.issueVerification(issueVerificationCommand);
 
         // then
         assertThat(notificationUseCase.getSentVerifications()).hasSize(1);

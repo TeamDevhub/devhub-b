@@ -1,11 +1,12 @@
 package teamdevhub.devhub.core.application.port.out;
 
+import java.util.List;
+
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
-
-import java.util.List;
 
 public interface ApplicationRepository {
 
@@ -23,5 +24,5 @@ public interface ApplicationRepository {
 
 	PageResult<ProjectApplication> findByApplicantGuid(String userGuid, PageCommand pageCommand);
 
-	List<ProjectApplication> findAcceptedByProjectGuid(String projectGuid);
+	List<ProjectApplicationScore> findAcceptedByProjectGuid(String projectGuid);
 }

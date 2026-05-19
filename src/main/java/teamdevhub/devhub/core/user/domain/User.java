@@ -39,6 +39,8 @@ public class User {
     private LocalDateTime blockEndDate;
     private boolean deleted;
 
+    private LocalDateTime lastLoginDateTime;
+
     private final AuditInfo auditInfo;
 
     @Builder
@@ -54,6 +56,7 @@ public class User {
             boolean blocked,
             LocalDateTime blockEndDate,
             boolean deleted,
+            LocalDateTime lastLoginDateTime,
             AuditInfo auditInfo
     ) {
         this.userGuid = userGuid;
@@ -72,11 +75,11 @@ public class User {
         this.blockEndDate = blockEndDate;
         this.deleted = deleted;
 
-        if (auditInfo == null) {
-            this.auditInfo = AuditInfo.empty();
-        } else {
-            this.auditInfo = auditInfo;
-        }
+        this.lastLoginDateTime = lastLoginDateTime;
+
+        this.auditInfo = auditInfo == null
+                ? AuditInfo.empty()
+                : auditInfo;
     }
 
     public static User createAdminUser(CreateUserCommand adminCreateUserCommand) {
@@ -86,6 +89,7 @@ public class User {
                 .username(adminCreateUserCommand.username())
                 .blocked(false)
                 .deleted(false)
+                .lastLoginDateTime(null)
                 .auditInfo(AuditInfo.empty())
                 .build();
     }
@@ -99,6 +103,7 @@ public class User {
                 .mannerDegree(36.5)
                 .blocked(false)
                 .deleted(false)
+                .lastLoginDateTime(null)
                 .auditInfo(AuditInfo.empty())
                 .build();
     }
@@ -112,6 +117,7 @@ public class User {
                 .mannerDegree(36.5)
                 .blocked(false)
                 .deleted(false)
+                .lastLoginDateTime(null)
                 .auditInfo(AuditInfo.empty())
                 .build();
     }
@@ -126,6 +132,7 @@ public class User {
             boolean blocked,
             LocalDateTime blockEndDate,
             boolean deleted,
+            LocalDateTime lastLoginDateTime,
             AuditInfo auditInfo
     ) {
         return User.builder()
@@ -138,8 +145,13 @@ public class User {
                 .blocked(blocked)
                 .blockEndDate(blockEndDate)
                 .deleted(deleted)
+                .lastLoginDateTime(lastLoginDateTime)
                 .auditInfo(auditInfo)
                 .build();
+    }
+
+    public void updateLastLoginDateTime(LocalDateTime lastLoginDateTime) {
+        this.lastLoginDateTime = lastLoginDateTime;
     }
 
     public void withdraw() {
@@ -193,6 +205,25 @@ public class User {
     public void loadPositionsAndSkills(Set<UserPosition> positions, Set<UserSkill> skills) {
         this.positions = new HashSet<>(positions);
         this.skills = new HashSet<>(skills);
+    }
+
+    public void ban(LocalDateTime blockEndDate) {
+        if (this.deleted) {
+            throw DomainRuleException.of(ErrorCode.USER_WITHDRAWN);
+        }
+        if (this.blocked) {
+            throw DomainRuleException.of(ErrorCode.USER_ALREADY_BANNED);
+        }
+        this.blocked = true;
+        this.blockEndDate = blockEndDate;
+    }
+
+    public void unban() {
+        if (!this.blocked) {
+            throw DomainRuleException.of(ErrorCode.USER_NOT_BANNED);
+        }
+        this.blocked = false;
+        this.blockEndDate = null;
     }
 
     public void assertActive() {

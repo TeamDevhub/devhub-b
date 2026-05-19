@@ -19,7 +19,7 @@ public class LocalFileStorage implements FileStorage {
     @Override
     public String save(String fileGuid, byte[] content) {
         try {
-            Path destination = fileStorageProperties.resolve(fileGuid);
+            Path destination = safeResolve(fileGuid);
             Files.createDirectories(destination.getParent());
             Files.write(destination, content);
             return destination.toString();
@@ -31,7 +31,7 @@ public class LocalFileStorage implements FileStorage {
     @Override
     public byte[] read(String fileGuid) {
         try {
-            Path path = fileStorageProperties.resolve(fileGuid);
+            Path path = safeResolve(fileGuid);
             return Files.readAllBytes(path);
         } catch (IOException e) {
             throw ExternalServiceException.of(ErrorCode.FILE_INVALID);
@@ -41,10 +41,19 @@ public class LocalFileStorage implements FileStorage {
     @Override
     public void delete(String fileGuid) {
         try {
-            Path destination = fileStorageProperties.resolve(fileGuid);
+            Path destination = safeResolve(fileGuid);
             Files.deleteIfExists(destination);
         } catch (IOException e) {
             throw ExternalServiceException.of(ErrorCode.FILE_INVALID);
         }
+    }
+
+    private Path safeResolve(String fileGuid) {
+        Path root = fileStorageProperties.getRootPath().toAbsolutePath().normalize();
+        Path resolved = fileStorageProperties.resolve(fileGuid).toAbsolutePath().normalize();
+        if (!resolved.startsWith(root)) {
+            throw ExternalServiceException.of(ErrorCode.FILE_INVALID);
+        }
+        return resolved;
     }
 }

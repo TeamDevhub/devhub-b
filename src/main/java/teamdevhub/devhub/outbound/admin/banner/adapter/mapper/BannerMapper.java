@@ -5,9 +5,10 @@ import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.outbound.admin.banner.adapter.entity.BannerEntity;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class BannerMapper {
+
+    private BannerMapper() {}
 
     private static AuditInfo toAuditInfo(BannerEntity entity) {
         return AuditInfo.of(
@@ -21,14 +22,14 @@ public class BannerMapper {
     public static Banner toBanner(BannerEntity bannerEntity) {
         return Banner.builder()
                 .bannerGuid(bannerEntity.getBannerGuid())
-                .publicationStartDate(bannerEntity.getPublicationStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .publicationEndDate(bannerEntity.getPublicationEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .imageGuid(bannerEntity.getImageGuid())
+                .publicationStartDate(bannerEntity.getStartDate().toString())
+                .publicationEndDate(bannerEntity.getEndDate().toString())
+                .imageGuid(bannerEntity.getImageFileGuid())
                 .title(bannerEntity.getTitle())
                 .description(bannerEntity.getDescription())
                 .isUsed(bannerEntity.isUsed())
                 .isMainBanner(bannerEntity.isMainBanner())
-                .link(bannerEntity.getLink())
+                .link(bannerEntity.getLinkUrl())
                 .auditInfo(toAuditInfo(bannerEntity))
                 .build();
     }
@@ -36,14 +37,15 @@ public class BannerMapper {
     public static BannerEntity toEntity(Banner banner) {
         return BannerEntity.builder()
                 .bannerGuid(banner.getBannerGuid())
-                .link(banner.getLink())
+                .linkUrl(banner.getLink())
                 .title(banner.getTitle())
-                .publicationStartDate(LocalDate.parse(banner.getPublicationStartDate()).atStartOfDay())
-                .publicationEndDate(LocalDate.parse(banner.getPublicationEndDate()).atStartOfDay())
+                .startDate(LocalDate.parse(banner.getPublicationStartDate()))
+                .endDate(LocalDate.parse(banner.getPublicationEndDate()))
                 .description(banner.getDescription())
-                .isMainBanner(banner.isMainBanner())
+                .mainBanner(banner.isMainBanner())
                 .used(banner.isUsed())
-                .imageGuid(banner.getImageGuid())
+                .imageFileGuid(banner.getImageGuid())
+                .sortOrder(0)
                 .build();
     }
 }

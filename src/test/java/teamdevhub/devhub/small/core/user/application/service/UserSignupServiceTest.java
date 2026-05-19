@@ -3,21 +3,19 @@ package teamdevhub.devhub.small.core.user.application.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOAuthUserCommand;
 import teamdevhub.devhub.core.user.application.service.UserSignupService;
-import teamdevhub.devhub.shared.enums.VerificationProvider;
-import teamdevhub.devhub.core.auth.domain.vo.oauth.OauthUser;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.domain.vo.position.UserPosition;
 import teamdevhub.devhub.core.user.domain.vo.skill.UserSkill;
-import teamdevhub.devhub.fake.pure.application.provider.FakeEncodedPasswordProvider;
-import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
+import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
+import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserPositionRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserRepository;
 import teamdevhub.devhub.fake.pure.application.port.out.user.FakeUserSkillRepository;
-import teamdevhub.devhub.core.auth.port.in.command.oauth.SignupOauthUserCommand;
-import teamdevhub.devhub.core.user.port.in.command.SignupAdminCommand;
-import teamdevhub.devhub.core.user.port.in.command.SignupUserCommand;
+import teamdevhub.devhub.fake.pure.application.provider.FakeEncodedPasswordProvider;
+import teamdevhub.devhub.fake.pure.application.provider.FakeUuidIdentifierProvider;
 
 import java.util.List;
 import java.util.Set;
@@ -102,9 +100,9 @@ public class UserSignupServiceTest {
     }
 
     @Test
-    @DisplayName("Oauth_회원가입이_성공하면_포지션과_스킬이_저장된다")
-    void signupWithOauthStoresPositionsAndSkills() {
-        SignupOauthUserCommand signupOauthUserCommand = new SignupOauthUserCommand(
+    @DisplayName("OAuth_회원가입이_성공하면_포지션과_스킬이_저장된다")
+    void signupWithOAuthStoresPositionsAndSkills() {
+        SignupOAuthUserCommand signupOAuthUserCommand = new SignupOAuthUserCommand(
                 TEMP_TOKEN,
                 TEST_USERNAME_1,
                 TEST_INTRO_1,
@@ -113,9 +111,7 @@ public class UserSignupServiceTest {
                 TEST_TERMS_AGREEMENT_LIST
         );
 
-        OauthUser oauthUser = new OauthUser(TEST_OAUTH_ID_1, VerificationProvider.GOOGLE, TEST_EMAIL_1);
-
-        userSignupService.saveOAuthUserInfo(signupOauthUserCommand, oauthUser, TEST_USER_GUID_1);
+        userSignupService.saveOAuthUserInfo(signupOAuthUserCommand, TEST_USER_GUID_1);
 
         Set<UserPosition> positions = userPositionRepository.findByUserGuid(TEST_USER_GUID_1);
         Set<UserSkill> skills = userSkillRepository.findByUserGuid(TEST_USER_GUID_1);

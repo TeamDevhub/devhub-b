@@ -13,6 +13,7 @@ import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationFormItem;
 import teamdevhub.devhub.core.admin.form.port.in.command.ApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.command.CreateApplicationFormCommand;
+import teamdevhub.devhub.core.admin.form.port.in.command.SaveApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.usecase.ApplicationFormUseCase;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormItemRepository;
 import teamdevhub.devhub.core.admin.form.port.out.ApplicationFormRepository;
@@ -21,34 +22,51 @@ import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ApplicationFormService implements ApplicationFormUseCase{
-	
+public class ApplicationFormService implements ApplicationFormUseCase {
+
 	private final IdentifierProvider identifierProvider;
 	private final ApplicationFormRepository applicationFormRepository;
 	private final ApplicationFormItemRepository applicationFormItemRepository;
-	
+
 	@Override
 	public List<String> saveApplicationForms(List<CreateApplicationFormCommand> applitionalFormCommandList) {
 		List<String> applicationFormGuids = new ArrayList<>();
 		applitionalFormCommandList.stream()
 				.forEach(applicationFormCommand -> {
 				ApplicationForm applicationForm = createApplicationForm(applicationFormCommand);
-				saveApplicationForm(applicationForm);
-				if(applicationFormCommand.getItemList() != null && applicationFormCommand.getItemList().size() > 0) {
+				applicationFormRepository.save(applicationForm);
+				if (applicationFormCommand.getItemList() != null && applicationFormCommand.getItemList().size() > 0) {
 					saveApplcationFormItems(applicationForm.getApplicationFormGuid(), applicationFormCommand.getItemList());
 				}
 				applicationFormGuids.add(applicationForm.getApplicationFormGuid());
 				});
 		return applicationFormGuids;
 	}
-	
+
+	@Override
+	public void saveApplicationForm(SaveApplicationFormCommand command) {
+		if (command.isInsert()) {
+			String newGuid = identifierProvider.generateIdentifier();
+			ApplicationForm form = ApplicationForm.createCustomApplicationForm(command, newGuid);
+			applicationFormRepository.save(form);
+			if (command.getItemList() != null && !command.getItemList().isEmpty()) {
+				saveApplcationFormItems(form.getApplicationFormGuid(), command.getItemList());
+			}
+		} else {
+			String guid = command.getApplicationFormGuid();
+			ApplicationForm form = applicationFormRepository.findByApplicationFormGuid(guid);
+			form.update(command.getTitle(), command.getHelpText(), command.isUsed(), !"Y".equals(command.getDefaultFieldYn()));
+			applicationFormRepository.update(form);
+			applicationFormItemRepository.deleteByApplicationFormGuid(List.of(guid));
+			if (command.getItemList() != null && !command.getItemList().isEmpty()) {
+				saveApplcationFormItems(guid, command.getItemList());
+			}
+		}
+	}
+
 	private ApplicationForm createApplicationForm(CreateApplicationFormCommand createApplicationFormCommand) {
 		String applicationFormGuid = identifierProvider.generateIdentifier();
 		return ApplicationForm.createCustomApplicationForm(createApplicationFormCommand, applicationFormGuid);
-	}
-	
-	private void saveApplicationForm(ApplicationForm applicationForm) {
-		applicationFormRepository.save(applicationForm);
 	}
 
 	private void saveApplcationFormItems(String applicationFormGuid, List<String> itemList) {
@@ -59,7 +77,6 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 				})
 				.collect(Collectors.toUnmodifiableSet());
 		applicationFormItemRepository.saveAll(items);
-		
 	}
 
 	@Override
@@ -70,7 +87,6 @@ public class ApplicationFormService implements ApplicationFormUseCase{
 												.toList();
 		applicationFormItemRepository.deleteByApplicationFormGuid(applicationFormGuids);
 		applicationFormRepository.deleteByApplicationFormGuid(applicationFormGuids);
-		
 	}
 
 	@Override

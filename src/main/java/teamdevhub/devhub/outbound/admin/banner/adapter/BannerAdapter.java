@@ -10,13 +10,13 @@ import teamdevhub.devhub.core.admin.banner.port.in.command.SearchBannerRequestCo
 import teamdevhub.devhub.core.admin.banner.port.out.BannerRepository;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.outbound.admin.banner.adapter.entity.BannerEntity;
 import teamdevhub.devhub.outbound.admin.banner.adapter.mapper.BannerMapper;
 import teamdevhub.devhub.outbound.admin.banner.persistence.JpaBannerRepository;
+import teamdevhub.devhub.outbound.admin.banner.adapter.entity.BannerEntity;
 
 import java.time.LocalDate;
 
-import static teamdevhub.devhub.shared.enums.DateConstants.MAX_LOCAL_DATE_TIME;
+import static teamdevhub.devhub.shared.enums.DateConstants.MAX_LOCAL_DATE;
 
 @Component
 @RequiredArgsConstructor
@@ -28,14 +28,14 @@ public class BannerAdapter implements BannerRepository {
     public PageResult<Banner> getBannerList(SearchBannerRequestCommand searchBannerRequestCommand, PageCommand pageCommand) {
         Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
         Page<BannerEntity> resultList = jpaBannerRepository.findByComplexCondition(
-                searchBannerRequestCommand.keyword()
-                , searchBannerRequestCommand.isUsed()
-                , searchBannerRequestCommand.isMainBanner()
-                , searchBannerRequestCommand.alwaysPublication()
-                , (searchBannerRequestCommand.publicationStartDate() != null) ? LocalDate.parse(searchBannerRequestCommand.publicationStartDate()).atStartOfDay() : null
-                , (searchBannerRequestCommand.publicationEndDate() != null) ? LocalDate.parse(searchBannerRequestCommand.publicationEndDate()).atStartOfDay() : null
-                , MAX_LOCAL_DATE_TIME
-                , pageable
+                searchBannerRequestCommand.keyword(),
+                searchBannerRequestCommand.isUsed(),
+                searchBannerRequestCommand.isMainBanner(),
+                searchBannerRequestCommand.alwaysPublication(),
+                searchBannerRequestCommand.publicationStartDate() != null ? LocalDate.parse(searchBannerRequestCommand.publicationStartDate()) : null,
+                searchBannerRequestCommand.publicationEndDate() != null ? LocalDate.parse(searchBannerRequestCommand.publicationEndDate()) : null,
+                MAX_LOCAL_DATE,
+                pageable
         );
         return PageResult.of(
                 resultList.getContent().stream().map(BannerMapper::toBanner).toList(),

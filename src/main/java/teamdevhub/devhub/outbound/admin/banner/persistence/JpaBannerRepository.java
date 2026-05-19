@@ -7,31 +7,32 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import teamdevhub.devhub.outbound.admin.banner.adapter.entity.BannerEntity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public interface JpaBannerRepository extends JpaRepository<BannerEntity, String> {
 
-        @Query("""
-                select B from BannerEntity B
-                where (:keyword IS NULL OR B.title LIKE %:keyword% OR B.description LIKE %:keyword%)
-                AND (:isUsed IS NULL OR B.used = :isUsed)
-                AND (:isMainBanner IS NULL OR B.isMainBanner = :isMainBanner)
-                AND (:alwaysPublication IS NULL OR (
-                        (:alwaysPublication = true AND B.publicationEndDate = :maxDate)
-                        OR 
-                        (:alwaysPublication = false AND (B.publicationEndDate IS NULL OR B.publicationEndDate <> :maxDate))
-                ))
-                AND (:publicationStartDate IS NULL OR B.publicationStartDate <= :publicationStartDate)
-                AND (:publicationEndDate IS NULL OR B.publicationEndDate >= :publicationEndDate)
-        """)
-        Page<BannerEntity> findByComplexCondition(
-                @Param("keyword") String keyword,
-                @Param("isUsed") Boolean isUsed,
-                @Param("isMainBanner") Boolean isMainBanner,
-                @Param("alwaysPublication") Boolean alwaysPublication,
-                @Param("publicationStartDate") LocalDateTime publicationStartDate,
-                @Param("publicationEndDate") LocalDateTime publicationEndDate,
-                @Param("maxDate") LocalDateTime maxDate,
-                Pageable pageable
-        );
+    @Query("""
+            SELECT b FROM BannerEntity b
+            WHERE (:keyword IS NULL OR b.title LIKE %:keyword% OR b.description LIKE %:keyword%)
+            AND (:isUsed IS NULL OR b.used = :isUsed)
+            AND (:isMainBanner IS NULL OR b.mainBanner = :isMainBanner)
+            AND (:alwaysPublication IS NULL OR (
+                (:alwaysPublication = true AND b.endDate = :maxDate)
+                OR
+                (:alwaysPublication = false AND b.endDate <> :maxDate)
+            ))
+            AND (:startDate IS NULL OR b.startDate <= :startDate)
+            AND (:endDate IS NULL OR b.endDate >= :endDate)
+            """)
+    Page<BannerEntity> findByComplexCondition(
+            @Param("username") String keyword,
+            @Param("isUsed") Boolean isUsed,
+            @Param("isMainBanner") Boolean isMainBanner,
+            @Param("alwaysPublication") Boolean alwaysPublication,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("maxDate") LocalDate maxDate,
+            Pageable pageable
+    );
+
 }

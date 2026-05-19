@@ -1,7 +1,9 @@
 package teamdevhub.devhub.fake.pure.application.port.out.file;
 
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
 import teamdevhub.devhub.core.file.application.FileMetadata;
 import teamdevhub.devhub.core.file.port.out.FileMetadataRepository;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +23,7 @@ public class FakeFileMetadataRepository implements FileMetadataRepository {
     public FileMetadata find(String fileGuid) {
         FileMetadata metadata = store.get(fileGuid);
         if (metadata == null) {
-            throw new RuntimeException(fileGuid);
+            throw AdapterDataException.of(ErrorCode.FILE_READ_FAIL);
         }
         return metadata;
     }

@@ -1,28 +1,31 @@
 package teamdevhub.devhub.outbound.application.persistence;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
+import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
+import teamdevhub.devhub.outbound.admin.code.adapter.entity.CommonCodeEntity;
+import teamdevhub.devhub.outbound.admin.code.persistence.JpaCommonCodeRepository;
 import teamdevhub.devhub.outbound.application.adapter.entity.ProjectApplicationAnswerEntity;
 import teamdevhub.devhub.outbound.application.adapter.entity.ProjectApplicationEntity;
 import teamdevhub.devhub.outbound.application.adapter.mapper.ApplicationMapper;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectRequirementEntity;
 import teamdevhub.devhub.outbound.project.persistence.JpaProjectRequirementRepository;
-import teamdevhub.devhub.outbound.admin.code.adapter.entity.CommonCodeEntity;
-import teamdevhub.devhub.outbound.admin.code.persistence.JpaCommonCodeRepository;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserEntity;
 import teamdevhub.devhub.outbound.user.adapter.entity.UserSkillEntity;
 import teamdevhub.devhub.outbound.user.persistence.JpaUserRepository;
+import teamdevhub.devhub.outbound.user.persistence.JpaUserReviewRepository;
 import teamdevhub.devhub.outbound.user.persistence.JpaUserSkillRepository;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,6 +37,7 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 	private final JpaUserRepository jpaUserRepository;
 	private final JpaUserSkillRepository jpaUserSkillRepository;
 	private final JpaCommonCodeRepository jpaCommonCodeRepository;
+	private final JpaUserReviewRepository jpaUserReviewRepository;
 
 	@Override
 	public Page<ProjectApplication> findApplicationsByProjectGuid(String projectGuid, Pageable pageable) {
@@ -185,10 +189,16 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 	}
 
 	@Override
-	public List<ProjectApplication> findAcceptedByProjectGuid(String projectGuid) {
+	public List<ProjectApplicationScore> findAcceptedByProjectGuid(String projectGuid) {
 		Page<ProjectApplication> result = findApplicationsByProjectGuid(projectGuid, Pageable.unpaged());
 		return result.getContent().stream()
 				.filter(application -> "3302".equals(application.getStatusCd()))
+				.map(application -> {
+					Double score = jpaUserReviewRepository.findByProjectGuidAndReviewee(projectGuid, application.getApplicantGuid())
+								.map(entity -> entity.getScore())
+								.orElse(null);
+					return ProjectApplicationScore.toApplicationWithScore(application, score);
+				})
 				.toList();
 	}
 }

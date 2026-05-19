@@ -37,4 +37,10 @@ public class FakeApplicationFormRepository implements ApplicationFormRepository 
 		store.add(applicationForm);
 	}
 
+	@Override
+	public void update(ApplicationForm applicationForm) {
+		store.removeIf(form -> applicationForm.getApplicationFormGuid().equals(form.getApplicationFormGuid()));
+		store.add(applicationForm);
+	}
+
 }
