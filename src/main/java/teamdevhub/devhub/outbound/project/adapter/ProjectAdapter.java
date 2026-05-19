@@ -28,7 +28,7 @@ public class ProjectAdapter implements ProjectRepository {
 	
 	@Override
 	public Project getProjectDetail(String projectGuid) {
-        ProjectEntity entity = jpaProjectRepository.findById(projectGuid).get();
+        ProjectEntity entity = jpaProjectRepository.findById(projectGuid).orElseThrow();
         return ProjectMapper.toProject(entity);
 	}
 	
