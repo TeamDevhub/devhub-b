@@ -1,4 +1,4 @@
-package teamdevhub.devhub.outbound.board.adapter.entity;
+package teamdevhub.devhub.outbound.report.adapter.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -24,7 +24,7 @@ public class ReportEntity extends BaseEntity {
     @Column(name = "board_guid", nullable = false)
     private String boardGuid;
     
-    @Column(name = "comment_guid", nullable = false)
+    @Column(name = "comment_guid")
     private String commentGuid;
     
     @Column(name = "reported_user", nullable = false)

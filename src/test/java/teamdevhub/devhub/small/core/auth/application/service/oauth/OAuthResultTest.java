@@ -59,7 +59,7 @@ public class OAuthResultTest {
 
     @Test
     @DisplayName("accessToken_이_없는_PENDING_상태에서_toauthorizationHeader_호출_시_예외가_발생한다")
-    void toauthorizationHeader_whenAccessTokenIsNull_throwsException() {
+    void toAuthorizationHeader_whenAccessTokenIsNull_throwsException() {
         // given
         OAuthResult pendingResult = OAuthResult.requiresSignup(TEMP_TOKEN);
 

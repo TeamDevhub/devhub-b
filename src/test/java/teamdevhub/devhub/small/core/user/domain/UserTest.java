@@ -83,7 +83,7 @@ class UserTest {
 
     @Test
     @DisplayName("OAuth_사용자를_생성한다")
-    void createOAuthUser() {
+    void createOauthUser() {
         // given
         SignupOAuthUserCommand signupOAuthUserCommand = SignupOAuthUserCommand.builder()
                 .tempToken("lastOAuthUser")
@@ -95,7 +95,7 @@ class UserTest {
         CreateUserCommand oauthCreateUserCommand = CreateUserCommand.oauthUserCreateCommand(signupOAuthUserCommand, TEST_USER_GUID_1);
 
         // when
-        User createdOAuthUser = User.createOAuthUser(oauthCreateUserCommand);
+        User createdOAuthUser = User.createOauthUser(oauthCreateUserCommand);
 
         // then
         assertThat(createdOAuthUser.getUserGuid()).isEqualTo(TEST_USER_GUID_1);

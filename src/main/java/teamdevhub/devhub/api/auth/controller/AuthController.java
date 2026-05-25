@@ -43,7 +43,7 @@ public class AuthController {
         AuthResult authResult = authFacade.login(loginRequestDto.toLoginCommand());
         ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(authResult.refreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, authResult.toauthorizationHeader())
+                .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(DataApiResponseDto.successWithData(
                         SuccessCode.LOGIN_SUCCESS,
@@ -63,7 +63,7 @@ public class AuthController {
         AuthResult authResult = authFacade.reissueAccessToken(refreshToken);
         ResponseCookie newRefreshCookie = cookieFactory.createRefreshTokenCookie(authResult.refreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, authResult.toauthorizationHeader())
+                .header(HttpHeaders.AUTHORIZATION, authResult.toAuthorizationHeader())
                 .header(HttpHeaders.SET_COOKIE, newRefreshCookie.toString())
                 .body(DataApiResponseDto.successWithData(
                         SuccessCode.CREATE_SUCCESS,

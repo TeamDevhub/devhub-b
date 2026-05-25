@@ -1,6 +1,7 @@
 package teamdevhub.devhub.outbound.board.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,7 @@ public interface JpaCommentRepository extends JpaRepository<CommentEntity, Strin
 	List<Object[]> countByCommentCount(@Param("boardGuids") List<String> boardGuids);
 
 	List<CommentEntity> findByBoardGuid(String boardGuid);
+	Optional<CommentEntity> findByCommentGuid(String commentGuid);
 
 	void deleteByBoardGuidAndCommentGuid(String boardGuid, String commentGuid);
 }

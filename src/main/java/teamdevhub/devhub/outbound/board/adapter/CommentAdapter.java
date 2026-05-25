@@ -12,6 +12,8 @@ import teamdevhub.devhub.core.board.port.out.CommentRepository;
 import teamdevhub.devhub.outbound.board.adapter.entity.CommentEntity;
 import teamdevhub.devhub.outbound.board.adapter.mapper.CommentMapper;
 import teamdevhub.devhub.outbound.board.persistence.JpaCommentRepository;
+import teamdevhub.devhub.outbound.common.exception.AdapterDataException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 @Component
 @RequiredArgsConstructor
@@ -34,6 +36,13 @@ public class CommentAdapter implements CommentRepository {
 		List<CommentEntity> commentList = jpaCommentRepository.findByBoardGuid(boardGuid);
 		return commentList.stream().map(CommentMapper::toComment).toList();
 	}
+
+	@Override
+	public Comment findByCommentGuid(String commentGuid) {
+		CommentEntity commentEntity = jpaCommentRepository.findByCommentGuid(commentGuid)
+				.orElseThrow(() -> AdapterDataException.of(ErrorCode.READ_FAIL));
+		return CommentMapper.toComment(commentEntity);
+	}
 	
 	@Override
 	public void save(Comment comment) {
@@ -43,5 +52,10 @@ public class CommentAdapter implements CommentRepository {
 	@Override
 	public void deleteByBoardGuidAndCommentGuid(String boardGuid, String commentGuid) {
 		jpaCommentRepository.deleteByBoardGuidAndCommentGuid(boardGuid, commentGuid);
+	}
+
+	@Override
+	public void updateComment(Comment comment) {
+		jpaCommentRepository.save(CommentMapper.toEntity(comment));
 	}
 }
