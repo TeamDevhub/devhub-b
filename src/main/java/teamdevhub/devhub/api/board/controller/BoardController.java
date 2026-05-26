@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.board.model.CreateBoardRequestDto;
 import teamdevhub.devhub.api.board.model.DeleteBoardRequestDto;
@@ -54,7 +55,7 @@ public class BoardController {
 			@ApiResponse(responseCode = "401", description = "인증되지 않은 사용자")
 	})
 	@PostMapping
-	public ResponseEntity<DataApiResponseDto<Void>> createBoard(@RequestBody CreateBoardRequestDto createBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+	public ResponseEntity<DataApiResponseDto<Void>> createBoard(@Valid @RequestBody CreateBoardRequestDto createBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
 		return ResponseEntity.ok(boardFacade.createBoard(createBoardRequestDto.toCommand(authenticatedUser.userGuid())));
 	}
 
@@ -95,7 +96,7 @@ public class BoardController {
 	@Operation(summary = "게시글 수정", description = "게시글 내용을 수정합니다. 작성자만 수정 가능합니다.")
 	@ApiResponse(responseCode = "200", description = "수정 성공")
 	@PutMapping("/{boardGuid}")
-	public ResponseEntity<DataApiResponseDto<Void>> updateBoard(@RequestBody UpdateBoardRequestDto updateBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser,
+	public ResponseEntity<DataApiResponseDto<Void>> updateBoard(@Valid @RequestBody UpdateBoardRequestDto updateBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser,
 			@Parameter(description = "게시글 GUID", required = true) @PathVariable("boardGuid") String boardGuid) {
 		return ResponseEntity.ok(boardFacade.updateBoard(updateBoardRequestDto.toCommand(authenticatedUser.userGuid(), boardGuid)));
 	}
@@ -112,7 +113,7 @@ public class BoardController {
 	@Operation(summary = "게시글 삭제", description = "게시글 GUID 목록을 받아 일괄 삭제합니다.")
 	@ApiResponse(responseCode = "200", description = "삭제 성공")
 	@PostMapping("/delete")
-	public ResponseEntity<DataApiResponseDto<Void>> deleteBoard(@RequestBody DeleteBoardRequestDto deleteBoardRequestDto) {
-		return ResponseEntity.ok(boardFacade.deleteBoard(deleteBoardRequestDto.getBoardGuids()));
+	public ResponseEntity<DataApiResponseDto<Void>> deleteBoard(@Valid @RequestBody DeleteBoardRequestDto deleteBoardRequestDto, @LoginUser AuthenticatedUser authenticatedUser) {
+		return ResponseEntity.ok(boardFacade.deleteBoard(deleteBoardRequestDto.getBoardGuid(), authenticatedUser.userGuid()));
 	}
 }

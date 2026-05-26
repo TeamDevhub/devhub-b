@@ -1,7 +1,6 @@
 package teamdevhub.devhub.api.board.model;
 
-import java.util.List;
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeleteBoardRequestDto {
-	
-	private List<String> boardGuids;
-	
+
+	@NotBlank(message = "게시글 GUID는 필수입니다")
+	private String boardGuid;
 }

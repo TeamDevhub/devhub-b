@@ -2,6 +2,7 @@ package teamdevhub.devhub.outbound.board.adapter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -29,11 +30,9 @@ public class BoardLikeAdapter implements BoardLikeRepository {
 	}
 	
 	@Override
-	public BoardLike likeBoard(String boardGuid, String userGuid) {
-		
+	public Optional<BoardLike> likeBoard(String boardGuid, String userGuid) {
 		return jpaBoardLikeRepository.findByBoardGuidAndUserGuid(boardGuid, userGuid)
-	            .map(BoardLikeMapper::toDomain)
-	            .orElse(null);
+	            .map(BoardLikeMapper::toDomain);
 	}
 	
 	@Override

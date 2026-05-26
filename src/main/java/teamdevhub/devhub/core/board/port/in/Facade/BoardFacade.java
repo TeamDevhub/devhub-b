@@ -33,9 +33,8 @@ public class BoardFacade {
     private final BoardUseCase boardUseCase;
 
 	public DataListApiResponseDto<BoardSummaryResponseDto> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand) {
-		
 		PageResult<Board> pagedBoardList = boardQueryUseCase.listBoard(searchBoardCommand, pageCommand);
-		
+
 		List<BoardSummaryResponseDto> boardSummaryResponseDtoList = pagedBoardList.content().stream()
 				.map(board -> BoardSummaryResponseDto.builder()
 						.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))
@@ -43,30 +42,29 @@ public class BoardFacade {
 						.commentCount(board.getCommentCount())
 		                .build())
 				.toList();
-		
+
 		return DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
                         boardSummaryResponseDtoList,
                         PageResponseDto.from(pagedBoardList));
 	}
-	
+
 	public DataApiResponseDto<Void> createBoard(CreateBoardCommand createBoardCommand) {
 		boardUseCase.createBoard(createBoardCommand);
-		 
+
 		return DataApiResponseDto.successWithoutData(
                         SuccessCode.CREATE_SUCCESS);
-		
 	}
 
 	public DataApiResponseDto<BoardDetailResponseDto> detailBoard(String boardGuid, Boolean cookieResult, String userGuid) {
 		Board board = boardUseCase.detailBoard(boardGuid, cookieResult, userGuid);
-		
+
 		BoardSummaryResponseDto summaryBoard = BoardSummaryResponseDto.builder()
 				.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))
 				.likeCount(board.getLikeCount())
 				.commentCount(board.getCommentCount())
                 .build();
-		
+
 		BoardDetailResponseDto responseDto = BoardDetailResponseDto.builder()
 				.boardSummaryResponseDto(summaryBoard)
 				.commentList(board.getCommentList())
@@ -82,27 +80,33 @@ public class BoardFacade {
 
 	public DataApiResponseDto<Void> updateBoard(UpdateBoardCommand updateBoardCommand) {
 		boardUseCase.updateBoard(updateBoardCommand);
-		 
+
 		return DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS);
 	}
 
-	public  DataApiResponseDto<Void> likeBoard(String boardGuid, String userGuid) {
+	public DataApiResponseDto<Void> likeBoard(String boardGuid, String userGuid) {
 		boardUseCase.likeBoard(boardGuid, userGuid);
-		 
+
 		return DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS);
 	}
 
-	public DataApiResponseDto<Void> deleteBoard(List<String> boardGuids) {
-		boardUseCase.deleteBoard(boardGuids);
+	public DataApiResponseDto<Void> deleteBoard(String boardGuid, String userGuid) {
+		boardUseCase.deleteBoard(boardGuid, userGuid);
+		return DataApiResponseDto.successWithoutData(
+                SuccessCode.DELETE_SUCCESS);
+	}
+
+	public DataApiResponseDto<Void> deleteAdminBoard(List<String> boardGuids) {
+		boardUseCase.deleteAdminBoard(boardGuids);
 		return DataApiResponseDto.successWithoutData(
                 SuccessCode.DELETE_SUCCESS);
 	}
 
 	public DataListApiResponseDto<AdminBoardResponseDto> listAdminBoard(SearchAdminBoardCommand searchAdminBoardCommand, PageCommand pageCommand) {
 		PageResult<Board> pagedBoardList = boardQueryUseCase.listAdminBoard(searchAdminBoardCommand, pageCommand);
-		
+
 		List<AdminBoardResponseDto> adminBoardResponseDtoList = pagedBoardList.content().stream()
 				.map(board -> AdminBoardResponseDto.builder()
 						.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))
@@ -110,7 +114,7 @@ public class BoardFacade {
 						.reportCount(board.getReportCount())
 		                .build())
 				.toList();
-		
+
 		return DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
                         adminBoardResponseDtoList,
