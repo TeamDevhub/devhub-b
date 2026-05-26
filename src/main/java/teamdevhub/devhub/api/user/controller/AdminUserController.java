@@ -53,7 +53,7 @@ public class AdminUserController {
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping("/{userGuid}")
     public ResponseEntity<DataApiResponseDto<AdminUserDetailResponseDto>> getUserDetail(
-            @Parameter(description = "사용자 GUID") @PathVariable String userGuid) {
+            @Parameter(description = "사용자 GUID") @PathVariable("userGuid") String userGuid) {
         User user = adminUserFacade.getUserDetail(userGuid);
         return ResponseEntity.ok(DataApiResponseDto.successWithData(SuccessCode.READ_SUCCESS, AdminUserDetailResponseDto.fromDomain(user)));
     }
