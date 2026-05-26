@@ -19,14 +19,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import teamdevhub.devhub.api.application.model.response.ProjectApplicationListResponseDto;
+import teamdevhub.devhub.api.application.model.request.SearchAdminProjectApplicationRequestDto;
+import teamdevhub.devhub.api.application.model.response.AdminProjectApplicationListResponseDto;
 import teamdevhub.devhub.api.project.model.SearchProjectRequestDto;
 import teamdevhub.devhub.api.project.model.UpdateProjectRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
-import teamdevhub.devhub.core.application.port.in.facade.ProjectApplicationFacade;
+import teamdevhub.devhub.core.application.port.in.command.SearchAdminProjectApplicationCommand;
+import teamdevhub.devhub.core.application.port.in.facade.AdminProjectApplicationFacade;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
@@ -41,7 +43,7 @@ import teamdevhub.devhub.shared.enums.SuccessCode;
 public class AdminProjectController {
 	
 	private final AdminProjectFacade adminProjectFacade;
-	private final ProjectApplicationFacade projectApplicationFacade;
+	private final AdminProjectApplicationFacade adminProjectApplicationFacade;
 
 	@Operation(summary = "프로젝트 목록 조회", description = "검색 조건(제목, 포지션, 스킬 등)으로 프로젝트 목록을 페이징 조회합니다. 로그인 시 좋아요 여부가 포함됩니다.")
 	@ApiResponse(responseCode = "200", description = "조회 성공")
@@ -113,14 +115,15 @@ public class AdminProjectController {
 	
 	@Operation(summary = "프로젝트 지원 목록 조회", description = "프로젝트에 대한 지원 목록을 페이징 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "조회 성공")
-	@GetMapping("/{projectGuid}/applications")
-	public ResponseEntity<DataApiResponseDto<ProjectApplicationListResponseDto>> getApplicationsByProjectGuid(
+	@GetMapping("/{projectGuid}/applicants")
+	public ResponseEntity<DataApiResponseDto<AdminProjectApplicationListResponseDto>> getApplicationsByProjectGuid(
 		@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid,
 		@Parameter(description = "페이지 번호", example = "0") @RequestParam("page") int page,
-		@Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size
+		@Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size,
+		@ModelAttribute SearchAdminProjectApplicationRequestDto searchAdminProjectApplicationRequestDto
 	) {
 		return ResponseEntity.ok(
-			projectApplicationFacade.getApplicationsByProjectGuid(projectGuid, PageCommand.of(page, size))
+			adminProjectApplicationFacade.getApplicationsByProjectGuid(searchAdminProjectApplicationRequestDto.toCommand(projectGuid), PageCommand.of(page, size))
 		);
 	}
 }
