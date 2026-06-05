@@ -70,14 +70,7 @@ public class AdminProjectFacade {
         if(project.getImageFileGuid() != null && !project.getImageFileGuid().isBlank()) {
         	imageFileUrl = fileUseCase.find(project.getImageFileGuid()).metadata().path();
         }
-        if(user == null) {
-            	return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, false);
-		} else {
-			ProjectLike projectLike = projectLikeUseCase.findByProjectGuidAndUserGuid(project.getProjectGuid(), user.userGuid());
-	    	boolean isProjectLiked = false;
-	    	if(projectLike != null) isProjectLiked= true;
-	        return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, isProjectLiked);
-		}
+    	return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, false);
 	}
 
 	public void updateProject(String projectGuid, UpdateProjectCommand updateProjectCommand) {
