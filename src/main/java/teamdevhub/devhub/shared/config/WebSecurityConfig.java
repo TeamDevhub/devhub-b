@@ -95,15 +95,18 @@ public class WebSecurityConfig {
                                         "/swagger-resources/**",
                                         "/v3/api-docs/**",
                                         "/webjars/**").permitAll()
+
+                                .requestMatchers("/api/auth/**").permitAll()
+
                                 .requestMatchers("/api/user/signup").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/common/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/files/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/projects").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/home").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/skill-trends").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/terms/**").permitAll()
+
                                 .requestMatchers(HttpMethod.POST, "/api/terms/**").hasRole("ADMIN")
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
