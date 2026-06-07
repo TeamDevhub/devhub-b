@@ -12,7 +12,7 @@ public interface CommentUseCase {
 
 	void createComment(CreateCommentCommand createCommentCommand);
 
-	void deleteComment(String boardGuid, String commentGuid);
+	void deleteComment(String boardGuid, String commentGuid, String userGuid);
 
 	void updateComment(UpdateCommentCommand updateCommentCommand);
 }

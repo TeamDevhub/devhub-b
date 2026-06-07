@@ -18,10 +18,11 @@ public class UpdateCommentRequestDto {
 	@NotBlank(message = "내용은 필수입니다")
 	private String content;
 	
-	public UpdateCommentCommand toCommand(String boardGuid, String commentGuid) {
+	public UpdateCommentCommand toCommand(String boardGuid, String commentGuid, String userGuid) {
 		return UpdateCommentCommand.builder()
 				.boardGuid(boardGuid)
 				.content(this.content)
+				.userGuid(userGuid)
 				.commentGuid(commentGuid)
 				.build();
 	}

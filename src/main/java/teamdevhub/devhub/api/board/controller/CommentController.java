@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.board.model.CreateCommentRequestDto;
 import teamdevhub.devhub.api.board.model.UpdateCommentRequestDto;
@@ -36,7 +37,7 @@ public class CommentController {
 			@ApiResponse(responseCode = "401", description = "인증되지 않은 사용자")
 	})
 	@PostMapping("/{boardGuid}/comments")
-	public ResponseEntity<DataApiResponseDto<Void>> createComment(@RequestBody CreateCommentRequestDto createcommentRequestDto, @LoginUser AuthenticatedUser authenticatedUser,
+	public ResponseEntity<DataApiResponseDto<Void>> createComment(@Valid @RequestBody CreateCommentRequestDto createcommentRequestDto, @LoginUser AuthenticatedUser authenticatedUser,
 			@Parameter(description = "게시글 GUID", required = true) @PathVariable("boardGuid") String boardGuid) {
 		return ResponseEntity.ok(commentFacade.createComment(createcommentRequestDto.toCommand(authenticatedUser.userGuid(), boardGuid)));
 	}
@@ -44,18 +45,20 @@ public class CommentController {
 	@Operation(summary = "댓글 수정", description = "댓글 내용을 수정합니다.")
 	@ApiResponse(responseCode = "200", description = "댓글 수정 성공")
 	@PutMapping("/{boardGuid}/comments/{commentGuid}")
-	public ResponseEntity<DataApiResponseDto<Void>> updateComment(@RequestBody UpdateCommentRequestDto updatecommentRequestDto,
+	public ResponseEntity<DataApiResponseDto<Void>> updateComment(@Valid @RequestBody UpdateCommentRequestDto updatecommentRequestDto,
+			@LoginUser AuthenticatedUser authenticatedUser,
 			@Parameter(description = "게시글 GUID", required = true) @PathVariable("boardGuid") String boardGuid,
 			@Parameter(description = "댓글 GUID", required = true) @PathVariable("commentGuid") String commentGuid) {
-		return ResponseEntity.ok(commentFacade.updateComment(updatecommentRequestDto.toCommand(boardGuid, commentGuid)));
+		return ResponseEntity.ok(commentFacade.updateComment(updatecommentRequestDto.toCommand(boardGuid, commentGuid, authenticatedUser.userGuid())));
 	}
 	
 	@Operation(summary = "댓글 삭제", description = "댓글을 삭제합니다.")
 	@ApiResponse(responseCode = "200", description = "댓글 삭제 성공")
 	@DeleteMapping("/{boardGuid}/comments/{commentGuid}")
 	public ResponseEntity<DataApiResponseDto<Void>> deleteComment(
+			@LoginUser AuthenticatedUser authenticatedUser,
 			@Parameter(description = "게시글 GUID", required = true) @PathVariable("boardGuid") String boardGuid,
 			@Parameter(description = "댓글 GUID", required = true) @PathVariable("commentGuid") String commentGuid) {
-		return ResponseEntity.ok(commentFacade.deleteComment(boardGuid, commentGuid));
+		return ResponseEntity.ok(commentFacade.deleteComment(boardGuid, commentGuid, authenticatedUser.userGuid()));
 	}
 }

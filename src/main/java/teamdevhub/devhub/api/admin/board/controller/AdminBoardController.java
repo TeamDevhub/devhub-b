@@ -6,12 +6,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.api.admin.board.model.DeleteAdminBoardRequestDto;
 import teamdevhub.devhub.api.admin.board.model.SearchAdminBoardRequestDto;
 import teamdevhub.devhub.api.web.model.request.PageRequestDto;
+import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.board.port.in.Facade.model.AdminBoardResponseDto;
@@ -30,6 +35,13 @@ public class AdminBoardController {
 	@GetMapping
 	public ResponseEntity<DataListApiResponseDto<AdminBoardResponseDto>> listAdminBoard(@ModelAttribute SearchAdminBoardRequestDto searchAdminBoardRequestDto, PageRequestDto pageRequestDto) {
 		return ResponseEntity.ok(boardFacade.listAdminBoard(searchAdminBoardRequestDto.toCommand(), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize())));
+	}
+
+	@Operation(summary = "게시글 삭제 (관리자)", description = "관리자가 게시글 GUID 목록을 받아 개별 또는 일괄 삭제합니다.")
+	@ApiResponse(responseCode = "200", description = "삭제 성공")
+	@PostMapping("/delete")
+	public ResponseEntity<DataApiResponseDto<Void>> deleteAdminBoard(@Valid @RequestBody DeleteAdminBoardRequestDto deleteAdminBoardRequestDto) {
+		return ResponseEntity.ok(boardFacade.deleteAdminBoard(deleteAdminBoardRequestDto.getBoardGuids()));
 	}
 
 }
