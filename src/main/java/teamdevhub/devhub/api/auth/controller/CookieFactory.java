@@ -10,8 +10,8 @@ public class CookieFactory {
     private static final String REFRESH_COOKIE_NAME = "refreshToken";
     private static final String OAUTH_STATE_COOKIE_NAME = "oauthState";
     private static final String SAME_SITE = "Lax";
-    private static final String PATH = "/auth/reissue";
-    private static final String OAUTH_PATH = "/auth/oauth";
+    private static final String PATH = "/api/auth/reissue";
+    private static final String OAUTH_PATH = "/api/auth/oauth";
     private static final int MAX_AGE_SECONDS = 14 * 24 * 60 * 60;
     private static final int OAUTH_STATE_MAX_AGE_SECONDS = 300;
 
