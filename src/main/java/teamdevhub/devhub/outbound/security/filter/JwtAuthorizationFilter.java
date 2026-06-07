@@ -29,28 +29,23 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        return path.startsWith("/api/auth/");
-    }
-
-    @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
         try {
             String token = httpServletRequest.getHeader(AUTHORIZATION_HEADER);
 
-            if (StringUtils.hasText(token)) {
-                String pureToken = tokenParseProvider.removeBearer(token);
-                AccessTokenInfo accessTokenInfo = tokenParseProvider.getAccessTokenInfo(pureToken);
-
-                setAuthentication(accessTokenInfo);
+            if (!StringUtils.hasText(token)) {
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                return;
             }
 
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
+            String pureToken = tokenParseProvider.removeBearer(token);
+            AccessTokenInfo accessTokenInfo = tokenParseProvider.getAccessTokenInfo(pureToken);
+            setAuthentication(accessTokenInfo);
 
-        } catch (AuthRuleException e) {
-            customFilterExceptionHandler.handle(httpServletResponse, e.getErrorCode());
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+        } catch (AuthRuleException authRuleException) {
+            customFilterExceptionHandler.handle(httpServletResponse, authRuleException.getErrorCode());
         }
     }
 
