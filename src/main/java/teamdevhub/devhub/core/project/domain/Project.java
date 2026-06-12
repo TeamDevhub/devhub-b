@@ -98,6 +98,9 @@ public class Project {
 	    if (this.capacityClosed) {
 	    	return ProjectRecruitStatus.COMPLETED.getCode();
 	    }
+	    if (this.recruitmentStartDate==null||this.recruitmentEndDate==null) {
+	    	return ProjectRecruitStatus.WAITING.getCode();
+    	}
 		if (now.isBefore(this.recruitmentStartDate)) {
 	        return ProjectRecruitStatus.WAITING.getCode();
 	    }

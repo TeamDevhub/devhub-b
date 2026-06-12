@@ -1,7 +1,6 @@
 package teamdevhub.devhub.outbound.project.persistence;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -92,7 +91,7 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 			        where pl2.projectGuid = p.projectGuid
 			    ) end desc
 			""")
-	Page<ProjectEntity> findBySearchCondition(@Param("username") String keyword, @Param("order") String order, @Param("skillCodeList") List<String> skillCodeList,
+	Page<ProjectEntity> findBySearchCondition(@Param("keyword") String keyword, @Param("order") String order, @Param("skillCodeList") List<String> skillCodeList,
 			@Param("regionCodeList") List<String> regionCodeList, @Param("positionCodeList") List<String> positionCodeList, @Param("positionLevelCodeList") List<String> positionLevelCodeList,
 			@Param("projectRecruitTypeList") List<String> projectRecruitTypeList, @Param("projectRecruitStatusList") List<String> projectRecruitStatusList,
 			@Param("projectProgressTypeList") List<String> projectProgressTypeList, @Param("recruitmentStartDate") LocalDate recruitmentStartDate, @Param("recruitmentEndDate") LocalDate recruitmentEndDate,

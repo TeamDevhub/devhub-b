@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
-import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.core.admin.form.domain.ApplicationForm;
 import teamdevhub.devhub.core.admin.form.port.in.command.ApplicationFormCommand;
 import teamdevhub.devhub.core.admin.form.port.in.facade.model.ApplicationFormResponseDto;
@@ -20,6 +18,7 @@ import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
@@ -36,8 +35,9 @@ import teamdevhub.devhub.core.project.port.in.usecase.ProjectApplicationFormUseC
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectLikeUseCase;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
-import teamdevhub.devhub.shared.enums.SuccessCode;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +52,7 @@ public class ProjectFacade {
 	private final ProjectApplicationUseCase projectApplicationUseCase;
 	private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
 
-	public DataListApiResponseDto<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, AuthenticatedUser user) {
+	public PageResult<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, AuthenticatedUser user) {
 		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
 		List<ProjectDetailResponseDto> projectDetailResponseDtoList = new ArrayList<>();
 		if(user == null) {
@@ -71,12 +71,9 @@ public class ProjectFacade {
             })
             .toList();
 		}
+		PageResult<ProjectDetailResponseDto> pagedProjectDetail = PageResult.of(projectDetailResponseDtoList, pagedProjectList.page(), pagedProjectList.size(), pagedProjectList.totalElements());
 		
-		return DataListApiResponseDto.successWithDataList(
-                SuccessCode.READ_SUCCESS,
-                projectDetailResponseDtoList,
-                PageResponseDto.from(pagedProjectList)
-		);
+		return pagedProjectDetail;
 	}
 	
 	public void createProject(CreateProjectCommand createProjectCommand) {
@@ -102,12 +99,15 @@ public class ProjectFacade {
 		}
 	}
 
-	public void deleteProject(String projectGuid) {
+	public void deleteProject(String projectGuid, AuthenticatedUser authenticatedUser) {
+		Project project = projectUseCase.getProjectDetail(projectGuid);
+		if(!(UserRole.ADMIN.equals(authenticatedUser.userRole()) || project.getUserGuid().equals(authenticatedUser.userGuid()))) {
+			throw BusinessRuleException.of(ErrorCode.DELETE_FAIL);
+		}
 		// 프로젝트 지원자 조회 후 지원자가 있으면 return, 지원자 없으면 continue??
 		// 삭제해야할 신청폼 목록 반환?
 		List<String> deleteApplicationFormGuids =  projectUseCase.deleteProject(projectGuid);
 		applicationFormUseCase.deleteApplicationForms(deleteApplicationFormGuids);
-		
 	}
 
 	public void updateProject(String projectGuid, UpdateProjectCommand updateProjectCommand) {
@@ -123,6 +123,7 @@ public class ProjectFacade {
 		 * 인증테이블 분리에 따라 추후 변경 필요
 		 */
 		String email = userProfileUseCase.getUserInfo(project.getUserGuid()).getUserGuid();
+		
 
 		List<ProjectApplicationForm> projectForms = projectApplicationFormUseCase.findByProjectGuid(projectGuid);
 		List<String> applicationFormGuids = projectForms.stream()

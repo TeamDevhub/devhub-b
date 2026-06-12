@@ -80,6 +80,7 @@ public class ProjectMapper {
         return Project.builder()
                 .projectGuid(entity.getProjectGuid())
                 .userGuid(entity.getUserGuid())
+                .username(entity.getUsername())
                 .attachmentFileGuid(entity.getAttachmentFileGuid())
                 .imageFileGuid(entity.getImageFileGuid())
                 .category(entity.getCategory())
