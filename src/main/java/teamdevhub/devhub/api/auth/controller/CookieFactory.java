@@ -31,9 +31,9 @@ public class CookieFactory {
     public ResponseCookie createOAuthStateCookie(String state) {
         return ResponseCookie.from(OAUTH_STATE_COOKIE_NAME, state)
                 .httpOnly(true)
-                .secure(false)
+                .secure(secureCookie)
                 .sameSite(SAME_SITE)
-                .path("/")
+                .path(OAUTH_PATH)
                 .maxAge(OAUTH_STATE_MAX_AGE_SECONDS)
                 .build();
     }
@@ -41,9 +41,9 @@ public class CookieFactory {
     public ResponseCookie expireOAuthStateCookie() {
         return ResponseCookie.from(OAUTH_STATE_COOKIE_NAME, "")
                 .httpOnly(true)
-                .secure(false)
+                .secure(secureCookie)
                 .sameSite(SAME_SITE)
-                .path("/")
+                .path(OAUTH_PATH)
                 .maxAge(0)
                 .build();
     }
