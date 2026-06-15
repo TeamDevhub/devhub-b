@@ -2,11 +2,14 @@ package teamdevhub.devhub.core.board.application;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
+import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
 import teamdevhub.devhub.core.board.domain.Board;
 import teamdevhub.devhub.core.board.domain.BoardLike;
 import teamdevhub.devhub.core.board.domain.Comment;
@@ -16,9 +19,12 @@ import teamdevhub.devhub.core.board.port.in.usecase.BoardUseCase;
 import teamdevhub.devhub.core.board.port.out.BoardLikeRepository;
 import teamdevhub.devhub.core.board.port.out.BoardRepository;
 import teamdevhub.devhub.core.board.port.out.CommentRepository;
+import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.out.UserRepository;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,8 +35,8 @@ public class BoardService implements BoardUseCase {
 	private final BoardLikeRepository boardLikeRepository;
 	private final CommentRepository commentRepository;
 	private final UserRepository userRepository;
+	private final EmailUserCredentialRepository emailUserCredentialRepository;
 	private final CommentService commentService;
-	
 	
 	@Override
 	public void createBoard(CreateBoardCommand createBoardCommand) {
@@ -46,8 +52,8 @@ public class BoardService implements BoardUseCase {
 		
 		Map<String, Long> boardLikes = boardLikeRepository.countByLikeCount(List.of(boardDetail.getBoardGuid()));
 		Map<String, Long> boardComments = commentRepository.countByCommentCount(List.of(boardDetail.getBoardGuid()));		
-        User user = userRepository.findByUserGuid(boardDetail.getUserGuid());
-        
+		User user = userRepository.findByUserGuid(boardDetail.getUserGuid());
+
         List<Comment> commentList = commentService.commentList(boardDetail.getBoardGuid());
 
         boolean isLiked = false;
@@ -55,15 +61,16 @@ public class BoardService implements BoardUseCase {
             isLiked = boardLikeRepository.existsByBoardGuidAndUserGuid(boardGuid, userGuid);
         }
         
+        String userEmail = emailUserCredentialRepository.findByUserGuid(user.getUserGuid())
+				.map(EmailUserCredential::getEmail)
+				.orElse(null);
+
         boardDetail.fillDetailSubquery(
 				boardLikes.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
 				boardComments.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
-        		user.getUsername(),
-				/**
-				 * 인증테이블 분리에 따라 추후 변경 필요
-				 */
-        		user.getUserGuid(),
-        		commentList,
+				user.getUsername(),
+				userEmail,
+				commentList,
 				isLiked
         		);
         
@@ -73,6 +80,7 @@ public class BoardService implements BoardUseCase {
 	@Override
 	public void updateBoard(UpdateBoardCommand updateBoardCommand) {
 		Board board = boardRepository.findByBoardGuid(updateBoardCommand.boardGuid());
+		validateOwner(board.getUserGuid(), updateBoardCommand.userGuid());
 		board.update(
 				updateBoardCommand.title(),
 				updateBoardCommand.categoryCd(),
@@ -83,19 +91,32 @@ public class BoardService implements BoardUseCase {
 	
 	@Override
 	public void likeBoard(String boardGuid, String userGuid) {
-		BoardLike boardLike = boardLikeRepository.likeBoard(boardGuid, userGuid);
+		Optional<BoardLike> boardLike = boardLikeRepository.likeBoard(boardGuid, userGuid);
 		
-		if(boardLike != null) {
-			boardLikeRepository.deleteBoardLike(boardLike);
+		if(boardLike.isPresent()) {
+			boardLikeRepository.deleteBoardLike(boardLike.get());
 		} else {
 			String boardLikeGuid = identifierProvider.generateIdentifier();
-			boardLike = BoardLike.createBoardLike(boardGuid, userGuid, boardLikeGuid);
-			boardLikeRepository.save(boardLike);
+			BoardLike newBoardLike = BoardLike.createBoardLike(boardGuid, userGuid, boardLikeGuid);
+			boardLikeRepository.save(newBoardLike);
 		}
 	}
 	
 	@Override
-	public void deleteBoard(List<String> boardGuids) {
+	public void deleteBoard(String boardGuid, String userGuid) {
+		Board board = boardRepository.findByBoardGuid(boardGuid);
+		validateOwner(board.getUserGuid(), userGuid);
+		boardRepository.deleteBoard(List.of(boardGuid));
+	}
+
+	@Override
+	public void deleteAdminBoard(List<String> boardGuids) {
 		boardRepository.deleteBoard(boardGuids);
+	}
+
+	private void validateOwner(String ownerGuid, String requestUserGuid) {
+		if (!ownerGuid.equals(requestUserGuid)) {
+			throw BusinessRuleException.of(ErrorCode.AUTH_INVALID);
+		}
 	}
 }

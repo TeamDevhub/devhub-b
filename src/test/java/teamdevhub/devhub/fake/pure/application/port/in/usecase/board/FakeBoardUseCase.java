@@ -39,7 +39,12 @@ public class FakeBoardUseCase implements BoardUseCase{
     }
 
     @Override
-    public void deleteBoard(List<String> boardGuids) {
+    public void deleteBoard(String boardGuid, String requestUserGuid) {
+
+    }
+
+    @Override
+    public void deleteAdminBoard(List<String> boardGuids) {
 
     }
 

@@ -8,7 +8,7 @@ pipeline {
         BUILD_TAG = "${PROJECT}-${DATE}-${BUILD_NUMBER}".toLowerCase()
         TARGET_ENV   = "dev"
         IMAGE_NAME   = "${DOCKERHUB_ID}/${PROJECT}-${TARGET_ENV}".toLowerCase()
-        INFRA_REPO = "https://github.com/Goonerd17/devhub-infra.git"
+        INFRA_REPO = "https://github.com/TeamDevhub/devhub-infra.git"
     }
 
     stages {
@@ -24,7 +24,7 @@ pipeline {
                 script {
                     def targetBranch = "${TARGET_ENV}"
                     echo "Checking out ${PROJECT} branch: ${targetBranch}..."
-                    git branch: targetBranch, url: "https://github.com/Goonerd17/${PROJECT}.git"
+                    git branch: targetBranch, url: "https://github.com/TeamDevhub/${PROJECT}.git"
                 }
             }
         }
@@ -61,11 +61,11 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh 'git config --global user.name "Jenkins"'
                         sh 'git config --global user.email "jenkins@devhub.local"'
-                        sh "git clone -b main https://${GIT_USER}:${GIT_TOKEN}@github.com/Goonerd17/devhub-infra.git"
+                        sh "git clone -b main https://${GIT_USER}:${GIT_TOKEN}@github.com/TeamDevhub/devhub-infra.git"
 
                         def infraPath = "devhub-infra/${targetDir}"
                         echo "Checking deployment.yml in ${infraPath}..."
-                        sh "ls -l ${infraPath}"  // 파일 존재 확인
+                        sh "ls -l ${infraPath}"
                         sh """
                             if [ ! -f ${infraPath}/deployment.yml ]; then
                                 echo "deployment.yml not found in ${infraPath}"

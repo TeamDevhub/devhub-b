@@ -24,8 +24,8 @@ public class CommentFacade {
                         SuccessCode.CREATE_SUCCESS);
 	}
 
-	public DataApiResponseDto<Void> deleteComment(String boardGuid, String commentGuid) {
-		commentUseCase.deleteComment(boardGuid, commentGuid);
+	public DataApiResponseDto<Void> deleteComment(String boardGuid, String commentGuid, String userGuid) {
+		commentUseCase.deleteComment(boardGuid, commentGuid, userGuid);
 		
 		return DataApiResponseDto.successWithoutData(
                 SuccessCode.DELETE_SUCCESS);

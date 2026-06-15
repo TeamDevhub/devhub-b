@@ -27,7 +27,6 @@ import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
-import teamdevhub.devhub.core.application.port.in.command.SearchAdminProjectApplicationCommand;
 import teamdevhub.devhub.core.application.port.in.facade.AdminProjectApplicationFacade;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.common.page.PageCommand;

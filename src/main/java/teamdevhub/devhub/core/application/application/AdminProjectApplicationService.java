@@ -10,17 +10,16 @@ import teamdevhub.devhub.core.application.domain.ProjectApplication;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationAnswer;
 import teamdevhub.devhub.core.application.port.in.command.SearchAdminProjectApplicationCommand;
 import teamdevhub.devhub.core.application.port.in.usecase.AdminProjectApplicationUseCase;
+import teamdevhub.devhub.core.application.port.out.AdminProjectApplicationRepository;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
-import teamdevhub.devhub.outbound.application.adapter.entity.ProjectApplicationEntity;
-import teamdevhub.devhub.outbound.application.persistence.JpaAdminProjectApplicationRepository;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AdminProjectApplicationService implements AdminProjectApplicationUseCase {
 	
-	private final JpaAdminProjectApplicationRepository jpaAdminProjectApplicationRepository;
+	private final AdminProjectApplicationRepository adminProjectApplicationRepository;
 
 	@Override
 	public List<ProjectApplicationAnswer> getAnswersByApplicationGuid(String applicationGuid) {
@@ -31,8 +30,8 @@ public class AdminProjectApplicationService implements AdminProjectApplicationUs
 	@Override
 	public PageResult<ProjectApplication> getApplicationsByProjectGuid(
 			SearchAdminProjectApplicationCommand searchAdminProjectApplicationCommand, PageCommand pageCommand) {
-		PageResult<ProjectApplicationEntity> entityResult = jpaAdminProjectApplicationRepository.getApplicationsByProjectGuid(searchAdminProjectApplicationCommand, pageCommand);
-		return null;
+		PageResult<ProjectApplication> result = adminProjectApplicationRepository.getApplicationsByProjectGuid(searchAdminProjectApplicationCommand, pageCommand);
+		return result;
 	}
 
 	@Override

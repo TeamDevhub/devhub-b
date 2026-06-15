@@ -16,5 +16,7 @@ public interface BoardUseCase {
 
 	void likeBoard(String userGuid, String boardGuid);
 
-	void deleteBoard(List<String> boardGuids);
+	void deleteBoard(String boardGuid, String userGuid);
+
+	void deleteAdminBoard(List<String> boardGuids);
 }
