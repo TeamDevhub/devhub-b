@@ -33,6 +33,7 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 		}
 
 		return builder
+			.nickName(project.getUsername())
 			.skillList(project.getProjectSkill())
 			.positionList(positionDtoList)
 			.likeCount(project.getLikeCount())

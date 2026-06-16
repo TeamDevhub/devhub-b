@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.vo.command.AdminUpdateProjectCommand;
+import teamdevhub.devhub.core.project.port.in.command.AdminSearchProjectRequestCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
@@ -28,7 +30,7 @@ public class ProjectAdapter implements ProjectRepository {
 	
 	@Override
 	public Project getProjectDetail(String projectGuid) {
-        ProjectEntity entity = jpaProjectRepository.findById(projectGuid).get();
+        ProjectEntity entity = jpaProjectRepository.findById(projectGuid).orElseThrow();
         return ProjectMapper.toProject(entity);
 	}
 	
@@ -97,6 +99,33 @@ public class ProjectAdapter implements ProjectRepository {
 	public Project getProjectByRequirementGuid(String requirementGuid) {
 		ProjectEntity entity = jpaProjectRepository.getProjectByRequirementGuid(requirementGuid);
 		return ProjectMapper.toProject(entity);
+	}
+
+	@Override
+	public void updateAdminProject(String projectGuid, AdminUpdateProjectCommand adminUpdateProjectCommand) {
+		jpaProjectRepository.updateAdminProject(projectGuid, adminUpdateProjectCommand.title(), adminUpdateProjectCommand.recruitmentTypeCd(),
+				adminUpdateProjectCommand.progressTypeCd(), adminUpdateProjectCommand.progressRegionCd(),
+				adminUpdateProjectCommand.recruitmentStartDate(), adminUpdateProjectCommand.recruitmentEndDate(),
+				adminUpdateProjectCommand.progressStartDate(), adminUpdateProjectCommand.progressEndDate());
+		
+	}
+
+	@Override
+	public PageResult<Project> getAdminProjectList(AdminSearchProjectRequestCommand adminSearchProjectRequestCommand,
+			PageCommand pageCommand) {
+		Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
+
+        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findByAdminSearchCondition(
+        		adminSearchProjectRequestCommand.keyword(), adminSearchProjectRequestCommand.recruitmentTypeCd(), adminSearchProjectRequestCommand.recruitStatusCd(),
+        		adminSearchProjectRequestCommand.progressTypeCd(), adminSearchProjectRequestCommand.progressRegionCd(),
+				adminSearchProjectRequestCommand.recruitmentStartDate(), adminSearchProjectRequestCommand.recruitmentEndDate(),
+				adminSearchProjectRequestCommand.progressStartDate(), adminSearchProjectRequestCommand.progressEndDate(), pageable);
+        
+        return PageResult.of(
+        		pagedProjectList.getContent().stream().map(ProjectMapper::toProject).toList(),
+        		pagedProjectList.getNumber(),
+        		pagedProjectList.getSize(),
+        		pagedProjectList.getTotalElements());
 	}
 
 }
