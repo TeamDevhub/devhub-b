@@ -21,8 +21,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.application.model.request.SearchAdminProjectApplicationRequestDto;
 import teamdevhub.devhub.api.application.model.response.AdminProjectApplicationListResponseDto;
+import teamdevhub.devhub.api.project.model.AdminSearchProjectRequestDto;
 import teamdevhub.devhub.api.project.model.AdminUpdateProjectRequestDto;
-import teamdevhub.devhub.api.project.model.SearchProjectRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
@@ -48,11 +48,11 @@ public class AdminProjectController {
 	@ApiResponse(responseCode = "200", description = "조회 성공")
 	@GetMapping
     public ResponseEntity<DataListApiResponseDto<ProjectDetailResponseDto>> getProjectList(
-    		@Valid @ModelAttribute SearchProjectRequestDto searchProjectRequestDto,
+    		@Valid @ModelAttribute AdminSearchProjectRequestDto adminSearchProjectRequestDto,
     		@Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam("page") int page,
     		@Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size,
     		@AuthenticationPrincipal AuthenticatedUser user) {
-		PageResult<ProjectDetailResponseDto> pagedProjectDetail = adminProjectFacade.getProjectList(searchProjectRequestDto.toSearchProjectListCommand(), PageCommand.of(page, size), user);
+		PageResult<ProjectDetailResponseDto> pagedProjectDetail = adminProjectFacade.getProjectList(adminSearchProjectRequestDto.toAdminSearchProjectRequestCommand(), PageCommand.of(page, size), user);
 		return ResponseEntity.ok(
 				DataListApiResponseDto.successWithDataList(
 		                SuccessCode.READ_SUCCESS,

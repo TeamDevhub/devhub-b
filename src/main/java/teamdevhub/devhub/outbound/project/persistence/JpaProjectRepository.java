@@ -180,5 +180,30 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 			@Param("progressRegionCd") String progressRegionCd, @Param("recruitmentStartDate") LocalDate recruitmentStartDate, @Param("recruitmentEndDate") LocalDate recruitmentEndDate,
 			@Param("progressStartDate") LocalDate progressStartDate, @Param("progressEndDate") LocalDate progressEndDate);
 
+	@Query("""
+			select p
+			from ProjectEntity p
+			where 1=1
+			and (:keyword is null or p.title like concat('%', :keyword, '%'))
+			and (:progressRegionCd is null or p.progressRegionCd = :progressRegionCd)
+			and (:recruitmentTypeCd is null or p.recruitmentTypeCd = :recruitmentTypeCd)
+
+			and (:recruitStatusCd is null or (
+			    ('3201' = :recruitStatusCd and CURRENT_DATE between p.recruitmentStartDate and p.recruitmentEndDate)
+			    or ('3202' = :recruitStatusCd and CURRENT_DATE > p.recruitmentEndDate)
+			    or ('3203' = :recruitStatusCd and CURRENT_DATE < p.recruitmentStartDate)
+			))
+			and (:progressTypeCd is null or p.progressTypeCd = :progressTypeCd)
+			and (:recruitmentStartDate is null or p.recruitmentStartDate >= :recruitmentStartDate)
+			and (:recruitmentEndDate is null or p.recruitmentEndDate <= :recruitmentEndDate)
+			and (:progressStartDate is null or p.progressStartDate >= :progressStartDate)
+			and (:progressEndDate is null or p.progressEndDate >= :progressEndDate)
+
+			order by p.registeredDate desc
+			""")
+	Page<ProjectEntity> findByAdminSearchCondition(@Param("keyword")String keyword, @Param("recruitmentTypeCd")String recruitmentTypeCd, @Param("recruitStatusCd")String recruitStatusCd,
+			@Param("progressTypeCd")String progressTypeCd, @Param("progressRegionCd")String progressRegionCd, @Param("recruitmentStartDate")LocalDate recruitmentStartDate,
+			@Param("recruitmentEndDate")LocalDate recruitmentEndDate, @Param("progressStartDate")LocalDate progressStartDate, @Param("progressEndDate")LocalDate progressEndDate, Pageable pageable);
+
 
 }

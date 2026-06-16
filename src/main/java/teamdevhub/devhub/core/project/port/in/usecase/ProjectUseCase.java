@@ -8,6 +8,7 @@ import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.vo.command.AdminUpdateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
+import teamdevhub.devhub.core.project.port.in.command.AdminSearchProjectRequestCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 
 public interface ProjectUseCase {
@@ -31,5 +32,8 @@ public interface ProjectUseCase {
 	Project getProjectByRequirementGuid(String requirementGuid);
 
 	void updateAdminProject(String projectGuid, AdminUpdateProjectCommand adminUpdateProjectCommand);
+
+	PageResult<Project> getAdminProjectList(AdminSearchProjectRequestCommand adminSearchProjectRequestCommand,
+			PageCommand pageCommand);
 
 }

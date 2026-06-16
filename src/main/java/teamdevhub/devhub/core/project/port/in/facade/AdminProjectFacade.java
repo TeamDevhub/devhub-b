@@ -17,6 +17,7 @@ import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.ProjectLike;
 import teamdevhub.devhub.core.project.domain.vo.command.AdminUpdateProjectCommand;
+import teamdevhub.devhub.core.project.port.in.command.AdminSearchProjectRequestCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectApplicationFormUseCase;
@@ -39,9 +40,9 @@ public class AdminProjectFacade {
 	private final ProjectApplicationUseCase projectApplicationUseCase;
 	private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
 
-	public PageResult<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand,
+	public PageResult<ProjectDetailResponseDto> getProjectList(AdminSearchProjectRequestCommand adminSearchProjectRequestCommand,
 			PageCommand pageCommand, AuthenticatedUser user) {
-		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
+		PageResult<Project> pagedProjectList = projectUseCase.getAdminProjectList(adminSearchProjectRequestCommand, pageCommand);
 		List<ProjectDetailResponseDto> projectDetailResponseDtoList = new ArrayList<>();
 		if(user == null) {
 			projectDetailResponseDtoList = pagedProjectList.content().stream()

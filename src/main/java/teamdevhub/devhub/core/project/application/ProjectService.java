@@ -22,6 +22,7 @@ import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
+import teamdevhub.devhub.core.project.port.in.command.AdminSearchProjectRequestCommand;
 import teamdevhub.devhub.core.project.port.in.command.CreateProjectRequirementRequestCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
@@ -169,6 +170,14 @@ public class ProjectService implements ProjectUseCase {
 	public void updateAdminProject(String projectGuid, AdminUpdateProjectCommand adminUpdateProjectCommand) {
 		projectRepository.updateAdminProject(projectGuid, adminUpdateProjectCommand);
 		
+	}
+
+	@Override
+	public PageResult<Project> getAdminProjectList(AdminSearchProjectRequestCommand adminSearchProjectRequestCommand,
+			PageCommand pageCommand) {
+		PageResult<Project> pagedProjectList = projectRepository.getAdminProjectList(adminSearchProjectRequestCommand, pageCommand);
+		
+		return pagedProjectList;
 	}
 
 }

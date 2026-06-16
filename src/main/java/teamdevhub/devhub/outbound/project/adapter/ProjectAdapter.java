@@ -10,6 +10,7 @@ import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.vo.command.AdminUpdateProjectCommand;
+import teamdevhub.devhub.core.project.port.in.command.AdminSearchProjectRequestCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
@@ -107,6 +108,24 @@ public class ProjectAdapter implements ProjectRepository {
 				adminUpdateProjectCommand.recruitmentStartDate(), adminUpdateProjectCommand.recruitmentEndDate(),
 				adminUpdateProjectCommand.progressStartDate(), adminUpdateProjectCommand.progressEndDate());
 		
+	}
+
+	@Override
+	public PageResult<Project> getAdminProjectList(AdminSearchProjectRequestCommand adminSearchProjectRequestCommand,
+			PageCommand pageCommand) {
+		Pageable pageable = PageRequest.of(pageCommand.page(), pageCommand.size());
+
+        Page<ProjectEntity> pagedProjectList= jpaProjectRepository.findByAdminSearchCondition(
+        		adminSearchProjectRequestCommand.keyword(), adminSearchProjectRequestCommand.recruitmentTypeCd(), adminSearchProjectRequestCommand.recruitStatusCd(),
+        		adminSearchProjectRequestCommand.progressTypeCd(), adminSearchProjectRequestCommand.progressRegionCd(),
+				adminSearchProjectRequestCommand.recruitmentStartDate(), adminSearchProjectRequestCommand.recruitmentEndDate(),
+				adminSearchProjectRequestCommand.progressStartDate(), adminSearchProjectRequestCommand.progressEndDate(), pageable);
+        
+        return PageResult.of(
+        		pagedProjectList.getContent().stream().map(ProjectMapper::toProject).toList(),
+        		pagedProjectList.getNumber(),
+        		pagedProjectList.getSize(),
+        		pagedProjectList.getTotalElements());
 	}
 
 }
