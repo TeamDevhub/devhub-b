@@ -163,5 +163,22 @@ public interface JpaProjectRepository extends JpaRepository<ProjectEntity, Strin
 		""")
 	ProjectEntity getProjectByRequirementGuid(@Param("requirementGuid") String requirementGuid);
 
+	@Modifying
+	@Query("""
+			update ProjectEntity p
+			set p.title = COALESCE(:title, p.title),
+				p.recruitmentStartDate = COALESCE(:recruitmentStartDate, p.recruitmentStartDate),
+				p.recruitmentEndDate = COALESCE(:recruitmentEndDate, p.recruitmentEndDate),
+				p.progressStartDate = COALESCE(:progressStartDate, p.progressStartDate),
+				p.progressEndDate = COALESCE(:progressEndDate, p.progressEndDate),
+				p.recruitmentTypeCd = COALESCE(:recruitmentTypeCd, p.recruitmentTypeCd),
+				p.progressRegionCd = COALESCE(:progressRegionCd, p.progressRegionCd),
+				p.progressTypeCd = COALESCE(:progressTypeCd, p.progressTypeCd)
+			where p.projectGuid = :projectGuid
+			""")
+	void updateAdminProject(@Param("projectGuid") String projectGuid, @Param("title") String title, @Param("recruitmentTypeCd") String recruitmentTypeCd, @Param("progressTypeCd") String progressTypeCd,
+			@Param("progressRegionCd") String progressRegionCd, @Param("recruitmentStartDate") LocalDate recruitmentStartDate, @Param("recruitmentEndDate") LocalDate recruitmentEndDate,
+			@Param("progressStartDate") LocalDate progressStartDate, @Param("progressEndDate") LocalDate progressEndDate);
+
 
 }

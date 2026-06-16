@@ -21,8 +21,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.api.application.model.request.SearchAdminProjectApplicationRequestDto;
 import teamdevhub.devhub.api.application.model.response.AdminProjectApplicationListResponseDto;
+import teamdevhub.devhub.api.project.model.AdminUpdateProjectRequestDto;
 import teamdevhub.devhub.api.project.model.SearchProjectRequestDto;
-import teamdevhub.devhub.api.project.model.UpdateProjectRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.PageResponseDto;
@@ -87,9 +87,9 @@ public class AdminProjectController {
 	@PutMapping("/{projectGuid}")
 	public ResponseEntity<DataApiResponseDto<Void>> updateProject(
 			@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid,
-			@Valid @RequestBody UpdateProjectRequestDto updateProjectRequestDto,
+			@Valid @RequestBody AdminUpdateProjectRequestDto adminUpdateProjectRequestDto,
 			@LoginUser AuthenticatedUser authenticatedUser) {
-		adminProjectFacade.updateProject(projectGuid, updateProjectRequestDto.toCommand());
+		adminProjectFacade.updateProject(projectGuid, adminUpdateProjectRequestDto.toCommand());
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS)
 		);

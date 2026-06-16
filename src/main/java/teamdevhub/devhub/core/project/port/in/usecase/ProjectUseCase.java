@@ -5,6 +5,7 @@ import java.util.List;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.vo.command.AdminUpdateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
@@ -28,5 +29,7 @@ public interface ProjectUseCase {
 	PageResult<Project> getEndProjectsByApplicantGuid(String userGuid, PageCommand pageCommand);
 
 	Project getProjectByRequirementGuid(String requirementGuid);
+
+	void updateAdminProject(String projectGuid, AdminUpdateProjectCommand adminUpdateProjectCommand);
 
 }

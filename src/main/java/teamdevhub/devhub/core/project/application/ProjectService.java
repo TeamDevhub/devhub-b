@@ -17,6 +17,7 @@ import teamdevhub.devhub.core.common.provider.IdentifierProvider;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 import teamdevhub.devhub.core.project.domain.ProjectSkill;
+import teamdevhub.devhub.core.project.domain.vo.command.AdminUpdateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectRequirementCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectSkillCommand;
@@ -162,6 +163,12 @@ public class ProjectService implements ProjectUseCase {
 	@Override
 	public Project getProjectByRequirementGuid(String requirementGuid) {
 		return projectRepository.getProjectByRequirementGuid(requirementGuid);
+	}
+
+	@Override
+	public void updateAdminProject(String projectGuid, AdminUpdateProjectCommand adminUpdateProjectCommand) {
+		projectRepository.updateAdminProject(projectGuid, adminUpdateProjectCommand);
+		
 	}
 
 }

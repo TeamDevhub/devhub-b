@@ -16,7 +16,7 @@ import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.ProjectLike;
-import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
+import teamdevhub.devhub.core.project.domain.vo.command.AdminUpdateProjectCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectApplicationFormUseCase;
@@ -73,11 +73,8 @@ public class AdminProjectFacade {
     	return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, false);
 	}
 
-	public void updateProject(String projectGuid, UpdateProjectCommand updateProjectCommand) {
-		List<String> additionalFormGuidList = applicationFormUseCase.saveApplicationForms(updateProjectCommand.additionalFormList());
-		updateProjectCommand.applicationFormList().addAll(additionalFormGuidList);
-		List<String> deleteApplicationFormGuids = projectUseCase.updateProject(projectGuid, updateProjectCommand);
-		applicationFormUseCase.deleteApplicationForms(deleteApplicationFormGuids);
+	public void updateProject(String projectGuid, AdminUpdateProjectCommand adminUpdateProjectCommand) {
+		projectUseCase.updateAdminProject(projectGuid, adminUpdateProjectCommand);
 		
 	}
 

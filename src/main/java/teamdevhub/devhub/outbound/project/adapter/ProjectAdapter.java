@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.vo.command.AdminUpdateProjectCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 import teamdevhub.devhub.outbound.project.adapter.entity.ProjectEntity;
@@ -97,6 +98,15 @@ public class ProjectAdapter implements ProjectRepository {
 	public Project getProjectByRequirementGuid(String requirementGuid) {
 		ProjectEntity entity = jpaProjectRepository.getProjectByRequirementGuid(requirementGuid);
 		return ProjectMapper.toProject(entity);
+	}
+
+	@Override
+	public void updateAdminProject(String projectGuid, AdminUpdateProjectCommand adminUpdateProjectCommand) {
+		jpaProjectRepository.updateAdminProject(projectGuid, adminUpdateProjectCommand.title(), adminUpdateProjectCommand.recruitmentTypeCd(),
+				adminUpdateProjectCommand.progressTypeCd(), adminUpdateProjectCommand.progressRegionCd(),
+				adminUpdateProjectCommand.recruitmentStartDate(), adminUpdateProjectCommand.recruitmentEndDate(),
+				adminUpdateProjectCommand.progressStartDate(), adminUpdateProjectCommand.progressEndDate());
+		
 	}
 
 }

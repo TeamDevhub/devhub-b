@@ -24,7 +24,7 @@ import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
 @NoArgsConstructor
 public class UpdateProjectRequestDto {
 	
-	@NotBlank(message = "사용자ID눈 필수입니다")
+	@NotBlank(message = "사용자ID는 필수입니다")
 	private String userGuid;
 	
 //	@NotBlank(message = "사용자이름은 필수입니다")
