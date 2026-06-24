@@ -34,12 +34,21 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 		if(projectApplicationList == null) {
 		    projectApplicationList = Collections.emptyList();
 		}
-		long getCurrentRecruitNumber = projectApplicationList.stream().filter(item -> ProjectApprovalStatus.APPROVED.getCode().equals(item.getStatusCd())).count();
-		long getTotalRecriutNumber =
-				project.getProjectRequirement().stream()
-			        .mapToInt(item -> item.getCapacity())
-			        .sum();
-		long getApprovalNumber = projectApplicationList.stream().filter(item -> ProjectApprovalStatus.PENDING.getCode().equals(item.getStatusCd())).count();
+		long getCurrentRecruitNumber = 0L;
+		long getTotalRecriutNumber = 0L;
+		long getApprovalNumber = 0L;
+		if(projectApplicationList.size() > 0) {
+			getCurrentRecruitNumber = projectApplicationList.stream().filter(item -> ProjectApprovalStatus.APPROVED.getCode().equals(item.getStatusCd())).count();
+		}
+		if(project.getProjectRequirement() != null && project.getProjectRequirement().size() > 0) {
+			getTotalRecriutNumber =
+					project.getProjectRequirement().stream()
+					.mapToInt(item -> item.getCapacity())
+					.sum();
+		}
+		if(projectApplicationList.size() > 0) {
+			getApprovalNumber = projectApplicationList.stream().filter(item -> ProjectApprovalStatus.PENDING.getCode().equals(item.getStatusCd())).count();
+		}
 		String getProgressState = LocalDate.now().isBefore(project.getProgressEndDate()) ? "ing" : "end";
 
 		return builder
