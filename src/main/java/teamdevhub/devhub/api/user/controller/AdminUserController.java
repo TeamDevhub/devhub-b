@@ -101,26 +101,26 @@ public class AdminUserController {
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping("/{userGuid}/projects")
     public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserProjects(
-            @Parameter(description = "사용자 GUID") @PathVariable String userGuid,
-            @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam int page,
-            @Parameter(description = "페이지 크기", example = "10") @RequestParam int size) {
-        List<UserProjectResponseDto> projects = adminUserFacade.getUserProjects(
+            @Parameter(description = "사용자 GUID") @PathVariable("userGuid") String userGuid,
+            @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam("page") int page,
+            @Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size) {
+    	PageResult<UserProjectResponseDto> projects = adminUserFacade.getUserProjects(
                 userGuid, PageCommand.of(page, size));
         return ResponseEntity.ok(
-                DataListApiResponseDto.successWithDataList(SuccessCode.READ_SUCCESS, projects));
+                DataListApiResponseDto.successWithDataList(SuccessCode.READ_SUCCESS, projects.content(), PageResponseDto.from(projects)));
     }
 
     @Operation(summary = "사용자 지원 프로젝트 조회", description = "특정 사용자가 지원한 프로젝트 목록을 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping("/{userGuid}/projects/applicant")
     public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserApplyProjects(
-            @Parameter(description = "사용자 GUID") @PathVariable String userGuid,
-            @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam int page,
-            @Parameter(description = "페이지 크기", example = "10") @RequestParam int size) {
-        List<UserProjectResponseDto> projects = adminUserFacade.getUserApplyProjects(
+            @Parameter(description = "사용자 GUID") @PathVariable("userGuid") String userGuid,
+            @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam("page") int page,
+            @Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size) {
+    	PageResult<UserProjectResponseDto> projects = adminUserFacade.getUserApplyProjects(
                 userGuid, PageCommand.of(page, size));
         return ResponseEntity.ok(
-                DataListApiResponseDto.successWithDataList(SuccessCode.READ_SUCCESS, projects));
+                DataListApiResponseDto.successWithDataList(SuccessCode.READ_SUCCESS, projects.content(), PageResponseDto.from(projects)));
     }
 
     @Operation(summary = "사용자가 받은 신고 조회", description = "특정 사용자가 신고를 받은 내역을 조회합니다.")

@@ -3,6 +3,10 @@ package teamdevhub.devhub.core.user.port.in.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import teamdevhub.devhub.core.application.domain.ProjectApplication;
+import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
+import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
 import teamdevhub.devhub.core.auth.port.in.usecase.UserCredentialUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
@@ -21,6 +25,7 @@ import teamdevhub.devhub.core.user.port.in.usecase.UserQueryUseCase;
 import teamdevhub.devhub.core.user.port.in.command.SearchUserCommand;
 import teamdevhub.devhub.core.user.port.in.facade.model.UserBasicResponseDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,6 +40,7 @@ public class AdminUserFacade {
     private final ProjectUseCase projectUseCase;
     private final ProjectApplicationUseCase projectApplicationUseCase;
     private final ReportQueryUseCase reportQueryUseCase;
+    private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
 
     public PageResult<UserBasicResponseDto> listUsers(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
         PageResult<User> result = userQueryUseCase.listUser(searchUserCommand, pageCommand);
@@ -70,20 +76,30 @@ public class AdminUserFacade {
      * @param pageCommand
      * @return
      */
-    public List<UserProjectResponseDto> getUserProjects(String userGuid, PageCommand pageCommand) {
-        PageResult<Project> result = projectUseCase.getUserProjects(userGuid, pageCommand);
-        return result.content().stream()
-                .map(project -> UserProjectResponseDto.fromDomain(project, null, null))
-                .toList();
+    public PageResult<UserProjectResponseDto> getUserProjects(String userGuid, PageCommand pageCommand) {
+    	List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+    	PageResult<Project> result = projectUseCase.getUserProjects(userGuid, pageCommand);
+        userProjectResponseDtoList = result.content().stream()
+	            .map(item -> {
+	            	PageResult<ProjectApplication> pagedApplicatgionList = projectApplicationQueryUseCase.getApplicationsByProjectGuid(item.getProjectGuid(), new PageCommand(0, Integer.MAX_VALUE));
+	            	Project project = projectUseCase.getProjectDetail(item.getProjectGuid());
+	            	return UserProjectResponseDto.fromDomain(project, pagedApplicatgionList.content().stream().map(application -> ProjectApplicationScore.toApplicationWithScore(application, 0.0)).toList(), null);
+	            })
+	            .toList();
+		return PageResult.of(userProjectResponseDtoList, result.page(), result.size(), result.totalElements());
     }
 
-    public List<UserProjectResponseDto> getUserApplyProjects(String userGuid, PageCommand pageCommand) {
-        return projectApplicationUseCase.findByApplicantGuid(userGuid, pageCommand).content().stream()
-                .map(application -> {
-                    Project project = projectUseCase.getProjectDetail(application.getRequirementGuid());
-                    return UserProjectResponseDto.fromDomain(project, null, null);
-                })
-                .toList();
+    public PageResult<UserProjectResponseDto> getUserApplyProjects(String userGuid, PageCommand pageCommand) {
+    	List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+		PageResult<ProjectApplication> pagedApplyProjectList = projectApplicationUseCase.findByApplicantGuid(userGuid, pageCommand);
+		userProjectResponseDtoList = pagedApplyProjectList.content().stream()
+	            .map(projectApply -> {
+	            	Project project = projectUseCase.getProjectByRequirementGuid(projectApply.getRequirementGuid());
+	            	Project projectDetail = projectUseCase.getProjectDetail(project.getProjectGuid());
+	            	return UserProjectResponseDto.fromDomain(projectDetail, null, projectApply.getStatusCd());
+	            })
+	            .toList();
+		return PageResult.of(userProjectResponseDtoList, pagedApplyProjectList.page(), pagedApplyProjectList.size(), pagedApplyProjectList.totalElements());
     }
 
     public PageResult<Report> getUserReceivedReports(String userGuid, PageCommand pageCommand) {
