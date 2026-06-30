@@ -96,6 +96,7 @@ public class WebSecurityConfig {
                                         "/v3/api-docs/**",
                                         "/webjars/**").permitAll()
 
+                                .requestMatchers("/actuator/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
 
                                 .requestMatchers("/user/signup").permitAll()
