@@ -62,11 +62,10 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOriginPatterns(List.of(
-                "http://localhost:*",
-                "http://127.0.0.1:*",
-                "http://*.s3-website-*",
-                "https://*.cloudfront.net"
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "http://devhub-frontend.s3-website.ap-northeast-2.amazonaws.com"
         ));
 
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
@@ -106,6 +105,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/auth/**").permitAll()
 
                                 .requestMatchers("/user/signup").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/common/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/files/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/projects").permitAll()
