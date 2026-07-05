@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/devhub}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:1234}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+oauth:
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:dev-google-id}
+    client-secret: ${GOOGLE_CLIENT_SECRET:dev-google-secret}
+    redirect-uri: http://localhost:8080/auth/oauth/google/callback
+
+  github:
+    client-id: ${GITHUB_CLIENT_ID:dev-github-id}
+    client-secret: ${GITHUB_CLIENT_SECRET:dev-github-secret}
+    redirect-uri: http://localhost:8080/auth/oauth/github/callback
+
+  kakao:
+    client-id: ${KAKAO_CLIENT_ID:dev-kakao-id}
+    client-secret: ${KAKAO_CLIENT_SECRET:dev-kakao-secret}
+    redirect-uri: http://localhost:8080/auth/oauth/kakao/callback
+
+  naver:
+    client-id: ${NAVER_CLIENT_ID:dev-naver-id}
+    client-secret: ${NAVER_CLIENT_SECRET:dev-naver-secret}
+    redirect-uri: http://localhost:8080/auth/oauth/naver/callback
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: ${MAIL_USERNAME:}
+  password: ${MAIL_PASSWORD:}
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY:dev-key}
+
+file:
+  storage:
+    root-path: ./local-files
+
+app:
+  frontend:
+    base-url: http://localhost:5173
+
+  cookie:
+    secure: false
