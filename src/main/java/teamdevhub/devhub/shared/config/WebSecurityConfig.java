@@ -62,14 +62,8 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOriginPatterns(List.of(
-                "http://localhost:*",
-                "http://127.0.0.1:*",
-                "http://*.s3-website-*",
-                "https://*.cloudfront.net"
-        ));
-
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173"));
+        config.setAllowedMethods(List.of("HEAD","POST","GET","DELETE","PUT","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.addExposedHeader(HttpHeaders.AUTHORIZATION);
         config.setAllowCredentials(true);
