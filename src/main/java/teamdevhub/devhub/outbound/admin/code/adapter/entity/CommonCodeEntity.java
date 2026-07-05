@@ -18,7 +18,7 @@ import teamdevhub.devhub.outbound.common.persistence.jpa.audit.BaseEntity;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "COMMON_CODE")
+@Table(name = "common_code")
 public class CommonCodeEntity extends BaseEntity {
 	
 	@Id

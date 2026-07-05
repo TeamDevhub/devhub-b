@@ -4,7 +4,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     defer-datasource-initialization: true
     properties:
       hibernate:
@@ -15,8 +15,8 @@ spring:
 
   sql:
     init:
-      mode: never
-      #data-locations: classpath:sql/init-data.sql
+      mode: always
+      data-locations: classpath:sql/init-data.sql
 
 server:
   servlet:

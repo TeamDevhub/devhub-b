@@ -1,4 +1,4 @@
-INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
+INSERT INTO common_code (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('SKILL_CODE', '기술 스택', '0000', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', 'Root'),
                                                                                                                                                            ('POSITION_CODE', '포지션', '0000', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', 'Root'),
                                                                                                                                                            ('POSITION_LEVEL_CODE', '숙련도', '0000', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', 'Root'),
@@ -11,7 +11,7 @@ INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, RE
                                                                                                                                                            ('NOTIFICATION_TYPE', '알림 유형', '0000', 10, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', 'Root'),
                                                                                                                                                            ('REGION_CODE', '지역 코드', '0000', 11, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', 'Root');
 
-INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
+INSERT INTO common_code (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
 ('1001', 'Java', 'SKILL_CODE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('1002', 'Spring', 'SKILL_CODE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('1003', 'React', 'SKILL_CODE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
@@ -45,13 +45,13 @@ INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, RE
 ('6003', '댓글 알림', 'NOTIFICATION_TYPE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
 
-INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
+INSERT INTO common_code (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('8100', '서울', 'REGION_CODE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('8200', '경기', 'REGION_CODE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('8300', '인천', 'REGION_CODE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('8400', '부산', 'REGION_CODE', 4, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
-INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
+INSERT INTO common_code (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('810001', '강남구', '8100', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('810002', '강동구', '8100', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('810003', '강북구', '8100', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
@@ -78,7 +78,7 @@ INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, RE
                                                                                                                                                            ('810024', '중구', '8100', 24, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('810025', '중랑구', '8100', 25, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
-INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
+INSERT INTO common_code (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('820001', '수원시', '8200', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('820002', '성남시', '8200', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('820003', '고양시', '8200', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
@@ -100,7 +100,7 @@ INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, RE
                                                                                                                                                            ('820019', '오산시', '8200', 19, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('820020', '구리시', '8200', 20, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
-INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
+INSERT INTO common_code (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('830001', '중구', '8300', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('830002', '동구', '8300', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('830003', '미추홀구', '8300', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
@@ -110,7 +110,7 @@ INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, RE
                                                                                                                                                            ('830007', '계양구', '8300', 7, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('830008', '서구', '8300', 8, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
-INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
+INSERT INTO common_code (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('840001', '해운대구', '8400', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('840002', '수영구', '8400', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('840003', '남구', '8400', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
@@ -257,7 +257,7 @@ INSERT INTO terms (
              'N'
          );
 
-INSERT INTO APPLICATION_FORM( MODIFIED_DATE, REGISTERED_DATE, APPLICATION_FORM_GUID, CUSTOM_YN, HELP_TEXT, MODIFIER_GUID, REGISTRANT_GUID, TITLE, TYPE_CD, USE_YN) VALUES
+INSERT INTO application_form( MODIFIED_DATE, REGISTERED_DATE, APPLICATION_FORM_GUID, CUSTOM_YN, HELP_TEXT, MODIFIER_GUID, REGISTRANT_GUID, TITLE, TYPE_CD, USE_YN) VALUES
                                                                                                                                                                        (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '1', 'N', '이름을 입력하세요', '1', '1', '이름', 'textfield_100', 'Y'),
                                                                                                                                                                        (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '2', 'N', '나이를 입력하세요', '1', '1', '나이', 'textfield_100', 'Y'),
                                                                                                                                                                        (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '3', 'N', '자기소개를 입력하세요', '1', '1', '자기소개', 'textarea', 'Y'),
