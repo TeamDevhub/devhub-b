@@ -21,11 +21,11 @@ public class TermsEntity extends BaseEntity {
     @Column(length = 32)
     private String termsGuid;
     
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "LONGTEXT")
     private String title;
 
     @Lob
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, columnDefinition = "LONGTEXT")
     private String content;
     
     @Convert(converter = BooleanToYNConverter.class)
