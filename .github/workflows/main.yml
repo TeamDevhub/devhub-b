@@ -64,6 +64,7 @@ jobs:
         with:
           repository: TeamDevhub/devhub-infra
           ref: dev
+          token: ${{ secrets.GH_PAT }}
           path: infra
 
       - name: Verify Deployment File
