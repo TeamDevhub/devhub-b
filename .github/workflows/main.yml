@@ -1,5 +1,7 @@
 name: Backend CI/CD
 
+
+
 on:
   push:
     branches:
@@ -16,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug secret
+        run: echo "${{ secrets.GH_PAT != '' }}"
 
       - name: Checkout Source
         uses: actions/checkout@v4
