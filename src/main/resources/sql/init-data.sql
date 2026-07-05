@@ -12,56 +12,45 @@ INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, RE
                                                                                                                                                            ('REGION_CODE', '지역 코드', '0000', 11, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', 'Root');
 
 INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
--- SKILL_CODE
 ('1001', 'Java', 'SKILL_CODE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('1002', 'Spring', 'SKILL_CODE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('1003', 'React', 'SKILL_CODE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('1004', 'Node.js', 'SKILL_CODE', 4, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
--- POSITION_CODE
 ('2001', 'Backend', 'POSITION_CODE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('2002', 'Frontend', 'POSITION_CODE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('2003', 'Fullstack', 'POSITION_CODE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('2004', 'Mobile', 'POSITION_CODE', 4, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
--- POSITION_LEVEL_CODE
 ('2101', '초급', 'POSITION_LEVEL_CODE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('2102', '중급', 'POSITION_LEVEL_CODE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('2103', '고급', 'POSITION_LEVEL_CODE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
--- PROJECT_RECRUIT_TYPE
 ('3001', '일반모집', 'PROJECT_RECRUIT_TYPE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('3002', '추가모집', 'PROJECT_RECRUIT_TYPE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
--- PROJECT_PROGRESS_TYPE
 ('3101', '온라인', 'PROJECT_PROGRESS_TYPE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('3102', '오프라인', 'PROJECT_PROGRESS_TYPE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('3103', '온/오프라인 병행', 'PROJECT_PROGRESS_TYPE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
--- PROJECT_RECRUIT_STATUS
 ('3201', '모집중', 'PROJECT_RECRUIT_STATUS', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('3202', '모집완료', 'PROJECT_RECRUIT_STATUS', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('3203', '모집대기', 'PROJECT_RECRUIT_STATUS', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
--- PROJECT_APPROVAL_STATUS
 ('3301', '승인 대기', 'PROJECT_APPROVAL_STATUS', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('3302', '승인 완료', 'PROJECT_APPROVAL_STATUS', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('3303', '승인 거절', 'PROJECT_APPROVAL_STATUS', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
--- BOARD_CATEGORY
 ('4001', '자유게시판', 'BOARD_CATEGORY', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('4002', '질문', 'BOARD_CATEGORY', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('4003', '공지사항', 'BOARD_CATEGORY', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
--- REPORT_TYPE
 ('5001', '스팸/광고', 'REPORT_TYPE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('5002', '욕설/비방', 'REPORT_TYPE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('5003', '불법 콘텐츠', 'REPORT_TYPE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
--- NOTIFICATION_TYPE
 ('6001', '프로젝트 지원 알림', 'NOTIFICATION_TYPE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('6002', '프로젝트 승인 알림', 'NOTIFICATION_TYPE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
 ('6003', '댓글 알림', 'NOTIFICATION_TYPE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
--- 대분류 (Depth 1)
+
 INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('8100', '서울', 'REGION_CODE', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('8200', '경기', 'REGION_CODE', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('8300', '인천', 'REGION_CODE', 3, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('8400', '부산', 'REGION_CODE', 4, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
--- 서울 소분류 (Depth 2)
 INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('810001', '강남구', '8100', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('810002', '강동구', '8100', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
@@ -89,7 +78,6 @@ INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, RE
                                                                                                                                                            ('810024', '중구', '8100', 24, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('810025', '중랑구', '8100', 25, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
--- 경기 소분류 (Depth 2)
 INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('820001', '수원시', '8200', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('820002', '성남시', '8200', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
@@ -112,7 +100,6 @@ INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, RE
                                                                                                                                                            ('820019', '오산시', '8200', 19, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('820020', '구리시', '8200', 20, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
--- 인천 소분류 (Depth 2)
 INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('830001', '중구', '8300', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('830002', '동구', '8300', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
@@ -123,7 +110,6 @@ INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, RE
                                                                                                                                                            ('830007', '계양구', '8300', 7, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('830008', '서구', '8300', 8, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', '');
 
--- 부산 소분류 (Depth 2)
 INSERT INTO COMMON_CODE (CODE_ID, NAME, SUPERIOR_CODE_ID, SORT_ORDER, USE_YN, REGISTERED_DATE, MODIFIED_DATE, REGISTRANT_GUID, MODIFIER_GUID, REMARKS) VALUES
                                                                                                                                                            ('840001', '해운대구', '8400', 1, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
                                                                                                                                                            ('840002', '수영구', '8400', 2, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SYSTEM', 'SYSTEM', ''),
