@@ -15,8 +15,8 @@ spring:
 
   sql:
     init:
-      mode: always
-      data-locations: classpath:sql/init-data.sql
+      mode: never
+      #data-locations: classpath:sql/init-data.sql
 
 server:
   servlet:
