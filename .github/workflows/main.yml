@@ -63,7 +63,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TeamDevhub/devhub-infra
-          token: ${{ secrets.GH_PAT }}
           ref: dev
           path: infra
 
