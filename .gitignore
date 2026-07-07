@@ -40,3 +40,4 @@ out/
 /logs/
 /src/test/resources/application.yml
 /.claude/docs/
+/src/main/resources/application-local.yml
