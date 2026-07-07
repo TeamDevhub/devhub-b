@@ -11,7 +11,7 @@ public record HomeBoardQuery(int limit, BoardSortType sortType) {
 
     public static HomeBoardQuery of(int limit, BoardSortType sortType) {
         return HomeBoardQuery.builder()
-                .limit(limit > 0 ? limit : 5)
+                .limit(limit > 0 ? limit : 6)
                 .sortType(sortType != null ? sortType : BoardSortType.VIEW_COUNT)
                 .build();
     }
