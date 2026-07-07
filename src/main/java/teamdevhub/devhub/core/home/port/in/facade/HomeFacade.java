@@ -18,8 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeFacade {
 
-    private static final int DEFAULT_PROJECT_LIMIT = 6;
-    private static final int DEFAULT_BOARD_LIMIT = 5;
+    private static final int DEFAULT_PROJECT_LIMIT = 12;
+    private static final int DEFAULT_BOARD_LIMIT = 6;
 
     private final HomeQueryUseCase homeQueryUseCase;
 

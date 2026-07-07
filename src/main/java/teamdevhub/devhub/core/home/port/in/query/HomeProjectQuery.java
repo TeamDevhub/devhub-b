@@ -7,7 +7,7 @@ public record HomeProjectQuery(int limit) {
 
     public static HomeProjectQuery of(int limit) {
         return HomeProjectQuery.builder()
-                .limit(limit > 0 ? limit : 6)
+                .limit(limit > 0 ? limit : 12)
                 .build();
     }
 }
