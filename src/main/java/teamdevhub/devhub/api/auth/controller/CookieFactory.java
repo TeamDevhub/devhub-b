@@ -28,6 +28,16 @@ public class CookieFactory {
                 .build();
     }
 
+    public ResponseCookie expireRefreshTokenCookie() {
+        return ResponseCookie.from(REFRESH_COOKIE_NAME, "")
+                .httpOnly(true)
+                .secure(secureCookie)
+                .sameSite(SAME_SITE)
+                .path(PATH)
+                .maxAge(0)
+                .build();
+    }
+
     public ResponseCookie createOAuthStateCookie(String state) {
         return ResponseCookie.from(OAUTH_STATE_COOKIE_NAME, state)
                 .httpOnly(true)

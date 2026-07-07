@@ -1,5 +1,6 @@
 package teamdevhub.devhub.medium.api.auth.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -99,15 +100,23 @@ class AuthControllerTest {
                 UserRole.USER
         );
 
+        HttpServletResponse response = mock(HttpServletResponse.class);
+
         doNothing().when(authFacade).logout(TEST_USER_GUID_1);
 
         // when
-        ResponseEntity<DataApiResponseDto<Void>> response = authController.logout(authenticatedUser);
+        ResponseEntity<DataApiResponseDto<Void>> result =
+                authController.logout(authenticatedUser, response);
 
         // then
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getCode()).isEqualTo(SuccessCode.LOGOUT_SUCCESS.getCode());
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody().getCode())
+                .isEqualTo(SuccessCode.LOGOUT_SUCCESS.getCode());
 
         verify(authFacade).logout(TEST_USER_GUID_1);
+        verify(response).addHeader(
+                eq(HttpHeaders.SET_COOKIE),
+                anyString()
+        );
     }
 }

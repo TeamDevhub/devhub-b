@@ -64,22 +64,22 @@ public class OAuthController {
             @Parameter(description = "OAuth 제공자로부터 받은 인가 코드", required = true) @RequestParam String code,
             @Parameter(description = "OAuth state 값") @RequestParam String state,
             @CookieValue(value = "oauthState", required = false) String cookieState,
-            HttpServletResponse response) throws IOException {
+            HttpServletResponse httpServletResponse) throws IOException {
         if (cookieState == null || !cookieState.equals(state)) {
             throw BusinessRuleException.of(ErrorCode.OAUTH_STATE_INVALID);
         }
 
         ResponseCookie expiredStateCookie = cookieFactory.expireOAuthStateCookie();
-        response.addHeader(HttpHeaders.SET_COOKIE, expiredStateCookie.toString());
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, expiredStateCookie.toString());
 
         OAuthResult oauthResult = oauthFacade.handleOAuthCallback(provider, code);
 
         if (oauthResult.signupStatus().equals(SignupStatus.COMPLETED)) {
             ResponseCookie refreshCookie = cookieFactory.createRefreshTokenCookie(oauthResult.refreshToken());
-            response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
-            response.sendRedirect(frontendBaseUrl + "/");
+            httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+            httpServletResponse.sendRedirect(frontendBaseUrl + "/?oauth=true");
         } else {
-            response.sendRedirect(frontendBaseUrl + "/auth/signup?token=" + oauthResult.tempToken());
+            httpServletResponse.sendRedirect(frontendBaseUrl + "/auth/signup?token=" + oauthResult.tempToken());
         }
     }
 

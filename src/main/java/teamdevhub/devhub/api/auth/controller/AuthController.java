@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -77,8 +78,9 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "인증되지 않은 사용자")
     })
     @PostMapping("/logout")
-    public ResponseEntity<DataApiResponseDto<Void>> logout(@LoginUser AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<DataApiResponseDto<Void>> logout(@LoginUser AuthenticatedUser authenticatedUser, HttpServletResponse httpServletResponse) {
         authFacade.logout(authenticatedUser.userGuid());
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, cookieFactory.expireRefreshTokenCookie().toString());
         return ResponseEntity.ok(
                 DataApiResponseDto.successWithoutData(
                         SuccessCode.LOGOUT_SUCCESS
