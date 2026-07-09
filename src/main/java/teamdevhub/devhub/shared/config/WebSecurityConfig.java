@@ -65,7 +65,8 @@ public class WebSecurityConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
                 "http://localhost:5173",
-                "http://devhub-frontend.s3-website.ap-northeast-2.amazonaws.com"
+                "https://devhub-24.com",
+                "https://www.devhub-24.com"
         ));
 
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
