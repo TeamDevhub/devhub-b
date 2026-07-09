@@ -1,0 +1,56 @@
+package teamdevhub.devhub.core.board.application;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import teamdevhub.devhub.core.board.domain.Board;
+import teamdevhub.devhub.core.board.port.in.command.SearchAdminBoardCommand;
+import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
+import teamdevhub.devhub.core.board.port.in.usecase.BoardQueryUseCase;
+import teamdevhub.devhub.core.board.port.out.BoardLikeRepository;
+import teamdevhub.devhub.core.board.port.out.BoardQueryRepository;
+import teamdevhub.devhub.core.board.port.out.CommentRepository;
+import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
+import teamdevhub.devhub.core.user.port.out.UserRepository;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class BoardQueryService implements BoardQueryUseCase {
+	
+	private final BoardQueryRepository boardQueryRepository;
+	private final BoardLikeRepository boardLikeRepository;
+	private final CommentRepository commentRepository;
+	private final UserRepository userRepository;
+	
+	@Override
+	public PageResult<Board> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand) {
+		
+		PageResult<Board> boardList = boardQueryRepository.listBoard(searchBoardCommand, pageCommand.page(), pageCommand.size());
+		List<String> boardGuids = boardList.content().stream().map(Board::getBoardGuid).toList();
+		List<String> userGuids = boardList.content().stream().map(Board::getUserGuid).toList();
+		
+		Map<String, Long> boardLikes = boardLikeRepository.countByLikeCount(boardGuids);
+		Map<String, Long> boardComments = commentRepository.countByCommentCount(boardGuids);
+		Map<String, String> userNames = userRepository.findNamesByUserGuid(userGuids);
+		
+		boardList.content().stream().forEach(board -> 
+			board.fillSummarySubquery(boardLikes.getOrDefault(board.getBoardGuid(), 0L).toString(), 
+					boardComments.getOrDefault(board.getBoardGuid(), 0L).toString(),
+					userNames.getOrDefault(board.getUserGuid(), "")
+					));
+		
+		return boardList;
+	}
+	
+	@Override
+	public PageResult<Board> listAdminBoard(SearchAdminBoardCommand searchAdminBoardCommand, PageCommand pageCommand) {
+		PageResult<Board> boardList = boardQueryRepository.listAdminBoard(searchAdminBoardCommand, pageCommand.page(), pageCommand.size());
+		return boardList;
+	}
+}
