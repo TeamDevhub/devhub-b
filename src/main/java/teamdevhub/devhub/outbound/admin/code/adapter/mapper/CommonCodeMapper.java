@@ -55,7 +55,7 @@ public class CommonCodeMapper {
         List<CommonCodeDetail> result = new ArrayList<>();
         map.values().forEach(domain -> {
             String parentCode = domain.getParentCode();
-            if ("0000".equals(parentCode) || parentCode == null || parentCode.isEmpty()) {
+            if (CommonCode.ROOT_PARENT_CODE.equals(parentCode) || parentCode == null || parentCode.isEmpty()) {
                 result.add(domain);
             } else {
                 CommonCodeDetail parent = map.get(parentCode);
