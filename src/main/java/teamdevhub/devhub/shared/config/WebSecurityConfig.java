@@ -111,6 +111,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/files/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/projects").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/boards").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/boards/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/home").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/skill-trends").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/terms/**").permitAll()
