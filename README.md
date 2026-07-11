@@ -10,9 +10,7 @@ DevHub는 사이드 프로젝트·스터디 팀원을 찾는 개발자들을 위
 [![QueryDSL](https://img.shields.io/badge/QueryDSL-5.1.0-lightgrey)](.)
 [![Architecture](https://img.shields.io/badge/Architecture-Hexagonal-9cf)](.)
 
-- Organization: [TeamDevhub](https://github.com/TeamDevhub)
 - 배포 도메인: `devhub-24.com`
-- 관련 저장소: 프론트엔드 · 인프라(`devhub-infra`, Kubernetes 매니페스트)
 
 ---
 
