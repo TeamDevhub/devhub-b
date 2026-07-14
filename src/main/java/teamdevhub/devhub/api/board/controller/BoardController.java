@@ -34,6 +34,8 @@ import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 
+import java.util.Optional;
+
 @Tag(name = "Board", description = "커뮤니티 게시글 API")
 @RestController
 @RequestMapping("/boards")
@@ -64,9 +66,12 @@ public class BoardController {
 	@GetMapping("/{boardGuid}")
 	public ResponseEntity<DataApiResponseDto<BoardDetailResponseDto>> detailBoard(
 			@Parameter(description = "게시글 GUID", required = true) @PathVariable("boardGuid") String boardGuid,
-			HttpServletRequest request, HttpServletResponse response, @LoginUser AuthenticatedUser authenticatedUser) {
+			HttpServletRequest request, HttpServletResponse response,  @LoginUser(required = false) AuthenticatedUser authenticatedUser) {
 		boolean cookieResult = isCookie(boardGuid, request, response);
-		return ResponseEntity.ok(boardFacade.detailBoard(boardGuid, cookieResult, authenticatedUser.userGuid()));
+		String userGuid = Optional.ofNullable(authenticatedUser)
+				.map(AuthenticatedUser::userGuid)
+				.orElse(null);
+		return ResponseEntity.ok(boardFacade.detailBoard(boardGuid, cookieResult, userGuid));
 	}
 	
 	private boolean isCookie(String boardGuid, HttpServletRequest request, HttpServletResponse response) {

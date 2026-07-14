@@ -29,14 +29,20 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) {
 
-        Object principal = Optional
-                .ofNullable(SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                )
-                .map(Authentication::getPrincipal)
-                .orElseThrow(
-                        () -> AuthRuleException.of(ErrorCode.USER_NOT_FOUND));
+        LoginUser loginUser = methodParameter.getParameterAnnotation(LoginUser.class);
+
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (authentication == null || authentication.getPrincipal() == null) {
+            if (loginUser.required()) {
+                throw AuthRuleException.of(ErrorCode.USER_NOT_FOUND);
+            }
+            return null;
+        }
+
+        Object principal = authentication.getPrincipal();
 
         if (principal instanceof UserAuthentication userAuthentication) {
             return userAuthentication.getUser();
@@ -46,6 +52,10 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
             return authenticatedUser;
         }
 
-        throw AuthRuleException.of(ErrorCode.USER_NOT_FOUND);
+        if (loginUser.required()) {
+            throw AuthRuleException.of(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return null;
     }
 }
