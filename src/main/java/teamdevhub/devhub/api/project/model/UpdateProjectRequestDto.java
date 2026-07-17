@@ -37,6 +37,7 @@ public class UpdateProjectRequestDto {
     private String category;
     
 	@NotBlank(message = "상세내용은 필수입니다")
+    @Size(max = 3000, message = "상세내용은 3000자를 초과할 수 없습니다")
     private String content;
 	
 	private String attachmentFileGuid;

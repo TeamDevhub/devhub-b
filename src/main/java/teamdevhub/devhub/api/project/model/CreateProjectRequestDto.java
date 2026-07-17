@@ -35,6 +35,7 @@ public class CreateProjectRequestDto {
 
     @Schema(description = "프로젝트 상세 내용", example = "Spring Boot + React 웹 서비스를 함께 개발할 팀원을 모집합니다.")
     @NotBlank(message = "상세내용은 필수입니다")
+    @Size(max = 3000, message = "상세내용은 3000자를 초과할 수 없습니다")
     private String content;
 
     @Schema(description = "첨부 파일 GUID", example = "abc123def456ghi789jkl012")

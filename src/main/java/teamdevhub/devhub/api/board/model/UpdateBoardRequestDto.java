@@ -1,6 +1,7 @@
 package teamdevhub.devhub.api.board.model;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class UpdateBoardRequestDto {
 	private String categoryCd;
 	
 	@NotBlank(message = "내용은 필수입니다")
+	@Size(max = 3000, message = "내용은 3000자를 초과할 수 없습니다")
 	private String content;
 	
 	public UpdateBoardCommand toCommand(String userGuid, String boardGuid) {
