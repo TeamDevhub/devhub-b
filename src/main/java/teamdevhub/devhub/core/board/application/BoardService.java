@@ -106,11 +106,17 @@ public class BoardService implements BoardUseCase {
 	public void deleteBoard(String boardGuid, String userGuid) {
 		Board board = boardRepository.findByBoardGuid(boardGuid);
 		validateOwner(board.getUserGuid(), userGuid);
-		boardRepository.deleteBoard(List.of(boardGuid));
+		deleteBoardWithChildren(List.of(boardGuid));
 	}
 
 	@Override
 	public void deleteAdminBoard(List<String> boardGuids) {
+		deleteBoardWithChildren(boardGuids);
+	}
+
+	private void deleteBoardWithChildren(List<String> boardGuids) {
+		commentRepository.deleteByBoardGuids(boardGuids);
+		boardLikeRepository.deleteByBoardGuids(boardGuids);
 		boardRepository.deleteBoard(boardGuids);
 	}
 

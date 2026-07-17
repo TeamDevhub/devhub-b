@@ -9,7 +9,7 @@ import teamdevhub.devhub.core.board.domain.BoardLike;
 public interface BoardLikeRepository {
 
 	Map<String, Long> countByLikeCount(List<String> boardGuids);
-	
+
 	Optional<BoardLike> likeBoard(String boardGuid, String userGuid);
 
 	void deleteBoardLike(BoardLike boardLike);
@@ -17,5 +17,9 @@ public interface BoardLikeRepository {
 	void save(BoardLike boardLike);
 
 	boolean existsByBoardGuidAndUserGuid(String boardGuid, String userGuid);
+
+	List<String> findLikedBoardGuids(String userGuid, List<String> boardGuids);
+
+	void deleteByBoardGuids(List<String> boardGuids);
 
 }

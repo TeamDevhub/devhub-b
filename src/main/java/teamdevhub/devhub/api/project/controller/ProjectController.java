@@ -113,7 +113,7 @@ public class ProjectController {
 			@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid,
 			@Valid @RequestBody UpdateProjectRequestDto updateProjectRequestDto,
 			@LoginUser AuthenticatedUser authenticatedUser) {
-		projectFacade.updateProject(projectGuid, updateProjectRequestDto.toCommand());
+		projectFacade.updateProject(projectGuid, updateProjectRequestDto.toCommand(), authenticatedUser);
 		return ResponseEntity.ok(
 			DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS)
 		);
@@ -148,7 +148,7 @@ public class ProjectController {
 	
 	@PostMapping("/{projectGuid}/close")
 	public ResponseEntity<DataApiResponseDto<Void>> closeProject(@PathVariable("projectGuid") String projectGuid, @LoginUser AuthenticatedUser authenticatedUser) {
-		projectFacade.closeProject(projectGuid);
+		projectFacade.closeProject(projectGuid, authenticatedUser);
 		return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS));
 	}
 }

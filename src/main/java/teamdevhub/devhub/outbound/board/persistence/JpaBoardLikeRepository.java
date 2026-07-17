@@ -16,8 +16,15 @@ public interface JpaBoardLikeRepository extends JpaRepository<BoardLikeEntity, S
 					"where bl.boardGuid IN (:boardGuids) " +
 					"group by bl.boardGuid")
 	List<Object[]> countByLikeCount(@Param("boardGuids") List<String> boardGuids);
-	
+
 	Optional<BoardLikeEntity> findByBoardGuidAndUserGuid(String boardGuid, String userGuid);
-	
+
 	boolean existsByBoardGuidAndUserGuid(String boardGuid, String userGuid);
+
+	@Query("select bl.boardGuid " +
+					"from BoardLikeEntity bl " +
+					"where bl.userGuid = :userGuid and bl.boardGuid IN (:boardGuids)")
+	List<String> findLikedBoardGuids(@Param("userGuid") String userGuid, @Param("boardGuids") List<String> boardGuids);
+
+	void deleteAllByBoardGuidIn(List<String> boardGuids);
 }

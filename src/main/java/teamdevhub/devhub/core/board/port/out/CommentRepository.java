@@ -17,5 +17,7 @@ public interface CommentRepository {
 
 	void deleteByBoardGuidAndCommentGuid(String boardGuid, String commentGuid);
 
+	void deleteByBoardGuids(List<String> boardGuids);
+
 	void updateComment(Comment comment);
 }

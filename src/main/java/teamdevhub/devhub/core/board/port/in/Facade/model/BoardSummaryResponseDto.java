@@ -14,4 +14,5 @@ public class BoardSummaryResponseDto {
 	private BoardBasicResponseDto boardBasicResponseDto;
 	private String likeCount;
 	private String commentCount;
+	private boolean isLiked;
 }

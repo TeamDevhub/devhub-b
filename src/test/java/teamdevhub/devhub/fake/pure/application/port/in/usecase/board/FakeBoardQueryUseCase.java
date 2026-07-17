@@ -10,7 +10,7 @@ import teamdevhub.devhub.core.common.page.PageResult;
 public class FakeBoardQueryUseCase implements BoardQueryUseCase {
 
     @Override
-    public PageResult<Board> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand) {
+    public PageResult<Board> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand, String userGuid) {
         return null;
     }
 

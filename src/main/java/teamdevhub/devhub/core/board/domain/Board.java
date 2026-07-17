@@ -62,11 +62,11 @@ public class Board {
 				.build();
 	}
 	
-	public void fillSummarySubquery(String likeCount, String commentCount, String userName) {
+	public void fillSummarySubquery(String likeCount, String commentCount, String userName, boolean isLiked) {
 		 this.likeCount = likeCount;
 		 this.commentCount = commentCount;
 		 this.userName = userName;
-
+		 this.isLiked = isLiked;
 	}
 	
 	public void fillDetailSubquery(String likeCount, String commentCount, String userName, String userEmail, List<Comment> commentList, boolean isLiked) {

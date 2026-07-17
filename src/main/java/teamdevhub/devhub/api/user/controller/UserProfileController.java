@@ -113,7 +113,7 @@ public class UserProfileController {
     @GetMapping("/profile/boards")
     public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> getUserListBoard(@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto,
     		@LoginUser AuthenticatedUser authenticatedUser) {
-    	return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(authenticatedUser.userGuid()), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize())));
+    	return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(authenticatedUser.userGuid()), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize()), authenticatedUser.userGuid()));
     }
     
     @Operation(summary = "내 프로젝트 목록 조회", description = "로그인된 사용자가 참여 중인 프로젝트 목록을 페이징으로 반환합니다.")
