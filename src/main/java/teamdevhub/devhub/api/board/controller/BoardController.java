@@ -47,8 +47,10 @@ public class BoardController {
 	@Operation(summary = "게시글 목록 조회", description = "검색 조건으로 게시글 목록을 페이징 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "조회 성공")
 	@GetMapping
-	public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> listBoard(@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto) {
-		return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize())));
+	public ResponseEntity<DataListApiResponseDto<BoardSummaryResponseDto>> listBoard(@ModelAttribute SearchBoardRequestDto searchBoardRequestDto, PageRequestDto pageRequestDto,
+			@LoginUser(required = false) AuthenticatedUser authenticatedUser) {
+		String userGuid = authenticatedUser != null ? authenticatedUser.userGuid() : null;
+		return ResponseEntity.ok(boardFacade.listBoard(searchBoardRequestDto.toCommand(), PageCommand.of((pageRequestDto.getPage()), pageRequestDto.getSize()), userGuid));
 	}
 	
 	@Operation(summary = "게시글 작성", description = "새로운 게시글을 작성합니다.")

@@ -1,7 +1,9 @@
 package teamdevhub.devhub.core.board.application;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,22 +31,24 @@ public class BoardQueryService implements BoardQueryUseCase {
 	private final UserRepository userRepository;
 	
 	@Override
-	public PageResult<Board> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand) {
-		
+	public PageResult<Board> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand, String userGuid) {
+
 		PageResult<Board> boardList = boardQueryRepository.listBoard(searchBoardCommand, pageCommand.page(), pageCommand.size());
 		List<String> boardGuids = boardList.content().stream().map(Board::getBoardGuid).toList();
 		List<String> userGuids = boardList.content().stream().map(Board::getUserGuid).toList();
-		
+
 		Map<String, Long> boardLikes = boardLikeRepository.countByLikeCount(boardGuids);
 		Map<String, Long> boardComments = commentRepository.countByCommentCount(boardGuids);
 		Map<String, String> userNames = userRepository.findNamesByUserGuid(userGuids);
-		
-		boardList.content().stream().forEach(board -> 
-			board.fillSummarySubquery(boardLikes.getOrDefault(board.getBoardGuid(), 0L).toString(), 
+		Set<String> likedBoardGuids = new HashSet<>(boardLikeRepository.findLikedBoardGuids(userGuid, boardGuids));
+
+		boardList.content().stream().forEach(board ->
+			board.fillSummarySubquery(boardLikes.getOrDefault(board.getBoardGuid(), 0L).toString(),
 					boardComments.getOrDefault(board.getBoardGuid(), 0L).toString(),
-					userNames.getOrDefault(board.getUserGuid(), "")
+					userNames.getOrDefault(board.getUserGuid(), ""),
+					likedBoardGuids.contains(board.getBoardGuid())
 					));
-		
+
 		return boardList;
 	}
 	

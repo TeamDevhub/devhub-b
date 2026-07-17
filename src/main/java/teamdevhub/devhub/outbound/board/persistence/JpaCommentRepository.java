@@ -21,4 +21,6 @@ public interface JpaCommentRepository extends JpaRepository<CommentEntity, Strin
 	Optional<CommentEntity> findByCommentGuid(String commentGuid);
 
 	void deleteByBoardGuidAndCommentGuid(String boardGuid, String commentGuid);
+
+	void deleteAllByBoardGuidIn(List<String> boardGuids);
 }
