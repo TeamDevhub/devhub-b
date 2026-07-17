@@ -49,4 +49,15 @@ public class BoardLikeAdapter implements BoardLikeRepository {
 	public boolean existsByBoardGuidAndUserGuid(String boardGuid, String userGuid) {
 		return jpaBoardLikeRepository.existsByBoardGuidAndUserGuid(boardGuid, userGuid);
 	}
+
+	@Override
+	public List<String> findLikedBoardGuids(String userGuid, List<String> boardGuids) {
+		if (userGuid == null || userGuid.isBlank() || boardGuids.isEmpty()) return List.of();
+		return jpaBoardLikeRepository.findLikedBoardGuids(userGuid, boardGuids);
+	}
+
+	@Override
+	public void deleteByBoardGuids(List<String> boardGuids) {
+		jpaBoardLikeRepository.deleteAllByBoardGuidIn(boardGuids);
+	}
 }

@@ -110,7 +110,11 @@ public class ProjectFacade {
 		applicationFormUseCase.deleteApplicationForms(deleteApplicationFormGuids);
 	}
 
-	public void updateProject(String projectGuid, UpdateProjectCommand updateProjectCommand) {
+	public void updateProject(String projectGuid, UpdateProjectCommand updateProjectCommand, AuthenticatedUser authenticatedUser) {
+		Project project = projectUseCase.getProjectDetail(projectGuid);
+		if(!(UserRole.ADMIN.equals(authenticatedUser.userRole()) || project.getUserGuid().equals(authenticatedUser.userGuid()))) {
+			throw BusinessRuleException.of(ErrorCode.UPDATE_FAIL);
+		}
 		List<String> additionalFormGuidList = applicationFormUseCase.saveApplicationForms(updateProjectCommand.additionalFormList());
 		updateProjectCommand.applicationFormList().addAll(additionalFormGuidList);
 		List<String> deleteApplicationFormGuids = projectUseCase.updateProject(projectGuid, updateProjectCommand);
@@ -218,7 +222,11 @@ public class ProjectFacade {
 		return userProjectResponseDtoList;
 	}
 
-	public void closeProject(String projectGuid) {
+	public void closeProject(String projectGuid, AuthenticatedUser authenticatedUser) {
+		Project project = projectUseCase.getProjectDetail(projectGuid);
+		if(!(UserRole.ADMIN.equals(authenticatedUser.userRole()) || project.getUserGuid().equals(authenticatedUser.userGuid()))) {
+			throw BusinessRuleException.of(ErrorCode.UPDATE_FAIL);
+		}
 		projectUseCase.closeProject(projectGuid);
 	}
 

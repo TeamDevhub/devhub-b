@@ -8,7 +8,7 @@ import teamdevhub.devhub.core.common.page.PageResult;
 
 public interface BoardQueryUseCase {
 
-	PageResult<Board> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand);
+	PageResult<Board> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand, String userGuid);
 
 	PageResult<Board> listAdminBoard(SearchAdminBoardCommand searchAdminBoardCommand, PageCommand pageCommand);
 }

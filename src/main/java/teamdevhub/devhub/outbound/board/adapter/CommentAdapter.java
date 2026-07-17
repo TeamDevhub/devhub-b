@@ -58,4 +58,9 @@ public class CommentAdapter implements CommentRepository {
 	public void updateComment(Comment comment) {
 		jpaCommentRepository.save(CommentMapper.toEntity(comment));
 	}
+
+	@Override
+	public void deleteByBoardGuids(List<String> boardGuids) {
+		jpaCommentRepository.deleteAllByBoardGuidIn(boardGuids);
+	}
 }

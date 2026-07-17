@@ -32,14 +32,15 @@ public class BoardFacade {
     private final BoardQueryUseCase boardQueryUseCase;
     private final BoardUseCase boardUseCase;
 
-	public DataListApiResponseDto<BoardSummaryResponseDto> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand) {
-		PageResult<Board> pagedBoardList = boardQueryUseCase.listBoard(searchBoardCommand, pageCommand);
+	public DataListApiResponseDto<BoardSummaryResponseDto> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand, String userGuid) {
+		PageResult<Board> pagedBoardList = boardQueryUseCase.listBoard(searchBoardCommand, pageCommand, userGuid);
 
 		List<BoardSummaryResponseDto> boardSummaryResponseDtoList = pagedBoardList.content().stream()
 				.map(board -> BoardSummaryResponseDto.builder()
 						.boardBasicResponseDto(BoardBasicResponseDto.fromDomain(board))
 						.likeCount(board.getLikeCount())
 						.commentCount(board.getCommentCount())
+						.isLiked(board.isLiked())
 		                .build())
 				.toList();
 
