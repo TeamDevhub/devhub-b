@@ -6,6 +6,8 @@ import java.util.List;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.vo.command.AdminUpdateProjectCommand;
+import teamdevhub.devhub.core.project.port.in.command.AdminSearchProjectRequestCommand;
 import teamdevhub.devhub.core.project.port.in.command.SearchProjectListCommand;
 import teamdevhub.devhub.core.project.port.out.ProjectRepository;
 
@@ -58,6 +60,16 @@ public class FakeProjectRepository implements ProjectRepository {
 
 	@Override
 	public Project getProjectByRequirementGuid(String requirementGuid) {
+		return null;
+	}
+
+	@Override
+	public void updateAdminProject(String projectGuid, AdminUpdateProjectCommand adminUpdateProjectCommand) {
+
+	}
+
+	@Override
+	public PageResult<Project> getAdminProjectList(AdminSearchProjectRequestCommand adminSearchProjectRequestCommand, PageCommand pageCommand) {
 		return null;
 	}
 

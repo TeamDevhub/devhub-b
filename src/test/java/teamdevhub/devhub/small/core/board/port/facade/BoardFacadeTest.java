@@ -12,21 +12,24 @@ import org.junit.jupiter.api.Test;
 import teamdevhub.devhub.constant.UserTestConstant;
 import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
+import teamdevhub.devhub.fake.pure.application.port.in.usecase.board.FakeBoardLikeUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.board.FakeBoardQueryUseCase;
 import teamdevhub.devhub.fake.pure.application.port.in.usecase.board.FakeBoardUseCase;
 
 public class BoardFacadeTest {
-	
+
 	private BoardFacade boardFacade;
-	
+
 	private FakeBoardUseCase boardUseCase;
 	private FakeBoardQueryUseCase boardQueryUseCase;
-	
+	private FakeBoardLikeUseCase boardLikeUseCase;
+
 	@BeforeEach
 	void init() {
 		boardUseCase = new FakeBoardUseCase();
-		
-		boardFacade = new BoardFacade(boardQueryUseCase, boardUseCase);
+		boardLikeUseCase = new FakeBoardLikeUseCase();
+
+		boardFacade = new BoardFacade(boardQueryUseCase, boardUseCase, boardLikeUseCase);
 	}
 	
 	@Test

@@ -24,7 +24,13 @@
       "Bash(Select-Object FullName)",
       "Bash(Sort-Object FullName)",
       "Bash(Get-Date *)",
-      "Bash(Select-Object Name)"
+      "Bash(Select-Object Name)",
+      "Bash(./gradlew compileJava compileTestJava -q)",
+      "Bash(./gradlew compileJava -q)",
+      "Bash(python3 \"C:\\\\Users\\\\5FINGE~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--devhub-b\\\\d9e9cac6-dd07-43c3-ab5a-048dcf335f63\\\\scratchpad\\\\parse_jacoco.py\")",
+      "PowerShell(python \"C:\\\\Users\\\\5FINGE~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--devhub-b\\\\d9e9cac6-dd07-43c3-ab5a-048dcf335f63\\\\scratchpad\\\\parse_jacoco.py\"; Write-Output \"EXIT:$LASTEXITCODE\")",
+      "PowerShell(python \"C:\\\\Users\\\\5FINGE~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--devhub-b\\\\d9e9cac6-dd07-43c3-ab5a-048dcf335f63\\\\scratchpad\\\\parse_jacoco_domain.py\"; Write-Output \"EXIT:$LASTEXITCODE\")",
+      "PowerShell(python \"C:\\\\Users\\\\5FINGE~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--devhub-b\\\\d9e9cac6-dd07-43c3-ab5a-048dcf335f63\\\\scratchpad\\\\parse_test_results.py\"; Write-Output \"EXIT:$LASTEXITCODE\")"
     ]
   }
 }

@@ -14,8 +14,6 @@ public interface BoardUseCase {
 
 	void updateBoard(UpdateBoardCommand updateBoardCommand);
 
-	void likeBoard(String userGuid, String boardGuid);
-
 	void deleteBoard(String boardGuid, String userGuid);
 
 	void deleteAdminBoard(List<String> boardGuids);

@@ -24,19 +24,23 @@ DevHub는 사이드 프로젝트·스터디 팀원을 찾는 개발자들을 위
 6. [API 문서](#api-문서-swagger-ui)
 7. [API 개요](#api-개요)
 8. [인증 방식](#인증-방식)
-9. [테스트 전략](#테스트-전략)
+9. [테스트 전략 & 커버리지](#테스트-전략--커버리지)
 10. [주요 기능](#주요-기능)
+11. [알려진 제한사항](#알려진-제한사항)
 
 ---
 
 ## 핵심 설계 포인트
 
-- **헥사고날 아키텍처** — 도메인 로직을 Spring/JPA 등 외부 기술로부터 분리. Service는 Port 인터페이스에만 의존하고, 실제 구현은 `outbound` 어댑터가 담당합니다.
-- **계층별 예외 체계** — 도메인/애플리케이션/어댑터 계층마다 `DomainRuleException` · `BusinessRuleException` · `AdapterDataException`을 구분하고, 59개로 세분화된 `ErrorCode`를 통해 일관된 에러 응답을 제공합니다.
-- **Fake 기반 단위 테스트** — Mockito 대신 Port 인터페이스를 직접 구현한 Fake 객체를 사용해, Mock 프레임워크에 의존하지 않는 순수 Java 단위 테스트를 작성합니다.
+- **헥사고날 아키텍처** — 도메인 로직을 Spring/JPA 등 외부 기술로부터 분리. Service는 Port 인터페이스에만 의존하고, 실제 구현은 `outbound` 어댑터가 담당합니다. 12개 도메인 전체에 `domain / application / port(in·out) / adapter` 계층 구분을 일관되게 적용했습니다.
+- **명확한 책임 분리** — Controller는 Facade만 주입받고, Facade는 여러 UseCase를 조합하는 오케스트레이션만 담당합니다. 전체적으로 Controller 24개 · Facade 25개 · UseCase 38개 · Service 36개 · Adapter 45개 · JPA Repository 28개 · QueryDSL Dao 8개로 구성되어, 계층별 역할이 파일 단위로 명확히 나뉩니다.
+- **계층별 예외 체계** — 도메인/애플리케이션/어댑터 계층마다 `DomainRuleException` · `BusinessRuleException` · `AdapterDataException`을 구분하고, 60개로 세분화된 `ErrorCode`(성공 응답은 `SuccessCode` 15종)를 통해 일관된 에러 응답을 제공합니다. 컨트롤러에서 에러 응답을 직접 조립하지 않고 `GlobalExceptionHandler`가 전담합니다.
+- **Fake 기반 단위 테스트** — Mockito 대신 Port 인터페이스를 직접 구현한 Fake 객체(67개)를 사용해, Mock 프레임워크에 의존하지 않는 순수 Java 단위 테스트를 작성합니다. 덕분에 `small` 테스트는 Spring Context 기동 없이 초 단위로 실행됩니다.
 - **Stateless JWT 인증** — Access Token(Header) + Refresh Token(HttpOnly Cookie) 조합으로 세션을 사용하지 않는 무상태 인증을 구현하고, Google·GitHub·Kakao·Naver 4종 소셜 로그인을 지원합니다.
 - **동적 쿼리 분리** — 단순 조회는 Spring Data JPA, 검색 필터·페이징·복합 조건이 필요한 조회는 QueryDSL 기반 `QueryDaoImpl`로 분리해 구현했습니다.
-- **자동화된 배포 파이프라인** — Jenkins가 빌드 → Docker 이미지 push → 인프라 저장소의 Kubernetes 매니페스트 갱신까지 자동으로 처리합니다.
+- **관측성(Observability)** — Actuator·Micrometer Tracing·Prometheus를 연동하고, AOP 기반 `LoggingAspect`와 `TraceIdMDCFilter`로 요청 단위 트레이스 로깅을 남깁니다.
+- **자동화된 CI/CD 파이프라인** — GitHub Actions가 빌드 → Docker 이미지 push → 인프라 저장소의 Kubernetes 매니페스트 갱신까지 자동으로 처리합니다. 배포 대상은 로컬 minikube 클러스터로, GitOps 구조 자체를 로컬 환경에서 직접 구축·검증했습니다.
+- **검증된 안정성** — 531개 테스트가 100% 통과(0 failures)하는 상태를 유지하며, 매 빌드마다 Jacoco로 커버리지를 측정합니다. 자세한 도메인별 수치는 [테스트 전략 & 커버리지](#테스트-전략--커버리지) 참고.
 
 ---
 
@@ -56,7 +60,7 @@ DevHub는 사이드 프로젝트·스터디 팀원을 찾는 개발자들을 위
 | 관측성(Observability) | Spring Actuator · Micrometer Tracing(Brave) · Prometheus |
 | 파일 저장 | 로컬 파일시스템 / 볼륨 마운트 (`file.storage.root-path`) |
 | 테스트 | JUnit 5 · AssertJ · Jacoco (커버리지 리포트) |
-| CI/CD | Jenkins · Docker · Kubernetes (GitOps 방식 매니페스트 갱신) |
+| CI/CD | GitHub Actions · Docker · Kubernetes (로컬 minikube, GitOps 방식 매니페스트 갱신) |
 
 ---
 
@@ -105,17 +109,18 @@ teamdevhub.devhub
 ```
 Push (dev 브랜치)
     ↓
-Jenkins: Checkout → ./gradlew clean build (테스트 포함)
+GitHub Actions: Checkout → ./gradlew clean build
     ↓
 Docker Build & Push → Docker Hub
     ↓
 devhub-infra 저장소의 Kubernetes deployment.yml 이미지 태그 자동 갱신 → Git Push
     ↓
-K8s 클러스터에 반영
+로컬 minikube 클러스터에 반영 (GitOps)
 ```
 
-- 매 빌드마다 `Dockerfile` 기반 이미지를 생성해 `{DOCKERHUB_ID}/devhub-b-dev:{BUILD_TAG}` 형태로 태깅합니다.
-- 애플리케이션 코드 저장소와 배포 매니페스트 저장소(`devhub-infra`)를 분리해 GitOps 방식으로 운영합니다.
+- CI/CD는 `.github/workflows/main.yml`의 GitHub Actions로 운영합니다. `Jenkinsfile-dev`는 초기에 사용했던 파이프라인 정의로 저장소에 남아있지만, 현재 실제로 동작하는 것은 GitHub Actions입니다.
+- 매 빌드마다 `Dockerfile` 기반 이미지를 생성해 `{DOCKERHUB_ID}/devhub-b-dev:{BUILD_TAG}` 형태로 태깅하고 Docker Hub에 푸시합니다.
+- 애플리케이션 코드 저장소와 배포 매니페스트 저장소(`devhub-infra`)를 분리해 GitOps 방식으로 운영하며, 실제 배포 대상은 클라우드 클러스터가 아닌 **로컬 minikube**입니다. 즉 실서비스 인프라가 아니라 GitOps 워크플로 자체를 로컬 환경에서 구축·연습하는 목적의 파이프라인입니다.
 - 운영 환경은 `application-prd.yml`을 통해 DB 접속정보, OAuth 키, JWT 시크릿 등을 전부 환경변수로 주입받습니다.
 
 ---
@@ -287,7 +292,7 @@ http://localhost:8080/api/swagger-ui/index.html
 
 ---
 
-## 테스트 전략
+## 테스트 전략 & 커버리지
 
 ```
 src/test/java/teamdevhub/devhub/
@@ -312,8 +317,48 @@ src/test/java/teamdevhub/devhub/
 ./gradlew test --tests "teamdevhub.devhub.medium.*"
 
 # 커버리지 리포트 (Jacoco)
+./gradlew test jacocoTestReport
 # build/reports/jacoco/test/html/index.html
 ```
+
+### 최근 측정 결과
+
+`./gradlew test jacocoTestReport` 기준 (단위 289건 + 통합 241건 + 부트스트랩 1건).
+
+| 항목 | 결과 |
+|---|---|
+| 총 테스트 | 531건 |
+| 실패 / 에러 | 0건 (100% 통과) |
+| 실행 시간 | 약 13초 |
+| 라인 커버리지 | 41.6% (2,279 / 5,475) |
+| 브랜치 커버리지 | 41.6% (351 / 844) |
+| 메서드 커버리지 | 46.1% (618 / 1,341) |
+| 클래스 커버리지 | 50.3% (221 / 439) |
+
+### 도메인/기능별 라인 커버리지
+
+핵심 인증·회원 도메인은 90% 안팎까지 두텁게 검증되어 있는 반면, 프로젝트·게시판·관리자 도메인은 상대적으로 테스트가 얇습니다. 신규 기능 작업 시 우선적으로 보강이 필요한 영역을 파악하는 용도로 참고하세요.
+
+> 표의 수치는 패키지 전체를 합산한 원본 값입니다. `공통 인프라`와 `인증/OAuth`는 열거형 상수·외부 OAuth 프로바이더 연동처럼 테스트 실익이 낮거나 실제 서버 호출 없이는 검증이 어려운 코드가 섞여 평균을 끌어내리므로, 그 부분을 제외하고 다시 계산한 값을 비고에 함께 적었습니다.
+
+| 영역 | 라인 커버리지 | 브랜치 커버리지 | 비고 |
+|---|---:|---:|---|
+| 약관 (`terms`) | 91.8% | 100.0% | |
+| 회원/프로필 (`user`) | 86.5% | 97.5% | 도메인 98.7%, 서비스 98.0% — 가장 두텁게 검증된 영역 |
+| 공통 인프라 (`shared`/`common`/`web`/`security`) | 81.9% | 50~100% | 저조한 부분은 대부분 `ErrorCode`/`SuccessCode` 등 열거형 상수 정의(60%)와 시큐리티 내부 배선 코드 — 이를 제외하면 87.7%. 예외 변환·공통 응답 래퍼·인가 필터 같은 실제 로직은 이미 90%대 |
+| 파일 (`file`) | 71.6% | 56.2% | |
+| 인증/OAuth (`auth`) | 65.0% | 38.2% | Google·GitHub·Kakao·Naver와 직접 통신하는 외부 연동 어댑터(`outbound.auth.infrastructure.oauth.*`, 207라인, 커버리지 4.3%)를 제외하면 **88.2%**. 이메일 인증·JWT 재발급 등 순수 서비스 로직은 이미 두텁게 검증되어 있고, 낮은 수치는 실서버 호출 없이는 검증이 어려운 외부 연동 부분에서 발생 |
+| 홈 (`home`) | 50.5% | 42.9% | |
+| 스킬 트렌드 (`skilltrend`) | 41.6% | 0.0% | |
+| 알림 (`notification`) | 37.8% | 100.0% | |
+| 신고 (`report`) | 15.2% | 0.0% | |
+| 관리자 - 모집폼 (`admin.form`) | 11.7% | 5.3% | |
+| 게시판 (`board`) | 2.4% | 0.0% | 테스트 3건뿐 — `BoardService`/`BoardLikeService`/어댑터 미검증 |
+| 프로젝트 (`project`) | 1.3% | 5.1% | 테스트 5건뿐 — `ProjectServiceTest`가 의존성 미비로 비활성화된 상태 |
+| 관리자 - 배너/게시글/공통코드 (`admin.banner`·`admin.board`·`admin.code`) | 0.0% | 0.0% | 테스트 없음 |
+| 프로젝트 지원(신청) (`application`) | 0.0% | 0.0% | 테스트 없음 |
+
+> 수치는 `build/reports/jacoco/test/jacocoTestReport.xml`을 기준으로 도메인 패키지 단위로 합산한 값이며, 빌드할 때마다 갱신됩니다.
 
 ---
 
@@ -327,3 +372,14 @@ src/test/java/teamdevhub/devhub/
 - **알림** — 이벤트 기반 알림 조회 및 읽음 처리
 - **파일** — 파일 업로드/다운로드/인라인 보기, 메타데이터 조회
 - **관리자** — 회원 관리(정지/해제, 비밀번호 초기화), 게시글·배너·공통코드 관리, 신고 내역 조회
+
+---
+
+## 알려진 제한사항
+
+현재 진행 중이거나 보강이 필요한 부분입니다.
+
+- **테스트 커버리지 편차** — 인증/회원 도메인은 80~90%대로 두텁게 검증된 반면, 프로젝트·게시판·관리자 일부 기능은 아직 테스트가 얇습니다(상세는 [도메인별 커버리지](#도메인기능별-라인-커버리지) 참고).
+- **`ProjectServiceTest` 비활성화** — Fake 리포지토리 의존성 정비가 끝나지 않아 테스트 코드가 주석 처리된 상태로 남아 있습니다.
+- **관리자 권한 정책 세분화 진행 중** — 일부 관리자 API의 역할(Role) 기반 접근 제어를 더 촘촘하게 다듬는 작업이 남아 있습니다.
+- **관리자 - 배너/게시글/공통코드, 프로젝트 지원(신청) 도메인** — 기능은 동작하지만 자동화 테스트가 아직 작성되지 않았습니다.
