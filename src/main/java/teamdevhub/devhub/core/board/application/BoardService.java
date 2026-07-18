@@ -2,7 +2,6 @@ package teamdevhub.devhub.core.board.application;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
 import teamdevhub.devhub.core.board.domain.Board;
-import teamdevhub.devhub.core.board.domain.BoardLike;
 import teamdevhub.devhub.core.board.domain.Comment;
 import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.UpdateBoardCommand;
@@ -87,19 +85,6 @@ public class BoardService implements BoardUseCase {
 				updateBoardCommand.content()
 				);
 		boardRepository.updateBoard(board);
-	}
-	
-	@Override
-	public void likeBoard(String boardGuid, String userGuid) {
-		Optional<BoardLike> boardLike = boardLikeRepository.likeBoard(boardGuid, userGuid);
-		
-		if(boardLike.isPresent()) {
-			boardLikeRepository.deleteBoardLike(boardLike.get());
-		} else {
-			String boardLikeGuid = identifierProvider.generateIdentifier();
-			BoardLike newBoardLike = BoardLike.createBoardLike(boardGuid, userGuid, boardLikeGuid);
-			boardLikeRepository.save(newBoardLike);
-		}
 	}
 	
 	@Override
