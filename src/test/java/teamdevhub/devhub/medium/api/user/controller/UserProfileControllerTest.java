@@ -51,7 +51,7 @@ class UserProfileControllerTest {
                 .userRole(UserRole.USER)
                 .build();
 
-        when(userProfileFacade.getCurrentUserProfile(authenticatedUser.userGuid())).thenReturn(UserDetailResponseDto.fromDomain(user));
+        when(userProfileFacade.getCurrentUserProfile(authenticatedUser.userGuid())).thenReturn(UserDetailResponseDto.fromDomain(user, true));
 
         // when
         ResponseEntity<DataApiResponseDto<UserDetailResponseDto>> response = userProfileController.getProfile(authenticatedUser);

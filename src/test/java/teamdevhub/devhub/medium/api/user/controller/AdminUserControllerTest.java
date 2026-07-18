@@ -17,6 +17,7 @@ import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
+import teamdevhub.devhub.core.project.port.in.facade.model.UserProjectResponseDto;
 import teamdevhub.devhub.core.report.domain.Report;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.domain.vo.UserRole;
@@ -164,7 +165,7 @@ class AdminUserControllerTest {
     void getUserProjects_returnsReadSuccess() {
         // given
         when(adminUserFacade.getUserProjects(anyString(), any(PageCommand.class)))
-                .thenReturn(List.of());
+                .thenReturn(PageResult.of(List.of(), 0, 10, 0));
 
         // when
         var response = adminUserController.getUserProjects(TEST_USER_GUID_1, 0, 10);
@@ -179,7 +180,7 @@ class AdminUserControllerTest {
     void getUserApplyProjects_returnsReadSuccess() {
         // given
         when(adminUserFacade.getUserApplyProjects(anyString(), any(PageCommand.class)))
-                .thenReturn(List.of());
+                .thenReturn(PageResult.of(List.of(), 0, 10, 0));
 
         // when
         var response = adminUserController.getUserApplyProjects(TEST_USER_GUID_1, 0, 10);

@@ -20,12 +20,14 @@ public class UserDetailResponseDto {
     private UserBasicResponseDto user;
     private List<String> positionList;
     private List<String> skillList;
+    private boolean passwordLoginAvailable;
 
-    public static UserDetailResponseDto fromDomain(User user) {
+    public static UserDetailResponseDto fromDomain(User user, boolean passwordLoginAvailable) {
         return UserDetailResponseDto.builder()
                 .user(UserBasicResponseDto.fromDomain(user))
                 .positionList(positionList(user.getPositions()))
                 .skillList(skillList(user.getSkills()))
+                .passwordLoginAvailable(passwordLoginAvailable)
                 .build();
     }
 

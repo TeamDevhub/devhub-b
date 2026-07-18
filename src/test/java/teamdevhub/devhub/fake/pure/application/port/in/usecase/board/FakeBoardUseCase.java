@@ -34,11 +34,6 @@ public class FakeBoardUseCase implements BoardUseCase{
     }
 
     @Override
-    public void likeBoard(String userGuid, String boardGuid) {
-
-    }
-
-    @Override
     public void deleteBoard(String boardGuid, String requestUserGuid) {
 
     }

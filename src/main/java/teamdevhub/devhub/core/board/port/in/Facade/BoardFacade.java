@@ -18,6 +18,7 @@ import teamdevhub.devhub.core.board.port.in.command.CreateBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.SearchAdminBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.SearchBoardCommand;
 import teamdevhub.devhub.core.board.port.in.command.UpdateBoardCommand;
+import teamdevhub.devhub.core.board.port.in.usecase.BoardLikeUseCase;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardQueryUseCase;
 import teamdevhub.devhub.core.board.port.in.usecase.BoardUseCase;
 import teamdevhub.devhub.core.common.page.PageCommand;
@@ -31,6 +32,7 @@ public class BoardFacade {
 
     private final BoardQueryUseCase boardQueryUseCase;
     private final BoardUseCase boardUseCase;
+    private final BoardLikeUseCase boardLikeUseCase;
 
 	public DataListApiResponseDto<BoardSummaryResponseDto> listBoard(SearchBoardCommand searchBoardCommand, PageCommand pageCommand, String userGuid) {
 		PageResult<Board> pagedBoardList = boardQueryUseCase.listBoard(searchBoardCommand, pageCommand, userGuid);
@@ -87,7 +89,7 @@ public class BoardFacade {
 	}
 
 	public DataApiResponseDto<Void> likeBoard(String boardGuid, String userGuid) {
-		boardUseCase.likeBoard(boardGuid, userGuid);
+		boardLikeUseCase.likeBoard(boardGuid, userGuid);
 
 		return DataApiResponseDto.successWithoutData(
                         SuccessCode.UPDATE_SUCCESS);

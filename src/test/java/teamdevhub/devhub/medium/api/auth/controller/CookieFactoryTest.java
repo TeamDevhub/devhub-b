@@ -23,7 +23,7 @@ public class CookieFactoryTest {
         // then
         assertThat(cookie.getName()).isEqualTo("refreshToken");
         assertThat(cookie.getValue()).isEqualTo(TEST_REFRESH_TOKEN);
-        assertThat(cookie.getPath()).isEqualTo("/auth/reissue");
+        assertThat(cookie.getPath()).isEqualTo("/api/auth/reissue");
         assertThat(cookie.isHttpOnly()).isTrue();
         assertThat(cookie.isSecure()).isFalse();
         assertThat(cookie.getSameSite()).isEqualTo("Lax");
