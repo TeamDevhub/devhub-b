@@ -3,6 +3,7 @@ package teamdevhub.devhub.core.user.port.in.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileCommand;
 import teamdevhub.devhub.core.user.port.in.command.UpdateProfileImageCommand;
@@ -16,6 +17,7 @@ import teamdevhub.devhub.core.user.port.in.usecase.UserProfileUseCase;
 public class UserProfileFacade {
 
     private final UserProfileUseCase userProfileUseCase;
+    private final EmailUserCredentialRepository emailUserCredentialRepository;
 
     public UserBasicResponseDto getUserInfo(String userGuid) {
         User user = userProfileUseCase.getUserInfo(userGuid);
@@ -24,7 +26,9 @@ public class UserProfileFacade {
 
     public UserDetailResponseDto getCurrentUserProfile(String userGuid) {
         User user = userProfileUseCase.getCurrentUserProfile(userGuid);
-        return UserDetailResponseDto.fromDomain(user);
+        // OAuth 전용 가입자는 EMAIL_USER_CREDENTIAL 행이 없다 - 이 존재 여부로 비밀번호 로그인 가능 여부를 판단한다.
+        boolean passwordLoginAvailable = emailUserCredentialRepository.findByUserGuid(userGuid).isPresent();
+        return UserDetailResponseDto.fromDomain(user, passwordLoginAvailable);
     }
 
     public void updateProfileImage(UpdateProfileImageCommand updateProfileImageCommand) {
