@@ -57,9 +57,7 @@ public class ProjectFacade {
 		List<ProjectDetailResponseDto> projectDetailResponseDtoList = new ArrayList<>();
 		if(user == null) {
 			projectDetailResponseDtoList = pagedProjectList.content().stream()
-            .map(project -> {
-            	return ProjectDetailResponseDto.fromDomain(project, null, false);
-            })
+            .map(project -> ProjectDetailResponseDto.fromDomain(project, null, false))
             .toList();
 		} else {
 	        projectDetailResponseDtoList = pagedProjectList.content().stream()
@@ -71,9 +69,8 @@ public class ProjectFacade {
             })
             .toList();
 		}
-		PageResult<ProjectDetailResponseDto> pagedProjectDetail = PageResult.of(projectDetailResponseDtoList, pagedProjectList.page(), pagedProjectList.size(), pagedProjectList.totalElements());
-		
-		return pagedProjectDetail;
+
+        return PageResult.of(projectDetailResponseDtoList, pagedProjectList.page(), pagedProjectList.size(), pagedProjectList.totalElements());
 	}
 	
 	public void createProject(CreateProjectCommand createProjectCommand) {

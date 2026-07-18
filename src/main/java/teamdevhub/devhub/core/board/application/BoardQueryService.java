@@ -42,7 +42,7 @@ public class BoardQueryService implements BoardQueryUseCase {
 		Map<String, String> userNames = userRepository.findNamesByUserGuid(userGuids);
 		Set<String> likedBoardGuids = new HashSet<>(boardLikeRepository.findLikedBoardGuids(userGuid, boardGuids));
 
-		boardList.content().stream().forEach(board ->
+		boardList.content().forEach(board ->
 			board.fillSummarySubquery(boardLikes.getOrDefault(board.getBoardGuid(), 0L).toString(),
 					boardComments.getOrDefault(board.getBoardGuid(), 0L).toString(),
 					userNames.getOrDefault(board.getUserGuid(), ""),
