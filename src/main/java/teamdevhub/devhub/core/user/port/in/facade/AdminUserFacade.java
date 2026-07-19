@@ -16,6 +16,7 @@ import teamdevhub.devhub.core.project.port.in.facade.model.UserProjectResponseDt
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.core.report.domain.Report;
 import teamdevhub.devhub.core.report.port.in.usecase.ReportQueryUseCase;
+import teamdevhub.devhub.core.report.port.in.usecase.ReportUseCase;
 import teamdevhub.devhub.core.user.domain.User;
 import teamdevhub.devhub.core.user.port.in.command.AdminUpdateUserCommand;
 import teamdevhub.devhub.core.user.port.in.command.BanUserCommand;
@@ -40,6 +41,7 @@ public class AdminUserFacade {
     private final ProjectUseCase projectUseCase;
     private final ProjectApplicationUseCase projectApplicationUseCase;
     private final ReportQueryUseCase reportQueryUseCase;
+    private final ReportUseCase reportUseCase;
     private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
 
     public PageResult<UserBasicResponseDto> listUsers(SearchUserCommand searchUserCommand, PageCommand pageCommand) {
@@ -112,5 +114,9 @@ public class AdminUserFacade {
 
     public PageResult<Report> getAllReports(PageCommand pageCommand) {
         return reportQueryUseCase.getAllReports(pageCommand);
+    }
+
+    public void processReport(String reportGuid) {
+        reportUseCase.processReport(reportGuid);
     }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import teamdevhub.devhub.core.user.domain.User;
+import teamdevhub.devhub.core.user.domain.vo.UserRole;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,7 @@ public class UserBasicResponseDto {
 
     private String userGuid;
     private String username;
+    private UserRole userRole;
     private String introduction;
 
     private String fileGuid;
@@ -37,6 +39,7 @@ public class UserBasicResponseDto {
         return UserBasicResponseDto.builder()
                 .userGuid(user.getUserGuid())
                 .username(user.getUsername())
+                .userRole(user.getUserRole())
                 .introduction(user.getIntroduction())
                 .fileGuid(user.getFileGuid())
                 .mannerDegree(user.getMannerDegree())
