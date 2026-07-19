@@ -16,6 +16,7 @@ public class BoardBasicResponseDto {
 	private String boardGuid;
 	private String userGuid;
 	private String userName;
+	private String userFileGuid;
 	private String categoryCd;
 	private String title;
 	private String content;
@@ -31,6 +32,7 @@ public class BoardBasicResponseDto {
     			.boardGuid(board.getBoardGuid())
     			.userGuid(board.getUserGuid())
     			.userName(board.getUserName())
+    			.userFileGuid(board.getUserFileGuid())
     			.categoryCd(board.getCategoryCd())
     			.title(board.getTitle())
     			.content(board.getContent())

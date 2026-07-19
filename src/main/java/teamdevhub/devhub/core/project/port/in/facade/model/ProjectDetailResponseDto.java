@@ -14,6 +14,7 @@ import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 
 	private String nickName;
+	private String userFileGuid;
 	private String mannerDegree;
 	private List<String> skillList;
 	private List<PositionDto> positionList;
@@ -23,6 +24,10 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 	private String recruitStatus;
 
 	public static ProjectDetailResponseDto fromDomain(Project project, String imageFileUrl, Boolean projectLiked) {
+		return fromDomain(project, imageFileUrl, projectLiked, null);
+	}
+
+	public static ProjectDetailResponseDto fromDomain(Project project, String imageFileUrl, Boolean projectLiked, String userFileGuid) {
 		ProjectDetailResponseDtoBuilder<?, ?> builder = ProjectDetailResponseDto.builder();
 		fillBase(builder, project);
 		List<PositionDto> positionDtoList = null;
@@ -34,6 +39,7 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 
 		return builder
 			.nickName(project.getUsername())
+			.userFileGuid(userFileGuid)
 			.skillList(project.getProjectSkill())
 			.positionList(positionDtoList)
 			.likeCount(project.getLikeCount())

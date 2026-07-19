@@ -67,6 +67,7 @@ public class BoardService implements BoardUseCase {
 				boardLikes.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
 				boardComments.getOrDefault(boardDetail.getBoardGuid(), 0L).toString(),
 				user.getUsername(),
+				user.getFileGuid(),
 				userEmail,
 				commentList,
 				isLiked
