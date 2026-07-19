@@ -125,4 +125,18 @@ public class AdminProjectController {
 			adminProjectApplicationFacade.getApplicationsByProjectGuid(searchAdminProjectApplicationRequestDto.toCommand(projectGuid), PageCommand.of(page, size))
 		);
 	}
+
+	@Operation(summary = "지원자 승인/거절", description = "프로젝트 지원자를 승인하거나 거절합니다.")
+	@ApiResponse(responseCode = "200", description = "처리 성공")
+	@PutMapping("/{projectGuid}/applicants/{applicationGuid}/status")
+	public ResponseEntity<DataApiResponseDto<Void>> approveApplicant(
+		@Parameter(description = "프로젝트 GUID", required = true) @PathVariable("projectGuid") String projectGuid,
+		@Parameter(description = "지원 GUID", required = true) @PathVariable("applicationGuid") String applicationGuid,
+		@Parameter(description = "승인 여부 (true: 승인, false: 거절)", required = true) @RequestParam("approved") boolean approved,
+		@LoginUser AuthenticatedUser authenticatedUser
+	) {
+		return ResponseEntity.ok(
+			adminProjectApplicationFacade.approveApplication(applicationGuid, authenticatedUser.userGuid(), approved)
+		);
+	}
 }

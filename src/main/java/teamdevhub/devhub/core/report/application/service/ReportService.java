@@ -51,4 +51,9 @@ public class ReportService implements ReportUseCase {
         Report report = Report.createReport(createReportCommand, reportGuid, reportedUserGuid);
         reportRepository.save(report);
     }
+
+    @Override
+    public void processReport(String reportGuid) {
+        reportRepository.markProcessed(reportGuid);
+    }
 }

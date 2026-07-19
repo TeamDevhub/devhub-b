@@ -160,4 +160,13 @@ public class AdminUserController {
         return ResponseEntity.ok(
                 DataListApiResponseDto.successWithDataList(SuccessCode.READ_SUCCESS, dtos, PageResponseDto.from(result)));
     }
+
+    @Operation(summary = "신고 처리 완료 처리", description = "특정 신고를 처리 완료 상태로 변경합니다.")
+    @ApiResponse(responseCode = "200", description = "처리 성공")
+    @PutMapping("/reports/{reportGuid}/process")
+    public ResponseEntity<DataApiResponseDto<Void>> processReport(
+            @Parameter(description = "신고 GUID") @PathVariable String reportGuid) {
+        adminUserFacade.processReport(reportGuid);
+        return ResponseEntity.ok(DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS));
+    }
 }
