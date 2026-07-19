@@ -20,9 +20,10 @@ public class Board {
 	private String viewCount;
 	
 	private String userName;
+	private String userFileGuid;
 	private String likeCount;
 	private String commentCount;
-	
+
 	private List<Comment> commentList;
 	private String userEmail;
 	private boolean isLiked;
@@ -69,10 +70,11 @@ public class Board {
 		 this.isLiked = isLiked;
 	}
 	
-	public void fillDetailSubquery(String likeCount, String commentCount, String userName, String userEmail, List<Comment> commentList, boolean isLiked) {
+	public void fillDetailSubquery(String likeCount, String commentCount, String userName, String userFileGuid, String userEmail, List<Comment> commentList, boolean isLiked) {
 		 this.likeCount = likeCount;
 		 this.commentCount = commentCount;
 		 this.userName = userName;
+		 this.userFileGuid = userFileGuid;
 		 this.userEmail = userEmail;
 		 this.commentList = commentList;
 		 this.isLiked = isLiked;

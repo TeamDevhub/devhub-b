@@ -86,13 +86,14 @@ public class ProjectFacade {
         if(project.getImageFileGuid() != null && !project.getImageFileGuid().isBlank()) {
         	imageFileUrl = fileUseCase.find(project.getImageFileGuid()).metadata().path();
         }
+        String userFileGuid = userProfileUseCase.getUserInfo(project.getUserGuid()).getFileGuid();
         if(user == null) {
-            	return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, false);
+            	return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, false, userFileGuid);
 		} else {
 			ProjectLike projectLike = projectLikeUseCase.findByProjectGuidAndUserGuid(project.getProjectGuid(), user.userGuid());
 	    	boolean isProjectLiked = false;
 	    	if(projectLike != null) isProjectLiked= true;
-	        return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, isProjectLiked);
+	        return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, isProjectLiked, userFileGuid);
 		}
 	}
 
