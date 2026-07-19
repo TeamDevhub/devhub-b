@@ -63,9 +63,8 @@ public class ProjectFacade {
 	        projectDetailResponseDtoList = pagedProjectList.content().stream()
             .map(project -> {
             	ProjectLike projectLike = projectLikeUseCase.findByProjectGuidAndUserGuid(project.getProjectGuid(), user.userGuid());
-            	boolean isProjectLiked = false;
-            	if(projectLike != null) isProjectLiked= true;
-            	return ProjectDetailResponseDto.fromDomain(project, null, isProjectLiked);
+            	boolean isProjectLiked = projectLike != null;
+                return ProjectDetailResponseDto.fromDomain(project, null, isProjectLiked);
             })
             .toList();
 		}
@@ -91,9 +90,8 @@ public class ProjectFacade {
             	return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, false, userFileGuid);
 		} else {
 			ProjectLike projectLike = projectLikeUseCase.findByProjectGuidAndUserGuid(project.getProjectGuid(), user.userGuid());
-	    	boolean isProjectLiked = false;
-	    	if(projectLike != null) isProjectLiked= true;
-	        return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, isProjectLiked, userFileGuid);
+	    	boolean isProjectLiked = projectLike != null;
+            return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, isProjectLiked, userFileGuid);
 		}
 	}
 
@@ -121,11 +119,7 @@ public class ProjectFacade {
 
 	public ProjectDetailWithFormResponseDto getProjectDetailWithForm(String projectGuid) {
 		Project project = projectUseCase.getProjectDetail(projectGuid);
-		/**
-		 * 인증테이블 분리에 따라 추후 변경 필요
-		 */
 		String email = userProfileUseCase.getUserInfo(project.getUserGuid()).getUserGuid();
-		
 
 		List<ProjectApplicationForm> projectForms = projectApplicationFormUseCase.findByProjectGuid(projectGuid);
 		List<String> applicationFormGuids = projectForms.stream()

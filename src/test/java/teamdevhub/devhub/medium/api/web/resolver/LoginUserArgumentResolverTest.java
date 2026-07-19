@@ -143,7 +143,7 @@ class LoginUserArgumentResolverTest {
 
     @Test
     @DisplayName("authentication이_없으면_예외가_발생한다")
-    void throwIfAuthenticationMissing() throws Exception {
+    void throwIfAuthenticationMissing() {
         // given
         SecurityContextHolder.clearContext();
 
@@ -156,7 +156,7 @@ class LoginUserArgumentResolverTest {
 
     @Test
     @DisplayName("principal이_null이면_예외가_발생한다")
-    void throwIfPrincipalIsNull() throws Exception {
+    void throwIfPrincipalIsNull() {
         // given
         SecurityContextHolder.getContext()
                 .setAuthentication(new FakeAuthentication(null));
@@ -170,7 +170,7 @@ class LoginUserArgumentResolverTest {
 
     @Test
     @DisplayName("principal_타입이_다르면_예외가_발생한다")
-    void throwIfPrincipalTypeMismatch() throws Exception {
+    void throwIfPrincipalTypeMismatch() {
         // given
         SecurityContextHolder.getContext()
                 .setAuthentication(new FakeAuthentication("invalid-principal"));
