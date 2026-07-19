@@ -54,7 +54,6 @@ public class BoardQueryService implements BoardQueryUseCase {
 	
 	@Override
 	public PageResult<Board> listAdminBoard(SearchAdminBoardCommand searchAdminBoardCommand, PageCommand pageCommand) {
-		PageResult<Board> boardList = boardQueryRepository.listAdminBoard(searchAdminBoardCommand, pageCommand.page(), pageCommand.size());
-		return boardList;
+        return boardQueryRepository.listAdminBoard(searchAdminBoardCommand, pageCommand.page(), pageCommand.size());
 	}
 }

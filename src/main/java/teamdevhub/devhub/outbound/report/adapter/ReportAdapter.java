@@ -23,4 +23,9 @@ public class ReportAdapter implements ReportRepository {
     public void save(Report report) {
         jpaReportRepository.save(ReportMapper.toEntity(report));
     }
+
+    @Override
+    public void markProcessed(String reportGuid) {
+        jpaReportRepository.markProcessed(reportGuid);
+    }
 }

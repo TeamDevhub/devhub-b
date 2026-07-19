@@ -3,6 +3,7 @@ package teamdevhub.devhub.outbound.report.persistence;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,6 +13,10 @@ public interface JpaReportRepository extends JpaRepository<ReportEntity, String>
 
     Page<ReportEntity> findByReportedUser(String reportedUser, Pageable pageable);
     Page<ReportEntity> findByReporterUser(String reporterUser, Pageable pageable);
+
+    @Modifying
+    @Query("update ReportEntity r set r.isProcessed = true where r.reportGuid = :reportGuid")
+    int markProcessed(@Param("reportGuid") String reportGuid);
 
     @Query("""
             select case when count(r) > 0 then true else false end
