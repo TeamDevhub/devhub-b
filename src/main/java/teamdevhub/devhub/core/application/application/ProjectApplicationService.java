@@ -2,6 +2,7 @@ package teamdevhub.devhub.core.application.application;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +70,19 @@ public class ProjectApplicationService implements ProjectApplicationQueryUseCase
 			command.approverGuid(),
 			decisionDate
 		);
+	}
+
+	@Override
+	@Transactional
+	public void cancelApplication(String applicationGuid, String applicantGuid) {
+		ProjectApplication application = applicationRepository.findApplicationByGuid(applicationGuid);
+		application.assertCancelable(applicantGuid);
+		applicationRepository.cancelApplication(applicationGuid);
+	}
+
+	@Override
+	public Map<String, Long> countApprovedByRequirementGuids(List<String> requirementGuids) {
+		return applicationRepository.countApprovedByRequirementGuids(requirementGuids);
 	}
 
 	@Override

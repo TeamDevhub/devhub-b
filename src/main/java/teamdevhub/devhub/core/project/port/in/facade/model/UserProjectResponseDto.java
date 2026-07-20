@@ -25,10 +25,17 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 	private String approvalNumber;
 	private String approvalState;
 	private String progressState;
-	
+
+	// 내가 신청한 프로젝트(apply) 목록에서만 채워진다 - 지원 취소 시 어떤 지원 건인지 식별하기 위함
+	private String applicationGuid;
+
 	private List<ProjectApplicationScore> applicationList;
 
 	public static UserProjectResponseDto fromDomain(Project project, List<ProjectApplicationScore> projectApplicationList, String approvalState) {
+		return fromDomain(project, projectApplicationList, approvalState, null);
+	}
+
+	public static UserProjectResponseDto fromDomain(Project project, List<ProjectApplicationScore> projectApplicationList, String approvalState, String applicationGuid) {
 		UserProjectResponseDtoBuilder<?, ?> builder = UserProjectResponseDto.builder();
 		fillBase(builder, project);
 		if(projectApplicationList == null) {
@@ -59,6 +66,7 @@ public class UserProjectResponseDto extends ProjectBasicResponseDto{
 			.approvalNumber(String.valueOf(getApprovalNumber))
 			.approvalState(approvalState)
 			.progressState(getProgressState)
+			.applicationGuid(applicationGuid)
 			.applicationList(projectApplicationList)
 			.build();
 	}

@@ -6,6 +6,7 @@ import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProjectApplicationQueryUseCase {
 
@@ -14,4 +15,6 @@ public interface ProjectApplicationQueryUseCase {
 	ProjectApplication getApplicationByGuid(String applicationGuid);
 
 	List<ProjectApplicationAnswer> getAnswersByApplicationGuid(String applicationGuid);
+
+	Map<String, Long> countApprovedByRequirementGuids(List<String> requirementGuids);
 }

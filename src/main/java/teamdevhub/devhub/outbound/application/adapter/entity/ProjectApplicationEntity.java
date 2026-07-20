@@ -49,4 +49,8 @@ public class ProjectApplicationEntity extends BaseEntity {
 		this.approverGuid = approverGuid;
 		this.decisionDate = decisionDate;
 	}
+
+	public void cancel() {
+		this.isCanceled = true;
+	}
 }

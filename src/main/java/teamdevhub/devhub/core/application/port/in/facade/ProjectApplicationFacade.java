@@ -21,6 +21,7 @@ import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseC
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.domain.Project;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 import teamdevhub.devhub.core.project.port.in.facade.model.ProjectDetailResponseDto;
 import teamdevhub.devhub.core.project.port.in.usecase.ProjectUseCase;
 import teamdevhub.devhub.shared.enums.SuccessCode;
@@ -53,8 +54,19 @@ public class ProjectApplicationFacade {
 		String applicantGuid,
 		CreateApplicationRequestDto requestDto
 	) {
+		Project project = projectUseCase.getProjectDetail(projectGuid);
+		project.assertApplicable(applicantGuid);
+
 		projectApplicationUseCase.createApplication(requestDto.toCommand(projectGuid, applicantGuid));
 		return DataApiResponseDto.successWithoutData(SuccessCode.CREATE_SUCCESS);
+	}
+
+	public DataApiResponseDto<Void> cancelApplication(
+		String applicationGuid,
+		String applicantGuid
+	) {
+		projectApplicationUseCase.cancelApplication(applicationGuid, applicantGuid);
+		return DataApiResponseDto.successWithoutData(SuccessCode.UPDATE_SUCCESS);
 	}
 
 	public DataApiResponseDto<ProjectApplicationListResponseDto> getApplicationsByProjectGuid(
@@ -62,7 +74,17 @@ public class ProjectApplicationFacade {
 		PageCommand pageCommand
 	) {
 		Project project = projectUseCase.getProjectDetail(projectGuid);
-		ProjectDetailResponseDto projectDetailDto = ProjectDetailResponseDto.fromDomain(project, null, null);
+
+		// 모집 포지션별 승인 인원(현재 인원)을 반영하기 위해 requirementGuid별 승인 수를 조회한다.
+		List<String> requirementGuids = project.getProjectRequirement() == null
+			? List.of()
+			: project.getProjectRequirement().stream()
+				.map(ProjectRequirement::getProjectRequirementGuid)
+				.toList();
+		var approvedCountResolver = ProjectDetailResponseDto.approvedCountResolverOf(
+			projectApplicationQueryUseCase.countApprovedByRequirementGuids(requirementGuids)
+		);
+		ProjectDetailResponseDto projectDetailDto = ProjectDetailResponseDto.fromDomain(project, null, null, null, approvedCountResolver);
 
 		PageResult<ProjectApplication> pagedApplications =
 			projectApplicationQueryUseCase.getApplicationsByProjectGuid(projectGuid, pageCommand);

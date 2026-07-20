@@ -15,11 +15,13 @@ import teamdevhub.devhub.api.user.model.UpdateProfileRequestDto;
 import teamdevhub.devhub.api.web.model.request.PageRequestDto;
 import teamdevhub.devhub.api.web.model.response.DataApiResponseDto;
 import teamdevhub.devhub.api.web.model.response.DataListApiResponseDto;
+import teamdevhub.devhub.api.web.model.response.PageResponseDto;
 import teamdevhub.devhub.api.web.resolver.LoginUser;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
 import teamdevhub.devhub.core.board.port.in.Facade.BoardFacade;
 import teamdevhub.devhub.core.board.port.in.Facade.model.BoardSummaryResponseDto;
 import teamdevhub.devhub.core.common.page.PageCommand;
+import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.project.port.in.facade.ProjectFacade;
 import teamdevhub.devhub.core.project.port.in.facade.model.UserProjectResponseDto;
 import teamdevhub.devhub.core.user.port.in.facade.UserProfileFacade;
@@ -123,10 +125,12 @@ public class UserProfileController {
             @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam("page") int page,
             @Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size,
     		@LoginUser AuthenticatedUser authenticatedUser) {
+        PageResult<UserProjectResponseDto> pagedProjects = projectFacade.getUserProjects(authenticatedUser.userGuid(), PageCommand.of(page, size));
         return ResponseEntity.ok(
         		DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
-                        projectFacade.getUserProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                        pagedProjects.content(),
+                        PageResponseDto.from(pagedProjects)
                 )
         );
     }
@@ -138,10 +142,12 @@ public class UserProfileController {
             @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam("page") int page,
             @Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size,
     		@LoginUser AuthenticatedUser authenticatedUser) {
+        PageResult<UserProjectResponseDto> pagedProjects = projectFacade.getUserLikeProjects(authenticatedUser.userGuid(), PageCommand.of(page, size));
         return ResponseEntity.ok(
         		DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
-                        projectFacade.getUserLikeProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                        pagedProjects.content(),
+                        PageResponseDto.from(pagedProjects)
                 )
         );
     }
@@ -153,10 +159,12 @@ public class UserProfileController {
             @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") @RequestParam("page") int page,
             @Parameter(description = "페이지 크기", example = "10") @RequestParam("size") int size,
     		@LoginUser AuthenticatedUser authenticatedUser) {
+        PageResult<UserProjectResponseDto> pagedProjects = projectFacade.getUserApplyProjects(authenticatedUser.userGuid(), PageCommand.of(page, size));
         return ResponseEntity.ok(
         		DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
-                        projectFacade.getUserApplyProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                        pagedProjects.content(),
+                        PageResponseDto.from(pagedProjects)
                 )
         );
     }
@@ -164,12 +172,14 @@ public class UserProfileController {
     @Operation(summary = "내 참여 프로젝트 목록 조회", description = "로그인된 사용자가 참여한 프로젝트 목록을 페이징으로 반환합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping("/projects/participates")
-    public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserParticipateProjects(@RequestParam("page") int page, @RequestParam("size") int size, 
+    public ResponseEntity<DataListApiResponseDto<UserProjectResponseDto>> getUserParticipateProjects(@RequestParam("page") int page, @RequestParam("size") int size,
     		@LoginUser AuthenticatedUser authenticatedUser) {
+        PageResult<UserProjectResponseDto> pagedProjects = projectFacade.getUserParticipateProjects(authenticatedUser.userGuid(), PageCommand.of(page, size));
         return ResponseEntity.ok(
         		DataListApiResponseDto.successWithDataList(
                         SuccessCode.READ_SUCCESS,
-                        projectFacade.getUserParticipateProjects(authenticatedUser.userGuid(), PageCommand.of(page, size))
+                        pagedProjects.content(),
+                        PageResponseDto.from(pagedProjects)
                 )
         );
     }

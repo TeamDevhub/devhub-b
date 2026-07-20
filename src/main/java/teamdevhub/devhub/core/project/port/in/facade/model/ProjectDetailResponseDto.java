@@ -1,6 +1,8 @@
 package teamdevhub.devhub.core.project.port.in.facade.model;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,12 +30,23 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 	}
 
 	public static ProjectDetailResponseDto fromDomain(Project project, String imageFileUrl, Boolean projectLiked, String userFileGuid) {
+		return fromDomain(project, imageFileUrl, projectLiked, userFileGuid, requirementGuid -> 0L);
+	}
+
+	// approvedCountResolver: requirementGuid -> 승인된(취소되지 않은) 지원자 수 - 모집 포지션의 현재 인원을 계산하기 위해 주입한다.
+	public static ProjectDetailResponseDto fromDomain(
+		Project project,
+		String imageFileUrl,
+		Boolean projectLiked,
+		String userFileGuid,
+		Function<String, Long> approvedCountResolver
+	) {
 		ProjectDetailResponseDtoBuilder<?, ?> builder = ProjectDetailResponseDto.builder();
 		fillBase(builder, project);
 		List<PositionDto> positionDtoList = null;
 		if (project.getProjectRequirement() != null) {
 			positionDtoList = project.getProjectRequirement().stream()
-				.map(PositionDto::fromDomain)
+				.map(requirement -> PositionDto.fromDomain(requirement, approvedCountResolver.apply(requirement.getProjectRequirementGuid())))
 				.toList();
 		}
 
@@ -49,6 +62,10 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 			.build();
 	}
 
+	public static Function<String, Long> approvedCountResolverOf(Map<String, Long> approvedCountByRequirement) {
+		return requirementGuid -> approvedCountByRequirement.getOrDefault(requirementGuid, 0L);
+	}
+
 	@Getter
 	@SuperBuilder
 	@NoArgsConstructor
@@ -57,15 +74,21 @@ public class ProjectDetailResponseDto extends ProjectBasicResponseDto {
 		private String position;
 		private int capacity;
 		private String level;
+		private long currentCount;
 		private boolean full;
 
 		public static PositionDto fromDomain(ProjectRequirement requirement) {
+			return fromDomain(requirement, 0L);
+		}
+
+		public static PositionDto fromDomain(ProjectRequirement requirement, long approvedCount) {
 			return PositionDto.builder()
 				.requirementGuid(requirement.getProjectRequirementGuid())
 				.position(requirement.getPositionCd())
 				.capacity(requirement.getCapacity())
 				.level(requirement.getLevelCd())
-				.full(false)
+				.currentCount(approvedCount)
+				.full(approvedCount >= requirement.getCapacity())
 				.build();
 		}
 	}

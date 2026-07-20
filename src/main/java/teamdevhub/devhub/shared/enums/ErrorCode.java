@@ -76,6 +76,9 @@ public enum ErrorCode {
     REVIEW_SELF_NOT_ALLOWED("ERR.DVH.0083", "자기 자신에게 리뷰할 수 없습니다", BAD_REQUEST),
     REVIEW_DUPLICATE("ERR.DVH.0084", "이미 해당 프로젝트에서 리뷰한 사용자입니다", BAD_REQUEST),
     REVIEW_SCORE_INVALID("ERR.DVH.0085", "리뷰 점수는 1.0~5.0 사이의 0.5 단위 값이어야 합니다", BAD_REQUEST),
+    APPLICATION_SELF_NOT_ALLOWED("ERR.DVH.0086", "본인이 등록한 프로젝트에는 지원할 수 없습니다", BAD_REQUEST),
+    APPLICATION_PROJECT_NOT_RECRUITING("ERR.DVH.0087", "모집 중인 프로젝트가 아닙니다", BAD_REQUEST),
+    APPLICATION_NOT_CANCELABLE("ERR.DVH.0088", "이미 처리된 지원은 취소할 수 없습니다", BAD_REQUEST),
     REPORT_DUPLICATE("ERR.DVH.0091", "이미 동일 대상을 신고했습니다", BAD_REQUEST),
     REPORT_TARGET_MISMATCH("ERR.DVH.0093", "해당 게시글의 댓글만 신고할 수 있습니다.", BAD_REQUEST),
 
