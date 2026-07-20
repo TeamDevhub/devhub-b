@@ -1,6 +1,8 @@
 package teamdevhub.devhub.outbound.application.adapter;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,7 @@ import teamdevhub.devhub.outbound.application.adapter.mapper.ApplicationMapper;
 import teamdevhub.devhub.outbound.application.persistence.JpaProjectApplicationAnswerRepository;
 import teamdevhub.devhub.outbound.application.persistence.JpaProjectApplicationRepository;
 import teamdevhub.devhub.outbound.application.persistence.ProjectApplicationQueryDao;
+import teamdevhub.devhub.shared.enums.ProjectApprovalStatus;
 
 @Component
 @RequiredArgsConstructor
@@ -51,6 +54,15 @@ public class ProjectApplicationAdapter implements ApplicationRepository {
 	}
 
 	@Override
+	public void cancelApplication(String applicationGuid) {
+		ProjectApplicationEntity entity = jpaProjectApplicationRepository
+			.findByApplicationGuid(applicationGuid)
+			.orElseThrow(() -> new IllegalArgumentException("지원 정보를 찾을 수 없습니다."));
+		entity.cancel();
+		jpaProjectApplicationRepository.save(entity);
+	}
+
+	@Override
 	public PageResult<ProjectApplication> findApplicationsByProjectGuid(String projectGuid, PageCommand pageCommand) {
 		Page<ProjectApplication> page = projectApplicationQueryDao.findApplicationsByProjectGuid(
 			projectGuid,
@@ -71,11 +83,11 @@ public class ProjectApplicationAdapter implements ApplicationRepository {
 
 	@Override
 	public PageResult<ProjectApplication> findByApplicantGuid(String userGuid, PageCommand pageCommand) {
-		Page<ProjectApplicationEntity> page = jpaProjectApplicationRepository.findByApplicantGuid(
+		Page<ProjectApplicationEntity> page = jpaProjectApplicationRepository.findByApplicantGuidAndNotCanceled(
 				userGuid,
 				PageRequest.of(pageCommand.page(), pageCommand.size())
 			);
-		
+
 		return PageResult.of(
 				page.getContent().stream().map(entity -> ApplicationMapper.toApplicationOnly(entity)).toList(),
 				page.getNumber(),
@@ -86,5 +98,20 @@ public class ProjectApplicationAdapter implements ApplicationRepository {
 	@Override
 	public List<ProjectApplicationScore> findAcceptedByProjectGuid(String projectGuid) {
 		return projectApplicationQueryDao.findAcceptedByProjectGuid(projectGuid);
+	}
+
+	@Override
+	public Map<String, Long> countApprovedByRequirementGuids(List<String> requirementGuids) {
+		if (requirementGuids == null || requirementGuids.isEmpty()) {
+			return Map.of();
+		}
+		List<Object[]> rows = jpaProjectApplicationRepository.countByRequirementGuidsAndStatusCd(
+			requirementGuids,
+			ProjectApprovalStatus.APPROVED.getCode()
+		);
+		return rows.stream().collect(Collectors.toMap(
+			row -> (String) row[0],
+			row -> (Long) row[1]
+		));
 	}
 }

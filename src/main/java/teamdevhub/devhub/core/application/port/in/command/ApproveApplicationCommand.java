@@ -1,6 +1,7 @@
 package teamdevhub.devhub.core.application.port.in.command;
 
 import lombok.Builder;
+import teamdevhub.devhub.shared.enums.ProjectApprovalStatus;
 
 @Builder
 public record ApproveApplicationCommand(
@@ -8,10 +9,7 @@ public record ApproveApplicationCommand(
 	String approverGuid,
 	boolean approved
 ) {
-	private static final String STATUS_APPROVED = "002";
-	private static final String STATUS_REJECTED = "003";
-
 	public String resolveStatusCd() {
-		return approved ? STATUS_APPROVED : STATUS_REJECTED;
+		return approved ? ProjectApprovalStatus.APPROVED.getCode() : ProjectApprovalStatus.REJECTED.getCode();
 	}
 }

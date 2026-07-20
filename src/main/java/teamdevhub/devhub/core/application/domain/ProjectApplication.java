@@ -3,6 +3,9 @@ package teamdevhub.devhub.core.application.domain;
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
+import teamdevhub.devhub.shared.enums.ErrorCode;
+import teamdevhub.devhub.shared.enums.ProjectApprovalStatus;
 
 import java.util.List;
 
@@ -31,4 +34,14 @@ public class ProjectApplication {
 	private String applyDate;
 
 	private AuditInfo auditInfo;
+
+	// 지원 취소 시점의 검증 - 본인 지원 건만, 아직 승인/거절 처리되지 않은 건만 취소 가능
+	public void assertCancelable(String requesterGuid) {
+		if (!this.applicantGuid.equals(requesterGuid)) {
+			throw DomainRuleException.of(ErrorCode.UPDATE_FAIL);
+		}
+		if (!ProjectApprovalStatus.PENDING.getCode().equals(this.statusCd)) {
+			throw DomainRuleException.of(ErrorCode.APPLICATION_NOT_CANCELABLE);
+		}
+	}
 }

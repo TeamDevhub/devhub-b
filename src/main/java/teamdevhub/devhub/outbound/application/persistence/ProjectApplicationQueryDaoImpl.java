@@ -53,9 +53,9 @@ public class ProjectApplicationQueryDaoImpl implements ProjectApplicationQueryDa
 			return new PageImpl<>(List.of(), pageable, 0);
 		}
 
-		// requirementGuid 목록으로 application 페이징 조회
+		// requirementGuid 목록으로 application 페이징 조회 (취소된 지원은 제외)
 		Page<ProjectApplicationEntity> applicationPage =
-			jpaProjectApplicationRepository.findByRequirementGuidIn(requirementGuidList, pageable);
+			jpaProjectApplicationRepository.findByRequirementGuidInAndNotCanceled(requirementGuidList, pageable);
 
 		List<ProjectApplicationEntity> applicationEntities = applicationPage.getContent();
 

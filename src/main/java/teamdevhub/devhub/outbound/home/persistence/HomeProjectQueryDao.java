@@ -18,6 +18,7 @@ public interface HomeProjectQueryDao {
             String imageFileGuid,
             LocalDate recruitmentStartDate,
             LocalDate recruitmentEndDate,
-            LocalDateTime registeredDate
+            LocalDateTime registeredDate,
+            boolean capacityClosed
     ) {}
 }

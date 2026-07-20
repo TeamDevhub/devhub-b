@@ -15,6 +15,8 @@ public interface ProjectApplicationUseCase {
 
 	void approveApplication(ApproveApplicationCommand command);
 
+	void cancelApplication(String applicationGuid, String applicantGuid);
+
 	PageResult<ProjectApplication> findByApplicantGuid(String userGuid, PageCommand pageCommand);
 
 	List<ProjectApplicationScore> findAcceptedByProjectGuid(String projectGuid);
