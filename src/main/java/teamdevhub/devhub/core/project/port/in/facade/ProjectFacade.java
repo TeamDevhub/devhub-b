@@ -17,13 +17,16 @@ import teamdevhub.devhub.core.application.domain.ProjectApplicationForm;
 import teamdevhub.devhub.core.application.domain.ProjectApplicationScore;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationQueryUseCase;
 import teamdevhub.devhub.core.application.port.in.usecase.ProjectApplicationUseCase;
+import teamdevhub.devhub.core.auth.domain.EmailUserCredential;
 import teamdevhub.devhub.core.auth.domain.vo.user.AuthenticatedUser;
+import teamdevhub.devhub.core.auth.port.out.EmailUserCredentialRepository;
 import teamdevhub.devhub.core.common.exception.BusinessRuleException;
 import teamdevhub.devhub.core.common.page.PageCommand;
 import teamdevhub.devhub.core.common.page.PageResult;
 import teamdevhub.devhub.core.file.port.in.usecase.FileUseCase;
 import teamdevhub.devhub.core.project.domain.Project;
 import teamdevhub.devhub.core.project.domain.ProjectLike;
+import teamdevhub.devhub.core.project.domain.ProjectRequirement;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectLikeCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
@@ -51,6 +54,7 @@ public class ProjectFacade {
 	private final ProjectLikeUseCase projectLikeUseCase;
 	private final ProjectApplicationUseCase projectApplicationUseCase;
 	private final ProjectApplicationQueryUseCase projectApplicationQueryUseCase;
+	private final EmailUserCredentialRepository emailUserCredentialRepository;
 
 	public PageResult<ProjectDetailResponseDto> getProjectList(SearchProjectListCommand projectListSearchRequestCommand, PageCommand pageCommand, AuthenticatedUser user) {
 		PageResult<Project> pagedProjectList = projectUseCase.getProjectList(projectListSearchRequestCommand, pageCommand);
@@ -86,13 +90,25 @@ public class ProjectFacade {
         	imageFileUrl = fileUseCase.find(project.getImageFileGuid()).metadata().path();
         }
         String userFileGuid = userProfileUseCase.getUserInfo(project.getUserGuid()).getFileGuid();
+        var approvedCountResolver = ProjectDetailResponseDto.approvedCountResolverOf(resolveApprovedCountByRequirement(project));
         if(user == null) {
-            	return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, false, userFileGuid);
+            	return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, false, userFileGuid, approvedCountResolver);
 		} else {
 			ProjectLike projectLike = projectLikeUseCase.findByProjectGuidAndUserGuid(project.getProjectGuid(), user.userGuid());
 	    	boolean isProjectLiked = projectLike != null;
-            return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, isProjectLiked, userFileGuid);
+            return ProjectDetailResponseDto.fromDomain(project, imageFileUrl, isProjectLiked, userFileGuid, approvedCountResolver);
 		}
+	}
+
+	// 프로젝트의 모집 포지션(requirement)별 승인된 지원자 수 - 현재 모집인원 계산용
+	private Map<String, Long> resolveApprovedCountByRequirement(Project project) {
+		if (project.getProjectRequirement() == null || project.getProjectRequirement().isEmpty()) {
+			return Map.of();
+		}
+		List<String> requirementGuids = project.getProjectRequirement().stream()
+			.map(ProjectRequirement::getProjectRequirementGuid)
+			.toList();
+		return projectApplicationQueryUseCase.countApprovedByRequirementGuids(requirementGuids);
 	}
 
 	public void deleteProject(String projectGuid, AuthenticatedUser authenticatedUser) {
@@ -119,7 +135,10 @@ public class ProjectFacade {
 
 	public ProjectDetailWithFormResponseDto getProjectDetailWithForm(String projectGuid) {
 		Project project = projectUseCase.getProjectDetail(projectGuid);
-		String email = userProfileUseCase.getUserInfo(project.getUserGuid()).getUserGuid();
+		// 소셜 로그인 전용 회원은 이메일 자격증명이 없을 수 있으므로 없으면 null로 응답한다 (BoardService.detailBoard와 동일한 패턴)
+		String email = emailUserCredentialRepository.findByUserGuid(project.getUserGuid())
+				.map(EmailUserCredential::getEmail)
+				.orElse(null);
 
 		List<ProjectApplicationForm> projectForms = projectApplicationFormUseCase.findByProjectGuid(projectGuid);
 		List<String> applicationFormGuids = projectForms.stream()
@@ -168,50 +187,47 @@ public class ProjectFacade {
 		if(project.getAttachmentFileGuid() != null && !project.getAttachmentFileGuid().isBlank()) {
 			attachmentFileName = fileUseCase.find(project.getAttachmentFileGuid()).metadata().originalName();
         }
-		return ProjectDetailWithFormResponseDto.fromDomain(project, email, applicationFormResponseList, additionalFormResponseList, imageFileName, attachmentFileName);
+		Map<String, Long> approvedCountByRequirement = resolveApprovedCountByRequirement(project);
+		return ProjectDetailWithFormResponseDto.fromDomain(project, email, applicationFormResponseList, additionalFormResponseList, imageFileName, attachmentFileName, approvedCountByRequirement);
 	}
 
 	public void toggleProjectLike(CreateProjectLikeCommand createProjectLikeCommand) {
 		projectLikeUseCase.toggleProjectLike(createProjectLikeCommand);
 	}
 
-	public List<UserProjectResponseDto> getUserProjects(String userGuid, PageCommand pageCommand) {
-		List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+	public PageResult<UserProjectResponseDto> getUserProjects(String userGuid, PageCommand pageCommand) {
 		PageResult<Project> pagedProjectList = projectUseCase.getUserProjects(userGuid, pageCommand);
-		userProjectResponseDtoList = pagedProjectList.content().stream()
+		List<UserProjectResponseDto> userProjectResponseDtoList = pagedProjectList.content().stream()
 	            .map(item -> {
 	            	PageResult<ProjectApplication> pagedApplicatgionList = projectApplicationQueryUseCase.getApplicationsByProjectGuid(item.getProjectGuid(), new PageCommand(0, Integer.MAX_VALUE));
 	            	Project project = projectUseCase.getProjectDetail(item.getProjectGuid());
 	            	return UserProjectResponseDto.fromDomain(project, pagedApplicatgionList.content().stream().map(application -> ProjectApplicationScore.toApplicationWithScore(application, 0.0)).toList(), null);
 	            })
 	            .toList();
-		return userProjectResponseDtoList;
+		return PageResult.of(userProjectResponseDtoList, pagedProjectList.page(), pagedProjectList.size(), pagedProjectList.totalElements());
 	}
 
-	public List<UserProjectResponseDto> getUserLikeProjects(String userGuid, PageCommand pageCommand) {
-		List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+	public PageResult<UserProjectResponseDto> getUserLikeProjects(String userGuid, PageCommand pageCommand) {
 		PageResult<ProjectLike> pagedLikeProjectList = projectLikeUseCase.findByUserGuid(userGuid, pageCommand);
-		userProjectResponseDtoList = pagedLikeProjectList.content().stream()
+		List<UserProjectResponseDto> userProjectResponseDtoList = pagedLikeProjectList.content().stream()
             .map(projectLike -> {
             	Project project = projectUseCase.getProjectDetail(projectLike.getProjectGuid());
             	return UserProjectResponseDto.fromDomain(project, null, null);
             })
             .toList();
-		return userProjectResponseDtoList;
+		return PageResult.of(userProjectResponseDtoList, pagedLikeProjectList.page(), pagedLikeProjectList.size(), pagedLikeProjectList.totalElements());
 	}
 
-	public List<UserProjectResponseDto> getUserApplyProjects(String userGuid, PageCommand pageCommand) {
-		List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+	public PageResult<UserProjectResponseDto> getUserApplyProjects(String userGuid, PageCommand pageCommand) {
 		PageResult<ProjectApplication> pagedApplyProjectList = projectApplicationUseCase.findByApplicantGuid(userGuid, pageCommand);
-		// 작업 예정
-		userProjectResponseDtoList = pagedApplyProjectList.content().stream()
+		List<UserProjectResponseDto> userProjectResponseDtoList = pagedApplyProjectList.content().stream()
             .map(projectApply -> {
             	Project project = projectUseCase.getProjectByRequirementGuid(projectApply.getRequirementGuid());
             	Project projectDetail = projectUseCase.getProjectDetail(project.getProjectGuid());
-            	return UserProjectResponseDto.fromDomain(projectDetail, null, projectApply.getStatusCd());
+            	return UserProjectResponseDto.fromDomain(projectDetail, null, projectApply.getStatusCd(), projectApply.getApplicationGuid());
             })
             .toList();
-		return userProjectResponseDtoList;
+		return PageResult.of(userProjectResponseDtoList, pagedApplyProjectList.page(), pagedApplyProjectList.size(), pagedApplyProjectList.totalElements());
 	}
 
 	public void closeProject(String projectGuid, AuthenticatedUser authenticatedUser) {
@@ -222,18 +238,16 @@ public class ProjectFacade {
 		projectUseCase.closeProject(projectGuid);
 	}
 
-	public List<UserProjectResponseDto> getUserParticipateProjects(String userGuid, PageCommand pageCommand) {
-		List<UserProjectResponseDto> userProjectResponseDtoList = new ArrayList<>();
+	public PageResult<UserProjectResponseDto> getUserParticipateProjects(String userGuid, PageCommand pageCommand) {
 		PageResult<Project> pagedParticipateProjectList = projectUseCase.getEndProjectsByApplicantGuid(userGuid, pageCommand);
-		// 작업 예정
-		userProjectResponseDtoList = pagedParticipateProjectList.content().stream()
+		List<UserProjectResponseDto> userProjectResponseDtoList = pagedParticipateProjectList.content().stream()
             .map(participateProject -> {
             	List<ProjectApplicationScore> applicationList = projectApplicationUseCase.findAcceptedByProjectGuid(participateProject.getProjectGuid());
             	Project project = projectUseCase.getProjectDetail(participateProject.getProjectGuid());
             	return UserProjectResponseDto.fromDomain(project, applicationList, null);
             })
             .toList();
-		return userProjectResponseDtoList;
+		return PageResult.of(userProjectResponseDtoList, pagedParticipateProjectList.page(), pagedParticipateProjectList.size(), pagedParticipateProjectList.totalElements());
 	}
 
 }

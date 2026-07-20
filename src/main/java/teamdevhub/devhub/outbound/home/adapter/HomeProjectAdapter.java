@@ -3,11 +3,11 @@ package teamdevhub.devhub.outbound.home.adapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import teamdevhub.devhub.core.home.domain.policy.ProjectExposurePolicy;
 import teamdevhub.devhub.core.home.port.in.query.HomeProjectQuery;
 import teamdevhub.devhub.core.home.port.out.LoadHomeProjectPort;
 import teamdevhub.devhub.outbound.home.persistence.HomeProjectQueryDao;
 import teamdevhub.devhub.outbound.home.persistence.HomeProjectQueryDao.HomeProjectDto;
+import teamdevhub.devhub.shared.enums.ProjectRecruitStatus;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,12 +37,20 @@ public class HomeProjectAdapter implements LoadHomeProjectPort {
                 .toList();
     }
 
+    // Project.getRecruitStatus()와 동일한 규칙을 적용한다 (capacityClosed -> 날짜 미정 -> 시작 전 -> 종료 후 -> 모집중).
     private String resolveRecruitStatus(HomeProjectDto dto, LocalDate today) {
-        if (dto.recruitmentStartDate() == null || dto.recruitmentEndDate() == null) {
-            return "UNKNOWN";
+        if (dto.capacityClosed()) {
+            return ProjectRecruitStatus.COMPLETED.getCode();
         }
-        boolean active = ProjectExposurePolicy.isActiveRecruitment(
-                dto.recruitmentStartDate(), dto.recruitmentEndDate(), today);
-        return active ? "RECRUITING" : "COMPLETED";
+        if (dto.recruitmentStartDate() == null || dto.recruitmentEndDate() == null) {
+            return ProjectRecruitStatus.WAITING.getCode();
+        }
+        if (today.isBefore(dto.recruitmentStartDate())) {
+            return ProjectRecruitStatus.WAITING.getCode();
+        }
+        if (today.isAfter(dto.recruitmentEndDate())) {
+            return ProjectRecruitStatus.COMPLETED.getCode();
+        }
+        return ProjectRecruitStatus.RECRUITING.getCode();
     }
 }

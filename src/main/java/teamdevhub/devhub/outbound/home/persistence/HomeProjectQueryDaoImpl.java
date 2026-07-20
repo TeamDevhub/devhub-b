@@ -29,10 +29,16 @@ public class HomeProjectQueryDaoImpl implements HomeProjectQueryDao {
                         projectEntity.imageFileGuid,
                         projectEntity.recruitmentStartDate,
                         projectEntity.recruitmentEndDate,
-                        projectEntity.registeredDate
+                        projectEntity.registeredDate,
+                        projectEntity.capacityClosed
                 ))
                 .from(projectEntity)
-                .where(projectEntity.deleted.isFalse())
+                .where(
+                        projectEntity.deleted.isFalse(),
+                        projectEntity.capacityClosed.isFalse(),
+                        projectEntity.recruitmentEndDate.isNull()
+                                .or(projectEntity.recruitmentEndDate.goe(today))
+                )
                 .orderBy(
                         new CaseBuilder()
                                 .when(projectEntity.recruitmentStartDate.loe(today)

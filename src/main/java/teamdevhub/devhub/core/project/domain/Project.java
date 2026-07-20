@@ -6,8 +6,10 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import teamdevhub.devhub.core.common.audit.AuditInfo;
+import teamdevhub.devhub.core.common.exception.DomainRuleException;
 import teamdevhub.devhub.core.project.domain.vo.command.CreateProjectCommand;
 import teamdevhub.devhub.core.project.domain.vo.command.UpdateProjectCommand;
+import teamdevhub.devhub.shared.enums.ErrorCode;
 import teamdevhub.devhub.shared.enums.ProjectRecruitStatus;
 
 @Getter
@@ -108,5 +110,15 @@ public class Project {
 	        return ProjectRecruitStatus.COMPLETED.getCode();
 	    }
 	    return ProjectRecruitStatus.RECRUITING.getCode();
+	}
+
+	// 프로젝트 지원 시점의 공통 검증 - 본인 프로젝트 지원 금지, 모집중 상태에서만 지원 가능
+	public void assertApplicable(String applicantGuid) {
+		if (this.userGuid.equals(applicantGuid)) {
+			throw DomainRuleException.of(ErrorCode.APPLICATION_SELF_NOT_ALLOWED);
+		}
+		if (!ProjectRecruitStatus.RECRUITING.getCode().equals(this.getRecruitStatus())) {
+			throw DomainRuleException.of(ErrorCode.APPLICATION_PROJECT_NOT_RECRUITING);
+		}
 	}
 }

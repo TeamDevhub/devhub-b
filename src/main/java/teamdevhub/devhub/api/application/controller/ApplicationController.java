@@ -60,6 +60,21 @@ public class ApplicationController {
 		);
 	}
 
+	@Operation(summary = "프로젝트 지원 취소", description = "본인의 지원을 취소합니다. 아직 승인/거절 처리되지 않은 지원만 취소할 수 있습니다.")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", description = "취소 성공"),
+			@ApiResponse(responseCode = "401", description = "인증되지 않은 사용자")
+	})
+	@PutMapping("/applications/{applicationGuid}/cancel")
+	public ResponseEntity<DataApiResponseDto<Void>> cancelApplication(
+		@Parameter(description = "지원 GUID", required = true) @PathVariable("applicationGuid") String applicationGuid,
+		@LoginUser AuthenticatedUser authenticatedUser
+	) {
+		return ResponseEntity.ok(
+			projectApplicationFacade.cancelApplication(applicationGuid, authenticatedUser.userGuid())
+		);
+	}
+
 	@Operation(summary = "프로젝트 지원 목록 조회", description = "프로젝트에 대한 지원 목록을 페이징 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "조회 성공")
 	@GetMapping("/{projectGuid}/applications")
