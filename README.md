@@ -31,15 +31,17 @@ DevHub는 사이드 프로젝트·스터디 팀원을 찾는 개발자들을 위
 
 ## 핵심 설계 포인트
 
-- **헥사고날 아키텍처** — 도메인 로직을 Spring/JPA 등 외부 기술로부터 분리. Service는 Port 인터페이스에만 의존하고, 실제 구현은 `outbound` 어댑터가 담당합니다. 12개 도메인 전체에 `domain / application / port(in·out) / adapter` 계층 구분을 일관되게 적용했습니다.
-- **명확한 책임 분리** — Controller는 Facade만 주입받고, Facade는 여러 UseCase를 조합하는 오케스트레이션만 담당합니다. 전체적으로 Controller 24개 · Facade 25개 · UseCase 38개 · Service 36개 · Adapter 45개 · JPA Repository 28개 · QueryDSL Dao 8개로 구성되어, 계층별 역할이 파일 단위로 명확히 나뉩니다.
-- **계층별 예외 체계** — 도메인/애플리케이션/어댑터 계층마다 `DomainRuleException` · `BusinessRuleException` · `AdapterDataException`을 구분하고, 60개로 세분화된 `ErrorCode`(성공 응답은 `SuccessCode` 15종)를 통해 일관된 에러 응답을 제공합니다. 컨트롤러에서 에러 응답을 직접 조립하지 않고 `GlobalExceptionHandler`가 전담합니다.
+- **헥사고날 아키텍처** — 도메인 로직을 Spring/JPA 등 외부 기술로부터 분리. Service는 Port 인터페이스에만 의존하고, 실제 구현은 `outbound` 어댑터가 담당합니다. 13개 도메인 전체에 `domain / application / port(in·out) / adapter` 계층 구분을 일관되게 적용했습니다.
+- **명확한 책임 분리** — Controller는 Facade만 주입받고, Facade는 여러 UseCase를 조합하는 오케스트레이션만 담당합니다. 전체적으로 Controller 24개 · Facade 23개 · UseCase 36개 · Service 36개 · Adapter 45개 · JPA Repository 28개 · QueryDSL Dao 8개로 구성되어, 계층별 역할이 파일 단위로 명확히 나뉩니다.
+- **계층별 예외 체계** — 도메인/애플리케이션/어댑터 계층마다 `DomainRuleException` · `BusinessRuleException` · `AdapterDataException`을 구분하고, 63개로 세분화된 `ErrorCode`(성공 응답은 `SuccessCode` 15종)를 통해 일관된 에러 응답을 제공합니다. 컨트롤러에서 에러 응답을 직접 조립하지 않고 `GlobalExceptionHandler`가 전담합니다.
 - **Fake 기반 단위 테스트** — Mockito 대신 Port 인터페이스를 직접 구현한 Fake 객체(67개)를 사용해, Mock 프레임워크에 의존하지 않는 순수 Java 단위 테스트를 작성합니다. 덕분에 `small` 테스트는 Spring Context 기동 없이 초 단위로 실행됩니다.
 - **Stateless JWT 인증** — Access Token(Header) + Refresh Token(HttpOnly Cookie) 조합으로 세션을 사용하지 않는 무상태 인증을 구현하고, Google·GitHub·Kakao·Naver 4종 소셜 로그인을 지원합니다.
+- **역할 기반 인가(RBAC) 적용 완료** — `/admin/**` 하위 전체 엔드포인트와 약관 등록(`POST /terms/**`)에 `hasRole("ADMIN")`을 적용해 관리자 전용 API를 실제로 보호합니다. 관리자 도메인은 회원·게시글·배너·공통코드·모집폼·프로젝트 6개 서브 컨트롤러로 세분화되어 있습니다.
+- **OAuth 보안 강화** — OAuth 인증 시작 시 발급한 `state` 값을 `HttpOnly` 쿠키(`oauthState`)에 저장해두었다가 콜백 시 쿠키 값과 파라미터 값을 비교 검증해 CSRF를 방지합니다. Refresh Token·OAuth state 쿠키의 `Secure` 속성과 OAuth 성공 후 리다이렉트할 프론트엔드 주소(`app.frontend.base-url`)는 하드코딩 대신 환경변수로 주입받도록 분리되어 있습니다.
 - **동적 쿼리 분리** — 단순 조회는 Spring Data JPA, 검색 필터·페이징·복합 조건이 필요한 조회는 QueryDSL 기반 `QueryDaoImpl`로 분리해 구현했습니다.
 - **관측성** — Actuator·Micrometer Tracing·Prometheus를 연동하고, AOP 기반 `LoggingAspect`와 `TraceIdMDCFilter`로 요청 단위 트레이스 로깅을 남깁니다.
 - **자동화된 CI/CD 파이프라인** — GitHub Actions가 빌드 → Docker 이미지 push → 인프라 저장소의 Kubernetes 매니페스트 갱신까지 자동으로 처리합니다. 배포 대상은 로컬 minikube 클러스터로, GitOps 구조 자체를 로컬 환경에서 직접 구축·검증했습니다.
-- **검증된 안정성** — 531개 테스트가 100% 통과(0 failures)하는 상태를 유지하며, 매 빌드마다 Jacoco로 커버리지를 측정합니다. 자세한 도메인별 수치는 [테스트 전략 & 커버리지](#테스트-전략--커버리지) 참고.
+- **검증된 안정성** — 532개 테스트가 100% 통과(0 failures)하는 상태를 유지하며, 매 빌드마다 Jacoco로 커버리지를 측정합니다. 자세한 도메인별 수치는 [테스트 전략 & 커버리지](#테스트-전략--커버리지) 참고.
 
 ---
 
@@ -84,7 +86,7 @@ DevHub는 사이드 프로젝트·스터디 팀원을 찾는 개발자들을 위
 ```
 teamdevhub.devhub
 ├── api/            REST 계층 — Controller, Request/Response DTO
-│   └── {domain}/   auth · user · project · board · admin · file · notification · terms ...
+│   └── {domain}/   auth · user · project · application · board · admin · file · notification · terms · report · skilltrend · home ...
 ├── core/           도메인 계층 — Entity, Service, Port(UseCase/Repository), Facade
 │   └── {domain}/
 │       ├── domain/         순수 자바 도메인 모델
@@ -99,7 +101,7 @@ teamdevhub.devhub
 └── shared/         공통 — Config, ErrorCode/SuccessCode, 공통 유틸, 응답 래퍼
 ```
 
-도메인은 `auth · user · project · board · admin · file · notification · terms · report · skilltrend · common · home` 총 12개로 구성되어 있습니다.
+도메인은 `auth · user · project · application(프로젝트 지원) · board · admin · file · notification · terms · report · skilltrend · common(web) · home` 총 13개로 구성되어 있습니다.
 
 ---
 
@@ -174,6 +176,12 @@ jwt:
 file:
   storage:
     root-path: ./local-files
+
+app:
+  frontend:
+    base-url: http://localhost:5173   # OAuth 로그인/회원가입 성공 후 리다이렉트할 프론트엔드 주소
+  cookie:
+    secure: false                     # 운영 환경(HTTPS)에서는 true로 설정
 ```
 
 ### 3. 서버 실행
@@ -235,10 +243,13 @@ http://localhost:8080/api/swagger-ui/index.html
 | GET | `/projects/{projectGuid}` | 프로젝트 상세 조회 |
 | PUT / DELETE | `/projects/{projectGuid}` | 프로젝트 수정 / 삭제 |
 | POST | `/projects/{projectGuid}/likes` | 좋아요 토글 |
-| POST | `/projects/{projectGuid}/applications` | 프로젝트 지원 |
+| POST | `/projects/{projectGuid}/applications` | 프로젝트 지원 (지원서 양식 답변 포함) |
 | GET | `/projects/{projectGuid}/applications` | 지원자 목록 조회 |
+| GET | `/projects/applications/{applicationGuid}` | 지원 상세 조회 (답변 포함) |
 | PUT | `/projects/applications/{applicationGuid}/approve` | 지원 승인/거절 |
-| POST | `/projects/{projectGuid}/members/{userGuid}` | 프로젝트 멤버 평가 |
+| PUT | `/projects/applications/{applicationGuid}/cancel` | 본인 지원 취소 (미처리 건만 가능) |
+| POST | `/projects/{projectGuid}/members/{userGuid}` | 프로젝트 멤버 평가 (매너 점수) |
+| GET | `/applicationForms` | 프로젝트별 지원서 양식 조회 |
 
 ### 게시판 (`/boards`)
 
@@ -252,15 +263,46 @@ http://localhost:8080/api/swagger-ui/index.html
 | POST | `/boards/delete` | 게시글 복수 삭제 |
 | POST / PUT / DELETE | `/boards/{boardGuid}/comments/**` | 댓글 작성/수정/삭제 |
 
+### 홈 (`/home`)
+
+| 메서드 | URL | 설명 |
+|---|---|---|
+| GET | `/home` | 홈 화면에 필요한 배너·프로젝트·게시글 데이터를 한 번에 조회 |
+
+### 스킬 트렌드 (`/skill-trends`)
+
+| 메서드 | URL | 설명 |
+|---|---|---|
+| GET | `/skill-trends` | 카드 통계·수요 스킬·인기 포지션·월별 타임라인 등 스킬 트렌드 통계 조회 |
+
+### 신고 (`/reports`)
+
+| 메서드 | URL | 설명 |
+|---|---|---|
+| POST | `/reports` | 게시글 또는 댓글 신고 등록 |
+
 ### 기타 도메인
 
 | 도메인 | 대표 엔드포인트 | 설명 |
 |---|---|---|
-| 모집폼 | `GET /applicationForms` | 모집폼 목록 조회 (검색 필터) |
+| 공통 코드 (공개) | `GET /common/code`, `PUT /common/save`, `PUT /common/saveAll` | 그룹별 공통 코드 조회 및 저장 |
 | 알림 | `GET /notification/list`, `PUT /notification/checked/{guid}` | 알림 조회 / 읽음 처리 |
 | 파일 | `POST /files`, `GET /files/{guid}`, `GET /files/{guid}/download` | 파일 업로드 / 조회 / 다운로드 |
-| 약관 | `GET/POST /terms` | 약관 조회 / 등록 |
-| 관리자 | `/admin/users`, `/admin/boards`, `/admin/banner`, `/admin/code` | 회원·게시글·배너·공통코드 관리 (ADMIN 권한) |
+| 약관 | `GET /terms`, `POST /terms`(ADMIN) | 약관 조회 / 등록 |
+
+### 관리자 (`/admin/**`, ADMIN 권한 필요)
+
+| 도메인 | 대표 엔드포인트 | 설명 |
+|---|---|---|
+| 회원 관리 | `GET /admin/users`, `GET/PUT /admin/users/{userGuid}` | 회원 목록/상세 조회, 닉네임·소개 수정 |
+| 회원 제재 | `POST /admin/users/{userGuid}/ban`, `POST /admin/users/{userGuid}/unban`, `POST /admin/users/{userGuid}/password` | 정지 / 정지 해제 / 비밀번호 강제 초기화 |
+| 회원 활동 조회 | `GET /admin/users/{userGuid}/projects`, `GET /admin/users/{userGuid}/projects/applicant` | 특정 회원이 등록/지원한 프로젝트 조회 |
+| 신고 처리 | `GET /admin/users/reports`, `GET /admin/users/{userGuid}/reports`, `GET /admin/users/{userGuid}/reports/reported`, `PUT /admin/users/reports/{reportGuid}/process` | 전체/수신/제출 신고 내역 조회 및 처리 완료 처리 |
+| 게시글 관리 | `GET /admin/boards`, `POST /admin/boards/delete` | 게시글 목록 조회, 개별/일괄 삭제 |
+| 배너 관리 | `GET /admin/banner/list`, `PUT /admin/banner`, `PUT /admin/banner/{bannerGuid}`, `DELETE /admin/banner/{bannerGuid}` | 배너 목록 조회 / 등록 / 수정 / 삭제 |
+| 공통 코드 관리 | `GET /admin/code/list`, `PUT /admin/code` | 공통 코드 목록 조회, 등록/수정 |
+| 지원서 양식 관리 | `GET /admin/form/list`, `PUT /admin/form`, `DELETE /admin/form/{applicationFormGuid}` | 프로젝트 지원서 양식 조회 / 등록·수정 / 삭제 |
+| 프로젝트 관리 | `GET /admin/projects`, `GET/PUT/DELETE /admin/projects/{projectGuid}`, `GET /admin/projects/{projectGuid}/applicants`, `PUT /admin/projects/{projectGuid}/applicants/{applicationGuid}/status` | 프로젝트 목록/상세/수정/삭제, 지원자 목록 조회 및 승인/거절 |
 
 ---
 
@@ -283,6 +325,16 @@ http://localhost:8080/api/swagger-ui/index.html
 - 세션을 사용하지 않는 `STATELESS` 정책 (`SessionCreationPolicy.STATELESS`)
 - 커스텀 JWT 인가 필터를 `UsernamePasswordAuthenticationFilter` 이전에 등록
 - 컨트롤러에서는 `@LoginUser` 어노테이션으로 인증된 사용자(`UserCredential`)를 바로 주입받아 사용
+
+### 인가(Authorization) 정책 (`WebSecurityConfig`)
+
+| 대상 | 정책 |
+|---|---|
+| `/auth/**`, `/user/signup`, Swagger, Actuator, 정적 리소스 | 인증 없이 허용 (`permitAll`) |
+| `GET /common/**`, `/files/**`, `/projects`, `/projects/**`, `/boards`, `/boards/**`, `/home`, `/skill-trends`, `/terms/**` | 조회(GET)는 비로그인 사용자도 허용 |
+| `POST /terms/**` | ADMIN 권한 필요 |
+| `/admin/**` | ADMIN 권한 필요 (`hasRole("ADMIN")`) |
+| 그 외 모든 요청 | 인증 필요 (`anyRequest().authenticated()`) |
 
 ### CORS 허용 출처
 
@@ -322,40 +374,38 @@ src/test/java/teamdevhub/devhub/
 
 ### 최근 측정 결과
 
-`./gradlew test jacocoTestReport` 기준 (단위 289건 + 통합 241건 + 부트스트랩 1건).
+`./gradlew test jacocoTestReport` 기준.
 
 | 항목 | 결과 |
 |---|---|
-| 총 테스트 | 531건 |
+| 총 테스트 | 532건 |
 | 실패 / 에러 | 0건 (100% 통과) |
-| 실행 시간 | 약 13초 |
-| 라인 커버리지 | 41.6% (2,279 / 5,475) |
-| 브랜치 커버리지 | 41.6% (351 / 844) |
-| 메서드 커버리지 | 46.1% (618 / 1,341) |
-| 클래스 커버리지 | 50.3% (221 / 439) |
+| 실행 시간 | 약 2분 |
+| 라인 커버리지 | 41.1% (2,288 / 5,573) |
+| 브랜치 커버리지 | 40.4% (351 / 868) |
+| 메서드 커버리지 | 45.2% (619 / 1,370) |
+| 클래스 커버리지 | 50.2% (221 / 440) |
 
 ### 도메인/기능별 라인 커버리지
 
 핵심 인증·회원 도메인은 90% 안팎까지 두텁게 검증되어 있는 반면, 프로젝트·게시판·관리자 도메인은 상대적으로 테스트가 얇습니다. 신규 기능 작업 시 우선적으로 보강이 필요한 영역을 파악하는 용도로 참고하세요.
 
-> 표의 수치는 패키지 전체를 합산한 원본 값입니다. `공통 인프라`와 `인증/OAuth`는 열거형 상수·외부 OAuth 프로바이더 연동처럼 테스트 실익이 낮거나 실제 서버 호출 없이는 검증이 어려운 코드가 섞여 평균을 끌어내리므로, 그 부분을 제외하고 다시 계산한 값을 비고에 함께 적었습니다.
-
-| 영역 | 라인 커버리지 | 브랜치 커버리지 | 비고 |
-|---|---:|---:|--|
-| 약관 (`terms`) | 91.8% | 100.0% | |
-| 회원/프로필 (`user`) | 86.5% | 97.5% | 도메인 98.7%, 서비스 98.0% — 가장 두텁게 검증된 영역 |
-| 공통 인프라 (`shared`/`common`/`web`/`security`) | 81.9% | 50~100% | 저조한 부분은 대부분 `ErrorCode`/`SuccessCode` 등 열거형 상수 정의(60%)와 시큐리티 내부 배선 코드 — 이를 제외하면 87.7%. 예외 변환·공통 응답 래퍼·인가 필터 같은 실제 로직은 이미 90%대 |
-| 파일 (`file`) | 71.6% | 56.2% | |
-| 인증/OAuth (`auth`) | 65.0% | 38.2% | Google·GitHub·Kakao·Naver와 직접 통신하는 외부 연동 어댑터(`outbound.auth.infrastructure.oauth.*`, 207라인, 커버리지 4.3%)를 제외하면 **88.2%**. 이메일 인증·JWT 재발급 등 순수 서비스 로직은 이미 두텁게 검증되어 있고, 낮은 수치는 실서버 호출 없이는 검증이 어려운 외부 연동 부분에서 발생 |
-| 홈 (`home`) | 50.5% | 42.9% | |
-| 스킬 트렌드 (`skilltrend`) | 41.6% | 0.0% | |
-| 알림 (`notification`) | 37.8% | 100.0% | |
-| 신고 (`report`) | 15.2% | 0.0% | |
-| 관리자 - 모집폼 (`admin.form`) | 11.7% | 5.3% | |
-| 게시판 (`board`) | 2.4% | 0.0% | |
-| 프로젝트 (`project`) | 1.3% | 5.1% | |
-| 관리자 - 배너/게시글/공통코드 (`admin.banner`·`admin.board`·`admin.code`) | 0.0% | 0.0% | |
-| 프로젝트 지원(신청) (`application`) | 0.0% | 0.0% | |
+| 영역 | 라인 커버리지 | 브랜치 커버리지 | 비고                                                                                                                                            |
+|---|---:|---:|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| 약관 (`terms`) | 91.8% | 100.0% |                                                                                                                                               |
+| 회원/프로필 (`user`) | 85.1% | 97.5% | 가장 두텁게 검증된 영역                                                                                                                                 |
+| 공통 인프라 (`shared`/`common`/`web`/`security`) | 81.9% | 81.3% | `ErrorCode`/`SuccessCode` 등 열거형 상수 관련 소스 외 예외 변환·공통 응답 래퍼·인가 필터 같은 실제 로직은 이미 두텁게 검증됨                                                          |
+| 파일 (`file`) | 71.6% | 56.2% |                                                                                                                                               |
+| 인증/OAuth (`auth`) | 65.2% | 38.2% | Google·GitHub·Kakao·Naver와 직접 통신하는 외부 연동 어댑터(outbound.auth.infrastructure.oauth.*, 207라인)를 제외하면 88.2%. 이메일 인증·JWT 재발급 등 순수 서비스 로직은 이미 두텁게 검증됨 |
+| 홈 (`home`) | 48.5% | 39.1% |                                                                                                                                               |
+| 스킬 트렌드 (`skilltrend`) | 41.6% | 0.0% |                                                                                                                                               |
+| 알림 (`notification`) | 37.8% | 100.0% |                                                                                                                                               |
+| 관리자 - 지원서 양식 (`admin.form`) | 11.7% | 5.3% |                                                                                                                                               |
+| 신고 (`report`) | 14.6% | 0.0% |                                                                                                                                               |
+| 게시판 (`board`) | 2.4% | 0.0% |                                                                                                                                               |
+| 프로젝트 (`project`) | 1.3% | 4.8% |                                                                                                                                               |
+| 관리자 - 배너/게시글/공통코드 (`admin.banner`·`admin.board`·`admin.code`) | 0.0% | 0.0% |                                                                                                                                               |
+| 프로젝트 지원(신청) (`application`) | 0.0% | 0.0% |                                                                                                                                               |
 
 > 수치는 `build/reports/jacoco/test/jacocoTestReport.xml`을 기준으로 도메인 패키지 단위로 합산한 값이며, 빌드할 때마다 갱신됩니다.
 
@@ -363,13 +413,14 @@ src/test/java/teamdevhub/devhub/
 
 ## 주요 기능
 
-- **인증** — 이메일/소셜(Google·GitHub·Kakao·Naver) 회원가입 및 로그인, 이메일 인증, 비밀번호 변경, JWT 재발급
+- **인증** — 이메일/소셜(Google·GitHub·Kakao·Naver) 회원가입 및 로그인, OAuth state 기반 CSRF 방지, 이메일 인증, 비밀번호 변경, JWT 재발급
 - **프로필** — 사용자 정보/프로필 조회·수정, 프로필 이미지 변경, 회원 탈퇴(소프트 삭제)
-- **프로젝트 매칭** — 프로젝트 CRUD, 좋아요, 지원 및 승인/거절 프로세스, 멤버 평가
+- **프로젝트 매칭** — 프로젝트 CRUD, 좋아요, 지원서 양식 기반 지원·취소·승인/거절 프로세스, 완료 프로젝트 팀원 매너 리뷰
 - **커뮤니티** — 게시판 CRUD, 조회수 집계, 좋아요, 댓글 CRUD
-- **모집폼** — 프로젝트별 맞춤 모집폼 조회
-- **알림** — 이벤트 기반 알림 조회 및 읽음 처리
+- **모집폼** — 프로젝트별 맞춤 지원서 양식 조회 (관리자 등록/수정/삭제)
+- **신고** — 게시글/댓글 신고 등록, 관리자 신고 처리(전체·수신·제출 내역 조회 및 처리 완료)
+- **홈 / 스킬 트렌드** — 홈 화면 통합 데이터(배너·프로젝트·게시글) 조회, 수요 스킬·인기 포지션·월별 타임라인 등 스킬 트렌드 통계 제공
 - **파일** — 파일 업로드/다운로드/인라인 보기, 메타데이터 조회
-- **관리자** — 회원 관리(정지/해제, 비밀번호 초기화), 게시글·배너·공통코드 관리, 신고 내역 조회
+- **관리자** — 회원 관리(상세 조회·정보 수정·정지/해제·비밀번호 강제 초기화), 회원별 활동/신고 내역 조회, 게시글·배너·공통코드·지원서 양식·프로젝트 전 영역 관리, 신고 처리
 
 ---
